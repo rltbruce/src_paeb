@@ -1,0 +1,10 @@
+{
+    "accueil": {
+      "parent": "Fandraisana",
+      "titre": "Tonga soa eto amin'ny Open Artfish Madagasikara",
+      "mot_de_bienvenue":"",
+      "menu":{
+        "titre":"Fandraisana"
+      }
+    }
+}

@@ -1,0 +1,37 @@
+(function ()
+{
+    'use strict';
+
+    angular
+        .module('app.paeb', [
+            'app.paeb.accueil',
+            'app.paeb.auth.login',
+            'app.paeb.auth.register',
+            'app.paeb.auth.forgot-password',
+            'app.paeb.auth.reset-password',
+            'app.paeb.auth.lock',
+            'app.paeb.administration',
+            'app.paeb.ddb',
+        ])
+        .config(config);
+
+    /** @ngInject */
+    function config(msNavigationServiceProvider, $mdDateLocaleProvider)
+    {
+        // Navigation
+        msNavigationServiceProvider.saveItem('paeb', {
+            title : 'Menu Principale',
+            group : true,
+            weight: 1
+        });
+
+         $mdDateLocaleProvider.formatDate = function(date) {
+            return date ? moment(date).format('DD/MM/YYYY') : new Date(NaN);
+        };
+  
+        $mdDateLocaleProvider.parseDate = function(dateString) {
+            var m = moment(dateString, 'DD/MM/YYYY', true);
+            return m.isValid() ? m.toDate() : new Date(NaN);
+        };
+    }
+})();

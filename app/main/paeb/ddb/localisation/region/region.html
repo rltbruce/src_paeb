@@ -1,0 +1,101 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Localisation</span>
+
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Region</span>
+            </div>
+
+            <div class="title">Region</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+      <div class="form-wrapper">
+        <div style="clear:both;"></div>
+          <md-tabs md-dynamic-height layout="column" flex>
+            <md-tab label="Région" layout="column" flex>
+              <md-tab-body>
+                <fieldset style="width: 100%">
+                  <legend>
+                    Région
+
+                    <md-button class="md-fab md-mini " aria-label="Use Android"ng-click="vm.ajouter()">
+                      <md-icon md-svg-src="assets/icons/svg/add.svg" style="color: greenyellow;"></md-icon>
+                    </md-button>
+                  </legend>
+                  
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions">
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="regc in ::vm.region_column">
+                            <div class="table-header">
+                              <span class="column-title">{{regc.titre}}</span>
+                            </div>
+                        </th>
+                      </tr>
+                    </thead>
+                   
+                   <tbody>
+                      <tr ng-repeat="region in vm.allregion"  ng-class="{selected: region.$selected}" ng-click="vm.selection(region)">           
+                        <td>
+                          <span ng-if="region.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Code</label>
+                              <input name="code" type="text" ng-model="region.code"/>
+                            </md-input-container>
+                          </span>
+                          
+                          <span ng-if="!region.$edit">{{region.code}}</span>
+                        </td>
+                        
+                        <td>
+                          <span ng-if="region.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Nom</label>
+                              <input name="Nom" type="text" ng-model="region.nom"/>
+                            </md-input-container>   
+                          </span>
+                          
+                          <span ng-if="!region.$edit">{{region.nom}}</span>
+                        </td>
+                                           
+                        <td>
+                          <a ng-if="!region.$edit" ng-click="vm.modifier(region)" title="Modifier">
+                            <span class="icon-table-edit"></span>
+                          </a>
+                          
+                          <a ng-if="!region.$edit" ng-click="vm.supprimer(region)" title="Supprimer">
+                            <span class="icon-delete"></span>
+                          </a>
+                          
+                          <a ng-if="region.$edit" ng-click="vm.annuler(region)" title="Annuler modification">
+                            <span class="icon-cancel"></span>
+                          </a>
+                          
+                          <a ng-if="region.$edit && region.code && region.nom >''" ng-click="vm.ajout(region,0)" title="Sauvegarder">
+                            <span class="icon-content-save"></span>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </fieldset>
+              </md-tab-body>
+            </md-tab>
+          </md-tabs>
+        </div>
+      </div>
+    <!-- / CONTENT -->
+  </div>

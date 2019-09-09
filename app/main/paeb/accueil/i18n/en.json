@@ -1,0 +1,10 @@
+{
+    "accueil": {
+      "parent": "Home",
+      "titre": "Welcome to Open Artfish Madagascar",
+      "mot_de_bienvenue":"",
+      "menu":{
+        "titre":"Home"
+      }
+    }
+}
