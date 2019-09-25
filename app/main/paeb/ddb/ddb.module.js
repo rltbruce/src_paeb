@@ -5,7 +5,13 @@
     angular
         .module('app.paeb.ddb', [
 			
-            'app.paeb.ddb.localisation'
+            'app.paeb.ddb.localisation',
+            'app.paeb.ddb.cisco',
+            'app.paeb.ddb.association',
+            'app.paeb.ddb.ecole',
+            'app.paeb.ddb.attachement',
+            'app.paeb.ddb.plan_comptable',
+            'app.paeb.ddb.prestataire'
 
             ])
         .run(testPermission)

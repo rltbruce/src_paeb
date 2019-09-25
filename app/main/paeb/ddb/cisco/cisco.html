@@ -1,0 +1,112 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Cisco</span>
+            </div>
+
+            <div class="title">Cisco</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Cisco -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Cisco</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add cisco" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout cisco</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="cisc in ::vm.cisco_column">
+                  <div class="table-header">
+                    <span class="column-title">{{cisc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="cisco in vm.allcisco"  ng-class="{selected: cisco.$selected}" ng-click="vm.selection(cisco)">           
+                <td>
+                  <span ng-if="cisco.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Code</label>
+                      <input name="code" type="text" ng-model="cisco.code"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!cisco.$edit">{{cisco.code}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="cisco.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Description</label>
+                      <input name="Description" type="text" ng-model="cisco.description"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!cisco.$edit">{{cisco.description}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="cisco.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>District</label>
+                      <md-select ng-model="cisco.id_district"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="district in vm.alldistrict" value="{{district.id}}">
+                                                            {{district.nom}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!cisco.$edit">{{cisco.district.nom}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!cisco.$edit" ng-click="vm.modifier(cisco)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!cisco.$edit" ng-click="vm.supprimer(cisco)" title="Supprimer">
+                    <span class="icon-delete"></span>
+                  </a>
+                            
+                  <a ng-if="cisco.$edit" ng-click="vm.annuler(cisco)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="cisco.$edit && cisco.code && cisco.description && cisco.id_district>''" ng-click="vm.ajout(cisco,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>                   
+      </div>
+      <!-- / Cisco -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

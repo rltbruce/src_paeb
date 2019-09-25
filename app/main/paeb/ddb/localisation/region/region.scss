@@ -3,6 +3,14 @@
     .content {
 
         .form-wrapper {
+          .tous_table{
+            .repeated-item.ng-enter{
+             
+              animation: my_animation 1.5s linear;
+              
+            }
+          }
+                              
 
         }
 		
@@ -19,3 +27,8 @@
         }
     }
 }
+
+@keyframes my_animation {
+              from { opacity: 0; }
+              to   { opacity: 1; }
+            }

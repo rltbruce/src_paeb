@@ -12,90 +12,269 @@
                 <span class="parent" href="javascript:;"> Localisation</span>
 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Region</span>
+                <span class="parent" href="javascript:;"> Géographique</span>
             </div>
 
-            <div class="title">Region</div>
+            <div class="title">Géographique</div>
         </div>
     </div>
     <!-- / HEADER -->
     
     <!-- CONTENT -->
     <div class="content" layout="column">
-      <div class="form-wrapper">
-        <div style="clear:both;"></div>
-          <md-tabs md-dynamic-height layout="column" flex>
-            <md-tab label="Région" layout="column" flex>
-              <md-tab-body>
-                <fieldset style="width: 100%">
-                  <legend>
-                    Région
 
-                    <md-button class="md-fab md-mini " aria-label="Use Android"ng-click="vm.ajouter()">
-                      <md-icon md-svg-src="assets/icons/svg/add.svg" style="color: greenyellow;"></md-icon>
-                    </md-button>
-                  </legend>
-                  
-                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions">
-                    <thead>
-                      <tr>
-                        <th class="secondary-text" ng-repeat="regc in ::vm.region_column">
-                            <div class="table-header">
-                              <span class="column-title">{{regc.titre}}</span>
-                            </div>
-                        </th>
-                      </tr>
-                    </thead>
+      <!-- Region -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">                  
+
+                        <!--md-button class="md-fab md-mini " aria-label="Use Android"ng-click="vm.ajouter()">
+                          <md-icon md-svg-src="assets/icons/svg/add.svg" style="color: greenyellow;"></md-icon>
+                        </md-button-->
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 0px 0px 10px; ">
+                <span style="line-height: normal;"> REGION</span>
+                <md-button class="md-icon-button" ng-click="vm.show_region()" ng-show="vm.showTableRegion">
+                  <md-icon md-font-icon="icon-chevron-down"></md-icon>
+                  <md-tooltip><span>Masquer</span></md-tooltip>
+                </md-button>
+                <md-button class="md-icon-button" ng-click="vm.show_region()" ng-show="!vm.showTableRegion">
+                  <md-icon md-font-icon="icon-chevron-right"></md-icon>
+                  <md-tooltip><span>Afficher</span></md-tooltip>
+                </md-button>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add region" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout région</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div ng-show="vm.showTableRegion" class="tous_table">        
+        <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+          <thead>
+            <tr>
+              <th class="secondary-text" ng-repeat="regc in ::vm.region_column">
+                <div class="table-header">
+                  <span class="column-title">{{regc.titre}}</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
                    
-                   <tbody>
-                      <tr ng-repeat="region in vm.allregion"  ng-class="{selected: region.$selected}" ng-click="vm.selection(region)">           
-                        <td>
-                          <span ng-if="region.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Code</label>
-                              <input name="code" type="text" ng-model="region.code"/>
-                            </md-input-container>
-                          </span>
-                          
-                          <span ng-if="!region.$edit">{{region.code}}</span>
-                        </td>
+          <tbody>
+            <tr ng-repeat="region in vm.allregion"  ng-class="{selected: region.$selected}" ng-click="vm.selection(region)">           
+              <td>
+                <span ng-if="region.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Code</label>
+                    <input name="code" type="text" ng-model="region.code"/>
+                  </md-input-container>
+                </span>                          
+                <span ng-if="!region.$edit">{{region.code}}</span>
+              </td>
                         
-                        <td>
-                          <span ng-if="region.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Nom</label>
-                              <input name="Nom" type="text" ng-model="region.nom"/>
-                            </md-input-container>   
-                          </span>
+              <td>
+                <span ng-if="region.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Nom</label>
+                    <input name="Nom" type="text" ng-model="region.nom"/>
+                  </md-input-container>   
+                </span>
                           
-                          <span ng-if="!region.$edit">{{region.nom}}</span>
-                        </td>
+                <span ng-if="!region.$edit">{{region.nom}}</span>
+              </td>
                                            
-                        <td>
-                          <a ng-if="!region.$edit" ng-click="vm.modifier(region)" title="Modifier">
-                            <span class="icon-table-edit"></span>
-                          </a>
+              <td>
+                <a ng-if="!region.$edit" ng-click="vm.modifier(region)" title="Modifier">
+                  <span class="icon-table-edit"></span>
+                </a>
                           
-                          <a ng-if="!region.$edit" ng-click="vm.supprimer(region)" title="Supprimer">
-                            <span class="icon-delete"></span>
-                          </a>
+                <a ng-if="!region.$edit" ng-click="vm.supprimer(region)" title="Supprimer">
+                  <span class="icon-delete"></span>
+                </a>
                           
-                          <a ng-if="region.$edit" ng-click="vm.annuler(region)" title="Annuler modification">
-                            <span class="icon-cancel"></span>
-                          </a>
+                <a ng-if="region.$edit" ng-click="vm.annuler(region)" title="Annuler modification">
+                  <span class="icon-cancel"></span>
+                </a>
                           
-                          <a ng-if="region.$edit && region.code && region.nom >''" ng-click="vm.ajout(region,0)" title="Sauvegarder">
-                            <span class="icon-content-save"></span>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </fieldset>
-              </md-tab-body>
-            </md-tab>
-          </md-tabs>
-        </div>
+                <a ng-if="region.$edit && region.code && region.nom >''" ng-click="vm.ajout(region,0)" title="Sauvegarder">
+                  <span class="icon-content-save"></span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>                   
       </div>
+      <!-- / Region -->
+
+      <!-- District -->            
+      <div class="form-wrapper md-whiteframe-1dp" style="margin-top: 15px">       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom"> 
+
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 0px 0px 10px; ">
+                <span style="line-height: normal;">DISTRICT</span>
+                <md-button class="md-icon-button" ng-click="vm.show_district()" ng-show="vm.showTableDistrict">
+                  <md-icon md-font-icon="icon-chevron-down"></md-icon>
+                  <md-tooltip><span>Masquer</span></md-tooltip>
+                </md-button>
+                <md-button class="md-icon-button" ng-click="vm.show_district()" ng-show="!vm.showTableDistrict">
+                  <md-icon md-font-icon="icon-chevron-down"></md-icon>
+                  <md-tooltip><span>Afficher</span></md-tooltip>
+                </md-button>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add district" ng-click="vm.ajouter_district()" ng-show="vm.boutonAjoutDistrict">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout district</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+        <div ng-show="vm.showTableDistrict" class="tous_table">         
+        <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions">
+          <thead>
+            <tr>
+              <th class="secondary-text" ng-repeat="distc in ::vm.district_column">
+                <div class="table-header">
+                  <span class="column-title">{{distc.titre}}</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+                   
+          <tbody>
+            <tr ng-repeat="district in vm.alldistrict"  ng-class="{selected: district.$selected}" ng-click="vm.selection_district(district)" class="repeated-item">           
+              <td>
+                <span ng-if="district.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Code</label>
+                    <input name="code" type="text" ng-model="district.code"/>
+                  </md-input-container>
+                </span>                          
+                <span ng-if="!district.$edit">{{district.code}}</span>
+              </td>
+                        
+              <td>
+                <span ng-if="district.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Nom</label>
+                    <input name="Nom" type="text" ng-model="district.nom"/>
+                  </md-input-container>   
+                </span>
+                          
+                <span ng-if="!district.$edit">{{district.nom}}</span>
+              </td>
+                                           
+              <td>
+                <a ng-if="!district.$edit" ng-click="vm.modifier_district(district)" title="Modifier">
+                  <span class="icon-table-edit"></span>
+                </a>
+                          
+                <a ng-if="!district.$edit" ng-click="vm.supprimer_district(district)" title="Supprimer">
+                  <span class="icon-delete"></span>
+                </a>
+                          
+                <a ng-if="district.$edit" ng-click="vm.annuler_district(district)" title="Annuler modification">
+                  <span class="icon-cancel"></span>
+                </a>
+                          
+                <a ng-if="district.$edit && district.code && district.nom >''" ng-click="vm.ajout_district(district,0)" title="Sauvegarder">
+                  <span class="icon-content-save"></span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>                   
+      </div>
+      <!-- District -->
+
+      <!-- Commune -->            
+      <div class="form-wrapper md-whiteframe-1dp" style="margin-top: 15px">       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom"> 
+
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 0px 0px 10px; ">
+                <span style="line-height: normal;">COMMUNE</span>
+                <md-button class="md-icon-button" ng-click="vm.show_commune()" ng-show="vm.showTableCommune"> 
+                  <md-icon md-font-icon="icon-chevron-down"></md-icon>
+                  <md-tooltip><span>Masquer</span></md-tooltip>
+                </md-button>
+                <md-button class="md-icon-button" ng-click="vm.show_commune()" ng-show="!vm.showTableCommune"> 
+                  <md-icon md-font-icon="icon-chevron-down"></md-icon>
+                  <md-tooltip><span>Afficher</span></md-tooltip>
+                </md-button>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add commune" ng-click="vm.ajouter_commune()" ng-show="vm.boutonAjoutCommune">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout commune</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+        <div ng-show="vm.showTableCommune" class="tous_table">          
+        <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions">
+          <thead>
+            <tr>
+              <th class="secondary-text" ng-repeat="comc in ::vm.commune_column">
+                <div class="table-header">
+                  <span class="column-title">{{comc.titre}}</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+                   
+          <tbody>
+            <tr ng-repeat="commune in vm.allcommune"  ng-class="{selected: commune.$selected}" ng-click="vm.selection_commune(commune)" class="repeated-item">           
+              <td>
+                <span ng-if="commune.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Code</label>
+                    <input name="code" type="text" ng-model="commune.code"/>
+                  </md-input-container>
+                </span>                          
+                <span ng-if="!commune.$edit">{{commune.code}}</span>
+              </td>
+                        
+              <td>
+                <span ng-if="commune.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Nom</label>
+                    <input name="Nom" type="text" ng-model="commune.nom"/>
+                  </md-input-container>   
+                </span>
+                          
+                <span ng-if="!commune.$edit">{{commune.nom}}</span>
+              </td>
+                                           
+              <td>
+                <a ng-if="!commune.$edit" ng-click="vm.modifier_commune(commune)" title="Modifier">
+                  <span class="icon-table-edit"></span>
+                </a>
+                          
+                <a ng-if="!commune.$edit" ng-click="vm.supprimer_commune(commune)" title="Supprimer">
+                  <span class="icon-delete"></span>
+                </a>
+                          
+                <a ng-if="commune.$edit" ng-click="vm.annuler_commune(commune)" title="Annuler modification">
+                  <span class="icon-cancel"></span>
+                </a>
+                          
+                <a ng-if="commune.$edit && commune.code && commune.nom >''" ng-click="vm.ajout_commune(commune,0)" title="Sauvegarder">
+                  <span class="icon-content-save"></span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>                  
+      </div>
+      <!-- Commune -->
+
+    </div>
     <!-- / CONTENT -->
   </div>

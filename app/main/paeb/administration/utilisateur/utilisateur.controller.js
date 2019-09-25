@@ -224,24 +224,6 @@
                       break;
                   }
 
-                  case 'SSI':
-                  {
-                      vm.user.ssi = true ;
-                      break;
-                  }
-
-                  case 'VLD':
-                  {
-                      vm.user.vld = true ;
-                      break;
-                  }
-
-                  case 'RPT':
-                  {
-                      vm.user.rpt = true ;
-                      break;
-                  }
-
                   default:
                   {
                       break ;
@@ -282,12 +264,6 @@
                 tab.push(key.toUpperCase());
               if(key == 'admin' && value == true)
                   tab.push(key.toUpperCase());
-              if(key == 'ssi' && value == true)
-                tab.push(key.toUpperCase());
-              if(key == 'vld' && value == true)
-                tab.push(key.toUpperCase());
-              if(key == 'rpt' && value == true)
-                tab.push(key.toUpperCase());
               
           });
 

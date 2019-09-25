@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.ddb.localisation.region', {
-            title: 'Région',
+            title: 'Géographique',
             icon  : 'icon-map-marker-circle',
             state: 'app.population_ddb_localisation_region',
 			weight: 1

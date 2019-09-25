@@ -4,9 +4,6 @@
 
     angular
         .module('app.paeb.ddb.localisation', [
-
-           'app.paeb.ddb.localisation.commune',
-            'app.paeb.ddb.localisation.district',
             'app.paeb.ddb.localisation.region',
         ])
         .config(config);
@@ -17,7 +14,7 @@
         msNavigationServiceProvider.saveItem('paeb.ddb.localisation', {
             title : 'Localisation',
             icon  : 'icon-map-marker-multiple',
-            weight: 9
+            weight: 1
         });
     }
 

@@ -1,0 +1,131 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Prestataire</span>
+            </div>
+
+            <div class="title">Prestataire</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Prestataire -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Prestataire</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add prestataire" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout prestataire</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="prestc in ::vm.prestataire_column">
+                  <div class="table-header">
+                    <span class="column-title">{{prestc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="prestataire in vm.allprestataire"  ng-class="{selected: prestataire.$selected}" ng-click="vm.selection(prestataire)">           
+                <td>
+                  <span ng-if="prestataire.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Code</label>
+                      <input name="code" type="text" ng-model="prestataire.code"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!prestataire.$edit">{{prestataire.code}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="prestataire.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Nom</label>
+                      <input name="Nom" type="text" ng-model="prestataire.nom"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!prestataire.$edit">{{prestataire.nom}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="prestataire.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Nif</label>
+                      <input name="Nif" type="text" ng-model="prestataire.nif"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!prestataire.$edit">{{prestataire.nif}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="prestataire.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Stat</label>
+                      <input name="Stat" type="text" ng-model="prestataire.stat"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!prestataire.$edit">{{prestataire.stat}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="prestataire.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Siege</label>
+                      <input name="Siege" type="text" ng-model="prestataire.siege"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!prestataire.$edit">{{prestataire.siege}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!prestataire.$edit" ng-click="vm.modifier(prestataire)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!prestataire.$edit" ng-click="vm.supprimer(prestataire)" title="Supprimer">
+                    <span class="icon-delete" ></span>
+                  </a>
+                            
+                  <a ng-if="prestataire.$edit" ng-click="vm.annuler(prestataire)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="prestataire.$edit && prestataire.code && prestataire.nom && prestataire.nif&& prestataire.stat && prestataire.siege>''" ng-click="vm.ajout(prestataire,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>                   
+      </div>
+      <!-- / prestataire -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

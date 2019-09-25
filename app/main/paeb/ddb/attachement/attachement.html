@@ -1,0 +1,98 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Attachement</span>
+            </div>
+
+            <div class="title">Attachement</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Attachement -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Attachement</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add attachement" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout attachement</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="cisc in ::vm.attachement_column">
+                  <div class="table-header">
+                    <span class="column-title">{{cisc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="attachement in vm.allattachement"  ng-class="{selected: attachement.$selected}" ng-click="vm.selection(attachement)">           
+                <td>
+                  <span ng-if="attachement.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Code</label>
+                      <input name="code" type="text" ng-model="attachement.code"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!attachement.$edit">{{attachement.code}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="attachement.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Description</label>
+                      <input name="Description" type="text" ng-model="attachement.description"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!attachement.$edit">{{attachement.description}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!attachement.$edit" ng-click="vm.modifier(attachement)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!attachement.$edit" ng-click="vm.supprimer(attachement)" title="Supprimer">
+                    <span class="icon-delete" ></span>
+                  </a>
+                            
+                  <a ng-if="attachement.$edit" ng-click="vm.annuler(attachement)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="attachement.$edit && attachement.code && attachement.description>''" ng-click="vm.ajout(attachement,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>                   
+      </div>
+      <!-- / attachement -->
+    </div>
+    <!-- / CONTENT -->
+  </div>
