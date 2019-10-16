@@ -28,7 +28,7 @@
         };
 
         //col table
-        vm.ecole_column = [{titre:"Code"},{titre:"Description"},{titre:"Lieu"},{titre:"Commune"},{titre:"Latitude"},{titre:"Longitude"},{titre:"Altitude"},{titre:"Action"}];
+        vm.ecole_column = [{titre:"Code"},{titre:"Description"},{titre:"Lieu"},{titre:"Commune"},{titre:"Latitude"},{titre:"Longitude"},{titre:"Altitude"},{titre:"Ponderation"},{titre:"Action"}];
         
         //recuperation donnée ecole
         apiFactory.getAll("ecole/index").then(function(result)
@@ -45,6 +45,7 @@
                   lieu: item.lieu,
                   description: item.description,
                   code: item.code,
+                  ponderation: item.ponderation,
                 }
                 
               };
@@ -107,7 +108,8 @@
               id_commune: '',         
               latitude: '',
               longitude: '',
-              altitude: ''
+              altitude: '',
+              ponderation: 0
             };         
             vm.allecole.push(items);
             vm.allecole.forEach(function(cis)
@@ -152,7 +154,8 @@
             item.id_commune  = currentItem.id_commune ;
             item.latitude    = currentItem.latitude ;
             item.longitude   = currentItem.longitude ;
-            item.altitude    = currentItem.altitude ; 
+            item.altitude    = currentItem.altitude ;
+            item.ponderation    = currentItem.ponderation ; 
           }else
           {
             vm.allecole = vm.allecole.filter(function(obj)
@@ -202,7 +205,8 @@
             item.id_commune  = vm.selectedItem.commune.id;
             item.latitude      = vm.selectedItem.latitude ;
             item.longitude = vm.selectedItem.longitude;
-            item.altitude  = vm.selectedItem.altitude; 
+            item.altitude  = vm.selectedItem.altitude;
+            item.ponderation  = vm.selectedItem.ponderation; 
         };
 
         //fonction bouton suppression item ecole
@@ -240,7 +244,8 @@
                     || (cis[0].id_commune!=currentItem.id_commune)
                     || (cis[0].latitude!=currentItem.latitude)
                     || (cis[0].longitude!=currentItem.longitude)
-                    || (cis[0].altitude!=currentItem.altitude))                    
+                    || (cis[0].altitude!=currentItem.altitude)
+                    || (cis[0].ponderation!=currentItem.ponderation))                    
                       { 
                          insert_in_base(item,suppression);
                       }
@@ -278,7 +283,8 @@
                     longitude:   ecole.longitude,
                     altitude:    ecole.altitude,
                     id_commune:  ecole.id_commune,
-                    description: ecole.description               
+                    description: ecole.description,
+                    ponderation: ecole.ponderation               
                 });
                 //console.log(ecole.pays_id);
                 //factory
@@ -301,6 +307,7 @@
                         vm.selectedItem.latitude   = ecole.latitude;
                         vm.selectedItem.longitude  = ecole.longitude;
                         vm.selectedItem.altitude   = ecole.altitude;
+                        vm.selectedItem.ponderation   = ecole.ponderation;
                         vm.selectedItem.commune       = com[0];
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
@@ -322,6 +329,7 @@
                   ecole.latitude  =  ecole.latitude;
                   ecole.longitude =  ecole.longitude;
                   ecole.altitude  =  ecole.altitude;
+                  ecole.ponderation  =  ecole.ponderation;
                   ecole.commune   = com[0];
                   ecole.id        =   String(data.response);              
                   NouvelItem = false;

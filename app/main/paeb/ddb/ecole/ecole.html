@@ -22,7 +22,7 @@
 
       <!-- Ecole -->
       <!--div class="form-wrapper md-whiteframe-1dp" --> 
-      <ms-widget class="form-wrapper" flippable="true">
+      <ms-widget class="form-wrapper" flippable="true" id="widgetecole">
       <ms-widget-front>       
         <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
           <div layout="row" layout-align="start" flex>
@@ -136,6 +136,17 @@
                   </span>
                             
                   <span ng-if="!ecole.$edit">{{ecole.altitude}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="ecole.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Ponderation</label>
+                      <input name="Ponderation" type="text" ng-model="ecole.ponderation"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!ecole.$edit">{{ecole.ponderation}}</span>
                 </td>
                                              
                 <td>

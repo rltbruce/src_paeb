@@ -6,33 +6,33 @@
 
     <div class="ms-theme-options-list" layout="column">
         <div class="theme-option">
-            <div class="option-title">Style de mise en page:</div>
+            <div class="option-title">Layout Style:</div>
 
             <md-radio-group layout="column" ng-model="vm.layoutStyle"
                             ng-change="vm.updateLayoutStyle()">
-                <md-radio-button value="verticalNavigation">Navigation Verticale</md-radio-button>
-                <md-radio-button value="horizontalNavigation">Navigation Horizontale</md-radio-button>
-                <md-radio-button value="contentOnly">Contenu seulement</md-radio-button>
-                <md-radio-button value="contentWithToolbar">Contenu avec la barre d'outils</md-radio-button>
+                <md-radio-button value="verticalNavigation">Vertical Navigation</md-radio-button>
+                <md-radio-button value="horizontalNavigation">Horizontal Navigation</md-radio-button>
+                <md-radio-button value="contentOnly">Content Only</md-radio-button>
+                <md-radio-button value="contentWithToolbar">Content with Toolbar</md-radio-button>
             </md-radio-group>
         </div>
 
         <md-divider></md-divider>
 
         <div class="theme-option">
-            <div class="option-title">Mode de mise en page:</div>
+            <div class="option-title">Layout Mode:</div>
 
             <md-radio-group layout="row" layout-align="start center" ng-model="vm.layoutMode"
                             ng-change="vm.updateLayoutMode()">
-                <md-radio-button value="boxed">En boîte</md-radio-button>
-                <md-radio-button value="wide">Large</md-radio-button>
+                <md-radio-button value="boxed">Boxed</md-radio-button>
+                <md-radio-button value="wide">Wide</md-radio-button>
             </md-radio-group>
         </div>
 
         <md-divider></md-divider>
 
         <div class="theme-option">
-            <div class="option-title">Palette de couleurs:</div>
+            <div class="option-title">Color Palette:</div>
 
             <md-menu-item ng-repeat="(themeName, theme) in vm.themes.list" class="theme">
                 <md-button class="md-raised theme-button"

@@ -21,7 +21,8 @@
             'app.quick-panel',
           
             //paeb
-			      'app.paeb'
+			      'app.paeb',
+                  "kendo.directives"
 
         ]);
 })();

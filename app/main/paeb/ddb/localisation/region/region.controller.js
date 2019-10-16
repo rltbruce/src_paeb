@@ -6,12 +6,12 @@
         .module('app.paeb.ddb.localisation.region')
         .controller('RegionController', RegionController);
     /** @ngInject */
-    function RegionController($mdDialog, $scope, apiFactory, $state)
+    function RegionController($mdDialog, $scope, apiFactory, $state,apiUrl,$http)
     {
         var vm = this;
-        vm.ajout = ajout ;
+        /*vm.ajout = ajout ;*/
         var NouvelItem=false;
-        var currentItem;
+       /* var currentItem;
         vm.selectedItem = {} ;
         vm.allregion = [] ;
         vm.showTableRegion = true;
@@ -30,16 +30,17 @@
         vm.selectedItem_commune = {} ;
         vm.allcommune= [] ; 
         vm.boutonAjoutCommune = false;
-        vm.showTableCommune = true;       
+        vm.showTableCommune = true;
+        vm.isCollapsed = false;       
        
-        //style
+        //styleorder : [1,'asc']
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
           autoWidth: false,
           responsive: true,
-          order : [1,'asc'],
-          iDisplayLength : 5,
+          ordering : false,
+          iDisplayLength : 20,
           lengthMenu : [ 5,10, 25, 50, 100 ]
           
         };
@@ -47,28 +48,538 @@
         //col table
         vm.region_column = [{titre:"Code"},{titre:"Nom"},{titre:"Action"}];
         vm.district_column = [{titre:"Code"},{titre:"Nom"},{titre:"Action"}];
-        vm.commune_column = [{titre:"Code"},{titre:"Nom"},{titre:"Action"}];
+        vm.commune_column = [{titre:"Code"},{titre:"Nom"},{titre:"Action"}];*/
+
+       /* apiFactory.getAll("region/index").then(function(result)
+        {
+            vm.allregion = result.data.response; 
+            console.log(vm.allregion);
+
+            vm.mainGridOptions = {
+       
+          dataSource: {
+            type: "json",
+            data:vm.allregion,
+            serverFiltering: true,
+            pageSize: 5,
+          },
+          selectable:"row",
+          //scrollable: false,
+          //sortable: true,
+          //pageable: true,
+          
+      };
+            
+            
+        });
+        
+      vm.gridColumns = [
+    { field: "code", title: "Code" },
+    { field: "nom", title: "Nom" }
+  ];*/
+        
+
+/* ***************DEBUT GEOGRAPHIQUE**********************/
+
+        vm.mainGridOptions =
+        {
+          dataSource: new kendo.data.DataSource({
+             
+            transport:
+            {
+                read: function (e)
+                {
+                    apiFactory.getAll("region/index").then(function success(response)
+                    {
+                        e.success(response.data.response)
+     
+
+                        console.log(response.data.response);
+                    }, function error(response)
+                        {
+                          alert('something went wrong')
+                          console.log(response);
+                        })
+                },
+                update : function (e)
+                {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        e.data.models[0].id,      
+                          code:      e.data.models[0].code,
+                          nom:       e.data.models[0].nom               
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("region/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });
+                                   
+                     
+                },
+                destroy: function (e)
+                {
+                    console.log("destroy");
+                    var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                    console.log(e.data.models);
+                    var datas = $.param({
+                            supprimer: 1,
+                            id:        e.data.models[0].id               
+                        });
+                    apiFactory.add("region/index",datas, config).success(function (data)
+                    {                
+                      e.success(e.data.models); 
+                    }).error(function (data)
+                      {
+                        //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                      });
+               
+                },
+                create: function(e) {
+                  console.log('create');
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                    console.log(e.data.models);
+                    var datas = $.param({
+                            supprimer: 0,
+                            id:        0,      
+                            code:      e.data.models[0].code,
+                            nom:       e.data.models[0].nom               
+                        });
+                    apiFactory.add("region/index",datas, config).success(function (data)
+                    { 
+                      e.data.models[0].id = String(data.response);               
+                      e.success(e.data.models);
+                      console.log(e.data.models); 
+                    }).error(function (data)
+                      {
+                        //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                      });
+                },
+            },
+                
+            //data: valueMapCtrl.dynamicData,
+            batch: true,
+            autoSync: false,
+            schema:
+            {
+                model:
+                {
+                    id: "id",
+                    fields:
+                    {
+                        code: {type: "string",validation: {required: true}},
+                        nom: {type: "string", validation: {required: true}}
+                    }
+                }
+            },
+
+            pageSize: 10//nbr affichage
+            //serverPaging: true,
+            //serverSorting: true
+          }),
+          
+          // height: 550,
+          toolbar: [{
+               name: "create",
+               text:"Ajout",
+               iconClass: "k-icon k-i-edit"
+          }],
+         /* edit: function(e)
+          {
+              NouvelItem = false;
+              var grid = e.sender;
+              var rows = grid.tbody.find("[role='row']");
+              var tr = $(e.target).closest("tr");
+              tr.addClass("k-state-selected");
+          },*/
+          /*cancel : function (e)
+          {
+              console.log("cancel");
+              console.log(e);
+              NouvelItem = false;
+               
+          },*/
+          editable:{ mode:"inline",update: true,destroy: true},
+          selectable:"row",
+          sortable: true,
+          //pageable: true,
+          reorderable: true,
+          scrollable: false,              
+          filterable: true,
+          //groupable: true,
+          pageable:{refresh: true,
+                    pageSizes: true, 
+                    buttonCount: 3,
+                    messages: {
+                      empty: "Pas de donnée",
+                      display: "{0}-{1} pour {2} items",
+                      itemsPerPage: "items par page",
+                      next: "Page suivant",
+                      previous: "Page précédant",
+                      refresh: "Actualiser",
+                      first: "Première page",
+                      last: "Dernière page"
+                    }
+                  },
+          
+          //dataBound: function() {
+                //this.expandRow(this.tbody.find("tr.k-master-row").first());
+            //},
+          columns: [
+            {
+              field: "code",
+              title: "Code",
+              width: "Auto"
+            },
+            {
+              field: "nom",
+              title: "Nom",
+              width: "Auto"
+            },
+            { 
+              title: "Action",
+              width: "Auto",
+              command:[{
+                      name: "edit",
+                      text: {edit: "Editer",update: "Modifier",cancel: "Annuler"},
+                      iconClass: {edit: "k-icon k-i-edit",update: "k-icon k-i-update",cancel: "k-icon k-i-cancel"
+                        },
+                  },{name: "destroy", text: "Supprimer"}]
+            }]
+          };
+
+/*function sourceDropDownEditor(container, options) {
+  var Sources = [{ "SourceID": 1, "Source": "11" },
+               { "SourceID": 2, "Source": "Source2" },
+               { "SourceID": 3, "Source": "Source3" }];
+    $('<input id="sourcesDropDownList" required data-text-field="Source" data-value-field="Source" data-bind="value:' + options.field + '"/>')
+        .appendTo(container)
+        .kendoDropDownList({
+            dataTextField: "Source",
+            dataValueField: "Source",
+            dataSource: Sources           
+        });
+}*/
+      vm.alldistrict = function(id) {
+        return {
+          dataSource:
+          {
+            type: "json",
+            transport: {
+              read: function (e)
+              {
+                apiFactory.getAPIgeneraliserREST("district/index","id_region",id).then(function(result)
+                {
+                    e.success(result.data.response)
+                }, function error(result)
+                  {
+                      alert('something went wrong')
+                  })
+              },
+              update : function (e)
+              {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        e.data.models[0].id,      
+                          code:      e.data.models[0].code,
+                          nom:       e.data.models[0].nom,
+                          id_region: e.data.models[0].region.id               
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("district/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              },
+              destroy : function (e)
+              {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 1,
+                          id:        e.data.models[0].id               
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("district/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              },
+              create : function (e)
+              {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        0,      
+                          code:      e.data.models[0].code,
+                          nom:       e.data.models[0].nom,
+                          id_region: id               
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("district/index",datas, config).success(function (data)
+                  { 
+                    e.data.models[0].id = String(data.response);              
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              }
+            },
+            batch: true,
+            schema:
+            {
+                model:
+                {
+                    id: "id",
+                    fields:
+                    {
+                        code: {type: "string",validation: {required: true}},
+                        nom: {type: "string", validation: {required: true}}
+                    }
+                }
+            },
+            //serverPaging: true,
+            //serverSorting: true,
+            serverFiltering: true,
+            pageSize: 5,
+          },
+          toolbar: [{
+               name: "create",
+               text:"Ajout",
+               iconClass: "k-icon k-i-edit"
+          }],
+          editable: {
+            mode:"inline"
+          },
+          selectable:"row",
+          scrollable: false,
+          sortable: true,
+          pageable:{refresh: true,
+                    pageSizes: true, 
+                    buttonCount: 3,
+                    messages: {
+                      empty: "Pas de donnée",
+                      display: "{0}-{1} pour {2} items",
+                      itemsPerPage: "items par page",
+                      next: "Page suivant",
+                      previous: "Page précédant",
+                      refresh: "Actualiser",
+                      first: "Première page",
+                      last: "Dernière page"
+                    }
+                  },
+          //dataBound: function() {
+                   // this.expandRow(this.tbody.find("tr.k-master-row").first());
+               // },
+          columns: [
+            {
+              field: "code",
+              title: "Code",
+              width: "Auto"
+            },
+            {
+              field: "nom",
+              title: "Nom",
+              width: "Auto"
+            },
+            { 
+              title: "Action",
+              width: "Auto",
+              command:[{
+                      name: "edit",
+                      text: {edit: "Editer",update: "Modifier",cancel: "Annuler"},
+                      iconClass: {edit: "k-icon k-i-edit",update: "k-icon k-i-update",cancel: "k-icon k-i-cancel"
+                        },
+                  },{name: "destroy", text: "Supprimer"}]
+            }]
+        };
+      };
+
+      vm.allcommune = function(id) {
+        return {
+          dataSource:
+          {
+            type: "json",
+            transport: {
+              read: function (e)
+              {
+                apiFactory.getAPIgeneraliserREST("commune/index","id_district",id).then(function(result)
+                {
+                    e.success(result.data.response)
+                }, function error(result)
+                  {
+                      alert('something went wrong')
+                  })
+              },
+              update : function (e)
+              {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        e.data.models[0].id,      
+                          code:      e.data.models[0].code,
+                          nom:       e.data.models[0].nom,
+                          id_district: e.data.models[0].district.id               
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("commune/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              },
+              destroy : function (e)
+              {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 1,
+                          id:        e.data.models[0].id               
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("commune/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              },
+              create : function (e)
+              {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        0,      
+                          code:      e.data.models[0].code,
+                          nom:       e.data.models[0].nom,
+                          id_district: id               
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("commune/index",datas, config).success(function (data)
+                  { 
+                    e.data.models[0].id = String(data.response);              
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              }
+            },
+            batch: true,
+            schema:
+            {
+                model:
+                {
+                    id: "id",
+                    fields:
+                    {
+                        code: {type: "string",validation: {required: true}},
+                        nom: {type: "string", validation: {required: true}}
+                    }
+                }
+            },
+            //serverPaging: true,
+            //serverSorting: true,
+            serverFiltering: true,
+            pageSize: 5,
+          },
+          toolbar: [{
+               name: "create",
+               text:"Ajout",
+               iconClass: "k-icon k-i-edit"
+          }],
+          editable: {
+            mode:"inline"
+          },
+          selectable:"row",
+          scrollable: false,
+          sortable: true,
+          pageable:{refresh: true,
+                    pageSizes: true, 
+                    buttonCount: 3,
+                    messages: {
+                      empty: "Pas de donnée",
+                      display: "{0}-{1} pour {2} items",
+                      itemsPerPage: "items par page",
+                      next: "Page suivant",
+                      previous: "Page précédant",
+                      refresh: "Actualiser",
+                      first: "Première page",
+                      last: "Dernière page"
+                    }
+                  },
+          //dataBound: function() {
+                   // this.expandRow(this.tbody.find("tr.k-master-row").first());
+               // },
+          columns: [
+            {
+              field: "code",
+              title: "Code",
+              width: "Auto"
+            },
+            {
+              field: "nom",
+              title: "Nom",
+              width: "Auto"
+            },
+            { 
+              title: "Action",
+              width: "Auto",
+              command:[{
+                      name: "edit",
+                      text: {edit: "Editer",update: "Modifier",cancel: "Annuler"},
+                      iconClass: {edit: "k-icon k-i-edit",update: "k-icon k-i-update",cancel: "k-icon k-i-cancel"
+                        },
+                  },{name: "destroy", text: "Supprimer"}]
+            }]
+        };
+      };
+
+/* ***************FIN GEOGRAPHIQUE**********************/
+
 
 
 /* ***************DEBUT REGION**********************/
        
-        apiFactory.getAll("region/index").then(function(result)
+       /* apiFactory.getAll("region/index").then(function(result)
         {
             vm.allregion = result.data.response; 
             console.log(vm.allregion);
-        });
-        
-        function ajout(region,suppression)
-        {
-            if (NouvelItem==false)
-            {
-                test_existance (region,suppression); 
-            } 
-            else
-            {
-                insert_in_base(region,suppression);
-            }
-        }
+        });*/
         
         //fonction d'insertion ou mise a jours ou suppression item dans bdd region
         function insert_in_base(region,suppression)
@@ -82,7 +593,7 @@
             var getId = 0;
             if (NouvelItem==false)
             {
-                getId = vm.selectedItem.id; 
+                getId = region.id; 
             } 
             
             var datas = $.param({
@@ -276,7 +787,7 @@
 /* ***************FIN REGION**********************/        
 
 /* ***************DEBUT DISTRICT**********************/
-        function ajout_district(district,suppression)
+     /*   function ajout_district(district,suppression)
         {
             if (NouvelItem_district==false)
             {
@@ -494,11 +1005,11 @@
           vm.showTableDistrict = !vm.showTableDistrict;
         }
         
-
+*/
 /* ***************FIN DISTRICT**********************/
 
 /* ***************DEBUT COMMUNE**********************/
-        function ajout_commune(commune,suppression)
+       /* function ajout_commune(commune,suppression)
         {
             if (NouvelItem_commune==false)
             {
@@ -702,7 +1213,7 @@
         {
           vm.showTableCommune = !vm.showTableCommune;
         }
-        
+        */
 
 /* ***************FIN COMMUNE**********************/
         

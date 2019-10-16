@@ -8,7 +8,7 @@
         .directive('msThemeOptions', msThemeOptions);
 
     /** @ngInject */
-    function MsThemeOptionsController($cookies, fuseTheming)
+    function MsThemeOptionsController($cookies, fuseTheming, $window, $location)
     {
         var vm = this;
 
@@ -57,7 +57,7 @@
             // Reload the page to apply the changes
             location.reload();
 
-            $window.location.href = '/peche';
+            $window.location.href = '/bianco';//mis à jour modules pour gestion securité
         }
     }
 
