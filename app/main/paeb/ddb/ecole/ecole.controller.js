@@ -357,5 +357,291 @@
             .targetEvent()
           );
         }
+
+vm.polylines = [
+            {
+                id: 1,
+                path: [
+                    {
+                        latitude: -13.586724,
+                        longitude: 47.958293 , 
+                    },
+                    {
+                        latitude: -14.025779,
+                        longitude: 48.047114 , 
+                    },
+                    {
+                        latitude: -13.992726,
+                        longitude: 48.090419
+                    },
+                    {
+                        latitude: -13.966392, 
+                        longitude: 48.084645,
+                    },
+                    {
+                        latitude: -13.876931, 
+                        longitude: 48.234667,
+                    },
+                    {
+                        latitude: -13.894659, 
+                        longitude: 48.259596,
+                    },
+                    {
+                        latitude: -14.012895,
+                        longitude: 48.174141
+                    },
+                    {
+                        latitude: -14.013105, 
+                        longitude: 48.174384,
+                    },
+                    {
+                        latitude: -14.034495, 
+                        longitude: 48.200923,
+                    },
+                    {
+                        latitude: -14.018789,
+                        longitude: 48.242270 , 
+                    },
+                    {
+                        latitude: -14.069342,
+                        longitude: 48.272315
+                    },
+                    {
+                        latitude: -14.071226, 
+                        longitude: 48.299803,
+                    },
+                    {
+                        latitude: -14.122543, 
+                        longitude: 48.365796,
+                    },
+                    {
+                        latitude: -14.121721, 
+                        longitude: 48.470424,
+                    },
+                    {
+                        latitude: -14.078683,
+                        longitude: 48.536567
+                    },
+                    {
+                        latitude: -14.141488, 
+                        longitude: 48.581585,
+                    },
+                    {
+                        latitude: -14.141124, 
+                        longitude: 48.623868,
+                    },
+                    {
+                        latitude: -14.216036,
+                        longitude: 48.701767 , 
+                    },
+                    {
+                        latitude: -14.189243,
+                        longitude: 48.797683
+                    },
+                    {
+                        latitude: -14.255137, 
+                        longitude: 48.837552,
+                    },
+                    {
+                        latitude: -14.148160, 
+                        longitude: 48.971524,
+                    },
+                    {
+                        latitude: -14.202813, 
+                        longitude: 49.087365,
+                    },
+                    {
+                        latitude: -14.204431,
+                        longitude: 49.132823
+                    },
+                    {
+                        latitude: -14.266465, 
+                        longitude: 49.140986,
+                    },
+                    {
+                        latitude: -14.441563, 
+                        longitude: 49.309307,
+                    },
+                    {
+                        latitude: -14.508693,
+                        longitude: 49.411704 , 
+                    },
+                    {
+                        latitude: -14.563009,
+                        longitude: 49.369156
+                    },
+                    {
+                        latitude: -14.671869, 
+                        longitude: 49.443677,
+                    },
+                    {
+                        latitude: -14.727503, 
+                        longitude: 49.464658,
+                    },
+                    {
+                        latitude: -14.826594, 
+                        longitude: 49.482034,
+                    },
+                    {
+                        latitude: -14.826150,
+                        longitude: 49.5147799
+                    },
+                    {
+                        latitude: -14.914193, 
+                        longitude: 49.590374,
+                    },
+                    {
+                        latitude: -14.938912, 
+                        longitude: 49.593879,
+                    },
+                    {
+                        latitude: -15.084998,
+                        longitude: 49.724461, 
+                    },
+                    {
+                        latitude: -15.045005,
+                        longitude: 49.843485
+                    },
+                    {
+                        latitude: -15.061595, 
+                        longitude: 49.908579,
+                    },
+                    {
+                        latitude: -15.042411, 
+                        longitude: 49.938876,
+                    },
+                    {
+                        latitude: -15.192719,
+                        longitude: 50.050715
+                    },
+                    {
+                        latitude: -15.255758,
+                        longitude: 49.993575
+                    },
+                    {
+                        latitude: -15.302653, 
+                        longitude: 50.034675,
+                    },
+                    {
+                        latitude: -15.340297, 
+                        longitude: 50.017314,
+                    },
+                    {
+                        latitude: -15.401211,
+                        longitude: 50.020597, 
+                    },
+                    {
+                        latitude: -15.436742,
+                        longitude: 50.058384
+                    },
+                    {
+                        latitude: -15.471482, 
+                        longitude: 50.061167,
+                    },
+                    {
+                        latitude: -15.482382, 
+                        longitude: 50.048577,
+                    },
+                    {
+                        latitude: -15.581120, 
+                        longitude: 50.021809,
+                    },
+                    {
+                        latitude: -15.641728,
+                        longitude: 50.045253
+                    },
+                    {
+                        latitude: -15.748891, 
+                        longitude: 50.067484,
+                    },
+                    {
+                        latitude: -15.771226, 
+                        longitude: 50.093409,
+                    },
+                    {
+                        latitude: -15.813575, 
+                        longitude: 50.094221,
+                    },
+                    {
+                        latitude: -15.937040,
+                        longitude: 50.132703
+                    },
+                    {
+                        latitude: -15.265595,
+                        longitude: 50.468376
+                    },
+                    {
+                        latitude: -11.971159,
+                        longitude: 49.264396
+                    },
+                    {
+                        latitude: -13.586724,
+                        longitude: 47.958293 , 
+                    }
+                ],
+                stroke: {
+                    color: '#6060FB',
+                    weight: 1
+                },
+                //editable: true,
+                //draggable: true,
+                //geodesic: true,
+                //visible: true,
+                fill: {
+                    
+                    opacity: 0
+                     
+                },
+                events: { 
+                  click: function()
+                  { 
+                  console.log("click ok"); 
+                  },
+                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0.5';
+                   console.log("mouseover ok");
+                  },
+                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0';
+                    console.log("mouseout ok");
+                  }
+                },
+                
+            },
+            {
+                id: 2,
+                path: [
+                    {
+                        latitude: 47,
+                        longitude: -74
+                    },
+                    {
+                        latitude: 32,
+                        longitude: -89
+                    },
+                    {
+                        latitude: 39,
+                        longitude: -122
+                    },
+                    {
+                        latitude: 62,
+                        longitude: -95
+                    }
+                ],
+                stroke: {
+                    color: '#FF7F00',
+                    weight: 3
+                },
+                editable: true,
+                draggable: true,
+                geodesic: true,
+                visible: true,
+                
+            }
+        ];
+  
+
+
+
     }
 })();

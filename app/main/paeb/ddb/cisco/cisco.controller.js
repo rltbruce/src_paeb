@@ -210,8 +210,9 @@
                     id_district: cisco.id_district               
                 });
                 //console.log(cisco.pays_id);
+                console.log(datas);
                 //factory
-            apiFactory.add("cisco/index",datas, config).success(function (data)
+            apiFactory.add("categorie_ouvrage/index",datas, config).success(function (data)
             {
                 
                 var dist = vm.alldistrict.filter(function(obj)

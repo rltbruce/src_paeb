@@ -9,9 +9,9 @@
             'app.paeb.ddb.cisco',
             'app.paeb.ddb.association',
             'app.paeb.ddb.ecole',
-            'app.paeb.ddb.attachement',
             'app.paeb.ddb.plan_comptable',
-            'app.paeb.ddb.prestataire'
+            'app.paeb.ddb.prestataire',
+            'app.paeb.ddb.type_ouvrage'
 
             ])
         .run(testPermission)

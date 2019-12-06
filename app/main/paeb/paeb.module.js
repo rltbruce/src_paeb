@@ -12,6 +12,7 @@
             'app.paeb.auth.lock',
             'app.paeb.administration',
             'app.paeb.ddb',
+            'app.paeb.traitement'
         ])
         .config(config);
 

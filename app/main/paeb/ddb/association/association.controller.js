@@ -27,7 +27,7 @@
         };
 
         //col table
-        vm.association_column = [{titre:"Code"},{titre:"Description"},{titre:"Cisco"},{titre:"Commune"},{titre:"Action"}];
+        vm.association_column = [{titre:"Code"},{titre:"Description"},{titre:"Ecole"},{titre:"Action"}];
         
         //recuperation donnée association
         apiFactory.getAll("association/index").then(function(result)
@@ -37,9 +37,9 @@
         });
 
         //recuperation donnée cisco
-        apiFactory.getAll("cisco/index").then(function(result)
+        apiFactory.getAll("ecole/index").then(function(result)
         {
-          vm.allcisco= result.data.response;
+          vm.allecole= result.data.response;
         });
 
         //Masque de saisi ajout
@@ -53,8 +53,7 @@
               id: '0',         
               code: '',
               description: '',
-              id_commune: '',
-              id_cisco: ''
+              id_ecole: ''
             };         
             vm.allassociation.push(items);
             vm.allassociation.forEach(function(asso)
@@ -94,9 +93,8 @@
             item.$edit = false;
             item.$selected = false;
             item.code      = currentItem.code ;
-            item.description       = currentItem.description ;
-            item.id_commune       = currentItem.id_commune ;
-            item.id_cisco       = currentItem.id_cisco ; 
+            item.description   = currentItem.description ;
+            item.id_ecole      = currentItem.id_ecole; 
           }else
           {
             vm.allassociation = vm.allassociation.filter(function(obj)
@@ -141,18 +139,7 @@
             item.$selected = true;            
             item.code      = vm.selectedItem.code ;
             item.description = vm.selectedItem.description;
-            item.id_commune  = vm.selectedItem.commune.id;
-            item.id_cisco    = vm.selectedItem.cisco.id;
-
-            var dist= vm.allcisco.filter(function(obj)
-            {
-                return obj.id == vm.selectedItem.id_cisco;
-            });
-            apiFactory.getAPIgeneraliserREST("commune/index",'id_district',dist[0].district.id).then(function(result)
-            {
-              vm.allcommune= result.data.response;
-              //console.log(vm.allcommune);
-            }); 
+            item.id_ecole  = vm.selectedItem.ecole.id; 
         };
 
         //fonction bouton suppression item association
@@ -186,8 +173,7 @@
                 {
                    if((cis[0].description!=currentItem.description) 
                     || (cis[0].code!=currentItem.code)
-                    || (cis[0].id_commune!=currentItem.id_commune)
-                    || (cis[0].id_cisco!=currentItem.id_cisco))                    
+                    || (cis[0].id_ecole!=currentItem.id_ecole))                    
                       { 
                          insert_in_base(item,suppression);
                       }
@@ -221,22 +207,16 @@
                     id:        getId,      
                     code:      association.code,
                     description: association.description,
-                    id_commune: association.id_commune,
-                    id_cisco: association.id_cisco                
+                    id_ecole: association.id_ecole                
                 });
                 //console.log(association.pays_id);
                 //factory
             apiFactory.add("association/index",datas, config).success(function (data)
             {
                 
-                var com = vm.allcommune.filter(function(obj)
+                var eco = vm.allecole.filter(function(obj)
                 {
-                    return obj.id == association.id_commune;
-                });
-
-                var cis = vm.allcisco.filter(function(obj)
-                {
-                    return obj.id == association.id_cisco;
+                    return obj.id == association.id_ecole;
                 });
 
                 if (NouvelItem == false)
@@ -246,8 +226,7 @@
                     {
                         vm.selectedItem.description        = association.description;
                         vm.selectedItem.code       = association.code;
-                        vm.selectedItem.commune       = com[0];
-                        vm.selectedItem.cisco       = cis[0];
+                        vm.selectedItem.ecole       = eco[0];
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
                         vm.selectedItem ={};
@@ -264,8 +243,7 @@
                 {
                   association.description =  association.description;
                   association.code=  association.code;
-                  association.commune = com[0];
-                  association.cisco = cis[0];
+                  association.commune = eco[0];
                   association.id  =   String(data.response);              
                   NouvelItem=false;
             }
@@ -293,19 +271,6 @@
           );
         }
         
-        //recuperation donnée quand cisco est modifié
-        vm.modifier_cisco= function(association)
-        {
-          var dist= vm.allcisco.filter(function(obj)
-          {
-              return obj.id == vm.selectedItem.id_cisco;
-          });
-          //console.log(dist[0]);
-        apiFactory.getAPIgeneraliserREST("commune/index",'id_district',dist[0].district.id).then(function(result)
-        {
-          vm.allcommune= result.data.response;
-          //console.log(vm.allcommune);
-        });
-        }
+
     }
 })();
