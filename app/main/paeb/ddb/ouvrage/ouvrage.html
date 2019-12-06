@@ -9,10 +9,10 @@
                 <span class="parent">Données de bases</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Attachement</span>
+                <span class="parent" href="javascript:;"> Ouvrage</span>
             </div>
 
-            <div class="title">Attachement</div>
+            <div class="title">Ouvrage</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -20,17 +20,17 @@
     <!-- CONTENT -->
     <div class="content" layout="column">
 
-      <!-- Attachement -->
+      <!-- Ouvrage -->
       <div class="form-wrapper md-whiteframe-1dp" >       
         <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
           <div layout="row" layout-align="start">
               <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
-                <span style="line-height: normal;"> Attachement</span>
+                <span style="line-height: normal;"> Ouvrage</span>
               </div>
               <div>
-                <md-button class="md-icon-button" aria-label="add attachement" ng-click="vm.ajouter()">
+                <md-button class="md-icon-button" aria-label="add ouvrage" ng-click="vm.ajouter()">
                   <md-icon md-font-icon="icon-plus"></md-icon>
-                  <md-tooltip><span>Ajout attachement</span></md-tooltip>
+                  <md-tooltip><span>Ajout ouvrage</span></md-tooltip>
                 </md-button>
               </div>                      
           </div>
@@ -39,7 +39,7 @@
           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
             <thead>
               <tr>
-                <th class="secondary-text" ng-repeat="cisc in ::vm.attachement_column">
+                <th class="secondary-text" ng-repeat="cisc in ::vm.ouvrage_column">
                   <div class="table-header">
                     <span class="column-title">{{cisc.titre}}</span>
                   </div>
@@ -48,42 +48,42 @@
             </thead>
                      
             <tbody>
-              <tr ng-repeat="attachement in vm.allattachement"  ng-class="{selected: attachement.$selected}" ng-click="vm.selection(attachement)">           
+              <tr ng-repeat="ouvrage in vm.allouvrage"  ng-class="{selected: ouvrage.$selected}" ng-click="vm.selection(ouvrage)">           
                 <td>
-                  <span ng-if="attachement.$edit">
+                  <span ng-if="ouvrage.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
-                      <label>Code</label>
-                      <input name="code" type="text" ng-model="attachement.code"/>
+                      <label>Libelle</label>
+                      <input name="libelle" type="text" ng-model="ouvrage.libelle"/>
                     </md-input-container>
                   </span>                          
-                  <span ng-if="!attachement.$edit">{{attachement.code}}</span>
+                  <span ng-if="!ouvrage.$edit">{{ouvrage.libelle}}</span>
                 </td>
                           
                 <td>
-                  <span ng-if="attachement.$edit">
+                  <span ng-if="ouvrage.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
                       <label>Description</label>
-                      <input name="Description" type="text" ng-model="attachement.description"/>
+                      <input name="Description" type="text" ng-model="ouvrage.description"/>
                     </md-input-container>   
                   </span>
                             
-                  <span ng-if="!attachement.$edit">{{attachement.description}}</span>
+                  <span ng-if="!ouvrage.$edit">{{ouvrage.description}}</span>
                 </td>
                                              
                 <td>
-                  <a ng-if="!attachement.$edit" ng-click="vm.modifier(attachement)" title="Modifier">
+                  <a ng-if="!ouvrage.$edit" ng-click="vm.modifier(ouvrage)" title="Modifier">
                     <span class="icon-table-edit"></span>
                   </a>
                             
-                  <a ng-if="!attachement.$edit" ng-click="vm.supprimer(attachement)" title="Supprimer">
-                    <span class="icon-delete" ></span>
+                  <a ng-if="!ouvrage.$edit" ng-click="vm.supprimer(ouvrage)" title="Supprimer">
+                    <span class="icon-delete"></span>
                   </a>
                             
-                  <a ng-if="attachement.$edit" ng-click="vm.annuler(attachement)" title="Annuler modification">
+                  <a ng-if="ouvrage.$edit" ng-click="vm.annuler(ouvrage)" title="Annuler modification">
                     <span class="icon-cancel"></span>
                   </a>
                             
-                  <a ng-if="attachement.$edit && attachement.code && attachement.description>''" ng-click="vm.ajout(attachement,0)" title="Sauvegarder">
+                  <a ng-if="ouvrage.$edit && ouvrage.libelle && ouvrage.description>''" ng-click="vm.ajout(ouvrage,0)" title="Sauvegarder">
                     <span class="icon-content-save"></span>
                   </a>
                 </td>
@@ -92,7 +92,7 @@
           </table>
         </div>                   
       </div>
-      <!-- / attachement -->
+      <!-- / ouvrage -->
     </div>
     <!-- / CONTENT -->
   </div>
