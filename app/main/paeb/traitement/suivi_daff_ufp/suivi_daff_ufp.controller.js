@@ -3,11 +3,11 @@
     'use strict';
 
     angular
-        .module('app.paeb.traitement.programmation')
-        .controller('ProgrammationController', ProgrammationController)
+        .module('app.paeb.traitement.suivi_daff_ufp')
+        .controller('Suivi_daff_ufpController', Suivi_daff_ufpController)
         .controller('ConventionDialogController', ConventionDialogController);
     /** @ngInject */
-    function ProgrammationController($mdDialog, $scope, apiFactory, $state)
+    function Suivi_daff_ufpController($mdDialog, $scope, apiFactory, $state)
     {
 		    var vm    = this;
 
@@ -19,7 +19,7 @@
         vm.allprogrammation  = [] ;
         vm.stepOne           = false;
         vm.stepTwo           = false;
-        vm.stepTree          = false;
+        vm.stepThree          = false;
 
     //initialisation convention
         vm.selectedItemConvention = {} ;
@@ -27,12 +27,19 @@
         var NouvelItemConvention    = false;
         vm.allconvention  = [] ;
 
-     //initialisation demande_deblocage_daff
-      vm.ajoutDemande_deblocage  = ajoutDemande_deblocage ;
+    //initialisation demande_deblocage_daff
+        vm.ajoutDemande_deblocage  = ajoutDemande_deblocage ;
         var NouvelItemDemande_deblocage    = false;     
         var currentItemDemande_deblocage;
         vm.selectedItemDemande_deblocage = {} ;
-        vm.alldemande_deblocage  = [] ;    
+        vm.alldemande_deblocage  = [] ;
+
+    //initialisation transfert_ufp
+        vm.ajoutTransfert_ufp  = ajoutTransfert_ufp ;
+        var NouvelItemTransfert_ufp    = false;     
+        var currentItemTransfert_ufp;
+        vm.selectedItemTransfert_ufp = {} ;
+        vm.alltransfert_ufp  = [] ;     
 
         //style
         vm.dtOptions = {
@@ -136,13 +143,30 @@
             currentItemProgrammation     = JSON.parse(JSON.stringify(vm.selectedItemProgrammation));
            // vm.allprogrammation= [] ;
            vm.stepOne = true;
+           vm.stepTwo = true;
+           vm.stepThree = true;
 
-           //recuperation donnée convention
-        apiFactory.getAPIgeneraliserREST("convention/index",'menu','getconventionvalide','id_programmation',vm.selectedItemProgrammation.id,'validation','1').then(function(result)
+        //recuperation donnée convention
+        apiFactory.getAPIgeneraliserREST("convention/index",'menu','getconventionvalide_programme','id_programmation',item.id).then(function(result)
         {
             vm.allconvention = result.data.response;
             console.log(vm.allconvention);
         }); 
+
+        //recuperation donnée demande_deblocage_daaf
+        apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index",'menu','getdemande_deblocage_daaf_programme','id_programmation',item.id).then(function(result)
+        {
+            vm.alldemande_deblocage = result.data.response;
+            console.log(vm.alldemande_deblocage);
+        });
+
+        //recuperation donnée demande_deblocage_daaf
+        apiFactory.getAPIgeneraliserREST("transfert_ufp/index",'menu','gettransfert_ufp_programme','id_programmation',item.id).then(function(result)
+        {
+            vm.alltransfert_ufp = result.data.response;
+            console.log(vm.alltransfert_ufp);
+        });
+
         };
         $scope.$watch('vm.selectedItemProgrammation', function()
         {
@@ -327,7 +351,7 @@
 
           var confirm = $mdDialog.confirm({
           controller: ConventionDialogController,
-          templateUrl: 'app/main/paeb/traitement/programmation/conventiondialog.html',
+          templateUrl: 'app/main/paeb/traitement/suivi_daff_ufp/conventiondialog.html',
           parent: angular.element(document.body),
           targetEvent: ev, 
           
@@ -413,13 +437,6 @@
         {titre:"Description"},
         {titre:"Date"},
         {titre:"Action"}];
-        
-        //recuperation donnée convention
-        apiFactory.getAll("demande_deblocage_daaf/index").then(function(result)
-        {
-            vm.alldemande_deblocage = result.data.response; 
-            console.log(vm.alldemande_deblocage);
-        });
 
         //Masque de saisi ajout
         vm.ajouterDemande_deblocage = function ()
@@ -510,7 +527,7 @@
         {
             NouvelItemDemande_deblocage = false ;
             vm.selectedItemDemande_deblocage = item;
-            currentItemDemande_deblocage = angular.copy(vm.selectedItem);
+            currentItemDemande_deblocage = angular.copy(vm.selectedItemDemande_deblocage);
             $scope.vm.alldemande_deblocage.forEach(function(dema) {
               dema.$edit = false;
             });
@@ -518,9 +535,9 @@
             item.$edit = true;
             item.$selected = true;
 
-            item.numero_convention = parseInt(vm.selectedItemDemande_deblocage.code) ;
-            item.description       = vm.selectedItemDemande_deblocage.description ;
-            item.date       = vm.selectedItem.date ;  
+            item.code = parseInt(vm.selectedItemDemande_deblocage.code) ;
+            item.description = vm.selectedItemDemande_deblocage.description ;
+            item.date       = vm.selectedItemDemande_deblocage.date ;  
         };
 
         //fonction bouton suppression item convention
@@ -552,9 +569,9 @@
                 });
                 if(dema[0])
                 {
-                   if((dema[0].description!=currentItem.description) 
-                    || (dema[0].code!=currentItem.code)
-                    || (dema[0].date!=currentItem.date))                    
+                   if((dema[0].description!=currentItemDemande_deblocage.description) 
+                    || (dema[0].code!=currentItemDemande_deblocage.code)
+                    || (dema[0].date!=currentItemDemande_deblocage.date))                    
                       { 
                         insert_in_baseDemande_deblocage(item,suppression);
                       }
@@ -620,7 +637,7 @@
                 else
                 {
                   demande_deblocage.code   = demande_deblocage.code;
-                  demande_deblocage.description      = demande_deblocage.description;
+                  demande_deblocage.description = demande_deblocage.description;
                   demande_deblocage.date     = demande_deblocage.date;
                   demande_deblocage.id  =   String(data.response);              
                   NouvelItemDemande_deblocage=false;
@@ -634,7 +651,244 @@
         }
 
   /*****************Fin StepThree demande_deblocage_daff****************/
-        
+
+  /*****************Fin StepFor transfert_ufp****************/
+
+  vm.transfert_ufp_column = [
+        {titre:"Code"},
+        {titre:"Description"},
+        {titre:"Montant"},
+        {titre:"Numero facture"},
+        {titre:"Date"},
+        {titre:"Action"}];
+
+        //Masque de saisi ajout
+        vm.ajouterTransfert_ufp = function ()
+        { 
+          if (NouvelItemTransfert_ufp == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              code: '',
+              description: '',
+              montant:'',
+              num_facture:'',
+              date: ''
+            };         
+            vm.alltransfert_ufp.push(items);
+            vm.alltransfert_ufp.forEach(function(dem)
+            {
+              if(dem.$selected==true)
+              {
+                vm.selectedItemTransfert_ufp = dem;
+              }
+            });
+
+            NouvelItemTransfert_ufp = true ;
+          }else
+          {
+            vm.showAlert('Ajout transfert_ufp','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutTransfert_ufp(transfert_ufp,suppression)
+        {
+            if (NouvelItemTransfert_ufp==false)
+            {
+                test_existanceTransfert_ufp (transfert_ufp,suppression); 
+            } 
+            else
+            {
+                insert_in_baseTransfert_ufp(transfert_ufp,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation transfert_ufp
+        vm.annulerTransfert_ufp = function(item)
+        {
+          if (NouvelItemTransfert_ufp == false)
+          {
+            item.$edit     = false;
+            item.$selected = false;
+            item.code      = currentItemTransfert_ufp.code ;
+            item.description = currentItemTransfert_ufp.description ;
+            item.montant     = currentItemTransfert_ufp.montant ;
+            item.num_facture = currentItemTransfert_ufp.num_facture ;
+            item.date        = currentItemTransfert_ufp.date ;  
+          }else
+          {
+            vm.alltransfert_ufp = vm.alltransfert_ufp.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemTransfert_ufp.id;
+            });
+          }
+
+          vm.selectedItemTransfert_ufp = {} ;
+          NouvelItemTransfert_ufp      = false;
+          
+        };
+
+        //fonction selection item transfert_ufp
+        vm.selectionTransfert_ufp= function (item)
+        {
+            vm.selectedItemTransfert_ufp = item;
+            vm.NouvelItemTransfert_ufp   = item;
+            currentItemTransfert_ufp     = JSON.parse(JSON.stringify(vm.selectedItemTransfert_ufp));
+           // vm.allconvention= [] ; 
+        };
+        $scope.$watch('vm.selectedItemTransfert_ufp', function()
+        {
+             if (!vm.alltransfert_ufp) return;
+             vm.alltransfert_ufp.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemTransfert_ufp.$selected = true;
+        });
+
+        //fonction masque de saisie modification item transfert_ufp
+        vm.modifiertransfert_ufp = function(item)
+        {
+            NouvelItemtransfert_ufp = false ;
+            vm.selectedItemtransfert_ufp = item;
+            currentItemtransfert_ufp = angular.copy(vm.selectedItemTransfert_ufp);
+            $scope.vm.alltransfert_ufp.forEach(function(dema) {
+              dema.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+
+            item.code = vm.selectedItemTransfert_ufp.code ;
+            item.description = vm.selectedItemTransfert_ufp.description ;
+            item.montant = vm.selectedItemTransfert_ufp.montant ;
+            item.num_facture = vm.selectedItemTransfert_ufp.num_facture ;
+            item.date       = vm.selectedItemTransfert_ufp.date ;  
+        };
+
+        //fonction bouton suppression item transfert_ufp
+        vm.supprimerTransfert_ufp = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajout(vm.selectedItemTransfert_ufp,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item convention
+        function test_existanceTransfert_ufp (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var dema = vm.alltransfert_ufp.filter(function(obj)
+                {
+                   return obj.id == currentItemTransfert_ufp.id;
+                });
+                if(dema[0])
+                {
+                   if((dema[0].description!=currentItemTransfert_ufp.description) 
+                    || (dema[0].code!=currentItemTransfert_ufp.code)
+                    || (dema[0].num_facture!=currentItemTransfert_ufp.num_facture)
+                    || (dema[0].montant!=currentItemTransfert_ufp.montant)
+                    || (dema[0].date!=currentItemTransfert_ufp.date))                    
+                      { 
+                        insert_in_baseTransfert_ufp(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseTransfert_ufp(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd transfert_ufp
+        function insert_in_baseTransfert_ufp(transfert_ufp,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemTransfert_ufp==false)
+            {
+                getId = vm.selectedItemTransfert_ufp.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,      
+                    code:         transfert_ufp.code,
+                    description:  transfert_ufp.description,
+                    montant:      transfert_ufp.montant,
+                    num_facture:  transfert_ufp.num_facture,
+                    date: convertionDate(new Date(transfert_ufp.date)),
+                    id_programmation:   vm.selectedItemProgrammation.id,
+                    validation: 0               
+                });
+                //console.log(demande_deblocage.pays_id);
+                console.log(datas);
+                //factory
+            apiFactory.add("transfert_ufp/index",datas, config).success(function (data)
+            {
+                if (NouvelItemTransfert_ufp == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                        vm.selectedItemTransfert_ufp.code   = transfert_ufp.code;
+                        vm.selectedItemTransfert_ufp.description = transfert_ufp.description;
+                        vm.selectedItemTransfert_ufp.montant     = transfert_ufp.montant;
+                        vm.selectedItemTransfert_ufp.num_facture = transfert_ufp.num_facture;
+                        vm.selectedItemTransfert_ufp.date     = transfert_ufp.date;
+                        vm.selectedItemTransfert_ufp.$selected  = false;
+                        vm.selectedItemTransfert_ufp.$edit      = false;
+                        vm.selectedItemTransfert_ufp ={};
+                    }
+                    else 
+                    {    
+                      vm.alltransfert_ufp = vm.alltransfert_ufp.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemTransfert_ufp.id;
+                      });
+                    }
+                }
+                else
+                {
+                  transfert_ufp.code   = transfert_ufp.code;
+                  transfert_ufp.description = transfert_ufp.description;
+                  transfert_ufp.montant     = transfert_ufp.montant;
+                  transfert_ufp.num_facture = transfert_ufp.num_facture;
+                  transfert_ufp.date        = transfert_ufp.date;
+                  transfert_ufp.id  =   String(data.response);              
+                  NouvelItemTransfert_ufp=false;
+            }
+              transfert_ufp.$selected = false;
+              transfert_ufp.$edit = false;
+              vm.selectedItemTransfert_ufp = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+  /*****************Fin StepFor transfert_ufp****************/       
 
         //Alert
         vm.showAlert = function(titre,content)

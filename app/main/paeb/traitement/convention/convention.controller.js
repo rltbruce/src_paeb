@@ -34,7 +34,7 @@
           titre:"Cisco"
         },
         {
-          titre:"Association"
+          titre:"Feffi"
         },
         {
           titre:"Numero convention"
@@ -62,35 +62,29 @@
         }];
         
         //recuperation donnée convention
-        apiFactory.getAPIgeneraliserREST("convention/index",'menu','getconventioninvalide').then(function(result)
+        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi/index",'menu','getconventioninvalide').then(function(result)
         {
             vm.allconvention = result.data.response; 
             console.log(vm.allconvention);
         });
 
-        //recuperation donnée district
+        //recuperation donnée cisco
         apiFactory.getAll("cisco/index").then(function(result)
         {
           vm.allcisco= result.data.response;
         });
 
-        //recuperation donnée district
-        apiFactory.getAll("association/index").then(function(result)
+        //recuperation donnée feffi
+        apiFactory.getAll("feffi/index").then(function(result)
         {
-          vm.allassociation= result.data.response;
+          vm.allfeffi= result.data.response;
         });
 
-        //recuperation donnée district
+        //recuperation donnée ouvrage
         apiFactory.getAll("ouvrage/index").then(function(result)
         {
           vm.allouvrage= result.data.response;
-        });
-
-        //recuperation donnée district
-        apiFactory.getAll("categorie_ouvrage/index").then(function(result)
-        {
-          vm.allcategorie_ouvrage= result.data.response;
-        });
+        });;
 
         //Masque de saisi ajout
         vm.ajouter = function ()
@@ -104,7 +98,7 @@
               numero_convention: '',
               description: '',
               id_cisco:'',
-              id_association:'',
+              id_feffi:'',
               id_categorie_ouvrage:'',
               id_ouvrage:'',              
               montant_prevu: '',
@@ -151,7 +145,7 @@
             item.numero_convention      = currentItem.numero_convention ;
             item.description       = currentItem.description ;
             item.id_cisco          = currentItem.id_cisco ;
-            item.id_association    = currentItem.id_association ;
+            item.id_feffi    = currentItem.id_feffi ;
             item.id_categorie_ouvrage  = currentItem.id_categorie_ouvrage ;
             item.id_ouvrage         = currentItem.id_ouvrage ;            
             item.montant_prevu      = currentItem.montant_prevu ;
@@ -204,7 +198,7 @@
             item.numero_convention = parseInt(vm.selectedItem.numero_convention) ;
             item.description       = vm.selectedItem.description ;
             item.id_cisco          = vm.selectedItem.cisco.id ;
-            item.id_association    = vm.selectedItem.association.id ;
+            item.id_feffi    = vm.selectedItem.feffi.id ;
             item.id_categorie_ouvrage  = vm.selectedItem.categorie_ouvrage.id ;
             item.id_ouvrage         = vm.selectedItem.ouvrage.id ;            
             item.montant_prevu      = parseInt(vm.selectedItem.montant_prevu) ;
@@ -244,7 +238,7 @@
                    if((conv[0].description!=currentItem.description) 
                     || (conv[0].numero_convention!=currentItem.numero_convention)
                     || (conv[0].id_cisco!=currentItem.id_cisco)
-                    || (conv[0].id_association!=currentItem.id_association)
+                    || (conv[0].id_feffi!=currentItem.id_feffi)
                     || (conv[0].id_categorie_ouvrage!=currentItem.id_categorie_ouvrage)
                     || (conv[0].id_ouvrage!=currentItem.id_ouvrage)
                     || (conv[0].montant_prevu!=currentItem.montant_prevu)
@@ -284,7 +278,7 @@
                     numero_convention:  convention.numero_convention,
                     description:   convention.description,
                     id_cisco:      convention.id_cisco,
-                    id_association:       convention.id_association,
+                    id_feffi:       convention.id_feffi,
                     id_categorie_ouvrage: convention.id_categorie_ouvrage,
                     id_ouvrage:    convention.id_ouvrage,
                     montant_reel:  convention.montant_reel,
@@ -303,9 +297,9 @@
                     return obj.id == convention.id_cisco;
                 });
 
-                var asso = vm.allassociation.filter(function(obj)
+                var asso = vm.allfeffi.filter(function(obj)
                 {
-                    return obj.id == convention.id_association;
+                    return obj.id == convention.id_feffi;
                 });
 
                 var cat = vm.allcategorie_ouvrage.filter(function(obj)
@@ -326,7 +320,7 @@
                         vm.selectedItem.numero_convention   = convention.numero_convention;
                         vm.selectedItem.description      = convention.description;
                         vm.selectedItem.cisco         = cis[0];
-                        vm.selectedItem.association   = asso[0];
+                        vm.selectedItem.feffi   = asso[0];
                         vm.selectedItem.categorie_ouvrage  = cat[0];
                         vm.selectedItem.ouvrage       = ouv[0];
                         vm.selectedItem.montant_prevu    = convention.montant_prevu;
@@ -349,7 +343,7 @@
                   convention.numero_convention   = convention.numero_convention;
                   convention.description      = convention.description;
                   convention.cisco         = cis[0];
-                  convention.association   = asso[0];
+                  convention.feffi   = asso[0];
                   convention.categorie_ouvrage  = cat[0];
                   convention.ouvrage       = ouv[0];
                   convention.montant_prevu    = convention.montant_prevu;

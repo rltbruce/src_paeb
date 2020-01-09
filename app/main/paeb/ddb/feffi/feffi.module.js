@@ -3,34 +3,34 @@
     'use strict';
 
     angular
-        .module('app.paeb.ddb.association', [])
+        .module('app.paeb.ddb.feffi', [])
         .config(config);
 
     /** @ngInject */
     function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
     {
         // State
-        $stateProvider.state('app.paeb_ddb_association', {
-            url      : '/donnees-de-base/association',
+        $stateProvider.state('app.paeb_ddb_feffi', {
+            url      : '/donnees-de-base/feffi',
             views    : {
                 'content@app': {
-                    templateUrl: 'app/main/paeb/ddb/association/association.html',
-                    controller : 'AssociationController as vm'
+                    templateUrl: 'app/main/paeb/ddb/feffi/feffi.html',
+                    controller : 'FeffiController as vm'
                 }
             },
-            bodyClass: 'association',
+            bodyClass: 'feffi',
             data : {
               authorizer : true,
               permitted : ["USER","PERSONNEL","ADMIN"],
-              page: "Association"
+              page: "Feffi"
             }
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.ddb.association', {
-            title: 'Association',
+        msNavigationServiceProvider.saveItem('paeb.ddb.feffi', {
+            title: 'Feffi',
             icon  : 'icon-blur-radial',
-            state: 'app.paeb_ddb_association',
+            state: 'app.paeb_ddb_feffi',
 			weight: 3
         });
     }

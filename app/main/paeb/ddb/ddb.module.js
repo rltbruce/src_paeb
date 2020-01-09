@@ -7,11 +7,11 @@
 			
             'app.paeb.ddb.localisation',
             'app.paeb.ddb.cisco',
-            'app.paeb.ddb.association',
+            'app.paeb.ddb.feffi',
             'app.paeb.ddb.ecole',
             'app.paeb.ddb.plan_comptable',
             'app.paeb.ddb.prestataire',
-            'app.paeb.ddb.type_ouvrage'
+            'app.paeb.ddb.ouvrage'
 
             ])
         .run(testPermission)

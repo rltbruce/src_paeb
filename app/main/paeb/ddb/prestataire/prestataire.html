@@ -48,16 +48,7 @@
             </thead>
                      
             <tbody>
-              <tr ng-repeat="prestataire in vm.allprestataire"  ng-class="{selected: prestataire.$selected}" ng-click="vm.selection(prestataire)">           
-                <td>
-                  <span ng-if="prestataire.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Code</label>
-                      <input name="code" type="text" ng-model="prestataire.code"/>
-                    </md-input-container>
-                  </span>                          
-                  <span ng-if="!prestataire.$edit">{{prestataire.code}}</span>
-                </td>
+              <tr ng-repeat="prestataire in vm.allprestataire"  ng-class="{selected: prestataire.$selected}" ng-click="vm.selection(prestataire)">
                           
                 <td>
                   <span ng-if="prestataire.$edit">
@@ -102,6 +93,16 @@
                             
                   <span ng-if="!prestataire.$edit">{{prestataire.siege}}</span>
                 </td>
+
+                <td>
+                  <span ng-if="prestataire.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Telephone</label>
+                      <input name="telephone" type="text" ng-model="prestataire.telephone"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!prestataire.$edit">{{prestataire.telephone}}</span>
+                </td>
                                              
                 <td>
                   <a ng-if="!prestataire.$edit" ng-click="vm.modifier(prestataire)" title="Modifier">
@@ -116,7 +117,7 @@
                     <span class="icon-cancel"></span>
                   </a>
                             
-                  <a ng-if="prestataire.$edit && prestataire.code && prestataire.nom && prestataire.nif&& prestataire.stat && prestataire.siege>''" ng-click="vm.ajout(prestataire,0)" title="Sauvegarder">
+                  <a ng-if="prestataire.$edit && prestataire.telephone && prestataire.nom && prestataire.nif&& prestataire.stat && prestataire.siege>''" ng-click="vm.ajout(prestataire,0)" title="Sauvegarder">
                     <span class="icon-content-save"></span>
                   </a>
                 </td>

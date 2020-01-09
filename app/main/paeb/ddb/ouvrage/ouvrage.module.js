@@ -29,9 +29,9 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.ddb.ouvrage', {
             title: 'Ouvrage',
-            icon  : 'icon-tile-four',
+            icon  : 'icon-clipboard-text',
             state: 'app.paeb_ddb_ouvrage',
-			weight: 2
+			weight: 5
         });
     }
 

@@ -3,17 +3,20 @@
     'use strict';
 
     angular
-        .module('app.paeb.ddb.prestataire')
-        .controller('PrestataireController', PrestataireController);
+        .module('app.paeb.ddb.feffi')
+        .controller('FeffiController', FeffiController);
     /** @ngInject */
-    function PrestataireController($mdDialog, $scope, apiFactory, $state)
+    function FeffiController($mdDialog, $scope, apiFactory, $state)
     {
 		    var vm = this;
         vm.ajout = ajout ;
         var NouvelItem=false;
         var currentItem;
         vm.selectedItem = {} ;
-        vm.allprestataire = [] ;
+        vm.allfeffi = [] ;
+
+        vm.allcommune = [] ;
+        vm.allcisco = [] ;
 
         //style
         vm.dtOptions = {
@@ -24,13 +27,19 @@
         };
 
         //col table
-        vm.prestataire_column = [{titre:"Nom"},{titre:"Nif"},{titre:"Stat"},{titre:"Siege"},{titre:"telephone"},{titre:"Action"}];
+        vm.feffi_column = [{titre:"Dénomination"},{titre:"Description"},{titre:"Ecole"},{titre:"Action"}];
         
-        //recuperation donnée prestataire
-        apiFactory.getAll("prestataire/index").then(function(result)
+        //recuperation donnée feffi
+        apiFactory.getAll("feffi/index").then(function(result)
         {
-            vm.allprestataire = result.data.response; 
-            //console.log(vm.allprestataire);
+            vm.allfeffi = result.data.response; 
+            //console.log(vm.allfeffi);
+        });
+
+        //recuperation donnée cisco
+        apiFactory.getAll("ecole/index").then(function(result)
+        {
+          vm.allecole= result.data.response;
         });
 
         //Masque de saisi ajout
@@ -41,58 +50,54 @@
             var items = {
               $edit: true,
               $selected: true,
-              id: '0',
-              nom: '',         
-              nif: '',
-              stat: '',         
-              siege: '',
-              telephone: ''
+              id: '0',         
+              denomination: '',
+              description: '',
+              id_ecole: ''
             };         
-            vm.allprestataire.push(items);
-            vm.allprestataire.forEach(function(pres)
+            vm.allfeffi.push(items);
+            vm.allfeffi.forEach(function(asso)
             {
-              if(pres.$selected==true)
+              if(asso.$selected==true)
               {
-                vm.selectedItem = pres;
+                vm.selectedItem = asso;
               }
             });
 
             NouvelItem = true ;
           }else
           {
-            vm.showAlert('Ajout prestataire','Un formulaire d\'ajout est déjà ouvert!!!');
+            vm.showAlert('Ajout feffi','Un formulaire d\'ajout est déjà ouvert!!!');
           }                
                       
         };
 
         //fonction ajout dans bdd
-        function ajout(prestataire,suppression)
+        function ajout(feffi,suppression)
         {
             if (NouvelItem==false)
             {
-                test_existance (prestataire,suppression); 
+                test_existance (feffi,suppression); 
             } 
             else
             {
-                insert_in_base(prestataire,suppression);
+                insert_in_base(feffi,suppression);
             }
         }
 
-        //fonction de bouton d'annulation prestataire
+        //fonction de bouton d'annulation feffi
         vm.annuler = function(item)
         {
           if (NouvelItem == false)
           {
             item.$edit = false;
             item.$selected = false;
-            item.telephone = currentItem.telephone ;
-            item.nom  = currentItem.nom  ;
-            item.nif  = currentItem.nif ; 
-            item.stat = currentItem.stat ; 
-            item.siege= currentItem.siege ;  
+            item.denomination      = currentItem.denomination ;
+            item.description   = currentItem.description ;
+            item.id_ecole      = currentItem.id_ecole; 
           }else
           {
-            vm.allprestataire = vm.allprestataire.filter(function(obj)
+            vm.allfeffi = vm.allfeffi.filter(function(obj)
             {
                 return obj.id !== vm.selectedItem.id;
             });
@@ -108,43 +113,40 @@
         {
             vm.selectedItem = item;
             vm.nouvelItem   = item;
-            currentItem     = JSON.parse(JSON.stringify(vm.selectedItem));
-           // vm.allprestataire= [] ; 
+            currentItem     = JSON.parse(JSON.stringify(vm.selectedItem)); 
         };
         $scope.$watch('vm.selectedItem', function()
         {
-             if (!vm.allprestataire) return;
-             vm.allprestataire.forEach(function(item)
+             if (!vm.allfeffi) return;
+             vm.allfeffi.forEach(function(item)
              {
                 item.$selected = false;
              });
              vm.selectedItem.$selected = true;
         });
 
-        //fonction masque de saisie modification item prestataire
+        //fonction masque de saisie modification item feffi
         vm.modifier = function(item)
         {
             NouvelItem = false ;
             vm.selectedItem = item;
             currentItem = angular.copy(vm.selectedItem);
-            $scope.vm.allprestataire.forEach(function(pres) {
-              pres.$edit = false;
+            $scope.vm.allfeffi.forEach(function(cis) {
+              cis.$edit = false;
             });
 
             item.$edit = true;
             item.$selected = true;            
-            item.telephone      = vm.selectedItem.telephone ;
-            item.nom       = vm.selectedItem.nom;
-            item.nif       = vm.selectedItem.nif ;
-            item.stat      = vm.selectedItem.stat ;
-            item.siege     = vm.selectedItem.siege ; 
+            item.denomination      = vm.selectedItem.denomination ;
+            item.description = vm.selectedItem.description;
+            item.id_ecole  = vm.selectedItem.ecole.id; 
         };
 
-        //fonction bouton suppression item prestataire
+        //fonction bouton suppression item feffi
         vm.supprimer = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enprestataireistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -158,22 +160,20 @@
               });
         };
 
-        //function teste s'il existe une modification item prestataire
+        //function teste s'il existe une modification item feffi
         function test_existance (item,suppression)
         {          
             if (suppression!=1)
             {
-               var cis = vm.allprestataire.filter(function(obj)
+               var cis = vm.allfeffi.filter(function(obj)
                 {
                    return obj.id == currentItem.id;
                 });
                 if(cis[0])
                 {
-                   if((cis[0].nom!=currentItem.nom) 
-                    || (cis[0].telephone!=currentItem.telephone)
-                    || (cis[0].nif!=currentItem.nif)
-                    || (cis[0].stat!=currentItem.stat)
-                    || (cis[0].siege!=currentItem.siege))                    
+                   if((cis[0].description!=currentItem.description) 
+                    || (cis[0].denomination!=currentItem.denomination)
+                    || (cis[0].id_ecole!=currentItem.id_ecole))                    
                       { 
                          insert_in_base(item,suppression);
                       }
@@ -187,8 +187,8 @@
                   insert_in_base(item,suppression);
         }
 
-        //insertion ou mise a jours ou suppression item dans bdd prestataire
-        function insert_in_base(prestataire,suppression)
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_base(feffi,suppression)
         {
             //add
             var config =
@@ -204,34 +204,36 @@
             
             var datas = $.param({
                     supprimer: suppression,
-                    id:     getId,      
-                    telephone:   prestataire.telephone,
-                    nom:    prestataire.nom,      
-                    nif:    prestataire.nif,      
-                    stat:   prestataire.stat,      
-                    siege:  prestataire.siege,               
+                    id:        getId,      
+                    denomination:      feffi.denomination,
+                    description: feffi.description,
+                    id_ecole: feffi.id_ecole                
                 });
-                //console.log(prestataire.pays_id);
+                //console.log(feffi.pays_id);
                 //factory
-            apiFactory.add("prestataire/index",datas, config).success(function (data)
+            apiFactory.add("feffi/index",datas, config).success(function (data)
             {
+                
+                var eco = vm.allecole.filter(function(obj)
+                {
+                    return obj.id == feffi.id_ecole;
+                });
+
                 if (NouvelItem == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItem.nom        = prestataire.nom;
-                        vm.selectedItem.telephone       = prestataire.telephone;
-                        vm.selectedItem.nif       = prestataire.nif;
-                        vm.selectedItem.stat       = prestataire.stat;
-                        vm.selectedItem.siege       = prestataire.siege;
+                        vm.selectedItem.description        = feffi.description;
+                        vm.selectedItem.denomination       = feffi.denomination;
+                        vm.selectedItem.ecole       = eco[0];
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
                         vm.selectedItem ={};
                     }
                     else 
                     {    
-                      vm.allprestataire = vm.allprestataire.filter(function(obj)
+                      vm.allfeffi = vm.allfeffi.filter(function(obj)
                       {
                           return obj.id !== vm.selectedItem.id;
                       });
@@ -239,16 +241,14 @@
                 }
                 else
                 {
-                  prestataire.nom =  prestataire.nom;
-                  prestataire.telephone=  prestataire.telephone;
-                  prestataire.nif =  prestataire.nif;
-                  prestataire.stat=  prestataire.stat;
-                  prestataire.siege =  prestataire.siege;
-                  prestataire.id  =   String(data.response);              
+                  feffi.description =  feffi.description;
+                  feffi.denomination=  feffi.denomination;
+                  feffi.commune = eco[0];
+                  feffi.id  =   String(data.response);              
                   NouvelItem=false;
             }
-              prestataire.$selected = false;
-              prestataire.$edit = false;
+              feffi.$selected = false;
+              feffi.$edit = false;
               vm.selectedItem = {};
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -270,5 +270,7 @@
             .targetEvent()
           );
         }
+        
+
     }
 })();

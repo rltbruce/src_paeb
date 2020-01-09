@@ -5,7 +5,8 @@
     angular
         .module('app.paeb.traitement', [			
             'app.paeb.traitement.convention',
-            'app.paeb.traitement.programmation'
+            'app.paeb.traitement.suivi_daff_ufp',
+            'app.paeb.traitement.suivi_daff_feffi'
             ])       
         .config(config);
         var vs ;
@@ -16,7 +17,7 @@
         msNavigationServiceProvider.saveItem('paeb.traitement', {
             title : 'Traitement',
             icon  : 'icon-data',
-            weight: 2
+            weight: 3
         });
 
 

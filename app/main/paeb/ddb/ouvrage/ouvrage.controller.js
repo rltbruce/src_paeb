@@ -8,240 +8,330 @@
     /** @ngInject */
     function OuvrageController($mdDialog, $scope, apiFactory, $state)
     {
-		    var vm = this;
-        vm.ajout = ajout ;
+		   var vm = this;
         var NouvelItem=false;
-        var currentItem;
-        vm.selectedItem = {} ;
-        vm.allouvrage = [] ;
 
-        //style
-        vm.dtOptions = {
-          dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
-          pagingType: 'simple',
-          autoWidth: false,
-          responsive: true          
-        };
-
-        //col table
-        vm.ouvrage_column = [{titre:"Libelle"},{titre:"Description"},{titre:"Action"}];
         
-        //recuperation donnée ouvrage
-        apiFactory.getAll("ouvrage/index").then(function(result)
-        {
-            vm.allouvrage = result.data.response; 
-            //console.log(vm.allouvrage);
-        });
 
-        //recuperation donnée district
-        apiFactory.getAll("district/index").then(function(result)
-        {
-          vm.alldistrict= result.data.response;
-        });
+/* ***************DEBUT TYPE OUVRAGE**********************/
 
-        //Masque de saisi ajout
-        vm.ajouter = function ()
-        { 
-          if (NouvelItem == false)
-          {
-            var items = {
-              $edit: true,
-              $selected: true,
-              id: '0',         
-              libelle: '',
-              description: ''
-            };         
-            vm.allouvrage.push(items);
-            vm.allouvrage.forEach(function(cis)
+        vm.mainGridOptions =
+        {
+          dataSource: new kendo.data.DataSource({
+             
+            transport:
             {
-              if(cis.$selected==true)
-              {
-                vm.selectedItem = cis;
-              }
-            });
-
-            NouvelItem = true ;
-          }else
-          {
-            vm.showAlert('Ajout ouvrage','Un formulaire d\'ajout est déjà ouvert!!!');
-          }                
-                      
-        };
-
-        //fonction ajout dans bdd
-        function ajout(ouvrage,suppression)
-        {
-            if (NouvelItem==false)
-            {
-                test_existance (ouvrage,suppression); 
-            } 
-            else
-            {
-                insert_in_base(ouvrage,suppression);
-            }
-        }
-
-        //fonction de bouton d'annulation ouvrage
-        vm.annuler = function(item)
-        {
-          if (NouvelItem == false)
-          {
-            item.$edit = false;
-            item.$selected = false;
-            item.libelle      = currentItem.libelle ;
-            item.description       = currentItem.description ; 
-          }else
-          {
-            vm.allouvrage = vm.allouvrage.filter(function(obj)
-            {
-                return obj.id !== vm.selectedItem.id;
-            });
-          }
-
-          vm.selectedItem = {} ;
-          NouvelItem      = false;
-          
-        };
-
-        //fonction selection item region
-        vm.selection= function (item)
-        {
-            vm.selectedItem = item;
-            vm.nouvelItem   = item;
-            currentItem     = JSON.parse(JSON.stringify(vm.selectedItem));
-           // vm.allouvrage= [] ; 
-        };
-        $scope.$watch('vm.selectedItem', function()
-        {
-             if (!vm.allouvrage) return;
-             vm.allouvrage.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItem.$selected = true;
-        });
-
-        //fonction masque de saisie modification item ouvrage
-        vm.modifier = function(item)
-        {
-            NouvelItem = false ;
-            vm.selectedItem = item;
-            currentItem = angular.copy(vm.selectedItem);
-            $scope.vm.allouvrage.forEach(function(cis) {
-              cis.$edit = false;
-            });
-
-            item.$edit = true;
-            item.$selected = true;            
-            item.libelle      = vm.selectedItem.libelle ;
-            item.description       = vm.selectedItem.description; 
-        };
-
-        //fonction bouton suppression item ouvrage
-        vm.supprimer = function()
-        {
-            var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enouvrageistrement ?')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-              $mdDialog.show(confirm).then(function() {
-                vm.ajout(vm.selectedItem,1);
-              }, function() {
-                //alert('rien');
-              });
-        };
-
-        //function teste s'il existe une modification item ouvrage
-        function test_existance (item,suppression)
-        {          
-            if (suppression!=1)
-            {
-               var cis = vm.allouvrage.filter(function(obj)
+                read: function (e)
                 {
-                   return obj.id == currentItem.id;
-                });
-                if(cis[0])
-                {
-                   if((cis[0].description!=currentItem.description) 
-                    || (cis[0].libelle!=currentItem.libelle))                    
-                      { 
-                         insert_in_base(item,suppression);
-                      }
-                      else
-                      {  
-                        item.$selected = true;
-                        item.$edit = false;
-                      }
-                }
-            } else
-                  insert_in_base(item,suppression);
-        }
-
-        //insertion ou mise a jours ou suppression item dans bdd ouvrage
-        function insert_in_base(ouvrage,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItem==false)
-            {
-                getId = vm.selectedItem.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,      
-                    libelle:     ouvrage.libelle,
-                    description: ouvrage.description               
-                });
-                //console.log(ouvrage.pays_id);
-                console.log(datas);
-                //factory
-            apiFactory.add("categorie_ouvrage/index",datas, config).success(function (data)
-            {
-
-                if (NouvelItem == false)
-                {
-                    // Update or delete: id exclu                 
-                    if(suppression==0)
+                    apiFactory.getAll("ouvrage/index").then(function success(response)
                     {
-                        vm.selectedItem.description        = ouvrage.description;
-                        vm.selectedItem.libelle       = ouvrage.libelle;
-                        vm.selectedItem.$selected  = false;
-                        vm.selectedItem.$edit      = false;
-                        vm.selectedItem ={};
-                    }
-                    else 
-                    {    
-                      vm.allouvrage = vm.allouvrage.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItem.id;
+                        e.success(response.data.response);
+                        console.log(response.data.response);
+                    }, function error(response)
+                        {
+                          alert('something went wrong')
+                          console.log(response);
+                        })
+                },
+                update : function (e)
+                {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        e.data.models[0].id,      
+                          libelle:      e.data.models[0].libelle,
+                          description:       e.data.models[0].description               
                       });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("ouvrage/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });
+                                   
+                     
+                },
+                destroy: function (e)
+                {
+                    var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                    
+                    var datas = $.param({supprimer: 1,id:e.data.models[0].id});
+                    
+                    apiFactory.add("ouvrage/index",datas, config).success(function (data)
+                    {                
+                      e.success(e.data.models); 
+                    }).error(function (data)
+                      {
+                        //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                      });
+               
+                },
+                create: function(e)
+                {
+                  
+                    var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                    
+                    var datas = $.param({
+                            supprimer: 0,
+                            id:        0,      
+                            libelle:      e.data.models[0].libelle,
+                            description:       e.data.models[0].description               
+                    });
+
+                    apiFactory.add("ouvrage/index",datas, config).success(function (data)
+                    { 
+                        e.data.models[0].id = String(data.response);               
+                        e.success(e.data.models); 
+                    }).error(function (data)
+                      {
+                        vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                      });
+                },
+            },
+                
+            //data: valueMapCtrl.dynamicData,
+            batch: true,
+            autoSync: false,
+            schema:
+            {
+                model:
+                {
+                    id: "id",
+                    fields:
+                    {
+                        libelle: {type: "string",validation: {required: true}},
+                        description: {type: "string", validation: {required: true}}
                     }
                 }
-                else
+            },
+
+            pageSize: 10//nbr affichage
+          }),
+          
+          // height: 550,
+          toolbar: [{               
+               template: "<label id='table_titre'>OUVRAGE</label>"
+          },{
+               name: "create",
+               text:"",
+               iconClass: "k-icon k-i-table-light-dialog"
+               
+          }],
+          editable:{ mode:"inline",update: true,destroy: true},
+          selectable:"row",
+          sortable: true,
+          //pageable: true,
+          reorderable: true,
+          scrollable: false,              
+          filterable: true,
+          //groupable: true,
+          pageable:{refresh: true,
+                    pageSizes: true, 
+                    buttonCount: 3,
+                    messages: {
+                      empty: "Pas de donnée",
+                      display: "{0}-{1} pour {2} items",
+                      itemsPerPage: "items par page",
+                      next: "Page suivant",
+                      previous: "Page précédant",
+                      refresh: "Actualiser",
+                      first: "Première page",
+                      last: "Dernière page"
+                    }
+                  },
+          
+          //dataBound: function() {
+                //this.expandRow(this.tbody.find("tr.k-master-row").first());
+            //},
+          columns: [
+            {
+              field: "libelle",
+              title: "Libelle",
+              width: "Auto"
+            },
+            {
+              field: "description",
+              title: "Description",
+              width: "Auto"
+            },
+            { 
+              title: "Action",
+              width: "Auto",
+              command:[{
+                      name: "edit",
+                      text: {edit: "",update: "",cancel: ""},
+                      click: function (e)
+                      {
+                        e.preventDefault();
+                        var row = $(e.currentTarget).closest("tr");
+                        
+                        var data = this.dataItem(row);
+                        
+                        row.addClass("k-state-selected");
+                      }
+                  },{name: "destroy", text: ""}]
+            }]
+          };
+          
+      vm.allattachement = function(id_ouvrage) {
+        return {
+          dataSource:
+          {
+            type: "json",
+            transport: {
+              read: function (e)
+              {
+                apiFactory.getAPIgeneraliserREST("attachement/index","id_ouvrage",id_ouvrage).then(function(result)
                 {
-                  ouvrage.description =  ouvrage.description;
-                  ouvrage.libelle=  ouvrage.libelle;
-                  ouvrage.id  =   String(data.response);              
-                  NouvelItem=false;
-            }
-              ouvrage.$selected = false;
-              ouvrage.$edit = false;
-              vm.selectedItem = {};
-            
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                    e.success(result.data.response)
+                }, function error(result)
+                  {
+                      alert('something went wrong')
+                  })
+              },
+              update : function (e)
+              {
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        e.data.models[0].id,      
+                          libelle:   e.data.models[0].libelle,
+                          description: e.data.models[0].description,
+                          ponderation: e.data.models[0].ponderation,
+                          id_ouvrage: e.data.models[0].ouvrage.id               
+                      });
+                  
+                  apiFactory.add("attachement/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              },
+              destroy : function (e)
+              {
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                 
+                  var datas = $.param({supprimer: 1,id: e.data.models[0].id});
+                  
+                  apiFactory.add("attachement/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              },
+              create : function (e)
+              {
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        0,      
+                          libelle:      e.data.models[0].libelle,
+                          description:  e.data.models[0].description,
+                          ponderation:  e.data.models[0].ponderation,
+                          id_ouvrage:   id_ouvrage               
+                      });
+                  
+                  apiFactory.add("attachement/index",datas, config).success(function (data)
+                  { 
+                    e.data.models[0].id = String(data.response);
+                    e.data.models[0].ouvrage={id:id_ouvrage};              
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              }
+            },
+            batch: true,
+            schema:
+            {
+                model:
+                {
+                    id: "id",
+                    fields:
+                    {
+                        libelle: {type: "string",validation: {required: true}},
+                        description: {type: "string", validation: {required: true}},
+                        ponderation: {type: "number", validation: {required: true}}
+                    }
+                }
+            },     
+            serverFiltering: true,
+            pageSize: 5,
+          },
+          toolbar: [{               
+               template: "<label id='table_titre'>ATTACHEMENT </label>"
+          },{
+               name: "create",
+               text:"",
+               iconClass: "k-icon k-i-table-light-dialog"
+               
+          }],
+          editable: {
+            mode:"inline"
+          },
+          selectable:"row",
+          scrollable: false,
+          sortable: true,
+          pageable:{refresh: true,
+                    pageSizes: true, 
+                    buttonCount: 3,
+                    messages: {
+                      empty: "Pas de donnée",
+                      display: "{0}-{1} pour {2} items",
+                      itemsPerPage: "items par page",
+                      next: "Page suivant",
+                      previous: "Page précédant",
+                      refresh: "Actualiser",
+                      first: "Première page",
+                      last: "Dernière page"
+                    }
+                  },
+          //dataBound: function() {
+                   // this.expandRow(this.tbody.find("tr.k-master-row").first());
+               // },
+          columns: [
+            {
+              field: "libelle",
+              title: "Libelle",
+              width: "Auto"
+            },
+            {
+              field: "description",
+              title: "Description",
+              width: "Auto"
+            },
+            {
+              field: "ponderation",
+              title: "Ponderation",
+              width: "Auto"
+            },
+            { 
+              title: "Action",
+              width: "Auto",
+              command:[{
+                      name: "edit",
+                      text: {edit: "",update: "",cancel: ""},
+                      //iconClass: {edit: "k-icon k-i-edit",update: "k-icon k-i-update",cancel: "k-icon k-i-cancel"
+                       // },
+                  },{name: "destroy", text: ""}]
+            }]
+        };
+      };
 
-        }
-
+/* ***************FIN TYPE OUVRAGE**********************/
+        
         //Alert
         vm.showAlert = function(titre,content)
         {

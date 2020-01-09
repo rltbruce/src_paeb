@@ -3,20 +3,17 @@
     'use strict';
 
     angular
-        .module('app.paeb.ddb.association')
-        .controller('AssociationController', AssociationController);
+        .module('app.paeb.ddb.ouvragee')
+        .controller('OuvrageeController', OuvrageeController);
     /** @ngInject */
-    function AssociationController($mdDialog, $scope, apiFactory, $state)
+    function OuvrageeController($mdDialog, $scope, apiFactory, $state)
     {
 		    var vm = this;
         vm.ajout = ajout ;
         var NouvelItem=false;
         var currentItem;
         vm.selectedItem = {} ;
-        vm.allassociation = [] ;
-
-        vm.allcommune = [] ;
-        vm.allcisco = [] ;
+        vm.allouvrage = [] ;
 
         //style
         vm.dtOptions = {
@@ -27,19 +24,19 @@
         };
 
         //col table
-        vm.association_column = [{titre:"Code"},{titre:"Description"},{titre:"Ecole"},{titre:"Action"}];
+        vm.ouvrage_column = [{titre:"Libelle"},{titre:"Description"},{titre:"Action"}];
         
-        //recuperation donnée association
-        apiFactory.getAll("association/index").then(function(result)
+        //recuperation donnée ouvrage
+        apiFactory.getAll("ouvrage/index").then(function(result)
         {
-            vm.allassociation = result.data.response; 
-            //console.log(vm.allassociation);
+            vm.allouvrage = result.data.response; 
+            //console.log(vm.allouvrage);
         });
 
-        //recuperation donnée cisco
-        apiFactory.getAll("ecole/index").then(function(result)
+        //recuperation donnée district
+        apiFactory.getAll("district/index").then(function(result)
         {
-          vm.allecole= result.data.response;
+          vm.alldistrict= result.data.response;
         });
 
         //Masque de saisi ajout
@@ -51,53 +48,51 @@
               $edit: true,
               $selected: true,
               id: '0',         
-              code: '',
-              description: '',
-              id_ecole: ''
+              libelle: '',
+              description: ''
             };         
-            vm.allassociation.push(items);
-            vm.allassociation.forEach(function(asso)
+            vm.allouvrage.push(items);
+            vm.allouvrage.forEach(function(cis)
             {
-              if(asso.$selected==true)
+              if(cis.$selected==true)
               {
-                vm.selectedItem = asso;
+                vm.selectedItem = cis;
               }
             });
 
             NouvelItem = true ;
           }else
           {
-            vm.showAlert('Ajout association','Un formulaire d\'ajout est déjà ouvert!!!');
+            vm.showAlert('Ajout ouvrage','Un formulaire d\'ajout est déjà ouvert!!!');
           }                
                       
         };
 
         //fonction ajout dans bdd
-        function ajout(association,suppression)
+        function ajout(ouvrage,suppression)
         {
             if (NouvelItem==false)
             {
-                test_existance (association,suppression); 
+                test_existance (ouvrage,suppression); 
             } 
             else
             {
-                insert_in_base(association,suppression);
+                insert_in_base(ouvrage,suppression);
             }
         }
 
-        //fonction de bouton d'annulation association
+        //fonction de bouton d'annulation ouvrage
         vm.annuler = function(item)
         {
           if (NouvelItem == false)
           {
             item.$edit = false;
             item.$selected = false;
-            item.code      = currentItem.code ;
-            item.description   = currentItem.description ;
-            item.id_ecole      = currentItem.id_ecole; 
+            item.libelle      = currentItem.libelle ;
+            item.description       = currentItem.description ; 
           }else
           {
-            vm.allassociation = vm.allassociation.filter(function(obj)
+            vm.allouvrage = vm.allouvrage.filter(function(obj)
             {
                 return obj.id !== vm.selectedItem.id;
             });
@@ -113,40 +108,40 @@
         {
             vm.selectedItem = item;
             vm.nouvelItem   = item;
-            currentItem     = JSON.parse(JSON.stringify(vm.selectedItem)); 
+            currentItem     = JSON.parse(JSON.stringify(vm.selectedItem));
+           // vm.allouvrage= [] ; 
         };
         $scope.$watch('vm.selectedItem', function()
         {
-             if (!vm.allassociation) return;
-             vm.allassociation.forEach(function(item)
+             if (!vm.allouvrage) return;
+             vm.allouvrage.forEach(function(item)
              {
                 item.$selected = false;
              });
              vm.selectedItem.$selected = true;
         });
 
-        //fonction masque de saisie modification item association
+        //fonction masque de saisie modification item ouvrage
         vm.modifier = function(item)
         {
             NouvelItem = false ;
             vm.selectedItem = item;
             currentItem = angular.copy(vm.selectedItem);
-            $scope.vm.allassociation.forEach(function(cis) {
+            $scope.vm.allouvrage.forEach(function(cis) {
               cis.$edit = false;
             });
 
             item.$edit = true;
             item.$selected = true;            
-            item.code      = vm.selectedItem.code ;
-            item.description = vm.selectedItem.description;
-            item.id_ecole  = vm.selectedItem.ecole.id; 
+            item.libelle      = vm.selectedItem.libelle ;
+            item.description       = vm.selectedItem.description; 
         };
 
-        //fonction bouton suppression item association
+        //fonction bouton suppression item ouvrage
         vm.supprimer = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enassociationistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enouvrageistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -160,20 +155,19 @@
               });
         };
 
-        //function teste s'il existe une modification item association
+        //function teste s'il existe une modification item ouvrage
         function test_existance (item,suppression)
         {          
             if (suppression!=1)
             {
-               var cis = vm.allassociation.filter(function(obj)
+               var cis = vm.allouvrage.filter(function(obj)
                 {
                    return obj.id == currentItem.id;
                 });
                 if(cis[0])
                 {
                    if((cis[0].description!=currentItem.description) 
-                    || (cis[0].code!=currentItem.code)
-                    || (cis[0].id_ecole!=currentItem.id_ecole))                    
+                    || (cis[0].libelle!=currentItem.libelle))                    
                       { 
                          insert_in_base(item,suppression);
                       }
@@ -187,8 +181,8 @@
                   insert_in_base(item,suppression);
         }
 
-        //insertion ou mise a jours ou suppression item dans bdd association
-        function insert_in_base(association,suppression)
+        //insertion ou mise a jours ou suppression item dans bdd ouvrage
+        function insert_in_base(ouvrage,suppression)
         {
             //add
             var config =
@@ -205,35 +199,29 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,      
-                    code:      association.code,
-                    description: association.description,
-                    id_ecole: association.id_ecole                
+                    libelle:     ouvrage.libelle,
+                    description: ouvrage.description               
                 });
-                //console.log(association.pays_id);
+                //console.log(ouvrage.pays_id);
+                console.log(datas);
                 //factory
-            apiFactory.add("association/index",datas, config).success(function (data)
+            apiFactory.add("categorie_ouvrage/index",datas, config).success(function (data)
             {
-                
-                var eco = vm.allecole.filter(function(obj)
-                {
-                    return obj.id == association.id_ecole;
-                });
 
                 if (NouvelItem == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItem.description        = association.description;
-                        vm.selectedItem.code       = association.code;
-                        vm.selectedItem.ecole       = eco[0];
+                        vm.selectedItem.description        = ouvrage.description;
+                        vm.selectedItem.libelle       = ouvrage.libelle;
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
                         vm.selectedItem ={};
                     }
                     else 
                     {    
-                      vm.allassociation = vm.allassociation.filter(function(obj)
+                      vm.allouvrage = vm.allouvrage.filter(function(obj)
                       {
                           return obj.id !== vm.selectedItem.id;
                       });
@@ -241,14 +229,13 @@
                 }
                 else
                 {
-                  association.description =  association.description;
-                  association.code=  association.code;
-                  association.commune = eco[0];
-                  association.id  =   String(data.response);              
+                  ouvrage.description =  ouvrage.description;
+                  ouvrage.libelle=  ouvrage.libelle;
+                  ouvrage.id  =   String(data.response);              
                   NouvelItem=false;
             }
-              association.$selected = false;
-              association.$edit = false;
+              ouvrage.$selected = false;
+              ouvrage.$edit = false;
               vm.selectedItem = {};
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -270,7 +257,5 @@
             .targetEvent()
           );
         }
-        
-
     }
 })();
