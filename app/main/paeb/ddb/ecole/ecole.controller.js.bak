@@ -1,0 +1,3331 @@
+(function ()
+{
+    'use strict';
+
+    angular
+        .module('app.paeb.ddb.ecole')
+        .controller('EcoleController', EcoleController);
+    /** @ngInject */
+    function EcoleController($mdDialog, $scope, apiFactory, $state, uiGmapGoogleMapApi)
+    {
+		    var vm = this;
+        vm.ajout = ajout ;
+        var NouvelItem=false;
+        var currentItem;
+        vm.selectedItem = {} ;
+        vm.allecole = [] ;
+
+        vm.allcommune = [] ;
+
+        vm.vuemap = false;
+        vm.liste = [] ;
+        //style
+        vm.dtOptions = {
+          dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
+          pagingType: 'simple',
+          autoWidth: false,
+          responsive: true          
+        };
+
+        //col table
+        vm.ecole_column = [{titre:"Code"},{titre:"Description"},{titre:"Lieu"},{titre:"Commune"},{titre:"Latitude"},{titre:"Longitude"},{titre:"Altitude"},{titre:"Ponderation"},{titre:"Action"}];
+        
+        //recuperation donnée ecole
+        apiFactory.getAll("ecole/index").then(function(result)
+        {
+            vm.allecole = result.data.response; 
+            console.log(vm.allecole);
+            vm.allecole.forEach(function(item)
+            {
+              var site = {
+                id: item.id,
+                coords:{
+                  latitude: item.latitude,
+                  longitude: item.longitude,
+                  lieu: item.lieu,
+                  description: item.description,
+                  code: item.code,
+                  ponderation: item.ponderation,
+                }
+                
+              };
+              vm.liste.push(site);              
+            });
+            console.log(vm.liste);
+        });
+/*
+ $scope.events = {
+        mouseover: function (marker, eventName, model, args) {
+          //model.options.labelContent = "Position - lat: " + model.latitude + " lon: " + model.longitude;
+        
+        //marker.show = true;
+        $scope.activemarker=marker;
+       // $scope.activemarker.show=true;
+//console.log($scope.activemarker.show);
+       // $scope.ec.push({show:true});
+        //vm.show = true;
+         // $scope.$apply();
+        },
+        mouseout: function (marker, eventName, model, args) {
+          // model.options.labelContent = " ";
+          // marker.showWindow = false;
+          
+          //marker.show=false;
+         // console.log(marker.show);
+          //console.log(false);
+          //$scope.$apply();
+        }
+    }
+       */
+
+        //recuperation donnée commune
+        apiFactory.getAll("commune/index").then(function(result)
+        {
+          vm.allcommune= result.data.response;
+        });
+
+         vm.ecolevueMap = {
+                        center: {
+                            latitude : -18.881728,
+                            longitude: 47.510447
+                        },
+                        zoom  : 5,
+                        marker: vm.liste
+                    };
+
+        //Masque de saisi ajout
+        vm.ajouter = function ()
+        { 
+          if (NouvelItem == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              code: '',
+              description: '',
+              lieu: '',
+              id_commune: '',         
+              latitude: '',
+              longitude: '',
+              altitude: '',
+              ponderation: 0
+            };         
+            vm.allecole.push(items);
+            vm.allecole.forEach(function(cis)
+            {
+              if(cis.$selected==true)
+              {
+                vm.selectedItem = cis;
+              }
+            });
+
+            NouvelItem = true ;
+          }else
+          {
+            vm.showAlert('Ajout ecole','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajout(ecole,suppression)
+        {
+            if (NouvelItem==false)
+            {
+                test_existance (ecole,suppression); 
+            } 
+            else
+            {
+                insert_in_base(ecole,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation ecole
+        vm.annuler = function(item)
+        {
+          if (NouvelItem == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.code      = currentItem.code ;
+            item.description = currentItem.description ;
+            item.lieu = currentItem.lieu ;
+            item.id_commune  = currentItem.id_commune ;
+            item.latitude    = currentItem.latitude ;
+            item.longitude   = currentItem.longitude ;
+            item.altitude    = currentItem.altitude ;
+            item.ponderation    = currentItem.ponderation ; 
+          }else
+          {
+            vm.allecole = vm.allecole.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItem.id;
+            });
+          }
+
+          vm.selectedItem = {} ;
+          NouvelItem      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selection= function (item)
+        {
+            vm.selectedItem = item;
+            vm.nouvelItem   = item;
+            currentItem     = JSON.parse(JSON.stringify(vm.selectedItem));
+           // vm.allecole= [] ; 
+        };
+        $scope.$watch('vm.selectedItem', function()
+        {
+             if (!vm.allecole) return;
+             vm.allecole.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItem.$selected = true;
+        });
+
+        //fonction masque de saisie modification item ecole
+        vm.modifier = function(item)
+        {
+            NouvelItem = false ;
+            vm.selectedItem = item;
+            currentItem = angular.copy(vm.selectedItem);
+            $scope.vm.allecole.forEach(function(cis) {
+              cis.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;            
+            item.code      = vm.selectedItem.code ;
+            item.description = vm.selectedItem.description;
+            item.lieu = vm.selectedItem.lieu;
+            item.id_commune  = vm.selectedItem.commune.id;
+            item.latitude      = vm.selectedItem.latitude ;
+            item.longitude = vm.selectedItem.longitude;
+            item.altitude  = vm.selectedItem.altitude;
+            item.ponderation  = vm.selectedItem.ponderation; 
+        };
+
+        //fonction bouton suppression item ecole
+        vm.supprimer = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enecoleistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajout(vm.selectedItem,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item ecole
+        function test_existance (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var cis = vm.allecole.filter(function(obj)
+                {
+                   return obj.id == currentItem.id;
+                });
+                if(cis[0])
+                {
+                   if((cis[0].description!=currentItem.description) 
+                    || (cis[0].code!=currentItem.code)
+                    || (cis[0].lieu!=currentItem.lieu)
+                    || (cis[0].id_commune!=currentItem.id_commune)
+                    || (cis[0].latitude!=currentItem.latitude)
+                    || (cis[0].longitude!=currentItem.longitude)
+                    || (cis[0].altitude!=currentItem.altitude)
+                    || (cis[0].ponderation!=currentItem.ponderation))                    
+                      { 
+                         insert_in_base(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_base(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd ecole
+        function insert_in_base(ecole,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItem==false)
+            {
+                getId = vm.selectedItem.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,      
+                    code:      ecole.code,
+                    lieu:      ecole.lieu,      
+                    latitude:    ecole.latitude,
+                    longitude:   ecole.longitude,
+                    altitude:    ecole.altitude,
+                    id_commune:  ecole.id_commune,
+                    description: ecole.description,
+                    ponderation: ecole.ponderation               
+                });
+                //console.log(ecole.pays_id);
+                //factory
+            apiFactory.add("ecole/index",datas, config).success(function (data)
+            {
+                
+                var com = vm.allcommune.filter(function(obj)
+                {
+                    return obj.id == ecole.id_commune;
+                });
+
+                if (NouvelItem == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                        vm.selectedItem.description = ecole.description;
+                        vm.selectedItem.code       = ecole.code;
+                        vm.selectedItem.lieu       = ecole.lieu;
+                        vm.selectedItem.latitude   = ecole.latitude;
+                        vm.selectedItem.longitude  = ecole.longitude;
+                        vm.selectedItem.altitude   = ecole.altitude;
+                        vm.selectedItem.ponderation   = ecole.ponderation;
+                        vm.selectedItem.commune       = com[0];
+                        vm.selectedItem.$selected  = false;
+                        vm.selectedItem.$edit      = false;
+                        vm.selectedItem ={};
+                    }
+                    else 
+                    {    
+                      vm.allecole = vm.allecole.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItem.id;
+                      });
+                    }
+                }
+                else
+                {
+                  ecole.description =  ecole.description;
+                  ecole.code      =  ecole.code;
+                  ecole.lieu      =  ecole.lieu;
+                  ecole.latitude  =  ecole.latitude;
+                  ecole.longitude =  ecole.longitude;
+                  ecole.altitude  =  ecole.altitude;
+                  ecole.ponderation  =  ecole.ponderation;
+                  ecole.commune   = com[0];
+                  ecole.id        =   String(data.response);              
+                  NouvelItem = false;
+            }
+              ecole.$selected = false;
+              ecole.$edit = false;
+              vm.selectedItem = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        //Alert
+        vm.showAlert = function(titre,content)
+        {
+          $mdDialog.show(
+            $mdDialog.alert()
+            .parent(angular.element(document.querySelector('#popupContainer')))
+            .clickOutsideToClose(false)
+            .parent(angular.element(document.body))
+            .title(titre)
+            .textContent(content)
+            .ariaLabel('Alert')
+            .ok('Fermer')
+            .targetEvent()
+          );
+        }
+
+vm.polylines = [
+            {
+                id: 1,
+                path: [
+                    {
+                        latitude: -13.586724,
+                        longitude: 47.958293 , 
+                    },
+                    {
+                        latitude: -14.025779,
+                        longitude: 48.047114 , 
+                    },
+                    {
+                        latitude: -13.992726,
+                        longitude: 48.090419
+                    },
+                    {
+                        latitude: -13.966392, 
+                        longitude: 48.084645,
+                    },
+                    {
+                        latitude: -13.876931, 
+                        longitude: 48.234667,
+                    },
+                    {
+                        latitude: -13.894659, 
+                        longitude: 48.259596,
+                    },
+                    {
+                        latitude: -14.012895,
+                        longitude: 48.174141
+                    },
+                    {
+                        latitude: -14.013105, 
+                        longitude: 48.174384,
+                    },
+                    {
+                        latitude: -14.034495, 
+                        longitude: 48.200923,
+                    },
+                    {
+                        latitude: -14.018789,
+                        longitude: 48.242270 , 
+                    },
+                    {
+                        latitude: -14.069342,
+                        longitude: 48.272315
+                    },
+                    {
+                        latitude: -14.071226, 
+                        longitude: 48.299803,
+                    },
+                    {
+                        latitude: -14.122543, 
+                        longitude: 48.365796,
+                    },
+                    {
+                        latitude: -14.121721, 
+                        longitude: 48.470424,
+                    },
+                    {
+                        latitude: -14.078683,
+                        longitude: 48.536567
+                    },
+                    {
+                        latitude: -14.141488, 
+                        longitude: 48.581585,
+                    },
+                    {
+                        latitude: -14.141124, 
+                        longitude: 48.623868,
+                    },
+                    {
+                        latitude: -14.216036,
+                        longitude: 48.701767 , 
+                    },
+                    {
+                        latitude: -14.189243,
+                        longitude: 48.797683
+                    },
+                    {
+                        latitude: -14.255137, 
+                        longitude: 48.837552,
+                    },
+                    {
+                        latitude: -14.148160, 
+                        longitude: 48.971524,
+                    },
+                    {
+                        latitude: -14.202813, 
+                        longitude: 49.087365,
+                    },
+                    {
+                        latitude: -14.204431,
+                        longitude: 49.132823
+                    },
+                    {
+                        latitude: -14.266465, 
+                        longitude: 49.140986,
+                    },
+                    {
+                        latitude: -14.441563, 
+                        longitude: 49.309307,
+                    },
+                    {
+                        latitude: -14.508693,
+                        longitude: 49.411704 , 
+                    },
+                    {
+                        latitude: -14.563009,
+                        longitude: 49.369156
+                    },
+                    {
+                        latitude: -14.671869, 
+                        longitude: 49.443677,
+                    },
+                    {
+                        latitude: -14.727503, 
+                        longitude: 49.464658,
+                    },
+                    {
+                        latitude: -14.826594, 
+                        longitude: 49.482034,
+                    },
+                    {
+                        latitude: -14.826150,
+                        longitude: 49.5147799
+                    },
+                    {
+                        latitude: -14.914193, 
+                        longitude: 49.590374,
+                    },
+
+                    {
+                        latitude: -14.938912, 
+                        longitude: 49.593879,
+                    },                    
+                    {
+                        latitude: -15.084998,
+                        longitude: 49.724461, 
+                    },
+                    {
+                        latitude: -15.045005,
+                        longitude: 49.843485
+                    },
+                    {
+                        latitude: -15.061595, 
+                        longitude: 49.908579,
+                    },
+                    {
+                        latitude: -15.042411, 
+                        longitude: 49.938876,
+                    },
+                    {
+                        latitude: -15.192719,
+                        longitude: 50.050715
+                    },
+                    {
+                        latitude: -15.255758,
+                        longitude: 49.993575
+                    },
+                    {
+                        latitude: -15.302653, 
+                        longitude: 50.034675,
+                    },
+                    {
+                        latitude: -15.340297, 
+                        longitude: 50.017314,
+                    },
+                    {
+                        latitude: -15.401211,
+                        longitude: 50.020597, 
+                    },
+                    {
+                        latitude: -15.436742,
+                        longitude: 50.058384
+                    },
+                    {
+                        latitude: -15.471482, 
+                        longitude: 50.061167,
+                    },
+                    {
+                        latitude: -15.482382, 
+                        longitude: 50.048577,
+                    },
+                    {
+                        latitude: -15.581120, 
+                        longitude: 50.021809,
+                    },
+                    {
+                        latitude: -15.641728,
+                        longitude: 50.045253
+                    },
+                    {
+                        latitude: -15.748891, 
+                        longitude: 50.067484,
+                    },
+                    {
+                        latitude: -15.771226, 
+                        longitude: 50.093409,
+                    },
+                    {
+                        latitude: -15.813575, 
+                        longitude: 50.094221,
+                    },
+                    {
+                        latitude: -15.937040,
+                        longitude: 50.132703
+                    },
+                    
+
+
+                     {
+                        latitude: -15.938632,
+                        longitude: 50.133856, 
+                    },
+                    {
+                        latitude: -15.938653,
+                        longitude: 50.134521, 
+                    },
+                    {
+                        latitude: -15.939200, 
+                        longitude: 50.136559, 
+                    },
+                    {
+                        latitude: -15.939602,  
+                        longitude: 50.137460,
+                    },
+                    {
+                        latitude: -15.939963,  
+                        longitude: 50.138286 ,
+                    }, 
+                    {
+                        latitude: -15.940943, 
+                        longitude: 50.140464 ,
+                    },
+                    {
+                        latitude: -15.942490,  
+                        longitude: 50.142814,
+                    },
+                    {
+                        latitude: -15.943171,  
+                        longitude: 50.144219,
+                    },
+                    {
+                        latitude: -15.950155,
+                        longitude: 50.146097,
+                    },
+                    {
+                        latitude: -15.950382, 
+                        longitude: 50.146108,
+                    }, 
+                    {
+                        latitude: -15.951557,  
+                        longitude: 50.145546,
+                    }, 
+                    {
+                        latitude: -15.953349,  
+                        longitude: 50.145157,
+                    }, 
+                    {
+                        latitude: -15.953909,  
+                        longitude: 50.145136,
+                    }, 
+                    {
+                        latitude: -15.954907,  
+                        longitude: 50.145176,
+                    }, 
+
+
+                   
+                    
+                                                    
+                ],
+
+                stroke: {
+                    color: '#6060FB',
+                    weight: 1
+                },
+                //editable: true,
+                //draggable: true,
+                //geodesic: true,
+                //visible: true,
+                fill: {
+                    
+                    opacity: 0
+                     
+                },
+                events: { 
+                  click: function()
+                  { 
+                  console.log("click ok"); 
+                  },
+                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0.5';
+                   console.log("mouseover ok");
+                  },
+                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0';
+                    console.log("mouseout ok");
+                  }
+                },                           
+            },
+            {
+               //Antananarivo
+                id: 2 ,
+                path: [
+                    {
+                        latitude: -17.892789, 
+                        longitude: 46.146866,
+                    },
+                    {
+                        latitude: -17.900252,  
+                        longitude: 46.145482, 
+                    },
+                    {
+                        latitude: -17.899139,  
+                        longitude: 46.173903, 
+                    },
+                    {
+                        latitude: -17.898179,   
+                        longitude: 46.197249, 
+                    },
+                    {
+                        latitude: -17.881741,   
+                        longitude: 46.210907, 
+                    },
+                    {
+                        latitude: -17.877473,   
+                        longitude: 46.214469, 
+                    },
+                    {
+                        latitude: -17.869141,   
+                        longitude: 46.268403, 
+                    },
+                    {
+                        latitude: -17.854569,   
+                        longitude: 46.324450, 
+                    },
+                    {
+                        latitude: -17.806831,   
+                        longitude: 46.380412, 
+                    },
+                    {
+                        latitude: -17.777635,  
+                        longitude: 46.483817,  
+                    },
+                    {
+                        latitude: -17.736069,   
+                        longitude: 46.546194, 
+                    },
+                    {
+                        latitude: -17.754677,   
+                        longitude: 46.572083, 
+                    },
+                    {
+                        latitude: -17.729434,    
+                        longitude: 46.724998, 
+                    },
+                    {
+                        latitude: -17.743570,    
+                        longitude: 46.845749, 
+                    },
+                    {
+                        latitude: -17.726923,    
+                        longitude: 46.886605, 
+                    },
+
+                    {
+                        latitude: -17.784837,    
+                        longitude: 46.919221, 
+                    },
+                    {
+                        latitude: -17.828472,    
+                        longitude: 46.897897, 
+                    },
+                    {
+                        latitude: -17.836405,   
+                        longitude: 46.990540,  
+                    },
+                    {
+                        latitude: -17.852671,    
+                        longitude: 47.064004, 
+                    },
+                    {
+                        latitude: -17.800650,    
+                        longitude: 47.106810, 
+                    },
+                    {
+                        latitude: -17.802475,    
+                        longitude: 47.154219,
+                    },
+                    {
+                        latitude: -17.754507,    
+                        longitude: 47.207758, 
+                    },
+                    {
+                        latitude: -17.758173,    
+                        longitude: 47.298250, 
+                    },
+                    {
+                        latitude: -17.776496,    
+                        longitude: 47.358738, 
+                    },
+                    {
+                        latitude: -17.846922,    
+                        longitude: 47.372188, 
+                    },
+                    {
+                        latitude: -17.883827,     
+                        longitude: 47.426284, 
+                    },
+                    {
+                        latitude: -17.924889,     
+                        longitude: 47.504315,
+                    },
+                    {
+                        latitude: -17.928372,     
+                        longitude: 47.592707, 
+                    },
+                    {
+                        latitude: -17.969639,     
+                        longitude: 47.623294, 
+                    },
+                    {
+                        latitude: -17.937062,     
+                        longitude: 47.814815, 
+                    },
+                    //Frontiere tamatave
+                    {
+                        latitude: -17.905175,     
+                        longitude: 47.907216, 
+                    },
+                    {
+                        latitude: -17.954710,     
+                        longitude: 47.927126, 
+                    },
+                    {
+                        latitude: -17.975100,     
+                        longitude: 47.966174, 
+                    },
+                    {
+                        latitude: -18.024696,     
+                        longitude: 47.981769, 
+                    },
+                    {
+                        latitude: -18.082425,     
+                        longitude: 48.012647, 
+                    },
+                    {
+                        latitude: -18.134367,  //Analamanga   
+                        longitude: 48.000300, 
+                    },
+                    {
+                        latitude: -18.215772,     
+                        longitude: 48.001244, 
+                    },
+                    {
+                        latitude: -18.242149,      
+                        longitude: 48.001523, 
+                    },
+                    {
+                        latitude: -18.309870,      
+                        longitude: 48.023114, 
+                    },
+                    {
+                        latitude: -18.380650,      
+                        longitude: 48.039843, 
+                    },
+                    {
+                        latitude: -18.407975,      
+                        longitude: 48.001266, 
+                    },
+                    {
+                        latitude: -18.580152,      
+                        longitude: 47.988144, 
+                    },
+                    {
+                        latitude: -18.677841,     
+                        longitude: 47.956799,  
+                    },
+                    {
+                        latitude: -18.786591,      
+                        longitude: 47.946124, 
+                    },
+                    {
+                        latitude: -18.796113,     
+                        longitude: 47.945203,  
+                    },
+                    {
+                        latitude: -18.984661,      
+                        longitude: 47.949576, 
+                    },
+                    {
+                        latitude: -19.132299,      
+                        longitude: 47.905754, 
+                    },
+                    {
+                        latitude: -19.193978,      
+                        longitude: 47.958572, 
+                    },
+                    {
+                        latitude: -19.221063,      
+                        longitude: 47.943734, 
+                    },
+                    {
+                        latitude: -19.266461,      
+                        longitude: 47.955105, 
+                    },
+                    {
+                        latitude: -19.388848,       
+                        longitude: 47.954444, 
+                    },
+                    {
+                        latitude: -19.563883,       
+                        longitude: 47.863033, 
+                    },
+                    {
+                        latitude: -19.607185,      
+                        longitude: 47.885301,  
+                    },
+                    {
+                        latitude: -19.634477,       
+                        longitude: 47.855161, 
+                    },
+                    {
+                        latitude: -19.733824,       
+                        longitude: 47.862888, 
+                    },
+                    {
+                        latitude: -19.831362,      
+                        longitude: 47.850994,  
+                    },
+                    {
+                        latitude: -19.894440,       
+                        longitude: 47.766697, 
+                    },
+                    {
+                        latitude: -19.969056,       
+                        longitude: 47.763202, 
+                    },
+
+                    {
+                        latitude: -20.010902,      
+                        longitude: 47.726569, 
+                    },
+                    
+                    {
+                        latitude: -20.056006,       
+                        longitude: 47.722723, 
+                    },
+                    
+                    {
+                        latitude: -20.066740,       
+                        longitude: 47.681378, 
+                    },
+                    {
+                        latitude: -20.017251,      
+                        longitude: 47.652429,  
+                    },
+                    {
+                        latitude: -20.048694,       
+                        longitude: 47.611285, 
+                    },
+                    {
+                        latitude: -20.053234,        
+                        longitude: 47.572058, 
+                    },
+                    {
+                        latitude: -20.088813,        
+                        longitude: 47.526523, 
+                    },
+
+
+                    {
+                        latitude: -20.054008,        
+                        longitude: 47.475942, 
+                    },
+                    {
+                        latitude: -20.085438,        
+                        longitude: 47.430388, 
+                    },
+                    {
+                        latitude: -20.044607,        
+                        longitude: 47.349217, 
+                    },
+                    {
+                        latitude: -20.084450,        
+                        longitude: 47.275307, 
+                    },
+                    {
+                        latitude: -20.053606,        
+                        longitude: 47.251013, 
+                    },
+                    {
+                        latitude: -20.087071,        
+                        longitude: 47.205434, 
+                    },
+                    {
+                        latitude: -20.141016,        
+                        longitude: 47.197124, 
+                    },
+                    {
+                        latitude: -20.170491,        
+                        longitude: 47.127405, 
+                    },
+                    {
+                        latitude: -20.177179,        
+                        longitude: 47.053169, 
+                    },
+                    {
+                        latitude: -20.193873,        
+                        longitude: 47.027026, 
+                    },
+                    {
+                        latitude: -20.169244,        
+                        longitude: 46.980956, 
+                    },
+                    {
+                        latitude: -20.267253,        
+                        longitude: 46.870076, 
+                    },
+                    {
+                        latitude: -20.290405,         
+                        longitude: 46.791459,
+                    },
+                    {
+                        latitude: -20.267700,         
+                        longitude: 46.767275, 
+                    },
+                    {
+                        latitude: -20.292796,        
+                        longitude: 46.708315,  
+                    },
+                    {
+                        latitude: -20.253750,         
+                        longitude: 46.620655, 
+                    },
+                    {
+                        latitude: -20.287092,         
+                        longitude: 46.550771, 
+                    },
+                    {
+                        latitude: -20.258113,         
+                        longitude: 46.513437, 
+                    },
+                    {
+                        latitude: -20.258286,         
+                        longitude: 46.474091, 
+                    },
+                    {
+                        latitude: -20.237620,       
+                        longitude: 46.436837,   
+                    },
+                    {
+                        latitude: -20.260540,         
+                        longitude: 46.388760, 
+                    },
+                    {
+                        latitude: -20.244014,         
+                        longitude: 46.347128, 
+                    },
+                    {
+                        latitude: -20.233682,         
+                        longitude: 46.309948,
+                    },
+                    {
+                        latitude: -20.194350,         
+                        longitude: 46.261758, 
+                    },
+                    {
+                        latitude: -20.154840,          
+                        longitude: 46.314091,
+                    },
+                    {
+                        latitude: -20.105158,          
+                        longitude: 46.270305,
+                    },
+                    {
+                        latitude: -20.082287,          
+                        longitude: 46.305139, 
+                    },
+                    {
+                        latitude: -20.036731,         
+                        longitude: 46.237341,  
+                    },
+                    {
+                        latitude: -20.107314,          
+                        longitude: 46.152253, 
+                    },
+                    {
+                        latitude: -20.055458,          
+                        longitude: 46.158730, 
+                    },
+                    {
+                        latitude: -20.038848,          
+                        longitude: 46.097608, 
+                    },
+                    {
+                        latitude: -19.972500,          
+                        longitude: 46.079960, 
+                    },
+                    {
+                        latitude: -19.966245,         
+                        longitude: 46.034132, 
+                    },
+                    {
+                        latitude: -19.941341,          
+                        longitude: 46.003535, 
+                    },
+
+                    {
+                        latitude: -19.941378,           
+                        longitude: 46.003485, 
+                    },
+                    {
+                        latitude: -19.947534,           
+                        longitude: 45.933642, 
+                    },
+                    {
+                        latitude: -19.918464,           
+                        longitude: 45.892152, 
+                    },
+                    {
+                        latitude: -19.930812,           
+                        longitude: 45.841931, 
+                    },
+
+                     //frontiere fianarantsoa
+                    {
+                        latitude: -19.900175,            
+                        longitude: 45.792978, 
+                    },
+                    {
+                        latitude: -19.779551,             
+                        longitude: 45.857336, 
+                    },
+
+                    {
+                        latitude: -19.761202,              
+                        longitude: 45.867783, 
+                    },                    
+                    
+                    
+                    {
+                        latitude: -19.761200,           
+                        longitude: 45.867762,
+                    },
+                    
+                    {
+                        latitude: -19.667892,           
+                        longitude: 45.854753, 
+                    },
+                    {
+                        latitude: -19.591011,           
+                        longitude: 45.832994,
+                    },
+                    {
+                        latitude: -19.553625,          
+                        longitude: 45.800336,  
+                    },
+                    {
+                        latitude: -19.522477,           
+                        longitude: 45.817791, 
+                    },
+                    {
+                        latitude: -19.451989,          
+                        longitude: 45.822194,  
+                    },
+                    {
+                        latitude: -19.416735,           
+                        longitude: 45.841798, 
+                    },
+                    {
+                        latitude: -19.312999,           
+                        longitude: 45.844062, 
+                    },
+                    {
+                        latitude: -19.236188,           
+                        longitude: 45.811469, 
+                    },
+                    {
+                        latitude: -19.248471,           
+                        longitude: 45.733179, 
+                    },
+                    {
+                        latitude: -19.134153,           
+                        longitude: 45.646425, 
+                    },
+                    {
+                        latitude: -19.092721,          
+                        longitude: 45.663893,  
+                    },
+                    {
+                        latitude: -19.084288,           
+                        longitude: 45.620494, 
+                    },
+                    {
+                        latitude: -19.049014,           
+                        longitude: 45.616156, 
+                    },
+                    {
+                        latitude: -19.017759,           
+                        longitude: 45.568483, 
+                    },
+                    {
+                        latitude: -18.932486,            
+                        longitude: 45.512272, 
+                    },
+                    {
+                        latitude: -18.849523,            
+                        longitude: 45.525498, 
+                    },
+                    {
+                        latitude: -18.722885,            
+                        longitude: 45.506314, 
+                    },
+                    {
+                        latitude: -18.575904,            
+                        longitude: 45.630160, 
+                    },
+                    {
+                        latitude: -18.468015,            
+                        longitude: 45.628250, 
+                    },
+                    {
+                        latitude: -18.451303,            
+                        longitude: 45.613157, 
+                    },
+                    {
+                        latitude: -18.372558,           
+                        longitude: 45.619805,  
+                    },
+                    {
+                        latitude: -18.355959,            
+                        longitude: 45.639262, 
+                    },
+                    {
+                        latitude: -18.285245,            
+                        longitude: 45.581062, 
+                    },
+                    
+                    {
+                        latitude: -18.239774,            
+                        longitude: 45.616124, 
+                    },
+                    {
+                        latitude: -18.235720,            
+                        longitude: 45.646446, 
+                    },
+                    {
+                        latitude: -18.250267,            
+                        longitude: 45.659413, 
+                    },
+                    {
+                        latitude: -18.252479,             
+                        longitude: 45.711275, 
+                    },
+                    {
+                        latitude: -18.277489,             
+                        longitude: 45.763126,
+                    },
+                    {
+                        latitude: -18.234010,             
+                        longitude: 45.823700, 
+                    },
+                    {
+                        latitude: -18.206998,             
+                        longitude: 45.815066, 
+                    },
+                    {
+                        latitude: -18.165528,             
+                        longitude: 45.808651, 
+                    },
+                    {
+                        latitude: -18.111643,            
+                        longitude: 45.871341,  
+                    },
+                    {
+                        latitude: -18.049448,             
+                        longitude: 45.873564, 
+                    },
+                    
+                    {
+                        latitude: -17.960011,             
+                        longitude: 45.931853,  
+                    },
+                    {
+                        latitude: -17.934677,              
+                        longitude: 45.940163,  
+                    },
+                    {
+                        latitude: -17.909151,              
+                        longitude: 45.948442,  
+                    },
+                    {
+                        latitude: -17.900133,              
+                        longitude: 45.951341,  
+                    },                    
+                    {
+                        latitude: -17.837592,              
+                        longitude: 45.961107, 
+                    },
+                    
+                    {
+                        latitude: -17.817171,              
+                        longitude: 45.964320, 
+                    },
+                    {
+                        latitude: -17.820807,               
+                        longitude: 45.970961, 
+                    },
+                    {
+                        latitude: -17.850386,                
+                        longitude: 46.024652, 
+                    },
+                    {
+                        latitude: -17.873294,                 
+                        longitude: 46.106647, 
+                    },
+                    {
+                        latitude: -17.865009,                 
+                        longitude: 46.151892, 
+                    },                                    
+                ],
+                stroke: {
+                    color: '#6060FB',
+                    weight: 1
+                },
+                //editable: true,
+                //draggable: true,
+                //geodesic: true,
+                //visible: true,
+                fill: {
+                    
+                    opacity: 0
+                     
+                },
+                events: { 
+                  click: function()
+                  { 
+                  console.log("click ok"); 
+                  },
+                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0.5';
+                   console.log("mouseover ok");
+                  },
+                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0';
+                    console.log("mouseout ok");
+                  }
+                },
+            },
+            //Fianarantsoa
+            {
+              id:3,
+              path: [
+                  {
+                        latitude: -24.127321,  //Tolaniaro
+                        longitude: 47.420448,
+                  },
+                  {
+                        latitude: -24.024188,  
+                        longitude: 47.234463,
+                  },
+                  {
+                        latitude: -23.991962,  
+                        longitude: 47.128548,
+                  },
+                  {
+                        latitude: -24.083073,  
+                        longitude: 47.136252,
+                  },
+                  {
+                        latitude: -24.106142,  
+                        longitude: 47.098288,
+                  },
+                  {
+                        latitude: -24.081601,  
+                        longitude: 47.059854,
+                  },
+                  {
+                        latitude: -24.104617,  
+                        longitude: 47.030876,
+                  },
+                  {
+                        latitude: -24.141920,  
+                        longitude: 47.031196,
+                  },
+                  {
+                        latitude: -24.199677,  
+                        longitude: 47.067750,
+                  },
+                  {
+                        latitude: -24.260035,  
+                        longitude: 47.032420,
+                  },
+                  {
+                        latitude: -24.293466,  
+                        longitude: 47.001204,
+                  },
+                  {
+                        latitude: -24.314524,  
+                        longitude: 46.954142,
+                  },
+                  {
+                        latitude: -24.304502,  
+                        longitude: 46.904508,
+                  },
+                  {
+                        latitude: -24.242301,  
+                        longitude: 46.908459,
+                  },
+                  {
+                        latitude: -24.221135,  
+                        longitude: 46.927825,
+                  },
+                  {
+                        latitude: -24.213105,  
+                        longitude: 46.935148,
+                  },
+                  {
+                        latitude: -24.155426,  
+                        longitude: 46.882982,
+                  },
+                  {
+                        latitude: -24.122566,  
+                        longitude: 46.830949,
+                  },
+                  {
+                        latitude: -24.125062, 
+                        longitude:  46.756786,
+                  },
+                  {
+                        latitude: -24.062931,  
+                        longitude: 46.747323,
+                  },
+                  {
+                        latitude: -24.048531,  
+                        longitude: 46.724743,
+                  },
+                  {
+                        latitude: -24.018318,  
+                        longitude: 46.733105,
+                  },
+                  {
+                        latitude: -24.009124,  
+                        longitude: 46.735660,
+                  },
+                  {
+                        latitude: -23.963941,  
+                        longitude: 46.650063,
+                  },
+                  {
+                        latitude: -23.947761,  
+                        longitude:46.551097,
+                  },
+                  {
+                        latitude: -23.915316,  
+                        longitude: 46.523447,
+                  },
+                  {
+                        latitude: -23.850660,  
+                        longitude: 46.467494,
+                  },
+                  {
+                        latitude: -23.844548,  
+                        longitude: 46.433815,
+                  },
+                  {
+                        latitude: -23.792743,  
+                        longitude: 46.431338,
+                  },
+                  {
+                        latitude: -23.641088,  
+                        longitude: 46.508979,
+                  },
+                  {
+                        latitude: -23.574800,  
+                        longitude: 46.497427,
+                  },
+                  {
+                        latitude: -23.514838,  
+                        longitude: 46.445602,
+                  },
+                  {
+                        latitude: -23.444396,  
+                        longitude: 46.434082,
+                  },
+                  {
+                        latitude: -23.427691,  
+                        longitude: 46.463077,
+                  },
+                  {
+                        latitude: -23.379904,  
+                        longitude: 46.489657,
+                  },
+                  {
+                        latitude: -23.341817,  
+                        longitude: 46.477466,
+                  },
+                  {
+                        latitude: -23.330219,  
+                        longitude: 46.473759,
+                  },
+                  {
+                        latitude: -23.216118,  
+                        longitude: 46.491044,
+                  },
+                  {
+                        latitude: -23.187125,  
+                        longitude: 46.466328,
+                  },
+                  {
+                        latitude: -23.166615,  
+                        longitude: 46.401493,
+                  },
+                  {
+                        latitude: -22.998834,  
+                        longitude: 46.312211,
+                  },
+                  {
+                        latitude: -22.837333,  
+                        longitude: 46.235288,
+                  },
+                  {
+                        latitude: -22.787648,  
+                        longitude: 46.177286,
+                  },
+                  {
+                        latitude: -22.750429,  
+                        longitude: 46.092604,
+                  },
+                  {
+                        latitude: -22.704807,  
+                        longitude: 46.023477,
+                  },
+                  {
+                        latitude: -22.690331,  
+                        longitude: 45.976798,
+                  },
+                  {
+                        latitude: -22.692417,  
+                        longitude: 45.923374,
+                  },
+                  {
+                        latitude: -22.702729,  
+                        longitude: 45.843272,
+                  },
+                  {
+                        latitude: -22.768807,  
+                        longitude: 45.631944,
+                  },
+                  {
+                        latitude: -22.863854,  
+                        longitude: 45.475792,
+                  },
+                  {
+                        latitude: -22.919663,  
+                        longitude: 45.413221,
+                  },
+                  {
+                        latitude: -22.975606,  
+                        longitude: 45.397441,
+                  },
+                  {
+                        latitude: -23.081341,  
+                        longitude: 45.397186,
+                  },
+                  {
+                        latitude: -23.118702,  
+                        longitude: 45.392570,
+                  },
+                  {
+                        latitude: -23.135268,  
+                        longitude: 45.376877,
+                  },
+                  {
+                        latitude: -23.147585,  
+                        longitude: 45.343374,
+                  },
+                  {
+                        latitude: -23.143272,  
+                        longitude: 45.305462,
+                  },
+                  {
+                        latitude: -23.134767,  
+                        longitude: 45.260815,
+                  },
+                  {
+                        latitude: -23.074625,  
+                        longitude: 45.245450,
+                  },
+                  {
+                        latitude: -23.074189,   
+                        longitude: 45.160639,
+                  },
+                  {
+                        latitude: -23.076013,   
+                        longitude: 45.107113,
+                  },
+                  {
+                        latitude: -23.009254,   
+                        longitude: 45.040568,
+                  },
+                  {
+                        latitude: -22.963519,   
+                        longitude: 45.025183,
+                  },
+                  {
+                        latitude: -22.880519,  
+                        longitude: 45.014544, 
+                  },
+                  {
+                        latitude: -22.843821,    
+                        longitude: 45.022043,
+                  },
+                  {
+                        latitude: -22.824550,   
+                        longitude: 45.025999,
+                  },
+                  {
+                        latitude: -22.745914,  
+                        longitude: 45.057613, 
+                  },
+                  {
+                        latitude: -22.703865,   
+                        longitude: 45.039848,
+                  },
+                  {
+                        latitude: -22.693961,   
+                        longitude: 45.035629,
+                  },
+                  {
+                        latitude: -22.646432,   
+                        longitude: 45.078166,
+                  },
+                  {
+                        latitude: -22.522381,   
+                        longitude: 45.121020,
+                  },
+                  {
+                        latitude: -22.451970,   
+                        longitude: 45.165858,
+                  },
+                  {
+                        latitude: -22.429394,   
+                        longitude: 45.232543,
+                  },
+                  {
+                        latitude: -22.375538,  
+                        longitude: 45.241693, 
+                  },
+                  {
+                        latitude: -22.356981,   
+                        longitude: 45.272830,
+                  },
+                  {
+                        latitude: -22.263671,   
+                        longitude: 45.275401,
+                  },
+                  {
+                        latitude: -22.228572,    
+                        longitude: 45.322088,
+                  },
+                  {
+                        latitude: -22.203621,    
+                        longitude: 45.302230,
+                  },
+                  {
+                        latitude: -22.168480,    
+                        longitude: 45.335601,
+                  },
+                  {
+                        latitude: -22.131043,    
+                        longitude: 45.304737,
+                  },
+                  {
+                        latitude: -22.021106,    
+                        longitude: 45.305162,
+                  },
+                  {
+                        latitude: -21.929550,    
+                        longitude: 45.232476,
+                  },
+                  {
+                        latitude: -21.900634,   
+                        longitude: 45.272408, 
+                  },
+                  {
+                        latitude: -21.886518,   
+                        longitude: 45.367583, 
+                  },
+                  {
+                        latitude: -21.845095,    
+                        longitude: 45.387642,
+                  },
+                  {
+                        latitude: -21.847271,    
+                        longitude: 45.425233,
+                  },
+                  {
+                        latitude: -21.747507,    
+                        longitude: 45.439199,
+                  },
+                  {
+                        latitude: -21.702133,    
+                        longitude: 45.445542,
+                  },
+                  {
+                        latitude: -21.683582,   
+                        longitude: 45.523889, 
+                  },
+                  {
+                        latitude: -21.675487,    
+                        longitude: 45.558260,
+                  },
+                  {
+                        latitude: -21.625699,    
+                        longitude: 45.549542,
+                  },
+                  {
+                        latitude: -21.619516,    
+                        longitude: 45.584835,
+                  },
+                  {
+                        latitude: -21.586330,    
+                        longitude: 45.582726,
+                  },
+                  {
+                        latitude: -21.532402, 
+                        longitude:  45.562978,  
+                  },
+                  {
+                        latitude: -21.430746,    
+                        longitude: 45.563177,
+                  },
+                  {
+                        latitude: -21.383124,     
+                        longitude: 45.611781,
+                  },
+                  {
+                        latitude: -21.335431,     
+                        longitude: 45.625072,
+                  },
+                  {
+                        latitude: -21.283734,    
+                        longitude: 45.693420, 
+                  },
+                  {
+                        latitude: -21.261017,     
+                        longitude: 45.772766,
+                  },
+                  {
+                        latitude: -21.173923,     
+                        longitude: 45.775048,
+                  },
+                  {
+                        latitude: -21.092982,     
+                        longitude: 45.746456,
+                  },
+                  {
+                        latitude: -21.034880,    
+                        longitude: 45.797113, 
+                  },
+                  {
+                        latitude: -20.902145,     
+                        longitude: 45.801585,
+                  },
+                  {
+                        latitude: -20.837838,     
+                        longitude: 45.781853, 
+                  },
+                  {
+                        latitude: -20.759034,      
+                        longitude: 45.808278, 
+                  },
+                  {
+                        latitude: -20.736269,       
+                        longitude: 45.854347, 
+                  },
+                  {
+                        latitude: -20.653317,       
+                        longitude: 45.854390, 
+                  },
+                  {
+                        latitude: -20.561972,       
+                        longitude: 45.823705, 
+                  },
+                  {
+                        latitude: -20.472804,       
+                        longitude: 45.854411, 
+                  },
+                  {
+                        latitude: -20.398105,        
+                        longitude: 45.845700, 
+                  },
+                  {
+                        latitude: -20.364937,        
+                        longitude: 45.856632, 
+                  },
+                  {
+                        latitude: -20.283937,        
+                        longitude: 45.830390, 
+                  },
+                  {
+                        latitude: -20.219658,        
+                        longitude: 45.830433, 
+                  },
+                  {
+                        latitude: -20.144908,        
+                        longitude: 45.791144,
+                  },
+                  {
+                        latitude: -20.028629,        
+                        longitude: 45.818449, 
+                  },
+                  {
+                        latitude: -19.995614,        
+                        longitude: 45.826184, 
+                  },
+                  
+                  {
+                        latitude: -19.956068,         
+                        longitude: 45.765085, 
+                  },
+                  {
+                        latitude: -19.900220,         
+                        longitude: 45.792980, 
+                  },
+//Antannarivo fianara                                     
+                    {
+                        latitude: -19.930828,            
+                        longitude: 45.841971, 
+                    },                    
+                    {
+                        latitude: -19.918461,           
+                        longitude: 45.892163, 
+                    },
+                    {
+                        latitude: -19.947559,           
+                        longitude: 45.933662, 
+                    },
+                    {
+                        latitude: -19.941387,           
+                        longitude: 46.003539, 
+                    },
+                    {
+                        latitude: -19.966266,           
+                        longitude: 46.034084, 
+                    },
+                    {
+                        latitude: -19.972508,           
+                        longitude: 46.079972, 
+                    },
+                    {
+                        latitude: -20.038869,           
+                        longitude: 46.097538, 
+                    },                                        
+                    {
+                        latitude: -20.055477,         
+                        longitude: 46.158716,  
+                    },                
+                    {
+                        latitude: -20.107290,          
+                        longitude: 46.152268, 
+                    },                     
+                    {
+                        latitude: -20.036762,          
+                        longitude: 46.237343, 
+                    },                    
+                    {
+                        latitude: -20.082274,          
+                        longitude: 46.305160,
+                    },                    
+                    {
+                        latitude: -20.105146,          
+                        longitude: 46.270302, 
+                    },
+                    {
+                        latitude: -20.154889,           
+                        longitude: 46.314108, 
+                    },                    
+                    {
+                        latitude: -20.194366,         
+                        longitude: 46.261755, 
+                    },
+
+                    {
+                        latitude: -20.233682,         
+                        longitude: 46.309917, 
+                    },
+
+                    {
+                        latitude: -20.260548,          
+                        longitude: 46.388759, 
+                    },
+                    {
+                        latitude: -20.237618,          
+                        longitude: 46.436803, 
+                    },
+                    {
+                        latitude: -20.258294,          
+                        longitude: 46.474086,
+                    },
+                    {
+                        latitude: -20.258214,           
+                        longitude: 46.513461,
+                    },
+                    {
+                        latitude: -20.287098,            
+                        longitude: 46.550776, 
+                    },
+                    {
+                        latitude: -20.253754,             
+                        longitude: 46.620631, 
+                    },    
+                    {
+                        latitude: -20.292834,           
+                        longitude: 46.708319,
+                    },
+                    {
+                        latitude:-20.267734,          
+                        longitude:46.767242, 
+                    },
+                    {
+                        latitude: -20.290377,          
+                        longitude: 46.791478, 
+                    },
+                    {
+                        latitude: -20.267256,          
+                        longitude: 46.870054, 
+                    },
+                    {
+                        latitude: -20.169249,          
+                        longitude: 46.980952, 
+                    },
+                    {
+                        latitude: -20.193840,        
+                        longitude: 47.027031,   
+                    },
+                    {
+                        latitude: -20.177140,          
+                        longitude: 47.053154, 
+                    },
+                    {
+                        latitude: -20.170503,          
+                        longitude: 47.127445, 
+                    },
+                    {
+                        latitude: -20.141027,          
+                        longitude: 47.197112,
+                    },
+                    {
+                        latitude: -20.087063,          
+                        longitude: 47.205380, 
+                    },
+
+                    {
+                        latitude: -20.053579,           
+                        longitude: 47.251001,
+                    },
+                    {
+                        latitude: -20.084476,          
+                        longitude: 47.275313, 
+                    },
+                    {
+                        latitude: -20.044620,           
+                        longitude: 47.349213, 
+                    },
+                    {
+                        latitude: -20.085434,         
+                        longitude: 47.430394,   
+                    },
+                    {
+                        latitude: -20.054013,           
+                        longitude: 47.475970, 
+                    },
+                    {
+                        latitude: -20.088799,           
+                        longitude: 47.526535, 
+                    },
+                    {
+                        latitude: -20.053253,           
+                        longitude: 47.572064, 
+                    },
+                    {
+                        latitude: -20.048748,           
+                        longitude: 47.611256, 
+                    },
+                    {
+                        latitude: -20.017280,          
+                        longitude: 47.652433, 
+                    },
+                    {
+                        latitude: -20.066748,           
+                        longitude: 47.681358, 
+                    },
+
+                    
+                    
+                              
+                    
+
+                  //Tamatave Fianaratsoa
+                  {
+                        latitude: -20.056009,            
+                        longitude: 47.722738, 
+                  },
+                  {
+                        latitude: -20.141009,         
+                        longitude: 47.721503, 
+                  },
+                  {
+                        latitude: -20.178616,         
+                        longitude: 47.693576, 
+                  },
+                  {
+                        latitude: -20.338119,         
+                        longitude: 47.686645, 
+                  },
+                  {
+                        latitude: -20.406572,         
+                        longitude: 47.696183, 
+                  },
+                  {
+                        latitude: -20.465764,         
+                        longitude: 47.790975, 
+                  },
+                  {
+                        latitude: -20.444383,         
+                        longitude: 47.858588, 
+                  },
+                  {
+                        latitude: -20.439406,         
+                        longitude: 47.935074, 
+                  },
+                  {
+                        latitude: -20.420172,          
+                        longitude: 47.989545, 
+                  },
+                  {
+                        latitude: -20.444442,          
+                        longitude: 48.038018, 
+                  },
+                  {
+                        latitude: -20.441728,          
+                        longitude: 48.092670, 
+                  },
+                  {
+                        latitude: -20.408800,          
+                        longitude: 48.076920, 
+                  },
+                  {
+                        latitude: -20.347390,          
+                        longitude: 48.114449, 
+                  },
+                  {
+                        latitude: -20.279374,          
+                        longitude: 48.155980, 
+                  },
+                  {
+                        latitude: -20.244378,         
+                        longitude: 48.137999,  
+                  },
+                  {
+                        latitude: -20.227224,          
+                        longitude: 48.185817,
+                  },
+                  {
+                        latitude: -20.238187,           
+                        longitude: 48.194690,
+                  },
+                  {
+                        latitude: -20.315428,           
+                        longitude: 48.257089,
+                  },
+                  {
+                        latitude: -20.306141,           
+                        longitude: 48.335624,
+                  },
+                  {
+                        latitude: -20.338568,           
+                        longitude: 48.388625,
+                  },
+                  {
+                        latitude: -20.394521,           
+                        longitude: 48.387348,
+                  },
+                  {
+                        latitude: -20.405954,           
+                        longitude: 48.466548,
+                  },
+                  {
+                        latitude: -20.416814,            
+                        longitude: 48.598351,
+                  },
+
+
+              ],
+              stroke: {
+                    color: '#6060FB',
+                    weight: 1
+                },
+                //editable: true,
+                //draggable: true,
+                //geodesic: true,
+                //visible: true,
+                fill: {
+                    
+                    opacity: 0
+                     
+                },
+                events: { 
+                  click: function()
+                  { 
+                  console.log("click ok"); 
+                  },
+                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0.5';
+                   console.log("mouseover ok");
+                  },
+                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0';
+                    console.log("mouseout ok");
+                  }
+                },
+            },  
+             //Tamatave
+            {
+              id:4,
+              path: [
+                   //Tamatave Fianaratsoa
+                  {
+                        latitude: -20.056009,            
+                        longitude: 47.722738, 
+                  },
+                  {
+                        latitude: -20.141009,         
+                        longitude: 47.721503, 
+                  },
+                  {
+                        latitude: -20.178616,         
+                        longitude: 47.693576, 
+                  },
+                  {
+                        latitude: -20.338119,         
+                        longitude: 47.686645, 
+                  },
+                  {
+                        latitude: -20.406572,         
+                        longitude: 47.696183, 
+                  },
+                  {
+                        latitude: -20.465764,         
+                        longitude: 47.790975, 
+                  },
+                  {
+                        latitude: -20.444383,         
+                        longitude: 47.858588, 
+                  },
+                  {
+                        latitude: -20.439406,         
+                        longitude: 47.935074, 
+                  },
+                  {
+                        latitude: -20.420172,          
+                        longitude: 47.989545, 
+                  },
+                  {
+                        latitude: -20.444442,          
+                        longitude: 48.038018, 
+                  },
+                  {
+                        latitude: -20.441728,          
+                        longitude: 48.092670, 
+                  },
+                  {
+                        latitude: -20.408800,          
+                        longitude: 48.076920, 
+                  },
+                  {
+                        latitude: -20.347390,          
+                        longitude: 48.114449, 
+                  },
+                  {
+                        latitude: -20.279374,          
+                        longitude: 48.155980, 
+                  },
+                  {
+                        latitude: -20.244378,         
+                        longitude: 48.137999,  
+                  },
+                  {
+                        latitude: -20.227224,          
+                        longitude: 48.185817,
+                  },
+                  {
+                        latitude: -20.238187,           
+                        longitude: 48.194690,
+                  },
+                  {
+                        latitude: -20.315428,           
+                        longitude: 48.257089,
+                  },
+                  {
+                        latitude: -20.306141,           
+                        longitude: 48.335624,
+                  },
+                  {
+                        latitude: -20.338568,           
+                        longitude: 48.388625,
+                  },
+                  {
+                        latitude: -20.394521,           
+                        longitude: 48.387348,
+                  },
+                  {
+                        latitude: -20.405954,           
+                        longitude: 48.466548,
+                  },
+                  {
+                        latitude: -20.416814,            
+                        longitude: 48.598351,
+                  },
+
+                  //Fin frontiere fianarantsoa
+                  //Debut frontiere diego suerez
+                  {
+                        latitude: -15.938429,                  
+                        longitude: 50.133075,
+                  },
+                  {
+                        latitude: -15.813547,                  
+                        longitude: 50.094243,
+                  },
+                  {
+                        latitude: -15.771199,                  
+                        longitude: 50.093417,
+                  },
+                  {
+                        latitude: -15.748865,                  
+                        longitude: 50.067486,
+                  },
+                  {
+                        latitude: -15.641743,                  
+                        longitude: 50.045286,
+                  },
+                  {
+                        latitude: -15.581088,                  
+                        longitude: 50.021822,
+                  },
+                  {
+                        latitude: -15.482369,                  
+                        longitude: 50.048590,
+                  },
+                  {
+                        latitude: -15.471781,                  
+                        longitude: 50.061164,
+                  },
+                  {
+                        latitude: -15.436632,                  
+                        longitude: 50.058385,
+                  },
+                  {
+                        latitude: -15.401122,                  
+                        longitude: 50.020587,
+                  },
+                  {
+                        latitude: -15.340147,                  
+                        longitude: 50.017367,
+                  },
+                  {
+                        latitude: -15.302637,                 
+                        longitude: 50.034695,
+                  },
+                  {
+                        latitude: -15.255639,                 
+                        longitude: 49.993507,
+                  },
+                  {
+                        latitude: -15.192698,                 
+                        longitude: 50.050697,
+                  },
+                  {
+                        latitude: -15.042437,                 
+                        longitude: 49.938858,
+                  },
+                  {
+                        latitude: -15.061490,                 
+                        longitude: 49.908441,
+                  },
+                  {
+                        latitude: -15.044924,                 
+                        longitude: 49.843553,
+                  },
+                  {
+                        latitude: -15.084977,                
+                        longitude: 49.724457, 
+                  },
+                  //Fin diego suarez
+                  //Debut frontiere Mahajanga
+                  {
+                        latitude: -14.938884,     // Diego suarez            
+                        longitude: 49.593865,
+                  },
+                  {
+                        latitude: -14.995124,                 
+                        longitude: 49.546025,
+                  },
+                  {
+                        latitude: -14.968885,                 
+                        longitude: 49.501027,
+                  },
+                  {
+                        latitude: -14.985914,                
+                        longitude: 49.465343,
+                  },
+                  {
+                        latitude: -15.037500,                
+                        longitude: 49.478819,
+                  },
+                  {
+                        latitude: -15.064676,                
+                        longitude: 49.460140,
+                  },
+                  {
+                        latitude: -15.153641,                
+                        longitude: 49.461502,
+                  },
+                  {
+                        latitude: -15.158063,                
+                        longitude: 49.440355,
+                  },
+                  {
+                        latitude: -15.142519,                
+                        longitude: 49.368042,
+                  },
+                  {
+                        latitude: -15.220964,                
+                        longitude: 49.381871,
+                  },
+                  {
+                        latitude: -15.236088,                
+                        longitude: 49.335479,
+                  },
+                  {
+                        latitude: -15.284291,                
+                        longitude: 49.287328,
+                  },
+                  {
+                        latitude: -15.281268,                
+                        longitude: 49.206639,
+                  },
+                  {
+                        latitude: -15.314622,                
+                        longitude: 49.185836,
+                  },
+                  {
+                        latitude: -15.340201,                
+                        longitude: 49.128834,
+                  },
+                  {
+                        latitude: -15.345084,                
+                        longitude: 49.065158,
+                  },
+                  {
+                        latitude: -15.370545,                
+                        longitude: 49.018831,
+                  },
+                  {
+                        latitude: -15.451273,                
+                        longitude: 49.022049,
+                  },
+                  {
+                        latitude: -15.464522,                
+                        longitude: 49.126300,
+                  },
+                  {
+                        latitude: -15.491322,                
+                        longitude: 49.128843,
+                  },
+                  {
+                        latitude: -15.520993,                
+                        longitude: 49.078300,
+                  },
+                  {
+                        latitude: -15.589148,                
+                        longitude: 49.089844,
+                  },
+                  {
+                        latitude: -15.649367,               
+                        longitude: 49.082238,
+                  },
+                  {
+                        latitude: -15.744970,               
+                        longitude: 49.053796,
+                  },
+                  {
+                        latitude: -15.891209,              
+                        longitude: 49.121892,
+                  },
+                  {
+                        latitude: -15.978962,               
+                        longitude: 49.057143,
+                  },
+                  {
+                        latitude: -16.108117,               
+                        longitude: 48.999347,
+                  },
+                  {
+                        latitude: -16.168787,               
+                        longitude: 49.113220,
+                  },
+                  {
+                        latitude: -16.176288,               
+                        longitude: 49.173054,
+                  },
+                  {
+                        latitude: -16.208867,               
+                        longitude: 49.214124,
+                  },                  
+                  {
+                        latitude: -16.252194,               
+                        longitude: 49.223298,
+                  },
+                  {
+                        latitude: -16.313573,              
+                        longitude: 49.192067,
+                  },
+                  {
+                        latitude: -16.433536,               
+                        longitude: 49.138627,
+                  },
+                  {
+                        latitude: -16.488686,              
+                        longitude: 49.043322, 
+                  },
+                  {
+                        latitude: -16.628475,               
+                        longitude: 48.964219,
+                  },
+                  {
+                        latitude: -16.675552,               
+                        longitude: 49.005531,
+                  },
+                  {
+                        latitude: -16.681907,               
+                        longitude: 48.832390,
+                  },
+                  {
+                        latitude: -16.770528,               
+                        longitude: 48.698805,
+                  },
+                  {
+                        latitude: -16.686430,               
+                        longitude: 48.624918,
+                  },
+                  {
+                        latitude: -16.623905,              
+                        longitude: 48.658338,
+                  },
+                  {
+                        latitude: -16.479164,              
+                        longitude: 48.637105,
+                  },
+                  {
+                        latitude: -16.423899,              
+                        longitude: 48.574492,
+                  },
+                  {
+                        latitude: -16.393538,             
+                        longitude:  48.503594,
+                  },
+                  {
+                        latitude: -16.354479,              
+                        longitude: 48.475367,
+                  },
+                  {
+                        latitude: -16.351229,              
+                        longitude: 48.387734,
+                  },
+                  
+                  {
+                        latitude: -16.305627,             
+                        longitude: 48.385073, 
+                  },
+                  {
+                        latitude: -16.305956,              
+                        longitude: 48.350912,
+                  },
+                  {
+                        latitude: -16.236128,              
+                        longitude: 48.286024,
+                  },
+                  {
+                        latitude: -16.268470,             
+                        longitude: 48.147493, 
+                  },
+                  {
+                        latitude: -16.250703,              
+                        longitude: 48.042662,
+                  },
+                  {
+                        latitude: -16.253288,              
+                        longitude: 47.978686,
+                  },
+                  {
+                        latitude: -16.342857,              
+                        longitude: 47.926114,
+                  },
+                  {
+                        latitude: -16.438137,              
+                        longitude: 47.935524,
+                  },
+                  {
+                        latitude: -16.529535,              
+                        longitude: 47.910730,
+                  },
+                  {
+                        latitude: -16.628785,             
+                        longitude: 47.948013,
+                  },
+                  {
+                        latitude: -16.724120,            
+                        longitude: 47.946822, 
+                  },
+                  {
+                        latitude: -16.831258,             
+                        longitude: 48.009886,
+                  },
+                  {
+                        latitude: -16.911679,             
+                        longitude: 48.079376,
+                  },
+                  {
+                        latitude: -16.942830,             
+                        longitude: 48.071147,
+                  },
+                  {
+                        latitude: -17.019305,             
+                        longitude: 48.097690,
+                  },
+                  {
+                        latitude: -17.101369,             
+                        longitude: 48.188671,
+                  },
+                  {
+                        latitude: -17.192345,             
+                        longitude: 48.211180,
+                  },
+                  {
+                        latitude: -17.252951,             
+                        longitude: 48.160347,
+                  },
+                  {
+                        latitude: -17.306797,             
+                        longitude: 48.163094,
+                  },
+                  {
+                        latitude: -17.421535,             
+                        longitude: 48.091361,
+                  },
+                  {
+                        latitude: -17.485462,             
+                        longitude: 48.122142,
+                  },
+                  {
+                        latitude: -17.577148,             
+                        longitude: 48.069431,
+                  },                  
+                  {
+                        latitude: -17.664279,             
+                        longitude: 48.061824,
+                  },                  
+                  {
+                        latitude: -17.685531,             
+                        longitude: 48.010379,
+                  },
+                  {
+                        latitude: -17.804064,             
+                        longitude: 47.963837,
+                  },
+                    //Fin frontiere Mahajanga
+
+                    //Frontiere Tananarivo
+                    {
+                        latitude: -17.905175,     
+                        longitude: 47.907216, 
+                    },
+                    {
+                        latitude: -17.954710,     
+                        longitude: 47.927126, 
+                    },
+                    {
+                        latitude: -17.975100,     
+                        longitude: 47.966174, 
+                    },
+                    {
+                        latitude: -18.024696,     
+                        longitude: 47.981769, 
+                    },
+                    {
+                        latitude: -18.082425,     
+                        longitude: 48.012647, 
+                    },
+                    {
+                        latitude: -18.134367,  //Analamanga   
+                        longitude: 48.000300, 
+                    },
+                    {
+                        latitude: -18.215772,     
+                        longitude: 48.001244, 
+                    },
+                    {
+                        latitude: -18.242149,      
+                        longitude: 48.001523, 
+                    },
+                    {
+                        latitude: -18.309870,      
+                        longitude: 48.023114, 
+                    },
+                    {
+                        latitude: -18.380650,      
+                        longitude: 48.039843, 
+                    },
+                    {
+                        latitude: -18.407975,      
+                        longitude: 48.001266, 
+                    },
+                    {
+                        latitude: -18.580152,      
+                        longitude: 47.988144, 
+                    },
+                    {
+                        latitude: -18.677841,     
+                        longitude: 47.956799,  
+                    },
+                    {
+                        latitude: -18.786591,      
+                        longitude: 47.946124, 
+                    },
+                    {
+                        latitude: -18.796113,     
+                        longitude: 47.945203,  
+                    },
+                    {
+                        latitude: -18.984661,      
+                        longitude: 47.949576, 
+                    },
+                    {
+                        latitude: -19.132299,      
+                        longitude: 47.905754, 
+                    },
+                    {
+                        latitude: -19.193978,      
+                        longitude: 47.958572, 
+                    },
+                    {
+                        latitude: -19.221063,      
+                        longitude: 47.943734, 
+                    },
+                    {
+                        latitude: -19.266461,      
+                        longitude: 47.955105, 
+                    },
+                    {
+                        latitude: -19.388848,       
+                        longitude: 47.954444, 
+                    },
+                    {
+                        latitude: -19.563883,       
+                        longitude: 47.863033, 
+                    },
+                    {
+                        latitude: -19.607185,      
+                        longitude: 47.885301,  
+                    },
+                    {
+                        latitude: -19.634477,       
+                        longitude: 47.855161, 
+                    },
+                    {
+                        latitude: -19.733824,       
+                        longitude: 47.862888, 
+                    },
+                    {
+                        latitude: -19.831362,      
+                        longitude: 47.850994,  
+                    },
+                    {
+                        latitude: -19.894440,       
+                        longitude: 47.766697, 
+                    },
+                    {
+                        latitude: -19.969056,       
+                        longitude: 47.763202, 
+                    },
+
+                    {
+                        latitude: -20.010902,      
+                        longitude: 47.726569, 
+                    },
+                   
+                    
+              ],
+              stroke: {
+                    color: '#6060FB',
+                    weight: 1
+                },
+                //editable: true,
+                //draggable: true,
+                //geodesic: true,
+                //visible: true,
+                fill: {
+                    
+                    opacity: 0
+                     
+                },
+                events: { 
+                  click: function()
+                  { 
+                  console.log("click ok"); 
+                  },
+                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0.5';
+                   console.log("mouseover ok");
+                  },
+                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0';
+                    console.log("mouseout ok");
+                  }
+                },
+            },  
+
+              //Mahajanga
+            {
+              id:5,
+              path: [
+                    //Debut frontiere diego 
+                    {
+                        latitude: -13.586724,
+                        longitude: 47.958293 , 
+                    },
+                    {
+                        latitude: -14.025779,
+                        longitude: 48.047114 , 
+                    },
+                    {
+                        latitude: -13.992726,
+                        longitude: 48.090419
+                    },
+                    {
+                        latitude: -13.966392, 
+                        longitude: 48.084645,
+                    },
+                    {
+                        latitude: -13.876931, 
+                        longitude: 48.234667,
+                    },
+                    {
+                        latitude: -13.894659, 
+                        longitude: 48.259596,
+                    },
+                    {
+                        latitude: -14.012895,
+                        longitude: 48.174141
+                    },
+                    {
+                        latitude: -14.013105, 
+                        longitude: 48.174384,
+                    },
+                    {
+                        latitude: -14.034495, 
+                        longitude: 48.200923,
+                    },
+                    {
+                        latitude: -14.018789,
+                        longitude: 48.242270 , 
+                    },
+                    {
+                        latitude: -14.069342,
+                        longitude: 48.272315
+                    },
+                    {
+                        latitude: -14.071226, 
+                        longitude: 48.299803,
+                    },
+                    {
+                        latitude: -14.122543, 
+                        longitude: 48.365796,
+                    },
+                    {
+                        latitude: -14.121721, 
+                        longitude: 48.470424,
+                    },
+                    {
+                        latitude: -14.078683,
+                        longitude: 48.536567
+                    },
+                    {
+                        latitude: -14.141488, 
+                        longitude: 48.581585,
+                    },
+                    {
+                        latitude: -14.141124, 
+                        longitude: 48.623868,
+                    },
+                    {
+                        latitude: -14.216036,
+                        longitude: 48.701767 , 
+                    },
+                    {
+                        latitude: -14.189243,
+                        longitude: 48.797683
+                    },
+                    {
+                        latitude: -14.255137, 
+                        longitude: 48.837552,
+                    },
+                    {
+                        latitude: -14.148160, 
+                        longitude: 48.971524,
+                    },
+                    {
+                        latitude: -14.202813, 
+                        longitude: 49.087365,
+                    },
+                    {
+                        latitude: -14.204431,
+                        longitude: 49.132823
+                    },
+                    {
+                        latitude: -14.266465, 
+                        longitude: 49.140986,
+                    },
+                    {
+                        latitude: -14.441563, 
+                        longitude: 49.309307,
+                    },
+                    {
+                        latitude: -14.508693,
+                        longitude: 49.411704 , 
+                    },
+                    {
+                        latitude: -14.563009,
+                        longitude: 49.369156
+                    },
+                    {
+                        latitude: -14.671869, 
+                        longitude: 49.443677,
+                    },
+                    {
+                        latitude: -14.727503, 
+                        longitude: 49.464658,
+                    },
+                    {
+                        latitude: -14.826594, 
+                        longitude: 49.482034,
+                    },
+                    {
+                        latitude: -14.826150,
+                        longitude: 49.5147799
+                    },
+                    {
+                        latitude: -14.914193, 
+                        longitude: 49.590374,
+                    },
+                    //Fin frontiere Diego
+                    
+                  //Debut frontiere Tamatave
+                  {
+                        latitude: -14.938884,     // Diego suarez            
+                        longitude: 49.593865,
+                  },
+                  {
+                        latitude: -14.995124,                 
+                        longitude: 49.546025,
+                  },
+                  {
+                        latitude: -14.968885,                 
+                        longitude: 49.501027,
+                  },
+                  {
+                        latitude: -14.985914,                
+                        longitude: 49.465343,
+                  },
+                  {
+                        latitude: -15.037500,                
+                        longitude: 49.478819,
+                  },
+                  {
+                        latitude: -15.064676,                
+                        longitude: 49.460140,
+                  },
+                  {
+                        latitude: -15.153641,                
+                        longitude: 49.461502,
+                  },
+                  {
+                        latitude: -15.158063,                
+                        longitude: 49.440355,
+                  },
+                  {
+                        latitude: -15.142519,                
+                        longitude: 49.368042,
+                  },
+                  {
+                        latitude: -15.220964,                
+                        longitude: 49.381871,
+                  },
+                  {
+                        latitude: -15.236088,                
+                        longitude: 49.335479,
+                  },
+                  {
+                        latitude: -15.284291,                
+                        longitude: 49.287328,
+                  },
+                  {
+                        latitude: -15.281268,                
+                        longitude: 49.206639,
+                  },
+                  {
+                        latitude: -15.314622,                
+                        longitude: 49.185836,
+                  },
+                  {
+                        latitude: -15.340201,                
+                        longitude: 49.128834,
+                  },
+                  {
+                        latitude: -15.345084,                
+                        longitude: 49.065158,
+                  },
+                  {
+                        latitude: -15.370545,                
+                        longitude: 49.018831,
+                  },
+                  {
+                        latitude: -15.451273,                
+                        longitude: 49.022049,
+                  },
+                  {
+                        latitude: -15.464522,                
+                        longitude: 49.126300,
+                  },
+                  {
+                        latitude: -15.491322,                
+                        longitude: 49.128843,
+                  },
+                  {
+                        latitude: -15.520993,                
+                        longitude: 49.078300,
+                  },
+                  {
+                        latitude: -15.589148,                
+                        longitude: 49.089844,
+                  },
+                  {
+                        latitude: -15.649367,               
+                        longitude: 49.082238,
+                  },
+                  {
+                        latitude: -15.744970,               
+                        longitude: 49.053796,
+                  },
+                  {
+                        latitude: -15.891209,              
+                        longitude: 49.121892,
+                  },
+                  {
+                        latitude: -15.978962,               
+                        longitude: 49.057143,
+                  },
+                  {
+                        latitude: -16.108117,               
+                        longitude: 48.999347,
+                  },
+                  {
+                        latitude: -16.168787,               
+                        longitude: 49.113220,
+                  },
+                  {
+                        latitude: -16.176288,               
+                        longitude: 49.173054,
+                  },
+                  {
+                        latitude: -16.208867,               
+                        longitude: 49.214124,
+                  },                  
+                  {
+                        latitude: -16.252194,               
+                        longitude: 49.223298,
+                  },
+                  {
+                        latitude: -16.313573,              
+                        longitude: 49.192067,
+                  },
+                  {
+                        latitude: -16.433536,               
+                        longitude: 49.138627,
+                  },
+                  {
+                        latitude: -16.488686,              
+                        longitude: 49.043322, 
+                  },
+                  {
+                        latitude: -16.628475,               
+                        longitude: 48.964219,
+                  },
+                  {
+                        latitude: -16.675552,               
+                        longitude: 49.005531,
+                  },
+                  {
+                        latitude: -16.681907,               
+                        longitude: 48.832390,
+                  },
+                  {
+                        latitude: -16.770528,               
+                        longitude: 48.698805,
+                  },
+                  {
+                        latitude: -16.686430,               
+                        longitude: 48.624918,
+                  },
+                  {
+                        latitude: -16.623905,              
+                        longitude: 48.658338,
+                  },
+                  {
+                        latitude: -16.479164,              
+                        longitude: 48.637105,
+                  },
+                  {
+                        latitude: -16.423899,              
+                        longitude: 48.574492,
+                  },
+                  {
+                        latitude: -16.393538,             
+                        longitude:  48.503594,
+                  },
+                  {
+                        latitude: -16.354479,              
+                        longitude: 48.475367,
+                  },
+                  {
+                        latitude: -16.351229,              
+                        longitude: 48.387734,
+                  },
+                  
+                  {
+                        latitude: -16.305627,             
+                        longitude: 48.385073, 
+                  },
+                  {
+                        latitude: -16.305956,              
+                        longitude: 48.350912,
+                  },
+                  {
+                        latitude: -16.236128,              
+                        longitude: 48.286024,
+                  },
+                  {
+                        latitude: -16.268470,             
+                        longitude: 48.147493, 
+                  },
+                  {
+                        latitude: -16.250703,              
+                        longitude: 48.042662,
+                  },
+                  {
+                        latitude: -16.253288,              
+                        longitude: 47.978686,
+                  },
+                  {
+                        latitude: -16.342857,              
+                        longitude: 47.926114,
+                  },
+                  {
+                        latitude: -16.438137,              
+                        longitude: 47.935524,
+                  },
+                  {
+                        latitude: -16.529535,              
+                        longitude: 47.910730,
+                  },
+                  {
+                        latitude: -16.628785,             
+                        longitude: 47.948013,
+                  },
+                  {
+                        latitude: -16.724120,            
+                        longitude: 47.946822, 
+                  },
+                  {
+                        latitude: -16.831258,             
+                        longitude: 48.009886,
+                  },
+                  {
+                        latitude: -16.911679,             
+                        longitude: 48.079376,
+                  },
+                  {
+                        latitude: -16.942830,             
+                        longitude: 48.071147,
+                  },
+                  {
+                        latitude: -17.019305,             
+                        longitude: 48.097690,
+                  },
+                  {
+                        latitude: -17.101369,             
+                        longitude: 48.188671,
+                  },
+                  {
+                        latitude: -17.192345,             
+                        longitude: 48.211180,
+                  },
+                  {
+                        latitude: -17.252951,             
+                        longitude: 48.160347,
+                  },
+                  {
+                        latitude: -17.306797,             
+                        longitude: 48.163094,
+                  },
+                  {
+                        latitude: -17.421535,             
+                        longitude: 48.091361,
+                  },
+                  {
+                        latitude: -17.485462,             
+                        longitude: 48.122142,
+                  },
+                  {
+                        latitude: -17.577148,             
+                        longitude: 48.069431,
+                  },                  
+                  {
+                        latitude: -17.664279,             
+                        longitude: 48.061824,
+                  },                  
+                  {
+                        latitude: -17.685531,             
+                        longitude: 48.010379,
+                  },
+                  {
+                        latitude: -17.804064,             
+                        longitude: 47.963837,
+                  },
+                    //Fin frontiere Tamatave
+
+                    
+              ],
+              stroke: {
+                    color: '#6060FB',
+                    weight: 1
+                },
+                //editable: true,
+                //draggable: true,
+                //geodesic: true,
+                //visible: true,
+                fill: {
+                    
+                    opacity: 0
+                     
+                },
+                events: { 
+                  click: function()
+                  { 
+                  console.log("click ok"); 
+                  },
+                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0.5';
+                   console.log("mouseover ok");
+                  },
+                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0';
+                    console.log("mouseout ok");
+                  }
+                },
+            },  
+
+             //District Andapa
+            {
+              id:6,
+              path: [
+                    //Debut frontiere diego 
+                    {
+                        latitude: -14.635719, 
+                        longitude: 49.629707, 
+                    },
+                    
+                    
+                    {
+                        latitude: -14.637546,  
+                        longitude: 49.652881,
+                    }, 
+                    {
+                        latitude: -14.639872,   
+                        longitude: 49.657001,
+                    }, 
+                    {
+                        latitude: -14.643858,   
+                        longitude: 49.661722,
+                    }, 
+                    {
+                        latitude: -14.656812,   
+                        longitude: 49.663524,
+                    }, 
+                    {
+                        latitude: -14.679314,   
+                        longitude: 49.668846,
+                    }, 
+                    {
+                        latitude: -14.682469,   
+                        longitude: 49.667473,
+                    }, 
+                    {
+                        latitude: -14.684462,    
+                        longitude: 49.662666,
+                    }, 
+                    {
+                        latitude: -14.685956,    
+                        longitude: 49.654341,
+                    }, 
+                    {
+                        latitude: -14.682137,    
+                        longitude: 49.647732,
+                    }, 
+                    {
+                        latitude: -14.674581,    
+                        longitude: 49.641123,
+                    }, 
+                    {
+                        latitude: -14.665687,    
+                        longitude: 49.635833,
+                    }, 
+                    {
+                        latitude: -14.654487,    
+                        longitude: 49.634342,
+                    },                     
+                                                                   
+              ],
+              stroke: {
+                    color: '#6060FB',
+                    weight: 1
+                },
+                //editable: true,
+                //draggable: true,
+                //geodesic: true,
+                //visible: true,
+                fill: {
+                    
+                    opacity: 0
+                     
+                },
+                events: { 
+                  click: function()
+                  { 
+                  console.log("click ok"); 
+                  },
+                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0.5';
+                   console.log("mouseover ok");
+                  },
+                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0';
+                    console.log("mouseout ok");
+                  }
+                },
+            }, 
+            //District Andapa
+            {
+              id:7,
+              path: [
+                    //Debut frontiere diego 
+                    {
+                        latitude: -14.635719, 
+                        longitude: 49.629707, 
+                    },
+                    
+                    
+                    {
+                        latitude: -14.637546,  
+                        longitude: 49.652881,
+                    }, 
+                    {
+                        latitude: -14.639872,   
+                        longitude: 49.657001,
+                    }, 
+                    {
+                        latitude: -14.643858,   
+                        longitude: 49.661722,
+                    }, 
+                    {
+                        latitude: -14.656812,   
+                        longitude: 49.663524,
+                    }, 
+                    {
+                        latitude: -14.679314,   
+                        longitude: 49.668846,
+                    }, 
+                    {
+                        latitude: -14.682469,   
+                        longitude: 49.667473,
+                    }, 
+                    {
+                        latitude: -14.684462,    
+                        longitude: 49.662666,
+                    }, 
+                    {
+                        latitude: -14.685956,    
+                        longitude: 49.654341,
+                    }, 
+                    {
+                        latitude: -14.682137,    
+                        longitude: 49.647732,
+                    }, 
+                    {
+                        latitude: -14.674581,    
+                        longitude: 49.641123,
+                    }, 
+                    {
+                        latitude: -14.665687,    
+                        longitude: 49.635833,
+                    }, 
+                    {
+                        latitude: -14.654487,    
+                        longitude: 49.634342,
+                    },                     
+                                                                   
+              ],
+              stroke: {
+                    color: '#6060FB',
+                    weight: 1
+                },
+                //editable: true,
+                //draggable: true,
+                //geodesic: true,
+                //visible: true,
+                fill: {
+                    
+                    opacity: 0
+                     
+                },
+                events: { 
+                  click: function()
+                  { 
+                  console.log("click ok"); 
+                  },
+                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0.5';
+                   console.log("mouseover ok");
+                  },
+                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
+                    polyModel.fill.opacity = '0';
+                    console.log("mouseout ok");
+                  }
+                },
+            },
+
+        ];
+        
+
+
+
+    }
+})();

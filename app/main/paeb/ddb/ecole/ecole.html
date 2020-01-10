@@ -94,15 +94,15 @@
                 <td>
                   <span ng-if="ecole.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
-                      <label>Fokontany</label>
-                      <md-select ng-model="ecole.id_fokontany"style="overflow: hidden;text-overflow: ellipsis;">
-                        <md-option ng-repeat="fokontany in vm.allfokontany" value="{{fokontany.id}}">
-                                                            {{fokontany.nom}}
+                      <label>Commune</label>
+                      <md-select ng-model="ecole.id_commune"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="commune in vm.allcommune" value="{{commune.id}}">
+                                                            {{commune.nom}}
                         </md-option>
                       </md-select>
                     </md-input-container>  
                   </span>
-                  <span ng-if="!ecole.$edit">{{ecole.fokontany.nom}}</span>
+                  <span ng-if="!ecole.$edit">{{ecole.commune.nom}}</span>
                 </td>
                           
                 <td>
@@ -162,7 +162,7 @@
                     <span class="icon-cancel"></span>
                   </a>
                             
-                  <a ng-if="ecole.$edit && ecole.code && ecole.description && ecole.id_fokontany && ecole.latitude && ecole.longitude && ecole.altitude && ecole.lieu>''" ng-click="vm.ajout(ecole,0)" title="Sauvegarder">
+                  <a ng-if="ecole.$edit && ecole.code && ecole.description && ecole.id_commune && ecole.latitude && ecole.longitude && ecole.altitude && ecole.lieu>''" ng-click="vm.ajout(ecole,0)" title="Sauvegarder">
                     <span class="icon-content-save"></span>
                   </a>
                 </td>
@@ -191,7 +191,7 @@
               </ui-gmap-marker>
             </div>
           </ui-gmap-google-map-->
-          <ui-gmap-google-map center="vm.ecolevueMap.center" zoom="vm.ecolevueMap.zoom" draggable="true" options="options" bounds="">
+    <ui-gmap-google-map center="vm.ecolevueMap.center" zoom="vm.ecolevueMap.zoom" draggable="true" options="options" bounds="">
         <ui-gmap-polygon ng-repeat="p in vm.polylines" path="p.path" stroke="p.stroke" visible='p.visible'
                   geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" clickable='true' icons='p.icons' events="p.events" fill="p.fill"></ui-gmap-polygon>
     </ui-gmap-google-map>
