@@ -9,10 +9,10 @@
                 <span class="parent">Données de bases</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Categorie ouvrage</span>
+                <span class="parent" href="javascript:;"> Accés zone</span>
             </div>
 
-            <div class="title">Categorie ouvrage</div>
+            <div class="title">Accés zone</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -25,12 +25,12 @@
         <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
           <div layout="row" layout-align="start">
               <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
-                <span style="line-height: normal;"> Categorie ouvrage</span>
+                <span style="line-height: normal;"> Accés zone</span>
               </div>
               <div>
                 <md-button class="md-icon-button" aria-label="add type ouvrage" ng-click="vm.ajouter()">
                   <md-icon md-font-icon="icon-plus"></md-icon>
-                  <md-tooltip><span>Ajout categorie ouvrage</span></md-tooltip>
+                  <md-tooltip><span>Ajout accés zone</span></md-tooltip>
                 </md-button>
               </div>                      
           </div>
@@ -39,51 +39,51 @@
           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
             <thead>
               <tr>
-                <th class="secondary-text" ng-repeat="cisc in ::vm.categorie_ouvrage_column">
+                <th class="secondary-text" ng-repeat="acce in ::vm.acces_zone_column">
                   <div class="table-header">
-                    <span class="column-title">{{cisc.titre}}</span>
+                    <span class="column-title">{{acce.titre}}</span>
                   </div>
                 </th>
               </tr>
             </thead>
                      
             <tbody>
-              <tr ng-repeat="categorie_ouvrage in vm.allcategorie_ouvrage"  ng-class="{selected: categorie_ouvrage.$selected}" ng-click="vm.selection(categorie_ouvrage)">           
+              <tr ng-repeat="acces_zone in vm.allacces_zone"  ng-class="{selected: acces_zone.$selected}" ng-click="vm.selection(acces_zone)">           
                 <td>
-                  <span ng-if="categorie_ouvrage.$edit">
+                  <span ng-if="acces_zone.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
                       <label>Libelle</label>
-                      <input name="libelle" type="text" ng-model="categorie_ouvrage.libelle"/>
+                      <input name="libelle" type="text" ng-model="acces_zone.libelle"/>
                     </md-input-container>
                   </span>                          
-                  <span ng-if="!categorie_ouvrage.$edit">{{categorie_ouvrage.libelle}}</span>
+                  <span ng-if="!acces_zone.$edit">{{acces_zone.libelle}}</span>
                 </td>
                           
                 <td>
-                  <span ng-if="categorie_ouvrage.$edit">
+                  <span ng-if="acces_zone.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
                       <label>Description</label>
-                      <input name="Description" type="text" ng-model="categorie_ouvrage.description"/>
+                      <input name="Description" type="text" ng-model="acces_zone.description"/>
                     </md-input-container>   
                   </span>
                             
-                  <span ng-if="!categorie_ouvrage.$edit">{{categorie_ouvrage.description}}</span>
+                  <span ng-if="!acces_zone.$edit">{{acces_zone.description}}</span>
                 </td>
                                              
                 <td>
-                  <a ng-if="!categorie_ouvrage.$edit" ng-click="vm.modifier(categorie_ouvrage)" title="Modifier">
+                  <a ng-if="!acces_zone.$edit" ng-click="vm.modifier(acces_zone)" title="Modifier">
                     <span class="icon-table-edit"></span>
                   </a>
                             
-                  <a ng-if="!categorie_ouvrage.$edit" ng-click="vm.supprimer(categorie_ouvrage)" title="Supprimer">
+                  <a ng-if="!acces_zone.$edit" ng-click="vm.supprimer(acces_zone)" title="Supprimer">
                     <span class="icon-delete" ></span>
                   </a>
                             
-                  <a ng-if="categorie_ouvrage.$edit" ng-click="vm.annuler(categorie_ouvrage)" title="Annuler modification">
+                  <a ng-if="acces_zone.$edit" ng-click="vm.annuler(acces_zone)" title="Annuler modification">
                     <span class="icon-cancel"></span>
                   </a>
                             
-                  <a ng-if="categorie_ouvrage.$edit && categorie_ouvrage.libelle && categorie_ouvrage.description>''" ng-click="vm.ajout(categorie_ouvrage,0)" title="Sauvegarder">
+                  <a ng-if="acces_zone.$edit && acces_zone.libelle && acces_zone.description>''" ng-click="vm.ajout(acces_zone,0)" title="Sauvegarder">
                     <span class="icon-content-save"></span>
                   </a>
                 </td>
@@ -92,7 +92,7 @@
           </table>
         </div>                   
       </div>
-      <!-- / categorie_ouvrage -->
+      <!-- / acces_zone -->
     </div>
     <!-- / CONTENT -->
   </div>

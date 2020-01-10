@@ -4,7 +4,7 @@
 
     angular
         .module('app.paeb.traitement', [			
-            'app.paeb.traitement.convention',
+            'app.paeb.traitement.convention_cisco_feffi',
             'app.paeb.traitement.suivi_daff_ufp',
             'app.paeb.traitement.suivi_daff_feffi'
             ])       

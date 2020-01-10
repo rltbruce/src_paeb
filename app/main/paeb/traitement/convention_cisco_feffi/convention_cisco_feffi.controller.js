@@ -3,10 +3,10 @@
     'use strict';
 
     angular
-        .module('app.paeb.traitement.convention')
-        .controller('ConventionController', ConventionController);
+        .module('app.paeb.traitement.convention_cisco_feffi')
+        .controller('Convention_cisco_feffiController', Convention_cisco_feffiController);
     /** @ngInject */
-    function ConventionController($mdDialog, $scope, apiFactory, $state)
+    function Convention_cisco_feffiController($mdDialog, $scope, apiFactory, $state)
     {
 		    var vm    = this;
         vm.ajout  = ajout ;

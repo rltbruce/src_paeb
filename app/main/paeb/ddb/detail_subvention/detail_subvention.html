@@ -1,0 +1,158 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Detail subvention</span>
+            </div>
+
+            <div class="title">Detail subvention</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- detail_subvention -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Detail subvention</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add type ouvrage" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout detail subvention</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="detail in ::vm.detail_subvention_column">
+                  <div class="table-header">
+                    <span class="column-title">{{detail.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="detail_subvention in vm.alldetail_subvention"  ng-class="{selected: detail_subvention.$selected}" ng-click="vm.selection(detail_subvention)">           
+                <td>
+                  <span ng-if="detail_subvention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Zone de subvention</label>
+                      <md-select ng-model="detail_subvention.id_zone_subvention"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="zone_subvention in vm.allzone_subvention" value="{{zone_subvention.id}}">{{zone_subvention.libelle}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!detail_subvention.$edit">{{detail_subvention.zone_subvention.libelle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="detail_subvention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Acces zone</label>
+                      <md-select ng-model="detail_subvention.id_acces_zone"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="acces_zone in vm.allacces_zone" value="{{acces_zone.id}}">{{acces_zone.libelle}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!detail_subvention.$edit">{{detail_subvention.acces_zone.libelle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="detail_subvention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Coût maitrise d'oeuvre</label>
+                      <input name="cout_maitrise_oeuvre" type="text" ng-model="detail_subvention.cout_maitrise_oeuvre"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!detail_subvention.$edit">{{detail_subvention.cout_maitrise_oeuvre}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="detail_subvention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Coût batiment</label>
+                      <input name="cout_batiment" type="text" ng-model="detail_subvention.cout_batiment"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!detail_subvention.$edit">{{detail_subvention.cout_batiment}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="detail_subvention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Coût latrine</label>
+                      <input name="cout_latrine" type="text" ng-model="detail_subvention.cout_latrine"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!detail_subvention.$edit">{{detail_subvention.cout_latrine}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="detail_subvention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Coût mobilier</label>
+                      <input name="cout_mobilier" type="text" ng-model="detail_subvention.cout_mobilier"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!detail_subvention.$edit">{{detail_subvention.cout_mobilier}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="detail_subvention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Coût sous projet</label>
+                      <input name="cout_sousprojet" type="text" ng-model="detail_subvention.cout_sousprojet"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!detail_subvention.$edit">{{detail_subvention.cout_sousprojet}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!detail_subvention.$edit" ng-click="vm.modifier(detail_subvention)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!detail_subvention.$edit" ng-click="vm.supprimer(detail_subvention)" title="Supprimer">
+                    <span class="icon-delete" ></span>
+                  </a>
+                            
+                  <a ng-if="detail_subvention.$edit" ng-click="vm.annuler(detail_subvention)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="detail_subvention.$edit && detail_subvention.id_zone_subvention && detail_subvention.id_acces_zone && detail_subvention.cout_batiment && detail_subvention.cout_latrine && detail_subvention.cout_mobilier && detail_subvention.cout_sousprojet>''" ng-click="vm.ajout(detail_subvention,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>                   
+      </div>
+      <!-- / detail_subvention -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

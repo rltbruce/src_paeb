@@ -3,17 +3,17 @@
     'use strict';
 
     angular
-        .module('app.paeb.ddb.categorie_ouvrage')
-        .controller('Categorie_ouvrageController', Categorie_ouvrageController);
+        .module('app.paeb.ddb.acces_zone')
+        .controller('Acces_zoneController', Acces_zoneController);
     /** @ngInject */
-    function Categorie_ouvrageController($mdDialog, $scope, apiFactory, $state)
+    function Acces_zoneController($mdDialog, $scope, apiFactory, $state)
     {
 		   var vm = this;
         vm.ajout = ajout ;
         var NouvelItem=false;
         var currentItem;
         vm.selectedItem = {} ;
-        vm.allcategorie_ouvrage = [] ;
+        vm.allacces_zone = [] ;
 
         //style
         vm.dtOptions = {
@@ -24,13 +24,13 @@
         };
 
         //col table
-        vm.categorie_ouvrage_column = [{titre:"libelle"},{titre:"Description"},{titre:"Action"}];
+        vm.acces_zone_column = [{titre:"Libelle"},{titre:"Description"},{titre:"Action"}];
         
-        //recuperation donnée categorie_ouvrage
-        apiFactory.getAll("categorie_ouvrage/index").then(function(result)
+        //recuperation donnée acces_zone
+        apiFactory.getAll("acces_zone/index").then(function(result)
         {
-            vm.allcategorie_ouvrage = result.data.response; 
-            //console.log(vm.allcategorie_ouvrage);
+            vm.allacces_zone = result.data.response; 
+            //console.log(vm.allacces_zone);
         });
 
 
@@ -46,8 +46,8 @@
               libelle: '',
               description: ''
             };         
-            vm.allcategorie_ouvrage.push(items);
-            vm.allcategorie_ouvrage.forEach(function(cis)
+            vm.allacces_zone.push(items);
+            vm.allacces_zone.forEach(function(cis)
             {
               if(cis.$selected==true)
               {
@@ -58,25 +58,25 @@
             NouvelItem = true ;
           }else
           {
-            vm.showAlert('Ajout categorie_ouvrage','Un formulaire d\'ajout est déjà ouvert!!!');
+            vm.showAlert('Ajout acces_zone','Un formulaire d\'ajout est déjà ouvert!!!');
           }                
                       
         };
 
         //fonction ajout dans bdd
-        function ajout(categorie_ouvrage,suppression)
+        function ajout(acces_zone,suppression)
         {
             if (NouvelItem==false)
             {
-                test_existance (categorie_ouvrage,suppression); 
+                test_existance (acces_zone,suppression); 
             } 
             else
             {
-                insert_in_base(categorie_ouvrage,suppression);
+                insert_in_base(acces_zone,suppression);
             }
         }
 
-        //fonction de bouton d'annulation categorie_ouvrage
+        //fonction de bouton d'annulation acces_zone
         vm.annuler = function(item)
         {
           if (NouvelItem == false)
@@ -87,7 +87,7 @@
             item.description       = currentItem.description ; 
           }else
           {
-            vm.allcategorie_ouvrage = vm.allcategorie_ouvrage.filter(function(obj)
+            vm.allacces_zone = vm.allacces_zone.filter(function(obj)
             {
                 return obj.id !== vm.selectedItem.id;
             });
@@ -104,25 +104,25 @@
             vm.selectedItem = item;
             vm.nouvelItem   = item;
             currentItem     = JSON.parse(JSON.stringify(vm.selectedItem));
-           // vm.allcategorie_ouvrage= [] ; 
+           // vm.allacces_zone= [] ; 
         };
         $scope.$watch('vm.selectedItem', function()
         {
-             if (!vm.allcategorie_ouvrage) return;
-             vm.allcategorie_ouvrage.forEach(function(item)
+             if (!vm.allacces_zone) return;
+             vm.allacces_zone.forEach(function(item)
              {
                 item.$selected = false;
              });
              vm.selectedItem.$selected = true;
         });
 
-        //fonction masque de saisie modification item categorie_ouvrage
+        //fonction masque de saisie modification item acces_zone
         vm.modifier = function(item)
         {
             NouvelItem = false ;
             vm.selectedItem = item;
             currentItem = angular.copy(vm.selectedItem);
-            $scope.vm.allcategorie_ouvrage.forEach(function(cis) {
+            $scope.vm.allacces_zone.forEach(function(cis) {
               cis.$edit = false;
             });
 
@@ -132,11 +132,11 @@
             item.description       = vm.selectedItem.description; 
         };
 
-        //fonction bouton suppression item categorie_ouvrage
+        //fonction bouton suppression item acces_zone
         vm.supprimer = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet encategorie_ouvrageistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -150,12 +150,12 @@
               });
         };
 
-        //function teste s'il existe une modification item categorie_ouvrage
+        //function teste s'il existe une modification item acces_zone
         function test_existance (item,suppression)
         {          
             if (suppression!=1)
             {
-               var cis = vm.allcategorie_ouvrage.filter(function(obj)
+               var cis = vm.allacces_zone.filter(function(obj)
                 {
                    return obj.id == currentItem.id;
                 });
@@ -176,8 +176,8 @@
                   insert_in_base(item,suppression);
         }
 
-        //insertion ou mise a jours ou suppression item dans bdd categorie_ouvrage
-        function insert_in_base(categorie_ouvrage,suppression)
+        //insertion ou mise a jours ou suppression item dans bdd acces_zone
+        function insert_in_base(acces_zone,suppression)
         {
             //add
             var config =
@@ -194,27 +194,27 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,      
-                    libelle:      categorie_ouvrage.libelle,
-                    description: categorie_ouvrage.description              
+                    libelle:      acces_zone.libelle,
+                    description: acces_zone.description              
                 });
                 console.log(datas);
                 //factory
-            apiFactory.add("categorie_ouvrage/index",datas, config).success(function (data)
+            apiFactory.add("acces_zone/index",datas, config).success(function (data)
             {
                 if (NouvelItem == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItem.description        = categorie_ouvrage.description;
-                       vm.selectedItem.libelle       = categorie_ouvrage.libelle;;
+                        vm.selectedItem.description        = acces_zone.description;
+                       vm.selectedItem.libelle       = acces_zone.libelle;;
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
                         vm.selectedItem ={};
                     }
                     else 
                     {    
-                      vm.allcategorie_ouvrage = vm.allcategorie_ouvrage.filter(function(obj)
+                      vm.allacces_zone = vm.allacces_zone.filter(function(obj)
                       {
                           return obj.id !== vm.selectedItem.id;
                       });
@@ -222,13 +222,13 @@
                 }
                 else
                 {
-                  categorie_ouvrage.description =  categorie_ouvrage.description;
-                  categorie_ouvrage.libelle=  categorie_ouvrage.libelle;
-                  categorie_ouvrage.id  =   String(data.response);              
+                  acces_zone.description =  acces_zone.description;
+                  acces_zone.libelle=  acces_zone.libelle;
+                  acces_zone.id  =   String(data.response);              
                   NouvelItem=false;
             }
-              categorie_ouvrage.$selected = false;
-              categorie_ouvrage.$edit = false;
+              acces_zone.$selected = false;
+              acces_zone.$edit = false;
               vm.selectedItem = {};
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
