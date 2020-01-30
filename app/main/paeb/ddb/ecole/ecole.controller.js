@@ -15,7 +15,7 @@
         vm.selectedItem = {} ;
         vm.allecole = [] ;
 
-        vm.allcommune = [] ;
+        vm.allfokontany = [] ;
 
         vm.vuemap = false;
         vm.liste = [] ;
@@ -28,7 +28,7 @@
         };
 
         //col table
-        vm.ecole_column = [{titre:"Code"},{titre:"Description"},{titre:"Lieu"},{titre:"Commune"},{titre:"Latitude"},{titre:"Longitude"},{titre:"Altitude"},{titre:"Ponderation"},{titre:"Action"}];
+        vm.ecole_column = [{titre:"Code"},{titre:"Description"},{titre:"Lieu"},{titre:"Fokontany"},{titre:"Latitude"},{titre:"Longitude"},{titre:"Altitude"},{titre:"Ponderation"},{titre:"Action"}];
         
         //recuperation donnée ecole
         apiFactory.getAll("ecole/index").then(function(result)
@@ -78,20 +78,13 @@
     }
        */
 
-        //recuperation donnée commune
-        apiFactory.getAll("commune/index").then(function(result)
+        //recuperation donnée fokontany
+        apiFactory.getAll("fokontany/index").then(function(result)
         {
-          vm.allcommune= result.data.response;
+          vm.allfokontany= result.data.response;
         });
 
-         vm.ecolevueMap = {
-                        center: {
-                            latitude : -18.881728,
-                            longitude: 47.510447
-                        },
-                        zoom  : 5,
-                        marker: vm.liste
-                    };
+         
 
         //Masque de saisi ajout
         vm.ajouter = function ()
@@ -105,7 +98,7 @@
               code: '',
               description: '',
               lieu: '',
-              id_commune: '',         
+              id_fokontany: '',         
               latitude: '',
               longitude: '',
               altitude: '',
@@ -151,7 +144,7 @@
             item.code      = currentItem.code ;
             item.description = currentItem.description ;
             item.lieu = currentItem.lieu ;
-            item.id_commune  = currentItem.id_commune ;
+            item.id_fokontany  = currentItem.id_fokontany ;
             item.latitude    = currentItem.latitude ;
             item.longitude   = currentItem.longitude ;
             item.altitude    = currentItem.altitude ;
@@ -175,7 +168,8 @@
             vm.selectedItem = item;
             vm.nouvelItem   = item;
             currentItem     = JSON.parse(JSON.stringify(vm.selectedItem));
-           // vm.allecole= [] ; 
+           // vm.allecole= [] ;
+           //console.log(item); 
         };
         $scope.$watch('vm.selectedItem', function()
         {
@@ -202,7 +196,7 @@
             item.code      = vm.selectedItem.code ;
             item.description = vm.selectedItem.description;
             item.lieu = vm.selectedItem.lieu;
-            item.id_commune  = vm.selectedItem.commune.id;
+            item.id_fokontany  = vm.selectedItem.fokontany.id;
             item.latitude      = vm.selectedItem.latitude ;
             item.longitude = vm.selectedItem.longitude;
             item.altitude  = vm.selectedItem.altitude;
@@ -241,7 +235,7 @@
                    if((cis[0].description!=currentItem.description) 
                     || (cis[0].code!=currentItem.code)
                     || (cis[0].lieu!=currentItem.lieu)
-                    || (cis[0].id_commune!=currentItem.id_commune)
+                    || (cis[0].id_fokontany!=currentItem.id_fokontany)
                     || (cis[0].latitude!=currentItem.latitude)
                     || (cis[0].longitude!=currentItem.longitude)
                     || (cis[0].altitude!=currentItem.altitude)
@@ -282,7 +276,7 @@
                     latitude:    ecole.latitude,
                     longitude:   ecole.longitude,
                     altitude:    ecole.altitude,
-                    id_commune:  ecole.id_commune,
+                    id_fokontany:  ecole.id_fokontany,
                     description: ecole.description,
                     ponderation: ecole.ponderation               
                 });
@@ -291,9 +285,9 @@
             apiFactory.add("ecole/index",datas, config).success(function (data)
             {
                 
-                var com = vm.allcommune.filter(function(obj)
+                var com = vm.allfokontany.filter(function(obj)
                 {
-                    return obj.id == ecole.id_commune;
+                    return obj.id == ecole.id_fokontany;
                 });
 
                 if (NouvelItem == false)
@@ -308,7 +302,7 @@
                         vm.selectedItem.longitude  = ecole.longitude;
                         vm.selectedItem.altitude   = ecole.altitude;
                         vm.selectedItem.ponderation   = ecole.ponderation;
-                        vm.selectedItem.commune       = com[0];
+                        vm.selectedItem.fokontany       = com[0];
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
                         vm.selectedItem ={};
@@ -330,7 +324,7 @@
                   ecole.longitude =  ecole.longitude;
                   ecole.altitude  =  ecole.altitude;
                   ecole.ponderation  =  ecole.ponderation;
-                  ecole.commune   = com[0];
+                  ecole.fokontany   = com[0];
                   ecole.id        =   String(data.response);              
                   NouvelItem = false;
             }
@@ -358,8 +352,17 @@
           );
         }
 
+       
+vm.ecolevueMap = {
+                        center: {
+                            latitude : -18.881728,
+                            longitude: 47.510447
+                        },
+                        zoom  : 5,
+                        marker: vm.liste
+                    };
 vm.polylines = [
-              //District Tsiombe 1               
+             //District Tsiombe 1               
             {               
                 id: 1 ,
                 path: [
@@ -27019,8 +27022,11 @@ vm.polylines = [
                     console.log("mouseout ok");
                   }
                 },
-            },
+            }
+        ];
+  
 
-        ];        
+
+
     }
 })();

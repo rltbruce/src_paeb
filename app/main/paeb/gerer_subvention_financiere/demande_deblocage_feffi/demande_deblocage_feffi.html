@@ -1,0 +1,667 @@
+
+   <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Traitement</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Suivi DAAF/FEFFI</span>
+            </div>
+
+            <div class="title">Suivi DAAF/FEFFI</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Convention -->
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+          <md-tab>
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                  </span>
+                  <span class="ms-form-wizard-step-text">Convention validé</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body>
+              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                <thead>
+                  <tr>
+                    <th class="secondary-text" ng-repeat="prog in ::vm.convention_cisco_feffi_entete_column">
+                      <div class="table-header">
+                        <span class="column-title">{{prog.titre}}</span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                         
+                <tbody>
+                  <tr ng-repeat="convention_cife_tete in vm.allconvention_cisco_feffi_entete"  ng-class="{selected: convention_cife_tete.$selected}" ng-click="vm.selectionConvention_cisco_feffi_entete(convention_cife_tete)">
+                    
+                    <td>
+                      <span>{{convention_cife_tete.cisco.code}}</span>
+                    </td>
+                    
+                    <td>
+                      <span>{{convention_cife_tete.feffi.denomination}}</span>
+                    </td>
+
+                    <td>                          
+                      <span>{{convention_cife_tete.numero_convention}}</span>
+                    </td>
+
+                    <td>                          
+                      <span >{{convention_cife_tete.objet}}</span>
+                    </td>
+
+                    <td>
+                      <span>{{vm.formatDate(convention_cife_tete.date_signature)}}</span>
+                    </td>
+
+                    <td>         
+                      <span>{{convention_cife_tete.financement}}</span>
+                    </td>                
+
+                    <td>                                    
+                      <span>{{convention_cife_tete.delai}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </md-tab-body>
+          </md-tab>
+
+          <md-tab ng-disabled="vm.stepOne==false">
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                </span>
+                <span class="ms-form-wizard-step-text">Demande réalimentation compte</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body>
+              <div style="widht:100%;">  
+                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_realimentation()" style="width:10%;">
+                    Nouveau
+                  </md-button>
+              </div> <br>
+
+              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                <thead>
+                  <tr>
+                    <th class="secondary-text" ng-repeat="cisc in ::vm.demande_realimentation_column">
+                      <div class="table-header">
+                        <span class="column-title">{{cisc.titre}}</span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>                     
+                <tbody>
+                  <tr ng-repeat="demande_realimentation in vm.alldemande_realimentation"  ng-class="{selected: demande_realimentation.$selected}" ng-click="vm.selectionDemande_realimentation(demande_realimentation)">
+                    <td>
+                      <span ng-if="demande_realimentation.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Compte feffi</label>
+                          <md-select ng-model="demande_realimentation.id_compte_feffi"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="demande_realimentation.validation!=0">
+                            <md-option ng-repeat="compte_feffi in vm.allcompte_feffi" value="{{compte_feffi.id}}">
+                                                                        {{compte_feffi.numero_compte}}
+                            </md-option>
+                          </md-select>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.compte_feffi.numero_compte}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_realimentation.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Tranche</label>
+                          <md-select ng-model="demande_realimentation.id_tranche_deblocage_feffi"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(demande_realimentation)" ng-disabled="demande_realimentation.validation!=0 || vm.modificationdemande">
+                            <md-option ng-repeat="tranche in vm.allcurenttranche_deblocage_feffi" value="{{tranche.id}}">
+                                                                        {{tranche.libelle}}
+                            </md-option>
+                          </md-select>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.tranche.libelle}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_realimentation.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Prévu</label>
+                          <input name="prevu" type="text" ng-model="demande_realimentation.prevu" disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.prevu}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_realimentation.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Cumul</label>
+                          <input name="cumul" type="text" ng-model="demande_realimentation.cumul" disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.cumul}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_realimentation.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Anterieur</label>
+                          <input name="anterieur" type="text" ng-model="demande_realimentation.anterieur" disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.anterieur}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_realimentation.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Periode</label>
+                          <input name="periode" type="text" ng-model="demande_realimentation.periode"disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.tranche.periode}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_realimentation.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Pourcentage</label>
+                          <input name="pourcentage" type="text" ng-model="demande_realimentation.pourcentage" disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.tranche.pourcentage}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_realimentation.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Reste</label>
+                          <input name="reste" type="text" ng-model="demande_realimentation.reste" disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.reste}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_realimentation.$edit">
+                        <md-datepicker ng-model="demande_realimentation.date" md-placeholder="Date de signature" md-max-date="vm.date_now" required ng-disabled="demande_realimentation.validation!=0">
+                          
+                        </md-datepicker>  
+                      </span>
+                      <span ng-if="!demande_realimentation.$edit">{{vm.formatDate(demande_realimentation.date)}}</span>
+                    </td>
+
+                    <!--td>
+                      <span ng-if="demande_realimentation.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Date d'approbation</label>
+                          <input name="date_approbation" type="text" ng-model="demande_realimentation.date_approbation"/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.date_approbation}}</span>
+                    </td-->
+
+                    <!--td>
+                      <span ng-if="demande_realimentation.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Validation</label>
+                          <input name="validation" type="text" ng-model="demande_realimentation.validation"/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.validation}}</span>
+                    </td-->
+                                                 
+                    <td>  
+                      <a ng-if="!demande_realimentation.$edit" ng-click="vm.modifierDemande_realimentation(demande_realimentation)" title="Modifier">
+                        <span class="icon-table-edit"></span>
+                      </a>
+                                
+                      <a ng-if="!demande_realimentation.$edit" ng-click="vm.supprimerDemande_realimentation(demande_realimentation)" title="Supprimer">
+                        <span class="icon-delete"></span>
+                      </a>
+                                
+                      <a ng-if="demande_realimentation.$edit" ng-click="vm.annulerDemande_realimentation(demande_realimentation)" title="Annuler modification">
+                        <span class="icon-cancel"></span>
+                      </a>
+                                
+                      <a ng-if="demande_realimentation.$edit && demande_realimentation.date && demande_realimentation.id_tranche_deblocage_feffi>''" ng-click="vm.ajoutDemande_realimentation(demande_realimentation,0)" title="Sauvegarder">
+                        <span class="icon-content-save"></span>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+             
+            </md-tab-body>
+          </md-tab>         
+
+          <md-tab ng-disabled="vm.stepTwo==false">
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                      <i class="icon-check s16"></i>
+                  </span>
+                <span class="ms-form-wizard-step-text">Pièce justificatif</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body>
+               <div style="widht:100%;">  
+                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPiece_justificatif_feffi()" style="width:10%;">
+                    Nouveau
+                  </md-button>
+              </div> <br>
+
+              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="cisc in ::vm.piece_justificatif_feffi_column">
+                  <div class="table-header">
+                    <span class="column-title">{{cisc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>                     
+            <tbody>
+              <tr ng-repeat="piece_justificatif_feffi in vm.allpiece_justificatif_feffi"  ng-class="{selected: piece_justificatif_feffi.$selected}" ng-click="vm.selectionPiece_justificatif_feffi(piece_justificatif_feffi)">
+
+                <td>
+                  <span ng-if="piece_justificatif_feffi.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Description</label>
+                      <input name="description" type="text" ng-model="piece_justificatif_feffi.description"/>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!piece_justificatif_feffi.$edit">{{piece_justificatif_feffi.description}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="piece_justificatif_feffi.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Fichier</label>
+                    <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile"  ng-model="fichier" id="fileid"/>
+                    </md-input-container>  
+                  </span>
+                            
+                  <span ng-if="!piece_justificatif_feffi.$edit">{{piece_justificatif_feffi.fichier}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="piece_justificatif_feffi.$edit">
+                    <md-datepicker ng-model="piece_justificatif_feffi.date" md-placeholder="Date" md-max-date="vm.date_now" required>                       
+                  </md-datepicker>  
+                  </span>
+                            
+                  <span ng-if="!piece_justificatif_feffi.$edit">{{vm.formatDate(piece_justificatif_feffi.date)}}</span>
+                </td>
+                                             
+                <td>  
+                  <a ng-if="!piece_justificatif_feffi.$edit" ng-click="vm.modifierPiece_justificatif_feffi(piece_justificatif_feffi)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!piece_justificatif_feffi.$edit" ng-click="vm.supprimerPiece_justificatif_feffi(piece_justificatif_feffi)" title="Supprimer">
+                    <span class="icon-delete"></span>
+                  </a>
+                            
+                  <a ng-if="piece_justificatif_feffi.$edit" ng-click="vm.annulerPiece_justificatif_feffi(piece_justificatif_feffi)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="piece_justificatif_feffi.$edit && piece_justificatif_feffi.description && piece_justificatif_feffi.date>''" ng-click="vm.ajoutPiece_justificatif_feffi(piece_justificatif_feffi,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+            </md-tab-body>
+          </md-tab>
+
+           <!--md-tab ng-disabled="vm.stepThree==false">
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">4</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
+                      <i class="icon-check s16"></i>
+                  </span>
+                <span class="ms-form-wizard-step-text">Transfert</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body>
+               <div style="widht:100%;">  
+                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterTransfert_daaf()" style="width:10%;">
+                    Nouveau
+                  </md-button>
+              </div> <br>
+
+              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="cisc in ::vm.transfert_daaf_column">
+                  <div class="table-header">
+                    <span class="column-title">{{cisc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>                     
+            <tbody>
+              <tr ng-repeat="transfert_daaf in vm.alltransfert_daaf"  ng-class="{selected: transfert_daaf.$selected}" ng-click="vm.selectionTransfert_daaf(transfert_daaf)">
+                <td>
+                  <span ng-if="transfert_daaf.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Code</label>
+                      <input name="code" type="text" ng-model="transfert_daaf.code"/>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!transfert_daaf.$edit">{{transfert_daaf.code}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="transfert_daaf.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Description</label>
+                      <input name="description" type="text" ng-model="transfert_daaf.description"/>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!transfert_daaf.$edit">{{transfert_daaf.description}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="transfert_daaf.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Montant</label>
+                      <input name="montant" type="text" ng-model="transfert_daaf.montant"/>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!transfert_daaf.$edit">{{transfert_daaf.montant}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="transfert_daaf.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Numero facture</label>
+                      <input name="num_facture" type="text" ng-model="transfert_daaf.num_facture"/>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!transfert_daaf.$edit">{{transfert_daaf.num_facture}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="transfert_daaf.$edit">
+                    <md-datepicker ng-model="transfert_daaf.date" md-placeholder="Date" md-max-date="vm.date_now" required>                       
+                  </md-datepicker>  
+                  </span>
+                            
+                  <span ng-if="!transfert_daaf.$edit">{{vm.formatDate(transfert_daaf.date)}}</span>
+                </td>
+                                             
+                <td>  
+                  <a ng-if="!transfert_daaf.$edit" ng-click="vm.modifierTransfert_daaf(transfert_daaf)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!transfert_daaf.$edit" ng-click="vm.supprimerTransfert_daaf(transfert_daaf)" title="Supprimer">
+                    <span class="icon-delete"></span>
+                  </a>
+                            
+                  <a ng-if="transfert_daaf.$edit" ng-click="vm.annulerTransfert_daaf(transfert_daaf)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="transfert_daaf.$edit && transfert_daaf.code && transfert_daaf.description && transfert_daaf.date>''" ng-click="vm.ajoutTransfert_daaf(transfert_daaf,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+            </md-tab-body>
+          </md-tab-->
+
+          <!--md-tab ng-disabled="vm.stepOne==false">
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label"-->
+                <!--span class="ms-form-wizard-step-number md-accent-bg"
+                                        ng-if="vm.stepTree==false">2</span>
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.step3==true">
+                  <i class="icon-check s16"></i>
+                </span-->
+                <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">
+                  <i class="icon-check s16"></i>
+                </span>
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                  <i class="icon-check s16"></i>
+                </span>
+
+                <span class="ms-form-wizard-step-text">Compte</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body>
+              <div style=" margin: 10px">
+              <md-tabs md-dynamic-height md-center-tabs="true" >
+                <md-tab ng-disabled="vm.stepOne==false">
+                <md-tab-label>
+                  <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg"
+                                            ng-if="vm.stepTree==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.step3==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">Compte</span>
+                  </span>
+                </md-tab-label>
+                
+                <md-tab-body>
+                  <span class="ms-form-wizard-step-text">Compte</span>
+                </md-tab-body>
+              </md-tab>
+              <md-tab ng-disabled="vm.stepOne==false">
+                <md-tab-label>
+                  <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg"
+                                            ng-if="vm.stepTree==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.step3==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">Compte</span>
+                  </span>
+                </md-tab-label>
+                
+                <md-tab-body>
+                  <span class="ms-form-wizard-step-text">Compte</span>
+                </md-tab-body>
+              </md-tab>
+            </md-tabs>
+            </div>
+            </md-tab-body>
+          </md-tab-->
+
+
+          </md-tabs>
+          </ms-form-wizard>       
+        <!--header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Convention</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add convention" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout programmation</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="cisc in ::vm.convention_column">
+                  <div class="table-header">
+                    <span class="column-title">{{cisc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="convention in vm.allconvention"  ng-class="{selected: convention.$selected}" ng-click="vm.selection(convention)">           
+                <td>
+                  <span ng-if="convention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Numero convention</label>
+                      <input name="numero_convention" type="number" ng-model="convention.numero_convention"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!convention.$edit">{{convention.numero_convention}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="convention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Description</label>
+                      <input name="description" type="text" ng-model="convention.description"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!convention.$edit">{{convention.description}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="convention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Cisco</label>
+                      <md-select ng-model="convention.id_cisco"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="cisco in vm.allcisco" value="{{cisco.id}}">
+                                                            {{cisco.libelle}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!convention.$edit">{{convention.cisco.libelle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="convention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Association</label>
+                      <md-select ng-model="convention.id_association"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="association in vm.allassociation" value="{{association.id}}">
+                                                            {{association.libelle}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!convention.$edit">{{convention.association.libelle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="convention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Categorie ouvrage</label>
+                      <md-select ng-model="convention.id_categorie_ouvrage"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="categorie_ouvrage in vm.allcategorie_ouvrage" value="{{categorie_ouvrage.id}}">
+                                                            {{categorie_ouvrage.libelle}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!convention.$edit">{{convention.categorie_ouvrage.libelle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="convention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Ouvrage</label>
+                      <md-select ng-model="convention.id_ouvrage"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="ouvrage in vm.allouvrage" value="{{ouvrage.id}}">
+                                                            {{ouvrage.libelle}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!convention.$edit">{{convention.ouvrage.libelle}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="convention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Montant prevu</label>
+                      <input name="Montant prevu" type="number" ng-model="convention.montant_prevu"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!convention.$edit">{{convention.montant_prevu}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="convention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Montant reel</label>
+                      <input name="Montant reel" type="number" ng-model="convention.montant_reel"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!convention.$edit">{{convention.montant_reel}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="convention.$edit">
+                    <md-datepicker ng-model="convention.date" md-placeholder="Date" md-max-date="vm.date_now" required>                       
+                  </md-datepicker>  
+                  </span>
+                            
+                  <span ng-if="!convention.$edit">{{vm.formatDate(convention.date)}}</span>
+                </td>
+                                             
+                <td>  
+                  <a ng-if="!convention.$edit" ng-click="vm.modifier(convention)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!convention.$edit" ng-click="vm.supprimer(convention)" title="Supprimer">
+                    <span class="icon-delete"></span>
+                  </a>
+                            
+                  <a ng-if="convention.$edit" ng-click="vm.annuler(convention)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="convention.$edit && convention.numero_convention && convention.description && convention.id_cisco && convention.id_association && convention.id_ouvrage && convention.id_categorie_ouvrage && convention.montant_reel && convention.montant_prevu && convention.date>''" ng-click="vm.ajout(convention,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div-->                   
+      </div>
+      <!-- / convention -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

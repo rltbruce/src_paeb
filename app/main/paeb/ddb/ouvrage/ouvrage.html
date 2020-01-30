@@ -24,8 +24,37 @@
         <!--Geographique  -->
           <kendo-grid options="vm.mainGridOptions">
             <div k-detail-template>
-              <kendo-grid k-options="vm.allattachement({{dataItem.id}})">
-              </kendo-grid>
+              <!--kendo-grid k-options="vm.allattachement({{dataItem.id}})">
+              </kendo-grid-->
+              <kendo-tabstrip>
+                <ul>
+                  <li>Attachement</li>
+                  <li>Annexe Latrine</li>
+                  <li>Annexe mobilier</li>
+                </ul>
+                
+                <div>
+                    <div kendo-grid k-options="vm.allattachement_batiment({{dataItem.id}})">
+
+                    </div>
+                </div>
+                <div>
+                    <div kendo-grid k-options="vm.allannexe_latrine({{dataItem.id}})">
+                      <div k-detail-template>
+                        <kendo-grid k-options="vm.allattachement_latrine({{dataItem.id}})">
+                        </kendo-grid>
+                      </div>
+                    </div>
+                </div>
+                <div>
+                    <div kendo-grid k-options="vm.allannexe_mobilier({{dataItem.id}})">
+                      <div k-detail-template>
+                        <kendo-grid k-options="vm.allattachement_mobilier({{dataItem.id}})">
+                        </kendo-grid>
+                      </div>
+                    </div>
+                </div>
+                </kendo-tabstrip>
             </div>
           </kendo-grid>        
       </div>

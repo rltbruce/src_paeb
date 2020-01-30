@@ -16,6 +16,7 @@
         vm.alldetail_subvention = [] ;
         vm.allzone_subvention = [] ;
         vm.allacces_zone = [] ;
+        vm.alldetail_ouvrage = [] ;
 
         //style responsive: true
         vm.dtOptions = {
@@ -31,6 +32,9 @@
         },
         {
           titre:"Accés zone"
+        },
+        {
+          titre:"Detail ouvrage"
         },
         {
           titre:"Coût maitrise d'oeuvre"
@@ -69,6 +73,12 @@
             vm.allacces_zone = result.data.response; 
         });
 
+        //recuperation donnée detail_ouvrage
+        apiFactory.getAll("detail_ouvrage/index").then(function(result)
+        {
+            vm.alldetail_ouvrage = result.data.response; console.log(vm.alldetail_ouvrage);
+        });
+
         //Masque de saisi ajout
         vm.ajouter = function ()
         { 
@@ -80,6 +90,7 @@
               id: '0',         
               id_acces_zone: '',
               id_zone_subvention: '',
+              id_detail_ouvrage: '',
               cout_maitrise_oeuvre: '',         
               cout_batiment: '',
               cout_latrine: '',
@@ -117,29 +128,29 @@
 
             /* debut verification doublon*/
               
-                var detail = vm.alldetail_subvention.filter(function(objs)
-                    {return objs.id != currentItem.id;}).filter(function(obj)
-                    {
-                      return obj.zone_subvention.id == detail_subvention.id_zone_subvention && obj.acces_zone.id == detail_subvention.id_acces_zone;
-                    });
+          var detail = vm.alldetail_subvention.filter(function(objs)
+            {return objs.id != currentItem.id;}).filter(function(obj)
+              {
+                  return obj.zone_subvention.id == detail_subvention.id_zone_subvention && obj.acces_zone.id == detail_subvention.id_acces_zone && obj.detail_ouvrage.id == detail_subvention.id_detail_ouvrage;
+              });
                 console.log(detail);
             /* fin verification doublon*/
 
-                if (detail[0])
-                {
-                    vm.showAlert('Doublon','La zone de subvention et acces zone existe déjà');
-                }
-                else
-                {
-                    if (NouvelItem==false)
-                    {
-                        test_existance (detail_subvention,suppression); 
-                    } 
-                    else
-                    {  
-                        insert_in_base(detail_subvention,suppression);
-                    }
-                }
+          if (detail[0])
+          {
+            vm.showAlert('Doublon','La zone de subvention et acces zone existe déjà');
+          }
+          else
+          {
+            if (NouvelItem==false)
+            {
+                test_existance (detail_subvention,suppression); 
+            } 
+            else
+            {  
+                insert_in_base(detail_subvention,suppression);
+            }
+          }
         }
 
         //fonction de bouton d'annulation detail_subvention
@@ -151,6 +162,7 @@
             item.$selected = false;
             item.id_zone_subvention  = currentItem.id_zone_subvention ;
             item.id_acces_zone       = currentItem.id_acces_zone ;
+            item.id_detail_ouvrage       = currentItem.id_detail_ouvrage ;
             item.cout_maitrise_oeuvre = currentItem.cout_maitrise_oeuvre ;
             item.cout_batiment      = currentItem.cout_batiment ;
             item.cout_latrine       = currentItem.cout_latrine ; 
@@ -201,6 +213,7 @@
             item.$selected = true;
             item.id_zone_subvention  = vm.selectedItem.zone_subvention.id ;
             item.id_acces_zone       = vm.selectedItem.acces_zone.id ;
+            item.id_detail_ouvrage   = vm.selectedItem.detail_ouvrage.id ;
             item.cout_maitrise_oeuvre = vm.selectedItem.cout_maitrise_oeuvre ;
             item.cout_batiment      = vm.selectedItem.cout_batiment ;
             item.cout_latrine       = vm.selectedItem.cout_latrine ; 
@@ -239,13 +252,42 @@
                 {
                    if((detail[0].id_zone_subvention!=currentItem.id_zone_subvention) 
                     || (detail[0].id_acces_zone!=currentItem.id_acces_zone)
+                    || (detail[0].id_detail_ouvrage!=currentItem.id_detail_ouvrage)
                     || (detail[0].cout_maitrise_oeuvre!=currentItem.cout_maitrise_oeuvre)
                     || (detail[0].cout_batiment!=currentItem.cout_batiment)
                     || (detail[0].cout_latrine!=currentItem.cout_latrine)
                     || (detail[0].cout_mobilier!=currentItem.cout_mobilier)
                     || (detail[0].cout_sousprojet!=currentItem.cout_sousprojet))                    
                       { 
-                         insert_in_base(item,suppression);
+                         //insert_in_base(item,suppression);
+
+                         if((detail[0].id_zone_subvention!=currentItem.id_zone_subvention) 
+                            || (detail[0].id_acces_zone!=currentItem.id_acces_zone)
+                            || (detail[0].id_detail_ouvrage!=currentItem.id_detail_ouvrage))
+                          {
+                            var det = vm.alldetail_subvention.filter(function(objs)
+                              {return objs.id != currentItem.id;}).filter(function(obj)
+                                {
+                                    return obj.zone_subvention.id == item.id_zone_subvention && obj.acces_zone.id == item.id_acces_zone && obj.detail_ouvrage.id == item.id_detail_ouvrage;
+                                });
+                                  console.log(det);
+                              /* fin verification doublon*/
+
+                            if (det[0])
+                            {
+                              vm.showAlert('Doublon','La zone de subvention et acces zone existe déjà');
+                            }
+                            else
+                            { 
+                                insert_in_base(item,suppression);
+                              
+                            }
+                          }
+                          else
+                          {
+                            insert_in_base(item,suppression);
+                          }
+                         
                       }
                       else
                       {  
@@ -277,6 +319,7 @@
                     id:        getId,      
                     id_zone_subvention: detail_subvention.id_zone_subvention,
                     id_acces_zone:      detail_subvention.id_acces_zone,
+                    id_detail_ouvrage:  detail_subvention.id_detail_ouvrage,
                     cout_maitrise_oeuvre: detail_subvention.cout_maitrise_oeuvre,
                     cout_batiment:      detail_subvention.cout_batiment,
                     cout_latrine:       detail_subvention.cout_latrine,    
@@ -297,6 +340,11 @@
                     return obj.id == detail_subvention.id_acces_zone;
                 });
 
+                var de_ouvr = vm.alldetail_ouvrage.filter(function(obj)
+                {
+                    return obj.id == detail_subvention.id_detail_ouvrage;
+                });
+
                 if (NouvelItem == false)
                 {
                     // Update or delete: id exclu                 
@@ -304,6 +352,7 @@
                     {
                         vm.selectedItem.acces_zone      = acces[0];
                         vm.selectedItem.zone_subvention = zone[0];
+                        vm.selectedItem.detail_ouvrage  = de_ouvr[0];
                         vm.selectedItem.cout_maitrise_oeuvre = detail_subvention.cout_maitrise_oeuvre;
                         vm.selectedItem.cout_batiment   = detail_subvention.cout_batiment;
                         vm.selectedItem.cout_latrine    = detail_subvention.cout_latrine;
@@ -325,6 +374,7 @@
                 {
                   detail_subvention.acces_zone      = acces[0];
                   detail_subvention.zone_subvention = zone[0];
+                  detail_subvention.detail_ouvrage  = de_ouvr[0];
                   detail_subvention.cout_maitrise_oeuvre = detail_subvention.cout_maitrise_oeuvre;
                   detail_subvention.cout_batiment   = detail_subvention.cout_batiment;
                   detail_subvention.cout_latrine    = detail_subvention.cout_latrine;

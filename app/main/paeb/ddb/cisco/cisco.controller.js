@@ -111,7 +111,6 @@
         vm.selection= function (item)
         {
             vm.selectedItem = item;
-            vm.nouvelItem   = item;
             currentItem     = JSON.parse(JSON.stringify(vm.selectedItem));
            // vm.allcisco= [] ; 
         };
@@ -212,7 +211,7 @@
                 //console.log(cisco.pays_id);
                 console.log(datas);
                 //factory
-            apiFactory.add("categorie_ouvrage/index",datas, config).success(function (data)
+            apiFactory.add("cisco/index",datas, config).success(function (data)
             {
                 
                 var dist = vm.alldistrict.filter(function(obj)

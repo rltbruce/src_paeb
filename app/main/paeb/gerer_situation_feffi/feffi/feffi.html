@@ -1,0 +1,245 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation feffi</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Feffi</span>
+            </div>
+
+            <div class="title">Feffi</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+    <!-----debut FEFFI ------>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">fEFFI</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouter()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="fef in ::vm.feffi_column">
+                        <div class="table-header">
+                          <span class="column-title">{{fef.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="feffi in vm.allfeffi"  ng-class="{selected: feffi.$selected}" ng-click="vm.selection(feffi)">           
+                      <td>
+                        <span ng-if="feffi.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Dénomination</label>
+                            <input name="denomination" type="text" ng-model="feffi.denomination"/>
+                          </md-input-container>
+                        </span>                          
+                        <span ng-if="!feffi.$edit">{{feffi.denomination}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="feffi.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Description</label>
+                            <input name="Description" type="text" ng-model="feffi.description"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!feffi.$edit">{{feffi.description}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="feffi.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Ecole</label>
+                            <md-select ng-model="feffi.id_ecole"style="overflow: hidden;text-overflow: ellipsis;">
+                              <md-option ng-repeat="ecole in vm.allecole" value="{{ecole.id}}">
+                                                                  {{ecole.code}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>  
+                        </span>
+                        <span ng-if="!feffi.$edit">{{feffi.ecole.code}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!feffi.$edit" ng-click="vm.modifier(feffi)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!feffi.$edit" ng-click="vm.supprimer(feffi)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="feffi.$edit" ng-click="vm.annuler(feffi)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="feffi.$edit && feffi.denomination && feffi.description && feffi.id_ecole>''" ng-click="vm.ajout(feffi,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN FEFFI ------>
+    <!-----Debut membre ------>
+          <md-tab>
+              <md-tab-label ng-disabled="vm.stepOne==false">
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Membre</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterMembre()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.membre_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="membre in vm.allmembre"  ng-class="{selected: membre.$selected}" ng-click="vm.selectionMembre(membre)">           
+                      <td>
+                        <span ng-if="membre.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nom</label>
+                            <input name="nom" type="text" ng-model="membre.nom"/>
+                          </md-input-container>
+                        </span>                          
+                        <span ng-if="!membre.$edit">{{membre.nom}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="membre.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Prenom</label>
+                            <input name="prenom" type="text" ng-model="membre.prenom"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!membre.$edit">{{membre.prenom}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="membre.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Sexe</label>
+                            <md-select ng-model="membre.sexe"style="overflow: hidden;text-overflow: ellipsis;">
+                                <md-option value="1">Masculin
+                                </md-option>
+                                <md-option value="2">Femimin
+                                </md-option>
+                              </md-select>
+                          </md-input-container>
+                        </span>                          
+                        <span ng-if="!membre.$edit">{{membre.sexe}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="membre.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Age</label>
+                            <input name="age" type="number" ng-model="membre.age"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!membre.$edit">{{membre.age}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="membre.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Occupation</label>
+                            <input name="occupation" type="text" ng-model="membre.occupation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!membre.$edit">{{membre.occupation}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!membre.$edit" ng-click="vm.modifierMembre(membre)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!membre.$edit" ng-click="vm.supprimerMembre(membre)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="membre.$edit" ng-click="vm.annulerMembre(membre)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="membre.$edit && membre.nom && membre.prenom && membre.sexe && membre.age && membre.occupation>''" ng-click="vm.ajoutMembre(membre,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN membre ------>                   
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

@@ -224,6 +224,42 @@
                       break;
                   }
 
+                  case 'ODAAF':
+                  {
+                      vm.user.odaaf = true ;
+                      break ;
+                  }
+
+                  case 'DAAF':
+                  {
+                      vm.user.daaf = true ;
+                      break ;
+                  }
+
+                  case 'OBCAF':
+                  {
+                      vm.user.obcaf = true ;
+                      break;
+                  }
+
+                  case 'BCAF':
+                  {
+                      vm.user.bcaf = true ;
+                      break;
+                  }
+
+                  case 'UFP':
+                  {
+                      vm.user.bcaf = true ;
+                      break;
+                  }
+
+                  case 'DPFI':
+                  {
+                      vm.user.bcaf = true ;
+                      break;
+                  }
+
                   default:
                   {
                       break ;
@@ -264,7 +300,18 @@
                 tab.push(key.toUpperCase());
               if(key == 'admin' && value == true)
                   tab.push(key.toUpperCase());
-              
+              if(key == 'odaaf' && value == true)
+                  tab.push(key.toUpperCase());
+              if(key == 'daaf' && value == true)
+                tab.push(key.toUpperCase());
+              if(key == 'obcaf' && value == true)
+                  tab.push(key.toUpperCase());
+              if(key == 'bcaf' && value == true)
+                  tab.push(key.toUpperCase());
+              if(key == 'ufp' && value == true)
+                  tab.push(key.toUpperCase());
+              if(key == 'dpfi' && value == true)
+                  tab.push(key.toUpperCase());  
           });
 
           

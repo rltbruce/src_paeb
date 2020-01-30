@@ -78,6 +78,19 @@
                 <td>
                   <span ng-if="detail_subvention.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
+                      <label>Detail ouvrage</label>
+                      <md-select ng-model="detail_subvention.id_detail_ouvrage"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="detail_ouvrage in vm.alldetail_ouvrage" value="{{detail_ouvrage.id}}">{{detail_ouvrage.libelle}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!detail_subvention.$edit">{{detail_subvention.detail_ouvrage.libelle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="detail_subvention.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
                       <label>Coût maitrise d'oeuvre</label>
                       <input name="cout_maitrise_oeuvre" type="text" ng-model="detail_subvention.cout_maitrise_oeuvre"/>
                     </md-input-container>   
@@ -143,7 +156,7 @@
                     <span class="icon-cancel"></span>
                   </a>
                             
-                  <a ng-if="detail_subvention.$edit && detail_subvention.id_zone_subvention && detail_subvention.id_acces_zone && detail_subvention.cout_batiment && detail_subvention.cout_latrine && detail_subvention.cout_mobilier && detail_subvention.cout_sousprojet>''" ng-click="vm.ajout(detail_subvention,0)" title="Sauvegarder">
+                  <a ng-if="detail_subvention.$edit && detail_subvention.id_zone_subvention && detail_subvention.id_acces_zone && detail_subvention.id_detail_ouvrage && detail_subvention.cout_batiment && detail_subvention.cout_latrine && detail_subvention.cout_mobilier && detail_subvention.cout_sousprojet>''" ng-click="vm.ajout(detail_subvention,0)" title="Sauvegarder">
                     <span class="icon-content-save"></span>
                   </a>
                 </td>

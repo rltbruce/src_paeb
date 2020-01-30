@@ -1,0 +1,126 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Composant</span>
+            </div>
+
+            <div class="title">Composant</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- composant -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Composant</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add composant" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout composant</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="compo in ::vm.composant_column">
+                  <div class="table-header">
+                    <span class="column-title">{{compo.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="composant in vm.allcomposant"  ng-class="{selected: composant.$selected}" ng-click="vm.selection(composant)">
+
+                <td>
+                  <span ng-if="composant.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Zone subvention</label>
+                      <md-select ng-model="composant.id_zone_subvention"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="zone_subvention in vm.allzone_subvention" value="{{zone_subvention.id}}">{{zone_subvention.libelle}}</md-option>
+                       </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!composant.$edit">{{composant.zone_subvention.libelle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="composant.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Acces zone</label>
+                      <md-select ng-model="composant.id_acces_zone"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="acces_zone in vm.allacces_zone" value="{{acces_zone.id}}">{{acces_zone.libelle}}</md-option>
+                       </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!composant.$edit">{{composant.acces_zone.libelle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="composant.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Cout maitrise d'oeuvre</label>
+                      <input name="cout_maitrise_oeuvre" type="number" ng-model="composant.cout_maitrise_oeuvre"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!composant.$edit">{{composant.cout_maitrise_oeuvre}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="composant.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Cout sous projet</label>
+                      <input name="cout_sous_projet" type="number" ng-model="composant.cout_sous_projet"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!composant.$edit">{{composant.cout_sous_projet}}</span>
+                </td>
+
+                
+                                             
+                <td>
+                  <a ng-if="!composant.$edit" ng-click="vm.modifier(composant)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!composant.$edit" ng-click="vm.supprimer(composant)" title="Supprimer">
+                    <span class="icon-delete" ></span>
+                  </a>
+                            
+                  <a ng-if="composant.$edit" ng-click="vm.annuler(composant)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="composant.$edit && composant.id_zone_subvention && composant.id_acces_zone && composant.cout_sous_projet&& composant.cout_maitrise_oeuvre>''" ng-click="vm.ajout(composant,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>                   
+      </div>
+      <!-- / composant -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

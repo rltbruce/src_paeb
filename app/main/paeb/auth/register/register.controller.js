@@ -13,7 +13,7 @@
 
       vm.allSite = [];
 
-      apiFactory.getAll("region/index").then(function(result)
+      /*apiFactory.getAll("region/index").then(function(result)
       {
           vm.allregion= result.data.response;
       });
@@ -22,12 +22,12 @@
       {
           vm.alldistrict = result.data.response;
           vm.districts = vm.alldistrict ;
-      });
+      });*/
 
       //enregistrer
       vm.enregistrer = enregistrer;
 
-      vm.filtre_district = function()
+     /* vm.filtre_district = function()
       {
           var ds = vm.alldistrict ;
           if (vm.registerForm.id_region) 
@@ -38,7 +38,7 @@
             });
           }
                  
-      }
+      }*/
 
       function enregistrer(utilisateur, ev)
       {
@@ -55,8 +55,8 @@
           prenom: utilisateur.lastname,
           email: utilisateur.email,
           password: utilisateur.password,
-          id_region: utilisateur.id_region,
-          id_district: utilisateur.id_district
+          //id_region: utilisateur.id_region,
+          //id_district: utilisateur.id_district
         });
 
         //ajout user

@@ -32,6 +32,9 @@
           getUserByEnabled: function(controller, enabled) {
             return $http.get(apiUrl+controller+"?enabled="+enabled);
           },
+          getDemande_realimentationByInvalide: function(controller, invalide) {
+            return $http.get(apiUrl+controller+"?invalide="+invalide);
+          },
           getAPIgeneraliser: function(controller,champ1,valeur1,champ2,valeur2) {
             return $http.get(apiUrl+controller+"?"+champ1+"="+valeur1+"&"+champ2+"="+valeur2);
           },
