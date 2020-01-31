@@ -133,6 +133,7 @@
                   vm.allmembre = result.data.response; 
                   //console.log(vm.allfeffi);
               });
+              vm.stepOne = true;
             }
             
         };
@@ -334,10 +335,10 @@
           {
             item.$edit = false;
             item.$selected = false;
-            item.nom      = currentItem.nom ;
-            item.prenom   = currentItem.prenom ;
-            item.sexe      = currentItem.sexe;
-            item.age      = currentItem.age ;
+            item.nom      = currentItemMembre.nom ;
+            item.prenom   = currentItemMembre.prenom ;
+            item.sexe      = currentItemMembre.sexe;
+            item.age      = currentItemMembre.age ;
             item.occupation   = currentItem.occupation ; 
           }else
           {
@@ -383,8 +384,8 @@
             item.$selected = true;            
             item.nom      = vm.selectedItemMembre.nom ;
             item.prenom = vm.selectedItemMembre.prenom;
-            item.sexe  = vm.selectedItemMembre.ecole.id;
-            item.age      = vm.selectedItemMembre.age ;
+            item.sexe  = parseInt(vm.selectedItemMembre.sexe);
+            item.age      =parseInt(vm.selectedItemMembre.age)  ;
             item.occupation = vm.selectedItemMembre.occupation; 
         };
 
@@ -503,6 +504,21 @@
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
+
+        vm.affichage_sexe= function (sexe)
+        { var affiche='';
+          switch (sexe)
+          {
+            case '1':
+                affiche= 'Masculin';
+                break;
+            case '2':
+                affiche= 'Feminin';
+                break;
+            default:
+          }
+          return affiche;
+        };
 /**********************************fin membre****************************************/
         //Alert
         vm.showAlert = function(titre,content)

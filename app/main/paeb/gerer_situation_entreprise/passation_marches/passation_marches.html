@@ -1,0 +1,290 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation feffi</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Feffi</span>
+            </div>
+
+            <div class="title">Feffi</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+    <!-----debut FEFFI ------>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Convention</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterTete()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="ciscT in ::vm.convention_entete_column">
+                          <div class="table-header">
+                            <span class="column-title">{{ciscT.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="convention_entete in vm.allconvention_entete"  ng-class="{selected: convention_entete.$selected}" ng-click="vm.selectionConvention_entete(convention_entete)">           
+                        
+
+                        <td>
+                          <span ng-if="!convention_entete.$edit">{{convention_entete.cisco.code}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="!convention_entete.$edit">{{convention_entete.feffi.denomination}}</span>
+                        </td>
+
+                        <td>                         
+                          <span ng-if="!convention_entete.$edit">{{convention_entete.numero_convention}}</span>
+                        </td>
+
+                        <td>                          
+                          <span ng-if="!convention_entete.$edit">{{convention_entete.objet}}</span>
+                        </td>
+
+                        <td>     
+                          <span ng-if="!convention_entete.$edit">{{vm.formatDate(convention_entete.date_signature)}}</span>
+                        </td>
+
+                        <td>     
+                          <span ng-if="!convention_entete.$edit">{{convention_entete.financement}}</span>
+                        </td>                
+
+                        <td>                                    
+                          <span ng-if="!convention_entete.$edit">{{convention_entete.delai}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+    <!-----FIN FEFFI ------>
+    <!-----Debut passation_marches ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">passation_marches</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.passation_marches_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="passation_marches in vm.allpassation_marches"  ng-class="{selected: passation_marches.$selected}" ng-click="vm.selectionPassation_marches(passation_marches)">           
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-datepicker ng-model="passation_marches.date_lancement" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_lancement)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-datepicker ng-model="passation_marches.date_remise" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>   
+                        </span>
+                                  
+                        <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_remise)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nombre offre recu</label>
+                            <input name="nbr_offre_recu" type="text" ng-model="passation_marches.nbr_offre_recu"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!passation_marches.$edit">{{passation_marches.nbr_offre_recu}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Montant moins chere</label>
+                            <input name="montant_moin_chere" type="text" ng-model="passation_marches.montant_moin_chere"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!passation_marches.$edit">{{passation_marches.montant_moin_chere}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-datepicker ng-model="passation_marches.date_rapport_evaluation" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_rapport_evaluation)}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-datepicker ng-model="passation_marches.date_demande_ano_dpfi" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_demande_ano_dpfi)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-datepicker ng-model="passation_marches.date_ano_dpfi" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>  
+                        </span>
+                                  
+                        <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_ano_dpfi)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Notification intention</label>
+                            <input name="notification_intention" type="text" ng-model="passation_marches.notification_intention"/>
+                          </md-input-container>  
+                        </span>
+                                  
+                        <span ng-if="!passation_marches.$edit">{{passation_marches.notification_intention}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-datepicker ng-model="passation_marches.date_notification_attribution" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_notification_attribution)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-datepicker ng-model="passation_marches.date_signature_contrat" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>  
+                        </span>
+                                  
+                        <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_signature_contrat)}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-datepicker ng-model="passation_marches.date_os" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_os)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Prestataire</label>
+                            <md-select ng-model="passation_marches.id_prestataire"style="overflow: hidden;text-overflow: ellipsis;">
+                              <md-option ng-repeat="prestataire in vm.allprestataire" value="{{prestataire.id}}">
+                                                                    {{prestataire.nom}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!passation_marches.$edit">{{passation_marches.prestataire.nom}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="passation_marches.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Observation</label>
+                            <input name="observation" type="text" ng-model="passation_marches.observation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!passation_marches.$edit">{{passation_marches.observation}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!passation_marches.$edit" ng-click="vm.modifierPassation_marches(passation_marches)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!passation_marches.$edit" ng-click="vm.supprimerPassation_marches(passation_marches)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="passation_marches.$edit" ng-click="vm.annulerPassation_marches(passation_marches)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="passation_marches.$edit && passation_marches.date_lancement && passation_marches.date_remise && passation_marches.nbr_offre_recu && passation_marches.montant_moin_chere && passation_marches.date_rapport_evaluation && passation_marches.date_demande_ano_dpfi && passation_marches.date_ano_dpfi && passation_marches.notification_intention && passation_marches.date_notification_attribution && passation_marches.date_signature_contrat && passation_marches.date_os && passation_marches.id_prestataire && passation_marches.observation >''" ng-click="vm.ajoutPassation_marches(passation_marches,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN passation_marches ------>                   
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

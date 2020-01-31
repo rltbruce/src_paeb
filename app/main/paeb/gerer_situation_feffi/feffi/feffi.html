@@ -122,8 +122,8 @@
           </md-tab>
     <!-----FIN FEFFI ------>
     <!-----Debut membre ------>
-          <md-tab>
-              <md-tab-label ng-disabled="vm.stepOne==false">
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
@@ -189,7 +189,7 @@
                               </md-select>
                           </md-input-container>
                         </span>                          
-                        <span ng-if="!membre.$edit">{{membre.sexe}}</span>
+                        <span ng-if="!membre.$edit">{{vm.affichage_sexe(membre.sexe)}}</span>
                       </td>
                                 
                       <td>
