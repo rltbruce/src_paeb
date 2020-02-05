@@ -523,7 +523,8 @@
           var anterieur = 0;
           var prevu = (vm.allconvention_cife_detail[0].montant_total * vm.allcurenttranche_deblocage_feffi[0].pourcentage)/100;
           var cumul = prevu;
-          if (vm.alldemande_realimentation.length>0)
+
+          if (vm.alldemande_realimentation.length>1)
           {                 
               anterieur = vm.dernierdemande[0].prevu;           
               cumul = prevu + parseInt(vm.dernierdemande[0].cumul);
@@ -538,7 +539,7 @@
           item.anterieur = anterieur;
           item.cumul = cumul;
           item.reste = reste;
-          console.log(prevu + parseInt(vm.dernierdemande[0].cumul));
+          //console.log(prevu + parseInt(vm.dernierdemande[0].cumul));
           
           if(NouvelItemDemande_realimentation==false)
           {
@@ -776,7 +777,7 @@
                  getIdFile = String(data.response);
                 }
 
-                var name_file = vm.selectedItemConvention_cisco_feffi_entete.numero_convention+'_'+getIdFile+'_'+file.name.split('.')[0] ;
+                var name_file = vm.selectedItemConvention_cisco_feffi_entete.numero_convention+'_'+getIdFile+'_attachement' ;
                 
                 var fd = new FormData();
                 fd.append('file', file);

@@ -41,12 +41,7 @@
                 </span>
               </md-tab-label>
               
-              <md-tab-body>
-                <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterTete()" style="width:10%;">
-                      Nouveau
-                    </md-button>
-                </div>
+              <md-tab-body><br>
 
                 <div>        
                   <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
@@ -115,7 +110,7 @@
               
               <md-tab-body>
                 <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches()" style="width:10%;">
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPassation">
                       Nouveau
                     </md-button>
                 </div>
@@ -143,7 +138,7 @@
                                 
                       <td>
                         <span ng-if="passation_marches.$edit">
-                          <md-datepicker ng-model="passation_marches.date_remise" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          <md-datepicker ng-model="passation_marches.date_remise" md-placeholder="Date de signature" md-min-date="passation_marches.date_lancement" md-max-date="vm.date_now" required>                       
                           </md-datepicker>   
                         </span>
                                   
@@ -174,7 +169,7 @@
 
                       <td>
                         <span ng-if="passation_marches.$edit">
-                          <md-datepicker ng-model="passation_marches.date_rapport_evaluation" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          <md-datepicker ng-model="passation_marches.date_rapport_evaluation" md-placeholder="Date de signature" md-min-date="passation_marches.date_remise" md-max-date="vm.date_now" required>                       
                           </md-datepicker>
                         </span>                          
                         <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_rapport_evaluation)}}</span>
@@ -182,7 +177,7 @@
 
                       <td>
                         <span ng-if="passation_marches.$edit">
-                          <md-datepicker ng-model="passation_marches.date_demande_ano_dpfi" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          <md-datepicker ng-model="passation_marches.date_demande_ano_dpfi" md-placeholder="Date de signature" md-min-date="passation_marches.date_rapport_evaluation" md-max-date="vm.date_now" required>                       
                           </md-datepicker>
                         </span>                          
                         <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_demande_ano_dpfi)}}</span>
@@ -190,7 +185,7 @@
                                 
                       <td>
                         <span ng-if="passation_marches.$edit">
-                          <md-datepicker ng-model="passation_marches.date_ano_dpfi" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          <md-datepicker ng-model="passation_marches.date_ano_dpfi" md-placeholder="Date de signature" md-min-date="passation_marches.date_demande_ano_dpfi" md-max-date="vm.date_now" required>                       
                           </md-datepicker>  
                         </span>
                                   
@@ -199,18 +194,16 @@
                                 
                       <td>
                         <span ng-if="passation_marches.$edit">
-                          <md-input-container style="width:100%;display: flex !important;">
-                            <label>Notification intention</label>
-                            <input name="notification_intention" type="text" ng-model="passation_marches.notification_intention"/>
-                          </md-input-container>  
+                          <md-datepicker ng-model="passation_marches.notification_intention" md-placeholder="Date de notification" md-min-date="passation_marches.date_demande_ano_dpfi" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>  
                         </span>
                                   
-                        <span ng-if="!passation_marches.$edit">{{passation_marches.notification_intention}}</span>
+                        <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.notification_intention)}}</span>
                       </td>
 
                       <td>
                         <span ng-if="passation_marches.$edit">
-                          <md-datepicker ng-model="passation_marches.date_notification_attribution" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          <md-datepicker ng-model="passation_marches.date_notification_attribution" md-placeholder="Date de signature" md-min-date="passation_marches.notification_intention" md-max-date="vm.date_now" required>                       
                           </md-datepicker>
                         </span>                          
                         <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_notification_attribution)}}</span>
@@ -218,7 +211,7 @@
                                 
                       <td>
                         <span ng-if="passation_marches.$edit">
-                          <md-datepicker ng-model="passation_marches.date_signature_contrat" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          <md-datepicker ng-model="passation_marches.date_signature_contrat" md-placeholder="Date de signature" md-min-date="passation_marches.date_notification_attribution" md-max-date="vm.date_now" required>                       
                           </md-datepicker>  
                         </span>
                                   
@@ -227,7 +220,7 @@
 
                       <td>
                         <span ng-if="passation_marches.$edit">
-                          <md-datepicker ng-model="passation_marches.date_os" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          <md-datepicker ng-model="passation_marches.date_os" md-placeholder="Date de signature" md-min-date="passation_marches.date_signature_contrat" md-max-date="vm.date_now" required>                       
                           </md-datepicker>
                         </span>                          
                         <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_os)}}</span>
@@ -283,7 +276,103 @@
 
             </md-tab-body>
           </md-tab>
-    <!-----FIN passation_marches ------>                   
+    <!-----FIN passation_marches ------>
+
+    <!-----Debut mpe_soumissionaire ------>
+          <md-tab ng-disabled="vm.stepTwo==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">mpe_soumissionaire</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterMpe_soumissionaire()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.mpe_soumissionaire_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="mpe_soumissionaire in vm.allmpe_soumissionaire"  ng-class="{selected: mpe_soumissionaire.$selected}" ng-click="vm.selectionMpe_soumissionaire(mpe_soumissionaire)">
+                                
+                      <td>
+                        <span ng-if="mpe_soumissionaire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Prestataire</label>
+                            <md-select ng-model="mpe_soumissionaire.id_prestataire"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changePrestataire(mpe_soumissionaire)">
+                              <md-option ng-repeat="prestataire in vm.allprestataire" value="{{prestataire.id}}">
+                                                                    {{prestataire.nom}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span> 
+                        <span ng-if="!mpe_soumissionaire.$edit">{{mpe_soumissionaire.prestataire.nom}}</span>
+                      </td>          
+                      <td>
+                        <span ng-if="mpe_soumissionaire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Telephone</label>
+                            <input name="telephone" type="text" ng-model="mpe_soumissionaire.telephone" disabled/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!mpe_soumissionaire.$edit">{{mpe_soumissionaire.prestataire.telephone}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="mpe_soumissionaire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Siège</label>
+                            <input name="siege" type="text" ng-model="mpe_soumissionaire.siege" disabled/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!mpe_soumissionaire.$edit">{{mpe_soumissionaire.prestataire.siege}}</span>
+                      </td>                       
+                      <td>
+                        <a ng-if="!mpe_soumissionaire.$edit" ng-click="vm.modifierMpe_soumissionaire(mpe_soumissionaire)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!mpe_soumissionaire.$edit" ng-click="vm.supprimerMpe_soumissionaire(mpe_soumissionaire)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="mpe_soumissionaire.$edit" ng-click="vm.annulerMpe_soumissionaire(mpe_soumissionaire)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="mpe_soumissionaire.$edit && mpe_soumissionaire.id_prestataire>''" ng-click="vm.ajoutMpe_soumissionaire(mpe_soumissionaire,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN passation_marches ------>                    
       </div>
     </div>
     <!-- / CONTENT -->

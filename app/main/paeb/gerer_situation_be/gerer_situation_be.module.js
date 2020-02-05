@@ -3,12 +3,9 @@
     'use strict';
 
     angular
-        .module('app.paeb.gerer_situation_entreprise', [
-            'app.paeb.gerer_situation_entreprise.passation_marches',
-            'app.paeb.gerer_situation_entreprise.contrat_prestataire',
-            'app.paeb.gerer_situation_entreprise.demande_payement_prestataire',
-            'app.paeb.gerer_situation_entreprise.validation_demande_payement_prestataire',
-            'app.paeb.gerer_situation_entreprise.suivi_execution_travaux'
+        .module('app.paeb.gerer_situation_be', [
+            'app.paeb.gerer_situation_be.passation_marches_be',
+            'app.paeb.gerer_situation_be.contrat_be'
             ])       
         .config(config);
         var vs ;
@@ -16,8 +13,8 @@
     /** @ngInject */
     function config(msNavigationServiceProvider)
     {
-        msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise', {
-            title : 'Gerer situation entreprise',
+        msNavigationServiceProvider.saveItem('paeb.gerer_situation_be', {
+            title : 'Gerer situation be',
             icon  : 'icon-data',
             weight: 3
         });

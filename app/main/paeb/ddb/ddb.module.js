@@ -10,6 +10,7 @@
             'app.paeb.ddb.ecole',
             'app.paeb.ddb.plan_comptable',
             'app.paeb.ddb.prestataire',
+            'app.paeb.ddb.bureau_etude',
             'app.paeb.ddb.ouvrage',
             'app.paeb.ddb.acces_zone',
             'app.paeb.ddb.zone_subvention',

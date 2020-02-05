@@ -4,9 +4,9 @@
 
     angular
         .module('app.paeb.gerer_situation_entreprise.passation_marches')
-        .controller('Passation_marchesController', passation_marchesController);
+        .controller('Passation_marchesController', Passation_marchesController);
     /** @ngInject */
-    function passation_marchesController($mdDialog, $scope, apiFactory, $state)
+    function Passation_marchesController($mdDialog, $scope, apiFactory, $state)
     {
 		    var vm = this;
         vm.selectedItemConvention_entete = {} ;
@@ -18,12 +18,20 @@
         vm.selectedItemPassation_marches = {} ;
         vm.allpassation_marches = [] ;
 
+        vm.ajoutMpe_soumissionaire = ajoutMpe_soumissionaire ;
+        var NouvelItemMpe_soumissionaire=false;
+        var currentItemMpe_soumissionaire;
+        vm.selectedItemMpe_soumissionaire = {} ;
+        vm.allmpe_soumissionaire = [] ;
+
         vm.allprestataire = [] ;
 
         vm.stepOne = false;
         vm.stepTwo = false;
+        vm.stepThree = false;
 
         vm.showbuttonNouvPassation=true;
+        vm.date_now         = new Date();
 
         //style
         vm.dtOptions = {
@@ -63,6 +71,7 @@
         apiFactory.getAll("prestataire/index").then(function(result)
         {
             vm.allprestataire= result.data.response;
+            console.log(vm.allprestataire);
         });
 
         //fonction selection item entete convention cisco/feffi
@@ -86,6 +95,7 @@
               });
               vm.stepOne = true;
               vm.stepTwo = false;
+              vm.stepThree = false;
             }           
 
         };
@@ -222,7 +232,18 @@
         {
             vm.selectedItemPassation_marches = item;
             vm.nouvelItemPassation_marches   = item;
-            currentItemPassation_marches    = JSON.parse(JSON.stringify(vm.selectedItemPassation_marches)); 
+            currentItemPassation_marches    = JSON.parse(JSON.stringify(vm.selectedItemPassation_marches));
+           if(item.id!=0)
+           {
+            apiFactory.getAPIgeneraliserREST("mpe_soumissionaire/index",'id_passation_marches',vm.selectedItemPassation_marches.id).then(function(result)
+            {
+                vm.allmpe_soumissionaire = result.data.response;
+            });
+
+            vm.stepTwo = true;
+            vm.stepThree = false;
+           }
+             
         };
         $scope.$watch('vm.selectedItemPassation_marches', function()
         {
@@ -249,7 +270,7 @@
             item.observation   = vm.selectedItemPassation_marches.observation ;
             item.date_os   = vm.selectedItemPassation_marches.date_os ;
             item.date_remise   = vm.selectedItemPassation_marches.date_remise ;
-            item.date_ano_dpfi = vm.selectedItemPassation_marches.date_ano_dpfi ;
+            item.date_ano_dpfi = vm.selectedItemPassation_marches.date_ano_dpfi;
             item.nbr_offre_recu = vm.selectedItemPassation_marches.nbr_offre_recu;
             item.date_lancement = vm.selectedItemPassation_marches.date_lancement ;
             item.id_prestataire = vm.selectedItemPassation_marches.prestataire.id ; 
@@ -342,7 +363,7 @@
                     date_rapport_evaluation:convertionDate(new Date(passation_marches.date_rapport_evaluation)),
                     date_demande_ano_dpfi: convertionDate(new Date(passation_marches.date_demande_ano_dpfi)),
                     date_ano_dpfi: convertionDate(new Date(passation_marches.date_ano_dpfi)),
-                    notification_intention: passation_marches.notification_intention,
+                    notification_intention: convertionDate(new Date(passation_marches.notification_intention)),
                     date_notification_attribution: convertionDate(new Date(passation_marches.date_notification_attribution)),
                     date_signature_contrat: convertionDate(new Date(passation_marches.date_signature_contrat)),
                     id_prestataire: passation_marches.id_prestataire,
@@ -380,6 +401,7 @@
                         vm.selectedItemPassation_marches.$selected  = false;
                         vm.selectedItemPassation_marches.$edit      = false;
                         vm.selectedItemPassation_marches ={};
+                        vm.showbuttonNouvPassation= false;
                     }
                     else 
                     {    
@@ -387,7 +409,9 @@
                       {
                           return obj.id !== vm.selectedItemPassation_marches.id;
                       });
+                      vm.showbuttonNouvPassation= true;
                     }
+                    
                 }
                 else
                 {
@@ -397,7 +421,7 @@
                   passation_marches.date_ano_dpfi = passation_marches.date_ano_dpfi ;
                   passation_marches.nbr_offre_recu = passation_marches.nbr_offre_recu;
                   passation_marches.date_lancement = passation_marches.date_lancement ;
-                  passation_marches.prestataire = pres[0]; ; 
+                  passation_marches.prestataire = pres[0];
                   passation_marches.montant_moin_chere = passation_marches.montant_moin_chere ;
                   passation_marches.date_signature_contrat   = passation_marches.date_signature_contrat ;
                   passation_marches.date_demande_ano_dpfi    = passation_marches.date_demande_ano_dpfi ;
@@ -407,6 +431,7 @@
 
                   passation_marches.id  =   String(data.response);              
                   NouvelItemPassation_marches=false;
+                  vm.showbuttonNouvPassation= false;
             }
               passation_marches.$selected = false;
               passation_marches.$edit = false;
@@ -416,6 +441,237 @@
 
         }
 /**********************************fin passation_marches****************************************/
+
+/**********************************fin mpe_sousmissionnaire****************************************/
+
+//col table
+        vm.mpe_soumissionaire_column = [
+        {titre:"MPE sousmissionnaire"
+        },
+        {titre:"Telephone"
+        },
+        {titre:"Siège"
+        },
+        {titre:"Action"
+        }];
+        //Masque de saisi ajout
+        vm.ajouterMpe_soumissionaire = function ()
+        { 
+          if (NouvelItemMpe_soumissionaire == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              id_prestataire: '',
+              telephone: '',
+              siege: ''
+            };         
+            vm.allmpe_soumissionaire.push(items);
+            vm.allmpe_soumissionaire.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemMpe_soumissionaire = mem;
+              }
+            });
+
+            NouvelItemMpe_soumissionaire = true ;
+          }else
+          {
+            vm.showAlert('Ajout mpe_soumissionaire','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutMpe_soumissionaire(mpe_soumissionaire,suppression)
+        {
+            if (NouvelItemMpe_soumissionaire==false)
+            {
+                test_existanceMpe_soumissionaire (mpe_soumissionaire,suppression); 
+            } 
+            else
+            {
+                insert_in_baseMpe_soumissionaire(mpe_soumissionaire,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation mpe_soumissionaire
+        vm.annulerMpe_soumissionaire = function(item)
+        {
+          if (NouvelItemMpe_soumissionaire == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.id_prestataire   = currentItemMpe_soumissionaire.id_prestataire ;
+            item.telephone   = currentItemMpe_soumissionaire.telephone ;
+            item.siege   = currentItemMpe_soumissionaire.siege ;
+          }else
+          {
+            vm.allmpe_soumissionaire = vm.allmpe_soumissionaire.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemMpe_soumissionaire.id;
+            });
+          }
+
+          vm.selectedItemMpe_soumissionaire = {} ;
+          NouvelItemMpe_soumissionaire      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionMpe_soumissionaire= function (item)
+        {
+            vm.selectedItemMpe_soumissionaire = item;
+            vm.nouvelItemMpe_soumissionaire   = item;
+            currentItemMpe_soumissionaire    = JSON.parse(JSON.stringify(vm.selectedItemMpe_soumissionaire)); 
+        };
+        $scope.$watch('vm.selectedItemMpe_soumissionaire', function()
+        {
+             if (!vm.allmpe_soumissionaire) return;
+             vm.allmpe_soumissionaire.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemMpe_soumissionaire.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierMpe_soumissionaire = function(item)
+        {
+            NouvelItemMpe_soumissionaire = false ;
+            vm.selectedItemMpe_soumissionaire = item;
+            currentItemMpe_soumissionaire = angular.copy(vm.selectedItemMpe_soumissionaire);
+            $scope.vm.allmpe_soumissionaire.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.id_prestataire   = vm.selectedItemMpe_soumissionaire.id_prestataire ;
+            item.telephone   = vm.selectedItemMpe_soumissionaire.telephone ;
+            item.siege   = vm.selectedItemMpe_soumissionaire.siege ;
+        };
+
+        //fonction bouton suppression item Mpe_soumissionaire
+        vm.supprimerMpe_soumissionaire = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutMpe_soumissionaire(vm.selectedItemMpe_soumissionaire,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceMpe_soumissionaire (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var pass = vm.allmpe_soumissionaire.filter(function(obj)
+                {
+                   return obj.id == currentItemMpe_soumissionaire.id;
+                });
+                if(pass[0])
+                {
+                   if((pass[0].id_prestataire   != currentItemMpe_soumissionaire.id_prestataire ))                   
+                      { 
+                         insert_in_baseMpe_soumissionaire(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseMpe_soumissionaire(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseMpe_soumissionaire(mpe_soumissionaire,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemMpe_soumissionaire==false)
+            {
+                getId = vm.selectedItemMpe_soumissionaire.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    id_prestataire: mpe_soumissionaire.id_prestataire,
+                    id_passation_marches: vm.selectedItemPassation_marches.id               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("mpe_soumissionaire/index",datas, config).success(function (data)
+            {   
+                var press= vm.allprestataire.filter(function(obj)
+                {
+                    return obj.id == mpe_soumissionaire.id_prestataire;
+                });
+
+                if (NouvelItemMpe_soumissionaire == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {                        
+                        vm.selectedItemMpe_soumissionaire.prestataire = press[0];
+                        
+                        vm.selectedItemMpe_soumissionaire.$selected  = false;
+                        vm.selectedItemMpe_soumissionaire.$edit      = false;
+                        vm.selectedItemMpe_soumissionaire ={};
+                    }
+                    else 
+                    {    
+                      vm.allmpe_soumissionaire = vm.allmpe_soumissionaire.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemMpe_soumissionaire.id;
+                      });
+                    }
+                }
+                else
+                {
+                  mpe_soumissionaire.prestataire = press[0]; ; 
+
+                  mpe_soumissionaire.id  =   String(data.response);              
+                  NouvelItemMpe_soumissionaire=false;
+            }
+              mpe_soumissionaire.$selected = false;
+              mpe_soumissionaire.$edit = false;
+              vm.selectedItemMpe_soumissionaire = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.changePrestataire = function(item)
+        {
+          var pre = vm.allprestataire.filter(function(obj)
+          {
+              return obj.id == item.id_prestataire;
+          });
+         // console.log(pre[0]);
+          item.telephone=pre[0].telephone;
+          item.siege=pre[0].siege;
+        }
+/**********************************fin mpe_sousmissionnaire****************************************/
         //Alert
         vm.showAlert = function(titre,content)
         {

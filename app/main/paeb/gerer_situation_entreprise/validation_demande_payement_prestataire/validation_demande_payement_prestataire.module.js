@@ -3,38 +3,39 @@
     'use strict';
 
     angular
-        .module('app.paeb.gerer_subvention_financiere.validation_demande_deblocage_feffi', [])
+        .module('app.paeb.gerer_situation_entreprise.validation_demande_payement_prestataire', [])
         .run(notification)
         .config(config);
 
         var vs = {};
         var affichage;
+
     /** @ngInject */
     function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
     {
         // State
-        $stateProvider.state('app.paeb_gerer_subvention_financiere_validation_demande_deblocage_feffi', {
-            url      : '/donnees-de-base/gerer_subvention_financiere/validation_demande_deblocage_feffi',
+        $stateProvider.state('app.paeb_gerer_situation_entreprise_validation_demande_payement_prestataire', {
+            url      : '/donnees-de-base/validation_demande_payement_prestataire',
             views    : {
                 'content@app': {
-                    templateUrl: 'app/main/paeb/gerer_subvention_financiere/validation_demande_deblocage_feffi/validation_demande_deblocage_feffi.html',
-                    controller : 'Validation_demande_deblocage_feffiController as vm'
+                    templateUrl: 'app/main/paeb/gerer_situation_entreprise/validation_demande_payement_prestataire/validation_demande_payement_prestataire.html',
+                    controller : 'Validation_demande_payement_prestataireController as vm'
                 }
             },
-            bodyClass: 'validation_demande_deblocage_feffi',
+            bodyClass: 'validation_demande_payement_prestataire',
             data : {
               authorizer : true,
               permitted : ["USER","PERSONNEL","ADMIN"],
-              page: "Validation_demande_deblocage_feffi"
+              page: "validation_demande_payement_prestataire"
             }
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.validation_demande_deblocage_feffi', {
-            title: 'Validation Demande feffi',
-            icon  : 'icon-tile-four',
-            state: 'app.paeb_gerer_subvention_financiere_validation_demande_deblocage_feffi',
-            weight: 2,
+        msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.validation_demande_payement_prestataire', {
+            title: 'Validation demande',
+            icon  : 'icon-blur-radial',
+            state: 'app.paeb_gerer_situation_entreprise_validation_demande_payement_prestataire',
+			weight: 3,
             badge:vs,
             hidden:function()
             {
@@ -46,17 +47,12 @@
     function notification($cookieStore,apiFactory,$interval,loginService)
     {
         var id_user = $cookieStore.get('id');
-       
-        
-        
-
-        
 
         if (id_user > 0) 
         {
             var permission = [];
             
-            apiFactory.getDemande_realimentationByInvalide("demande_realimentation_feffi",Number(1)).then(function(result) 
+            apiFactory.getDemande_realimentationByInvalide("count_payement_prestataire",Number(1)).then(function(result) 
             {
                 var x = result.data.response;
                 vs.content = x[0].nombre ;
@@ -77,7 +73,7 @@
                 //**************************************************
                 if (id_user && !affichage) 
                 {
-                    $interval(function(){apiFactory.getDemande_realimentationByInvalide("demande_realimentation_feffi",Number(1),"getcoutInvalide").then(function(result) 
+                    $interval(function(){apiFactory.getDemande_realimentationByInvalide("count_payement_prestataire",Number(1)).then(function(result) 
                     {
                         var resultat = result.data.response;
 

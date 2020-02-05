@@ -15,7 +15,8 @@
             'app.paeb.gerer_subvention_financiere',
             'app.paeb.gerer_situation_feffi',
             'app.paeb.gerer_convention_ufp_daaf',
-            'app.paeb.gerer_situation_entreprise'
+            'app.paeb.gerer_situation_entreprise',
+            'app.paeb.gerer_situation_be'
         ])
         .config(config);
 

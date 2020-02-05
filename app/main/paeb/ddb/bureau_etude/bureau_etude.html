@@ -1,0 +1,132 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> bureau_etude</span>
+            </div>
+
+            <div class="title">bureau_etude</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- bureau_etude -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> bureau_etude</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add bureau_etude" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout bureau_etude</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="prestc in ::vm.bureau_etude_column">
+                  <div class="table-header">
+                    <span class="column-title">{{prestc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="bureau_etude in vm.allbureau_etude"  ng-class="{selected: bureau_etude.$selected}" ng-click="vm.selection(bureau_etude)">
+                          
+                <td>
+                  <span ng-if="bureau_etude.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Nom</label>
+                      <input name="Nom" type="text" ng-model="bureau_etude.nom"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!bureau_etude.$edit">{{bureau_etude.nom}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="bureau_etude.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Nif</label>
+                      <input name="Nif" type="text" ng-model="bureau_etude.nif"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!bureau_etude.$edit">{{bureau_etude.nif}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="bureau_etude.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Stat</label>
+                      <input name="Stat" type="text" ng-model="bureau_etude.stat"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!bureau_etude.$edit">{{bureau_etude.stat}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="bureau_etude.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Siege</label>
+                      <input name="Siege" type="text" ng-model="bureau_etude.siege"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!bureau_etude.$edit">{{bureau_etude.siege}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="bureau_etude.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Telephone</label>
+                      <input name="telephone" type="text" ng-model="bureau_etude.telephone"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!bureau_etude.$edit">{{bureau_etude.telephone}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!bureau_etude.$edit" ng-click="vm.modifier(bureau_etude)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!bureau_etude.$edit" ng-click="vm.supprimer(bureau_etude)" title="Supprimer">
+                    <span class="icon-delete" ></span>
+                  </a>
+                            
+                  <a ng-if="bureau_etude.$edit" ng-click="vm.annuler(bureau_etude)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="bureau_etude.$edit && bureau_etude.telephone && bureau_etude.nom && bureau_etude.nif&& bureau_etude.stat && bureau_etude.siege>''" ng-click="vm.ajout(bureau_etude,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>                   
+      </div>
+      <!-- / bureau_etude -->
+    </div>
+    <!-- / CONTENT -->
+  </div>
