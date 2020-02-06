@@ -256,6 +256,16 @@
                           </span>                          
                           <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.montant_total}}</span>
                         </td>
+
+                        <td>
+                          <span ng-if="convention_cife_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Avancement</label>
+                              <input name="avancement" type="number" ng-model="convention_cife_detail.avancement" disabled/>
+                            </md-input-container>
+                          </span>                          
+                          <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.avancement}}</span>
+                        </td>
                                                      
                         <td>  
                           <a ng-if="!convention_cife_detail.$edit" ng-click="vm.modifierDetail(convention_cife_detail)" title="Modifier">

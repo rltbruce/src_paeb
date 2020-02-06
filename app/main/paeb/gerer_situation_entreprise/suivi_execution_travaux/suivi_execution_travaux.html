@@ -327,13 +327,7 @@
                 </span>
               </md-tab-label>
               
-              <md-tab-body>
-                <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterBatiment_construction()" style="width:10%;">
-                      Nouveau
-                    </md-button>
-                </div>
-
+              <md-tab-body><br>
                 <div>
                   <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                     <thead>
@@ -350,47 +344,19 @@
                       <tr ng-repeat="batiment_construction in vm.allbatiment_construction"  ng-class="{selected: batiment_construction.$selected}" ng-click="vm.selectionBatiment_construction(batiment_construction)">
 
                         <td>
-                          <span ng-if="batiment_construction.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Batiment ouvrage</label>
-                              <md-select ng-model="batiment_construction.id_batiment_ouvrage"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.modification_batiment_ouvrage(batiment_construction)">
-                                <md-option ng-repeat="batiment_ouvrage in vm.allbatiment_ouvrage" value="{{batiment_ouvrage.id}}">
-                                                                    {{batiment_ouvrage.libelle}}
-                                </md-option>
-                              </md-select>
-                            </md-input-container>  
-                          </span>
-                          <span ng-if="!batiment_construction.$edit">{{batiment_construction.batiment_ouvrage.libelle}}</span>
+                          <span>{{batiment_construction.batiment_ouvrage.libelle}}</span>
                         </td>
 
-                        <td>
-                          <span ng-if="batiment_construction.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Cout maitrise oeuvre</label>
-                              <input name="cout_maitrise_oeuvre" type="number" ng-model="batiment_construction.cout_maitrise_oeuvre" disabled />
-                            </md-input-container>
-                          </span>                          
-                          <span ng-if="!batiment_construction.$edit">{{batiment_construction.batiment_ouvrage.cout_maitrise_oeuvre}}</span>
+                        <td>                         
+                          <span>{{batiment_construction.batiment_ouvrage.cout_maitrise_oeuvre}}</span>
                         </td>
 
-                        <td>
-                          <span ng-if="batiment_construction.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Cout batiment</label>
-                              <input name="cout_batiment" type="number" ng-model="batiment_construction.cout_batiment" disabled />
-                            </md-input-container>
-                          </span>                          
-                          <span ng-if="!batiment_construction.$edit">{{batiment_construction.batiment_ouvrage.cout_batiment}}</span>
+                        <td>                         
+                          <span>{{batiment_construction.batiment_ouvrage.cout_batiment}}</span>
                         </td>
 
-                        <td>
-                          <span ng-if="batiment_construction.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Cout sous projet</label>
-                              <input name="cout_sous_projet" type="number" ng-model="batiment_construction.cout_sous_projet" disabled />
-                            </md-input-container>
-                          </span>                          
-                          <span ng-if="!batiment_construction.$edit">{{batiment_construction.batiment_ouvrage.cout_sous_projet}}</span>
+                        <td>                         
+                          <span>{{batiment_construction.batiment_ouvrage.cout_sous_projet}}</span>
                         </td>
 
                         <td>
@@ -422,15 +388,11 @@
                             <span class="icon-table-edit"></span>
                           </a>
                                     
-                          <a ng-if="!batiment_construction.$edit" ng-click="vm.supprimerBatiment_construction(batiment_construction)" title="Supprimer">
-                            <span class="icon-delete"></span>
-                          </a>
-                                    
                           <a ng-if="batiment_construction.$edit" ng-click="vm.annulerBatiment_construction(batiment_construction)" title="Annuler modification">
                             <span class="icon-cancel"></span>
                           </a>
                                     
-                          <a ng-if="batiment_construction.$edit && batiment_construction.id_batiment_ouvrage &&  batiment_construction.id_attachement_batiment>''" ng-click="vm.ajoutBatiment_construction(batiment_construction,0)" title="Sauvegarder">
+                          <a ng-if="batiment_construction.$edit &&  batiment_construction.id_attachement_batiment>''" ng-click="vm.ajoutBatiment_construction(batiment_construction,0)" title="Sauvegarder">
                             <span class="icon-content-save"></span>
                           </a>
                         </td>

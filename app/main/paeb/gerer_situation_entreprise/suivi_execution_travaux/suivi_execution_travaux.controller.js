@@ -21,7 +21,12 @@
         vm.selectedItemConvention_detail = {} ;
         vm.allconvention_detail = [] ;
 
-        vm.ajoutAvenant_prestataire = ajoutAvenant_prestataire ;
+        vm.ajoutBatiment_construction = ajoutBatiment_construction ;
+        vm.selectedItemBatiment_construction = {} ;
+        vm.allbatiment_construction  = [] ;
+        var currentItemBatiment_construction;
+
+        //vm.ajoutAvenant_prestataire = ajoutAvenant_prestataire ;
         var NouvelItemAvenant_prestataire=false;
         var currentItemAvenant_prestataire;
         vm.selectedItemAvenant_prestataire = {} ;
@@ -210,166 +215,136 @@
 
 /**********************************debut avenant_prestataire****************************************/
 
-//col table
-        vm.avenant_prestataire_column = [
-        {titre:"Description"
+/*****************debut batiment construction***************/
+      //col table
+        vm.batiment_construction_column = [        
+        {
+          titre:"Batiment"
         },
-        {titre:"Cout batiment"
+        {
+          titre:"cout maitrise oeuvre"
         },
-        {titre:"Cout latrine"
+        {
+          titre:"Cout batiment"
         },
-        {titre:"Cout mobilier"
+        {
+          titre:"Cout sous projet"
         },
-        {titre:"Date signature"
+        {
+          titre:"Attachement"
         },
-        {titre:"Action"
+        {
+          titre:"Ponderation"
+        },
+        {
+          titre:"Action"
         }];
-        //Masque de saisi ajout
-        vm.ajouterAvenant_prestataire = function ()
-        { 
-          if (NouvelItemAvenant_prestataire == false)
-          {
-            var items = {
-              $edit: true,
-              $selected: true,
-              id: '0',         
-              description: '',
-              num_contrat: '',
-              cout_batiment: 0,
-              cout_latrine: 0,
-              cout_mobilier:0,
-              date_signature:'',
-            };         
-            vm.allavenant_prestataire.push(items);
-            vm.allavenant_prestataire.forEach(function(mem)
-            {
-              if(mem.$selected==true)
-              {
-                vm.selectedItemAvenant_prestataire = mem;
-              }
-            });
 
-            NouvelItemAvenant_prestataire = true ;
-          }else
-          {
-            vm.showAlert('Ajout avenant_prestataire','Un formulaire d\'ajout est déjà ouvert!!!');
-          }                
-                      
-        };
+        //recuperation donnée batiment ouvrage
+        apiFactory.getAll("batiment_ouvrage/index").then(function(result)
+        {
+          vm.allbatiment_ouvrage= result.data.response;
+        });
+
 
         //fonction ajout dans bdd
-        function ajoutAvenant_prestataire(avenant_prestataire,suppression)
+        function ajoutBatiment_construction(batiment_construction,suppression)
         {
-            if (NouvelItemAvenant_prestataire==false)
-            {
-                test_existanceAvenant_prestataire (avenant_prestataire,suppression); 
-            } 
-            else
-            {
-                insert_in_baseAvenant_prestataire(avenant_prestataire,suppression);
-            }
+          test_existanceBatiment_construction (batiment_construction,suppression); 
+            
         }
 
-        //fonction de bouton d'annulation avenant_prestataire
-        vm.annulerAvenant_prestataire = function(item)
+        //fonction de bouton d'annulation batiment_construction
+        vm.annulerBatiment_construction = function(item)
         {
-          if (NouvelItemAvenant_prestataire == false)
-          {
-            item.$edit = false;
-            item.$selected = false;
-            item.description   = currentItemAvenant_prestataire.description ;
-            item.num_contrat   = currentItemAvenant_prestataire.num_contrat ;
-            item.cout_batiment   = currentItemAvenant_prestataire.cout_batiment ;
-            item.cout_latrine = currentItemAvenant_prestataire.cout_latrine ;
-            item.cout_mobilier = currentItemAvenant_prestataire.cout_mobilier;
-            item.date_signature = currentItemAvenant_prestataire.date_signature ;
-          }else
-          {
-            vm.allavenant_prestataire = vm.allavenant_prestataire.filter(function(obj)
-            {
-                return obj.id !== vm.selectedItemAvenant_prestataire.id;
-            });
-          }
-
-          vm.selectedItemAvenant_prestataire = {} ;
-          NouvelItemAvenant_prestataire      = false;
+              item.$edit = false;
+              item.$selected = false;
+              item.id_batiment_ouvrage = currentItemBatiment_construction.id_batiment_ouvrage;
+              item.cout_maitrise_oeuvre    = currentItemBatiment_construction.cout_maitrise_oeuvre;
+              item.cout_sous_projet = currentItemBatiment_construction.cout_sous_projet;
+              item.cout_batiment = currentItemBatiment_construction.cout_batiment;
+              item.ponderation_batiment = currentItemBatiment_construction.ponderation_batiment;
+              item.id_attachement_batiment    = currentItemBatiment_construction.id_attachement_batiment; 
+        
+          vm.selectedItemBatiment_construction = {} ;
           
         };
 
-        //fonction selection item region
-        vm.selectionAvenant_prestataire= function (item)
+        //fonction selection item batiment construction cisco/feffi
+        vm.selectionBatiment_construction = function (item)
         {
-            vm.selectedItemAvenant_prestataire = item;
-            vm.nouvelItemAvenant_prestataire   = item;
-            currentItemAvenant_prestataire    = JSON.parse(JSON.stringify(vm.selectedItemAvenant_prestataire)); 
+            vm.selectedItemBatiment_construction = item;
+            currentItemBatiment_construction     = JSON.parse(JSON.stringify(vm.selectedItemBatiment_construction));
+           // vm.allconvention= [] ;            
+            //recuperation donnée convention
+            if (vm.selectedItemBatiment_construction.id!=0)
+            {
+              apiFactory.getAPIgeneraliserREST("latrine_construction/index",'id_batiment_construction',vm.selectedItemBatiment_construction.id).then(function(result)
+              {
+                  vm.alllatrine_construction = result.data.response;
+                  
+              });
+
+              apiFactory.getAPIgeneraliserREST("mobilier_construction/index",'id_batiment_construction',vm.selectedItemBatiment_construction.id).then(function(result)
+              {
+                  vm.allmobilier_construction = result.data.response;
+                  
+              });
+              vm.stepThree = true;
+              vm.stepFor = false;
+            }           
+
         };
-        $scope.$watch('vm.selectedItemAvenant_prestataire', function()
+        $scope.$watch('vm.selectedItemBatiment_construction', function()
         {
-             if (!vm.allavenant_prestataire) return;
-             vm.allavenant_prestataire.forEach(function(item)
+             if (!vm.allbatiment_construction) return;
+             vm.allbatiment_construction.forEach(function(item)
              {
                 item.$selected = false;
              });
-             vm.selectedItemAvenant_prestataire.$selected = true;
+             vm.selectedItemBatiment_construction.$selected = true;
         });
 
-        //fonction masque de saisie modification item feffi
-        vm.modifierAvenant_prestataire = function(item)
+        //fonction masque de saisie modification item batiment construction
+        vm.modifierBatiment_construction = function(item)
         {
-            NouvelItemAvenant_prestataire = false ;
-            vm.selectedItemAvenant_prestataire = item;
-            currentItemAvenant_prestataire = angular.copy(vm.selectedItemAvenant_prestataire);
-            $scope.vm.allavenant_prestataire.forEach(function(mem) {
-              mem.$edit = false;
+            //NouvelItemBatiment_construction = false ;
+            vm.selectedItemBatiment_construction = item;
+            currentItemBatiment_construction = angular.copy(vm.selectedItemBatiment_construction);
+            $scope.vm.allbatiment_construction.forEach(function(ouv) {
+              ouv.$edit = false;
             });
 
             item.$edit = true;
             item.$selected = true;
-            item.description   = vm.selectedItemAvenant_prestataire.description ;
-            item.num_contrat   = vm.selectedItemAvenant_prestataire.num_contrat ;
-            item.cout_batiment   = vm.selectedItemAvenant_prestataire.cout_batiment ;
-            item.cout_latrine = vm.selectedItemAvenant_prestataire.cout_latrine;
-            item.cout_mobilier = vm.selectedItemAvenant_prestataire.cout_mobilier;
-            item.date_signature = vm.selectedItemAvenant_prestataire.date_signature ;
+             
+            //recuperation donnée attachement
+            apiFactory.getAPIgeneraliserREST("attachement_batiment/index","id_batiment_ouvrage",item.batiment_ouvrage.id).then(function(result)
+            {
+              vm.allattachement_batiment= result.data.response;
+              item.id_attachement_batiment = vm.selectedItemBatiment_construction.attachement_batiment.id;
+            });
+
+           item.ponderation_batiment = parseInt(vm.selectedItemBatiment_construction.attachement_batiment.ponderation_batiment);
+            
+
+            
         };
 
-        //fonction bouton suppression item Avenant_prestataire
-        vm.supprimerAvenant_prestataire = function()
-        {
-            var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-              $mdDialog.show(confirm).then(function() {
-                vm.ajoutAvenant_prestataire(vm.selectedItemAvenant_prestataire,1);
-              }, function() {
-                //alert('rien');
-              });
-        };
-
-        //function teste s'il existe une modification item feffi
-        function test_existanceAvenant_prestataire (item,suppression)
+        //function teste s'il existe une modification item entente convention cisco feffi
+        function test_existanceBatiment_construction (item,suppression)
         {          
             if (suppression!=1)
             {
-               var pass = vm.allavenant_prestataire.filter(function(obj)
+               var ouv_c = vm.allbatiment_construction.filter(function(obj)
                 {
-                   return obj.id == currentItemAvenant_prestataire.id;
+                   return obj.id == currentItemBatiment_construction.id;
                 });
-                if(pass[0])
+                if(ouv_c[0])
                 {
-                   if((pass[0].description   != currentItemAvenant_prestataire.description )
-                    || (pass[0].num_contrat  != currentItemAvenant_prestataire.num_contrat)
-                    || (pass[0].cout_batiment   != currentItemAvenant_prestataire.cout_batiment )
-                    || (pass[0].cout_latrine != currentItemAvenant_prestataire.cout_latrine )
-                    || (pass[0].cout_mobilier != currentItemAvenant_prestataire.cout_mobilier)
-                    || (pass[0].date_signature != currentItemAvenant_prestataire.date_signature ))                   
+                   if((ouv_c[0].id_attachement_batiment!=currentItemBatiment_construction.id_attachement_batiment))                    
                       { 
-                         insert_in_baseAvenant_prestataire(item,suppression);
+                        insert_in_baseBatiment_construction(item,suppression);
                       }
                       else
                       {  
@@ -378,11 +353,11 @@
                       }
                 }
             } else
-                  insert_in_baseAvenant_prestataire(item,suppression);
+                  insert_in_baseBatiment_construction(item,suppression);
         }
 
-        //insertion ou mise a jours ou suppression item dans bdd feffi
-        function insert_in_baseAvenant_prestataire(avenant_prestataire,suppression)
+        //insertion ou mise a jours ou suppression item dans bdd convention
+        function insert_in_baseBatiment_construction(batiment_construction,suppression)
         {
             //add
             var config =
@@ -390,90 +365,51 @@
                 headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
             };
             
-            var getId = 0;
-            if (NouvelItemAvenant_prestataire==false)
-            {
-                getId = vm.selectedItemAvenant_prestataire.id; 
-            } 
-            
             var datas = $.param({
                     supprimer: suppression,
-                    id:        getId,
-                    description: avenant_prestataire.description,
-                    num_contrat: avenant_prestataire.num_contrat,
-                    cout_batiment: avenant_prestataire.cout_batiment,
-                    cout_latrine: avenant_prestataire.cout_latrine,
-                    cout_mobilier:avenant_prestataire.cout_mobilier,
-                    date_signature:convertionDate(new Date(avenant_prestataire.date_signature)),
-                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id               
+                    id:        vm.selectedItemBatiment_construction.id,
+                    id_batiment_ouvrage: batiment_construction.batiment_ouvrage.id,
+                    id_attachement_batiment: batiment_construction.id_attachement_batiment,
+                    id_convention_detail: vm.selectedItemConvention_detail.id
+
                 });
                 console.log(datas);
                 //factory
-            apiFactory.add("avenant_prestataire/index",datas, config).success(function (data)
-            {   
-                var press= vm.allprestataire.filter(function(obj)
+            apiFactory.add("batiment_construction/index",datas, config).success(function (data)
+            {
+                var atta_b = vm.allattachement_batiment.filter(function(obj)
                 {
-                    return obj.id == avenant_prestataire.id_prestataire;
+                    return obj.id == batiment_construction.id_attachement_batiment;
                 });
-
-                if (NouvelItemAvenant_prestataire == false)
-                {
-                    // Update or delete: id exclu                 
-                    if(suppression==0)
-                    {                        
-                        vm.selectedItemAvenant_prestataire.prestataire = press[0];
-
-                        vm.selectedItemAvenant_prestataire.description   = avenant_prestataire.description ;
-                        vm.selectedItemAvenant_prestataire.num_contrat   = avenant_prestataire.num_contrat ;
-                        vm.selectedItemAvenant_prestataire.cout_batiment   = avenant_prestataire.cout_batiment ;
-                        vm.selectedItemAvenant_prestataire.cout_mobilier = avenant_prestataire.cout_mobilier ;
-                        vm.selectedItemAvenant_prestataire.cout_latrine = avenant_prestataire.cout_latrine;
-                        vm.selectedItemAvenant_prestataire.date_signature = avenant_prestataire.date_signature ;
-                        
-                        vm.selectedItemAvenant_prestataire.$selected  = false;
-                        vm.selectedItemAvenant_prestataire.$edit      = false;
-                        vm.selectedItemAvenant_prestataire ={};
-                    }
-                    else 
-                    {    
-                      vm.allavenant_prestataire = vm.allavenant_prestataire.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemAvenant_prestataire.id;
-                      });
-                    }
-                }
-                else
-                {
-                  avenant_prestataire.prestataire = press[0];
-
-                  avenant_prestataire.description   = avenant_prestataire.description ;
-                  avenant_prestataire.cout_batiment   = avenant_prestataire.cout_batiment ;
-                  avenant_prestataire.cout_latrine   = avenant_prestataire.cout_latrine ;
-                  avenant_prestataire.cout_mobilier = avenant_prestataire.cout_mobilier ;
-                  avenant_prestataire.date_signature = avenant_prestataire.date_signature; 
-
-                  avenant_prestataire.id  =   String(data.response);              
-                  NouvelItemAvenant_prestataire=false;
-                }
-              avenant_prestataire.$selected = false;
-              avenant_prestataire.$edit = false;
-              vm.selectedItemAvenant_prestataire = {};
+                // Update: id exclu
+                vm.selectedItemBatiment_construction.attachement_batiment   = atta_b[0];
+                vm.selectedItemBatiment_construction.$selected  = false;
+                vm.selectedItemBatiment_construction.$edit      = false;
+                vm.selectedItemBatiment_construction ={};
+               
+              batiment_construction.$selected = false;
+              batiment_construction.$edit = false;
+              vm.selectedItemBatiment_construction = {};
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
+
         }
 
-       /* vm.changePrestataire = function(item)
+        vm.modification_attachement_batiment = function(item)
         {
-          var pre = vm.allprestataire.filter(function(obj)
-          {
-              return obj.id == item.id_prestataire;
-          });
-         // console.log(pre[0]);
-          item.telephone=pre[0].telephone;
-          item.siege=pre[0].siege;
-        }*/
-/**********************************fin mpe_sousmissionnaire****************************************/
+          var atta = vm.allattachement_batiment.filter(function(obj)
+            {
+                return obj.id == item.id_attachement_batiment;
+            });
+
+            item.ponderation_batiment = parseInt(atta[0].ponderation_batiment);
+        }
+
+        
+
+      /*****************fin batiment construction***************/
+      
         //Alert
         vm.showAlert = function(titre,content)
         {

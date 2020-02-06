@@ -424,6 +424,9 @@
           titre:"Cout éstimé"
         },
         {
+          titre:"Avancement"
+        },
+        {
           titre:"Action"
         }];      
         
@@ -450,6 +453,7 @@
               id: '0',
               intitule:'',
               montant_total:0,
+              avancement:0,
               id_zone_subvention:'',
               id_acces_zone: ''
             };         
@@ -554,7 +558,8 @@
             item.$selected = true;
 
             item.intitule = vm.selectedItemDetail.intitule ;
-            item.montant_total = parseInt(vm.selectedItemDetail.montant_total) ;
+            item.montant_total = parseInt(vm.selectedItemDetail.montant_total);
+            item.avancement = parseInt(vm.selectedItemDetail.avancement);
             item.id_zone_subvention = vm.selectedItemDetail.zone_subvention.id ;
             item.id_acces_zone = vm.selectedItemDetail.acces_zone.id ;
         };
@@ -636,6 +641,7 @@
                     supprimer: suppression,
                     id:        getId,      
                     montant_total:    convention_cife_detail.montant_total,
+                    avancement:    convention_cife_detail.avancement,
                     intitule:    convention_cife_detail.intitule,
                     id_zone_subvention: convention_cife_detail.id_zone_subvention,
                     id_acces_zone: convention_cife_detail.id_acces_zone, 
@@ -662,6 +668,7 @@
                     if(suppression==0)
                     {
                         vm.selectedItemDetail.intitule  = convention_cife_detail.intitule;
+                        vm.selectedItemDetail.avancement  = convention_cife_detail.avancement;
                         vm.selectedItemDetail.montant_total  = convention_cife_detail.montant_total;
                         vm.selectedItemDetail.zone_subvention   = zosub[0];
                         vm.selectedItemDetail.acces_zone   = azone[0];
@@ -683,6 +690,7 @@
                 {
                   
                   convention_cife_detail.intitule= convention_cife_detail.intitule;
+                  convention_cife_detail.avancement= convention_cife_detail.avancement;
                   convention_cife_detail.montant_total= convention_cife_detail.montant_total;
                  
                   convention_cife_detail.zone_subvention = zosub[0];
@@ -938,7 +946,7 @@
             item.cout_maitrise_oeuvre = parseInt(vm.selectedItemBatiment_construction.batiment_ouvrage.cout_maitrise_oeuvre);
             item.cout_batiment = parseInt(vm.selectedItemBatiment_construction.batiment_ouvrage.cout_batiment);
             item.cout_sous_projet = parseInt(vm.selectedItemBatiment_construction.batiment_ouvrage.cout_sous_projet);
-            item.ponderation = parseInt(vm.selectedItemBatiment_construction.attachement_batiment.ponderation);
+            item.ponderation = parseInt(vm.selectedItemBatiment_construction.attachement_batiment.ponderation_batiment);
             
 
             
@@ -1146,6 +1154,7 @@
                     supprimer: suppression,
                     id:        getId,      
                     montant_total:    montant_total,
+                    avancement:    convention_cife_detail.avancement,
                     intitule:    convention_cife_detail.intitule,
                     id_zone_subvention: convention_cife_detail.zone_subvention.id,
                     id_acces_zone: convention_cife_detail.acces_zone.id, 
