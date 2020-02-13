@@ -27,7 +27,7 @@
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.ddb.ouvrage', {
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.ouvrage', {
             title: 'Ouvrage',
             icon  : 'icon-clipboard-text',
             state: 'app.paeb_ddb_ouvrage',

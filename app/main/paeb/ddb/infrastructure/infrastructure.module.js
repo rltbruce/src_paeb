@@ -27,7 +27,7 @@
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.ddb.infrastructure', {
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.infrastructure', {
             title: 'Infrastructure',
             icon  : 'icon-clipboard-text',
             state: 'app.paeb_ddb_infrastructure',

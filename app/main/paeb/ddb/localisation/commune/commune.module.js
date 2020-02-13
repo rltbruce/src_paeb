@@ -27,7 +27,7 @@
 
         });
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.ddb.localisation.commune', {
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.localisation.commune', {
             title: 'Commune',
             icon  : 'icon-map-marker',
             state: 'app.population_ddb_localisation_commune',

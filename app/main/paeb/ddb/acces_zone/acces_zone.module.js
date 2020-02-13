@@ -27,7 +27,7 @@
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.ddb.acces_zone', {
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.acces_zone', {
             title: 'Acces zone',
             icon  : 'icon-clipboard-text',
             state: 'app.paeb_ddb_acces_zone',
