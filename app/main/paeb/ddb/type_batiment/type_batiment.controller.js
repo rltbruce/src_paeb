@@ -3,10 +3,10 @@
     'use strict';
 
     angular
-        .module('app.paeb.ddb.ouvrage')
-        .controller('OuvrageController', OuvrageController);
+        .module('app.paeb.ddb.type_batiment')
+        .controller('Type_batimentController', Type_batimentController);
     /** @ngInject */
-    function OuvrageController($mdDialog, $scope, apiFactory, $state)
+    function Type_batimentController($mdDialog, $scope, apiFactory, $state)
     {
 		   var vm = this;
         var NouvelItem=false;
@@ -33,7 +33,7 @@ vm.mainGridOptions = {
          transport: {
               read: function (e)
               {
-                apiFactory.getAll("batiment_ouvrage/index").then(function(result)
+                apiFactory.getAll("type_batiment/index").then(function(result)
                 {
                     e.success(result.data.response)
                     console.log(result.data.response);
@@ -60,7 +60,7 @@ vm.mainGridOptions = {
                           id_acces_zone:        e.data.models[0].acces_zone.id               
                       });
                   
-                  apiFactory.add("batiment_ouvrage/index",datas, config).success(function (data)
+                  apiFactory.add("type_batiment/index",datas, config).success(function (data)
                   {                
                     e.success(e.data.models); 
                   }).error(function (data)
@@ -74,7 +74,7 @@ vm.mainGridOptions = {
                  
                   var datas = $.param({supprimer: 1,id: e.data.models[0].id});
                   
-                  apiFactory.add("batiment_ouvrage/index",datas, config).success(function (data)
+                  apiFactory.add("type_batiment/index",datas, config).success(function (data)
                   {                
                     e.success(e.data.models); 
                   }).error(function (data)
@@ -100,7 +100,7 @@ vm.mainGridOptions = {
                           id_acces_zone:        e.data.models[0].acces_zone                
                       });
                   console.log(e.data.models[0]);
-                  apiFactory.add("batiment_ouvrage/index",datas, config).success(function (data)
+                  apiFactory.add("type_batiment/index",datas, config).success(function (data)
                   { 
                     e.data.models[0].id = String(data.response);
                     var itemsAcces_zone =
@@ -275,7 +275,7 @@ vm.mainGridOptions = {
             });
           }
       
-   vm.allannexe_latrine = function(id_batiment_ouvrage) {
+   /*vm.allannexe_latrine = function(id_type_batiment) {
         return {
           dataSource:
           {
@@ -283,7 +283,7 @@ vm.mainGridOptions = {
             transport: {
               read: function (e)
               {
-                apiFactory.getAPIgeneraliserREST("annexe_latrine/index","id_batiment_ouvrage",id_batiment_ouvrage).then(function(result)
+                apiFactory.getAPIgeneraliserREST("annexe_latrine/index","id_type_batiment",id_type_batiment).then(function(result)
                 {
                     e.success(result.data.response)
                 }, function error(result)
@@ -304,7 +304,7 @@ vm.mainGridOptions = {
                           nbr_box_latrine:   e.data.models[0].nbr_box_latrine,
                           nbr_point_eau:   e.data.models[0].nbr_point_eau,
                           cout_latrine: e.data.models[0].cout_latrine,
-                          id_batiment_ouvrage: e.data.models[0].batiment_ouvrage.id               
+                          id_type_batiment: e.data.models[0].type_batiment.id               
                       });
                   console.log(datas);
                   apiFactory.add("annexe_latrine/index",datas, config).success(function (data)
@@ -342,13 +342,13 @@ vm.mainGridOptions = {
                           nbr_box_latrine:   e.data.models[0].nbr_box_latrine,
                           nbr_point_eau:   e.data.models[0].nbr_point_eau,
                           cout_latrine:  e.data.models[0].cout_latrine,
-                          id_batiment_ouvrage:   id_batiment_ouvrage               
+                          id_type_batiment:   id_type_batiment               
                       });
                   
                   apiFactory.add("annexe_latrine/index",datas, config).success(function (data)
                   { 
                     e.data.models[0].id = String(data.response);
-                    e.data.models[0].batiment_ouvrage={id:id_batiment_ouvrage};              
+                    e.data.models[0].type_batiment={id:id_type_batiment};              
                     e.success(e.data.models); 
                   }).error(function (data)
                     {
@@ -451,7 +451,7 @@ vm.mainGridOptions = {
       };
       
 
-      vm.allannexe_mobilier = function(id_batiment_ouvrage) {
+      vm.allannexe_mobilier = function(id_type_batiment) {
         return {
           dataSource:
           {
@@ -459,7 +459,7 @@ vm.mainGridOptions = {
             transport: {
               read: function (e)
               {
-                apiFactory.getAPIgeneraliserREST("annexe_mobilier/index","id_batiment_ouvrage",id_batiment_ouvrage).then(function(result)
+                apiFactory.getAPIgeneraliserREST("annexe_mobilier/index","id_type_batiment",id_type_batiment).then(function(result)
                 {
                     e.success(result.data.response)
                 }, function error(result)
@@ -481,7 +481,7 @@ vm.mainGridOptions = {
                           nbr_table_maitre: e.data.models[0].nbr_table_maitre,
                           nbr_chais_maitre: e.data.models[0].nbr_chais_maitre,
                           cout_mobilier: e.data.models[0].cout_mobilier,
-                          id_batiment_ouvrage: e.data.models[0].batiment_ouvrage.id               
+                          id_type_batiment: e.data.models[0].type_batiment.id               
                       });
                   
                   apiFactory.add("annexe_mobilier/index",datas, config).success(function (data)
@@ -520,13 +520,13 @@ vm.mainGridOptions = {
                           nbr_table_maitre: e.data.models[0].nbr_table_maitre,
                           nbr_chais_maitre: e.data.models[0].nbr_chais_maitre,
                           cout_mobilier:  e.data.models[0].cout_mobilier,
-                          id_batiment_ouvrage:   id_batiment_ouvrage               
+                          id_type_batiment:   id_type_batiment               
                       });
                   
                   apiFactory.add("annexe_mobilier/index",datas, config).success(function (data)
                   { 
                     e.data.models[0].id = String(data.response);
-                    e.data.models[0].batiment_ouvrage={id:id_batiment_ouvrage};              
+                    e.data.models[0].type_batiment={id:id_type_batiment};              
                     e.success(e.data.models); 
                   }).error(function (data)
                     {
@@ -632,9 +632,9 @@ vm.mainGridOptions = {
                   },{name: "destroy", text: ""}]
             }]
         };
-      };
+      };*/
 
-      vm.allattachement_batiment = function(id_batiment_ouvrage) {
+      vm.allattachement_batiment = function(id_type_batiment) {
         return {
           dataSource:
           {
@@ -642,7 +642,7 @@ vm.mainGridOptions = {
             transport: {
               read: function (e)
               {
-                apiFactory.getAPIgeneraliserREST("attachement_batiment/index","id_batiment_ouvrage",id_batiment_ouvrage).then(function(result)
+                apiFactory.getAPIgeneraliserREST("attachement_batiment/index","id_type_batiment",id_type_batiment).then(function(result)
                 {
                     e.success(result.data.response)
                 }, function error(result)
@@ -660,7 +660,7 @@ vm.mainGridOptions = {
                           libelle:   e.data.models[0].libelle,
                           description: e.data.models[0].description,
                           ponderation_batiment: e.data.models[0].ponderation_batiment,
-                          id_batiment_ouvrage: e.data.models[0].batiment_ouvrage.id               
+                          id_type_batiment: e.data.models[0].type_batiment.id               
                       });
                   
                   apiFactory.add("attachement_batiment/index",datas, config).success(function (data)
@@ -695,13 +695,13 @@ vm.mainGridOptions = {
                           libelle:      e.data.models[0].libelle,
                           description:  e.data.models[0].description,
                           ponderation_batiment:  e.data.models[0].ponderation_batiment,
-                          id_batiment_ouvrage:   id_batiment_ouvrage               
+                          id_type_batiment:   id_type_batiment               
                       });
                   
                   apiFactory.add("attachement_batiment/index",datas, config).success(function (data)
                   { 
                     e.data.models[0].id = String(data.response);
-                    e.data.models[0].batiment_ouvrage={id:id_batiment_ouvrage};              
+                    e.data.models[0].type_batiment={id:id_type_batiment};              
                     e.success(e.data.models); 
                   }).error(function (data)
                     {
