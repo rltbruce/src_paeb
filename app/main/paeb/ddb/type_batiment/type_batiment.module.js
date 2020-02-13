@@ -27,7 +27,7 @@
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.ddb.type_batiment', {
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.type_batiment', {
             title: 'Type batiment',
             icon  : 'icon-clipboard-text',
             state: 'app.paeb_ddb_type_batiment',
