@@ -27,7 +27,7 @@
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.ddb.detail_subvention', {
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.detail_subvention', {
             title: 'Detail subvention',
             icon  : 'icon-clipboard-text',
             state: 'app.paeb_ddb_detail_subvention',

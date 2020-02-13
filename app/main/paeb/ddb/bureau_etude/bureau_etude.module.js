@@ -27,7 +27,7 @@
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.ddb.bureau_etude', {
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.bureau_etude', {
             title: 'bureau_etude',
             icon  : 'icon-ticket-account',
             state: 'app.paeb_ddb_bureau_etude',

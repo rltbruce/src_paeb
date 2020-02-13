@@ -27,7 +27,7 @@
 
         });
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.ddb.localisation.district', {
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.localisation.district', {
             title: 'District',
             icon  : 'icon-map-marker-radius',
             state: 'app.population_ddb_localisation_district',

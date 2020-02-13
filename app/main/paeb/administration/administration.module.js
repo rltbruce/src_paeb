@@ -30,6 +30,12 @@
             icon  : 'icon-account-multiple'
             //state: 'app.population_administration_secteur'
         });
+
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases', {
+            title: 'Données de base',
+            icon  : 'icon-account-multiple'
+            //state: 'app.population_administration_secteur'
+        });
     }
 
     function testPermission(loginService,$cookieStore,apiFactory)

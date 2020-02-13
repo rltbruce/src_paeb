@@ -27,7 +27,7 @@
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.ddb.ecole', {
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.ecole', {
             title: 'Ecole',
             icon  : 'icon-home-variant',
             state: 'app.paeb_ddb_ecole',

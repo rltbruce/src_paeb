@@ -27,7 +27,7 @@
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.ddb.localisation.region', {
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.localisation.region', {
             title: 'Géographique',
             icon  : 'icon-map-marker-circle',
             state: 'app.population_ddb_localisation_region',

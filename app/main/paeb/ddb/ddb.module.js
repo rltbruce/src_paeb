@@ -26,7 +26,7 @@
     /** @ngInject */
     function config(msNavigationServiceProvider)
     {
-        msNavigationServiceProvider.saveItem('paeb.ddb', {
+        /*msNavigationServiceProvider.saveItem('paeb.ddb', {
             title : 'Données de Bases',
             icon  : 'icon-data',
             weight: 2,
@@ -34,7 +34,7 @@
             {
                     return vs;
             }
-        });
+        });*/
 
 
 

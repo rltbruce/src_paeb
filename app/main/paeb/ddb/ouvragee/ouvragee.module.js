@@ -27,7 +27,7 @@
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.ddb.ouvragee', {
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.ouvragee', {
             title: 'Ouvragee',
             icon  : 'icon-tile-four',
             state: 'app.paeb_ddb_ouvragee',
