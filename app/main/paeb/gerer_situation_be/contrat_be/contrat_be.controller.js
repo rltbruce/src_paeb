@@ -3,10 +3,10 @@
     'use strict';
 
     angular
-        .module('app.paeb.gerer_situation_entreprise.contrat_prestataire')
-        .controller('Contrat_prestataireController', Contrat_prestataireController);
+        .module('app.paeb.gerer_situation_be.contrat_be')
+        .controller('Contrat_beController', Contrat_beController);
     /** @ngInject */
-    function Contrat_prestataireController($mdDialog, $scope, apiFactory, $state)
+    function Contrat_beController($mdDialog, $scope, apiFactory, $state)
     {
 		    var vm = this;
         vm.selectedItemConvention_entete = {} ;
@@ -48,15 +48,23 @@
         },
         {titre:"Feffi"
         },
-        {titre:"Numero convention"
+        {titre:"Reference convention"
         },
         {titre:"Objet"
         },
         {titre:"Date signature"
         },
-        {titre:"Financement"
+        {titre:"Reference Financement"
+        },
+        {titre:"Nom banque"
+        },
+        {titre:"Adresse banque"
+        },
+        {titre:"RIB"
         },
         {titre:"Delai"
+        },
+        {titre:"Observation"
         }];
  
 /**********************************fin convention entete****************************************/       

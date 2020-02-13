@@ -60,7 +60,19 @@
                   </thead>
                            
                   <tbody>
-                    <tr ng-repeat="feffi in vm.allfeffi"  ng-class="{selected: feffi.$selected}" ng-click="vm.selection(feffi)">           
+                    <tr ng-repeat="feffi in vm.allfeffi"  ng-class="{selected: feffi.$selected}" ng-click="vm.selection(feffi)">
+                                
+                      <td>
+                        <span ng-if="feffi.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Identifiant</label>
+                            <input name="identifiant" type="text" ng-model="feffi.identifiant"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!feffi.$edit">{{feffi.identifiant}}</span>
+                      </td>
+
                       <td>
                         <span ng-if="feffi.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
@@ -74,12 +86,34 @@
                       <td>
                         <span ng-if="feffi.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
-                            <label>Description</label>
-                            <input name="Description" type="text" ng-model="feffi.description"/>
+                            <label>Nombre feminin</label>
+                            <input name="nbr_feminin" type="text" ng-model="feffi.nbr_feminin"/>
                           </md-input-container>   
                         </span>
                                   
-                        <span ng-if="!feffi.$edit">{{feffi.description}}</span>
+                        <span ng-if="!feffi.$edit">{{feffi.nbr_feminin}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="feffi.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nombre total</label>
+                            <input name="nbr_total" type="text" ng-model="feffi.nbr_total"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!feffi.$edit">{{feffi.nbr_total}}</span>
+                      </td>                      
+                                
+                      <td>
+                        <span ng-if="feffi.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Adresse</label>
+                            <input name="adresse" type="text" ng-model="feffi.adresse"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!feffi.$edit">{{feffi.adresse}}</span>
                       </td>
 
                       <td>
@@ -95,6 +129,17 @@
                         </span>
                         <span ng-if="!feffi.$edit">{{feffi.ecole.code}}</span>
                       </td>
+                                
+                      <td>
+                        <span ng-if="feffi.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Observation</label>
+                            <input name="observation" type="text" ng-model="feffi.observation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!feffi.$edit">{{feffi.observation}}</span>
+                      </td>
                                                    
                       <td>
                         <a ng-if="!feffi.$edit" ng-click="vm.modifier(feffi)" title="Modifier">
@@ -109,7 +154,7 @@
                           <span class="icon-cancel"></span>
                         </a>
                                   
-                        <a ng-if="feffi.$edit && feffi.denomination && feffi.description && feffi.id_ecole>''" ng-click="vm.ajout(feffi,0)" title="Sauvegarder">
+                        <a ng-if="feffi.$edit && feffi.denomination && feffi.identifiant && feffi.adresse && feffi.id_ecole>''" ng-click="vm.ajout(feffi,0)" title="Sauvegarder">
                           <span class="icon-content-save"></span>
                         </a>
                       </td>
@@ -202,16 +247,22 @@
                                   
                         <span ng-if="!membre.$edit">{{membre.age}}</span>
                       </td>
-                                
+
                       <td>
                         <span ng-if="membre.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Occupation</label>
-                            <input name="occupation" type="text" ng-model="membre.occupation"/>
-                          </md-input-container>   
-                        </span>
-                                  
-                        <span ng-if="!membre.$edit">{{membre.occupation}}</span>
+                            <md-select ng-model="membre.occupation"style="overflow: hidden;text-overflow: ellipsis;">
+                                <md-option value="1">President
+                                </md-option>
+                                <md-option value="2">Secretaire
+                                </md-option>
+                                <md-option value="3">Simple membre
+                                </md-option>
+                              </md-select>
+                          </md-input-container>
+                        </span>                          
+                        <span ng-if="!membre.$edit">{{vm.affichage_occupation(membre.occupation)}}</span>
                       </td>
                                                    
                       <td>

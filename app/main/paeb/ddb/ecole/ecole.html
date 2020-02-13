@@ -138,16 +138,33 @@
                   <span ng-if="!ecole.$edit">{{ecole.altitude}}</span>
                 </td>
 
-                <td>
-                  <span ng-if="ecole.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Ponderation</label>
-                      <input name="Ponderation" type="text" ng-model="ecole.ponderation"/>
-                    </md-input-container>   
-                  </span>
-                            
-                  <span ng-if="!ecole.$edit">{{ecole.ponderation}}</span>
-                </td>
+                        <td>
+                          <span ng-if="ecole.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Zone subvention</label>
+                              <md-select ng-model="ecole.id_zone_subvention"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_zone_subvention(ecole)">
+                                <md-option ng-repeat="zone_subvention in vm.allzone_subvention" value="{{zone_subvention.id}}">
+                                                                    {{zone_subvention.libelle}}
+                                </md-option>
+                              </md-select>
+                            </md-input-container>  
+                          </span>
+                          <span ng-if="!ecole.$edit">{{ecole.zone_subvention.libelle}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="ecole.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Acces zone</label>
+                              <md-select ng-model="ecole.id_acces_zone"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="!ecole.id_zone_subvention" ng-change="vm.change_acces_zone(ecole)">
+                                <md-option ng-repeat="acces_zone in vm.allacces_zone" value="{{acces_zone.id}}">
+                                                                    {{acces_zone.libelle}}
+                                </md-option>
+                              </md-select>
+                            </md-input-container>  
+                          </span>
+                          <span ng-if="!ecole.$edit">{{ecole.acces_zone.libelle}}</span>
+                        </td>
                                              
                 <td>
                   <a ng-if="!ecole.$edit" ng-click="vm.modifier(ecole)" title="Modifier">

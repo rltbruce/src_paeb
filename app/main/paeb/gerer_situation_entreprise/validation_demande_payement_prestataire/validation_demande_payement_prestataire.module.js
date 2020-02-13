@@ -32,7 +32,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.validation_demande_payement_prestataire', {
-            title: 'Validation demande',
+            title: 'Validation technique',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_entreprise_validation_demande_payement_prestataire',
 			weight: 3,
@@ -52,7 +52,7 @@
         {
             var permission = [];
             
-            apiFactory.getDemande_realimentationByInvalide("count_payement_prestataire",Number(1)).then(function(result) 
+            apiFactory.getDemande_realimentationByInvalide("count_demande_prestataire",Number(1)).then(function(result) 
             {
                 var x = result.data.response;
                 vs.content = x[0].nombre ;
@@ -67,13 +67,13 @@
                
 
                 var permission = user.roles;
-                var permissions = ["BCAF"];
+                var permissions = ["DPFI"];
                 affichage =  loginService.gestionMenu(permissions,permission);  
 
                 //**************************************************
                 if (id_user && !affichage) 
                 {
-                    $interval(function(){apiFactory.getDemande_realimentationByInvalide("count_payement_prestataire",Number(1)).then(function(result) 
+                    $interval(function(){apiFactory.getDemande_realimentationByInvalide("count_demande_prestataire",Number(1)).then(function(result) 
                     {
                         var resultat = result.data.response;
 

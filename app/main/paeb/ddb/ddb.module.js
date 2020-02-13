@@ -15,7 +15,8 @@
             'app.paeb.ddb.acces_zone',
             'app.paeb.ddb.zone_subvention',
             'app.paeb.ddb.detail_subvention',
-            'app.paeb.ddb.composant'
+            'app.paeb.ddb.composant',
+            'app.paeb.ddb.infrastructure'
 
             ])
         .run(testPermission)

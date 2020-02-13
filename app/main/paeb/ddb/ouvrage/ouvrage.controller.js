@@ -48,9 +48,11 @@ vm.mainGridOptions = {
                   
                   var datas = $.param({
                           supprimer: 0,
-                          id:        e.data.models[0].id,      
+                          id:        e.data.models[0].id,
+                          code:   e.data.models[0].code,      
                           libelle:   e.data.models[0].libelle,
                           description:   e.data.models[0].description,
+                          nbr_salle:   e.data.models[0].nbr_salle,
                           cout_batiment:   e.data.models[0].cout_batiment,
                           cout_maitrise_oeuvre:   e.data.models[0].cout_maitrise_oeuvre,
                           cout_sous_projet:   e.data.models[0].cout_sous_projet,
@@ -86,9 +88,11 @@ vm.mainGridOptions = {
                   
                   var datas = $.param({
                           supprimer: 0,
-                          id:        0,      
+                          id:        0,
+                          code:   e.data.models[0].code,      
                           libelle:   e.data.models[0].libelle,
                           description:   e.data.models[0].description,
+                          nbr_salle:   e.data.models[0].nbr_salle,
                           cout_batiment:   e.data.models[0].cout_batiment,
                           cout_maitrise_oeuvre:   e.data.models[0].cout_maitrise_oeuvre,
                           cout_sous_projet:   e.data.models[0].cout_sous_projet,
@@ -128,8 +132,10 @@ vm.mainGridOptions = {
                     id: "id",
                     fields:
                     {
+                        code: {type: "string",validation: {required: true}},
                         libelle: {type: "string",validation: {required: true}},
                         description: {type: "string",validation: {required: true}},
+                        nbr_salle: {type: "string",validation: {required: true}},
                         zone_subvention: {validation: {required: true}},
                         acces_zone: { validation: {required: true}},
                         cout_batiment: {type: "number", validation: {required: true}},
@@ -174,6 +180,11 @@ vm.mainGridOptions = {
                // },
           columns: [
             {
+              field: "code",
+              title: "Code",
+              width: "Auto"
+            },
+            {
               field: "libelle",
               title: "Libelle",
               width: "Auto"
@@ -183,6 +194,10 @@ vm.mainGridOptions = {
               width: "Auto"
             },
             {
+              field: "nbr_salle",
+              title: "Nombre salle",
+              width: "Auto"
+            },{
               field: "zone_subvention",
               title: "Zone subvention",
               template: "{{dataItem.zone_subvention.libelle}}",
@@ -282,13 +297,16 @@ vm.mainGridOptions = {
                   
                   var datas = $.param({
                           supprimer: 0,
-                          id:        e.data.models[0].id,      
+                          id:        e.data.models[0].id,
+                          code:   e.data.models[0].code,      
                           libelle:   e.data.models[0].libelle,
                           description: e.data.models[0].description,
+                          nbr_box_latrine:   e.data.models[0].nbr_box_latrine,
+                          nbr_point_eau:   e.data.models[0].nbr_point_eau,
                           cout_latrine: e.data.models[0].cout_latrine,
                           id_batiment_ouvrage: e.data.models[0].batiment_ouvrage.id               
                       });
-                  
+                  console.log(datas);
                   apiFactory.add("annexe_latrine/index",datas, config).success(function (data)
                   {                
                     e.success(e.data.models); 
@@ -317,9 +335,12 @@ vm.mainGridOptions = {
                   
                   var datas = $.param({
                           supprimer: 0,
-                          id:        0,      
+                          id:        0,
+                          code:   e.data.models[0].code,       
                           libelle:      e.data.models[0].libelle,
                           description:  e.data.models[0].description,
+                          nbr_box_latrine:   e.data.models[0].nbr_box_latrine,
+                          nbr_point_eau:   e.data.models[0].nbr_point_eau,
                           cout_latrine:  e.data.models[0].cout_latrine,
                           id_batiment_ouvrage:   id_batiment_ouvrage               
                       });
@@ -343,8 +364,11 @@ vm.mainGridOptions = {
                     id: "id",
                     fields:
                     {
+                        code: {type: "string",validation: {required: true}},
                         libelle: {type: "string",validation: {required: true}},
                         description: {type: "string", validation: {required: true}},
+                        nbr_box_latrine: {type: "number",validation: {required: true}},
+                        nbr_point_eau: {type: "number",validation: {required: true}},
                         cout_latrine: {type: "number", validation: {required: true}}
                     }
                 }
@@ -385,6 +409,10 @@ vm.mainGridOptions = {
                // },
           columns: [
             {
+              field: "code",
+              title: "Code",
+              width: "Auto"
+            },{
               field: "libelle",
               title: "Libelle",
               width: "Auto"
@@ -392,6 +420,16 @@ vm.mainGridOptions = {
             {
               field: "description",
               title: "Description",
+              width: "Auto"
+            },
+            {
+              field: "nbr_box_latrine",
+              title: "Nombre box latrine",
+              width: "Auto"
+            },
+            {
+              field: "nbr_point_eau",
+              title: "Nombre point d'eau",
               width: "Auto"
             },
             {
@@ -435,9 +473,13 @@ vm.mainGridOptions = {
                   
                   var datas = $.param({
                           supprimer: 0,
-                          id:        e.data.models[0].id,      
+                          id:        e.data.models[0].id,
+                          code:  e.data.models[0].code,    
                           libelle:   e.data.models[0].libelle,
                           description: e.data.models[0].description,
+                          nbr_banc: e.data.models[0].nbr_banc,
+                          nbr_table_maitre: e.data.models[0].nbr_table_maitre,
+                          nbr_chais_maitre: e.data.models[0].nbr_chais_maitre,
                           cout_mobilier: e.data.models[0].cout_mobilier,
                           id_batiment_ouvrage: e.data.models[0].batiment_ouvrage.id               
                       });
@@ -470,9 +512,13 @@ vm.mainGridOptions = {
                   
                   var datas = $.param({
                           supprimer: 0,
-                          id:        0,      
+                          id:        0,
+                          code:  e.data.models[0].code,       
                           libelle:      e.data.models[0].libelle,
                           description:  e.data.models[0].description,
+                          nbr_banc: e.data.models[0].nbr_banc,
+                          nbr_table_maitre: e.data.models[0].nbr_table_maitre,
+                          nbr_chais_maitre: e.data.models[0].nbr_chais_maitre,
                           cout_mobilier:  e.data.models[0].cout_mobilier,
                           id_batiment_ouvrage:   id_batiment_ouvrage               
                       });
@@ -495,9 +541,12 @@ vm.mainGridOptions = {
                 {
                     id: "id",
                     fields:
-                    {
+                    {   code: {type: "string",validation: {required: true}},
                         libelle: {type: "string",validation: {required: true}},
                         description: {type: "string", validation: {required: true}},
+                        nbr_banc: {type: "number",validation: {required: true}},
+                        nbr_table_maitre: {type: "number",validation: {required: true}},
+                        nbr_chais_maitre: {type: "number",validation: {required: true}},
                         cout_mobilier: {type: "number", validation: {required: true}}
                     }
                 }
@@ -538,6 +587,11 @@ vm.mainGridOptions = {
                // },
           columns: [
             {
+              field: "code",
+              title: "Code",
+              width: "Auto"
+            },
+            {
               field: "libelle",
               title: "Libelle",
               width: "Auto"
@@ -545,6 +599,21 @@ vm.mainGridOptions = {
             {
               field: "description",
               title: "Description",
+              width: "Auto"
+            },
+            {
+              field: "nbr_banc",
+              title: "Nombre banc",
+              width: "Auto"
+            },
+            {
+              field: "nbr_table_maitre",
+              title: "Nombre table maitre",
+              width: "Auto"
+            },
+            {
+              field: "nbr_chais_maitre",
+              title: "Nombre chaise maitre",
               width: "Auto"
             },
             {
@@ -590,7 +659,7 @@ vm.mainGridOptions = {
                           id:        e.data.models[0].id,      
                           libelle:   e.data.models[0].libelle,
                           description: e.data.models[0].description,
-                          ponderation: e.data.models[0].ponderation,
+                          ponderation_batiment: e.data.models[0].ponderation_batiment,
                           id_batiment_ouvrage: e.data.models[0].batiment_ouvrage.id               
                       });
                   
@@ -625,7 +694,7 @@ vm.mainGridOptions = {
                           id:        0,      
                           libelle:      e.data.models[0].libelle,
                           description:  e.data.models[0].description,
-                          ponderation:  e.data.models[0].ponderation,
+                          ponderation_batiment:  e.data.models[0].ponderation_batiment,
                           id_batiment_ouvrage:   id_batiment_ouvrage               
                       });
                   
@@ -650,7 +719,7 @@ vm.mainGridOptions = {
                     {
                         libelle: {type: "string",validation: {required: true}},
                         description: {type: "string", validation: {required: true}},
-                        ponderation: {type: "number", validation: {required: true}}
+                        ponderation_batiment: {type: "number", validation: {required: true}}
                     }
                 }
             },     
@@ -700,8 +769,8 @@ vm.mainGridOptions = {
               width: "Auto"
             },
             {
-              field: "ponderation",
-              title: "Ponderation",
+              field: "ponderation_batiment",
+              title: "Ponderation batiment",
               width: "Auto"
             },
             { 
@@ -742,7 +811,7 @@ vm.mainGridOptions = {
                           id:        e.data.models[0].id,      
                           libelle:   e.data.models[0].libelle,
                           description: e.data.models[0].description,
-                          ponderation: e.data.models[0].ponderation,
+                          ponderation_latrine: e.data.models[0].ponderation_latrine,
                           id_annexe_latrine: e.data.models[0].annexe_latrine.id               
                       });
                   
@@ -777,7 +846,7 @@ vm.mainGridOptions = {
                           id:        0,      
                           libelle:      e.data.models[0].libelle,
                           description:  e.data.models[0].description,
-                          ponderation:  e.data.models[0].ponderation,
+                          ponderation_latrine:  e.data.models[0].ponderation_latrine,
                           id_annexe_latrine:   id_annexe_latrine               
                       });
                   
@@ -802,7 +871,7 @@ vm.mainGridOptions = {
                     {
                         libelle: {type: "string",validation: {required: true}},
                         description: {type: "string", validation: {required: true}},
-                        ponderation: {type: "number", validation: {required: true}}
+                        ponderation_latrine: {type: "number", validation: {required: true}}
                     }
                 }
             },     
@@ -852,8 +921,8 @@ vm.mainGridOptions = {
               width: "Auto"
             },
             {
-              field: "ponderation",
-              title: "Ponderation",
+              field: "ponderation_latrine",
+              title: "Ponderation latrine",
               width: "Auto"
             },
             { 
@@ -894,7 +963,7 @@ vm.mainGridOptions = {
                           id:        e.data.models[0].id,      
                           libelle:   e.data.models[0].libelle,
                           description: e.data.models[0].description,
-                          ponderation: e.data.models[0].ponderation,
+                          ponderation_mobilier: e.data.models[0].ponderation_mobilier,
                           id_annexe_mobilier: e.data.models[0].annexe_mobilier.id               
                       });
                   
@@ -929,7 +998,7 @@ vm.mainGridOptions = {
                           id:        0,      
                           libelle:      e.data.models[0].libelle,
                           description:  e.data.models[0].description,
-                          ponderation:  e.data.models[0].ponderation,
+                          ponderation_mobilier:  e.data.models[0].ponderation_mobilier,
                           id_annexe_mobilier:   id_annexe_mobilier               
                       });
                   
@@ -954,7 +1023,7 @@ vm.mainGridOptions = {
                     {
                         libelle: {type: "string",validation: {required: true}},
                         description: {type: "string", validation: {required: true}},
-                        ponderation: {type: "number", validation: {required: true}}
+                        ponderation_mobilier: {type: "number", validation: {required: true}}
                     }
                 }
             },     
@@ -1004,8 +1073,8 @@ vm.mainGridOptions = {
               width: "Auto"
             },
             {
-              field: "ponderation",
-              title: "Ponderation",
+              field: "ponderation_mobilier",
+              title: "Ponderation mobilier",
               width: "Auto"
             },
             { 

@@ -154,6 +154,17 @@
                       <td>
                         <span ng-if="demande_payement_prest.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
+                            <label>Référence facture</label>
+                            <input name="ref_facture" type="text" ng-model="demande_payement_prest.ref_facture"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.ref_facture}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="demande_payement_prest.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
                             <label>Montant</label>
                             <input name="montant" type="number" ng-model="demande_payement_prest.montant"/>
                           </md-input-container>   
@@ -406,7 +417,114 @@
 
             </md-tab-body>
           </md-tab>
-    <!-----FIN demande_payement_prest ------>                     
+    <!-----FIN justification facture ------> 
+    <!-----Debut justificatif_facture ------>
+          <md-tab ng-disabled="vm.stepTwo==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">F</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Autre pièces</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_autre()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Description</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Fichier</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text" ng-if="vm.showThParcourir">
+                        <div class="table-header">
+                          <span class="column-title">Parcourir</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Action</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="justificatif_autre in vm.alljustificatif_autre"  ng-class="{selected: justificatif_autre.$selected}" ng-click="vm.selectionJustificatif_autre(justificatif_autre)">
+                               
+                      <td>
+                        <span ng-if="justificatif_autre.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Description</label>
+                            <input name="description" type="text" ng-model="justificatif_autre.description"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!justificatif_autre.$edit">{{justificatif_autre.description}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="justificatif_autre.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                            <input name="fichier" type="text" ng-model="justificatif_autre.fichier" disabled/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!justificatif_autre.$edit">{{justificatif_autre.fichier}}</span>
+                      </td>
+                      <td ng-if="vm.showThParcourir">
+                        <span>
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                          <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFileAutre"  ng-model="fichier" id="fileid"/>
+                          </md-input-container>   
+                        </span>
+                      </td>                       
+                      <td>
+                        <a ng-if="!justificatif_autre.$edit" ng-click="vm.modifierJustificatif_autre(justificatif_autre)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!justificatif_autre.$edit" ng-click="vm.supprimerJustificatif_autre(justificatif_autre)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="justificatif_autre.$edit" ng-click="vm.annulerJustificatif_autre(justificatif_autre)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="justificatif_autre.$edit && justificatif_autre.description && justificatif_autre.fichier>''" ng-click="vm.ajoutJustificatif_autre(justificatif_autre,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN demande_payement_prest ------> 
+        </ms-form-wizard>
+      </md-tabs>                   
       </div>
     </div>
     <!-- / CONTENT -->

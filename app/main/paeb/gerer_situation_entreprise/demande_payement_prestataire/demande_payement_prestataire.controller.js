@@ -75,6 +75,12 @@
         vm.selectedItemJustificatif_facture = {} ;
         vm.alljustificatif_facture = [] ;
 
+        vm.ajoutJustificatif_autre = ajoutJustificatif_autre ;
+        var NouvelItemJustificatif_autre=false;
+        var currentItemJustificatif_autre;
+        vm.selectedItemJustificatif_autre = {} ;
+        vm.alljustificatif_autre = [] ;
+
         vm.stepOne = false;
         vm.stepTwo = false;
         vm.stepThree = false;
@@ -127,7 +133,7 @@
             //recuperation donnée convention
             if (vm.selectedItemContrat_prestataire.id!=0)
             {
-              apiFactory.getAPIgeneraliserREST("demande_payement_prestataire/index",'menu','getdemandeInvalideBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+              apiFactory.getAPIgeneraliserREST("demande_payement_prestataire/index",'menu','getdemandeInvalide','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
               {
                   vm.alldemande_payement_prest = result.data.response;
 
@@ -161,6 +167,8 @@
         },
         {titre:"Description"
         },
+        {titre:"Référence facture"
+        },
         {titre:"Montant"
         },
         {titre:"Date"
@@ -178,6 +186,7 @@
               id: '0',         
               objet: '',
               description: '',
+              ref_facture: '',
               montant: '',
               date: ''
             };         
@@ -220,6 +229,7 @@
             item.$selected = false;
             item.objet   = currentItemDemande_payement_prest.objet ;
             item.description   = currentItemDemande_payement_prest.description ;
+            item.ref_facture   = currentItemDemande_payement_prest.ref_facture ;
             item.montant   = currentItemDemande_payement_prest.montant ;
             item.date  = currentItemDemande_payement_prest.date;
           }else
@@ -247,6 +257,18 @@
             {
                 vm.alljustificatif_attachement = result.data.response;
                 console.log(vm.alljustificatif_attachement);
+            });
+
+            apiFactory.getAPIgeneraliserREST("justificatif_facture/index",'id_demande_pay_pre',vm.selectedItemDemande_payement_prest.id).then(function(result)
+            {
+                vm.alljustificatif_facture = result.data.response;
+                console.log(vm.alljustificatif_facture);
+            });
+
+            apiFactory.getAPIgeneraliserREST("justificatif_autre_pre/index",'id_demande_pay_pre',vm.selectedItemDemande_payement_prest.id).then(function(result)
+            {
+                vm.alljustificatif_autre = result.data.response;
+                console.log(vm.alljustificatif_autre);
             });
 
             vm.stepTwo = true;
@@ -278,8 +300,9 @@
             item.$selected = true;
             item.objet   = vm.selectedItemDemande_payement_prest.objet ;
             item.description   = vm.selectedItemDemande_payement_prest.description ;
-            item.montant   = vm.selectedItemDemande_payement_prest.montant;
-            tem.date   = vm.selectedItemDemande_payement_prest.date;
+            item.ref_facture   = vm.selectedItemDemande_payement_prest.ref_facture ;
+            item.montant   = parseInt(vm.selectedItemDemande_payement_prest.montant);
+            item.date   =new Date(vm.selectedItemDemande_payement_prest.date) ;
         };
 
         //fonction bouton suppression item Demande_payement_prest
@@ -314,7 +337,8 @@
                    if((pass[0].objet   != currentItemDemande_payement_prest.objet )
                     || (pass[0].description   != currentItemDemande_payement_prest.description )
                     || (pass[0].montant   != currentItemDemande_payement_prest.montant )
-                    || (pass[0].date   != currentItemDemande_payement_prest.date ) )                   
+                    || (pass[0].date   != currentItemDemande_payement_prest.date )
+                    || (pass[0].ref_facture   != currentItemDemande_payement_prest.ref_facture ) )                   
                       { 
                          insert_in_baseDemande_payement_prest(item,suppression);
                       }
@@ -348,6 +372,7 @@
                     id:        getId,
                     objet: demande_payement_prest.objet,
                     description:demande_payement_prest.description,
+                    ref_facture:demande_payement_prest.ref_facture,
                     montant: demande_payement_prest.montant,
                     date: convertionDate(new Date(demande_payement_prest.date)),
                     id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
@@ -365,6 +390,7 @@
                     {
                         vm.selectedItemDemande_payement_prest.objet   = demande_payement_prest.objet ;
                         vm.selectedItemDemande_payement_prest.description   = demande_payement_prest.description ;
+                        vm.selectedItemDemande_payement_prest.ref_facture   = demande_payement_prest.ref_facture ;
                         vm.selectedItemDemande_payement_prest.montant   = demande_payement_prest.montant ;
                         vm.selectedItemDemande_payement_prest.date   = demande_payement_prest.date ;
                         
@@ -386,6 +412,7 @@
                 {
                   demande_payement_prest.objet   = demande_payement_prest.objet ;
                   demande_payement_prest.description   = demande_payement_prest.description ;
+                  demande_payement_prest.ref_facture   = demande_payement_prest.ref_facture ;
                   demande_payement_prest.montant   = demande_payement_prest.montant ;
                   demande_payement_prest.date   = demande_payement_prest.date ;
 
@@ -754,7 +781,7 @@
         }
 /**********************************fin mpe_sousmissionnaire****************************************/
 
-/**********************************fin justificatif attachement****************************************/
+/**********************************Debut justificatif facture****************************************/
 
 //col table
         vm.justificatif_facture_column = [
@@ -1061,6 +1088,327 @@
                             justificatif_facture.$selected = false;
                             justificatif_facture.$edit = false;
                             vm.selectedItemJustificatif_facture = {};
+                            vm.showThParcourir = false;
+                            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                      }
+                  }).error(function()
+                  {
+                    vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                  });
+                }
+            vm.showThParcourir = false;
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+/**********************************fin mpe_sousmissionnaire****************************************/
+
+/**********************************fin justificatif attachement****************************************/
+
+//col table
+        vm.justificatif_autre_column = [
+        {titre:"Description"
+        },
+        {titre:"Fichier"
+        },
+        {titre:"Action"
+        }];
+
+        $scope.uploadFileAutre = function(event)
+       {
+         // console.dir(event);
+          var files = event.target.files;
+          vm.myFile = files;
+          vm.selectedItemJustificatif_autre.fichier = vm.myFile[0].name;
+        } 
+
+        //Masque de saisi ajout
+        vm.ajouterJustificatif_autre = function ()
+        { 
+          if (NouvelItemJustificatif_autre == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              description: '',
+              fichier: ''
+            };
+        
+            vm.alljustificatif_autre.push(items);
+            vm.alljustificatif_autre.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemJustificatif_autre = mem;
+              }
+            });
+
+            NouvelItemJustificatif_autre = true ;
+            vm.showThParcourir = true;
+          }else
+          {
+            vm.showAlert('Ajout Justificatif_autre','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutJustificatif_autre(justificatif_autre,suppression)
+        {
+            if (NouvelItemJustificatif_autre==false)
+            {
+                test_existanceJustificatif_autre (justificatif_autre,suppression); 
+            } 
+            else
+            {
+                insert_in_baseJustificatif_autre(justificatif_autre,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation Justificatif_autre
+        vm.annulerJustificatif_autre = function(item)
+        {
+          if (NouvelItemJustificatif_autre == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.description   = currentItemJustificatif_autre.description ;
+            item.fichier   = currentItemJustificatif_autre.fichier ;
+          }else
+          {
+            vm.alljustificatif_autre = vm.alljustificatif_autre.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemJustificatif_autre.id;
+            });
+          }
+
+          vm.selectedItemJustificatif_autre = {} ;
+          NouvelItemJustificatif_autre      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionJustificatif_autre= function (item)
+        {
+            vm.selectedItemJustificatif_autre = item;
+            vm.nouvelItemJustificatif_autre   = item;
+            currentItemJustificatif_autre    = JSON.parse(JSON.stringify(vm.selectedItemJustificatif_autre)); 
+        };
+        $scope.$watch('vm.selectedItemJustificatif_autre', function()
+        {
+             if (!vm.alljustificatif_autre) return;
+             vm.alljustificatif_autre.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemJustificatif_autre.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierJustificatif_autre = function(item)
+        {
+            NouvelItemJustificatif_autre = false ;
+            vm.selectedItemJustificatif_autre = item;
+            currentItemJustificatif_autre = angular.copy(vm.selectedItemJustificatif_autre);
+            $scope.vm.alljustificatif_autre.forEach(function(jus) {
+              jus.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.description   = vm.selectedItemJustificatif_autre.description ;
+            item.fichier   = vm.selectedItemJustificatif_autre.fichier ;
+            vm.showThParcourir = true;
+        };
+
+        //fonction bouton suppression item Justificatif_autre
+        vm.supprimerJustificatif_autre = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutJustificatif_autre(vm.selectedItemJustificatif_autre,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceJustificatif_autre (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var just = vm.alljustificatif_autre.filter(function(obj)
+                {
+                   return obj.id == currentItemJustificatif_autre.id;
+                });
+                if(just[0])
+                {
+                   if((just[0].description   != currentItemJustificatif_autre.description )
+                    ||(just[0].fichier   != currentItemJustificatif_autre.fichier ))                   
+                      { 
+                         insert_in_baseJustificatif_autre(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseJustificatif_autre(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd Justificatif_autre
+        function insert_in_baseJustificatif_autre(justificatif_autre,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemJustificatif_autre==false)
+            {
+                getId = vm.selectedItemJustificatif_autre.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    description: justificatif_autre.description,
+                    fichier: justificatif_autre.fichier,
+                    id_demande_pay_pre: vm.selectedItemDemande_payement_prest.id               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("justificatif_autre_pre/index",datas, config).success(function (data)
+            {
+                var file       = vm.myFile[0];
+                var repertoire = 'justificatif_autre/';
+                var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
+                var getIdFile = 0;
+
+                if (NouvelItemJustificatif_autre==false)
+                {
+                    getIdFile = vm.selectedItemJustificatif_autre.id; 
+                }
+                else
+                { 
+                 getIdFile = String(data.response);
+                }
+                var name_file = vm.selectedItemContrat_prestataire.num_contrat+'_'+getIdFile+'_autre' ;
+
+                var fd = new FormData();
+                fd.append('file', file);
+                fd.append('repertoire',repertoire);
+                fd.append('name_fichier',name_file);
+                if(file)
+                { 
+                  var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
+                  headers: {'Content-Type': undefined}, repertoire: repertoire
+                  }).success(function(data)
+                  {
+                      if(data['erreur'])
+                      {
+                        var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
+                        //var msg = data['erreur'];
+                        var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
+                        $mdDialog.show( alert ).finally(function()
+                        {   
+                          justificatif_autre.fichier='';
+                          var datas = $.param({
+                              supprimer: suppression,
+                              id:        getIdFile,
+                              description: justificatif_autre.description,
+                              fichier: justificatif_autre.fichier,
+                              id_demande_pay_pre: vm.selectedItemDemande_payement_prest.id               
+                          });
+                            apiFactory.add("justificatif_autre_pre/index",datas, config).success(function (data)
+                            {
+                              if (NouvelItemJustificatif_autre == false)
+                              {
+                                  // Update or delete: id exclu                 
+                                  if(suppression==0)
+                                  {                        
+                                      vm.selectedItemJustificatif_autre.description = justificatif_autre.description;
+                                      vm.selectedItemJustificatif_autre.fichier = justificatif_autre.fichier;
+                                      vm.selectedItemJustificatif_autre.$selected  = false;
+                                      vm.selectedItemJustificatif_autre.$edit      = false;
+                                      vm.selectedItemJustificatif_autre ={};
+                                  }
+                                  else 
+                                  {    
+                                    vm.alljustificatif_autre = vm.alljustificatif_autre.filter(function(obj)
+                                    {
+                                        return obj.id !== vm.selectedItemJustificatif_autre.id;
+                                    });
+                                  }
+                              }
+                              else
+                              {
+                                justificatif_autre.description = justificatif_autre.description;
+                                justificatif_autre.fichier = justificatif_autre.fichier; 
+
+                                justificatif_autre.id  =   String(data.response);              
+                                NouvelItemJustificatif_autre=false;
+                          }
+                            justificatif_autre.$selected = false;
+                            justificatif_autre.$edit = false;
+                            vm.selectedItemJustificatif_autre = {};
+                            vm.showThParcourir = false;
+                            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                        });
+                      }
+                      else
+                      {
+                        justificatif_autre.fichier=repertoire+data['nomFile'];
+                        var datas = $.param({
+                              supprimer: suppression,
+                              id:        getIdFile,
+                              description: justificatif_autre.description,
+                              fichier: justificatif_autre.fichier,
+                              id_demande_pay_pre: vm.selectedItemDemande_payement_prest.id               
+                          });
+                        apiFactory.add("justificatif_autre_pre/index",datas, config).success(function (data)
+                            {
+                              if (NouvelItemJustificatif_autre == false)
+                              {
+                                  // Update or delete: id exclu                 
+                                  if(suppression==0)
+                                  {                        
+                                      vm.selectedItemJustificatif_autre.description = justificatif_autre.description;
+                                      vm.selectedItemJustificatif_autre.fichier = justificatif_autre.fichier;
+                                      vm.selectedItemJustificatif_autre.$selected  = false;
+                                      vm.selectedItemJustificatif_autre.$edit      = false;
+                                      vm.selectedItemJustificatif_autre ={};
+                                  }
+                                  else 
+                                  {    
+                                    vm.alljustificatif_autre = vm.alljustificatif_autre.filter(function(obj)
+                                    {
+                                        return obj.id !== vm.selectedItemJustificatif_autre.id;
+                                    });
+                                  }
+                              }
+                              else
+                              {
+                                justificatif_autre.description = justificatif_autre.description;
+                                justificatif_autre.fichier = justificatif_autre.fichier; 
+
+                                justificatif_autre.id  =   String(data.response);              
+                                NouvelItemJustificatif_autre=false;
+                          }
+                            justificatif_autre.$selected = false;
+                            justificatif_autre.$edit = false;
+                            vm.selectedItemJustificatif_autre = {};
                             vm.showThParcourir = false;
                             }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
                       }

@@ -57,34 +57,48 @@
                              
                     <tbody>
                       <tr ng-repeat="convention_entete in vm.allconvention_entete"  ng-class="{selected: convention_entete.$selected}" ng-click="vm.selectionConvention_entete(convention_entete)">           
-                        
-
                         <td>
-                          <span ng-if="!convention_entete.$edit">{{convention_entete.cisco.code}}</span>
+                          <span>{{convention_entete.cisco.code}}</span>
                         </td>
 
                         <td>
-                          <span ng-if="!convention_entete.$edit">{{convention_entete.feffi.denomination}}</span>
-                        </td>
-
-                        <td>                         
-                          <span ng-if="!convention_entete.$edit">{{convention_entete.numero_convention}}</span>
+                          <span>{{convention_entete.feffi.denomination}}</span>
                         </td>
 
                         <td>                          
-                          <span ng-if="!convention_entete.$edit">{{convention_entete.objet}}</span>
+                          <span>{{convention_entete.ref_convention}}</span>
+                        </td>
+
+                        <td>                         
+                          <span">{{convention_entete.objet}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{vm.formatDate(convention_entete.date_signature)}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{convention_entete.ref_financement}}</span>
+                        </td>
+
+                        <td>  
+                          <span>{{convention_entete.compte_feffi.nom_banque}}</span>
                         </td>
 
                         <td>     
-                          <span ng-if="!convention_entete.$edit">{{vm.formatDate(convention_entete.date_signature)}}</span>
+                          <span>{{convention_entete.compte_feffi.adresse_banque}}</span>
                         </td>
 
-                        <td>     
-                          <span ng-if="!convention_entete.$edit">{{convention_entete.financement}}</span>
-                        </td>                
+                        <td>       
+                          <span>{{convention_entete.compte_feffi.rib}}</span>
+                        </td>
+
+                        <td>      
+                          <span>{{convention_entete.delai}}</span>
+                        </td>
 
                         <td>                                    
-                          <span ng-if="!convention_entete.$edit">{{convention_entete.delai}}</span>
+                          <span>{{convention_entete.observation}}</span>
                         </td>
                       </tr>
                     </tbody>

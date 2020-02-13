@@ -48,15 +48,23 @@
         },
         {titre:"Feffi"
         },
-        {titre:"Numero convention"
+        {titre:"Reference convention"
         },
         {titre:"Objet"
         },
         {titre:"Date signature"
         },
-        {titre:"Financement"
+        {titre:"Reference Financement"
+        },
+        {titre:"Nom banque"
+        },
+        {titre:"Adresse banque"
+        },
+        {titre:"RIB"
         },
         {titre:"Delai"
+        },
+        {titre:"Observation"
         }];
  
 /**********************************fin convention entete****************************************/       
@@ -206,7 +214,7 @@
             item.id_prestataire = currentItemContrat_prestataire.id_prestataire ;
           }else
           {
-            vm.allcontrat_prestataire = vm.allContrat_prestataire.filter(function(obj)
+            vm.allcontrat_prestataire = vm.allcontrat_prestataire.filter(function(obj)
             {
                 return obj.id !== vm.selectedItemContrat_prestataire.id;
             });
@@ -383,7 +391,7 @@
                     }
                     else 
                     {    
-                      vm.allcontrat_prestataire = vm.allContrat_prestataire.filter(function(obj)
+                      vm.allcontrat_prestataire = vm.allcontrat_prestataire.filter(function(obj)
                       {
                           return obj.id !== vm.selectedItemContrat_prestataire.id;
                       });

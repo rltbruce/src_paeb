@@ -60,31 +60,47 @@
                         
 
                         <td>
-                          <span ng-if="!convention_entete.$edit">{{convention_entete.cisco.code}}</span>
+                          <span>{{convention_entete.cisco.code}}</span>
                         </td>
 
                         <td>
-                          <span ng-if="!convention_entete.$edit">{{convention_entete.feffi.denomination}}</span>
-                        </td>
-
-                        <td>                         
-                          <span ng-if="!convention_entete.$edit">{{convention_entete.numero_convention}}</span>
+                          <span>{{convention_entete.feffi.denomination}}</span>
                         </td>
 
                         <td>                          
-                          <span ng-if="!convention_entete.$edit">{{convention_entete.objet}}</span>
+                          <span>{{convention_entete.ref_convention}}</span>
+                        </td>
+
+                        <td>                         
+                          <span">{{convention_entete.objet}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{vm.formatDate(convention_entete.date_signature)}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{convention_entete.ref_financement}}</span>
+                        </td>
+
+                        <td>  
+                          <span>{{convention_entete.compte_feffi.nom_banque}}</span>
                         </td>
 
                         <td>     
-                          <span ng-if="!convention_entete.$edit">{{vm.formatDate(convention_entete.date_signature)}}</span>
+                          <span>{{convention_entete.compte_feffi.adresse_banque}}</span>
                         </td>
 
-                        <td>     
-                          <span ng-if="!convention_entete.$edit">{{convention_entete.financement}}</span>
-                        </td>                
+                        <td>       
+                          <span>{{convention_entete.compte_feffi.rib}}</span>
+                        </td>
+
+                        <td>      
+                          <span>{{convention_entete.delai}}</span>
+                        </td>
 
                         <td>                                    
-                          <span ng-if="!convention_entete.$edit">{{convention_entete.delai}}</span>
+                          <span>{{convention_entete.observation}}</span>
                         </td>
                       </tr>
                     </tbody>
@@ -149,7 +165,7 @@
                         <span ng-if="passation_marches.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Nombre offre recu</label>
-                            <input name="nbr_offre_recu" type="text" ng-model="passation_marches.nbr_offre_recu"/>
+                            <input name="nbr_offre_recu" type="text" ng-model="passation_marches.nbr_offre_recu" disabled/>
                           </md-input-container>   
                         </span>
                                   
@@ -265,7 +281,7 @@
                           <span class="icon-cancel"></span>
                         </a>
                                   
-                        <a ng-if="passation_marches.$edit && passation_marches.date_lancement && passation_marches.date_remise && passation_marches.nbr_offre_recu && passation_marches.montant_moin_chere && passation_marches.date_rapport_evaluation && passation_marches.date_demande_ano_dpfi && passation_marches.date_ano_dpfi && passation_marches.notification_intention && passation_marches.date_notification_attribution && passation_marches.date_signature_contrat && passation_marches.date_os && passation_marches.id_prestataire && passation_marches.observation >''" ng-click="vm.ajoutPassation_marches(passation_marches,0)" title="Sauvegarder">
+                        <a ng-if="passation_marches.$edit && passation_marches.date_lancement && passation_marches.date_remise && passation_marches.montant_moin_chere && passation_marches.date_rapport_evaluation && passation_marches.date_demande_ano_dpfi && passation_marches.date_ano_dpfi && passation_marches.notification_intention && passation_marches.date_notification_attribution && passation_marches.date_signature_contrat && passation_marches.date_os && passation_marches.id_prestataire && passation_marches.observation >''" ng-click="vm.ajoutPassation_marches(passation_marches,0)" title="Sauvegarder">
                           <span class="icon-content-save"></span>
                         </a>
                       </td>

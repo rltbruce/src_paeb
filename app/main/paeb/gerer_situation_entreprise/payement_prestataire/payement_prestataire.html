@@ -1,0 +1,204 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation feffi</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Feffi</span>
+            </div>
+
+            <div class="title">Feffi</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+          <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">demande payement entreprise</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.demande_payement_prest_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="demande_payement_prest in vm.alldemande_payement_prest"  ng-class="{selected: demande_payement_prest.$selected}" ng-click="vm.selectionDemande_payement_prest(demande_payement_prest)">
+                                
+                      <td>                                  
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.objet}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.description}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.ref_facture}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.montant}}</span>
+                      </td>
+
+                       <td>                          
+                        <span ng-if="!demande_payement_prest.$edit">{{vm.affichageDate(demande_payement_prest.date)}}</span>
+                      </td>
+
+                       <td>                          
+                        <span ng-if="!demande_payement_prest.$edit">{{vm.affichageDate(demande_payement_prest.date_approbation)}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN demande_payement_prest ------>
+
+    <!-----Debut paiement_prestataire ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Paiement MPE</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPaiement_prestataire()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="pai in ::vm.paiement_prestataire_column">
+                        <div class="table-header">
+                          <span class="column-title">{{pai.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="paiement_prestataire in vm.allpaiement_prestataire"  ng-class="{selected: paiement_prestataire.$selected}" ng-click="vm.selectionPaiement_prestataire(paiement_prestataire)">
+                                
+                      <td>
+                        <span ng-if="paiement_prestataire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Montant paiement</label>
+                            <input name="montant_paiement" type="text" ng-model="paiement_prestataire.montant_paiement"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!paiement_prestataire.$edit">{{paiement_prestataire.montant_paiement}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="paiement_prestataire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Cumul</label>
+                            <input name="cumul" type="text" ng-model="paiement_prestataire.cumul"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!paiement_prestataire.$edit">{{paiement_prestataire.cumul}}</span>
+                      </td>
+
+                       <td>
+                        <span ng-if="paiement_prestataire.$edit">
+                          <md-datepicker ng-model="paiement_prestataire.date_paiement" md-placeholder="Date" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!paiement_prestataire.$edit">{{vm.affichageDate(paiement_prestataire.date_paiement)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="paiement_prestataire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Pourcentage</label>
+                            <input name="pourcentage_paiement" type="text" ng-model="paiement_prestataire.pourcentage_paiement"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!paiement_prestataire.$edit">{{paiement_prestataire.pourcentage_paiement}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="paiement_prestataire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Observation</label>
+                            <input name="observation" type="text" ng-model="paiement_prestataire.observation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!paiement_prestataire.$edit">{{paiement_prestataire.observation}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!paiement_prestataire.$edit" ng-click="vm.modifierPaiement_prestataire(paiement_prestataire)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!paiement_prestataire.$edit" ng-click="vm.supprimerPaiement_prestataire(paiement_prestataire)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="paiement_prestataire.$edit" ng-click="vm.annulerPaiement_prestataire(paiement_prestataire)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="paiement_prestataire.$edit && paiement_prestataire.montant_paiement && paiement_prestataire.date_paiement >''" ng-click="vm.ajoutPaiement_prestataire(paiement_prestataire,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN paiement_prestataire------>
+        </ms-form-wizard>
+      </md-tabs>                     
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

@@ -48,15 +48,23 @@
         },
         {titre:"Feffi"
         },
-        {titre:"Numero convention"
+        {titre:"Reference convention"
         },
         {titre:"Objet"
         },
         {titre:"Date signature"
         },
-        {titre:"Financement"
+        {titre:"Reference Financement"
+        },
+        {titre:"Nom banque"
+        },
+        {titre:"Adresse banque"
+        },
+        {titre:"RIB"
         },
         {titre:"Delai"
+        },
+        {titre:"Observation"
         }];
  
 /**********************************fin convention entete****************************************/       
@@ -268,18 +276,18 @@
             item.$edit = true;
             item.$selected = true;
             item.observation   = vm.selectedItemPassation_marches.observation ;
-            item.date_os   = vm.selectedItemPassation_marches.date_os ;
-            item.date_remise   = vm.selectedItemPassation_marches.date_remise ;
-            item.date_ano_dpfi = vm.selectedItemPassation_marches.date_ano_dpfi;
+            item.date_os   = new Date(vm.selectedItemPassation_marches.date_os );
+            item.date_remise   = new Date(vm.selectedItemPassation_marches.date_remise );
+            item.date_ano_dpfi = new Date(vm.selectedItemPassation_marches.date_ano_dpfi);
             item.nbr_offre_recu = vm.selectedItemPassation_marches.nbr_offre_recu;
-            item.date_lancement = vm.selectedItemPassation_marches.date_lancement ;
+            item.date_lancement = new Date(vm.selectedItemPassation_marches.date_lancement) ;
             item.id_prestataire = vm.selectedItemPassation_marches.prestataire.id ; 
             item.montant_moin_chere = vm.selectedItemPassation_marches.montant_moin_chere ;
-            item.date_signature_contrat   = vm.selectedItemPassation_marches.date_signature_contrat ;
-            item.date_demande_ano_dpfi    = vm.selectedItemPassation_marches.date_demande_ano_dpfi ;
-            item.date_rapport_evaluation  = vm.selectedItemPassation_marches.date_rapport_evaluation ;
-            item.notification_intention   = vm.selectedItemPassation_marches.notification_intention;
-            item.date_notification_attribution  = vm.selectedItemPassation_marches.date_notification_attribution ;
+            item.date_signature_contrat   = new Date(vm.selectedItemPassation_marches.date_signature_contrat) ;
+            item.date_demande_ano_dpfi    = new Date(vm.selectedItemPassation_marches.date_demande_ano_dpfi) ;
+            item.date_rapport_evaluation  = new Date(vm.selectedItemPassation_marches.date_rapport_evaluation) ;
+            item.notification_intention   = new Date(vm.selectedItemPassation_marches.notification_intention);
+            item.date_notification_attribution  = new Date(vm.selectedItemPassation_marches.date_notification_attribution) ;
         };
 
         //fonction bouton suppression item passation_marches
@@ -368,7 +376,8 @@
                     date_signature_contrat: convertionDate(new Date(passation_marches.date_signature_contrat)),
                     id_prestataire: passation_marches.id_prestataire,
                     observation:passation_marches.observation,
-                    id_convention_entete: vm.selectedItemConvention_entete.id               
+                    id_convention_entete: vm.selectedItemConvention_entete.id,
+                    validation:0,               
                 });
                 console.log(datas);
                 //factory
@@ -644,6 +653,8 @@
                       {
                           return obj.id !== vm.selectedItemMpe_soumissionaire.id;
                       });
+                      var nb_offre= parseInt(vm.selectedItemPassation_marches.nbr_offre_recu) - 1;
+                      miseajourPassation_marches(vm.selectedItemPassation_marches,0,nb_offre);
                     }
                 }
                 else
@@ -652,6 +663,9 @@
 
                   mpe_soumissionaire.id  =   String(data.response);              
                   NouvelItemMpe_soumissionaire=false;
+
+                  var nb_offre= parseInt(vm.selectedItemPassation_marches.nbr_offre_recu) + 1;
+                  miseajourPassation_marches(vm.selectedItemPassation_marches,0,nb_offre);
             }
               mpe_soumissionaire.$selected = false;
               mpe_soumissionaire.$edit = false;
@@ -670,6 +684,42 @@
          // console.log(pre[0]);
           item.telephone=pre[0].telephone;
           item.siege=pre[0].siege;
+        }
+
+         //insertion ou mise a jours ou suppression item dans bdd feffi
+        function miseajourPassation_marches(passation_marches,suppression,nbr_offre_recu)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+          
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        vm.selectedItemPassation_marches.id,
+                    date_lancement: convertionDate(new Date(passation_marches.date_lancement)),
+                    date_os: convertionDate(new Date(passation_marches.date_os)),
+                    date_remise: convertionDate(new Date(passation_marches.date_remise)),
+                    nbr_offre_recu: nbr_offre_recu,
+                    montant_moin_chere:passation_marches.montant_moin_chere,
+                    date_rapport_evaluation:convertionDate(new Date(passation_marches.date_rapport_evaluation)),
+                    date_demande_ano_dpfi: convertionDate(new Date(passation_marches.date_demande_ano_dpfi)),
+                    date_ano_dpfi: convertionDate(new Date(passation_marches.date_ano_dpfi)),
+                    notification_intention: convertionDate(new Date(passation_marches.notification_intention)),
+                    date_notification_attribution: convertionDate(new Date(passation_marches.date_notification_attribution)),
+                    date_signature_contrat: convertionDate(new Date(passation_marches.date_signature_contrat)),
+                    id_prestataire: passation_marches.prestataire.id,
+                    observation:passation_marches.observation,
+                    id_convention_entete: vm.selectedItemConvention_entete.id               
+                });
+                //factory
+            apiFactory.add("passation_marches/index",datas, config).success(function (data)
+            {
+              vm.selectedItemPassation_marches.nbr_offre_recu = nbr_offre_recu;
+            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
         }
 /**********************************fin mpe_sousmissionnaire****************************************/
         //Alert

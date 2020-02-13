@@ -8,7 +8,12 @@
             'app.paeb.gerer_situation_entreprise.contrat_prestataire',
             'app.paeb.gerer_situation_entreprise.demande_payement_prestataire',
             'app.paeb.gerer_situation_entreprise.validation_demande_payement_prestataire',
-            'app.paeb.gerer_situation_entreprise.suivi_execution_travaux'
+            'app.paeb.gerer_situation_entreprise.validation_fina_demande_payement_prestataire',
+            'app.paeb.gerer_situation_entreprise.suivi_execution_travaux',
+            'app.paeb.gerer_situation_entreprise.prestation_mpe',
+            'app.paeb.gerer_situation_entreprise.demande_payement_prestataire_valide',
+            'app.paeb.gerer_situation_entreprise.payement_prestataire'
+
             ])       
         .config(config);
         var vs ;

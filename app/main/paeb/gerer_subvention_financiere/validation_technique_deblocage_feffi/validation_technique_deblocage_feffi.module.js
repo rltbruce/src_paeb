@@ -56,7 +56,7 @@
         {
             var permission = [];
             
-            apiFactory.getDemande_realimentationByInvalide("demande_realimentation_feffi",Number(2)).then(function(result) 
+            apiFactory.getDemande_realimentationByInvalide("demande_realimentation_feffi",Number(1)).then(function(result) 
             {
                 var x = result.data.response;
                 vs.content = x[0].nombre ;

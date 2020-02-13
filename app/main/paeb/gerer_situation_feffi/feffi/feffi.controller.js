@@ -38,7 +38,15 @@
 /**********************************debut feffi****************************************/
 
         //col table
-        vm.feffi_column = [{titre:"Dénomination"},{titre:"Description"},{titre:"Ecole"},{titre:"Action"}];
+        vm.feffi_column = [
+          {titre:"Identifiant"},
+          {titre:"Dénomination"},
+          {titre:"Nombre feminin"},
+          {titre:"Nombre total"},
+          {titre:"Adresse"},
+          {titre:"Ecole"},
+          {titre:"Observation"},
+          {titre:"Action"}];
         
         //recuperation donnée feffi
         apiFactory.getAll("feffi/index").then(function(result)
@@ -61,9 +69,13 @@
             var items = {
               $edit: true,
               $selected: true,
-              id: '0',         
+              id: '0',
+              identifiant: '',
               denomination: '',
-              description: '',
+              nbr_feminin: '',
+              nbr_total: '',
+              adresse: '',
+              observation: '',
               id_ecole: ''
             };         
             vm.allfeffi.push(items);
@@ -103,8 +115,12 @@
           {
             item.$edit = false;
             item.$selected = false;
+            item.identifiant      = currentItem.identifiant ;
             item.denomination      = currentItem.denomination ;
-            item.description   = currentItem.description ;
+            item.nbr_feminin      = currentItem.nbr_feminin ;
+            item.nbr_total      = currentItem.nbr_total ;
+            item.adresse      = currentItem.adresse ;
+            item.observation      = currentItem.observation ;
             item.id_ecole      = currentItem.id_ecole; 
           }else
           {
@@ -158,10 +174,15 @@
             });
 
             item.$edit = true;
-            item.$selected = true;            
+            item.$selected = true; 
+
+            item.identifiant      = vm.selectedItem.identifiant ;
             item.denomination      = vm.selectedItem.denomination ;
-            item.description = vm.selectedItem.description;
-            item.id_ecole  = vm.selectedItem.ecole.id; 
+            item.nbr_feminin      = vm.selectedItem.nbr_feminin ;
+            item.nbr_total      = vm.selectedItem.nbr_total ;
+            item.adresse      = vm.selectedItem.adresse ;
+            item.observation      = vm.selectedItem.observation ;
+            item.id_ecole  = vm.selectedItem.ecole.id;
         };
 
         //fonction bouton suppression item feffi
@@ -193,8 +214,12 @@
                 });
                 if(cis[0])
                 {
-                   if((cis[0].description!=currentItem.description) 
+                   if((cis[0].identifiant!=currentItem.identifiant) 
                     || (cis[0].denomination!=currentItem.denomination)
+                    || (cis[0].nbr_feminin!=currentItem.nbr_feminin)
+                    || (cis[0].nbr_total!=currentItem.nbr_total)
+                    || (cis[0].adresse!=currentItem.adresse)
+                    || (cis[0].observation!=currentItem.observation)
                     || (cis[0].id_ecole!=currentItem.id_ecole))                    
                       { 
                          insert_in_base(item,suppression);
@@ -228,7 +253,11 @@
                     supprimer: suppression,
                     id:        getId,      
                     denomination:      feffi.denomination,
-                    description: feffi.description,
+                    identifiant: feffi.identifiant,
+                    nbr_feminin: feffi.nbr_feminin,
+                    nbr_total:      feffi.nbr_total,
+                    adresse: feffi.adresse,
+                    observation:      feffi.observation,
                     id_ecole: feffi.id_ecole                
                 });
                 //console.log(feffi.pays_id);
@@ -246,9 +275,14 @@
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItem.description        = feffi.description;
-                        vm.selectedItem.denomination       = feffi.denomination;
                         vm.selectedItem.ecole       = eco[0];
+
+                        vm.selectedItem.identifiant      = feffi.identifiant ;
+                        vm.selectedItem.denomination      = feffi.denomination ;
+                        vm.selectedItem.nbr_feminin      = feffi.nbr_feminin ;
+                        vm.selectedItem.nbr_total      = feffi.nbr_total ;
+                        vm.selectedItem.adresse      = feffi.adresse ;
+                        vm.selectedItem.observation      = feffi.observation ;
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
                         vm.selectedItem ={};
@@ -263,9 +297,15 @@
                 }
                 else
                 {
-                  feffi.description =  feffi.description;
-                  feffi.denomination=  feffi.denomination;
-                  feffi.commune = eco[0];
+
+                  feffi.identifiant      = feffi.identifiant ;
+                  feffi.denomination      = feffi.denomination ;
+                  feffi.nbr_feminin      = feffi.nbr_feminin ;
+                  feffi.nbr_total      = feffi.nbr_total ;
+                  feffi.adresse      = feffi.adresse ;
+                  feffi.observation      = feffi.observation ;
+
+                  feffi.ecole = eco[0];
                   feffi.id  =   String(data.response);              
                   NouvelItem=false;
             }
@@ -281,7 +321,13 @@
 
 /**********************************debut membre****************************************/
 //col table
-        vm.membre_column = [{titre:"Nom"},{titre:"Prenom"},{titre:"Sexe"},{titre:"Age"},{titre:"Occupation"},{titre:"Action"}]; 
+        vm.membre_column = [
+        {titre:"Nom"},
+        {titre:"Prenom"},
+        {titre:"Sexe"},
+        {titre:"Age"},
+        {titre:"Occupation"},
+        {titre:"Action"}]; 
 
         //Masque de saisi ajout
         vm.ajouterMembre = function ()
@@ -477,7 +523,7 @@
                         vm.selectedItemMembre.occupation        = membre.occupation;
                         vm.selectedItemMembre.$selected  = false;
                         vm.selectedItemMembre.$edit      = false;
-                        vm.selectedItem ={};
+                        vm.selectedItemMembre ={};
                     }
                     else 
                     {    
@@ -514,6 +560,24 @@
                 break;
             case '2':
                 affiche= 'Feminin';
+                break;
+            default:
+          }
+          return affiche;
+        };
+
+        vm.affichage_occupation= function (sexe)
+        { var affiche='';
+          switch (sexe)
+          {
+            case '1':
+                affiche= 'President';
+                break;
+            case '2':
+                affiche= 'Secretaire';
+                break;
+            case '3':
+                affiche= 'Simple membre';
                 break;
             default:
           }

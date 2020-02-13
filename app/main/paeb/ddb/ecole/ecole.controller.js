@@ -28,7 +28,26 @@
         };
 
         //col table
-        vm.ecole_column = [{titre:"Code"},{titre:"Description"},{titre:"Lieu"},{titre:"Fokontany"},{titre:"Latitude"},{titre:"Longitude"},{titre:"Altitude"},{titre:"Ponderation"},{titre:"Action"}];
+        vm.ecole_column = [
+        {titre:"Code"
+        },
+        {titre:"Description"
+        },
+        {titre:"Lieu"
+        },
+        {titre:"Fokontany"
+        },
+        {titre:"Latitude"
+        },
+        {titre:"Longitude"
+        },
+        {titre:"Altitude"
+        },
+        {titre:"Zone subvention"
+        },
+        {titre:"Acces zone"
+        },
+        {titre:"Action"}];
         
         //recuperation donnée ecole
         apiFactory.getAll("ecole/index").then(function(result)
@@ -52,6 +71,18 @@
               vm.liste.push(site);              
             });
             console.log(vm.liste);
+        });
+
+        //recuperation donnée zone_subvetention
+        apiFactory.getAll("zone_subvention/index").then(function(result)
+        {
+          vm.allzone_subvention= result.data.response;
+        });
+
+        //recuperation donnée acces_zone
+        apiFactory.getAll("acces_zone/index").then(function(result)
+        {
+          vm.allacces_zone= result.data.response;
         });
 /*
  $scope.events = {
@@ -102,7 +133,8 @@
               latitude: '',
               longitude: '',
               altitude: '',
-              ponderation: 0
+              id_zone_subvention:'',
+              id_acces_zone: ''
             };         
             vm.allecole.push(items);
             vm.allecole.forEach(function(cis)
@@ -148,7 +180,8 @@
             item.latitude    = currentItem.latitude ;
             item.longitude   = currentItem.longitude ;
             item.altitude    = currentItem.altitude ;
-            item.ponderation    = currentItem.ponderation ; 
+            item.id_zone_subvention = currentItem.id_zone_subvention;
+            item.id_acces_zone    = currentItem.id_acces_zone; 
           }else
           {
             vm.allecole = vm.allecole.filter(function(obj)
@@ -200,7 +233,8 @@
             item.latitude      = vm.selectedItem.latitude ;
             item.longitude = vm.selectedItem.longitude;
             item.altitude  = vm.selectedItem.altitude;
-            item.ponderation  = vm.selectedItem.ponderation; 
+            item.id_zone_subvention = vm.selectedItem.zone_subvention.id ;
+            item.id_acces_zone = vm.selectedItem.acces_zone.id ; 
         };
 
         //fonction bouton suppression item ecole
@@ -239,7 +273,8 @@
                     || (cis[0].latitude!=currentItem.latitude)
                     || (cis[0].longitude!=currentItem.longitude)
                     || (cis[0].altitude!=currentItem.altitude)
-                    || (cis[0].ponderation!=currentItem.ponderation))                    
+                    || (cis[0].id_acces_zone!=currentItem.id_acces_zone)
+                    ||(cis[0].id_zone_subvention!=currentItem.id_zone_subvention))                    
                       { 
                          insert_in_base(item,suppression);
                       }
@@ -278,7 +313,8 @@
                     altitude:    ecole.altitude,
                     id_fokontany:  ecole.id_fokontany,
                     description: ecole.description,
-                    ponderation: ecole.ponderation               
+                    id_zone_subvention: ecole.id_zone_subvention,
+                    id_acces_zone: ecole.id_acces_zone,                
                 });
                 //console.log(ecole.pays_id);
                 //factory
@@ -288,6 +324,16 @@
                 var com = vm.allfokontany.filter(function(obj)
                 {
                     return obj.id == ecole.id_fokontany;
+                });
+
+                var zosub = vm.allzone_subvention.filter(function(obj)
+                {
+                    return obj.id == ecole.id_zone_subvention;
+                });
+
+                var azone = vm.allacces_zone.filter(function(obj)
+                {
+                    return obj.id == ecole.id_acces_zone;
                 });
 
                 if (NouvelItem == false)
@@ -301,7 +347,8 @@
                         vm.selectedItem.latitude   = ecole.latitude;
                         vm.selectedItem.longitude  = ecole.longitude;
                         vm.selectedItem.altitude   = ecole.altitude;
-                        vm.selectedItem.ponderation   = ecole.ponderation;
+                        vm.selectedItem.zone_subvention   = zosub[0];
+                        vm.selectedItem.acces_zone   = azone[0];
                         vm.selectedItem.fokontany       = com[0];
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
@@ -323,7 +370,8 @@
                   ecole.latitude  =  ecole.latitude;
                   ecole.longitude =  ecole.longitude;
                   ecole.altitude  =  ecole.altitude;
-                  ecole.ponderation  =  ecole.ponderation;
+                  ecole.zone_subvention = zosub[0];
+                  ecole.acces_zone = azone[0];
                   ecole.fokontany   = com[0];
                   ecole.id        =   String(data.response);              
                   NouvelItem = false;
@@ -334,6 +382,11 @@
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
+        }
+
+        vm.change_zone_subvention = function(item)
+        {
+          item.id_acces_zone = null;
         }
 
         //Alert

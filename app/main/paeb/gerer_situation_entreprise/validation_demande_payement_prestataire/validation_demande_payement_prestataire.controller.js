@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('app.paeb.gerer_situation_entreprise.demande_payement_prestataire')
+        .module('app.paeb.gerer_situation_entreprise.validation_demande_payement_prestataire')
         .directive('customOnChange', function() {
       return {
         restrict: 'A',
@@ -69,6 +69,10 @@
         vm.selectedItemJustificatif_facture = {} ;
         vm.alljustificatif_facture = [] ;
 
+        var currentItemJustificatif_autre;
+        vm.selectedItemJustificatif_autre = {} ;
+        vm.alljustificatif_autre = [] ;
+
         vm.stepOne = false;
         vm.stepTwo = false;
         vm.stepThree = false;
@@ -101,7 +105,7 @@
  
 /**********************************fin contrat prestataire****************************************/       
         //recuperation donnée convention
-        apiFactory.getAll("contrat_prestataire/index").then(function(result)
+      /*  apiFactory.getAll("contrat_prestataire/index").then(function(result)
         {
             vm.allcontrat_prestataire = result.data.response; 
             console.log(vm.allcontrat_prestataire);
@@ -117,7 +121,7 @@
             //recuperation donnée convention
             if (vm.selectedItemContrat_prestataire.id!=0)
             {
-              apiFactory.getAPIgeneraliserREST("demande_payement_prestataire/index",'menu','getdemandeInvalideBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+              apiFactory.getAPIgeneraliserREST("demande_payement_prestataire/index",'menu','getdemandeInvalide').then(function(result)
               {
                   vm.alldemande_payement_prest = result.data.response;
 
@@ -140,9 +144,14 @@
                 item.$selected = false;
              });
              vm.selectedItemContrat_prestataire.$selected = true;
-        });        
+        }); */       
 
 /**********************************fin contrat prestataire****************************************/
+
+          apiFactory.getAPIgeneraliserREST("demande_payement_prestataire/index",'menu','getdemandeInvalide').then(function(result)
+          {
+            vm.alldemande_payement_prest = result.data.response;
+          });
 
 /**********************************debut demande_payement_prest****************************************/
 //col table
@@ -150,6 +159,8 @@
         {titre:"Objet"
         },
         {titre:"Description"
+        },
+        {titre:"Référence facture"
         },
         {titre:"Montant"
         },
@@ -177,6 +188,18 @@
             {
                 vm.alljustificatif_attachement = result.data.response;
                 console.log(vm.alljustificatif_attachement);
+            });
+
+            apiFactory.getAPIgeneraliserREST("justificatif_facture/index",'id_demande_pay_pre',vm.selectedItemDemande_payement_prest.id).then(function(result)
+            {
+                vm.alljustificatif_facture = result.data.response;
+                console.log(vm.alljustificatif_facture);
+            });
+
+            apiFactory.getAPIgeneraliserREST("justificatif_autre_pre/index",'id_demande_pay_pre',vm.selectedItemDemande_payement_prest.id).then(function(result)
+            {
+                vm.alljustificatif_autre = result.data.response;
+                console.log(vm.alljustificatif_autre);
             });
 
             vm.stepTwo = true;
@@ -208,9 +231,10 @@
                     id:        demande_payement_prest.id,
                     objet: demande_payement_prest.objet,
                     description:demande_payement_prest.description,
+                    ref_facture:demande_payement_prest.ref_facture,
                     montant: demande_payement_prest.montant,
                     date: convertionDate(new Date(demande_payement_prest.date)),
-                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
+                    id_contrat_prestataire: demande_payement_prest.contrat_prestataire.id,
                     validation: validation               
                 });
                 console.log(datas);
@@ -299,6 +323,42 @@
         });
 
         vm.download_facture = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
+        }
+
+/**********************************fin mpe_sousmissionnaire****************************************/
+
+/**********************************fin justificatif attachement****************************************/
+
+//col table
+        vm.justificatif_autre_column = [
+        {titre:"Description"
+        },
+        {titre:"Fichier"
+        },
+        {titre:"Action"
+        }];
+
+
+        //fonction selection item region
+        vm.selectionJustificatif_autre= function (item)
+        {
+            vm.selectedItemJustificatif_autre = item;
+            vm.nouvelItemJustificatif_autre   = item;
+            currentItemJustificatif_autre    = JSON.parse(JSON.stringify(vm.selectedItemJustificatif_autre)); 
+        };
+        $scope.$watch('vm.selectedItemJustificatif_autre', function()
+        {
+             if (!vm.alljustificatif_autre) return;
+             vm.alljustificatif_autre.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemJustificatif_autre.$selected = true;
+        });
+
+        vm.download_autre = function(item)
         {
             window.location = apiUrlFile+item.fichier ;
         }
