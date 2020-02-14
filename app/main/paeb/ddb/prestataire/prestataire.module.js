@@ -31,7 +31,7 @@
             title: 'Prestataire',
             icon  : 'icon-ticket-account',
             state: 'app.paeb_ddb_prestataire',
-			weight: 6
+			weight: 9
         });
     }
 

@@ -31,7 +31,7 @@
             title: 'Type batiment',
             icon  : 'icon-clipboard-text',
             state: 'app.paeb_ddb_type_batiment',
-			weight: 5
+			weight: 6
         });
     }
 

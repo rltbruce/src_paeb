@@ -31,7 +31,7 @@
             title: 'bureau_etude',
             icon  : 'icon-ticket-account',
             state: 'app.paeb_ddb_bureau_etude',
-			weight: 6
+			weight: 10
         });
     }
 

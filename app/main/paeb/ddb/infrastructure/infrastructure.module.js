@@ -31,7 +31,7 @@
             title: 'Infrastructure',
             icon  : 'icon-clipboard-text',
             state: 'app.paeb_ddb_infrastructure',
-			weight: 5
+			weight: 11
         });
     }
 
