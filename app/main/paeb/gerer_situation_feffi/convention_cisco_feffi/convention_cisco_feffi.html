@@ -121,6 +121,26 @@
                                     
                           <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.ref_financement}}</span>
                         </td>
+
+                        <td>
+                          <span ng-if="convention_cife_tete.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Montant total</label>
+                              <input name="montant_total" type="number" ng-model="convention_cife_tete.montant_total" disabled/>
+                            </md-input-container>
+                          </span>                          
+                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.montant_total}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="convention_cife_tete.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Avancement</label>
+                              <input name="avancement" type="number" ng-model="convention_cife_tete.avancement" disabled/>
+                            </md-input-container>
+                          </span>                          
+                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.avancement}}</span>
+                        </td>
                                                      
                         <td>  
                           <a ng-if="!convention_cife_tete.$edit" ng-click="vm.modifierTete(convention_cife_tete)" title="Modifier">
@@ -197,15 +217,6 @@
                             </md-input-container>
                           </span>                          
                           <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.intitule}}</span>
-                        </td>
-                        <td>
-                          <span ng-if="convention_cife_detail.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Montant total</label>
-                              <input name="montant_total" type="number" ng-model="convention_cife_detail.montant_total" disabled/>
-                            </md-input-container>
-                          </span>                          
-                          <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.montant_total}}</span>
                         </td> 
                         <td>
                           <span ng-if="convention_cife_detail.$edit">
@@ -273,16 +284,6 @@
                           </span>
                                     
                           <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.observation}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="convention_cife_detail.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Avancement</label>
-                              <input name="avancement" type="number" ng-model="convention_cife_detail.avancement" disabled/>
-                            </md-input-container>
-                          </span>                          
-                          <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.avancement}}</span>
                         </td>
                                                      
                         <td>  

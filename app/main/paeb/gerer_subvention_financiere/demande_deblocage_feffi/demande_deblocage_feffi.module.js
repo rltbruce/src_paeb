@@ -29,7 +29,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.demande_deblocage_feffi', {
-            title: 'Saisi Demande feffi',
+            title: 'Saisie Demande feffi',
             icon  : 'icon-tile-four',
             state: 'app.paeb_gerer_subvention_financiere_demande_deblocage_feffi',
             weight: 1,

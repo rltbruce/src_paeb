@@ -96,6 +96,10 @@
         },
         {titre:"Reference Financement"
         },
+        {titre:"Cout éstimé"
+        },
+        {titre:"Avancement"
+        },
         {titre:"Action"
         }];
         
@@ -131,7 +135,9 @@
               id_feffi:'',
               ref_convention: '',
               objet: '',
-              ref_financement: ''
+              ref_financement: '',
+              montant_total:0,
+              avancement:0
             };       
             vm.allconvention_cife_tete.push(items);
             vm.allconvention_cife_tete.forEach(function(conv)
@@ -175,6 +181,8 @@
               item.ref_convention  = currentItemTete.ref_convention ;
               item.objet       = currentItemTete.objet ;              
               item.ref_financement = currentItemTete.ref_financement ;
+              item.montant_total = currentItemTete.montant_total; 
+              item.avancement = currentItemTete.avancement;
               
           }else
           {
@@ -257,6 +265,8 @@
             item.ref_convention  = vm.selectedItemTete.ref_convention ;
             item.objet           = vm.selectedItemTete.objet ;
             item.ref_financement = vm.selectedItemTete.ref_financement ;
+            item.montant_total = parseInt(vm.selectedItemTete.montant_total);
+            item.avancement = parseInt(vm.selectedItemTete.avancement);
 
         };
 
@@ -337,16 +347,14 @@
             
             var datas = $.param({
                     supprimer: suppression,
-                    id:        getId,      
-                    //delai:    convention_cife_tete.delai,
+                    id:        getId,
                     id_cisco: convention_cife_tete.id_cisco,
                     id_feffi: convention_cife_tete.id_feffi,
                     objet:    convention_cife_tete.objet,
-                   // date_signature:    convertionDate(new Date(convention_cife_tete.date_signature)),
-                    ref_financement:       convention_cife_tete.ref_financement,
-                    ref_convention: convention_cife_tete.ref_convention,
-                   /* id_compte_feffi: convention_cife_tete.id_compte_feffi,
-                    observation: convention_cife_tete.observation,*/
+                    ref_financement:  convention_cife_tete.ref_financement,
+                    ref_convention:   convention_cife_tete.ref_convention,
+                    montant_total:    convention_cife_tete.montant_total,
+                    avancement:    convention_cife_tete.avancement,
                     validation: 0               
                 });
                 //console.log(convention.pays_id);
@@ -375,6 +383,8 @@
                         vm.selectedItemTete.objet   = convention_cife_tete.objet;
                         vm.selectedItemTete.ref_financement       = convention_cife_tete.ref_financement;
                         vm.selectedItemTete.ref_convention = convention_cife_tete.ref_convention;
+                        vm.selectedItemTete.avancement  = convention_cife_tete.avancement;
+                        vm.selectedItemTete.montant_total  = convention_cife_tete.montant_total;
                         vm.selectedItemTete.$selected  = false;
                         vm.selectedItemTete.$edit      = false;
                         vm.selectedItemTete ={};
@@ -399,6 +409,8 @@
                   convention_cife_tete.ref_convention  = convention_cife_tete.ref_convention ;
                   convention_cife_tete.objet           = convention_cife_tete.objet ;
                   convention_cife_tete.ref_financement = convention_cife_tete.ref_financement ;
+                  convention_cife_tete.avancement= convention_cife_tete.avancement;
+                  convention_cife_tete.montant_total= convention_cife_tete.montant_total;
                   NouvelItemTete = false;
             }
               convention_cife_tete.$selected = false;
@@ -471,9 +483,6 @@
           titre:"Intitule"
         },
         {
-          titre:"Cout éstimé"
-        },
-        {
           titre:"Nom banque"
         },
         {
@@ -492,9 +501,6 @@
           titre:"Observation"
         },
         {
-          titre:"Avancement"
-        },
-        {
           titre:"Action"
         }];
 
@@ -508,14 +514,12 @@
               $selected: true,
               id: '0',
               intitule:'',
-              montant_total:0,
               id_feffi:'',
               adresse_banque:'',
               rib:'',
               delai:'',
               date_signature:'',
-              observation:'',
-              avancement:0
+              observation:''
             };         
             vm.allconvention_cife_detail.push(items);
             vm.allconvention_cife_detail.forEach(function(conv)
@@ -554,8 +558,7 @@
           {
               item.$edit = false;
               item.$selected = false;
-              item.intitule = currentItemDetail.intitule;
-              item.montant_total = currentItemDetail.montant_total; 
+              item.intitule = currentItemDetail.intitule; 
 
               item.id_compte_feffi  = currentItemDetail.compte_feffi.id ;
               item.nom_banque  = currentItemDetail.compte_feffi.nom_banque ;
@@ -639,8 +642,6 @@
             item.$selected = true;
 
             item.intitule = vm.selectedItemDetail.intitule ;
-            item.montant_total = parseInt(vm.selectedItemDetail.montant_total);
-            item.avancement = parseInt(vm.selectedItemDetail.avancement);
 
             item.id_compte_feffi  = vm.selectedItemDetail.compte_feffi.id ;
             item.nom_banque  = vm.selectedItemDetail.compte_feffi.nom_banque ;
@@ -746,8 +747,6 @@
                     if(suppression==0)
                     {
                         vm.selectedItemDetail.intitule  = convention_cife_detail.intitule;
-                        vm.selectedItemDetail.avancement  = convention_cife_detail.avancement;
-                        vm.selectedItemDetail.montant_total  = convention_cife_detail.montant_total;
                         vm.selectedItemDetail.delai  = convention_cife_detail.delai;
                         vm.selectedItemDetail.date_signature    = convention_cife_detail.date_signature;
                         vm.selectedItemDetail.compte_feffi = comp_fef[0];
@@ -771,8 +770,6 @@
                 {
                   
                   convention_cife_detail.intitule= convention_cife_detail.intitule;
-                  convention_cife_detail.avancement= convention_cife_detail.avancement;
-                  convention_cife_detail.montant_total= convention_cife_detail.montant_total;
                   convention_cife_detail.delai  = convention_cife_detail.delai;
                   convention_cife_detail.date_signature    = convention_cife_detail.date_signature;
                   convention_cife_detail.compte_feffi = comp_fef[0];

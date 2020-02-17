@@ -61,7 +61,11 @@
         vm.stepThree = false;
         //vm.stepFor   = false;
 
-    //initialisation convention_cisco_feffi_entete
+    //initialisation feffi
+        vm.selectedItemFeffi = {} ;
+        vm.allfeffi  = [] ;
+
+        //initialisation convention_cisco_feffi_entete
         vm.selectedItemConvention_cisco_feffi_entete = {} ;
         vm.allconvention_cisco_feffi_entete  = [] ;
 
@@ -98,8 +102,58 @@
         {
           vm.alltranche_deblocage_feffi= result.data.response;
           vm.allcurenttranche_deblocage_feffi = result.data.response;
-              //console.log(vm.allcurenttranche_deblocage_feffi);
+          //console.log(vm.allcurenttranche_deblocage_feffi);
         });
+
+    /*****************Debut StepOne feffi***************/
+
+      //recuperation donnée feffi
+        apiFactory.getAll("feffi/index").then(function(result)
+        {
+            vm.allfeffi = result.data.response; 
+            console.log(vm.allfeffi);
+        });
+
+        //col table
+        vm.feffi_column = [
+          {titre:"Identifiant"},
+          {titre:"Dénomination"},
+          {titre:"Nombre feminin"},
+          {titre:"Nombre membre"},
+          {titre:"Adresse"},
+          {titre:"Ecole"},
+          {titre:"Observation"}];
+        
+        
+
+        //fonction selection item convetion
+        vm.selectionFeffi = function (item)
+        {
+            vm.selectedItemFeffi = item;           
+            vm.stepOne = true;
+            vm.stepTwo = false;
+            vm.stepThree = false;
+            vm.stepFor= false;
+
+            //recuperation donnée convention
+           apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideByfeffi','id_feffi',item.id).then(function(result)
+          {
+              vm.allconvention_cisco_feffi_entete = result.data.response;
+              console.log(vm.allconvention_cisco_feffi_entete);
+          });
+           
+        };
+        $scope.$watch('vm.selectedItemFeffi', function()
+        {
+             if (!vm.allfeffi) return;
+             vm.allfeffi.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemFeffi.$selected = true;
+        });          
+
+  /*****************Fin StepOne feffi****************/
         
 
   /*****************Debut StepOne convention_cisco_feffi_entete***************/
@@ -141,9 +195,10 @@
         vm.selectionConvention_cisco_feffi_entete = function (item)
         {
             vm.selectedItemConvention_cisco_feffi_entete = item;           
-            vm.stepOne = true;
-            vm.stepTwo = false;
+           
+            vm.stepTwo = true;
             vm.stepThree = false;
+            vm.stepFor= false;
 
            //recuperation donnée demande
             apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemande_realimentation_feffi","id_convention_cife_entete",item.id).then(function(result)
@@ -212,7 +267,7 @@
             var numcode=vm.dernierdemande[0].tranche.code.split(' ')[1];
 
             
-            switch (numcode)
+            /*switch (numcode)
             {
               case '1':
                   vm.allcurenttranche_deblocage_feffi = vm.alltranche_deblocage_feffi.filter(function(obj)
@@ -234,7 +289,13 @@
 
               default:
           
-            }
+            }*/
+
+            vm.allcurenttranche_deblocage_feffi = vm.alltranche_deblocage_feffi.filter(function(obj)
+            {
+                return obj.code == 'tranche '+(parseInt(numcode)+1);
+            });
+
           }
           else
           {
@@ -333,8 +394,8 @@
                 vm.allpiece_justificatif_feffi = result.data.response;
                 console.log(vm.allpiece_justificatif_feffi);
             });
-            vm.stepTwo  = true;
-            vm.stepThree = false; 
+            vm.stepThree = true; 
+            vm.stepThree = false;
         };
         $scope.$watch('vm.selectedItemDemande_realimentation', function()
         {

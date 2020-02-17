@@ -45,7 +45,7 @@
           {titre:"Identifiant"},
           {titre:"Dénomination"},
           {titre:"Nombre feminin"},
-          {titre:"Nombre total"},
+          {titre:"Nombre membre"},
           {titre:"Adresse"},
           {titre:"Ecole"},
           {titre:"Observation"},
@@ -55,7 +55,7 @@
         apiFactory.getAll("feffi/index").then(function(result)
         {
             vm.allfeffi = result.data.response; 
-            //console.log(vm.allfeffi);
+            console.log(vm.allfeffi);
         });
 
         //recuperation donnée cisco
@@ -75,8 +75,8 @@
               id: '0',
               identifiant: '',
               denomination: '',
-              nbr_feminin: '',
-              nbr_total: '',
+              nbr_feminin: 0,
+              nbr_membre: 0,
               adresse: '',
               observation: '',
               id_ecole: ''
@@ -121,7 +121,7 @@
             item.identifiant      = currentItem.identifiant ;
             item.denomination      = currentItem.denomination ;
             item.nbr_feminin      = currentItem.nbr_feminin ;
-            item.nbr_total      = currentItem.nbr_total ;
+            item.nbr_membre      = currentItem.nbr_membre ;
             item.adresse      = currentItem.adresse ;
             item.observation      = currentItem.observation ;
             item.id_ecole      = currentItem.id_ecole; 
@@ -143,7 +143,10 @@
         {
             vm.selectedItem = item;
             vm.nouvelItem   = item;
-            currentItem     = JSON.parse(JSON.stringify(vm.selectedItem)); 
+            if(item.$selected==false)
+            {
+              currentItem     = JSON.parse(JSON.stringify(vm.selectedItem)); 
+            }
             if (vm.selectedItem.id!=0)
             {
               //recuperation donnée membre
@@ -189,7 +192,7 @@
             item.identifiant      = vm.selectedItem.identifiant ;
             item.denomination      = vm.selectedItem.denomination ;
             item.nbr_feminin      = vm.selectedItem.nbr_feminin ;
-            item.nbr_total      = vm.selectedItem.nbr_total ;
+            item.nbr_membre      = vm.selectedItem.nbr_membre ;
             item.adresse      = vm.selectedItem.adresse ;
             item.observation      = vm.selectedItem.observation ;
             item.id_ecole  = vm.selectedItem.ecole.id;
@@ -226,8 +229,6 @@
                 {
                    if((cis[0].identifiant!=currentItem.identifiant) 
                     || (cis[0].denomination!=currentItem.denomination)
-                    || (cis[0].nbr_feminin!=currentItem.nbr_feminin)
-                    || (cis[0].nbr_total!=currentItem.nbr_total)
                     || (cis[0].adresse!=currentItem.adresse)
                     || (cis[0].observation!=currentItem.observation)
                     || (cis[0].id_ecole!=currentItem.id_ecole))                    
@@ -264,8 +265,6 @@
                     id:        getId,      
                     denomination:      feffi.denomination,
                     identifiant: feffi.identifiant,
-                    nbr_feminin: feffi.nbr_feminin,
-                    nbr_total:      feffi.nbr_total,
                     adresse: feffi.adresse,
                     observation:      feffi.observation,
                     id_ecole: feffi.id_ecole                
@@ -290,7 +289,7 @@
                         vm.selectedItem.identifiant      = feffi.identifiant ;
                         vm.selectedItem.denomination      = feffi.denomination ;
                         vm.selectedItem.nbr_feminin      = feffi.nbr_feminin ;
-                        vm.selectedItem.nbr_total      = feffi.nbr_total ;
+                        vm.selectedItem.nbr_membre      = feffi.nbr_membre ;
                         vm.selectedItem.adresse      = feffi.adresse ;
                         vm.selectedItem.observation      = feffi.observation ;
                         vm.selectedItem.$selected  = false;
@@ -311,7 +310,7 @@
                   feffi.identifiant      = feffi.identifiant ;
                   feffi.denomination      = feffi.denomination ;
                   feffi.nbr_feminin      = feffi.nbr_feminin ;
-                  feffi.nbr_total      = feffi.nbr_total ;
+                  feffi.nbr_membre      = feffi.nbr_membre ;
                   feffi.adresse      = feffi.adresse ;
                   feffi.observation      = feffi.observation ;
 
@@ -414,7 +413,10 @@
         {
             vm.selectedItemMembre = item;
             vm.nouvelItemMembre   = item;
-            currentItemMembre    = JSON.parse(JSON.stringify(vm.selectedItemMembre)); 
+            if(item.$selected==false)
+            {
+              currentItemMembre    = JSON.parse(JSON.stringify(vm.selectedItemMembre));
+            } 
         };
         $scope.$watch('vm.selectedItemMembre', function()
         {
@@ -470,7 +472,7 @@
             {
                var mem = vm.allmembre.filter(function(obj)
                 {
-                   return obj.id == currentItem.id;
+                   return obj.id == currentItemMembre.id;
                 });
                 if(mem[0])
                 {
@@ -534,6 +536,17 @@
                         vm.selectedItemMembre.$selected  = false;
                         vm.selectedItemMembre.$edit      = false;
                         vm.selectedItemMembre ={};
+
+                        if(currentItemMembre.sexe == 1 && currentItemMembre.sexe !=vm.selectedItemMembre.sexe)
+                        {
+                          vm.selectedItem.nbr_feminin = parseInt(vm.selectedItem.nbr_feminin)+1;                          
+                        }
+
+                        if(currentItemMembre.sexe == 2 && currentItemMembre.sexe !=vm.selectedItemMembre.sexe)
+                        {
+                          vm.selectedItem.nbr_feminin = parseInt(vm.selectedItem.nbr_feminin)-1;                          
+                        }
+                        
                     }
                     else 
                     {    
@@ -541,6 +554,12 @@
                       {
                           return obj.id !== vm.selectedItemMembre.id;
                       });
+                      vm.selectedItem.nbr_membre = parseInt(vm.selectedItem.nbr_membre)-1;
+                      
+                      if(parseInt(membre.sexe) == 2)
+                      {
+                        vm.selectedItem.nbr_feminin = parseInt(vm.selectedItem.nbr_feminin)-1;
+                      }
                     }
                 }
                 else
@@ -552,6 +571,12 @@
                   membre.occupation        = membre.occupation;
                   membre.id  =   String(data.response);              
                   NouvelItemMembre=false;
+
+                  vm.selectedItem.nbr_membre = parseInt(vm.selectedItem.nbr_membre)+1;
+                  if(parseInt(membre.sexe) == 2)
+                  {
+                    vm.selectedItem.nbr_feminin = parseInt(vm.selectedItem.nbr_feminin)+1;
+                  }
             }
               membre.$selected = false;
               membre.$edit = false;
@@ -794,7 +819,8 @@
               compte_feffi.$edit = false;
               vm.selectedItemCompte_feffi = {};
             
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+          }).error(function (retour){
+            vm.showAlert('Error','Erreur lors de l\'insertion de compte.Il se peut qu\'un compte existe déjà');});
 
         }
 

@@ -37,7 +37,7 @@
         {
           vm.alltranche_deblocage_feffi= result.data.response;
          // vm.allcurenttranche_deblocage_feffi = result.data.response;
-              //console.log(vm.allcurenttranche_deblocage_feffi);
+        //console.log(vm.allcurenttranche_deblocage_feffi);
         });
         
 

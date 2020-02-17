@@ -250,13 +250,13 @@
 
                   case 'UFP':
                   {
-                      vm.user.bcaf = true ;
+                      vm.user.ufp = true ;
                       break;
                   }
 
                   case 'DPFI':
                   {
-                      vm.user.bcaf = true ;
+                      vm.user.dpfi = true ;
                       break;
                   }
 
