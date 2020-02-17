@@ -30,12 +30,8 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.infrastructure', {
             title: 'Infrastructure',
             icon  : 'icon-clipboard-text',
-<<<<<<< HEAD
             state: 'app.paeb_ddb_infrastructure'
-=======
-            state: 'app.paeb_ddb_infrastructure',
-			weight: 11
->>>>>>> origin/master
+
         });
     }
 

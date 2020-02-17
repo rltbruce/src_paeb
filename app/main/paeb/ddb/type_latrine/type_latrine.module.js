@@ -30,8 +30,7 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.type_latrine', {
             title: 'Type latrine',
             icon  : 'icon-clipboard-text',
-            state: 'app.paeb_ddb_type_latrine',
-			weight: 7
+            state: 'app.paeb_ddb_type_latrine'
         });
     }
 
