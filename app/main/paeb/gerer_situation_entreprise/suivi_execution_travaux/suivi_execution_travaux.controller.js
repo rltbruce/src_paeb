@@ -1239,13 +1239,14 @@ console.log(attac[0]);
             if (vm.allavancement_latrine.length>1)
             {
               var max_ponderation_latrine = Math.max.apply(Math, vm.allavancement_latrine.map(function(o)
-            { 
-                  return o.attachement_latrine.ponderation_latrine;
-            }));
-            vm.allcurrentattachement_latrine = vm.allattachement_latrine.filter(function(obj)
-            {
-                return obj.ponderation_latrine > max_ponderation_latrine;
-            });
+              { 
+                    return o.attachement_latrine.ponderation_latrine;
+              }));
+              vm.allcurrentattachement_latrine = vm.allattachement_latrine.filter(function(obj)
+              {
+                  return obj.ponderation_latrine > max_ponderation_latrine;
+              });
+            }
           }else
           {
             vm.showAlert('Ajout avancement_latrine','Un formulaire d\'ajout est déjà ouvert!!!');
@@ -1967,13 +1968,14 @@ var length_bat = vm.allbatiment_construction.length;
             if (vm.allavancement_mobilier.length>1)
             {
               var max_ponderation_mobilier = Math.max.apply(Math, vm.allavancement_mobilier.map(function(o)
-            { 
-                  return o.attachement_mobilier.ponderation_mobilier;
-            }));
-            vm.allcurrentattachement_mobilier = vm.allattachement_mobilier.filter(function(obj)
-            {
-                return obj.ponderation_mobilier > max_ponderation_mobilier;
-            });
+              { 
+                    return o.attachement_mobilier.ponderation_mobilier;
+              }));
+              vm.allcurrentattachement_mobilier = vm.allattachement_mobilier.filter(function(obj)
+              {
+                  return obj.ponderation_mobilier > max_ponderation_mobilier;
+              });
+            }
           }else
           {
             vm.showAlert('Ajout avancement_mobilier','Un formulaire d\'ajout est déjà ouvert!!!');
