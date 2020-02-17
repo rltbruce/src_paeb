@@ -30,8 +30,7 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.ecole', {
             title: 'Ecole',
             icon  : 'icon-home-variant',
-            state: 'app.paeb_ddb_ecole',
-			weight: 4
+            state: 'app.paeb_ddb_ecole'
         });
     }
 

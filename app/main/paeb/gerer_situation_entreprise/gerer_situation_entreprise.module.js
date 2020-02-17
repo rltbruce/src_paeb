@@ -22,7 +22,7 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise', {
-            title : 'Gerer situation entreprise',
+            title : 'Gérer situation entreprise',
             icon  : 'icon-data',
             weight: 3
         });

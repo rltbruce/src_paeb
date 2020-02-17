@@ -30,8 +30,7 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.composant', {
             title: 'Composant',
             icon  : 'icon-ticket-account',
-            state: 'app.paeb_ddb_composant',
-			weight: 6
+            state: 'app.paeb_ddb_composant'
         });
     }
 

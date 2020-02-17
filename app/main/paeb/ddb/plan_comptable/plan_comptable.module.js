@@ -30,8 +30,7 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.plan_comptable', {
             title: 'Plan comptable',
             icon  : 'icon-format-list-bulleted',
-            state: 'app.paeb_ddb_plan_comptable',
-			weight: 6
+            state: 'app.paeb_ddb_plan_comptable'
         });
     }
 

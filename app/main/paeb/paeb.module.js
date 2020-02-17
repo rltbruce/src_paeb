@@ -2,8 +2,7 @@
 {
     'use strict';
 
-    angular
-        .module('app.paeb', [
+    var tab = [
             'app.paeb.accueil',
             'app.paeb.auth.login',
             'app.paeb.auth.register',
@@ -17,7 +16,10 @@
             'app.paeb.gerer_convention_ufp_daaf',
             'app.paeb.gerer_situation_entreprise',
             'app.paeb.gerer_situation_be'
-        ])
+        ] ;
+
+    angular
+        .module('app.paeb', tab.sort())
         .config(config);
 
     /** @ngInject */

@@ -13,8 +13,7 @@
     {
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.localisation', {
             title : 'Localisation',
-            icon  : 'icon-map-marker-multiple',
-            weight: 1
+            icon  : 'icon-map-marker-multiple'
         });
     }
 

@@ -30,8 +30,7 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.prestataire', {
             title: 'Prestataire',
             icon  : 'icon-ticket-account',
-            state: 'app.paeb_ddb_prestataire',
-			weight: 6
+            state: 'app.paeb_ddb_prestataire'
         });
     }
 

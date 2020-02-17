@@ -15,7 +15,7 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_feffi', {
-            title : 'Gerer situation feffi',
+            title : 'Gérer situation feffi',
             icon  : 'icon-data',
             weight: 3
         });

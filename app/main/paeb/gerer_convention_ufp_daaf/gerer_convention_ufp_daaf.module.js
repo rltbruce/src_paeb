@@ -14,7 +14,7 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_convention_ufp_daaf', {
-            title : 'Gerer convention ufp/daaf',
+            title : 'Gérer convention ufp/daaf',
             icon  : 'icon-data',
             weight: 3
         });
