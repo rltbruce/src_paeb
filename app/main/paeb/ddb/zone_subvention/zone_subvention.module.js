@@ -30,7 +30,9 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.zone_subvention', {
             title: 'Zone subvention',
             icon  : 'icon-clipboard-text',
+
             state: 'app.paeb_ddb_zone_subvention'
+
         });
     }
 

@@ -8,15 +8,15 @@
             'app.paeb.ddb.acces_zone',
             'app.paeb.ddb.cisco',
             'app.paeb.ddb.ecole',
-            'app.paeb.ddb.plan_comptable',
+            //'app.paeb.ddb.plan_comptable',
             'app.paeb.ddb.prestataire',
             'app.paeb.ddb.bureau_etude',
             'app.paeb.ddb.type_batiment',
             'app.paeb.ddb.zone_subvention',
-            'app.paeb.ddb.detail_subvention',
-            'app.paeb.ddb.composant',
             'app.paeb.ddb.infrastructure',
-            'app.paeb.ddb.type_cout_divers'
+            'app.paeb.ddb.type_cout_divers',
+            'app.paeb.ddb.type_mobilier',
+            'app.paeb.ddb.type_latrine',
 
             ] ;
 

@@ -113,15 +113,6 @@
 
                         <td>
                           <span ng-if="convention_cife_tete.$edit">
-                            <md-datepicker ng-model="convention_cife_tete.date_signature" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
-                          </md-datepicker>  
-                          </span>
-                                    
-                          <span ng-if="!convention_cife_tete.$edit">{{vm.formatDate(convention_cife_tete.date_signature)}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="convention_cife_tete.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
                               <label>Réference financement</label>
                               <input name="ref_financement" type="text" ng-model="convention_cife_tete.ref_financement"/>
@@ -129,65 +120,6 @@
                           </span>
                                     
                           <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.ref_financement}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="convention_cife_tete.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Nom banque</label>
-                              <md-select ng-model="convention_cife_tete.id_compte_feffi"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changecompte_feffi(convention_cife_tete)">
-                                <md-option ng-repeat="compte_feffi in vm.allcompte_feffi" value="{{compte_feffi.id}}">
-                                                                    {{compte_feffi.nom_banque}}
-                                </md-option>
-                              </md-select>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.compte_feffi.nom_banque}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="convention_cife_tete.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Adresse banque</label>
-                              <input name="adresse_banque" type="text" ng-model="convention_cife_tete.adresse_banque"/>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.compte_feffi.adresse_banque}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="convention_cife_tete.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>RIB</label>
-                              <input name="rib" type="text" ng-model="convention_cife_tete.rib"/>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.compte_feffi.rib}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="convention_cife_tete.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Delai</label>
-                              <input name="delai" type="text" ng-model="convention_cife_tete.delai" md-placeholder="en mois"/>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.delai}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="convention_cife_tete.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Observation</label>
-                              <input name="observation" type="text" ng-model="convention_cife_tete.observation" md-placeholder="en mois"/>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.observation}}</span>
                         </td>
                                                      
                         <td>  
@@ -203,7 +135,7 @@
                             <span class="icon-cancel"></span>
                           </a>
                                     
-                          <a ng-if="convention_cife_tete.$edit && convention_cife_tete.ref_convention && convention_cife_tete.objet && convention_cife_tete.id_cisco && convention_cife_tete.id_feffi && convention_cife_tete.ref_financement && convention_cife_tete.date_signature && convention_cife_tete.delai && convention_cife_tete.id_compte_feffi>''" ng-click="vm.ajoutTete(convention_cife_tete,0)" title="Sauvegarder">
+                          <a ng-if="convention_cife_tete.$edit && convention_cife_tete.ref_convention && convention_cife_tete.objet && convention_cife_tete.id_cisco && convention_cife_tete.id_feffi && convention_cife_tete.ref_financement>''" ng-click="vm.ajoutTete(convention_cife_tete,0)" title="Sauvegarder">
                             <span class="icon-content-save"></span>
                           </a>
                         </td>
@@ -225,6 +157,12 @@
                   <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
                       <i class="icon-check s16"></i>
                   </span>
+                  <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">
+                    <i class="icon-check s16"></i>
+                  </span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                    <i class="icon-check s16"></i>
+                  </span-->
                   <span class="ms-form-wizard-step-text">Detail</span>
                 </span>
               </md-tab-label>
@@ -260,13 +198,6 @@
                           </span>                          
                           <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.intitule}}</span>
                         </td>
-                        <td>                         
-                          <span>{{vm.selectedItemTete.ecole.libelle_zone}}</span>
-                        </td>
-                        <td>                         
-                          <span>{{vm.selectedItemTete.ecole.libelle_acces}}</span>
-                        </td>
-
                         <td>
                           <span ng-if="convention_cife_detail.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
@@ -275,6 +206,73 @@
                             </md-input-container>
                           </span>                          
                           <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.montant_total}}</span>
+                        </td> 
+                        <td>
+                          <span ng-if="convention_cife_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Nom banque</label>
+                              <md-select ng-model="convention_cife_detail.id_compte_feffi"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changecompte_feffi(convention_cife_detail)">
+                                <md-option ng-repeat="compte_feffi in vm.allcompte_feffi" value="{{compte_feffi.id}}">
+                                                                    {{compte_feffi.nom_banque}}
+                                </md-option>
+                              </md-select>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.compte_feffi.nom_banque}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="convention_cife_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Adresse banque</label>
+                              <input name="adresse_banque" type="text" ng-model="convention_cife_detail.adresse_banque"/>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.compte_feffi.adresse_banque}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="convention_cife_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>RIB</label>
+                              <input name="rib" type="text" ng-model="convention_cife_detail.rib"/>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.compte_feffi.rib}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="convention_cife_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Delai</label>
+                              <input name="delai" type="text" ng-model="convention_cife_detail.delai" md-placeholder="en mois"/>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.delai}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="convention_cife_detail.$edit">
+                            <md-datepicker ng-model="convention_cife_detail.date_signature" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>  
+                          </span>
+                                    
+                          <span ng-if="!convention_cife_detail.$edit">{{vm.formatDate(convention_cife_detail.date_signature)}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="convention_cife_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Observation</label>
+                              <input name="observation" type="text" ng-model="convention_cife_detail.observation" md-placeholder="en mois"/>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.observation}}</span>
                         </td>
 
                         <td>
@@ -300,7 +298,7 @@
                             <span class="icon-cancel"></span>
                           </a>
                                     
-                          <a ng-if="convention_cife_detail.$edit && convention_cife_detail.intitule>''" ng-click="vm.ajoutDetail(convention_cife_detail,0)" title="Sauvegarder">
+                          <a ng-if="convention_cife_detail.$edit && convention_cife_detail.intitule && convention_cife_detail.id_compte_feffi && convention_cife_detail.delai && convention_cife_detail.date_signature>''" ng-click="vm.ajoutDetail(convention_cife_detail,0)" title="Sauvegarder">
                             <span class="icon-content-save"></span>
                           </a>
                         </td>
@@ -350,44 +348,34 @@
                           <span ng-if="batiment_construction.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
                               <label>Batiment ouvrage</label>
-                              <md-select ng-model="batiment_construction.id_batiment_ouvrage"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.modification_batiment_ouvrage(batiment_construction)">
-                                <md-option ng-repeat="batiment_ouvrage in vm.allbatiment_ouvrage" value="{{batiment_ouvrage.id}}">
-                                                                    {{batiment_ouvrage.libelle}}
+                              <md-select ng-model="batiment_construction.id_type_batiment"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.modification_type_batiment(batiment_construction)">
+                                <md-option ng-repeat="type_batiment in vm.alltype_batiment" value="{{type_batiment.id}}">
+                                                                    {{type_batiment.libelle}}
                                 </md-option>
                               </md-select>
                             </md-input-container>  
                           </span>
-                          <span ng-if="!batiment_construction.$edit">{{batiment_construction.batiment_ouvrage.libelle}}</span>
+                          <span ng-if="!batiment_construction.$edit">{{batiment_construction.type_batiment.libelle}}</span>
                         </td>
 
                         <td>
                           <span ng-if="batiment_construction.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
-                              <label>Cout maitrise oeuvre</label>
-                              <input name="cout_maitrise_oeuvre" type="number" ng-model="batiment_construction.cout_maitrise_oeuvre" disabled />
+                              <label>Nombre batiment</label>
+                              <input name="nbr_batiment" type="number" ng-model="batiment_construction.nbr_batiment"/>
                             </md-input-container>
                           </span>                          
-                          <span ng-if="!batiment_construction.$edit">{{batiment_construction.batiment_ouvrage.cout_maitrise_oeuvre}}</span>
+                          <span ng-if="!batiment_construction.$edit">{{batiment_construction.nbr_batiment}}</span>
                         </td>
 
                         <td>
                           <span ng-if="batiment_construction.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
-                              <label>Cout batiment</label>
-                              <input name="cout_batiment" type="number" ng-model="batiment_construction.cout_batiment" disabled />
+                              <label>Cout unitaire</label>
+                              <input name="cout_unitaire" type="number" ng-model="batiment_construction.cout_unitaire" disabled />
                             </md-input-container>
                           </span>                          
-                          <span ng-if="!batiment_construction.$edit">{{batiment_construction.batiment_ouvrage.cout_batiment}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="batiment_construction.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Cout sous projet</label>
-                              <input name="cout_sous_projet" type="number" ng-model="batiment_construction.cout_sous_projet" disabled />
-                            </md-input-container>
-                          </span>                          
-                          <span ng-if="!batiment_construction.$edit">{{batiment_construction.batiment_ouvrage.cout_sous_projet}}</span>
+                          <span ng-if="!batiment_construction.$edit">{{batiment_construction.cout_unitaire}}</span>
                         </td>
                                                      
                         <td>  
@@ -403,7 +391,7 @@
                             <span class="icon-cancel"></span>
                           </a>
                                     
-                          <a ng-if="batiment_construction.$edit && batiment_construction.id_batiment_ouvrage>''" ng-click="vm.ajoutBatiment_construction(batiment_construction,0)" title="Sauvegarder">
+                          <a ng-if="batiment_construction.$edit && batiment_construction.id_type_batiment && batiment_construction.nbr_batiment>''" ng-click="vm.ajoutBatiment_construction(batiment_construction,0)" title="Sauvegarder">
                             <span class="icon-content-save"></span>
                           </a>
                         </td>
@@ -430,7 +418,7 @@
               
               <md-tab-body>
                 <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterLatrine_construction()" style="width:10%;" ng-disabled="!vm.showbuttonNouvLatrine">
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterLatrine_construction()" style="width:10%;">
                       Nouveau
                     </md-button>
                 </div>
@@ -453,25 +441,35 @@
                         <td>
                           <span ng-if="latrine_construction.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
-                              <label>Annexe latrine</label>
-                              <md-select ng-model="latrine_construction.id_annexe_latrine"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.modification_annexe_latrine(latrine_construction)">
-                                <md-option ng-repeat="annexe_latrine in vm.allannexe_latrine" value="{{annexe_latrine.id}}">
-                                                                    {{annexe_latrine.libelle}}
+                              <label>Type latrine</label>
+                              <md-select ng-model="latrine_construction.id_type_latrine"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.modification_type_latrine(latrine_construction)">
+                                <md-option ng-repeat="type_latrine in vm.alltype_latrine" value="{{type_latrine.id}}">
+                                                                    {{type_latrine.libelle}}
                                 </md-option>
                               </md-select>
                             </md-input-container>  
                           </span>
-                          <span ng-if="!latrine_construction.$edit">{{latrine_construction.annexe_latrine.libelle}}</span>
+                          <span ng-if="!latrine_construction.$edit">{{latrine_construction.type_latrine.libelle}}</span>
                         </td>
 
                         <td>
                           <span ng-if="latrine_construction.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
-                              <label>Cout latrine</label>
-                              <input name="cout_latrine" type="number" ng-model="latrine_construction.cout_latrine" disabled />
+                              <label>Nombre latrine</label>
+                              <input name="nbr_latrine" type="number" ng-model="latrine_construction.nbr_latrine"/>
                             </md-input-container>
                           </span>                          
-                          <span ng-if="!latrine_construction.$edit">{{latrine_construction.annexe_latrine.cout_latrine}}</span>
+                          <span ng-if="!latrine_construction.$edit">{{latrine_construction.nbr_latrine}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="latrine_construction.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Cout unitaire</label>
+                              <input name="cout_unitaire" type="number" ng-model="latrine_construction.cout_unitaire" disabled />
+                            </md-input-container>
+                          </span>                          
+                          <span ng-if="!latrine_construction.$edit">{{latrine_construction.cout_unitaire}}</span>
                         </td>
                                                      
                         <td>  
@@ -487,7 +485,7 @@
                             <span class="icon-cancel"></span>
                           </a>
                                     
-                          <a ng-if="latrine_construction.$edit && latrine_construction.id_annexe_latrine>''" ng-click="vm.ajoutLatrine_construction(latrine_construction,0)" title="Sauvegarder">
+                          <a ng-if="latrine_construction.$edit && latrine_construction.id_type_latrine && latrine_construction.nbr_latrine>''" ng-click="vm.ajoutLatrine_construction(latrine_construction,0)" title="Sauvegarder">
                             <span class="icon-content-save"></span>
                           </a>
                         </td>
@@ -536,25 +534,35 @@
                         <td>
                           <span ng-if="mobilier_construction.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
-                              <label>Annexe mobilier</label>
-                              <md-select ng-model="mobilier_construction.id_annexe_mobilier"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.modification_annexe_mobilier(mobilier_construction)">
-                                <md-option ng-repeat="annexe_mobilier in vm.allannexe_mobilier" value="{{annexe_mobilier.id}}">
-                                                                    {{annexe_mobilier.libelle}}
+                              <label>type mobilier</label>
+                              <md-select ng-model="mobilier_construction.id_type_mobilier"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.modification_type_mobilier(mobilier_construction)">
+                                <md-option ng-repeat="type_mobilier in vm.alltype_mobilier" value="{{type_mobilier.id}}">
+                                                                    {{type_mobilier.libelle}}
                                 </md-option>
                               </md-select>
                             </md-input-container>  
                           </span>
-                          <span ng-if="!mobilier_construction.$edit">{{mobilier_construction.annexe_mobilier.libelle}}</span>
+                          <span ng-if="!mobilier_construction.$edit">{{mobilier_construction.type_mobilier.libelle}}</span>
                         </td>
 
                         <td>
                           <span ng-if="mobilier_construction.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
-                              <label>Cout mobilier</label>
-                              <input name="cout_mobilier" type="number" ng-model="mobilier_construction.cout_mobilier" disabled />
+                              <label>Nombre mobilier</label>
+                              <input name="nbr_mobilier" type="number" ng-model="mobilier_construction.nbr_mobilier"/>
                             </md-input-container>
                           </span>                          
-                          <span ng-if="!mobilier_construction.$edit">{{mobilier_construction.annexe_mobilier.cout_mobilier}}</span>
+                          <span ng-if="!mobilier_construction.$edit">{{mobilier_construction.nbr_mobilier}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="mobilier_construction.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Cout unitaire</label>
+                              <input name="cout_unitaire" type="number" ng-model="mobilier_construction.cout_unitaire" disabled />
+                            </md-input-container>
+                          </span>                          
+                          <span ng-if="!mobilier_construction.$edit">{{mobilier_construction.cout_unitaire}}</span>
                         </td>
                                                      
                         <td>  
@@ -570,7 +578,7 @@
                             <span class="icon-cancel"></span>
                           </a>
                                     
-                          <a ng-if="mobilier_construction.$edit && mobilier_construction.id_annexe_mobilier>''" ng-click="vm.ajoutMobilier_construction(mobilier_construction,0)" title="Sauvegarder">
+                          <a ng-if="mobilier_construction.$edit && mobilier_construction.id_type_mobilier>''" ng-click="vm.ajoutMobilier_construction(mobilier_construction,0)" title="Sauvegarder">
                             <span class="icon-content-save"></span>
                           </a>
                         </td>

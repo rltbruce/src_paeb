@@ -42,7 +42,7 @@
 /**********************************debut feffi****************************************/
 
         //col table
-        vm.contrat_prestataire_column = [
+     /*   vm.contrat_prestataire_column = [
         {titre:"Numero contrat"
         },
         {titre:"Description"
@@ -61,7 +61,7 @@
           apiFactory.getAPIgeneraliserREST("demande_payement_prestataire/index",'menu','getdemandeValide').then(function(result)
           {
             vm.alldemande_payement_prest = result.data.response;
-          });
+          });*/
 
 /**********************************debut demande_payement_prest****************************************/
 //col table
@@ -75,8 +75,6 @@
         {titre:"Montant"
         },
         {titre:"Date"
-        },
-        {titre:"Action"
         }];
 
 

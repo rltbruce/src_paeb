@@ -52,19 +52,7 @@
         },
         {titre:"Objet"
         },
-        {titre:"Date signature"
-        },
         {titre:"Reference Financement"
-        },
-        {titre:"Nom banque"
-        },
-        {titre:"Adresse banque"
-        },
-        {titre:"RIB"
-        },
-        {titre:"Delai"
-        },
-        {titre:"Observation"
         }];
  
 /**********************************fin convention entete****************************************/       
@@ -270,9 +258,9 @@
             item.cout_batiment   = parseInt(vm.selectedItemContrat_prestataire.cout_batiment);
             item.cout_latrine = parseInt(vm.selectedItemContrat_prestataire.cout_latrine);
             item.cout_mobilier = parseInt(vm.selectedItemContrat_prestataire.cout_mobilier);
-            item.date_signature = vm.selectedItemContrat_prestataire.date_signature ;
-            item.date_prev_deb_trav = vm.selectedItemContrat_prestataire.date_prev_deb_trav ;
-            item.date_reel_deb_trav = vm.selectedItemContrat_prestataire.date_reel_deb_trav ;
+            item.date_signature = new Date(vm.selectedItemContrat_prestataire.date_signature) ;
+            item.date_prev_deb_trav = new Date(vm.selectedItemContrat_prestataire.date_prev_deb_trav) ;
+            item.date_reel_deb_trav = new Date(vm.selectedItemContrat_prestataire.date_reel_deb_trav) ;
             item.delai_execution = parseInt(vm.selectedItemContrat_prestataire.delai_execution) ;
             item.id_prestataire = vm.selectedItemContrat_prestataire.prestataire.id ;
         };
@@ -357,6 +345,7 @@
                     date_reel_deb_trav:convertionDate(new Date(contrat_prestataire.date_reel_deb_trav)),
                     delai_execution:contrat_prestataire.delai_execution,
                     id_prestataire:contrat_prestataire.id_prestataire,
+                    paiement_recu: 0,
                     id_convention_entete: vm.selectedItemConvention_entete.id               
                 });
                 console.log(datas);

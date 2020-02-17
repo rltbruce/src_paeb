@@ -8,11 +8,12 @@
     /** @ngInject */
     function Convention_cisco_feffi_valideController($mdDialog, $scope, apiFactory, $state)
     {
-      /*****debut initialisation*****/
+     /*****debut initialisation*****/
 
         var vm    = this;
         var NouvelItemTete = false;
         var currentItemTete;
+        
 
         var NouvelItemDetail = false;
         var currentItemDetail;
@@ -24,6 +25,7 @@
         vm.allcisco         = [] ;
         vm.ajoutTete        = ajoutTete ;
         vm.selectedItemTete = {} ;
+        vm.selectedItemTete.$selected=false;
         vm.allconvention_cife_tete  = [] ;
         vm.allcompte_feffi = [];
 
@@ -34,36 +36,40 @@
 
         vm.ajoutDetail = ajoutDetail ;
         vm.selectedItemDetail = {} ;
+
         vm.allconvention_cife_detail  = [] ;
         vm.showbuttonNouvDetail=true;
 
 
-        vm.allattachement_batiment  = [] ;
-        vm.allbatiment_ouvrage  = [] ;
+        //vm.allattachement_batiment  = [] ;
+        vm.alltype_batiment  = [] ;
 
         vm.ajoutBatiment_construction = ajoutBatiment_construction ;
         vm.selectedItemBatiment_construction = {} ;
+        vm.selectedItemBatiment_construction.$selected=false;
         vm.allbatiment_construction  = [] ;
 
-        vm.allattachement_latrine  = [] ;
-        vm.allannexe_latrine  = [] ;
+        //vm.allattachement_latrine  = [] ;
+        vm.alltype_latrine  = [] ;
 
         var NouvelItemLatrine_construction = false;
         var currentItemLatrine_construction;
 
         vm.ajoutLatrine_construction = ajoutLatrine_construction ;
         vm.selectedItemLatrine_construction = {} ;
+        vm.selectedItemLatrine_construction.$selected=false;
         vm.alllatrine_construction  = [] ;
-        vm.showbuttonNouvLatrine=true;
+        
 
-        vm.allattachement_mobilier  = [] ;
-        vm.allannexe_mobilier  = [] ;
+        //vm.allattachement_mobilier  = [] ;
+        vm.alltype_mobilier  = [] ;
 
         var NouvelItemMobilier_construction = false;
         var currentItemMobilier_construction;
 
         vm.ajoutMobilier_construction = ajoutMobilier_construction ;
         vm.selectedItemMobilier_construction = {} ;
+        vm.selectedItemMobilier_construction.$selected=false;
         vm.allmobilier_construction  = [] ;
         vm.showbuttonNouvMobilier=true;
 
@@ -88,19 +94,7 @@
         },
         {titre:"Objet"
         },
-        {titre:"Date signature"
-        },
         {titre:"Reference Financement"
-        },
-        {titre:"Nom banque"
-        },
-        {titre:"Adresse banque"
-        },
-        {titre:"RIB"
-        },
-        {titre:"Delai"
-        },
-        {titre:"Observation"
         },
         {titre:"Action"
         }];
@@ -136,15 +130,8 @@
               id_cisco:'',
               id_feffi:'',
               ref_convention: '',
-              objet: '',              
-              date_signature: '',
-              ref_financement: '',
-              id_compte_feffi:'',
-              nom_banque:'',
-              adresse_banque:'',
-              rib:'',
-              delai: '',
-              observation: ''
+              objet: '',
+              ref_financement: ''
             };       
             vm.allconvention_cife_tete.push(items);
             vm.allconvention_cife_tete.forEach(function(conv)
@@ -186,15 +173,9 @@
               item.id_cisco    = currentItemTete.id_cisco ;
               item.id_feffi    = currentItemTete.id_feffi ;
               item.ref_convention  = currentItemTete.ref_convention ;
-              item.objet       = currentItemTete.objet ;
-              item.date_signature  = currentItemTete.date_signature ;
+              item.objet       = currentItemTete.objet ;              
               item.ref_financement = currentItemTete.ref_financement ;
-              item.id_compte_feffi  = currentItemTete.id_compte_feffi ;
-              item.nom_banque  = currentItemTete.nom_banque ;
-              item.adresse_banque  = currentItemTete.adresse_banque ;
-              item.rib  = currentItemTete.rib ;
-              item.delai = currentItemTete.delai ;
-              item.observation  = currentItemTete.observation ; 
+              
           }else
           {
             vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
@@ -212,14 +193,18 @@
         vm.selectionTete = function (item)
         {
             vm.selectedItemTete = item;
-            currentItemTete     = JSON.parse(JSON.stringify(vm.selectedItemTete));
+            if(item.$selected==false)
+            {
+              currentItemTete     = JSON.parse(JSON.stringify(vm.selectedItemTete));
+            }
+            
            // vm.allconvention= [] ;
             
             vm.showbuttonNouvDetail=true;
             //recuperation donnée convention
-            if (vm.selectedItemTete.id!=0)
+           if (vm.selectedItemTete.id!=0)
             {
-              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_detail/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_detail/index",'id_convention_entete',item.id).then(function(result)
               {
                   vm.allconvention_cife_detail = result.data.response;
 
@@ -229,6 +214,12 @@
                   } 
                   console.log(vm.selectedItemTete);
                   console.log(vm.allconvention_cife_detail);
+              });
+              apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
+              {
+                vm.allcompte_feffi = result.data.response;
+                console.log(vm.allcompte_feffi);
+               
               });
               vm.stepOne = true;
               vm.stepTwo = false;
@@ -255,14 +246,7 @@
             currentItemTete = angular.copy(vm.selectedItemTete);
             $scope.vm.allconvention_cife_tete.forEach(function(cis) {
               cis.$edit = false;
-            });
-
-            apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
-            {
-              vm.allcompte_feffi = result.data.response;
-              console.log(vm.allcompte_feffi);
-             
-            });
+            });            
 
             item.$edit = true;
             item.$selected = true;
@@ -272,14 +256,7 @@
 
             item.ref_convention  = vm.selectedItemTete.ref_convention ;
             item.objet           = vm.selectedItemTete.objet ;
-            item.date_signature  = new Date(vm.selectedItemTete.date_signature );
             item.ref_financement = vm.selectedItemTete.ref_financement ;
-            item.id_compte_feffi  = vm.selectedItemTete.compte_feffi.id ;
-            item.nom_banque  = vm.selectedItemTete.compte_feffi.nom_banque ;
-            item.adresse_banque  = vm.selectedItemTete.compte_feffi.adresse_banque ;
-            item.rib  = vm.selectedItemTete.compte_feffi.rib ;
-            item.delai = parseInt(vm.selectedItemTete.delai) ;
-            item.observation  = vm.selectedItemTete.observation ;
 
         };
 
@@ -321,11 +298,9 @@
                     || (convT[0].id_cisco!=currentItemTete.id_cisco)
                     || (convT[0].id_feffi!=currentItemTete.id_feffi)
                     || (convT[0].objet!=currentItemTete.objet)
-                    || (convT[0].date_signature!=currentItemTete.date_signature)
+                    
                     || (convT[0].ref_financement!=currentItemTete.ref_financement)
-                    || (convT[0].ref_convention!=currentItemTete.ref_convention)
-                    || (convT[0].id_compte_feffi!=currentItemTete.id_compte_feffi)
-                    || (convT[0].observation!=currentItemTete.observation)) 
+                    || (convT[0].ref_convention!=currentItemTete.ref_convention))                   
                                        
                       { 
                         if (convT[0].id_feffi!=currentItemTete.id_feffi)
@@ -363,15 +338,15 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,      
-                    delai:    convention_cife_tete.delai,
+                    //delai:    convention_cife_tete.delai,
                     id_cisco: convention_cife_tete.id_cisco,
                     id_feffi: convention_cife_tete.id_feffi,
                     objet:    convention_cife_tete.objet,
-                    date_signature:    convertionDate(new Date(convention_cife_tete.date_signature)),
+                   // date_signature:    convertionDate(new Date(convention_cife_tete.date_signature)),
                     ref_financement:       convention_cife_tete.ref_financement,
                     ref_convention: convention_cife_tete.ref_convention,
-                    id_compte_feffi: convention_cife_tete.id_compte_feffi,
-                    observation: convention_cife_tete.observation,
+                   /* id_compte_feffi: convention_cife_tete.id_compte_feffi,
+                    observation: convention_cife_tete.observation,*/
                     validation: 0               
                 });
                 //console.log(convention.pays_id);
@@ -390,26 +365,16 @@
                     return obj.id == convention_cife_tete.id_feffi;
                 });
 
-                var comp_fef = vm.allcompte_feffi.filter(function(obj)
-                {
-                    return obj.id == convention_cife_tete.id_compte_feffi;
-                });
-
                 if (NouvelItemTete == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItemTete.delai  = convention_cife_tete.delai;;
                         vm.selectedItemTete.cisco   = cis[0];
-                        vm.selectedItemTete.feffi   = fef[0];
+                        vm.selectedItemTete.feffi = fef[0];
                         vm.selectedItemTete.objet   = convention_cife_tete.objet;
-                        vm.selectedItemTete.date_signature    = convention_cife_tete.date_signature;
                         vm.selectedItemTete.ref_financement       = convention_cife_tete.ref_financement;
                         vm.selectedItemTete.ref_convention = convention_cife_tete.ref_convention;
-                        vm.selectedItemTete.compte_feffi = comp_fef[0];
-
-                        vm.selectedItemTete.observation = convention_cife_tete.observation;
                         vm.selectedItemTete.$selected  = false;
                         vm.selectedItemTete.$edit      = false;
                         vm.selectedItemTete ={};
@@ -433,11 +398,7 @@
 
                   convention_cife_tete.ref_convention  = convention_cife_tete.ref_convention ;
                   convention_cife_tete.objet           = convention_cife_tete.objet ;
-                  convention_cife_tete.date_signature  = convention_cife_tete.date_signature ;
                   convention_cife_tete.ref_financement = convention_cife_tete.ref_financement ;
-                  convention_cife_tete.compte_feffi  = comp_fef[0];
-                  convention_cife_tete.delai = parseInt(convention_cife_tete.delai) ;
-                  convention_cife_tete.observation  = convention_cife_tete.observation ;
                   NouvelItemTete = false;
             }
               convention_cife_tete.$selected = false;
@@ -480,16 +441,6 @@
             }  
           }
         }
-        vm.changecompte_feffi = function(item)
-        {
-          var comp_fef = vm.allcompte_feffi.filter(function(obj)
-          {
-             return obj.id == item.id_compte_feffi;
-          });
-          vm.selectedItemTete.adresse_banque    = comp_fef[0].adresse_banque;
-          vm.selectedItemTete.rib       = comp_fef[0].rib;
-
-        }
 
 
         function supressiondetail_construction()
@@ -520,13 +471,25 @@
           titre:"Intitule"
         },
         {
-          titre:"Zone subvention"
-        },
-        {
-          titre:"Acces zone"
-        },
-        {
           titre:"Cout éstimé"
+        },
+        {
+          titre:"Nom banque"
+        },
+        {
+          titre:"Adresse banque"
+        },
+        {
+          titre:"RIB"
+        },
+        {
+          titre:"Delai"
+        },
+        {
+          titre:"Date signature"
+        },
+        {
+          titre:"Observation"
         },
         {
           titre:"Avancement"
@@ -546,9 +509,13 @@
               id: '0',
               intitule:'',
               montant_total:0,
-              avancement:0,
-              zone_subvention:vm.selectedItemTete.ecole.libelle_zone,
-              acces_zone: vm.selectedItemTete.ecole.libelle_acces
+              id_feffi:'',
+              adresse_banque:'',
+              rib:'',
+              delai:'',
+              date_signature:'',
+              observation:'',
+              avancement:0
             };         
             vm.allconvention_cife_detail.push(items);
             vm.allconvention_cife_detail.forEach(function(conv)
@@ -589,6 +556,14 @@
               item.$selected = false;
               item.intitule = currentItemDetail.intitule;
               item.montant_total = currentItemDetail.montant_total; 
+
+              item.id_compte_feffi  = currentItemDetail.compte_feffi.id ;
+              item.nom_banque  = currentItemDetail.compte_feffi.nom_banque ;
+              item.adresse_banque  = currentItemDetail.compte_feffi.adresse_banque ;
+              item.rib  = currentItemDetail.compte_feffi.rib ;
+              item.delai = currentItemDetail.delai ;
+              item.observation  = currentItemDetail.observation ;
+              item.date_signature  = new Date(currentItemDetail.date_signature) ; 
           }else
           {
             vm.allconvention_cife_detail = vm.allconvention_cife_detail.filter(function(obj)
@@ -606,7 +581,12 @@
         vm.selectionDetail = function (item)
         {
             vm.selectedItemDetail = item;
-            currentItemDetail     = JSON.parse(JSON.stringify(vm.selectedItemDetail));
+
+            if(item.$selected==false)
+            {
+              currentItemDetail     = JSON.parse(JSON.stringify(vm.selectedItemDetail));
+            }
+            
            // vm.allconvention= [] ;
             
             //recuperation donnée convention
@@ -618,18 +598,20 @@
                   console.log(vm.allbatiment_construction);
               });
 
+              //recuperation donnée batiment ouvrage
+              apiFactory.getAPIgeneraliserREST("type_batiment/index",'menu','getbatimentByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone,
+                'id_acces_zone',vm.selectedItemTete.ecole.id_acces).then(function(result)
+              {
+                vm.alltype_batiment = result.data.response;
+                console.log(vm.alltype_batiment);
+              });
+
               vm.stepTwo = true;
               vm.stepThree = false;
               vm.stepFor = false;
             }
 
-            //recuperation donnée batiment ouvrage
-            apiFactory.getAPIgeneraliserREST("batiment_ouvrage/index",'menu','getbatimentByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone,
-              'id_acces_zone',vm.selectedItemTete.ecole.id_acces).then(function(result)
-            {
-              vm.allbatiment_ouvrage = result.data.response;
-              console.log(vm.allbatiment_ouvrage);
-            });
+            
                         
 
         };
@@ -659,6 +641,14 @@
             item.intitule = vm.selectedItemDetail.intitule ;
             item.montant_total = parseInt(vm.selectedItemDetail.montant_total);
             item.avancement = parseInt(vm.selectedItemDetail.avancement);
+
+            item.id_compte_feffi  = vm.selectedItemDetail.compte_feffi.id ;
+            item.nom_banque  = vm.selectedItemDetail.compte_feffi.nom_banque ;
+            item.adresse_banque  = vm.selectedItemDetail.compte_feffi.adresse_banque ;
+            item.rib  = vm.selectedItemDetail.compte_feffi.rib ;
+            item.delai = parseInt(vm.selectedItemDetail.delai) ;
+            item.observation  = vm.selectedItemDetail.observation ;
+            item.date_signature  = new Date(vm.selectedItemDetail.date_signature)
         };
 
         //fonction bouton suppression item detail convention cisco feffi
@@ -687,15 +677,19 @@
         {          
             if (suppression!=1)
             {
-               var convT = vm.allconvention_cife_detail.filter(function(obj)
+               var convD = vm.allconvention_cife_detail.filter(function(obj)
                 {
                    return obj.id == currentItemDetail.id;
                 });
-                if(convT[0])
+                if(convD[0])
                 {
-                   if((convT[0].id_zone_subvention!=currentItemDetail.id_zone_subvention)
-                    || (convT[0].intitule!=currentItemDetail.intitule)
-                    || (convT[0].id_acces_zone!=currentItemDetail.id_acces_zone))                    
+                   if((convD[0].id_zone_subvention!=currentItemDetail.id_zone_subvention)
+                    || (convD[0].intitule!=currentItemDetail.intitule)
+                    || (convD[0].id_acces_zone!=currentItemDetail.id_acces_zone)
+                    || (convD[0].date_signature!=currentItemDetail.date_signature)
+                    || (convD[0].id_compte_feffi!=currentItemDetail.id_compte_feffi)
+                    || (convD[0].observation!=currentItemDetail.observation)
+                    || (convD[0].delai!=currentItemDetail.delai))                    
                       {
                           insert_in_baseDetail(item,suppression);                        
                         
@@ -731,12 +725,20 @@
                     montant_total:    convention_cife_detail.montant_total,
                     avancement:    convention_cife_detail.avancement,
                     intitule:    convention_cife_detail.intitule, 
-                    id_convention_entete: vm.selectedItemTete.id             
+                    id_convention_entete: vm.selectedItemTete.id ,
+                    delai:    convention_cife_detail.delai,
+                    date_signature:    convertionDate(new Date(convention_cife_detail.date_signature)),
+                    id_compte_feffi: convention_cife_detail.id_compte_feffi,
+                    observation: convention_cife_detail.observation,           
                 });
                 console.log(datas);
                 //factory
             apiFactory.add("convention_cisco_feffi_detail/index",datas, config).success(function (data)
             {
+                var comp_fef = vm.allcompte_feffi.filter(function(obj)
+                {
+                    return obj.id == convention_cife_detail.id_compte_feffi;
+                });
 
                 if (NouvelItemDetail == false)
                 {
@@ -746,6 +748,11 @@
                         vm.selectedItemDetail.intitule  = convention_cife_detail.intitule;
                         vm.selectedItemDetail.avancement  = convention_cife_detail.avancement;
                         vm.selectedItemDetail.montant_total  = convention_cife_detail.montant_total;
+                        vm.selectedItemDetail.delai  = convention_cife_detail.delai;
+                        vm.selectedItemDetail.date_signature    = convention_cife_detail.date_signature;
+                        vm.selectedItemDetail.compte_feffi = comp_fef[0];
+                        vm.selectedItemDetail.observation = convention_cife_detail.observation;
+
                         vm.selectedItemDetail.$selected  = false;
                         vm.selectedItemDetail.$edit      = false;
                         vm.selectedItemDetail ={};
@@ -766,6 +773,10 @@
                   convention_cife_detail.intitule= convention_cife_detail.intitule;
                   convention_cife_detail.avancement= convention_cife_detail.avancement;
                   convention_cife_detail.montant_total= convention_cife_detail.montant_total;
+                  convention_cife_detail.delai  = convention_cife_detail.delai;
+                  convention_cife_detail.date_signature    = convention_cife_detail.date_signature;
+                  convention_cife_detail.compte_feffi = comp_fef[0];
+                  convention_cife_detail.observation = convention_cife_detail.observation;
                   convention_cife_detail.id  =   String(data.response);              
                   NouvelItemDetail = false;
 
@@ -776,6 +787,18 @@
               vm.selectedItemDetail = {};
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
+
+        }
+
+
+        vm.changecompte_feffi = function(item)
+        {
+          var comp_fef = vm.allcompte_feffi.filter(function(obj)
+          {
+             return obj.id == item.id_compte_feffi;
+          });
+          vm.selectedItemDetail.adresse_banque    = comp_fef[0].adresse_banque;
+          vm.selectedItemDetail.rib       = comp_fef[0].rib;
 
         }
        
@@ -789,13 +812,10 @@
           titre:"Batiment"
         },
         {
-          titre:"cout maitrise oeuvre"
+          titre:"Nombre batiment"
         },
         {
-          titre:"Cout batiment"
-        },
-        {
-          titre:"Cout sous projet"
+          titre:"Cout unitaire"
         },
         {
           titre:"Action"
@@ -809,10 +829,9 @@
               $edit: true,
               $selected: true,
               id: '0',
-              id_batiment_ouvrage:'',
-              cout_maitrise_oeuvre:'',
-              cout_batiment:'',
-              cout_sous_projet:''
+              id_type_batiment:'',
+              nbr_batiment:'',
+              cout_unitaire:''
             };         
             vm.allbatiment_construction.push(items);
             vm.allbatiment_construction.forEach(function(conv)
@@ -851,10 +870,10 @@
           {
               item.$edit = false;
               item.$selected = false;
-              item.id_batiment_ouvrage = currentItemBatiment_construction.id_batiment_ouvrage;
-              item.cout_maitrise_oeuvre    = currentItemBatiment_construction.cout_maitrise_oeuvre;
-              item.cout_sous_projet = currentItemBatiment_construction.cout_sous_projet;
-              item.cout_batiment = currentItemBatiment_construction.cout_batiment;
+              item.id_type_batiment = currentItemBatiment_construction.id_type_batiment;
+              item.nbr_batiment    = currentItemBatiment_construction.nbr_batiment;
+              item.cout_unitaire = currentItemBatiment_construction.cout_unitaire;
+              //item.cout_batiment = currentItemBatiment_construction.cout_batiment;
              // item.ponderation_batiment = currentItemBatiment_construction.ponderation_batiment;
              // item.id_attachement_batiment    = currentItemBatiment_construction.id_attachement_batiment; 
           }else
@@ -874,43 +893,44 @@
         vm.selectionBatiment_construction = function (item)
         {
             vm.selectedItemBatiment_construction = item;
-            currentItemBatiment_construction     = JSON.parse(JSON.stringify(vm.selectedItemBatiment_construction));
-           // vm.allconvention= [] ; 
-           vm.showbuttonNouvLatrine=true;           
+            console.log(vm.selectedItemTete);
+
+            if(item.$selected==false)
+            {
+               currentItemBatiment_construction     = JSON.parse(JSON.stringify(vm.selectedItemBatiment_construction));
+            }
+           
+           // vm.allconvention= [] ;          
             //recuperation donnée convention
             if (vm.selectedItemBatiment_construction.id!=0)
             {
               apiFactory.getAPIgeneraliserREST("latrine_construction/index",'id_batiment_construction',vm.selectedItemBatiment_construction.id).then(function(result)
               {
                   vm.alllatrine_construction = result.data.response;
-                  
-                  if(vm.alllatrine_construction.length!=0)
-                  {
-                    vm.showbuttonNouvLatrine=false;
-                  }
+                console.log(vm.alllatrine_construction);
                   
               });
 
               apiFactory.getAPIgeneraliserREST("mobilier_construction/index",'id_batiment_construction',vm.selectedItemBatiment_construction.id).then(function(result)
               {
                   vm.allmobilier_construction = result.data.response;
-                  if(vm.allmobilier_construction.length!=0)
+                 /* if(vm.allmobilier_construction.length!=0)
                   {
                     vm.showbuttonNouvMobilier=false;
-                  }
+                  }*/
                   
               });
 
-              apiFactory.getAPIgeneraliserREST("annexe_latrine/index",'id_batiment_ouvrage',vm.selectedItemBatiment_construction.batiment_ouvrage.id).then(function(result)
+              apiFactory.getAPIgeneraliserREST("type_latrine/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone,'id_acces_zone',vm.selectedItemTete.ecole.id_acces).then(function(result)
               {
-                  vm.allannexe_latrine = result.data.response; 
-                  console.log(vm.allannexe_latrine);
+                  vm.alltype_latrine = result.data.response; 
+                  console.log(vm.alltype_latrine);
               });
 
-              apiFactory.getAPIgeneraliserREST("annexe_mobilier/index",'id_batiment_ouvrage',vm.selectedItemBatiment_construction.batiment_ouvrage.id).then(function(result)
+              apiFactory.getAPIgeneraliserREST("type_mobilier/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone,'id_acces_zone',vm.selectedItemTete.ecole.id_acces).then(function(result)
               {
-                  vm.allannexe_mobilier = result.data.response; 
-                  console.log(vm.allannexe_mobilier);
+                  vm.alltype_mobilier = result.data.response; 
+                  //console.log(vm.alltype_mobilier);
               });
               vm.stepThree = true;
               vm.stepFor = false;
@@ -939,21 +959,11 @@
 
             item.$edit = true;
             item.$selected = true;
-             
-            //recuperation donnée attachement
-           /* apiFactory.getAPIgeneraliserREST("attachement_batiment/index","id_batiment_ouvrage",item.batiment_ouvrage.id).then(function(result)
-            {
-              vm.allattachement_batiment= result.data.response;
-              item.id_attachement_batiment = vm.selectedItemBatiment_construction.attachement_batiment.id;
-            });*/
-              item.id_batiment_ouvrage = vm.selectedItemBatiment_construction.batiment_ouvrage.id;
-            item.cout_maitrise_oeuvre = parseInt(vm.selectedItemBatiment_construction.batiment_ouvrage.cout_maitrise_oeuvre);
-            item.cout_batiment = parseInt(vm.selectedItemBatiment_construction.batiment_ouvrage.cout_batiment);
-            item.cout_sous_projet = parseInt(vm.selectedItemBatiment_construction.batiment_ouvrage.cout_sous_projet);
-           // item.ponderation_batiment = parseInt(vm.selectedItemBatiment_construction.attachement_batiment.ponderation_batiment);
-            
 
-            
+            item.id_type_batiment = vm.selectedItemBatiment_construction.type_batiment.id;
+            item.nbr_batiment = parseInt(vm.selectedItemBatiment_construction.nbr_batiment);
+            item.cout_batiment = parseInt(vm.selectedItemBatiment_construction.cout_batiment);
+            item.cout_unitaire = parseInt(vm.selectedItemBatiment_construction.cout_unitaire);
         };
 
         //fonction bouton suppression item batiment construction cisco feffi
@@ -987,8 +997,9 @@
                 });
                 if(ouv_c[0])
                 {
-                   if((ouv_c[0].id_batiment_ouvrage!=currentItemBatiment_construction.id_batiment_ouvrage)
-                    //|| (ouv_c[0].id_attachement_batiment!=currentItemBatiment_construction.id_attachement_batiment)
+                   if((ouv_c[0].id_type_batiment!=currentItemBatiment_construction.id_type_batiment)
+                    || (ouv_c[0].nbr_batiment!=currentItemBatiment_construction.nbr_batiment)
+                    || (ouv_c[0].cout_unitaire!=currentItemBatiment_construction.cout_unitaire)
                     )                    
                       { 
                         insert_in_baseBatiment_construction(item,suppression);
@@ -1021,8 +1032,9 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    id_batiment_ouvrage: batiment_construction.id_batiment_ouvrage,
-                   // id_attachement_batiment: batiment_construction.id_attachement_batiment,
+                    id_type_batiment: batiment_construction.id_type_batiment,
+                    nbr_batiment: batiment_construction.nbr_batiment,
+                    cout_unitaire: batiment_construction.cout_unitaire,
                     id_convention_detail: vm.selectedItemDetail.id
 
                 });
@@ -1031,32 +1043,24 @@
             apiFactory.add("batiment_construction/index",datas, config).success(function (data)
             {
 
-                var bat_ouvra = vm.allbatiment_ouvrage.filter(function(obj)
+                var typ_bat = vm.alltype_batiment.filter(function(obj)
                 {
-                    return obj.id == batiment_construction.id_batiment_ouvrage;
+                    return obj.id == batiment_construction.id_type_batiment;
                 });
-
-               /* var atta_b = vm.allattachement_batiment.filter(function(obj)
-                {
-                    return obj.id == batiment_construction.id_attachement_batiment;
-                });*/
 
                 if (NouvelItemBatiment_construction == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItemBatiment_construction.batiment_ouvrage = bat_ouvra[0];
-                        //vm.selectedItemBatiment_construction.attachement_batiment   = atta_b[0];
+                        vm.selectedItemBatiment_construction.type_batiment = typ_bat[0];
+                        vm.selectedItemBatiment_construction.nbr_batiment = batiment_construction.nbr_batiment;
+                        vm.selectedItemBatiment_construction.cout_unitaire = batiment_construction.cout_unitaire;
                         vm.selectedItemBatiment_construction.$selected  = false;
                         vm.selectedItemBatiment_construction.$edit      = false;
                         vm.selectedItemBatiment_construction ={};
-                        var cout_ancien_bat= parseInt(currentItemBatiment_construction.batiment_ouvrage.cout_batiment) +
-                                        parseInt(currentItemBatiment_construction.batiment_ouvrage.cout_maitrise_oeuvre)+
-                                        parseInt(currentItemBatiment_construction.batiment_ouvrage.cout_sous_projet);
-                        var cout_nouveau_bat= parseInt(bat_ouvra[0].cout_batiment) +
-                                        parseInt(bat_ouvra[0].cout_maitrise_oeuvre)+
-                                        parseInt(bat_ouvra[0].cout_sous_projet);
+                        var cout_ancien_bat= parseInt(currentItemBatiment_construction.cout_unitaire)*parseInt(currentItemBatiment_construction.nbr_batiment);
+                        var cout_nouveau_bat= parseInt(typ_bat[0].cout_batiment)*parseInt(batiment_construction.nbr_batiment);
                         var cout_tot = parseInt(vm.selectedItemDetail.montant_total)- cout_ancien_bat + cout_nouveau_bat ;
                         miseajourDetail(vm.selectedItemDetail,0,cout_tot);
                     }
@@ -1066,10 +1070,27 @@
                       {
                           return obj.id !== vm.selectedItemBatiment_construction.id;
                       });
-                      var cout_ancien_bat= parseInt(currentItemBatiment_construction.batiment_ouvrage.cout_batiment) +
-                                        parseInt(currentItemBatiment_construction.batiment_ouvrage.cout_maitrise_oeuvre)+
-                                        parseInt(currentItemBatiment_construction.batiment_ouvrage.cout_sous_projet);
-                      var cout_tot = parseInt(vm.selectedItemDetail.montant_total) - cout_ancien_bat;
+
+                      var prix_latrine=0;
+                      var prix_mobilier=0;
+
+                      if(vm.alllatrine_construction.length!=0)
+                      { 
+                          vm.alllatrine_construction.forEach(function(item)
+                         {
+                            prix_latrine = prix_latrine + (item.nbr_latrine*item.cout_unitaire)
+                         });
+                      }
+                      if(vm.allmobilier_construction.length!=0)
+                      { 
+                          vm.allmobilier_construction.forEach(function(item)
+                         {
+                            prix_mobilier = prix_mobilier + (item.nbr_mobilier*item.cout_unitaire)
+                         });
+                      }
+                      var cout_ancien_bat= parseInt(currentItemBatiment_construction.cout_unitaire) *
+                                        parseInt(currentItemBatiment_construction.nbr_batiment);
+                      var cout_tot = parseInt(vm.selectedItemDetail.montant_total) - cout_ancien_bat-prix_latrine-prix_mobilier;
 
                        miseajourDetail(vm.selectedItemDetail,0,cout_tot);
                     }
@@ -1077,15 +1098,15 @@
                 else
                 {
                   
-                  batiment_construction.batiment_ouvrage= bat_ouvra[0];
-                  //batiment_construction.attachement_batiment = atta_b[0];
+                  batiment_construction.type_batiment= typ_bat[0];
+                  batiment_construction.nbr_batiment = batiment_construction.nbr_batiment;
+                  batiment_construction.cout_unitaire = batiment_construction.cout_unitaire;
                   batiment_construction.id  =   String(data.response);              
                   NouvelItemBatiment_construction = false;
 
                   
                   var cout_tot = parseInt(vm.selectedItemDetail.montant_total)+ 
-                  parseInt(bat_ouvra[0].cout_batiment)+ parseInt(bat_ouvra[0].cout_maitrise_oeuvre)+ 
-                  parseInt(bat_ouvra[0].cout_sous_projet);
+                  (parseInt(batiment_construction.cout_unitaire)*parseInt(batiment_construction.nbr_batiment));
                  miseajourDetail(vm.selectedItemDetail,0,cout_tot);
             }
               batiment_construction.$selected = false;
@@ -1098,34 +1119,15 @@
         }
 
         //fonction bouton modification ouvrage
-        vm.modification_batiment_ouvrage = function(item)
-        {   
-          item.id_attachement_batiment = null;
-            
-            //recuperation donnée attachement
-            apiFactory.getAPIgeneraliserREST("attachement_batiment/index","id_batiment_ouvrage",item.id_batiment_ouvrage).then(function(result)
+        vm.modification_type_batiment = function(item)
+        { 
+            var bato = vm.alltype_batiment.filter(function(obj)
             {
-              vm.allattachement_batiment= result.data.response;
+                return obj.id == item.id_type_batiment;
             });
-            var bato = vm.allbatiment_ouvrage.filter(function(obj)
-            {
-                return obj.id == item.id_batiment_ouvrage;
-            });
-            item.cout_maitrise_oeuvre = parseInt(bato[0].cout_maitrise_oeuvre);
-            item.cout_batiment = parseInt(bato[0].cout_batiment);
-            item.cout_sous_projet = parseInt(bato[0].cout_sous_projet);
+            item.cout_unitaire = parseInt(bato[0].cout_batiment);
             
         };
-
-       /* vm.modification_attachement_batiment = function(item)
-        {
-          var atta = vm.allattachement_batiment.filter(function(obj)
-            {
-                return obj.id == item.id_attachement_batiment;
-            });
-
-            item.ponderation_batiment = parseInt(atta[0].ponderation_batiment);
-        }*/
 
          //insertion ou mise a jours ou suppression item dans bdd convention
         function miseajourDetail(convention_cife_detail,suppression,montant_total)
@@ -1148,40 +1150,18 @@
                     montant_total:    montant_total,
                     avancement:    convention_cife_detail.avancement,
                     intitule:    convention_cife_detail.intitule, 
-                    id_convention_entete: vm.selectedItemTete.id             
+                    id_convention_entete: vm.selectedItemTete.id ,
+                    delai:    convention_cife_detail.delai,
+                    date_signature:    convertionDate(new Date(convention_cife_detail.date_signature)),
+                    id_compte_feffi: convention_cife_detail.compte_feffi.id,
+                    observation: convention_cife_detail.observation,             
                 });
                 console.log(datas);
                 //factory
             apiFactory.add("convention_cisco_feffi_detail/index",datas, config).success(function (data)
             {
+                vm.selectedItemDetail.montant_total  = montant_total;
 
-                if (NouvelItemDetail == false)
-                {
-                    // Update or delete: id exclu                 
-                    if(suppression==0)
-                    {
-                        vm.selectedItemDetail.intitule  = convention_cife_detail.intitule;
-                        vm.selectedItemDetail.montant_total  = montant_total;
-                    }
-                    else 
-                    {    
-                      vm.allconvention_cife_detail = vm.allconvention_cife_detail.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemDetail.id;
-                      });
-                      vm.showbuttonNouvDetail = true;
-                    }
-                }
-                else
-                {
-                  
-                  convention_cife_detail.intitule= convention_cife_detail.intitule;
-                  convention_cife_detail.montant_total= montant_total;
-                  convention_cife_detail.id  =   String(data.response);              
-                  //NouvelItemDetail = false;
-
-                  vm.showbuttonNouvDetail = false;
-            }
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
 
@@ -1195,6 +1175,9 @@
         vm.latrine_construction_column = [        
         {
           titre:"Latrine"
+        },
+        {
+          titre:"Nombre latrine"
         },
         {
           titre:"cout latrine"
@@ -1212,8 +1195,9 @@
               $edit: true,
               $selected: true,
               id: '0',
-              id_annexe_latrine:'',
-              cout_latrine:''
+              id_type_latrine:'',
+              cout_unitaire:'',
+              nbr_latrine:''
             };         
             vm.alllatrine_construction.push(items);
             vm.alllatrine_construction.forEach(function(conv)
@@ -1252,10 +1236,9 @@
           {
               item.$edit = false;
               item.$selected = false;
-              item.id_annexe_ouvrage = currentItemLatrine_construction.id_annexe_ouvrage;
-              item.cout_latrine    = currentItemLatrine_construction.cout_latrine;
-              //item.ponderation_latrine = currentItemLatrine_construction.ponderation_latrine;
-              //item.id_attachement_latrine    = currentItemLatrine_construction.id_attachement_latrine; 
+              item.id_type_latrine = currentItemLatrine_construction.id_type_latrine;
+              item.nbr_latrine    = currentItemLatrine_construction.nbr_latrine;
+              item.cout_unitaire = currentItemLatrine_construction.cout_unitaire; 
           }else
           {
             vm.alllatrine_construction = vm.alllatrine_construction.filter(function(obj)
@@ -1273,7 +1256,12 @@
         vm.selectionLatrine_construction = function (item)
         {
             vm.selectedItemLatrine_construction = item;
-            currentItemLatrine_construction     = JSON.parse(JSON.stringify(vm.selectedItemLatrine_construction));
+
+            if (item.$selected==false)
+            {
+               currentItemLatrine_construction     = JSON.parse(JSON.stringify(vm.selectedItemLatrine_construction));
+            }
+           
            // vm.allconvention= [] ;
                        
 
@@ -1300,22 +1288,17 @@
 
             item.$edit = true;
             item.$selected = true;
-             
-            //recuperation donnée attachement
-           /* apiFactory.getAPIgeneraliserREST("attachement_latrine/index","id_annexe_latrine",item.annexe_latrine.id).then(function(result)
-            {
-              vm.allattachement_latrine= result.data.response;
-              item.id_attachement_latrine = vm.selectedItemLatrine_construction.attachement_latrine.id;
-            });*/
 
-            //recuperation donnée annexe_latrine
-            apiFactory.getAPIgeneraliserREST("annexe_latrine/index","id_batiment_ouvrage",vm.selectedItemBatiment_construction.batiment_ouvrage.id).then(function(result)
+            //recuperation donnée type_latrine
+            /*apiFactory.getAPIgeneraliserREST("type_latrine/index","id_type_batiment",vm.selectedItemBatiment_construction.type_batiment.id).then(function(result)
             {
-              vm.allannexe_latrine= result.data.response;
-              item.id_annexe_latrine = vm.selectedItemLatrine_construction.annexe_latrine.id;
-            });
-            item.cout_latrine = parseInt(vm.selectedItemLatrine_construction.annexe_latrine.cout_latrine);
-            //item.ponderation_latrine = parseInt(vm.selectedItemLatrine_construction.attachement_latrine.ponderation_latrine);
+              vm.alltype_latrine= result.data.response;
+              item.id_type_latrine = vm.selectedItemLatrine_construction.type_latrine.id;
+            });*/
+            item.id_type_latrine = vm.selectedItemLatrine_construction.type_latrine.id;
+            item.nbr_latrine = parseInt(vm.selectedItemLatrine_construction.nbr_latrine);
+            item.cout_latrine = parseInt(vm.selectedItemLatrine_construction.cout_latrine);
+            item.cout_unitaire = parseInt(vm.selectedItemLatrine_construction.cout_unitaire);
             
 
             
@@ -1344,14 +1327,15 @@
         {          
             if (suppression!=1)
             {
-               var ouv_c = vm.alllatrine_construction.filter(function(obj)
+               var latr_con = vm.alllatrine_construction.filter(function(obj)
                 {
                    return obj.id == currentItemLatrine_construction.id;
                 });
-                if(ouv_c[0])
+                if(latr_con[0])
                 {
-                   if((ouv_c[0].id_annexe_latrine!=currentItemLatrine_construction.id_annexe_latrine)
-                    //|| (ouv_c[0].id_attachement_latrine!=currentItemLatrine_construction.id_attachement_latrine)
+                   if((latr_con[0].id_type_latrine!=currentItemLatrine_construction.id_type_latrine)
+                    || (latr_con[0].nbr_latrine!=currentItemLatrine_construction.nbr_latrine)
+                    || (latr_con[0].cout_unitaire!=currentItemLatrine_construction.cout_unitaire)
                     )                    
                       { 
                         insert_in_baseLatrine_construction(item,suppression);
@@ -1384,8 +1368,9 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    id_annexe_latrine: latrine_construction.id_annexe_latrine,
-                    //id_attachement_latrine: latrine_construction.id_attachement_latrine,
+                    id_type_latrine: latrine_construction.id_type_latrine,
+                    nbr_latrine: latrine_construction.nbr_latrine,
+                    cout_unitaire: latrine_construction.cout_unitaire,
                     id_batiment_construction: vm.selectedItemBatiment_construction.id
 
                 });
@@ -1394,29 +1379,25 @@
             apiFactory.add("latrine_construction/index",datas, config).success(function (data)
             {
 
-                var anne_lat = vm.allannexe_latrine.filter(function(obje)
+                var typ_lat = vm.alltype_latrine.filter(function(obje)
                 {
-                    return obje.id == latrine_construction.id_annexe_latrine;
+                    return obje.id == latrine_construction.id_type_latrine;
                 });
-
-               /* var atta_l = vm.allattachement_latrine.filter(function(obj)
-                {
-                    return obj.id == latrine_construction.id_attachement_latrine;
-                });*/
 
                 if (NouvelItemLatrine_construction == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItemLatrine_construction.latrine_ouvrage = anne_lat[0];
-                        //vm.selectedItemLatrine_construction.attachement_latrine   = atta_l[0];
+                        vm.selectedItemLatrine_construction.latrine_ouvrage = typ_lat[0];
+                        vm.selectedItemLatrine_construction.nbr_latrine = latrine_construction.nbr_latrine;
+                        vm.selectedItemLatrine_construction.cout_unitaire = latrine_construction.cout_unitaire;
                         vm.selectedItemLatrine_construction.$selected  = false;
                         vm.selectedItemLatrine_construction.$edit      = false;
                         vm.selectedItemLatrine_construction ={};
 
-                        var cout_ancien_lat= parseInt(currentItemLatrine_construction.annexe_latrine.cout_latrine);
-                        var cout_nouveau_lat= parseInt(anne_lat[0].cout_latrine);
+                        var cout_ancien_lat= parseInt(currentItemLatrine_construction.cout_unitaire)*parseInt(currentItemLatrine_construction.nbr_latrine);
+                        var cout_nouveau_lat= parseInt(typ_lat[0].cout_latrine)*parseInt(latrine_construction.nbr_latrine);
                         var cout_tot = parseInt(vm.selectedItemDetail.montant_total)- cout_ancien_lat + cout_nouveau_lat ;
                         miseajourDetail(vm.selectedItemDetail,0,cout_tot);
                     }
@@ -1427,24 +1408,26 @@
                           return obj.id !== vm.selectedItemLatrine_construction.id;
                       });
 
-                      var cout_ancien_lat= parseInt(currentItemLatrine_construction.annexe_latrine.cout_latrine);
+                      var cout_ancien_lat= parseInt(currentItemLatrine_construction.cout_unitaire) *
+                                        parseInt(currentItemLatrine_construction.nbr_latrine);
                       var cout_tot = parseInt(vm.selectedItemDetail.montant_total) - cout_ancien_lat;
 
                        miseajourDetail(vm.selectedItemDetail,0,cout_tot);
-                      vm.showbuttonNouvLatrine=true;
+                      
                     }
                 }
                 else
                 {
                   
-                  latrine_construction.annexe_latrine= anne_lat[0];
-                 // latrine_construction.attachement_latrine = atta_l[0];
+                  latrine_construction.type_latrine= typ_lat[0];
+                  latrine_construction.nbr_latrine = latrine_construction.nbr_latrine;
+                  latrine_construction.cout_unitaire = latrine_construction.cout_unitaire;
                   latrine_construction.id  =   String(data.response);              
                   NouvelItemLatrine_construction = false;
-                  vm.showbuttonNouvLatrine=false;
+                  
                   //console.log(latrine_construction);
                   var cout_tot = parseInt(vm.selectedItemDetail.montant_total)+ 
-                  parseInt(anne_lat[0].cout_latrine);
+                  (parseInt(latrine_construction.cout_unitaire)*parseInt(latrine_construction.nbr_latrine));
                   
                   miseajourDetail(vm.selectedItemDetail,0,cout_tot);
             }
@@ -1457,40 +1440,25 @@
         }
 
          //fonction bouton modification ouvrage
-        vm.modification_annexe_latrine = function(item)
-        {   
-          item.id_attachement_latrine = null;
-            
-            //recuperation donnée attachement
-           /* apiFactory.getAPIgeneraliserREST("attachement_latrine/index","id_annexe_latrine",item.id_annexe_latrine).then(function(result)
+        vm.modification_type_latrine = function(item)
+        {
+            var annel = vm.alltype_latrine.filter(function(obj)
             {
-              vm.allattachement_latrine= result.data.response;
-              console.log(vm.allattachement_latrine);
-            });*/
-            var annel = vm.allannexe_latrine.filter(function(obj)
-            {
-                return obj.id == item.id_annexe_latrine;
+                return obj.id == item.id_type_latrine;
             });
-            item.cout_latrine = parseInt(annel[0].cout_latrine);
+            item.cout_unitaire = parseInt(annel[0].cout_latrine);
             
         };
-
-       /* vm.modification_attachement_latrine = function(item)
-        {
-          var atta = vm.allattachement_latrine.filter(function(obj)
-            {
-                return obj.id == item.id_attachement_latrine;
-            });
-
-            item.ponderation_latrine = parseInt(atta[0].ponderation_latrine);
-        }*/
       /*****************fin latrine construction***************/
 
       /*****************debut mobilier construction***************/
-      //col table
+       //col table
         vm.mobilier_construction_column = [        
         {
           titre:"Mobilier"
+        },
+        {
+          titre:"Nombre mobilier"
         },
         {
           titre:"cout mobilier"
@@ -1502,14 +1470,15 @@
         //Masque de saisi ajout
         vm.ajouterMobilier_construction = function ()
         { 
-          if (NouvelItemLatrine_construction == false)
+          if (NouvelItemMobilier_construction == false)
           {
             var items = {
               $edit: true,
               $selected: true,
               id: '0',
-              id_annexe_mobilier:'',
-              cout_mobilier:''
+              id_type_mobilier:'',
+              cout_unitaire:'',
+              nbr_mobilier:''
             };         
             vm.allmobilier_construction.push(items);
             vm.allmobilier_construction.forEach(function(conv)
@@ -1548,10 +1517,9 @@
           {
               item.$edit = false;
               item.$selected = false;
-              item.id_annexe_ouvrage = currentItemMobilier_construction.id_annexe_ouvrage;
-              item.cout_mobilier    = currentItemMobilier_construction.cout_mobilier;
-              //item.ponderation_mobilier = currentItemMobilier_construction.ponderation_mobilier;
-              //item.id_attachement_mobilier    = currentItemMobilier_construction.id_attachement_mobilier; 
+              item.id_type_mobilier = currentItemMobilier_construction.id_type_mobilier;
+              item.nbr_mobilier    = currentItemMobilier_construction.nbr_mobilier;
+              item.cout_unitaire = currentItemMobilier_construction.cout_unitaire; 
           }else
           {
             vm.allmobilier_construction = vm.allmobilier_construction.filter(function(obj)
@@ -1565,12 +1533,19 @@
           
         };
 
-        //fonction selection item Latrine construction cisco/feffi
+        //fonction selection item Mobilier construction cisco/feffi
         vm.selectionMobilier_construction = function (item)
         {
+            
             vm.selectedItemMobilier_construction = item;
-            currentItemMobilier_construction     = JSON.parse(JSON.stringify(vm.selectedItemMobilier_construction));
-           // vm.allconvention= [] ;           
+
+            if(item.$selected == false)
+            {
+               currentItemMobilier_construction     = JSON.parse(JSON.stringify(vm.selectedItemMobilier_construction));
+            }
+           
+           // vm.allconvention= [] ;
+                       
 
         };
         $scope.$watch('vm.selectedItemMobilier_construction', function()
@@ -1595,25 +1570,9 @@
 
             item.$edit = true;
             item.$selected = true;
-             
-            //recuperation donnée attachement
-           /* apiFactory.getAPIgeneraliserREST("attachement_mobilier/index","id_annexe_mobilier",item.annexe_mobilier.id).then(function(result)
-            {
-              vm.allattachement_mobilier= result.data.response;
-              item.id_attachement_mobilier = vm.selectedItemMobilier_construction.attachement_mobilier.id;
-              console.log(vm.allattachement_mobilier);
-              console.log(item);
-
-            });*/
-
-            //recuperation donnée annexe_latrine
-            apiFactory.getAPIgeneraliserREST("annexe_mobilier/index","id_batiment_ouvrage",vm.selectedItemBatiment_construction.batiment_ouvrage.id).then(function(result)
-            {
-              vm.allannexe_mobilier= result.data.response;
-              item.id_annexe_mobilier = vm.selectedItemMobilier_construction.annexe_mobilier.id;
-            });
-            item.cout_mobilier = parseInt(vm.selectedItemMobilier_construction.annexe_mobilier.cout_mobilier);
-           // item.ponderation_mobilier = parseInt(vm.selectedItemMobilier_construction.attachement_mobilier.ponderation_mobilier);
+            item.id_type_mobilier = vm.selectedItemMobilier_construction.type_mobilier.id;
+            item.nbr_mobilier = parseInt(vm.selectedItemMobilier_construction.nbr_mobilier);
+            item.cout_unitaire = parseInt(vm.selectedItemMobilier_construction.cout_unitaire);
             
 
             
@@ -1624,7 +1583,7 @@
         {
             var confirm = $mdDialog.confirm()
                     .title('Etes-vous sûr de supprimer cet enregistrement ?')
-                    .textContent('')
+                    .textContent('Les données mobiliers et latrines seront également supprimer')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
@@ -1642,14 +1601,15 @@
         {          
             if (suppression!=1)
             {
-               var ouv_c = vm.allmobilier_construction.filter(function(obj)
+               var latr_con = vm.allmobilier_construction.filter(function(obj)
                 {
                    return obj.id == currentItemMobilier_construction.id;
                 });
-                if(ouv_c[0])
+                if(latr_con[0])
                 {
-                   if((ouv_c[0].id_annexe_mobilier!=currentItemMobilier_construction.id_annexe_mobilier)
-                    //|| (ouv_c[0].id_attachement_mobilier!=currentItemMobilier_construction.id_attachement_mobilier)
+                   if((latr_con[0].id_type_mobilier!=currentItemMobilier_construction.id_type_mobilier)
+                    || (latr_con[0].nbr_mobilier!=currentItemMobilier_construction.nbr_mobilier)
+                    || (latr_con[0].cout_unitaire!=currentItemMobilier_construction.cout_unitaire)
                     )                    
                       { 
                         insert_in_baseMobilier_construction(item,suppression);
@@ -1682,8 +1642,9 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    id_annexe_mobilier: mobilier_construction.id_annexe_mobilier,
-                    //id_attachement_mobilier: mobilier_construction.id_attachement_mobilier,
+                    id_type_mobilier: mobilier_construction.id_type_mobilier,
+                    nbr_mobilier: mobilier_construction.nbr_mobilier,
+                    cout_unitaire: mobilier_construction.cout_unitaire,
                     id_batiment_construction: vm.selectedItemBatiment_construction.id
 
                 });
@@ -1692,30 +1653,27 @@
             apiFactory.add("mobilier_construction/index",datas, config).success(function (data)
             {
 
-                var anne_mob = vm.allannexe_mobilier.filter(function(obje)
+                var typ_mob = vm.alltype_mobilier.filter(function(obje)
                 {
-                    return obje.id == mobilier_construction.id_annexe_mobilier;
+                    return obje.id == mobilier_construction.id_type_mobilier;
                 });
-
-               /* var atta_m = vm.allattachement_mobilier.filter(function(obj)
-                {
-                    return obj.id == mobilier_construction.id_attachement_mobilier;
-                });*/
 
                 if (NouvelItemMobilier_construction == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItemMobilier_construction.mobilier_ouvrage = anne_mob[0];
-                       // vm.selectedItemMobilier_construction.attachement_mobilier   = atta_m[0];
+                        vm.selectedItemMobilier_construction.mobilier_ouvrage = typ_mob[0];
+                        vm.selectedItemMobilier_construction.nbr_mobilier = mobilier_construction.nbr_mobilier;
+                        vm.selectedItemMobilier_construction.cout_unitaire = mobilier_construction.cout_unitaire;
                         vm.selectedItemMobilier_construction.$selected  = false;
                         vm.selectedItemMobilier_construction.$edit      = false;
                         vm.selectedItemMobilier_construction ={};
 
-                        var cout_ancien_mob= parseInt(currentItemMobilier_construction.annexe_mobilier.cout_mobilier);
-                        var cout_nouveau_mob= parseInt(anne_mob[0].cout_mobilier);
+                        var cout_ancien_mob= parseInt(currentItemMobilier_construction.cout_unitaire)*parseInt(currentItemMobilier_construction.nbr_mobilier);
+                        var cout_nouveau_mob= parseInt(typ_mob[0].cout_mobilier)*parseInt(mobilier_construction.nbr_mobilier);
                         var cout_tot = parseInt(vm.selectedItemDetail.montant_total)- cout_ancien_mob + cout_nouveau_mob ;
+    
                         miseajourDetail(vm.selectedItemDetail,0,cout_tot);
                     }
                     else 
@@ -1724,24 +1682,27 @@
                       {
                           return obj.id !== vm.selectedItemMobilier_construction.id;
                       });
-                      var cout_ancien_mob= parseInt(currentItemMobilier_construction.annexe_mobilier.cout_mobilier);
+
+                      var cout_ancien_mob= parseInt(currentItemMobilier_construction.cout_unitaire) *
+                                        parseInt(currentItemMobilier_construction.nbr_mobilier);
                       var cout_tot = parseInt(vm.selectedItemDetail.montant_total) - cout_ancien_mob;
 
                        miseajourDetail(vm.selectedItemDetail,0,cout_tot);
-                      vm.showbuttonNouvMobilier=true;
+                      
                     }
                 }
                 else
                 {
                   
-                  mobilier_construction.annexe_mobilier= anne_mob[0];
-                  ///mobilier_construction.attachement_mobilier = atta_m[0];
+                  mobilier_construction.type_mobilier= typ_mob[0];
+                  mobilier_construction.nbr_mobilier = mobilier_construction.nbr_mobilier;
+                  mobilier_construction.cout_unitaire = mobilier_construction.cout_unitaire;
                   mobilier_construction.id  =   String(data.response);              
                   NouvelItemMobilier_construction = false;
-                  vm.showbuttonNouvMobilier=false;
-                  //console.log(mobilier_construction);
+                  
+                  //console.log(latrine_construction);
                   var cout_tot = parseInt(vm.selectedItemDetail.montant_total)+ 
-                  parseInt(anne_mob[0].cout_mobilier);
+                  (parseInt(mobilier_construction.cout_unitaire)*parseInt(mobilier_construction.nbr_mobilier));
                   
                   miseajourDetail(vm.selectedItemDetail,0,cout_tot);
             }
@@ -1754,33 +1715,15 @@
         }
 
          //fonction bouton modification ouvrage
-        vm.modification_annexe_mobilier = function(item)
-        {   
-          //item.id_attachement_mobilier = null;
-            
-            //recuperation donnée attachement
-           /* apiFactory.getAPIgeneraliserREST("attachement_mobilier/index","id_annexe_mobilier",item.id_annexe_mobilier).then(function(result)
+        vm.modification_type_mobilier = function(item)
+        {
+            var annel = vm.alltype_mobilier.filter(function(obj)
             {
-              vm.allattachement_mobilier= result.data.response;
-              console.log(vm.allattachement_mobilier);
-            });*/
-            var annel = vm.allannexe_mobilier.filter(function(obj)
-            {
-                return obj.id == item.id_annexe_mobilier;
+                return obj.id == item.id_type_mobilier;
             });
-            item.cout_mobilier = parseInt(annel[0].cout_mobilier);
+            item.cout_unitaire = parseInt(annel[0].cout_mobilier);
             
         };
-
-       /* vm.modification_attachement_mobilier = function(item)
-        {
-          var atta = vm.allattachement_mobilier.filter(function(obj)
-            {
-                return obj.id == item.id_attachement_mobilier;
-            });
-
-            item.ponderation_mobilier = parseInt(atta[0].ponderation_mobilier);
-        }*/
       /*****************fin mobilier construction***************/
 
       

@@ -3,34 +3,35 @@
     'use strict';
 
     angular
-        .module('app.paeb.ddb.detail_subvention', [])
+        .module('app.paeb.ddb.type_mobilier', [])
         .config(config);
 
     /** @ngInject */
     function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
     {
         // State
-        $stateProvider.state('app.paeb_ddb_detail_subvention', {
-            url      : '/donnees-de-base/detail_subvention',
+        $stateProvider.state('app.paeb_ddb_type_mobilier', {
+            url      : '/donnees-de-base/type_mobilier',
             views    : {
                 'content@app': {
-                    templateUrl: 'app/main/paeb/ddb/detail_subvention/detail_subvention.html',
-                    controller : 'Detail_subventionController as vm'
+                    templateUrl: 'app/main/paeb/ddb/type_mobilier/type_mobilier.html',
+                    controller : 'Type_mobilierController as vm'
                 }
             },
-            bodyClass: 'detail_subvention',
+            bodyClass: 'type_mobilier',
             data : {
               authorizer : true,
               permitted : ["USER","PERSONNEL","ADMIN"],
-              page: "Detail_subvention"
+              page: "type_mobilier"
             }
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.detail_subvention', {
-            title: 'Detail subvention',
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.type_mobilier', {
+            title: 'Type mobilier',
             icon  : 'icon-clipboard-text',
             state: 'app.paeb_ddb_detail_subvention'
+
         });
     }
 
