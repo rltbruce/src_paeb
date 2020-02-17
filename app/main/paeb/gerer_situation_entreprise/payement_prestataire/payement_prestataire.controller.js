@@ -64,7 +64,7 @@
         },
         {titre:"Description"
         },
-        {titre:"Référence paiement"
+        {titre:"Référence facture"
         },
         {titre:"Montant"
         },
