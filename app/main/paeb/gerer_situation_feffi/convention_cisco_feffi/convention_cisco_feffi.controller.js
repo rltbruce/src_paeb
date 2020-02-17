@@ -122,6 +122,14 @@
           vm.allfeffi= result.data.response;
         });
 
+
+        //recuperation donnée type_cout_divers
+        apiFactory.getAll("type_cout_divers/index").then(function(result)
+        {
+          vm.all_type_cout_divers= result.data.response;
+        });
+
+
         //Masque de saisi ajout
         vm.ajouterTete = function ()
         { 
@@ -229,6 +237,16 @@
                 console.log(vm.allcompte_feffi);
                
               });
+
+              //Récupération cout divers par convention
+
+              apiFactory.getAPIgeneraliserREST("cout_divers_construction/index",'id_convention_entete',item.id).then(function(result)
+              {
+                vm.all_cout_divers = result.data.response;
+                console.log(vm.all_cout_divers);
+               
+              });
+              //Fin Récupération cout divers par convention
               vm.stepOne = true;
               vm.stepTwo = false;
               vm.stepThree = false;
