@@ -1259,10 +1259,7 @@
             if (item.$selected==false)
             {
                currentItemLatrine_construction     = JSON.parse(JSON.stringify(vm.selectedItemLatrine_construction));
-            }
-           
-           // vm.allconvention= [] ;
-                       
+            }           
 
         };
         $scope.$watch('vm.selectedItemLatrine_construction', function()

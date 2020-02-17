@@ -15,14 +15,17 @@
         vm.selectedItem = {} ;
         vm.allfeffi = [] ;
 
-        vm.allcommune = [] ;
-        vm.allcisco = [] ;
-
         vm.ajoutMembre = ajoutMembre ;
         var NouvelItemMembre=false;
         var currentItemMembre;
         vm.selectedItemMembre = {} ;
         vm.allmembre = [] ;
+
+        vm.ajoutCompte_feffi = ajoutCompte_feffi ;
+        var NouvelItemCompte_feffi=false;
+        var currentItemCompte_feffi;
+        vm.selectedItemCompte_feffi = {} ;
+        vm.allcompte_feffi = [] ;
 
         vm.stepOne = false;
         vm.stepTwo = false;
@@ -147,7 +150,14 @@
               apiFactory.getAPIgeneraliserREST("membre_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
               {
                   vm.allmembre = result.data.response; 
-                  //console.log(vm.allfeffi);
+                  console.log( vm.allmembre);
+              });
+
+              //recuperation donnée compte
+              apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
+              {
+                  vm.allcompte_feffi = result.data.response; 
+                  console.log(vm.allcompte_feffi);
               });
               vm.stepOne = true;
             }
@@ -464,11 +474,11 @@
                 });
                 if(mem[0])
                 {
-                   if((mem[0].nom!=currentItem.nom) 
-                    || (mem[0].prenom!=currentItem.prenom)
-                    || (mem[0].sexe!=currentItem.sexe)
-                    || (mem[0].age!=currentItem.age)
-                    || (mem[0].occupation!=currentItem.occupation))                    
+                   if((mem[0].nom!=currentItemMembre.nom) 
+                    || (mem[0].prenom!=currentItemMembre.prenom)
+                    || (mem[0].sexe!=currentItemMembre.sexe)
+                    || (mem[0].age!=currentItemMembre.age)
+                    || (mem[0].occupation!=currentItemMembre.occupation))                    
                       { 
                          insert_in_baseMembre(item,suppression);
                       }
@@ -511,7 +521,7 @@
                 //factory
             apiFactory.add("membre_feffi/index",datas, config).success(function (data)
             {
-                if (NouvelItem == false)
+                if (NouvelItemMembre == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
@@ -529,7 +539,7 @@
                     {    
                       vm.allmembre = vm.allmembre.filter(function(obj)
                       {
-                          return obj.id !== vm.selectedItem.id;
+                          return obj.id !== vm.selectedItemMembre.id;
                       });
                     }
                 }
@@ -546,6 +556,243 @@
               membre.$selected = false;
               membre.$edit = false;
               vm.selectedItemMembre = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        /**********************************debut compte****************************************/
+//col table
+        vm.compte_feffi_column = [
+        {titre:"Nom banque"},
+        {titre:"Adresse banque"},
+        {titre:"RIB"},
+        {titre:"Numero compte"},
+        {titre:"Titulaire"},
+        {titre:"Action"}]; 
+
+        //Masque de saisi ajout
+        vm.ajouterCompte_feffi = function ()
+        { 
+          if (NouvelItemCompte_feffi == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              nom_banque: '',
+              adresse_banque: '',
+              rib: '',
+              numero_compte:'',
+              id_membre_feffi:''
+            };         
+            vm.allcompte_feffi.push(items);
+            vm.allcompte_feffi.forEach(function(comp)
+            {
+              if(comp.$selected==true)
+              {
+                vm.selectedItemCompte_feffi = comp;
+              }
+            });
+
+            NouvelItemCompte_feffi = true ;
+          }else
+          {
+            vm.showAlert('Ajout compte feffi','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutCompte_feffi(compte_feffi,suppression)
+        {
+            if (NouvelItemCompte_feffi==false)
+            {
+                test_existanceCompte_feffi (compte_feffi,suppression); 
+            } 
+            else
+            {
+                insert_in_baseCompte_feffi(compte_feffi,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation membre
+        vm.annulerCompte_feffi = function(item)
+        {
+          if (NouvelItemCompte_feffi == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.nom_banque      = currentItemCompte_feffi.nom_banque ;
+            item.adresse_banque   = currentItemCompte_feffi.adresse_banque ;
+            item.rib      = currentItemCompte_feffi.rib;
+            item.numero_compte      = currentItemCompte_feffi.numero_compte ;
+            item.id_membre_feffi   = currentItemCompte_feffi.id_membre_feffi ; 
+          }else
+          {
+            vm.allcompte_feffi = vm.allcompte_feffi.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemCompte_feffi.id;
+            });
+          }
+
+          vm.selectedItemCompte_feffi = {} ;
+          NouvelItemCompte_feffi      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionCompte_feffi= function (item)
+        {
+            vm.selectedItemCompte_feffi = item;
+            vm.nouvelItemCompte_feffi   = item;
+            currentItemCompte_feffi    = JSON.parse(JSON.stringify(vm.selectedItemCompte_feffi)); 
+        };
+        $scope.$watch('vm.selectedItemCompte_feffi', function()
+        {
+             if (!vm.allcompte_feffi) return;
+             vm.allcompte_feffi.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemCompte_feffi.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierCompte_feffi = function(item)
+        {
+            NouvelItemCompte_feffi = false ;
+            vm.selectedItemCompte_feffi = item;
+            currentItemCompte_feffi = angular.copy(vm.selectedItemCompte_feffi);
+            $scope.vm.allcompte_feffi.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;            
+            item.nom_banque      = vm.selectedItemCompte_feffi.nom_banque ;
+            item.adresse_banque = vm.selectedItemCompte_feffi.adresse_banque;
+            item.rib  = parseInt(vm.selectedItemCompte_feffi.rib);
+            item.numero_compte      =parseInt(vm.selectedItemCompte_feffi.numero_compte)  ;
+            item.id_membre_feffi = vm.selectedItemCompte_feffi.membre_feffi.id; 
+        };
+
+        //fonction bouton suppression item membre
+        vm.supprimerCompte_feffi = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutMembre(vm.selectedItemCompte_feffi,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceCompte_feffi (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var comp = vm.allcompte_feffi.filter(function(obj)
+                {
+                   return obj.id == currentItem.id;
+                });
+                if(comp[0])
+                {
+                   if((comp[0].nom_banque!=currentItemCompte_feffi.nom_banque) 
+                    || (comp[0].adresse_banque!=currentItemCompte_feffi.adresse_banque)
+                    || (comp[0].rib!=currentItemCompte_feffi.rib)
+                    || (comp[0].numero_compte!=currentItemCompte_feffi.numero_compte)
+                    || (comp[0].id_membre_feffi!=currentItemCompte_feffi.id_membre_feffi))                    
+                      { 
+                         insert_in_baseCompte_feffi(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseCompte_feffi(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseCompte_feffi(compte_feffi,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemCompte_feffi==false)
+            {
+                getId = vm.selectedItemCompte_feffi.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,      
+                    nom_banque:      compte_feffi.nom_banque,
+                    adresse_banque: compte_feffi.adresse_banque,
+                    rib: compte_feffi.rib,
+                    numero_compte: compte_feffi.numero_compte,
+                    id_membre_feffi: compte_feffi.id_membre_feffi,
+                    id_feffi: vm.selectedItem.id                
+                });
+                //console.log(feffi.pays_id);
+                //factory
+            apiFactory.add("compte_feffi/index",datas, config).success(function (data)
+            {
+                var memb = vm.allmembre.filter(function(obj)
+                {
+                    return obj.id == compte_feffi.id_membre_feffi;
+                });
+
+                if (NouvelItemCompte_feffi == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                        vm.selectedItemCompte_feffi.nom_banque        = compte_feffi.nom_banque;
+                        vm.selectedItemCompte_feffi.adresse_banque       = compte_feffi.adresse_banque;
+                        vm.selectedItemCompte_feffi.rib        = compte_feffi.rib;
+                        vm.selectedItemCompte_feffi.numero_compte       = compte_feffi.numero_compte;
+                        vm.selectedItemCompte_feffi.membre_feffi        = memb[0];
+                        vm.selectedItemCompte_feffi.$selected  = false;
+                        vm.selectedItemCompte_feffi.$edit      = false;
+                        vm.selectedItemCompte_feffi ={};
+                    }
+                    else 
+                    {    
+                      vm.allcompte_feffi = vm.allcompte_feffi.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemCompte_feffi.id;
+                      });
+                    }
+                }
+                else
+                {
+                  compte_feffi.nom_banque        = compte_feffi.nom_banque;
+                  compte_feffi.adresse_banque       = compte_feffi.adresse_banque;
+                  compte_feffi.rib        = compte_feffi.rib;
+                  compte_feffi.numero_compte       =compte_feffi.numero_compte;
+                  compte_feffi.membre_feffi        = memb[0];
+                  compte_feffi.id  =   String(data.response);              
+                  NouvelItemCompte_feffi=false;
+            }
+              compte_feffi.$selected = false;
+              compte_feffi.$edit = false;
+              vm.selectedItemCompte_feffi = {};
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 

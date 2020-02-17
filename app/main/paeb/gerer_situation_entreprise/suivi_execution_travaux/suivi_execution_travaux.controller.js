@@ -83,6 +83,7 @@
         vm.selectedItemAvancement_batiment = {} ;
         vm.allavancement_batiment = [] ;
         vm.allattachement_batiment = [] ;
+        vm.allcurrentattachement_batiment = [] ;
 
         vm.ajoutAvancement_batiment_doc = ajoutAvancement_batiment_doc ;
         var NouvelItemAvancement_batiment_doc=false;
@@ -238,19 +239,7 @@
         },
         {titre:"Objet"
         },
-        {titre:"Date signature"
-        },
         {titre:"Reference Financement"
-        },
-        {titre:"Nom banque"
-        },
-        {titre:"Adresse banque"
-        },
-        {titre:"RIB"
-        },
-        {titre:"Delai"
-        },
-        {titre:"Observation"
         }];
  
         //fonction selection item region
@@ -301,13 +290,25 @@ console.log(vm.nouvelItemConvention_entete);
           titre:"Intitule"
         },
         {
-          titre:"Zone subvention"
-        },
-        {
-          titre:"Acces zone"
-        },
-        {
           titre:"Cout éstimé"
+        },
+        {
+          titre:"Nom banque"
+        },
+        {
+          titre:"Adresse banque"
+        },
+        {
+          titre:"RIB"
+        },
+        {
+          titre:"Delai"
+        },
+        {
+          titre:"Date signature"
+        },
+        {
+          titre:"Observation"
         },
         {
           titre:"Avancement"
@@ -364,13 +365,10 @@ console.log(vm.nouvelItemConvention_entete);
           titre:"Batiment"
         },
         {
-          titre:"cout maitrise oeuvre"
+          titre:"Nombre batiment"
         },
         {
-          titre:"Cout batiment"
-        },
-        {
-          titre:"Cout sous projet"
+          titre:"Cout unitaire"
         }];
 
         //fonction selection item batiment construction cisco/feffi
@@ -379,24 +377,24 @@ console.log(vm.nouvelItemConvention_entete);
             vm.selectedItemBatiment_construction = item;
           
             if (vm.selectedItemBatiment_construction.id!=0)
-            {
-              apiFactory.getAPIgeneraliserREST("latrine_construction/index",'id_batiment_construction',vm.selectedItemBatiment_construction.id).then(function(result)
+            {apiFactory.getAPIgeneraliserREST("latrine_construction/index",'id_batiment_construction',vm.selectedItemBatiment_construction.id).then(function(result)
               {
                   vm.alllatrine_construction = result.data.response;
+                console.log(vm.alllatrine_construction);
                   
               });
 
               apiFactory.getAPIgeneraliserREST("mobilier_construction/index",'id_batiment_construction',vm.selectedItemBatiment_construction.id).then(function(result)
               {
                   vm.allmobilier_construction = result.data.response;
-                  console.log(vm.allmobilier_construction);
+                  
               });
               apiFactory.getAPIgeneraliserREST("avancement_batiment/index",'menu','getavancementBybatiment','id_batiment_construction',vm.selectedItemBatiment_construction.id).then(function(result)
               {
                   vm.allavancement_batiment = result.data.response;
                   
               });
-              apiFactory.getAPIgeneraliserREST("attachement_batiment/index",'id_batiment_ouvrage',vm.selectedItemBatiment_construction.batiment_ouvrage.id).then(function(result)
+              apiFactory.getAPIgeneraliserREST("attachement_batiment/index",'id_type_batiment',vm.selectedItemBatiment_construction.type_batiment.id).then(function(result)
               {
                   vm.allattachement_batiment = result.data.response;
                   console.log(vm.allattachement_batiment);
@@ -462,7 +460,8 @@ console.log(vm.nouvelItemConvention_entete);
               observation: '',
               date: '',
               id_attachement_batiment:'',
-              ponderation_batiment:''
+              ponderation_batiment:'',
+              attachement_batiment:{ponderation_batiment:0}
             };         
             vm.allavancement_batiment.push(items);
             vm.allavancement_batiment.forEach(function(mem)
@@ -472,8 +471,28 @@ console.log(vm.nouvelItemConvention_entete);
                 vm.selectedItemAvancement_batiment = mem;
               }
             });
-
+            
             NouvelItemAvancement_batiment= true ;
+            console.log(vm.allavancement_batiment);
+            if (vm.allavancement_batiment.length>1)
+            {
+              var max_ponderation_batiment = Math.max.apply(Math, vm.allavancement_batiment.map(function(o)
+            { 
+                  return o.attachement_batiment.ponderation_batiment;
+            }));
+            vm.allcurrentattachement_batiment = vm.allattachement_batiment.filter(function(obj)
+            {
+                return obj.ponderation_batiment > max_ponderation_batiment;
+            });
+            console.log(max_ponderation_batiment);
+            console.log(vm.allcurrentattachement_batiment);
+
+            }else
+            {
+              vm.allcurrentattachement_batiment = vm.allattachement_batiment;
+            }
+            
+
           }else
           {
             vm.showAlert('Ajout avancement_batiment','Un formulaire d\'ajout est déjà ouvert!!!');
@@ -574,6 +593,34 @@ console.log(vm.nouvelItemConvention_entete);
             item.date = new Date(vm.selectedItemAvancement_batiment.date);
             item.id_attachement_batiment = vm.selectedItemAvancement_batiment.attachement_batiment.id;
             item.ponderation_batiment = parseInt(vm.selectedItemAvancement_batiment.attachement_batiment.ponderation_batiment);
+
+            var allattachement_batiment_autre = vm.allattachement_batiment.filter(function(obj)
+            {
+                return obj.id != vm.selectedItemAvancement_batiment.attachement_batiment.id;
+            });
+
+            var allavancement_batiment_autre = vm.allavancement_batiment.filter(function(obj)
+            {
+                return obj.id != vm.selectedItemAvancement_batiment.id;
+            });
+
+            //if (vm.allavancement_batiment.length>1)
+           // {
+              var max_ponderation_batiment = Math.max.apply(Math, allavancement_batiment_autre.map(function(o)
+              { 
+                return o.attachement_batiment.ponderation_batiment;
+              }));
+            vm.allcurrentattachement_batiment = allattachement_batiment_autre.filter(function(obj)
+            {
+                return obj.ponderation_batiment > max_ponderation_batiment;
+            });
+            vm.allcurrentattachement_batiment.push(vm.selectedItemAvancement_batiment.attachement_batiment);
+
+
+           /* }else
+            {
+              vm.allcurrentattachement_batiment = vm.allattachement_batiment;
+            }*/
            
         };
 
@@ -658,6 +705,14 @@ console.log(vm.nouvelItemConvention_entete);
                     return obj.id == avancement_batiment.id_attachement_batiment;
                 });
 console.log(attac[0]);
+
+                var length_bat = vm.allbatiment_construction.length;
+                var length_lat = vm.alllatrine_construction.length;
+                var length_mob = vm.allmobilier_construction.length;
+                var length_total = length_bat+length_lat+length_mob;
+                var avancement_total=0;
+                
+
                 if (NouvelItemAvancement_batiment == false)
                 {
                     // Update or delete: id exclu                 
@@ -678,10 +733,11 @@ console.log(attac[0]);
                         vm.selectedItemAvancement_batiment.$edit      = false;
                         vm.selectedItemAvancement_batiment ={};
                         vm.showbuttonNouvAvancement_batiment= false;
-                        var ponderation_ancien= parseInt(currentItemAvancement_batiment.attachement_batiment.ponderation_batiment)/3
-                        var ponderation_nouve= parseInt(attac[0].ponderation_batiment)/3;
-                        var avancement_total= parseInt(vm.selectedItemConvention_detail.avancement)-ponderation_ancien+ponderation_nouve;
+                        var ponderation_ancien= parseInt(currentItemAvancement_batiment.attachement_batiment.ponderation_batiment);
+                        var ponderation_nouve= parseInt(attac[0].ponderation_batiment);
+                        avancement_total= ((parseInt(vm.selectedItemConvention_detail.avancement)*length_total)-ponderation_ancien+ponderation_nouve)/length_total;
                         miseajourconventiondetail(vm.selectedItemConvention_detail,0,avancement_total);
+                     
                     }
                     else 
                     {    
@@ -690,8 +746,18 @@ console.log(attac[0]);
                           return obj.id !== vm.selectedItemAvancement_batiment.id;
                       });
                       vm.showbuttonNouvAvancement_batiment= true;
-                      var avancement_total= parseInt(vm.selectedItemConvention_detail.avancement)-(parseInt(attac[0].ponderation_batiment)/3);
+
+                       max_ponderation = Math.max.apply(Math, vm.allavancement_batiment.map(function(o)
+                      { 
+                        return o.attachement_batiment.ponderation_batiment;
+                      }));
+
+                      avancement_total= ((parseInt(vm.selectedItemConvention_detail.avancement)*length_total)-vm.selectedItemAvancement_batiment.ponderation_batiment+max_ponderation)/length_total;
+                     
+                      
                       miseajourconventiondetail(vm.selectedItemConvention_detail,0,avancement_total);
+
+
                     }
                     
                 }
@@ -706,8 +772,25 @@ console.log(attac[0]);
                   avancement_batiment.id  =   String(data.response);              
                   NouvelItemAvancement_batiment=false;
                   vm.showbuttonNouvAvancement_batiment= false;
+                  var max_ponderation=0;
+
+                  if(vm.allavancement_batiment.length>1)
+                  {
+                    var allavancement_batiment_encien = vm.allavancement_batiment.filter(function(obj)
+                      {
+                          return obj.id !== String(data.response);
+                      });
+                   max_ponderation = Math.max.apply(Math, allavancement_batiment_encien.map(function(o)
+                  { 
+                    return o.attachement_batiment.ponderation_batiment;
+                  }));
+                   console.log(max_ponderation);
+
+                  }
                  //var ponderation_ancien= parseInt(currentItemAvancement_batiment.attachement_batiment.ponderation);
-                  var avancement_total= parseInt(vm.selectedItemConvention_detail.avancement)+(parseInt(attac[0].ponderation_batiment)/3);
+                 avancement_total=((parseFloat(vm.selectedItemConvention_detail.avancement)*length_total)- max_ponderation+parseInt(attac[0].ponderation_batiment))/length_total;
+                  //avancement_total= (((parseFloat(vm.selectedItemConvention_detail.avancement)*length_total)+parseInt(attac[0].ponderation_batiment))/length_total).toFixe(3);
+
                   miseajourconventiondetail(vm.selectedItemConvention_detail,0,avancement_total);
             }
               avancement_batiment.$selected = false;
@@ -926,6 +1009,12 @@ console.log(attac[0]);
                 var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
                 var getIdFile = 0;
 
+                var length_bat = vm.allbatiment_construction.length;
+                var length_lat = vm.alllatrine_construction.length;
+                var length_mob = vm.allmobilier_construction.length;
+                var length_total = length_bat+length_lat+length_mob;
+                var avancement_total=0;
+
                 if (NouvelItemAvancement_batiment_doc==false)
                 {
                     getIdFile = vm.selectedItemAvancement_batiment_doc.id; 
@@ -1060,6 +1149,9 @@ console.log(attac[0]);
           titre:"Latrine"
         },
         {
+          titre:"Nombre latrine"
+        },
+        {
           titre:"cout latrine"
         }];
 
@@ -1067,7 +1159,7 @@ console.log(attac[0]);
         vm.selectionLatrine_construction = function (item)
         {
             vm.selectedItemLatrine_construction = item;
-            apiFactory.getAPIgeneraliserREST("attachement_latrine/index",'id_annexe_latrine',vm.selectedItemLatrine_construction.annexe_latrine.id).then(function(result)
+            apiFactory.getAPIgeneraliserREST("attachement_latrine/index",'id_type_latrine',vm.selectedItemLatrine_construction.type_latrine.id).then(function(result)
             {
                   vm.allattachement_latrine = result.data.response;
                   console.log(vm.allattachement_latrine);
@@ -1143,6 +1235,17 @@ console.log(attac[0]);
             });
 
             NouvelItemAvancement_latrine= true ;
+
+            if (vm.allavancement_latrine.length>1)
+            {
+              var max_ponderation_latrine = Math.max.apply(Math, vm.allavancement_latrine.map(function(o)
+            { 
+                  return o.attachement_latrine.ponderation_latrine;
+            }));
+            vm.allcurrentattachement_latrine = vm.allattachement_latrine.filter(function(obj)
+            {
+                return obj.ponderation_latrine > max_ponderation_latrine;
+            });
           }else
           {
             vm.showAlert('Ajout avancement_latrine','Un formulaire d\'ajout est déjà ouvert!!!');
@@ -1239,6 +1342,28 @@ console.log(attac[0]);
             item.date = new Date(vm.selectedItemAvancement_latrine.date);
             item.id_attachement_latrine = vm.selectedItemAvancement_latrine.attachement_latrine.id;
             item.ponderation_latrine = parseInt(vm.selectedItemAvancement_latrine.attachement_latrine.ponderation_latrine);
+
+            var allattachement_latrine_autre = vm.allattachement_latrine.filter(function(obj)
+            {
+                return obj.id != vm.selectedItemAvancement_latrine.attachement_latrine.id;
+            });
+
+            var allavancement_latrine_autre = vm.allavancement_latrine.filter(function(obj)
+            {
+                return obj.id != vm.selectedItemAvancement_latrine.id;
+            });
+
+            //if (vm.allavancement_latrine.length>1)
+           // {
+              var max_ponderation_latrine = Math.max.apply(Math, allavancement_latrine_autre.map(function(o)
+              { 
+                return o.attachement_latrine.ponderation_latrine;
+              }));
+            vm.allcurrentattachement_latrine = allattachement_latrine_autre.filter(function(obj)
+            {
+                return obj.ponderation_latrine > max_ponderation_latrine;
+            });
+            vm.allcurrentattachement_latrine.push(vm.selectedItemAvancement_latrine.attachement_batiment);
            
         };
 
@@ -1323,6 +1448,11 @@ console.log(attac[0]);
                     return obj.id == avancement_latrine.id_attachement_latrine;
                 });
 console.log(attac[0]);
+var length_bat = vm.allbatiment_construction.length;
+                var length_lat = vm.alllatrine_construction.length;
+                var length_mob = vm.allmobilier_construction.length;
+                var length_total = length_bat+length_lat+length_mob;
+                var avancement_total=0;
                 if (NouvelItemAvancement_latrine == false)
                 {
                     // Update or delete: id exclu                 
@@ -1343,6 +1473,11 @@ console.log(attac[0]);
                         vm.selectedItemAvancement_latrine.$edit      = false;
                         vm.selectedItemAvancement_latrine ={};
                         vm.showbuttonNouvAvancement_latrine= false;
+                         var ponderation_ancien= parseInt(currentItemAvancement_latrine.attachement_latrine.ponderation_latrine);
+                        var ponderation_nouve= parseInt(attac[0].ponderation_latrine);
+                        avancement_total= ((parseInt(vm.selectedItemConvention_detail.avancement)*length_total)-ponderation_ancien+ponderation_nouve)/length_total;
+                        miseajourconventiondetail(vm.selectedItemConvention_detail,0,avancement_total);
+                       
                     }
                     else 
                     {    
@@ -1351,6 +1486,15 @@ console.log(attac[0]);
                           return obj.id !== vm.selectedItemAvancement_latrine.id;
                       });
                       vm.showbuttonNouvAvancement_latrine= true;
+                      max_ponderation = Math.max.apply(Math, vm.allavancement_latrine.map(function(o)
+                      { 
+                        return o.attachement_latrine.ponderation_latrine;
+                      }));
+
+                      avancement_total= ((parseInt(vm.selectedItemConvention_detail.avancement)*length_total)-vm.selectedItemAvancement_latrine.ponderation_latrine+max_ponderation)/length_total;
+                      
+                      miseajourconventiondetail(vm.selectedItemConvention_detail,0,avancement_total);
+                     
                     }
                     
                 }
@@ -1365,6 +1509,24 @@ console.log(attac[0]);
                   avancement_latrine.id  =   String(data.response);              
                   NouvelItemAvancement_latrine=false;
                   vm.showbuttonNouvAvancement_latrine= false;
+                  var max_ponderation=0;
+
+                  if(vm.allavancement_latrine.length>1)
+                  {
+                    var allavancement_latrine_encien = vm.allavancement_latrine.filter(function(obj)
+                      {
+                          return obj.id !== String(data.response);
+                      });
+                   max_ponderation = Math.max.apply(Math, allavancement_latrine_encien.map(function(o)
+                  { 
+                    return o.attachement_latrine.ponderation_latrine;
+                  }));
+                   console.log(max_ponderation);
+
+                  }
+                 //var ponderation_ancien= parseInt(currentItemAvancement_batiment.attachement_batiment.ponderation);
+                 avancement_total=((parseFloat(vm.selectedItemConvention_detail.avancement)*length_total)- max_ponderation+parseInt(attac[0].ponderation_latrine))/length_total;
+                 
             }
               avancement_latrine.$selected = false;
               avancement_latrine.$edit = false;
@@ -1720,6 +1882,9 @@ console.log(attac[0]);
           titre:"Mobilier"
         },
         {
+          titre:"Nombre mobilier"
+        },
+        {
           titre:"cout mobilier"
         }];
 
@@ -1729,7 +1894,7 @@ console.log(attac[0]);
         {
             vm.selectedItemMobilier_construction = item;
            // vm.allconvention= [] ;
-           apiFactory.getAPIgeneraliserREST("attachement_mobilier/index",'id_annexe_mobilier',vm.selectedItemMobilier_construction.annexe_mobilier.id).then(function(result)
+           apiFactory.getAPIgeneraliserREST("attachement_mobilier/index",'id_type_mobilier',vm.selectedItemMobilier_construction.type_mobilier.id).then(function(result)
             {
                   vm.allattachement_mobilier = result.data.response;
                   console.log(vm.allattachement_mobilier);
@@ -1798,6 +1963,17 @@ console.log(attac[0]);
             });
 
             NouvelItemAvancement_mobilier= true ;
+
+            if (vm.allavancement_mobilier.length>1)
+            {
+              var max_ponderation_mobilier = Math.max.apply(Math, vm.allavancement_mobilier.map(function(o)
+            { 
+                  return o.attachement_mobilier.ponderation_mobilier;
+            }));
+            vm.allcurrentattachement_mobilier = vm.allattachement_mobilier.filter(function(obj)
+            {
+                return obj.ponderation_mobilier > max_ponderation_mobilier;
+            });
           }else
           {
             vm.showAlert('Ajout avancement_mobilier','Un formulaire d\'ajout est déjà ouvert!!!');
@@ -1894,6 +2070,28 @@ console.log(attac[0]);
             item.date = new Date(vm.selectedItemAvancement_mobilier.date);
             item.id_attachement_mobilier = vm.selectedItemAvancement_mobilier.attachement_mobilier.id;
             item.ponderation_mobilier = parseInt(vm.selectedItemAvancement_mobilier.attachement_mobilier.ponderation_mobilier);
+
+            var allattachement_mobilier_autre = vm.allattachement_mobilier.filter(function(obj)
+            {
+                return obj.id != vm.selectedItemAvancement_mobilier.attachement_mobilier.id;
+            });
+
+            var allavancement_mobilier_autre = vm.allavancement_mobilier.filter(function(obj)
+            {
+                return obj.id != vm.selectedItemAvancement_mobilier.id;
+            });
+
+            //if (vm.allavancement_mobilier.length>1)
+           // {
+              var max_ponderation_mobilier = Math.max.apply(Math, allavancement_mobilier_autre.map(function(o)
+              { 
+                return o.attachement_mobilier.ponderation_mobilier;
+              }));
+            vm.allcurrentattachement_mobilier = allattachement_mobilier_autre.filter(function(obj)
+            {
+                return obj.ponderation_mobilier > max_ponderation_mobilier;
+            });
+            vm.allcurrentattachement_mobilier.push(vm.selectedItemAvancement_mobilier.attachement_mobilier);
            
         };
 
@@ -1978,6 +2176,11 @@ console.log(attac[0]);
                     return obj.id == avancement_mobilier.id_attachement_mobilier;
                 });
 console.log(attac[0]);
+var length_bat = vm.allbatiment_construction.length;
+                var length_lat = vm.alllatrine_construction.length;
+                var length_mob = vm.allmobilier_construction.length;
+                var length_total = length_bat+length_lat+length_mob;
+                var avancement_total=0;
                 if (NouvelItemAvancement_mobilier == false)
                 {
                     // Update or delete: id exclu                 
@@ -1998,6 +2201,11 @@ console.log(attac[0]);
                         vm.selectedItemAvancement_mobilier.$edit      = false;
                         vm.selectedItemAvancement_mobilier ={};
                         vm.showbuttonNouvAvancement_mobilier= false;
+
+                         var ponderation_ancien= parseInt(currentItemAvancement_mobilier.attachement_mobilier.ponderation_mobilier);
+                        var ponderation_nouve= parseInt(attac[0].ponderation_mobilier);
+                        avancement_total= ((parseInt(vm.selectedItemConvention_detail.avancement)*length_total)-ponderation_ancien+ponderation_nouve)/length_total;
+                        miseajourconventiondetail(vm.selectedItemConvention_detail,0,avancement_total);
                     }
                     else 
                     {    
@@ -2006,6 +2214,15 @@ console.log(attac[0]);
                           return obj.id !== vm.selectedItemAvancement_mobilier.id;
                       });
                       vm.showbuttonNouvAvancement_mobilier= true;
+                       max_ponderation = Math.max.apply(Math, vm.allavancement_mobilier.map(function(o)
+                      { 
+                        return o.attachement_mobilier.ponderation_mobilier;
+                      }));
+
+                      avancement_total= ((parseInt(vm.selectedItemConvention_detail.avancement)*length_total)-vm.selectedItemAvancement_mobilier.ponderation_mobilier+max_ponderation)/length_total;
+                     
+                      
+                      miseajourconventiondetail(vm.selectedItemConvention_detail,0,avancement_total);
                     }
                     
                 }
@@ -2020,6 +2237,26 @@ console.log(attac[0]);
                   avancement_mobilier.id  =   String(data.response);              
                   NouvelItemAvancement_mobilier=false;
                   vm.showbuttonNouvAvancement_mobilier= false;
+                  var max_ponderation=0;
+
+                  if(vm.allavancement_mobilier.length>1)
+                  {
+                    var allavancement_mobilier_encien = vm.allavancement_mobilier.filter(function(obj)
+                      {
+                          return obj.id !== String(data.response);
+                      });
+                   max_ponderation = Math.max.apply(Math, allavancement_mobilier_encien.map(function(o)
+                  { 
+                    return o.attachement_mobilier.ponderation_mobilier;
+                  }));
+                   console.log(max_ponderation);
+
+                  }
+                 //var ponderation_ancien= parseInt(currentItemAvancement_mobilier.attachement_mobilier.ponderation);
+                 avancement_total=((parseFloat(vm.selectedItemConvention_detail.avancement)*length_total)- max_ponderation+parseInt(attac[0].ponderation_mobilier))/length_total;
+                  //avancement_total= (((parseFloat(vm.selectedItemConvention_detail.avancement)*length_total)+parseInt(attac[0].ponderation_batiment))/length_total).toFixe(3);
+
+                  miseajourconventiondetail(vm.selectedItemConvention_detail,0,avancement_total);
             }
               avancement_mobilier.$selected = false;
               avancement_mobilier.$edit = false;
@@ -2125,6 +2362,7 @@ console.log(attac[0]);
 
           vm.selectedItemAvancement_mobilier_doc = {} ;
           NouvelItemAvancement_mobilier_doc      = false;
+          vm.showThParcourir = false;
           
         };
 
@@ -2151,18 +2389,19 @@ console.log(attac[0]);
         //fonction masque de saisie modification item feffi
         vm.modifierAvancement_mobilier_doc = function(item)
         {
+            vm.showThParcourir = true;
             NouvelItemAvancement_mobilier_doc = false ;
             vm.selectedItemAvancement_mobilier_doc = item;
             currentItemAvancement_mobilier_doc = angular.copy(vm.selectedItemAvancement_mobilier_doc);
-            $scope.vm.allavancement_mobilier_doc.forEach(function(jus) {
-              jus.$edit = false;
+            $scope.vm.allavancement_mobilier_doc.forEach(function(avanc) {
+              avanc.$edit = false;
             });
 
             item.$edit = true;
             item.$selected = true;
             item.description   = vm.selectedItemAvancement_mobilier_doc.description ;
             item.fichier   = vm.selectedItemAvancement_mobilier_doc.fichier ;
-            vm.showThParcourir = true;
+            
         };
 
         //fonction bouton suppression item avancement_mobilier_doc
@@ -2382,7 +2621,11 @@ console.log(attac[0]);
                     montant_total:    convention_cife_detail.montant_total,
                     avancement:    avancement,
                     intitule:    convention_cife_detail.intitule, 
-                    id_convention_entete: convention_cife_detail.convention_entete.id             
+                    id_convention_entete: convention_cife_detail.convention_entete.id ,
+                    delai:    convention_cife_detail.delai,
+                    date_signature:    convertionDate(new Date(convention_cife_detail.date_signature)),
+                    id_compte_feffi: convention_cife_detail.compte_feffi.id,
+                    observation: convention_cife_detail.observation,            
                 });
                 console.log(datas);
                 //factory

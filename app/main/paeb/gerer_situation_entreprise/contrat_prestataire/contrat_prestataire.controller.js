@@ -52,19 +52,7 @@
         },
         {titre:"Objet"
         },
-        {titre:"Date signature"
-        },
         {titre:"Reference Financement"
-        },
-        {titre:"Nom banque"
-        },
-        {titre:"Adresse banque"
-        },
-        {titre:"RIB"
-        },
-        {titre:"Delai"
-        },
-        {titre:"Observation"
         }];
  
 /**********************************fin convention entete****************************************/       

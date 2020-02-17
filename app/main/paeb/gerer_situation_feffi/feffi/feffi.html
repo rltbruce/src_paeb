@@ -170,7 +170,7 @@
           <md-tab ng-disabled="vm.stepOne==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">M</span>
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
                       <i class="icon-check s16"></i>
                     </span>
@@ -289,7 +289,124 @@
 
             </md-tab-body>
           </md-tab>
-    <!-----FIN membre ------>                   
+    <!-----FIN membre ------>   
+
+     <!-----Debut membre ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">C</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Compte banquaire</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterCompte_feffi()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="comp in ::vm.compte_feffi_column">
+                        <div class="table-header">
+                          <span class="column-title">{{comp.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="compte_feffi in vm.allcompte_feffi"  ng-class="{selected: compte_feffi.$selected}" ng-click="vm.selectionCompte_feffi(compte_feffi)">           
+                      <td>
+                        <span ng-if="compte_feffi.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nom banque</label>
+                            <input name="nom_banque" type="text" ng-model="compte_feffi.nom_banque"/>
+                          </md-input-container>
+                        </span>                          
+                        <span ng-if="!compte_feffi.$edit">{{compte_feffi.nom_banque}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="compte_feffi.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Adresse banque</label>
+                            <input name="adresse_banque" type="text" ng-model="compte_feffi.adresse_banque"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!compte_feffi.$edit">{{compte_feffi.adresse_banque}}</span>
+                      </td>                      
+                                
+                      <td>
+                        <span ng-if="compte_feffi.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>RIB</label>
+                            <input name="rib" type="number" ng-model="compte_feffi.rib"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!compte_feffi.$edit">{{compte_feffi.rib}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="compte_feffi.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Numero compte</label>
+                            <input name="numero_compte" type="number" ng-model="compte_feffi.numero_compte"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!compte_feffi.$edit">{{compte_feffi.numero_compte}}</span>
+                      </td> 
+                        <td>
+                          <span ng-if="compte_feffi.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Titulaire</label>
+                              <md-select ng-model="compte_feffi.id_membre_feffi"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changemembre_feffi(compte_feffi)">
+                                <md-option ng-repeat="membre_feffi in vm.allmembre" value="{{membre_feffi.id}}"> {{membre_feffi.nom}}
+                                </md-option>
+                              </md-select>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!compte_feffi.$edit">{{compte_feffi.membre_feffi.nom}}</span>
+                        </td>
+                                                   
+                      <td>
+                        <a ng-if="!compte_feffi.$edit" ng-click="vm.modifierCompte_feffi(compte_feffi)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!compte_feffi.$edit" ng-click="vm.supprimerCompte_feffi(compte_feffi)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="compte_feffi.$edit" ng-click="vm.annulerCompte_feffi(compte_feffi)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="compte_feffi.$edit && compte_feffi.nom_banque && compte_feffi.adresse_banque && compte_feffi.rib && compte_feffi.numero_compte && compte_feffi.id_membre_feffi>''" ng-click="vm.ajoutCompte_feffi(compte_feffi,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN membre ------>                 
       </div>
     </div>
     <!-- / CONTENT -->

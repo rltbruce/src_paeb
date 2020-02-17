@@ -352,7 +352,7 @@ vm.mainGridOptions = {
             pageSize: 5,
           },
           toolbar: [{               
-               template: "<label id='table_titre'></label>"
+               template: "<label id='table_titre'>ATTACHEMENT</label>"
           },{
                name: "create",
                text:"",
