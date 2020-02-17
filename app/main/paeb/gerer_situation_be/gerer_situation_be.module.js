@@ -14,7 +14,7 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_be', {
-            title : 'Gerer situation be',
+            title : 'Gérer situation BE',
             icon  : 'icon-data',
             weight: 3
         });

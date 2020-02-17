@@ -28,10 +28,9 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.bureau_etude', {
-            title: 'bureau_etude',
+            title: "Bureau d'étude",
             icon  : 'icon-ticket-account',
-            state: 'app.paeb_ddb_bureau_etude',
-			weight: 10
+            state: 'app.paeb_ddb_bureau_etude'
         });
     }
 

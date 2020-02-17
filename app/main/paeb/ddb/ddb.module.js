@@ -2,23 +2,26 @@
 {
     'use strict';
 
-    angular
-        .module('app.paeb.ddb', [
-			
+    var tab = [
+            
             'app.paeb.ddb.localisation',
+            'app.paeb.ddb.acces_zone',
             'app.paeb.ddb.cisco',
             'app.paeb.ddb.ecole',
             //'app.paeb.ddb.plan_comptable',
             'app.paeb.ddb.prestataire',
             'app.paeb.ddb.bureau_etude',
             'app.paeb.ddb.type_batiment',
-            'app.paeb.ddb.acces_zone',
             'app.paeb.ddb.zone_subvention',
+            'app.paeb.ddb.infrastructure',
+            'app.paeb.ddb.type_cout_divers',
             'app.paeb.ddb.type_mobilier',
             'app.paeb.ddb.type_latrine',
-            'app.paeb.ddb.infrastructure'
 
-            ])
+            ] ;
+
+    angular
+        .module('app.paeb.ddb', tab.sort())
         .run(testPermission)
         .config(config);
         var vs ;

@@ -3,34 +3,34 @@
     'use strict';
 
     angular
-        .module('app.paeb.ddb.cisco', [])
+        .module('app.paeb.ddb.ouvragee', [])
         .config(config);
 
     /** @ngInject */
     function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
     {
         // State
-        $stateProvider.state('app.paeb_ddb_cisco', {
-            url      : '/donnees-de-base/cisco',
+        $stateProvider.state('app.paeb_ddb_ouvragee', {
+            url      : '/donnees-de-base/ouvragee',
             views    : {
                 'content@app': {
-                    templateUrl: 'app/main/paeb/ddb/cisco/cisco.html',
-                    controller : 'CiscoController as vm'
+                    templateUrl: 'app/main/paeb/ddb/ouvragee/ouvragee.html',
+                    controller : 'OuvrageeController as vm'
                 }
             },
-            bodyClass: 'cisco',
+            bodyClass: 'ouvragee',
             data : {
               authorizer : true,
               permitted : ["USER","PERSONNEL","ADMIN"],
-              page: "Cisco"
+              page: "Ouvragee"
             }
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.cisco', {
-            title: 'Cisco',
+        msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.ouvragee', {
+            title: 'Ouvragee',
             icon  : 'icon-tile-four',
-            state: 'app.paeb_ddb_cisco'
+            state: 'app.paeb_ddb_ouvragee'
         });
     }
 

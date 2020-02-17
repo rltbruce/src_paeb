@@ -30,8 +30,8 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.type_mobilier', {
             title: 'Type mobilier',
             icon  : 'icon-clipboard-text',
-            state: 'app.paeb_ddb_type_mobilier',
-			weight: 6
+            state: 'app.paeb_ddb_detail_subvention'
+
         });
     }
 
