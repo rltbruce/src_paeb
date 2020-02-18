@@ -21,10 +21,14 @@
         var NouvelItemBatiment_construction = false;
         var currentItemBatiment_construction;
 
+        var Nouvel_elem_cout_divers = false;
+        var current_elem_cout_divers;
+
         vm.date_now         = new Date();
         vm.allcisco         = [] ;
         vm.ajoutTete        = ajoutTete ;
         vm.selectedItemTete = {} ;
+        vm.selectedItem_cout_divers = {} ;
         vm.selectedItemTete.$selected=false;
         vm.allconvention_cife_tete  = [] ;
         vm.allcompte_feffi = [];
@@ -81,7 +85,22 @@
           pagingType: 'simple',
           autoWidth: false          
         };
+        
 
+        vm.formatMillier = function (nombre) 
+        {
+            if (typeof nombre != 'undefined' && parseInt(nombre) >= 0) {
+                nombre += '';
+                var sep = ' ';
+                var reg = /(\d+)(\d{3})/;
+                while (reg.test(nombre)) {
+                    nombre = nombre.replace(reg, '$1' + sep + '$2');
+                }
+                return nombre;
+            } else {
+                return "";
+            }
+        }
       /*****************debut convention entete***************/
 
         //col table
@@ -493,6 +512,201 @@
 
       /*****************fin convention entete***************/
 
+      /*****************debut cout divers**************/
+
+      vm.cout_divers_column = 
+      [        
+        {
+          titre:"Déscription"
+        },
+        {
+          titre:"Coût"
+        },
+        {titre:"Action"
+        }
+      ];
+
+      vm.ajouter_cout_divers = function()
+        {
+          console.log(Nouvel_elem_cout_divers);
+          if (Nouvel_elem_cout_divers == false) 
+          {
+            Nouvel_elem_cout_divers = true ;
+
+            var items = 
+            {
+              $edit: true,
+              $selected: true,
+              id: '0',
+              id_tcd:'',
+              cout:''
+            };   
+
+            vm.all_cout_divers.push(items);
+            vm.selectedItem_cout_divers = items ;
+          }
+          else
+            vm.showAlert("Ajout entête batiment construction','Un formulaire d'ajout est déjà ouvert!!!");
+            
+        }
+
+
+        vm.modifier_cout_divers = function(item)
+        {
+
+          Nouvel_elem_cout_divers == false;
+          item.$edit = true ;
+          vm.selectedItem_cout_divers = item ;
+          current_elem_cout_divers = angular.copy(item) ;
+          item.cout = (Number)(item.cout) ;
+
+         
+        }
+
+
+        vm.ajout_cout_diver = function(cout_divers,suppression)
+        {
+          console.log(cout_divers);
+
+          insert_in_base_cout_divers(cout_divers,suppression) ;
+        }
+
+        vm.supprimer_cout_divers = function(item)
+        {
+          var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
+                    .textContent('Les données latrine et mobilier seront également supprimées')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() 
+              {
+                insert_in_base_cout_divers(vm.selectedItem_cout_divers,1);
+              }, 
+              function() 
+              {
+                //alert('rien');
+              });
+        }
+
+
+        function insert_in_base_cout_divers(cout_divers,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (Nouvel_elem_cout_divers == false)
+            {
+                getId = vm.selectedItem_cout_divers.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id: getId,
+                    id_type_cout_divers: cout_divers.id_tcd,
+                    cout: cout_divers.cout,
+                    id_convention_entete: vm.selectedItemTete.id
+
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("cout_divers_construction/index",datas, config).success(function (data)
+            {
+
+              cout_divers.$edit = false ;
+
+              var tpc = vm.all_type_cout_divers.filter(function(obj)
+                        {
+                           return obj.id == cout_divers.id_tcd;
+                        });
+              cout_divers.description = tpc[0].description ;
+
+              if (Nouvel_elem_cout_divers == false)
+              {
+                  // Update or delete: id exclu                 
+                  if(suppression == 0)
+                  {
+                      //update tsy miasa eto
+                  }
+                  else 
+                  {    
+                    vm.all_cout_divers = vm.all_cout_divers.filter(function(obj)
+                    {
+                       return obj.id !== cout_divers.id;
+                    });
+                  }
+              }
+              else
+              {
+                
+                cout_divers.id = String(data.response);
+                Nouvel_elem_cout_divers = false ;
+
+              }
+
+
+              
+            
+            })
+            .error
+            (
+              function (data)
+              {
+                vm.showAlert("Error","Erreur lors de l'insertion de donnée");
+              }
+            );
+
+
+        }
+
+
+
+
+        vm.annuler_cout_divers = function(item)
+        {
+          item.$edit = false ;
+          
+
+          if (Nouvel_elem_cout_divers == false) 
+          { 
+            
+            item.id_tcd = current_elem_cout_divers.id_tcd ;
+            item.cout = current_elem_cout_divers.cout ;
+          }
+          else
+          {
+            vm.all_cout_divers = vm.all_cout_divers.filter(function(obj)
+            {
+                return obj.id !== '0';
+            });
+
+            Nouvel_elem_cout_divers = false;
+          }
+
+        }
+
+        vm.select_cout_divers = function(item)
+        {
+          vm.selectedItem_cout_divers = item ;
+          console.log(vm.selectedItem_cout_divers);
+        }
+
+        $scope.$watch('vm.selectedItem_cout_divers', function()
+        {
+             if (!vm.all_cout_divers) return;
+             vm.all_cout_divers.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItem_cout_divers.$selected = true;
+        });
+      /*****************fin cout divers**************/
       /*****************debut convention detail**************/
 
       //col table
@@ -835,6 +1049,10 @@
         {
           titre:"Action"
         }];
+
+
+
+
         //Masque de saisi ajout
         vm.ajouterBatiment_construction = function ()
         { 
@@ -849,21 +1067,23 @@
               cout_unitaire:''
             };         
             vm.allbatiment_construction.push(items);
-            vm.allbatiment_construction.forEach(function(conv)
-            {
-              if(conv.$selected==true)
-              {
-                vm.selectedItemBatiment_construction = conv;
-              }
-            });
+            
+              
+            vm.selectedItemBatiment_construction = items;
+            
 
             NouvelItemBatiment_construction = true ;
-          }else
+          }
+          else
           {
-            vm.showAlert('Ajout entête batiment construction','Un formulaire d\'ajout est déjà ouvert!!!');
+            vm.showAlert("Ajout entête batiment construction','Un formulaire d'ajout est déjà ouvert!!!");
           }                
                       
         };
+
+
+        
+
 
         //fonction ajout dans bdd
         function ajoutBatiment_construction(batiment_construction,suppression)
