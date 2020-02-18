@@ -124,7 +124,7 @@
                   <tbody>
                     <tr ng-repeat="demande_payement_prest in vm.alldemande_payement_prest"  ng-class="{selected: demande_payement_prest.$selected}" ng-click="vm.selectionDemande_payement_prest(demande_payement_prest)">
                                 
-                      <td>                                  
+                       <td>                                  
                         <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.objet}}</span>
                       </td>
                                 
@@ -137,12 +137,37 @@
                       </td>
                                 
                       <td>       
-                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.montant}}</span>
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.tranche.libelle}}</span>
                       </td>
 
                        <td>                          
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.montant}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.cumul}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.anterieur}}</span>
+                      </td>
+
+                       <td>                          
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.tranche.periode}}</span>
+                      </td>
+
+                       <td>                          
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.tranche.pourcentage}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.reste}}</span>
+                      </td>
+                                
+                      <td>       
                         <span ng-if="!demande_payement_prest.$edit">{{vm.affichageDate(demande_payement_prest.date)}}</span>
                       </td>
+                             
                                                    
                       <td>                                  
                         <a ng-click="vm.validerDemande_payement_prest(demande_payement_prest,0,2)" title="Valider">

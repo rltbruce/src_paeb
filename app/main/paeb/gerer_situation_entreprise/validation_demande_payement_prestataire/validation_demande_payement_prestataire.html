@@ -137,10 +137,34 @@
                       </td>
                                 
                       <td>       
-                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.montant}}</span>
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.tranche.libelle}}</span>
                       </td>
 
                        <td>                          
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.montant}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.cumul}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.anterieur}}</span>
+                      </td>
+
+                       <td>                          
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.tranche.periode}}</span>
+                      </td>
+
+                       <td>                          
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.tranche.pourcentage}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span ng-if="!demande_payement_prest.$edit">{{demande_payement_prest.reste}}</span>
+                      </td>
+                                
+                      <td>       
                         <span ng-if="!demande_payement_prest.$edit">{{vm.affichageDate(demande_payement_prest.date)}}</span>
                       </td>
                                                    

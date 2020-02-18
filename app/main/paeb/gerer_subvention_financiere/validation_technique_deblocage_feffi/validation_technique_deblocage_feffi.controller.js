@@ -10,6 +10,7 @@
     {
 		    var vm    = this;
             vm.stepOne   = false;
+            vm.stepTwo   = false;
 
     //initialisation
 
@@ -87,6 +88,7 @@
         //fonction selection item region
         vm.selectionDemande_realimentation= function (item)
         {   vm.stepOne   = true;
+            vm.stepTwo = false;
             vm.selectedItemDemande_realimentation = item;
             apiFactory.getAPIgeneraliserREST("piece_justificatif_feffi/index",'id_demande_rea_feffi',item.id).then(function(result)
             {

@@ -59,6 +59,7 @@
         vm.stepOne   = false;
         vm.stepTwo   = false;
         vm.stepThree = false;
+        vm.stepFor = false;
         //vm.stepFor   = false;
 
     //initialisation feffi
@@ -167,26 +168,19 @@
 
         //col table
         vm.convention_cisco_feffi_entete_column = [
-        {
-          titre:"Cisco"
+        {titre:"Cisco"
         },
-        {
-          titre:"Feffi"
+        {titre:"Feffi"
         },
-        {
-          titre:"Numero convention"
+        {titre:"Reference convention"
         },
-        {
-          titre:"Objet"
+        {titre:"Objet"
         },
-        {
-          titre:"Date signature"
+        {titre:"Reference Financement"
         },
-        {
-          titre:"Financement"
+        {titre:"Cout éstimé"
         },
-        {
-          titre:"Delai"
+        {titre:"Avancement"
         }];
         
         
@@ -322,13 +316,9 @@
               validation:'0',
             };         
             vm.alldemande_realimentation.push(items);
-            vm.alldemande_realimentation.forEach(function(dem)
-            {
-              if(dem.$selected==true)
-              {
-                vm.selectedItemDemande_realimentation = dem;
-              }
-            });
+            
+            vm.selectedItemDemande_realimentation = items;
+             
 
             NouvelItemDemande_realimentation = true ;
           }else
@@ -395,7 +385,7 @@
                 console.log(vm.allpiece_justificatif_feffi);
             });
             vm.stepThree = true; 
-            vm.stepThree = false;
+            vm.stepFor = false;
         };
         $scope.$watch('vm.selectedItemDemande_realimentation', function()
         {
@@ -557,7 +547,7 @@
                 {
                   demande_realimentation.objet = demande_realimentation.objet ;
                   demande_realimentation.tranche = tran[0] ;
-                  demande_realimentation.compte_feffi = comp[0]; ;
+                  demande_realimentation.compte_feffi = comp[0];
                   demande_realimentation.cumul = demande_realimentation.cumul ;
                   demande_realimentation.anterieur = demande_realimentation.anterieur ;
                   demande_realimentation.periode = tran[0].periode ;
@@ -663,13 +653,8 @@
               date: ''
             };         
             vm.allpiece_justificatif_feffi.push(items);
-            vm.allpiece_justificatif_feffi.forEach(function(dem)
-            {
-              if(dem.$selected==true)
-              {
-                vm.selectedItemPiece_justificatif_feffi = dem;
-              }
-            });
+            vm.selectedItemPiece_justificatif_feffi = items;
+             
 
             NouvelItemPiece_justificatif_feffi = true ;
           }else

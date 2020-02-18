@@ -9,8 +9,13 @@
     function Passation_marchesController($mdDialog, $scope, apiFactory, $state)
     {
 		    var vm = this;
-        vm.selectedItemConvention_entete = {} ;
-        vm.allconvention_entete = [] ;
+       /* vm.selectedItemConvention_entete = {} ;
+        vm.allconvention_entete = [] ;*/
+        vm.selectedItemPrestataire = {} ;
+        vm.allprestataire = [] ;
+
+        vm.selectedItemContrat_prestataire = {} ;
+        vm.allcontrat_prestataire = [] ;
 
         vm.ajoutPassation_marches = ajoutPassation_marches ;
         var NouvelItemPassation_marches=false;
@@ -39,11 +44,124 @@
           pagingType: 'simple',
           autoWidth: false          
         };
+/**********************************debut prestataire****************************************/
+//col table
+        vm.prestataire_column = [
+        {titre:"Nom"},
+        {titre:"Nif"},
+        {titre:"Stat"},
+        {titre:"Siege"},
+        {titre:"telephone"}
+        ];
+        //recuperation donnée prestataire
+        apiFactory.getAll("prestataire/index").then(function(result)
+        {
+            vm.allprestataire = result.data.response; 
+            console.log(vm.allprestataire);
+        });
 
-/**********************************debut feffi****************************************/
+        //fonction selection item entete convention cisco/feffi
+        vm.selectionPrestaire = function (item)
+        {
+            vm.selectedItemPrestaire = item;
+           // vm.allconvention= [] ;
+            
+            vm.showbuttonNouvPassation=true;
+            //recuperation donnée convention
+            if (vm.selectedItemPrestaire.id!=0)
+            { 
+
+              //recuperation donnée convention
+              apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menu','getcontratByprestataire','id_prestataire',vm.selectedItemPrestataire.id).then(function(result)
+              {
+                  vm.allcontrat_prestataire = result.data.response; 
+                  console.log(vm.allcontrat_prestataire);
+
+                 /* apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                  {
+                      vm.allpassation_marches = result.data.response;
+
+                      if (vm.allpassation_marches.length!=0)
+                      {
+                        vm.showbuttonNouvPassation=false;
+                      }
+                  });*/
+              });
+              vm.stepOne = true;
+              vm.stepTwo = false;
+              vm.stepThree = false;
+            }           
+
+        };
+        $scope.$watch('vm.selectedItemPrestataire', function()
+        {
+             if (!vm.allprestataire) return;
+             vm.allprestataire.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemPrestataire.$selected = true;
+        });
+
+/**********************************fin prestataire****************************************/
+
+//col table
+        vm.contrat_prestataire_column = [
+        {titre:"Prestataire"
+        },
+        {titre:"Description"
+        },
+        {titre:"Numero contrat"
+        },
+        {titre:"Cout batiment"
+        },
+        {titre:"Cout latrine"
+        },
+        {titre:"Cout mobilier"
+        },
+        {titre:"Date signature"
+        },
+        {titre:"Date prévisionnelle"
+        },
+        {titre:"Date réel"
+        },
+        {titre:"Délai éxecution"
+        }];
+
+        //fonction selection item region
+        vm.selectionContrat_prestataire= function (item)
+        {
+            vm.selectedItemContrat_prestataire = item;
+           if(item.id!=0)
+           {
+            /*apiFactory.getAPIgeneraliserREST("avenant_prestataire/index",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.allavenat_prestataire = result.data.response;
+            });*/
+
+            vm.stepTwo = true;
+            vm.stepThree = false;
+           }
+             
+        };
+        $scope.$watch('vm.selectedItemContrat_prestataire', function()
+        {
+             if (!vm.allcontrat_prestataire) return;
+             vm.allcontrat_prestataire.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemContrat_prestataire.$selected = true;
+        });
+
+/**********************************debut contrat****************************************/
+
+/**********************************fin contrat****************************************/
+
+
 
         //col table
-        vm.convention_entete_column = [
+    /*    vm.convention_entete_column = [
         {titre:"Cisco"
         },
         {titre:"Feffi"
@@ -54,10 +172,10 @@
         },
         {titre:"Reference Financement"
         }];
- 
-/**********************************fin convention entete****************************************/       
+ */
+/**********************************debut convention entete****************************************/       
         //recuperation donnée convention
-        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalide').then(function(result)
+    /*    apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalide').then(function(result)
         {
             vm.allconvention_entete = result.data.response; 
             console.log(vm.allconvention_entete);
@@ -103,7 +221,7 @@
                 item.$selected = false;
              });
              vm.selectedItemConvention_entete.$selected = true;
-        });        
+        });     */   
 
 /**********************************fin convention entete****************************************/
 

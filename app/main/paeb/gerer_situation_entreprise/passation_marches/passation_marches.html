@@ -24,10 +24,70 @@
 
         <ms-form-wizard flex>
           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+      <!-----debut prestataire ------>
 
-    <!-----debut FEFFI ------>
+            <!--md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span-->
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <!--span class="ms-form-wizard-step-text">Prestataire</span>
+                </span>
+              </md-tab-label>
 
-            <md-tab>
+              <md-tab-body><br>
+
+              <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="prestc in ::vm.prestataire_column">
+                          <div class="table-header">
+                            <span class="column-title">{{prestc.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="prestataire in vm.allprestataire"  ng-class="{selected: prestataire.$selected}" ng-click="vm.selection(prestataire)">
+                                  
+                        <td>                                    
+                          <span>{{prestataire.nom}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{prestataire.nif}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{prestataire.stat}}</span>
+                        </td>
+
+                        <td>  
+                          <span>{{prestataire.siege}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{prestataire.telephone}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+              <md-tab-body><br>
+                <div>
+                </div>
+              </md-tab-body>
+            </md-tab-->
+
+             <md-tab>
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
@@ -37,7 +97,146 @@
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
                         <i class="icon-check s16"></i>
                     </span-->
-                    <span class="ms-form-wizard-step-text">Convention</span>
+                    <span class="ms-form-wizard-step-text">MPE</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="pres in ::vm.prestataire_column">
+                          <div class="table-header">
+                            <span class="column-title">{{pres.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="prestataire in vm.allprestataire"  ng-class="{selected: prestataire.$selected}" ng-click="vm.selectionPrestataire(prestataire)">           
+                       <td>                                    
+                          <span>{{prestataire.nom}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{prestataire.nif}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{prestataire.stat}}</span>
+                        </td>
+
+                        <td>  
+                          <span>{{prestataire.siege}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{prestataire.telephone}}</span>
+                        </td>      
+                          <span>{{convention_entete.ref_financement}}</span>
+                        </td>                        
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>    
+      <!-----fin prestataire ------>
+      <!-----Debut contrat prstataire ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Contrat prestataire</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.contrat_prestataire_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="contrat_prestataire in vm.allcontrat_prestataire"  ng-class="{selected: contrat_prestataire.$selected}" ng-click="vm.selectionContrat_prestataire(contrat_prestataire)">
+                                
+                      <td>  
+                        <span>{{contrat_prestataire.prestataire.nom}}</span>
+                      </td>
+                                
+                      <td>     
+                        <span>{{contrat_prestataire.description}}</span>
+                      </td>
+                                
+                      <td>    
+                        <span>{{contrat_prestataire.num_contrat}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span>{{contrat_prestataire.cout_batiment}}</span>
+                      </td>
+                                
+                      <td>     
+                        <span>{{contrat_prestataire.cout_latrine}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span>{{contrat_prestataire.cout_mobilier}}</span>
+                      </td>
+
+                      <td>                         
+                        <span>{{vm.affichageDate(contrat_prestataire.date_signature)}}</span>
+                      </td>
+
+                      <td>                          
+                        <span>{{vm.affichageDate(contrat_prestataire.date_prev_deb_trav)}}</span>
+                      </td>
+
+                      <td>                          
+                        <span>{{vm.affichageDate(contrat_prestataire.date_reel_deb_trav)}}</span>
+                      </td>
+
+                                
+                      <td>     
+                        <span>{{contrat_prestataire.delai_execution}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN contrat prstataire ------>
+    <!-----debut FEFFI ------>
+
+            <!--md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span-->
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <!--span class="ms-form-wizard-step-text">Convention</span>
                 </span>
               </md-tab-label>
               
@@ -83,7 +282,7 @@
                   </table>
                 </div>
               </md-tab-body>
-            </md-tab>
+            </md-tab-->
     <!-----FIN FEFFI ------>
     <!-----Debut passation_marches ------>
           <md-tab ng-disabled="vm.stepOne==false">

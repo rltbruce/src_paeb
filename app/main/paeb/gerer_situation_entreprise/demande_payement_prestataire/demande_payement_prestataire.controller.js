@@ -81,6 +81,10 @@
         vm.selectedItemJustificatif_autre = {} ;
         vm.alljustificatif_autre = [] ;
 
+        vm.allcurenttranche_demande_mpe = [];
+        vm.alltranche_demande_mpe = [];
+        vm.dernierdemande = [];
+
         vm.stepOne = false;
         vm.stepTwo = false;
         vm.stepThree = false;
@@ -169,15 +173,63 @@
         },
         {titre:"Référence facture"
         },
+        {titre:"Tranche"
+        },
         {titre:"Montant"
+        },
+        {titre:"Cumul"
+        },
+        {titre:"Antérieur"
+        },
+        {titre:"Periode"
+        },
+        {titre:"Pourcentage"
+        },
+        {titre:"Reste à décaisser"
         },
         {titre:"Date"
         },
         {titre:"Action"
         }];
+
+        //recuperation donnée tranche deblocage mpe
+        apiFactory.getAll("tranche_demande_mpe/index").then(function(result)
+        {
+          vm.alltranche_demande_mpe= result.data.response;
+          vm.allcurenttranche_demande_mpe = result.data.response;
+          //console.log(vm.allcurenttranche_demande_mpe);
+        });
+
         //Masque de saisi ajout
         vm.ajouterDemande_payement_prest = function ()
         { 
+          if(vm.alldemande_payement_prest.length>0)
+          {
+            var last_id_demande = Math.max.apply(Math, vm.alldemande_payement_prest.map(function(o)
+            { 
+              return o.id;
+            }));
+
+            vm.dernierdemande = vm.alldemande_payement_prest.filter(function(obj)
+            {
+                return obj.id == last_id_demande;
+            });
+            var numcode=vm.dernierdemande[0].tranche.code.split(' ')[1];
+
+            vm.allcurenttranche_demande_mpe = vm.alltranche_demande_mpe.filter(function(obj)
+            {
+                return obj.code == 'tranche '+(parseInt(numcode)+1);
+            });
+
+          }
+          else
+          {
+            vm.allcurenttranche_demande_mpe = vm.alltranche_demande_mpe.filter(function(obj)
+            {
+                return obj.code == 'tranche 1';
+            });
+            vm.dernierdemande = [];console.log(vm.allcurenttranche_demande_mpe);
+          }
           if (NouvelItemDemande_payement_prest == false)
           {
             var items = {
@@ -187,7 +239,13 @@
               objet: '',
               description: '',
               ref_facture: '',
+              tranche: '',
               montant: '',
+              cumul: '',
+              anterieur: '',
+              periode: '',
+              pourcentage:'',
+              reste:'',
               date: ''
             };         
             vm.alldemande_payement_prest.push(items);
@@ -230,7 +288,13 @@
             item.objet   = currentItemDemande_payement_prest.objet ;
             item.description   = currentItemDemande_payement_prest.description ;
             item.ref_facture   = currentItemDemande_payement_prest.ref_facture ;
+            item.id_tranche_demande_mpe = currentItemDemande_payement_prest.id_tranche_demande_mpe ;
             item.montant   = currentItemDemande_payement_prest.montant ;
+            item.cumul = currentItemDemande_payement_prest.cumul ;
+            item.anterieur = currentItemDemande_payement_prest.anterieur;
+            item.periode = currentItemDemande_payement_prest.periode ;
+            item.pourcentage = currentItemDemande_payement_prest.pourcentage ;
+            item.reste = currentItemDemande_payement_prest.reste;
             item.date  = currentItemDemande_payement_prest.date;
           }else
           {
@@ -301,7 +365,13 @@
             item.objet   = vm.selectedItemDemande_payement_prest.objet ;
             item.description   = vm.selectedItemDemande_payement_prest.description ;
             item.ref_facture   = vm.selectedItemDemande_payement_prest.ref_facture ;
+            item.id_tranche_demande_mpe = vm.selectedItemDemande_payement_prest.tranche.id ;
             item.montant   = parseInt(vm.selectedItemDemande_payement_prest.montant);
+            item.cumul = vm.selectedItemDemande_payement_prest.cumul ;
+            item.anterieur = vm.selectedItemDemande_payement_prest.anterieur ;
+            item.periode = vm.selectedItemDemande_payement_prest.tranche.periode ;
+            item.pourcentage = vm.selectedItemDemande_payement_prest.tranche.pourcentage ;
+            item.reste = vm.selectedItemDemande_payement_prest.reste ;
             item.date   =new Date(vm.selectedItemDemande_payement_prest.date) ;
         };
 
@@ -336,7 +406,11 @@
                 {
                    if((pass[0].objet   != currentItemDemande_payement_prest.objet )
                     || (pass[0].description   != currentItemDemande_payement_prest.description )
+                    || (dema[0].id_tranche_demande_mpe != currentItemDemande_payement_prest.id_tranche_demande_mpe )
                     || (pass[0].montant   != currentItemDemande_payement_prest.montant )
+                    || (pass[0].cumul != currentItemDemande_payement_prest.cumul )
+                    || (pass[0].anterieur != currentItemDemande_payement_prest.anterieur )
+                    || (pass[0].reste != currentItemDemande_payement_prest.reste )
                     || (pass[0].date   != currentItemDemande_payement_prest.date )
                     || (pass[0].ref_facture   != currentItemDemande_payement_prest.ref_facture ) )                   
                       { 
@@ -373,7 +447,11 @@
                     objet: demande_payement_prest.objet,
                     description:demande_payement_prest.description,
                     ref_facture:demande_payement_prest.ref_facture,
+                    id_tranche_demande_mpe: demande_payement_prest.id_tranche_demande_mpe ,
                     montant: demande_payement_prest.montant,
+                    cumul: demande_payement_prest.cumul ,
+                    anterieur: demande_payement_prest.anterieur ,
+                    reste: demande_payement_prest.reste ,
                     date: convertionDate(new Date(demande_payement_prest.date)),
                     id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
                     validation: 0               
@@ -381,7 +459,12 @@
                 console.log(datas);
                 //factory
             apiFactory.add("demande_payement_prestataire/index",datas, config).success(function (data)
-            {
+            {   
+
+                var tran= vm.alltranche_demande_mpe.filter(function(obj)
+                {
+                    return obj.id == demande_payement_prest.id_tranche_demande_mpe;
+                });
 
                 if (NouvelItemDemande_payement_prest == false)
                 {
@@ -392,6 +475,12 @@
                         vm.selectedItemDemande_payement_prest.description   = demande_payement_prest.description ;
                         vm.selectedItemDemande_payement_prest.ref_facture   = demande_payement_prest.ref_facture ;
                         vm.selectedItemDemande_payement_prest.montant   = demande_payement_prest.montant ;
+                        vm.selectedItemDemande_payement_prest.tranche = tran[0] ;
+                        vm.selectedItemDemande_payement_prest.cumul = demande_payement_prest.cumul ;
+                        vm.selectedItemDemande_payement_prest.anterieur = demande_payement_prest.anterieur ;
+                        vm.selectedItemDemande_payement_prest.periode = tran[0].periode ;
+                        vm.selectedItemDemande_payement_prest.pourcentage = tran[0].pourcentage ;
+                        vm.selectedItemDemande_payement_prest.reste = demande_payement_prest.reste ;
                         vm.selectedItemDemande_payement_prest.date   = demande_payement_prest.date ;
                         
                         vm.selectedItemDemande_payement_prest.$selected  = false;
@@ -414,6 +503,12 @@
                   demande_payement_prest.description   = demande_payement_prest.description ;
                   demande_payement_prest.ref_facture   = demande_payement_prest.ref_facture ;
                   demande_payement_prest.montant   = demande_payement_prest.montant ;
+                  demande_payement_prest.tranche = tran[0] ;
+                  demande_payement_prest.cumul = demande_payement_prest.cumul ;
+                  demande_payement_prest.anterieur = demande_payement_prest.anterieur ;
+                  demande_payement_prest.periode = tran[0].periode ;
+                  demande_payement_prest.pourcentage = tran[0].pourcentage ;
+                  demande_payement_prest.reste = demande_payement_prest.reste ;
                   demande_payement_prest.date   = demande_payement_prest.date ;
 
                   demande_payement_prest.id  =   String(data.response);              
@@ -425,6 +520,33 @@
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
+        }
+
+        vm.tranchechange = function(item)
+        { 
+          
+          var reste = 0;
+          var anterieur = 0;
+          var montant = ((parseInt(vm.selectedItemContrat_prestataire.cout_batiment)+
+            parseInt(vm.selectedItemContrat_prestataire.cout_latrine)+parseInt(vm.selectedItemContrat_prestataire.cout_mobilier)) * vm.allcurenttranche_demande_mpe[0].pourcentage)/100;
+          var cumul = montant;
+
+          if (vm.alldemande_payement_prest.length>1)
+          {                 
+              anterieur = vm.dernierdemande[0].montant;           
+              cumul = montant + parseInt(vm.dernierdemande[0].cumul);
+          }
+
+          reste= (parseInt(vm.selectedItemContrat_prestataire.cout_batiment)+
+            parseInt(vm.selectedItemContrat_prestataire.cout_latrine)+parseInt(vm.selectedItemContrat_prestataire.cout_mobilier)) - cumul;
+
+          item.periode = vm.allcurenttranche_demande_mpe[0].periode;
+          item.pourcentage = vm.allcurenttranche_demande_mpe[0].pourcentage;
+
+          item.montant = montant;
+          item.anterieur = anterieur;
+          item.cumul = cumul;
+          item.reste = reste;
         }
 /**********************************fin demande_payement_prest****************************************/
 

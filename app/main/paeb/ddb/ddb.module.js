@@ -17,6 +17,8 @@
             'app.paeb.ddb.type_cout_divers',
             'app.paeb.ddb.type_mobilier',
             'app.paeb.ddb.type_latrine',
+            'app.paeb.ddb.tranche_demande_mpe',
+            'app.paeb.ddb.tranche_deblocage_feffi',
 
             ] ;
 

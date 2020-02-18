@@ -10,10 +10,10 @@
                 <span class="parent">Gestion subvention financière</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Demande de déblocage Feffi</span>
+                <span class="parent" href="javascript:;"> Saisie demande de déblocage Feffi</span>
             </div>
 
-            <div class="title">Demande de déblocage Feffi</div>
+            <div class="title">Saisie demande de déblocage Feffi</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -121,23 +121,23 @@
                     </td>
 
                     <td>                          
-                      <span>{{convention_cife_tete.numero_convention}}</span>
+                      <span>{{convention_cife_tete.ref_convention}}</span>
                     </td>
 
                     <td>                          
                       <span >{{convention_cife_tete.objet}}</span>
                     </td>
 
-                    <td>
-                      <span>{{vm.formatDate(convention_cife_tete.date_signature)}}</span>
-                    </td>
-
                     <td>         
-                      <span>{{convention_cife_tete.financement}}</span>
+                      <span>{{convention_cife_tete.ref_financement}}</span>
                     </td>                
 
                     <td>                                    
-                      <span>{{convention_cife_tete.delai}}</span>
+                      <span>{{convention_cife_tete.montant_total}}</span>
+                    </td>                
+
+                    <td>                                    
+                      <span>{{convention_cife_tete.avancement}}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -148,7 +148,7 @@
           <md-tab ng-disabled="vm.stepTwo==false">
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
-                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">2</span>
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
                 <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
                       <i class="icon-check s16"></i>
                 </span>
@@ -319,7 +319,7 @@
           <md-tab ng-disabled="vm.stepThree==false">
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
-                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">3</span>
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">4</span>
                   <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
                       <i class="icon-check s16"></i>
                   </span>

@@ -116,11 +116,23 @@
         },
         {titre:"Description"
         },
-        {titre:"Référence paiement"
+        {titre:"Référence facture"
+        },
+        {titre:"Tranche"
         },
         {titre:"Montant"
         },
-        {titre:"Date facture"
+        {titre:"Cumul"
+        },
+        {titre:"Antérieur"
+        },
+        {titre:"Periode"
+        },
+        {titre:"Pourcentage"
+        },
+        {titre:"Reste à décaisser"
+        },
+        {titre:"Date"
         },
         {titre:"Action"
         }];
@@ -188,9 +200,13 @@
                     objet: demande_payement_prest.objet,
                     description:demande_payement_prest.description,
                     ref_facture:demande_payement_prest.ref_facture,
+                    id_tranche_demande_mpe: demande_payement_prest.id_tranche_demande_mpe ,
                     montant: demande_payement_prest.montant,
+                    cumul: demande_payement_prest.cumul ,
+                    anterieur: demande_payement_prest.anterieur ,
+                    reste: demande_payement_prest.reste ,
                     date: convertionDate(new Date(demande_payement_prest.date)),
-                    id_contrat_prestataire: demande_payement_prest.contrat_prestataire.id,
+                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
                     validation: validation               
                 });
                 console.log(datas);
