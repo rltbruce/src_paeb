@@ -326,6 +326,75 @@
 
 
         <md-tab-body>
+          <div style="widht:100%;">  
+              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouter_cout_divers()" style="width:10%;">
+                Nouveau
+              </md-button>
+          </div>
+
+          <div>
+            <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+              <thead>
+                <tr>
+                  <th class="secondary-text" ng-repeat="ouv in ::vm.cout_divers_column">
+                    <div class="table-header">
+                      <span class="column-title">{{ouv.titre}}</span>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+                       
+              <tbody>
+                <tr ng-repeat="cout_divers in vm.all_cout_divers"  ng-class="{selected: cout_divers.$selected}" ng-click="vm.select_cout_divers(cout_divers)">
+
+                  <td>
+                    <span ng-if="cout_divers.$edit">
+                      <md-input-container style="width:100%;display: flex !important;">
+                        <label>Déscription</label>
+                        <md-select ng-model="cout_divers.id_tcd"style="overflow: hidden;text-overflow: ellipsis;" >
+
+                          <md-option ng-repeat="type_cout in vm.all_type_cout_divers" value="{{type_cout.id}}">
+                                                              {{type_cout.description}}
+                          </md-option>
+
+                        </md-select>
+                      </md-input-container>  
+                    </span>
+                    <span ng-if="!cout_divers.$edit">{{cout_divers.description}}</span>
+                  </td>
+
+              
+                  <td>
+                    <span ng-if="cout_divers.$edit">
+                      <md-input-container style="width:100%;display: flex !important;">
+                        <label>Coût</label>
+                        <input name="cout_unitaire" type="number" ng-model="cout_divers.cout" />
+                      </md-input-container>
+                    </span>                          
+                    <span ng-if="!cout_divers.$edit">{{vm.formatMillier(cout_divers.cout)}} Ar</span>
+                  </td>
+                                               
+                  <td>  
+                    <a ng-if="!cout_divers.$edit" ng-click="vm.modifier_cout_divers(cout_divers)" title="Modifier">
+                      <span class="icon-table-edit"></span>
+                    </a>
+                              
+                    <a ng-if="!cout_divers.$edit" ng-click="vm.supprimer_cout_divers(cout_divers)" title="Supprimer">
+                      <span class="icon-delete"></span>
+                    </a>
+                              
+                    <a ng-if="cout_divers.$edit" ng-click="vm.annuler_cout_divers(cout_divers)" title="Annuler modification">
+                      <span class="icon-cancel"></span>
+                    </a>
+                              
+                    <a ng-if="cout_divers.$edit && cout_divers.id_tcd && cout_divers.cout>''" ng-click="vm.ajout_cout_diver(cout_divers,0)" title="Sauvegarder">
+                      <span class="icon-content-save"></span>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </md-tab-body>
       </md-tab>
     <!-----fin divers cout construction ********------>
