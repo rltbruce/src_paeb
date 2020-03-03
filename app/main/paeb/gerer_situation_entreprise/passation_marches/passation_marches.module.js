@@ -31,7 +31,7 @@
             title: 'passation de marchés',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_entreprise_passation_marches',
-			weight: 3
+			weight: 1
         });
     }
 

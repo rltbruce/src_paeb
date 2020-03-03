@@ -33,7 +33,7 @@
             title: 'Prestation mpe',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_entreprise_prestation_mpe',
-			weight: 3,
+			weight: 17,
             hidden: function()
             {
                     return vs;

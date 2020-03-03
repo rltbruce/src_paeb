@@ -1,0 +1,379 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation feffi</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Feffi</span>
+            </div>
+
+            <div class="title">Feffi</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+ <!-----debut Bureau etude ------>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepOne==true">1
+                    </span>
+                    <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span-->
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">MOE</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="pres in ::vm.bureau_etude_column">
+                          <div class="table-header">
+                            <span class="column-title">{{pres.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="bureau_etude in vm.allbureau_etude"  ng-class="{selected: bureau_etude.$selected}" ng-click="vm.selectionBureau_etude(bureau_etude)">           
+                       <td>                                    
+                          <span>{{bureau_etude.nom}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{bureau_etude.nif}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{bureau_etude.stat}}</span>
+                        </td>
+
+                        <td>  
+                          <span>{{bureau_etude.siege}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{bureau_etude.telephone}}</span>
+                        </td>                        
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+    <!-----FIN Bureau etude ------>
+
+        <!-----Debut contrat prstataire ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Contrat moe</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.contrat_bureau_etude_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="contrat_bureau_etude in vm.allcontrat_bureau_etude"  ng-class="{selected: contrat_bureau_etude.$selected}" ng-click="vm.selectionContrat_bureau_etude(contrat_bureau_etude)">
+                                
+                      <td>                                  
+                        <span ng-if="!contrat_bureau_etude.$edit">{{contrat_bureau_etude.bureau_etude.nom}}</span>
+                      </td>
+                                
+                      <td>
+                                  
+                        <span ng-if="!contrat_bureau_etude.$edit">{{contrat_bureau_etude.intitule}}</span>
+                      </td>
+                                
+                      <td>
+                                  
+                        <span ng-if="!contrat_bureau_etude.$edit">{{contrat_bureau_etude.ref_contrat}}</span>
+                      </td>
+                                
+                      <td>
+                                  
+                        <span ng-if="!contrat_bureau_etude.$edit">{{contrat_bureau_etude.montant_contrat}}</span>
+                      </td>
+
+                      <td>                         
+                        <span ng-if="!contrat_bureau_etude.$edit">{{vm.affichageDate(contrat_bureau_etude.date_signature)}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN contrat moe ------>   
+
+    <!-----Debut Manuel gestion ------>
+          <md-tab ng-disabled="vm.stepTwo==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
+                    <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
+                      <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepThree==true">3
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Manuel gestion</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterManuel_gestion()" style="width:10%;" ng-show="vm.showbuttonNouvManuel">
+                      Nouveau
+                    </md-button>  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.validerManuel_gestion()" style="width:10%;" ng-show="vm.showbuttonValidation">
+                      Validation
+                    </md-button>
+                </div><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Description</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Fichier</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Date livraison</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Observation</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Action</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="manuel_gestion in vm.allmanuel_gestion"  ng-class="{selected: manuel_gestion.$selected}" ng-click="vm.selectionManuel_gestion(manuel_gestion)">
+                               
+                      <td>
+                        <span ng-if="manuel_gestion.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Description</label>
+                            <input name="description" type="text" ng-model="manuel_gestion.description"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!manuel_gestion.$edit">{{manuel_gestion.description}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="manuel_gestion.$edit" style="display: inline-block !important;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                            <input name="fichier" type="text" ng-model="manuel_gestion.fichier" disabled/>
+                          </md-input-container>   
+                        </span>
+
+                        <span ng-if="manuel_gestion.$edit" style="display: inline-block !important;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                          <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile"  ng-model="fichier" id="fileid"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!manuel_gestion.$edit">{{manuel_gestion.fichier}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="manuel_gestion.$edit">
+                          <md-datepicker ng-model="manuel_gestion.date_livraison" md-placeholder="Date de livraison" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!manuel_gestion.$edit">{{vm.affichageDate(manuel_gestion.date_livraison)}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="manuel_gestion.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Observation</label>
+                            <input name="observation" type="text" ng-model="manuel_gestion.observation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!manuel_gestion.$edit">{{manuel_gestion.observation}}</span>
+                      </td>
+
+                      <td>
+                        <a ng-if="!manuel_gestion.$edit" ng-click="vm.modifierManuel_gestion(manuel_gestion)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!manuel_gestion.$edit" ng-click="vm.supprimerManuel_gestion(manuel_gestion)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>                        
+                                  
+                        <a ng-if="!manuel_gestion.$edit" ng-click="vm.download_manuel_gestion(manuel_gestion)" title="Telecharger fichier">
+                          <span class="icon-box-download"></span>
+                        </a>
+                                  
+                        <a ng-if="manuel_gestion.$edit" ng-click="vm.annulerManuel_gestion(manuel_gestion)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="manuel_gestion.$edit && manuel_gestion.description && manuel_gestion.fichier && manuel_gestion.date_livraison>''" ng-click="vm.ajoutManuel_gestion(manuel_gestion,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN Manuel gestion ------> 
+
+    <!-----Debut Manuel gestion ------>
+          <md-tab ng-disabled="vm.stepTwo==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">4</span>
+                    <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
+                      <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepThree==true">4
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Manuel gestion valide</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Description</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Fichier</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Date livraison</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Observation</span>
+                        </div>
+                      </th>
+
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Action</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="manuel_gestion_valide in vm.allmanuel_gestion_valide"  ng-class="{selected: manuel_gestion_valide.$selected}" ng-click="vm.selectionManuel_gestion_valide(manuel_gestion_valide)">
+                               
+                      <td>                                  
+                        <span>{{manuel_gestion_valide.description}}</span>
+                      </td>
+                                
+                      <td>                                  
+                        <span>{{manuel_gestion_valide.fichier}}</span>
+                      </td>
+
+                      <td>                         
+                        <span>{{vm.affichageDate(manuel_gestion_valide.date_livraison)}}</span>
+                      </td>
+
+                      <td>     
+                        <span>{{manuel_gestion_valide.observation}}</span>
+                      </td>
+
+                      <td>                        
+                                  
+                        <a ng-click="vm.download_manuel_gestion(manuel_gestion_valide)" title="Telecharger fichier">
+                          <span class="icon-box-download"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN Manuel gestion ------>         
+        </ms-form-wizard>
+      </md-tabs>                   
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

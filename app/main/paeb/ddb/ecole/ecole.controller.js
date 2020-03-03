@@ -113,6 +113,7 @@
         apiFactory.getAll("fokontany/index").then(function(result)
         {
           vm.allfokontany= result.data.response;
+          console.log(vm.allfokontany);
         });
 
          

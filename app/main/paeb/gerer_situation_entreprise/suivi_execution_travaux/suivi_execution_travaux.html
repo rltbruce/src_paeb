@@ -34,9 +34,6 @@
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
                       <i class="icon-check s16"></i>
                     </span>
-                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                        <i class="icon-check s16"></i>
-                    </span-->
                     <span class="ms-form-wizard-step-text">Contrat</span>
                 </span>
               </md-tab-label>
@@ -188,147 +185,14 @@
               </md-tab-body>
             </md-tab>
     <!-----FIN contrat ------>
-    <!-----Debut convention entete ------>
-          <md-tab ng-disabled="vm.stepOne==false">
-              <md-tab-label>
-                <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
-                      <i class="icon-check s16"></i>
-                    </span>
-                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                        <i class="icon-check s16"></i>
-                    </span-->
-                    <span class="ms-form-wizard-step-text">Convention entete</span>
-                </span>
-              </md-tab-label>
-              
-              <md-tab-body>
-                <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterContrat_prestataire()" style="width:10%;" ng-disabled="!vm.showbuttonNouvContrat_prestataire">
-                      Nouveau
-                    </md-button>
-                </div>
-               <div>        
-                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                  <thead>
-                    <tr>
-                      <th class="secondary-text" ng-repeat="mem in ::vm.convention_entete_column">
-                        <div class="table-header">
-                          <span class="column-title">{{mem.titre}}</span>
-                        </div>
-                      </th>
-                    </tr>
-                  </thead>
-                           
-                  <tbody>
-                    <tr ng-repeat="convention_entete in vm.allconvention_entete"  ng-class="{selected: convention_entete.$selected}" ng-click="vm.selectionConvention_entete(convention_entete)">
-                                
-                       <td>
-                          <span>{{convention_entete.cisco.code}}</span>
-                        </td>
-
-                        <td>
-                          <span>{{convention_entete.feffi.denomination}}</span>
-                        </td>
-
-                        <td>                          
-                          <span>{{convention_entete.ref_convention}}</span>
-                        </td>
-
-                        <td>                         
-                          <span">{{convention_entete.objet}}</span>
-                        </td>
-
-                        <td>       
-                          <span>{{convention_entete.ref_financement}}</span>
-                        </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-            </md-tab-body>
-          </md-tab>
-    <!-----FIN convention entete ------>
-    <!-----Debut convention detail ------>
-          <md-tab ng-disabled="vm.stepTwo==false">
-              <md-tab-label>
-                <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
-                      <i class="icon-check s16"></i>
-                    </span>
-                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                        <i class="icon-check s16"></i>
-                    </span-->
-                    <span class="ms-form-wizard-step-text">convention detail</span>
-                </span>
-              </md-tab-label>
-              
-              <md-tab-body><br>
-              <div>        
-                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                    <thead>
-                      <tr>
-                        <th class="secondary-text" ng-repeat="cond in ::vm.convention_detail_column">
-                          <div class="table-header">
-                            <span class="column-title">{{cond.titre}}</span>
-                          </div>
-                        </th>
-                      </tr>
-                    </thead>
-                             
-                    <tbody>
-                      <tr ng-repeat="convention_detail in vm.allconvention_detail"  ng-class="{selected: convention_detail.$selected}" ng-click="vm.selectionConvention_detail(convention_detail)">
-
-                        <td>                          
-                          <span>{{convention_detail.intitule}}</span>
-                        </td>
-
-                        <td>
-                           <span>{{convention_detail.montant_total}}</span>                        
-                         </td>
-
-                        <td>
-                          <span>{{convention_detail.compte_feffi.nom_banque}}</span>
-                        </td>
-
-                        <td>                          
-                          <span>{{convention_detail.compte_feffi.adresse_banque}}</span>
-                        </td>                        
-
-                        <td>                         
-                          <span>{{convention_detail.compte_feffi.rib}}</span>
-                        </td>
-                        <td>
-                          <span>{{convention_detail.delai}}</span>
-                        </td>
-                        <td>
-                          <span>{{vm.affichageDate(convention_detail.date_signature)}}</span>
-                        </td>
-                        <td>
-                          <span>{{convention_detail.observation}}</span>
-                        </td>
-                        <td>
-                           <span>{{convention_detail.avancement}}</span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div> 
-
-            </md-tab-body>
-          </md-tab>
-    <!-----FIN convention detail ------>
 
    <!-----debut batiment construction ------>
-            <md-tab ng-disabled="vm.stepThree==false">
+            <md-tab ng-disabled="vm.stepOne==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
 
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">B</span>
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">B</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
                       <i class="icon-check s16"></i>
                   </span>
                   <span class="ms-form-wizard-step-text">Batiment</span>
@@ -372,11 +236,11 @@
             <!-----debut ouvrage construction ------>
 
              <!-----Debut avancement_batiment ------>
-          <md-tab ng-disabled="vm.stepFor==false">
+          <md-tab ng-disabled="vm.stepTwo==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFive==false">B1</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFive==true">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">B.1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
                       <i class="icon-check s16"></i>
                     </span>
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -501,11 +365,11 @@
     <!-----FIN avancement_batiment ------>
 
      <!-----Debut avancement_batiment_doc ------>
-          <md-tab ng-disabled="vm.stepFive==false">
+          <md-tab ng-disabled="vm.stepThree==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepSixe==false">F</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepSixe==true">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">B.2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
                       <i class="icon-check s16"></i>
                     </span>
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -598,11 +462,11 @@
     <!-----FIN davancement_batiment_doc------> 
 
             <!-----debut detail latrine ------>
-            <md-tab ng-disabled="vm.stepSeven==false">
+            <md-tab ng-disabled="vm.stepTwo==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepEight==false">L</span>
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepEight==true">
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFive==false">L</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFive==true">
                       <i class="icon-check s16"></i>
                   </span>
                   <span class="ms-form-wizard-step-text">latrine</span>
@@ -646,11 +510,11 @@
 
 
              <!-----Debut avancement_latrine ------>
-          <md-tab ng-disabled="vm.stepEight==false">
+          <md-tab ng-disabled="vm.stepFive==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepNine==false">L1</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepNine==true">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepSixe==false">L.1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepSixe==true">
                       <i class="icon-check s16"></i>
                     </span>
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -708,7 +572,7 @@
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Attachement</label>
                             <md-select ng-model="avancement_latrine.id_attachement_latrine"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changeAttachement_latrine(avancement_latrine)">
-                              <md-option ng-repeat="attachement_latrine in vm.allattachement_latrine" value="{{attachement_latrine.id}}">
+                              <md-option ng-repeat="attachement_latrine in vm.allcurrentattachement_latrine" value="{{attachement_latrine.id}}">
                                                                     {{attachement_latrine.libelle}}
                               </md-option>
                             </md-select>
@@ -775,11 +639,11 @@
     <!-----FIN avancement_batiment ------>
 
          <!-----Debut avancement_latrine_doc ------>
-          <md-tab ng-disabled="vm.stepNine==false">
+          <md-tab ng-disabled="vm.stepSixe==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTen==false">F</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTen==true">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepSeven==false">F.2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepSeven==true">
                       <i class="icon-check s16"></i>
                     </span>
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -872,11 +736,11 @@
     <!-----FIN davancement_batiment_doc------>
 
              <!-----debut detail mobilier ------>
-            <md-tab ng-disabled="vm.stepEleven==false">
+            <md-tab ng-disabled="vm.stepTwo==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwelve==false">M</span>
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwelve==true">
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepEight==false">M</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepEight==true">
                       <i class="icon-check s16"></i>
                   </span>
                   <span class="ms-form-wizard-step-text">Mobilier</span>
@@ -919,11 +783,11 @@
             <!-----debut detail mobilier ------>
 
                        <!-----Debut avancement_mobilier ------>
-          <md-tab ng-disabled="vm.stepTwelve==false">
+          <md-tab ng-disabled="vm.stepEight==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTherteen==false">M1</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTherteen==true">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepNine==false">M.1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepNine==true">
                       <i class="icon-check s16"></i>
                     </span>
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -981,7 +845,7 @@
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Attachement</label>
                             <md-select ng-model="avancement_mobilier.id_attachement_mobilier"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changeAttachement_mobilier(avancement_mobilier)">
-                              <md-option ng-repeat="attachement_mobilier in vm.allattachement_mobilier" value="{{attachement_mobilier.id}}">
+                              <md-option ng-repeat="attachement_mobilier in vm.allcurrentattachement_mobilier" value="{{attachement_mobilier.id}}">
                                                                     {{attachement_mobilier.libelle}}
                               </md-option>
                             </md-select>
@@ -1048,11 +912,11 @@
     <!-----FIN avancement_batiment ------>
 
          <!-----Debut avancement_mobilier_doc ------>
-          <md-tab ng-disabled="vm.stepTherteen==false">
+          <md-tab ng-disabled="vm.stepNine==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepForteen==false">F</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepForteen==true">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTen==false">F</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTen==true">
                       <i class="icon-check s16"></i>
                     </span>
                     <span class="ms-form-wizard-step-text">Rapport scanné</span>

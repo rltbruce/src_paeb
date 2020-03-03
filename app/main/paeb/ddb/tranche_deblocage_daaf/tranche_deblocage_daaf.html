@@ -1,0 +1,132 @@
+ <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Tranche déblocage daaf</span>
+            </div>
+
+            <div class="title">Tranche déblocage daaf</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Tranche déblocage daaf -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Tranche déblocage daaf</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add tranche déblocage daaf" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout tranche déblocage daaf</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="prestc in ::vm.tranche_deblocage_daaf_column">
+                  <div class="table-header">
+                    <span class="column-title">{{prestc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="tranche_deblocage_daaf in vm.alltranche_deblocage_daaf"  ng-class="{selected: tranche_deblocage_daaf.$selected}" ng-click="vm.selection(tranche_deblocage_daaf)">
+                          
+                <td>
+                  <span ng-if="tranche_deblocage_daaf.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Libelle</label>
+                      <input name="libelle" type="text" ng-model="tranche_deblocage_daaf.libelle"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!tranche_deblocage_daaf.$edit">{{tranche_deblocage_daaf.libelle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="tranche_deblocage_daaf.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Periode</label>
+                      <input name="periode" type="text" ng-model="tranche_deblocage_daaf.periode"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!tranche_deblocage_daaf.$edit">{{tranche_deblocage_daaf.periode}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="tranche_deblocage_daaf.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Pourcentage</label>
+                      <input name="pourcentage" type="text" ng-model="tranche_deblocage_daaf.pourcentage"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!tranche_deblocage_daaf.$edit">{{tranche_deblocage_daaf.pourcentage}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="tranche_deblocage_daaf.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Description</label>
+                      <input name="description" type="text" ng-model="tranche_deblocage_daaf.description"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!tranche_deblocage_daaf.$edit">{{tranche_deblocage_daaf.description}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="tranche_deblocage_daaf.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Code</label>
+                      <input name="code" type="text" ng-model="tranche_deblocage_daaf.code" disabled/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!tranche_deblocage_daaf.$edit">{{tranche_deblocage_daaf.code}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!tranche_deblocage_daaf.$edit" ng-click="vm.modifier(tranche_deblocage_daaf)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!tranche_deblocage_daaf.$edit" ng-click="vm.supprimer(tranche_deblocage_daaf)" title="Supprimer">
+                    <span class="icon-delete" ></span>
+                  </a>
+                            
+                  <a ng-if="tranche_deblocage_daaf.$edit" ng-click="vm.annuler(tranche_deblocage_daaf)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="tranche_deblocage_daaf.$edit && tranche_deblocage_daaf.libelle && tranche_deblocage_daaf.periode && tranche_deblocage_daaf.pourcentage&& tranche_deblocage_daaf.description && tranche_deblocage_daaf.code>''" ng-click="vm.ajout(tranche_deblocage_daaf,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>                   
+      </div>
+      <!-- / tranche_deblocage_daaf -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

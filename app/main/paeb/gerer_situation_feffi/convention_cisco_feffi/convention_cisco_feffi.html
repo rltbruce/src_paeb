@@ -67,7 +67,7 @@
                           <span ng-if="convention_cife_tete.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
                               <label>Cisco</label>
-                              <md-select ng-model="convention_cife_tete.id_cisco"style="overflow: hidden;text-overflow: ellipsis;">
+                              <md-select ng-model="convention_cife_tete.id_cisco"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_cisco(convention_cife_tete)">
                                 <md-option ng-repeat="cisco in vm.allcisco" value="{{cisco.id}}">
                                                                     {{cisco.code}}
                                 </md-option>
@@ -81,7 +81,7 @@
                           <span ng-if="convention_cife_tete.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
                               <label>Feffi</label>
-                              <md-select ng-model="convention_cife_tete.id_feffi"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_feffi(convention_cife_tete)">
+                              <md-select ng-model="convention_cife_tete.id_feffi"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_feffi(convention_cife_tete)" ng-disabled="!convention_cife_tete.id_cisco">
                                 <md-option ng-repeat="feffi in vm.allfeffi" value="{{feffi.id}}">
                                                                     {{feffi.denomination}}
                                 </md-option>

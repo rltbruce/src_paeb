@@ -53,6 +53,10 @@
         {titre:"Objet"
         },
         {titre:"Reference Financement"
+        },
+        {titre:"Cout éstimé"
+        },
+        {titre:"Avancement"
         }];
  
 /**********************************fin convention entete****************************************/       
@@ -213,7 +217,7 @@
           
         };
 
-        //fonction selection item region
+        //fonction selection item contrat
         vm.selectionContrat_prestataire= function (item)
         {
             vm.selectedItemContrat_prestataire = item;
@@ -221,11 +225,6 @@
             currentItemContrat_prestataire    = JSON.parse(JSON.stringify(vm.selectedItemContrat_prestataire));
            if(item.id!=0)
            {
-            /*apiFactory.getAPIgeneraliserREST("avenant_prestataire/index",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
-            {
-                vm.allavenat_prestataire = result.data.response;
-            });*/
-
             vm.stepTwo = true;
             vm.stepThree = false;
            }

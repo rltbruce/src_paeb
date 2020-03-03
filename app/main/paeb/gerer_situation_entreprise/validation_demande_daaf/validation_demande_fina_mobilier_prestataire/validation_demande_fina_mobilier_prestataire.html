@@ -1,0 +1,263 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation entreprise</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Demande de paiement mpe</span>
+            </div>
+
+            <div class="title">Demande de paiement mpe</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+    <!-----Debut demande_mobilier_prest ------>
+          <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">demande mobilier</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.demande_mobilier_prest_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="demande_mobilier_prest in vm.alldemande_mobilier_prest"  ng-class="{selected: demande_mobilier_prest.$selected}" ng-click="vm.selectionDemande_mobilier_prest(demande_mobilier_prest)">
+                                
+                      <td>                                  
+                        <span ng-if="!demande_mobilier_prest.$edit">{{demande_mobilier_prest.objet}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span ng-if="!demande_mobilier_prest.$edit">{{demande_mobilier_prest.description}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span ng-if="!demande_mobilier_prest.$edit">{{demande_mobilier_prest.ref_facture}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span ng-if="!demande_mobilier_prest.$edit">{{demande_mobilier_prest.tranche.libelle}}</span>
+                      </td>
+
+                       <td>                          
+                        <span ng-if="!demande_mobilier_prest.$edit">{{demande_mobilier_prest.montant}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span ng-if="!demande_mobilier_prest.$edit">{{demande_mobilier_prest.cumul}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span ng-if="!demande_mobilier_prest.$edit">{{demande_mobilier_prest.anterieur}}</span>
+                      </td>
+
+                       <td>                          
+                        <span ng-if="!demande_mobilier_prest.$edit">{{demande_mobilier_prest.tranche.periode}}</span>
+                      </td>
+
+                       <td>                          
+                        <span ng-if="!demande_mobilier_prest.$edit">{{demande_mobilier_prest.tranche.pourcentage}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span ng-if="!demande_mobilier_prest.$edit">{{demande_mobilier_prest.reste}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span ng-if="!demande_mobilier_prest.$edit">{{vm.affichageDate(demande_mobilier_prest.date)}}</span>
+                      </td>
+                                                   
+                      <td>                                  
+                        <a ng-click="vm.validerDemande_mobilier_prest(demande_mobilier_prest,0,3)" title="Valider">
+                          <span class="icon-check-circle"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN demande_mobilier_prest ------>
+
+    <!-----Debut justificatif_attachement ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Pièce jointe</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Description</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Fichier</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Action</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="justificatif_mobilier_pre in vm.alljustificatif_mobilier_pre"  ng-class="{selected: justificatif_mobilier_pre.$selected}" ng-click="vm.selectionJustificatif_mobilier_pre(justificatif_mobilier_pre)">
+                               
+                      <td>                                  
+                        <span ng-if="!justificatif_mobilier_pre.$edit">{{justificatif_mobilier_pre.description}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span ng-if="!justificatif_mobilier_pre.$edit">{{justificatif_mobilier_pre.fichier}}</span>
+                      </td>                       
+                      <td>
+                                  
+                        <a ng-click="vm.download_attachement(justificatif_mobilier_pre)" title="Telecharger">
+                          <span class="icon-box-download"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN demande_mobilier_prest ------>
+
+    <!-----Debut infosupplementaire ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Info supplementaire</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Reference convention</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Referenance contrat</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Nom MPE</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">CISCO</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">FEFFI</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="infosupplement in vm.allinfosupplement">
+                               
+                      <td>                                  
+                        <span>{{infosupplement.ref_convention}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span>{{infosupplement.num_contrat}}</span>
+                      </td>
+
+                      <td>                                  
+                       <span>{{infosupplement.nom_prestataire}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span>{{infosupplement.denomination_feffi}}</span>
+                      </td>
+                                             
+                      <td>                                  
+                       <span>{{infosupplement.code_cisco}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN infosupplementaire ------>
+        </ms-form-wizard>
+      </md-tabs>                     
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

@@ -26,67 +26,6 @@
           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
       <!-----debut prestataire ------>
 
-            <!--md-tab>
-              <md-tab-label>
-                <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
-                      <i class="icon-check s16"></i>
-                    </span-->
-                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                        <i class="icon-check s16"></i>
-                    </span-->
-                    <!--span class="ms-form-wizard-step-text">Prestataire</span>
-                </span>
-              </md-tab-label>
-
-              <md-tab-body><br>
-
-              <div>        
-                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
-                    <thead>
-                      <tr>
-                        <th class="secondary-text" ng-repeat="prestc in ::vm.prestataire_column">
-                          <div class="table-header">
-                            <span class="column-title">{{prestc.titre}}</span>
-                          </div>
-                        </th>
-                      </tr>
-                    </thead>
-                             
-                    <tbody>
-                      <tr ng-repeat="prestataire in vm.allprestataire"  ng-class="{selected: prestataire.$selected}" ng-click="vm.selection(prestataire)">
-                                  
-                        <td>                                    
-                          <span>{{prestataire.nom}}</span>
-                        </td>
-
-                        <td>                                    
-                          <span>{{prestataire.nif}}</span>
-                        </td>
-
-                        <td>                                    
-                          <span>{{prestataire.stat}}</span>
-                        </td>
-
-                        <td>  
-                          <span>{{prestataire.siege}}</span>
-                        </td>
-
-                        <td>                         
-                          <span>{{prestataire.telephone}}</span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </md-tab-body>
-              <md-tab-body><br>
-                <div>
-                </div>
-              </md-tab-body>
-            </md-tab-->
-
              <md-tab>
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
@@ -135,9 +74,7 @@
 
                         <td>                         
                           <span>{{prestataire.telephone}}</span>
-                        </td>      
-                          <span>{{convention_entete.ref_financement}}</span>
-                        </td>                        
+                        </td>                       
                       </tr>
                     </tbody>
                   </table>
@@ -224,66 +161,7 @@
             </md-tab-body>
           </md-tab>
     <!-----FIN contrat prstataire ------>
-    <!-----debut FEFFI ------>
 
-            <!--md-tab>
-              <md-tab-label>
-                <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
-                      <i class="icon-check s16"></i>
-                    </span-->
-                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                        <i class="icon-check s16"></i>
-                    </span-->
-                    <!--span class="ms-form-wizard-step-text">Convention</span>
-                </span>
-              </md-tab-label>
-              
-              <md-tab-body><br>
-
-                <div>        
-                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                    <thead>
-                      <tr>
-                        <th class="secondary-text" ng-repeat="ciscT in ::vm.convention_entete_column">
-                          <div class="table-header">
-                            <span class="column-title">{{ciscT.titre}}</span>
-                          </div>
-                        </th>
-                      </tr>
-                    </thead>
-                             
-                    <tbody>
-                      <tr ng-repeat="convention_entete in vm.allconvention_entete"  ng-class="{selected: convention_entete.$selected}" ng-click="vm.selectionConvention_entete(convention_entete)">           
-                        
-
-                        <td>
-                          <span>{{convention_entete.cisco.code}}</span>
-                        </td>
-
-                        <td>
-                          <span>{{convention_entete.feffi.denomination}}</span>
-                        </td>
-
-                        <td>                          
-                          <span>{{convention_entete.ref_convention}}</span>
-                        </td>
-
-                        <td>                         
-                          <span">{{convention_entete.objet}}</span>
-                        </td>
-
-                        <td>       
-                          <span>{{convention_entete.ref_financement}}</span>
-                        </td>                        
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </md-tab-body>
-            </md-tab-->
-    <!-----FIN FEFFI ------>
     <!-----Debut passation_marches ------>
           <md-tab ng-disabled="vm.stepOne==false">
               <md-tab-label>
@@ -399,15 +277,6 @@
                         </span>                          
                         <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_notification_attribution)}}</span>
                       </td>
-                                
-                      <td>
-                        <span ng-if="passation_marches.$edit">
-                          <md-datepicker ng-model="passation_marches.date_signature_contrat" md-placeholder="Date de signature" md-min-date="passation_marches.date_notification_attribution" md-max-date="vm.date_now" required>                       
-                          </md-datepicker>  
-                        </span>
-                                  
-                        <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_signature_contrat)}}</span>
-                      </td>
 
                       <td>
                         <span ng-if="passation_marches.$edit">
@@ -415,21 +284,6 @@
                           </md-datepicker>
                         </span>                          
                         <span ng-if="!passation_marches.$edit">{{vm.affichageDate(passation_marches.date_os)}}</span>
-                      </td>
-                                
-                      <td>
-                        <span ng-if="passation_marches.$edit">
-                          <md-input-container style="width:100%;display: flex !important;">
-                            <label>Prestataire</label>
-                            <md-select ng-model="passation_marches.id_prestataire"style="overflow: hidden;text-overflow: ellipsis;">
-                              <md-option ng-repeat="prestataire in vm.allprestataire" value="{{prestataire.id}}">
-                                                                    {{prestataire.nom}}
-                              </md-option>
-                            </md-select>
-                          </md-input-container>   
-                        </span>
-                                  
-                        <span ng-if="!passation_marches.$edit">{{passation_marches.prestataire.nom}}</span>
                       </td>
                                 
                       <td>
@@ -456,7 +310,7 @@
                           <span class="icon-cancel"></span>
                         </a>
                                   
-                        <a ng-if="passation_marches.$edit && passation_marches.date_lancement && passation_marches.date_remise && passation_marches.montant_moin_chere && passation_marches.date_rapport_evaluation && passation_marches.date_demande_ano_dpfi && passation_marches.date_ano_dpfi && passation_marches.notification_intention && passation_marches.date_notification_attribution && passation_marches.date_signature_contrat && passation_marches.date_os && passation_marches.id_prestataire && passation_marches.observation >''" ng-click="vm.ajoutPassation_marches(passation_marches,0)" title="Sauvegarder">
+                        <a ng-if="passation_marches.$edit && passation_marches.date_lancement && passation_marches.date_remise && passation_marches.montant_moin_chere && passation_marches.date_rapport_evaluation && passation_marches.date_demande_ano_dpfi && passation_marches.date_ano_dpfi && passation_marches.notification_intention && passation_marches.date_notification_attribution && passation_marches.date_os && passation_marches.observation >''" ng-click="vm.ajoutPassation_marches(passation_marches,0)" title="Sauvegarder">
                           <span class="icon-content-save"></span>
                         </a>
                       </td>

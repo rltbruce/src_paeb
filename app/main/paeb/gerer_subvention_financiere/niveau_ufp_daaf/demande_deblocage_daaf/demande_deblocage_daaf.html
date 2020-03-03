@@ -1,0 +1,340 @@
+
+   <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gestion subvention financière</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Saisie demande de déblocage daaf</span>
+            </div>
+
+            <div class="title">Saisie demande de déblocage daaf</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Convention -->
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+          <md-tab>
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                  </span>
+                  <span class="ms-form-wizard-step-text">Convention validé</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body>
+              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                <thead>
+                  <tr>
+                    <th class="secondary-text" ng-repeat="prog in ::vm.convention_ufp_daaf_entete_column">
+                      <div class="table-header">
+                        <span class="column-title">{{prog.titre}}</span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                         
+                <tbody>
+                  <tr ng-repeat="convention_ufp_daaf_entete in vm.allconvention_ufp_daaf_entete"  ng-class="{selected: convention_ufp_daaf_entete.$selected}" ng-click="vm.selectionConvention_ufp_daaf_entete(convention_ufp_daaf_entete)">
+                    
+                    <td>
+                      <span>{{convention_ufp_daaf_entete.ref_convention}}</span>
+                    </td>
+                    
+                    <td>
+                      <span>{{convention_ufp_daaf_entete.daaf.objet}}</span>
+                    </td>
+
+                    <td>                          
+                      <span>{{convention_ufp_daaf_entete.ref_financement}}</span>
+                    </td>
+
+                    <td>                          
+                      <span >{{convention_ufp_daaf_entete.montant_trans_comm}}</span>
+                    </td>
+
+                    <td>         
+                      <span>{{convention_ufp_daaf_entete.frais_bancaire}}</span>
+                    </td>                
+
+                    <td>                                    
+                      <span>{{convention_ufp_daaf_entete.montant_convention}}</span>
+                    </td> 
+                  </tr>
+                </tbody>
+              </table>
+            </md-tab-body>
+          </md-tab>
+
+          <md-tab ng-disabled="vm.stepOne==false">
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                </span>
+                <span class="ms-form-wizard-step-text">Demande déblocage de fond</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body>
+              <div style="widht:100%;">  
+                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_deblocage_daaf()" style="width:10%;">
+                    Nouveau
+                  </md-button>
+              </div> <br>
+
+              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                <thead>
+                  <tr>
+                    <th class="secondary-text" ng-repeat="cisc in ::vm.demande_deblocage_daaf_column">
+                      <div class="table-header">
+                        <span class="column-title">{{cisc.titre}}</span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>                     
+                <tbody>
+                  <tr ng-repeat="demande_deblocage_daaf in vm.alldemande_deblocage_daaf"  ng-class="{selected: demande_deblocage_daaf.$selected}" ng-click="vm.selectionDemande_deblocage_daaf(demande_deblocage_daaf)">
+
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Réference demande</label>
+                          <input name="ref_demande" type="text" ng-model="demande_deblocage_daaf.ref_demande"/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.ref_demande}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Objet</label>
+                          <input name="objet" type="text" ng-model="demande_deblocage_daaf.objet"/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.objet}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Tranche</label>
+                          <md-select ng-model="demande_deblocage_daaf.id_tranche_deblocage_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(demande_deblocage_daaf)" ng-disabled="demande_deblocage_daaf.validation!=0 || vm.modificationdemande">
+                            <md-option ng-repeat="tranche in vm.allcurenttranche_deblocage_daaf" value="{{tranche.id}}">
+                                                                        {{tranche.libelle}}
+                            </md-option>
+                          </md-select>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.tranche.libelle}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Prévu</label>
+                          <input name="prevu" type="text" ng-model="demande_deblocage_daaf.prevu" disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.prevu}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Cumul</label>
+                          <input name="cumul" type="text" ng-model="demande_deblocage_daaf.cumul" disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.cumul}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Anterieur</label>
+                          <input name="anterieur" type="text" ng-model="demande_deblocage_daaf.anterieur" disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.anterieur}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Periode</label>
+                          <input name="periode" type="text" ng-model="demande_deblocage_daaf.periode"disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.tranche.periode}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Pourcentage</label>
+                          <input name="pourcentage" type="text" ng-model="demande_deblocage_daaf.pourcentage" disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.tranche.pourcentage}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Reste</label>
+                          <input name="reste" type="text" ng-model="demande_deblocage_daaf.reste" disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.reste}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Compte daaf</label>
+                          <md-select ng-model="demande_deblocage_daaf.id_compte_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="demande_deblocage_daaf.validation!=0">
+                            <md-option ng-repeat="compte_daaf in vm.allcompte_daaf" value="{{compte_daaf.id}}">
+                                                                        {{compte_daaf.numero_compte}}
+                            </md-option>
+                          </md-select>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{vm.allcompte_daaf[0].numero_compte}}</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-datepicker ng-model="demande_deblocage_daaf.date" md-placeholder="Date de signature" md-max-date="vm.date_now" required ng-disabled="demande_deblocage_daaf.validation!=0">
+                          
+                        </md-datepicker>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{vm.formatDate(demande_deblocage_daaf.date)}}</span>
+                    </td>
+                                                 
+                    <td>  
+                      <a ng-if="!demande_deblocage_daaf.$edit" ng-click="vm.modifierDemande_deblocage_daaf(demande_deblocage_daaf)" title="Modifier">
+                        <span class="icon-table-edit"></span>
+                      </a>
+                                
+                      <a ng-if="!demande_deblocage_daaf.$edit" ng-click="vm.supprimerDemande_deblocage_daaf(demande_deblocage_daaf)" title="Supprimer">
+                        <span class="icon-delete"></span>
+                      </a>
+                                
+                      <a ng-if="demande_deblocage_daaf.$edit" ng-click="vm.annulerDemande_deblocage_daaf(demande_deblocage_daaf)" title="Annuler modification">
+                        <span class="icon-cancel"></span>
+                      </a>
+                                
+                      <a ng-if="demande_deblocage_daaf.$edit && demande_deblocage_daaf.date && demande_deblocage_daaf.id_tranche_deblocage_daaf>''" ng-click="vm.ajoutDemande_deblocage_daaf(demande_deblocage_daaf,0)" title="Sauvegarder">
+                        <span class="icon-content-save"></span>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+             
+            </md-tab-body>
+          </md-tab>         
+
+          <md-tab ng-disabled="vm.stepTwo==false">
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                      <i class="icon-check s16"></i>
+                  </span>
+                <span class="ms-form-wizard-step-text">Pièce justificatif</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body>
+               <div style="widht:100%;">  
+                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_daaf()" style="width:10%;">
+                    Nouveau
+                  </md-button>
+              </div> <br>
+
+              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="cisc in ::vm.justificatif_daaf_column">
+                  <div class="table-header">
+                    <span class="column-title">{{cisc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>                     
+            <tbody>
+              <tr ng-repeat="justificatif_daaf in vm.alljustificatif_daaf"  ng-class="{selected: justificatif_daaf.$selected}" ng-click="vm.selectionJustificatif_daaf(justificatif_daaf)">
+
+                <td>
+                  <span ng-if="justificatif_daaf.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Description</label>
+                      <input name="description" type="text" ng-model="justificatif_daaf.description"/>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!justificatif_daaf.$edit">{{justificatif_daaf.description}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="justificatif_daaf.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Fichier</label>
+                    <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile"  ng-model="fichier" id="fileid"/>
+                    </md-input-container>  
+                  </span>
+                            
+                  <span ng-if="!justificatif_daaf.$edit">{{justificatif_daaf.fichier}}</span>
+                </td>
+                                             
+                <td>  
+                  <a ng-if="!justificatif_daaf.$edit" ng-click="vm.modifierJustificatif_daaf(justificatif_daaf)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!justificatif_daaf.$edit" ng-click="vm.supprimerJustificatif_daaf(justificatif_daaf)" title="Supprimer">
+                    <span class="icon-delete"></span>
+                  </a>
+                            
+                  <a ng-if="justificatif_daaf.$edit" ng-click="vm.annulerJustificatif_daaf(justificatif_daaf)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="justificatif_daaf.$edit && justificatif_daaf.description>''" ng-click="vm.ajoutJustificatif_daaf(justificatif_daaf,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+            </md-tab-body>
+          </md-tab>
+
+
+          </md-tabs>
+          </ms-form-wizard>       
+                  
+      </div>
+      <!-- / convention -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

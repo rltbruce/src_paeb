@@ -1,0 +1,282 @@
+
+   <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gestion subvention financière</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Saisie demande de déblocage daaf</span>
+            </div>
+
+            <div class="title">Saisie demande de déblocage daaf</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Convention -->
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+          <md-tab>
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                </span>
+                <span class="ms-form-wizard-step-text">Demande déblocage de fond</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body>
+               <!--div style="widht:100%;">  
+                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.boutonEncourTraitement()" style="width:15%;" ng-disabled="vm.situation>1" ng-show="vm.showbutton">
+                    Mettre en-cours
+                  </md-button>
+
+                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.buttonfinaliser()" style="width:10%;" ng-disabled="vm.situation>2" ng-show="vm.showbutton">
+                    Finalisée
+                  </md-button>
+
+                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.buttonrejeter()" style="width:10%;" ng-disabled="vm.situation>3" ng-show="vm.showbutton">
+                    Rejeter
+                  </md-button>
+              </div--> <br>
+
+              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                <thead>
+                  <tr>
+                    <th class="secondary-text" ng-repeat="cisc in ::vm.demande_deblocage_daaf_validation_ufp_column">
+                      <div class="table-header">
+                        <span class="column-title">{{cisc.titre}}</span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>                     
+                <tbody>
+                  <tr ng-repeat="demande_deblocage_daaf_validation_ufp in vm.alldemande_deblocage_daaf_valide_daaf"  ng-class="{selected: demande_deblocage_daaf_validation_ufp.$selected}" ng-click="vm.selectionDemande_deblocage_daaf_validation_ufp(demande_deblocage_daaf_validation_ufp)">
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_validation_ufp.convention_ufp_daaf_entete.ref_convention}}</span>
+                    </td>
+                    <td>
+                      <span >{{demande_deblocage_daaf_validation_ufp.ref_demande}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_validation_ufp.objet}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_validation_ufp.tranche.libelle}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_validation_ufp.prevu}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_validation_ufp.cumul}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_validation_ufp.anterieur}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_validation_ufp.tranche.periode}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_validation_ufp.tranche.pourcentage}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_validation_ufp.reste}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_validation_ufp.convention_ufp_daaf_detail.numero_compte}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{vm.formatDate(demande_deblocage_daaf_validation_ufp.date)}}</span>
+                    </td>
+
+                    <!--td>
+                      <span >{{vm.situationdemande(demande_deblocage_daaf_validation_ufp.validation)}}</span>
+                    </td-->
+                                                 
+                    <td>  
+                      <a ng-if="!demande_deblocage_daaf_validation_ufp.$edit" ng-click="vm.demande_deblocage_daaf_mettreencours(demande_deblocage_daaf_validation_ufp)" title="Mettre en cours de traitement">
+                        <span class="icon-check-circle"></span>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+             
+            </md-tab-body>
+          </md-tab>                   
+
+          <md-tab ng-disabled="vm.stepOne==false">
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                  </span>
+                <span class="ms-form-wizard-step-text">Pièce justificatif</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body>
+               <div style="widht:100%;">  
+                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_daaf()" style="width:10%;">
+                    Nouveau
+                  </md-button>
+              </div> <br>
+
+              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="cisc in ::vm.justificatif_daaf_column">
+                  <div class="table-header">
+                    <span class="column-title">{{cisc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>                     
+            <tbody>
+              <tr ng-repeat="justificatif_daaf in vm.alljustificatif_daaf"  ng-class="{selected: justificatif_daaf.$selected}" ng-click="vm.selectionJustificatif_daaf(justificatif_daaf)">
+
+                <td>
+                  <span>{{justificatif_daaf.description}}</span>
+                </td>
+
+                <td>
+                            
+                  <span>{{justificatif_daaf.fichier}}</span>
+                </td>
+                                             
+                <td>  
+                  <a ng-click="vm.DownloadJustificatif_daaf(justificatif_daaf)" title="Telecharger">
+                    <span class="icon-box-download"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+            </md-tab-body>
+          </md-tab>
+
+          <md-tab>
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">T</span>
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                      <i class="icon-check s16"></i>
+                </span>
+                <span class="ms-form-wizard-step-text">Demande déblocage en cours de traitement</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body> <br>
+
+              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                <thead>
+                  <tr>
+                    <th class="secondary-text" ng-repeat="encour in ::vm.demande_deblocage_daaf_validation_ufp_column">
+                      <div class="table-header">
+                        <span class="column-title">{{encour.titre}}</span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>                     
+                <tbody>
+                  <tr ng-repeat="demande_deblocage_daaf_encours in vm.alldemande_deblocage_daaf_encours"  ng-class="{selected: demande_deblocage_daaf_encours.$selected}" ng-click="vm.selectionDemande_deblocage_daaf_encours(demande_deblocage_daaf_encours)">
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_encours.convention_ufp_daaf_entete.ref_convention}}</span>
+                    </td>
+                    <td>
+                      <span >{{demande_deblocage_daaf_encours.ref_demande}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_encours.objet}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_encours.tranche.libelle}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_encours.prevu}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_encours.cumul}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_encours.anterieur}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_encours.tranche.periode}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_encours.tranche.pourcentage}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_encours.reste}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{demande_deblocage_daaf_encours.convention_ufp_daaf_detail.numero_compte}}</span>
+                    </td>
+
+                    <td>
+                      <span >{{vm.formatDate(demande_deblocage_daaf_encours.date)}}</span>
+                    </td>
+
+                    <!--td>
+                      <span >{{vm.situationdemande(demande_deblocage_daaf_encours.validation)}}</span>
+                    </td-->
+                                                 
+                    <td>  
+                      <a ng-click="vm.demande_deblocage_daaf_finaliser(demande_deblocage_daaf_encours)" title="Finaliser">
+                        <span class="icon-check-circle"></span>
+                      </a>
+                      <a ng-click="vm.demande_deblocage_daaf_rejeter(demande_deblocage_daaf_encours)" title="Rejeter">
+                        <span class="icon-check-circle"></span>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+             
+            </md-tab-body>
+          </md-tab>
+
+          </md-tabs>
+          </ms-form-wizard>       
+                  
+      </div>
+      <!-- / convention -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

@@ -31,7 +31,7 @@
             title: 'Contrat prestataire',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_entreprise_contrat_prestataire',
-			weight: 3
+			weight: 2
         });
     }
 

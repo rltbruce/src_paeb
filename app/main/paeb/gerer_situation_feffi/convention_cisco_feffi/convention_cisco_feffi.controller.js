@@ -13,7 +13,7 @@
         var vm    = this;
         var NouvelItemTete = false;
         var currentItemTete;
-        
+        vm.allfeffi = [];
 
         var NouvelItemDetail = false;
         var currentItemDetail;
@@ -134,13 +134,6 @@
         {
           vm.allcisco= result.data.response;
         });
-
-        //recuperation donnée feffi
-        apiFactory.getAll("feffi/index").then(function(result)
-        {
-          vm.allfeffi= result.data.response;
-        });
-
 
         //recuperation donnée type_cout_divers
         apiFactory.getAll("type_cout_divers/index").then(function(result)
@@ -265,6 +258,26 @@
                 console.log(vm.all_cout_divers);
                
               });
+              //recuperation donnée convention
+           
+              apiFactory.getAPIgeneraliserREST("batiment_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+              {
+                  vm.allbatiment_construction = result.data.response; 
+                  console.log(vm.allbatiment_construction);
+              });
+
+              //recuperation donnée batiment ouvrage
+              apiFactory.getAPIgeneraliserREST("type_batiment/index",'menu','getbatimentByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone,
+                'id_acces_zone',vm.selectedItemTete.ecole.id_acces).then(function(result)
+              {
+                vm.alltype_batiment = result.data.response;
+                console.log(vm.alltype_batiment);
+              });
+
+              /*vm.stepTwo = true;
+              vm.stepThree = false;
+              vm.stepFor = false;*/
+            
               //Fin Récupération cout divers par convention
               vm.stepOne = true;
               vm.stepTwo = false;
@@ -304,6 +317,11 @@
             item.ref_financement = vm.selectedItemTete.ref_financement ;
             item.montant_total = parseInt(vm.selectedItemTete.montant_total);
             item.avancement = parseInt(vm.selectedItemTete.avancement);
+            //recuperation donnée feffi
+          apiFactory.getAPIgeneraliserREST("feffi/index",'menus','getfeffiBycisco','id_cisco',item.id_cisco).then(function(result)
+          {
+            vm.allfeffi= result.data.response;
+          });
 
         };
 
@@ -417,11 +435,11 @@
                     {
                         vm.selectedItemTete.cisco   = cis[0];
                         vm.selectedItemTete.feffi = fef[0];
-                        vm.selectedItemTete.objet   = convention_cife_tete.objet;
+                        /*vm.selectedItemTete.objet   = convention_cife_tete.objet;
                         vm.selectedItemTete.ref_financement       = convention_cife_tete.ref_financement;
                         vm.selectedItemTete.ref_convention = convention_cife_tete.ref_convention;
                         vm.selectedItemTete.avancement  = convention_cife_tete.avancement;
-                        vm.selectedItemTete.montant_total  = convention_cife_tete.montant_total;
+                        vm.selectedItemTete.montant_total  = convention_cife_tete.montant_total;*/
                         vm.selectedItemTete.$selected  = false;
                         vm.selectedItemTete.$edit      = false;
                         vm.selectedItemTete ={};
@@ -443,11 +461,11 @@
                   convention_cife_tete.feffi = fef[0];
                   convention_cife_tete.id  =   String(data.response);
 
-                  convention_cife_tete.ref_convention  = convention_cife_tete.ref_convention ;
+                 /* convention_cife_tete.ref_convention  = convention_cife_tete.ref_convention ;
                   convention_cife_tete.objet           = convention_cife_tete.objet ;
                   convention_cife_tete.ref_financement = convention_cife_tete.ref_financement ;
                   convention_cife_tete.avancement= convention_cife_tete.avancement;
-                  convention_cife_tete.montant_total= convention_cife_tete.montant_total;
+                  convention_cife_tete.montant_total= convention_cife_tete.montant_total;*/
                   NouvelItemTete = false;
             }
               convention_cife_tete.$selected = false;
@@ -491,6 +509,17 @@
           }
         }
 
+        vm.change_cisco = function(item)
+        {
+          item.id_feffi = null;
+//console.lod(item)
+          //recuperation donnée feffi
+          apiFactory.getAPIgeneraliserREST("feffi/index",'menus','getfeffiBycisco','id_cisco',item.id_cisco).then(function(result)
+          {
+            vm.allfeffi= result.data.response;
+            console.log(vm.allfeffi);
+          });
+        }
 
         function supressiondetail_construction()
         { 
@@ -633,6 +662,9 @@
                   if(suppression == 0)
                   {
                       //update tsy miasa eto
+                      var cout_tot = parseInt(vm.selectedItemTete.montant_total)- current_elem_cout_divers.cout + cout_divers.cout ;
+
+                        vm.selectedItemTete.montant_total= cout_tot;
                   }
                   else 
                   {    
@@ -640,6 +672,7 @@
                     {
                        return obj.id !== cout_divers.id;
                     });
+                    vm.selectedItemTete.montant_total= parseInt(vm.selectedItemTete.montant_total)-vm.selectedItem_cout_divers.cout;
                   }
               }
               else
@@ -647,6 +680,7 @@
                 
                 cout_divers.id = String(data.response);
                 Nouvel_elem_cout_divers = false ;
+                vm.selectedItemTete.montant_total = parseInt(vm.selectedItemTete.montant_total)+cout_divers.cout;
 
               }
 
@@ -695,6 +729,10 @@
         {
           vm.selectedItem_cout_divers = item ;
           console.log(vm.selectedItem_cout_divers);
+          if(item.$selected==false)
+            {
+              current_elem_cout_divers     = JSON.parse(JSON.stringify(vm.selectedItem_cout_divers));
+            }
         }
 
         $scope.$watch('vm.selectedItem_cout_divers', function()
@@ -746,7 +784,7 @@
               $selected: true,
               id: '0',
               intitule:'',
-              id_feffi:'',
+              id_compte_feffi:'',
               adresse_banque:'',
               rib:'',
               delai:'',
@@ -822,32 +860,7 @@
               currentItemDetail     = JSON.parse(JSON.stringify(vm.selectedItemDetail));
             }
             
-           // vm.allconvention= [] ;
-            
-            //recuperation donnée convention
-            if (vm.selectedItemDetail.id!=0)
-            {
-              apiFactory.getAPIgeneraliserREST("batiment_construction/index",'id_convention_detail',vm.selectedItemDetail.id).then(function(result)
-              {
-                  vm.allbatiment_construction = result.data.response; 
-                  console.log(vm.allbatiment_construction);
-              });
-
-              //recuperation donnée batiment ouvrage
-              apiFactory.getAPIgeneraliserREST("type_batiment/index",'menu','getbatimentByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone,
-                'id_acces_zone',vm.selectedItemTete.ecole.id_acces).then(function(result)
-              {
-                vm.alltype_batiment = result.data.response;
-                console.log(vm.alltype_batiment);
-              });
-
-              vm.stepTwo = true;
-              vm.stepThree = false;
-              vm.stepFor = false;
-            }
-
-            
-                        
+           // vm.allconvention= [] ;             
 
         };
         $scope.$watch('vm.selectedItemDetail', function()
@@ -916,9 +929,7 @@
                 });
                 if(convD[0])
                 {
-                   if((convD[0].id_zone_subvention!=currentItemDetail.id_zone_subvention)
-                    || (convD[0].intitule!=currentItemDetail.intitule)
-                    || (convD[0].id_acces_zone!=currentItemDetail.id_acces_zone)
+                   if((convD[0].intitule!=currentItemDetail.intitule)
                     || (convD[0].date_signature!=currentItemDetail.date_signature)
                     || (convD[0].id_compte_feffi!=currentItemDetail.id_compte_feffi)
                     || (convD[0].observation!=currentItemDetail.observation)
@@ -955,13 +966,13 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,      
-                    montant_total:    convention_cife_detail.montant_total,
-                    avancement:    convention_cife_detail.avancement,
+                    //montant_total:    convention_cife_detail.montant_total,
+                    //avancement:    convention_cife_detail.avancement,
                     intitule:    convention_cife_detail.intitule, 
                     id_convention_entete: vm.selectedItemTete.id ,
                     delai:    convention_cife_detail.delai,
                     date_signature:    convertionDate(new Date(convention_cife_detail.date_signature)),
-                    id_compte_feffi: convention_cife_detail.id_compte_feffi,
+                    //id_compte_feffi: convention_cife_detail.id_compte_feffi,
                     observation: convention_cife_detail.observation,           
                 });
                 console.log(datas);
@@ -978,11 +989,11 @@
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItemDetail.intitule  = convention_cife_detail.intitule;
+                       /* vm.selectedItemDetail.intitule  = convention_cife_detail.intitule;
                         vm.selectedItemDetail.delai  = convention_cife_detail.delai;
-                        vm.selectedItemDetail.date_signature    = convention_cife_detail.date_signature;
+                        vm.selectedItemDetail.date_signature    = convention_cife_detail.date_signature;*/
                         vm.selectedItemDetail.compte_feffi = comp_fef[0];
-                        vm.selectedItemDetail.observation = convention_cife_detail.observation;
+                       // vm.selectedItemDetail.observation = convention_cife_detail.observation;
 
                         vm.selectedItemDetail.$selected  = false;
                         vm.selectedItemDetail.$edit      = false;
@@ -1001,11 +1012,11 @@
                 else
                 {
                   
-                  convention_cife_detail.intitule= convention_cife_detail.intitule;
+                 /* convention_cife_detail.intitule= convention_cife_detail.intitule;
                   convention_cife_detail.delai  = convention_cife_detail.delai;
-                  convention_cife_detail.date_signature    = convention_cife_detail.date_signature;
+                  convention_cife_detail.date_signature    = convention_cife_detail.date_signature;*/
                   convention_cife_detail.compte_feffi = comp_fef[0];
-                  convention_cife_detail.observation = convention_cife_detail.observation;
+                  //convention_cife_detail.observation = convention_cife_detail.observation;
                   convention_cife_detail.id  =   String(data.response);              
                   NouvelItemDetail = false;
 
@@ -1269,7 +1280,7 @@
                     id_type_batiment: batiment_construction.id_type_batiment,
                     nbr_batiment: batiment_construction.nbr_batiment,
                     cout_unitaire: batiment_construction.cout_unitaire,
-                    id_convention_detail: vm.selectedItemDetail.id
+                    id_convention_entete: vm.selectedItemTete.id
 
                 });
                 console.log(datas);
@@ -1288,15 +1299,17 @@
                     if(suppression==0)
                     {
                         vm.selectedItemBatiment_construction.type_batiment = typ_bat[0];
-                        vm.selectedItemBatiment_construction.nbr_batiment = batiment_construction.nbr_batiment;
-                        vm.selectedItemBatiment_construction.cout_unitaire = batiment_construction.cout_unitaire;
+                       // vm.selectedItemBatiment_construction.nbr_batiment = batiment_construction.nbr_batiment;
+                       // vm.selectedItemBatiment_construction.cout_unitaire = batiment_construction.cout_unitaire;
                         vm.selectedItemBatiment_construction.$selected  = false;
                         vm.selectedItemBatiment_construction.$edit      = false;
                         vm.selectedItemBatiment_construction ={};
                         var cout_ancien_bat= parseInt(currentItemBatiment_construction.cout_unitaire)*parseInt(currentItemBatiment_construction.nbr_batiment);
                         var cout_nouveau_bat= parseInt(typ_bat[0].cout_batiment)*parseInt(batiment_construction.nbr_batiment);
-                        var cout_tot = parseInt(vm.selectedItemDetail.montant_total)- cout_ancien_bat + cout_nouveau_bat ;
-                        miseajourDetail(vm.selectedItemDetail,0,cout_tot);
+                        var cout_tot = parseInt(vm.selectedItemTete.montant_total)- cout_ancien_bat + cout_nouveau_bat ;
+
+                        vm.selectedItemTete.montant_total= cout_tot;
+                        // miseajourDetail(vm.selectedItemDetail,0,cout_tot);
                     }
                     else 
                     {    
@@ -1305,7 +1318,7 @@
                           return obj.id !== vm.selectedItemBatiment_construction.id;
                       });
 
-                      var prix_latrine=0;
+                      /*var prix_latrine=0;
                       var prix_mobilier=0;
 
                       if(vm.alllatrine_construction.length!=0)
@@ -1321,27 +1334,26 @@
                          {
                             prix_mobilier = prix_mobilier + (item.nbr_mobilier*item.cout_unitaire)
                          });
-                      }
+                      }*/
                       var cout_ancien_bat= parseInt(currentItemBatiment_construction.cout_unitaire) *
                                         parseInt(currentItemBatiment_construction.nbr_batiment);
-                      var cout_tot = parseInt(vm.selectedItemDetail.montant_total) - cout_ancien_bat-prix_latrine-prix_mobilier;
-
-                       miseajourDetail(vm.selectedItemDetail,0,cout_tot);
+                      var cout_tot = parseInt(vm.selectedItemTete.montant_total) - cout_ancien_bat;
+                      vm.selectedItemTete.montant_total = cout_tot;
+                       //miseajourDetail(vm.selectedItemDetail,0,cout_tot);
                     }
                 }
                 else
                 {
                   
                   batiment_construction.type_batiment= typ_bat[0];
-                  batiment_construction.nbr_batiment = batiment_construction.nbr_batiment;
-                  batiment_construction.cout_unitaire = batiment_construction.cout_unitaire;
+                  /*batiment_construction.nbr_batiment = batiment_construction.nbr_batiment;
+                  batiment_construction.cout_unitaire = batiment_construction.cout_unitaire;*/
                   batiment_construction.id  =   String(data.response);              
                   NouvelItemBatiment_construction = false;
-
                   
-                  var cout_tot = parseInt(vm.selectedItemDetail.montant_total)+ 
+                  vm.selectedItemTete.montant_total = parseInt(vm.selectedItemTete.montant_total)+ 
                   (parseInt(batiment_construction.cout_unitaire)*parseInt(batiment_construction.nbr_batiment));
-                 miseajourDetail(vm.selectedItemDetail,0,cout_tot);
+                 //miseajourDetail(vm.selectedItemDetail,0,cout_tot);
             }
               batiment_construction.$selected = false;
               batiment_construction.$edit = false;
@@ -1363,43 +1375,6 @@
             
         };
 
-         //insertion ou mise a jours ou suppression item dans bdd convention
-        function miseajourDetail(convention_cife_detail,suppression,montant_total)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemDetail ==false)
-            {
-                getId = vm.selectedItemDetail.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,      
-                    montant_total:    montant_total,
-                    avancement:    convention_cife_detail.avancement,
-                    intitule:    convention_cife_detail.intitule, 
-                    id_convention_entete: vm.selectedItemTete.id ,
-                    delai:    convention_cife_detail.delai,
-                    date_signature:    convertionDate(new Date(convention_cife_detail.date_signature)),
-                    id_compte_feffi: convention_cife_detail.compte_feffi.id,
-                    observation: convention_cife_detail.observation,             
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("convention_cisco_feffi_detail/index",datas, config).success(function (data)
-            {
-                vm.selectedItemDetail.montant_total  = montant_total;
-
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-
-        }
 
       /*****************fin batiment construction***************/
 
@@ -1621,16 +1596,17 @@
                     if(suppression==0)
                     {
                         vm.selectedItemLatrine_construction.latrine_ouvrage = typ_lat[0];
-                        vm.selectedItemLatrine_construction.nbr_latrine = latrine_construction.nbr_latrine;
-                        vm.selectedItemLatrine_construction.cout_unitaire = latrine_construction.cout_unitaire;
+                        //vm.selectedItemLatrine_construction.nbr_latrine = latrine_construction.nbr_latrine;
+                        //vm.selectedItemLatrine_construction.cout_unitaire = latrine_construction.cout_unitaire;
                         vm.selectedItemLatrine_construction.$selected  = false;
                         vm.selectedItemLatrine_construction.$edit      = false;
                         vm.selectedItemLatrine_construction ={};
 
                         var cout_ancien_lat= parseInt(currentItemLatrine_construction.cout_unitaire)*parseInt(currentItemLatrine_construction.nbr_latrine);
                         var cout_nouveau_lat= parseInt(typ_lat[0].cout_latrine)*parseInt(latrine_construction.nbr_latrine);
-                        var cout_tot = parseInt(vm.selectedItemDetail.montant_total)- cout_ancien_lat + cout_nouveau_lat ;
-                        miseajourDetail(vm.selectedItemDetail,0,cout_tot);
+                        var cout_tot = parseInt(vm.selectedItemTete.montant_total)- cout_ancien_lat + cout_nouveau_lat ;
+                        vm.selectedItemTete.montant_total = cout_tot;
+                        //miseajourDetail(vm.selectedItemDetail,0,cout_tot);
                     }
                     else 
                     {    
@@ -1641,9 +1617,9 @@
 
                       var cout_ancien_lat= parseInt(currentItemLatrine_construction.cout_unitaire) *
                                         parseInt(currentItemLatrine_construction.nbr_latrine);
-                      var cout_tot = parseInt(vm.selectedItemDetail.montant_total) - cout_ancien_lat;
-
-                       miseajourDetail(vm.selectedItemDetail,0,cout_tot);
+                      var cout_tot = parseInt(vm.selectedItemTete.montant_total) - cout_ancien_lat;
+                      vm.selectedItemTete.montant_total = cout_tot;
+                       //miseajourDetail(vm.selectedItemDetail,0,cout_tot);
                       
                     }
                 }
@@ -1651,16 +1627,17 @@
                 {
                   
                   latrine_construction.type_latrine= typ_lat[0];
-                  latrine_construction.nbr_latrine = latrine_construction.nbr_latrine;
-                  latrine_construction.cout_unitaire = latrine_construction.cout_unitaire;
+                  //latrine_construction.nbr_latrine = latrine_construction.nbr_latrine;
+                  //latrine_construction.cout_unitaire = latrine_construction.cout_unitaire;
                   latrine_construction.id  =   String(data.response);              
                   NouvelItemLatrine_construction = false;
                   
                   //console.log(latrine_construction);
-                  var cout_tot = parseInt(vm.selectedItemDetail.montant_total)+ 
+                  //var cout_tot = parseInt(vm.selectedItemDetail.montant_total)+ 
+                  //(parseInt(latrine_construction.cout_unitaire)*parseInt(latrine_construction.nbr_latrine));
+                  vm.selectedItemTete.montant_total = parseInt(vm.selectedItemTete.montant_total)+ 
                   (parseInt(latrine_construction.cout_unitaire)*parseInt(latrine_construction.nbr_latrine));
-                  
-                  miseajourDetail(vm.selectedItemDetail,0,cout_tot);
+                  //miseajourDetail(vm.selectedItemDetail,0,cout_tot);
             }
               latrine_construction.$selected = false;
               latrine_construction.$edit = false;
@@ -1895,17 +1872,16 @@
                     if(suppression==0)
                     {
                         vm.selectedItemMobilier_construction.mobilier_ouvrage = typ_mob[0];
-                        vm.selectedItemMobilier_construction.nbr_mobilier = mobilier_construction.nbr_mobilier;
-                        vm.selectedItemMobilier_construction.cout_unitaire = mobilier_construction.cout_unitaire;
+                        //vm.selectedItemMobilier_construction.nbr_mobilier = mobilier_construction.nbr_mobilier;
+                        //vm.selectedItemMobilier_construction.cout_unitaire = mobilier_construction.cout_unitaire;
                         vm.selectedItemMobilier_construction.$selected  = false;
                         vm.selectedItemMobilier_construction.$edit      = false;
                         vm.selectedItemMobilier_construction ={};
 
                         var cout_ancien_mob= parseInt(currentItemMobilier_construction.cout_unitaire)*parseInt(currentItemMobilier_construction.nbr_mobilier);
                         var cout_nouveau_mob= parseInt(typ_mob[0].cout_mobilier)*parseInt(mobilier_construction.nbr_mobilier);
-                        var cout_tot = parseInt(vm.selectedItemDetail.montant_total)- cout_ancien_mob + cout_nouveau_mob ;
-    
-                        miseajourDetail(vm.selectedItemDetail,0,cout_tot);
+                        var cout_tot = parseInt(vm.selectedItemTete.montant_total)- cout_ancien_mob + cout_nouveau_mob ;
+                        vm.selectedItemTete.montant_total = cout_tot;
                     }
                     else 
                     {    
@@ -1916,9 +1892,9 @@
 
                       var cout_ancien_mob= parseInt(currentItemMobilier_construction.cout_unitaire) *
                                         parseInt(currentItemMobilier_construction.nbr_mobilier);
-                      var cout_tot = parseInt(vm.selectedItemDetail.montant_total) - cout_ancien_mob;
+                      var cout_tot = parseInt(vm.selectedItemTete.montant_total) - cout_ancien_mob;
 
-                       miseajourDetail(vm.selectedItemDetail,0,cout_tot);
+                      vm.selectedItemTete.montant_total = cout_tot;
                       
                     }
                 }
@@ -1926,16 +1902,15 @@
                 {
                   
                   mobilier_construction.type_mobilier= typ_mob[0];
-                  mobilier_construction.nbr_mobilier = mobilier_construction.nbr_mobilier;
-                  mobilier_construction.cout_unitaire = mobilier_construction.cout_unitaire;
+                  //mobilier_construction.nbr_mobilier = mobilier_construction.nbr_mobilier;
+                  //mobilier_construction.cout_unitaire = mobilier_construction.cout_unitaire;
                   mobilier_construction.id  =   String(data.response);              
                   NouvelItemMobilier_construction = false;
                   
                   //console.log(latrine_construction);
-                  var cout_tot = parseInt(vm.selectedItemDetail.montant_total)+ 
-                  (parseInt(mobilier_construction.cout_unitaire)*parseInt(mobilier_construction.nbr_mobilier));
                   
-                  miseajourDetail(vm.selectedItemDetail,0,cout_tot);
+                  vm.selectedItemTete.montant_total = parseInt(vm.selectedItemDetail.montant_total)+ 
+                  (parseInt(mobilier_construction.cout_unitaire)*parseInt(mobilier_construction.nbr_mobilier));
             }
               mobilier_construction.$selected = false;
               mobilier_construction.$edit = false;

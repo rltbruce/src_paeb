@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.tranche_demande_mpe', {
-            title: 'Tranche demande mpe',
+            title: 'T d_batiment mpe',
             icon  : 'icon-clipboard-text',
             state: 'app.paeb_ddb_tranche_demande_mpe'
 

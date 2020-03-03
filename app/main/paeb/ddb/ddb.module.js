@@ -19,6 +19,15 @@
             'app.paeb.ddb.type_latrine',
             'app.paeb.ddb.tranche_demande_mpe',
             'app.paeb.ddb.tranche_deblocage_feffi',
+            'app.paeb.ddb.tranche_demande_latrine_mpe',
+            'app.paeb.ddb.tranche_demande_latrine_moe',
+            'app.paeb.ddb.tranche_demande_mobilier_mpe',
+            'app.paeb.ddb.tranche_demande_mobilier_moe',
+            'app.paeb.ddb.tranche_deblocage_daaf',
+            'app.paeb.ddb.tranche_demande_batiment_moe',
+            'app.paeb.ddb.tranche_d_debut_travaux_moe',
+            'app.paeb.ddb.tranche_d_fin_travaux_moe',
+            'app.paeb.ddb.partenaire_relai'
 
             ] ;
 

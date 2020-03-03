@@ -61,14 +61,14 @@
         });
 
         //fonction selection item entete convention cisco/feffi
-        vm.selectionPrestaire = function (item)
+        vm.selectionPrestataire = function (item)
         {
-            vm.selectedItemPrestaire = item;
+            vm.selectedItemPrestataire = item;
            // vm.allconvention= [] ;
             
             vm.showbuttonNouvPassation=true;
             //recuperation donnée convention
-            if (vm.selectedItemPrestaire.id!=0)
+            if (vm.selectedItemPrestataire.id!=0)
             { 
 
               //recuperation donnée convention
@@ -76,16 +76,6 @@
               {
                   vm.allcontrat_prestataire = result.data.response; 
                   console.log(vm.allcontrat_prestataire);
-
-                 /* apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
-                  {
-                      vm.allpassation_marches = result.data.response;
-
-                      if (vm.allpassation_marches.length!=0)
-                      {
-                        vm.showbuttonNouvPassation=false;
-                      }
-                  });*/
               });
               vm.stepOne = true;
               vm.stepTwo = false;
@@ -134,10 +124,22 @@
             vm.selectedItemContrat_prestataire = item;
            if(item.id!=0)
            {
-            /*apiFactory.getAPIgeneraliserREST("avenant_prestataire/index",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
-            {
-                vm.allavenat_prestataire = result.data.response;
-            });*/
+              apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationBycontrat_prestataire','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+              {
+                  vm.allpassation_marches = result.data.response;
+                  console.log(vm.allpassation_marches);
+
+                  if (vm.allpassation_marches.length!=0)
+                  {
+                      vm.showbuttonNouvPassation=false;
+                  }
+              });
+
+              apiFactory.getOne("convention_cisco_feffi_entete/index",item.convention_entete.id).then(function(result)
+              {
+                  vm.allconvention_entete = result.data.response;
+                  console.log(vm.allconvention_entete);
+              });
 
             vm.stepTwo = true;
             vm.stepThree = false;
@@ -246,11 +248,7 @@
         },
         {titre:"Date notification attribution"
         },
-        {titre:"Date signature contrat"
-        },
         {titre:"Date OS"
-        },
-        {titre:"Titulaire travaux"
         },
         {titre:"Observention"
         },
@@ -267,25 +265,18 @@
               id: '0',         
               date_lancement: '',
               date_remise: '',
-              nbr_offre_recu: '',
+              nbr_offre_recu: 0,
               montant_moin_chere:'',
               date_rapport_evaluation:'',
               date_demande_ano_dpfi: '',
               date_ano_dpfi: '',
               notification_intention: '',
               date_notification_attribution:'',
-              date_signature_contrat:'',
-              id_prestataire: '',
               observation:''
             };         
             vm.allpassation_marches.push(items);
-            vm.allpassation_marches.forEach(function(mem)
-            {
-              if(mem.$selected==true)
-              {
-                vm.selectedItemPassation_marches = mem;
-              }
-            });
+           
+            vm.selectedItemPassation_marches = items;             
 
             NouvelItemPassation_marches = true ;
           }else
@@ -320,10 +311,8 @@
             item.date_remise   = currentItemPassation_marches.date_remise ;
             item.date_ano_dpfi = currentItemPassation_marches.date_ano_dpfi ;
             item.nbr_offre_recu = currentItemPassation_marches.nbr_offre_recu;
-            item.date_lancement = currentItemPassation_marches.date_lancement ;
-            item.id_prestataire = currentItemPassation_marches.id_prestataire ; 
+            item.date_lancement = currentItemPassation_marches.date_lancement ; 
             item.montant_moin_chere = currentItemPassation_marches.montant_moin_chere ;
-            item.date_signature_contrat   = currentItemPassation_marches.date_signature_contrat ;
             item.date_demande_ano_dpfi    = currentItemPassation_marches.date_demande_ano_dpfi ;
             item.date_rapport_evaluation  = currentItemPassation_marches.date_rapport_evaluation ;
             item.notification_intention   = currentItemPassation_marches.notification_intention;
@@ -346,7 +335,11 @@
         {
             vm.selectedItemPassation_marches = item;
             vm.nouvelItemPassation_marches   = item;
-            currentItemPassation_marches    = JSON.parse(JSON.stringify(vm.selectedItemPassation_marches));
+            if (item.$selected = false)
+            {
+              currentItemPassation_marches    = JSON.parse(JSON.stringify(vm.selectedItemPassation_marches));
+            }
+            
            if(item.id!=0)
            {
             apiFactory.getAPIgeneraliserREST("mpe_soumissionaire/index",'id_passation_marches',vm.selectedItemPassation_marches.id).then(function(result)
@@ -387,9 +380,7 @@
             item.date_ano_dpfi = new Date(vm.selectedItemPassation_marches.date_ano_dpfi);
             item.nbr_offre_recu = vm.selectedItemPassation_marches.nbr_offre_recu;
             item.date_lancement = new Date(vm.selectedItemPassation_marches.date_lancement) ;
-            item.id_prestataire = vm.selectedItemPassation_marches.prestataire.id ; 
             item.montant_moin_chere = vm.selectedItemPassation_marches.montant_moin_chere ;
-            item.date_signature_contrat   = new Date(vm.selectedItemPassation_marches.date_signature_contrat) ;
             item.date_demande_ano_dpfi    = new Date(vm.selectedItemPassation_marches.date_demande_ano_dpfi) ;
             item.date_rapport_evaluation  = new Date(vm.selectedItemPassation_marches.date_rapport_evaluation) ;
             item.notification_intention   = new Date(vm.selectedItemPassation_marches.notification_intention);
@@ -430,10 +421,8 @@
                     || (pass[0].date_remise   != currentItemPassation_marches.date_remise )
                     || (pass[0].date_ano_dpfi != currentItemPassation_marches.date_ano_dpfi )
                     || (pass[0].nbr_offre_recu != currentItemPassation_marches.nbr_offre_recu)
-                    || (pass[0].date_lancement != currentItemPassation_marches.date_lancement )
-                    || (pass[0].id_prestataire != currentItemPassation_marches.id_prestataire ) 
+                    || (pass[0].date_lancement != currentItemPassation_marches.date_lancement ) 
                     || (pass[0].montant_moin_chere != currentItemPassation_marches.montant_moin_chere )
-                    || (pass[0].date_signature_contrat   != currentItemPassation_marches.date_signature_contrat )
                     || (pass[0].date_demande_ano_dpfi    != currentItemPassation_marches.date_demande_ano_dpfi )
                     || (pass[0].date_rapport_evaluation  != currentItemPassation_marches.date_rapport_evaluation )
                     || (pass[0].notification_intention   != currentItemPassation_marches.notification_intention)
@@ -465,24 +454,21 @@
             {
                 getId = vm.selectedItemPassation_marches.id; 
             } 
-            
+            console.log(vm.selectedItemPassation_marches);
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
                     date_lancement: convertionDate(new Date(passation_marches.date_lancement)),
                     date_os: convertionDate(new Date(passation_marches.date_os)),
                     date_remise: convertionDate(new Date(passation_marches.date_remise)),
-                    nbr_offre_recu: passation_marches.nbr_offre_recu,
                     montant_moin_chere:passation_marches.montant_moin_chere,
                     date_rapport_evaluation:convertionDate(new Date(passation_marches.date_rapport_evaluation)),
                     date_demande_ano_dpfi: convertionDate(new Date(passation_marches.date_demande_ano_dpfi)),
                     date_ano_dpfi: convertionDate(new Date(passation_marches.date_ano_dpfi)),
                     notification_intention: convertionDate(new Date(passation_marches.notification_intention)),
-                    date_notification_attribution: convertionDate(new Date(passation_marches.date_notification_attribution)),
-                    date_signature_contrat: convertionDate(new Date(passation_marches.date_signature_contrat)),
-                    id_prestataire: passation_marches.id_prestataire,
+                    date_notification_attribution: convertionDate(new Date(passation_marches.date_notification_attribution)),                    
                     observation:passation_marches.observation,
-                    id_convention_entete: vm.selectedItemConvention_entete.id,
+                    id_convention_entete: vm.allconvention_entete[0].id,
                     validation:0,               
                 });
                 console.log(datas);
@@ -499,7 +485,7 @@
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItemPassation_marches.observation   = passation_marches.observation ;
+                       /* vm.selectedItemPassation_marches.observation   = passation_marches.observation ;
                         vm.selectedItemPassation_marches.date_os   = passation_marches.date_os ;
                         vm.selectedItemPassation_marches.date_remise   = passation_marches.date_remise ;
                         vm.selectedItemPassation_marches.date_ano_dpfi = passation_marches.date_ano_dpfi ;
@@ -516,7 +502,7 @@
                         vm.selectedItemPassation_marches.$selected  = false;
                         vm.selectedItemPassation_marches.$edit      = false;
                         vm.selectedItemPassation_marches ={};
-                        vm.showbuttonNouvPassation= false;
+                        vm.showbuttonNouvPassation= false;*/
                     }
                     else 
                     {    
@@ -530,19 +516,17 @@
                 }
                 else
                 {
-                  passation_marches.observation   = passation_marches.observation ;
+                 /* passation_marches.observation   = passation_marches.observation ;
                   passation_marches.date_os   = passation_marches.date_os ;
                   passation_marches.date_remise   = passation_marches.date_remise ;
                   passation_marches.date_ano_dpfi = passation_marches.date_ano_dpfi ;
                   passation_marches.nbr_offre_recu = passation_marches.nbr_offre_recu;
                   passation_marches.date_lancement = passation_marches.date_lancement ;
-                  passation_marches.prestataire = pres[0];
                   passation_marches.montant_moin_chere = passation_marches.montant_moin_chere ;
-                  passation_marches.date_signature_contrat   = passation_marches.date_signature_contrat ;
                   passation_marches.date_demande_ano_dpfi    = passation_marches.date_demande_ano_dpfi ;
                   passation_marches.date_rapport_evaluation  = passation_marches.date_rapport_evaluation ;
                   passation_marches.notification_intention   = passation_marches.notification_intention;
-                  passation_marches.date_notification_attribution  = passation_marches.date_notification_attribution ;
+                  passation_marches.date_notification_attribution  = passation_marches.date_notification_attribution ;*/
 
                   passation_marches.id  =   String(data.response);              
                   NouvelItemPassation_marches=false;
@@ -736,7 +720,7 @@
                 console.log(datas);
                 //factory
             apiFactory.add("mpe_soumissionaire/index",datas, config).success(function (data)
-            {   
+            {   var nb_offre = 0;
                 var press= vm.allprestataire.filter(function(obj)
                 {
                     return obj.id == mpe_soumissionaire.id_prestataire;
@@ -759,8 +743,8 @@
                       {
                           return obj.id !== vm.selectedItemMpe_soumissionaire.id;
                       });
-                      var nb_offre= parseInt(vm.selectedItemPassation_marches.nbr_offre_recu) - 1;
-                      miseajourPassation_marches(vm.selectedItemPassation_marches,0,nb_offre);
+                      nb_offre= parseInt(vm.selectedItemPassation_marches.nbr_offre_recu) - 1;
+                      //miseajourPassation_marches(vm.selectedItemPassation_marches,0,nb_offre);
                     }
                 }
                 else
@@ -770,9 +754,10 @@
                   mpe_soumissionaire.id  =   String(data.response);              
                   NouvelItemMpe_soumissionaire=false;
 
-                  var nb_offre= parseInt(vm.selectedItemPassation_marches.nbr_offre_recu) + 1;
-                  miseajourPassation_marches(vm.selectedItemPassation_marches,0,nb_offre);
+                  nb_offre= parseInt(vm.selectedItemPassation_marches.nbr_offre_recu) + 1;
+                  //miseajourPassation_marches(vm.selectedItemPassation_marches,0,nb_offre);
             }
+             vm.selectedItemPassation_marches.nbr_offre_recu = nb_offre
               mpe_soumissionaire.$selected = false;
               mpe_soumissionaire.$edit = false;
               vm.selectedItemMpe_soumissionaire = {};
@@ -793,7 +778,7 @@
         }
 
          //insertion ou mise a jours ou suppression item dans bdd feffi
-        function miseajourPassation_marches(passation_marches,suppression,nbr_offre_recu)
+       /* function miseajourPassation_marches(passation_marches,suppression,nbr_offre_recu)
         {
             //add
             var config =
@@ -826,7 +811,7 @@
               vm.selectedItemPassation_marches.nbr_offre_recu = nbr_offre_recu;
             }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
-        }
+        }*/
 /**********************************fin mpe_sousmissionnaire****************************************/
         //Alert
         vm.showAlert = function(titre,content)

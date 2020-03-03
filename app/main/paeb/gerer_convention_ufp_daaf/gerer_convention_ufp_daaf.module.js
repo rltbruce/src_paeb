@@ -4,9 +4,10 @@
 
     angular
         .module('app.paeb.gerer_convention_ufp_daaf', [			
-            'app.paeb.gerer_convention_ufp_daaf.convention_daff_ufp',,
-            //'app.paeb.gerer_convention_ufp_daaf.convention_daff_ufp',
-            ])       
+            'app.paeb.gerer_convention_ufp_daaf.convention_ufp_daaf',
+            'app.paeb.gerer_convention_ufp_daaf.convention_ufp_daaf_valide',
+            ])
+        .run(testPermission)       
         .config(config);
         var vs ;
 
@@ -16,7 +17,11 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_convention_ufp_daaf', {
             title : 'Gérer convention ufp/daaf',
             icon  : 'icon-data',
-            weight: 3
+            weight: 3,
+            hidden: function()
+            {
+                    return vs;
+            }
         });
 
 
@@ -36,7 +41,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["DAAF","ODAAF"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

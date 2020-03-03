@@ -1,0 +1,132 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> partenaire_relai</span>
+            </div>
+
+            <div class="title">partenaire_relai</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- partenaire_relai -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> partenaires relais</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add partenaire_relai" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout partenaires relais</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="partc in ::vm.partenaire_relai_column">
+                  <div class="table-header">
+                    <span class="column-title">{{partc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="partenaire_relai in vm.allpartenaire_relai"  ng-class="{selected: partenaire_relai.$selected}" ng-click="vm.selection(partenaire_relai)">
+                          
+                <td>
+                  <span ng-if="partenaire_relai.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Nom</label>
+                      <input name="Nom" type="text" ng-model="partenaire_relai.nom"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!partenaire_relai.$edit">{{partenaire_relai.nom}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="partenaire_relai.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Nif</label>
+                      <input name="Nif" type="text" ng-model="partenaire_relai.nif"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!partenaire_relai.$edit">{{partenaire_relai.nif}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="partenaire_relai.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Stat</label>
+                      <input name="Stat" type="text" ng-model="partenaire_relai.stat"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!partenaire_relai.$edit">{{partenaire_relai.stat}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="partenaire_relai.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Siege</label>
+                      <input name="Siege" type="text" ng-model="partenaire_relai.siege"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!partenaire_relai.$edit">{{partenaire_relai.siege}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="partenaire_relai.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Telephone</label>
+                      <input name="telephone" type="text" ng-model="partenaire_relai.telephone"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!partenaire_relai.$edit">{{partenaire_relai.telephone}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!partenaire_relai.$edit" ng-click="vm.modifier(partenaire_relai)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!partenaire_relai.$edit" ng-click="vm.supprimer(partenaire_relai)" title="Supprimer">
+                    <span class="icon-delete" ></span>
+                  </a>
+                            
+                  <a ng-if="partenaire_relai.$edit" ng-click="vm.annuler(partenaire_relai)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="partenaire_relai.$edit && partenaire_relai.telephone && partenaire_relai.nom && partenaire_relai.nif&& partenaire_relai.stat && partenaire_relai.siege>''" ng-click="vm.ajout(partenaire_relai,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>                   
+      </div>
+      <!-- / partenaire_relai -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

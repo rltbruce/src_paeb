@@ -31,7 +31,7 @@
             title: 'Suivi execution',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_entreprise_suivi_execution_travaux',
-			weight: 3
+			weight: 16
         });
     }
 

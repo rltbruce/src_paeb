@@ -1,0 +1,224 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation feffi</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Feffi</span>
+            </div>
+
+            <div class="title">Feffi</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+   
+    <!-----Debut demande_mobilier_moe ------>
+          <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span-->
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepOne==true">1
+                    </span>
+                    <span class="ms-form-wizard-step-text">demande mobilier</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_mobilier_moe()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.demande_mobilier_moe_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="demande_mobilier_moe in vm.alldemande_mobilier_moe"  ng-class="{selected: demande_mobilier_moe.$selected}" ng-click="vm.selectionDemande_mobilier_moe(demande_mobilier_moe)">
+                                
+                      <td>         
+                        <span>{{demande_mobilier_moe.objet}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span>{{demande_mobilier_moe.description}}</span>
+                      </td>
+                                
+                      <td>        
+                        <span>{{demande_mobilier_moe.ref_facture}}</span>
+                      </td>                      
+
+                    <td>
+                      <span>{{demande_mobilier_moe.tranche.libelle}}</span>
+                    </td>
+                                
+                      <td>       
+                        <span>{{demande_mobilier_moe.montant}}</span>
+                      </td>
+
+                    <td>
+                      <span>{{demande_mobilier_moe.cumul}}</span>
+                    </td>
+
+                    <td>
+                      <span>{{demande_mobilier_moe.anterieur}}</span>
+                    </td>
+
+                    <td>
+                      <span>{{demande_mobilier_moe.tranche.periode}}</span>
+                    </td>
+
+                    <td>
+                      <span>{{demande_mobilier_moe.tranche.pourcentage}}</span>
+                    </td>
+
+                    <td>
+                      <span>{{demande_mobilier_moe.reste}}</span>
+                    </td>
+
+                       <td>                          
+                        <span>{{vm.affichageDate(demande_mobilier_moe.date)}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-click="vm.validerDemande_mobilier_moe(demande_mobilier_moe,0,2)" title="Valider">
+                          <span class="icon-check-circle"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN demande_mobilier_moe ------>
+
+    <!-----Debut paiement_mobilier_moe ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Paiement MPE</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPaiement_mobilier_moe()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="pai in ::vm.paiement_mobilier_moe_column">
+                        <div class="table-header">
+                          <span class="column-title">{{pai.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="paiement_mobilier_moe in vm.allpaiement_mobilier_moe"  ng-class="{selected: paiement_mobilier_moe.$selected}" ng-click="vm.selectionPaiement_mobilier_moe(paiement_mobilier_moe)">
+                                
+                      <td>
+                        <span ng-if="paiement_mobilier_moe.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Montant paiement</label>
+                            <input name="montant_paiement" type="number" ng-model="paiement_mobilier_moe.montant_paiement"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!paiement_mobilier_moe.$edit">{{paiement_mobilier_moe.montant_paiement}}</span>
+                      </td>
+
+                       <td>
+                        <span ng-if="paiement_mobilier_moe.$edit">
+                          <md-datepicker ng-model="paiement_mobilier_moe.date_paiement" md-placeholder="Date" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!paiement_mobilier_moe.$edit">{{vm.affichageDate(paiement_mobilier_moe.date_paiement)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="paiement_mobilier_moe.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Observation</label>
+                            <input name="observation" type="text" ng-model="paiement_mobilier_moe.observation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!paiement_mobilier_moe.$edit">{{paiement_mobilier_moe.observation}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!paiement_mobilier_moe.$edit" ng-click="vm.modifierPaiement_mobilier_moe(paiement_mobilier_moe)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!paiement_mobilier_moe.$edit" ng-click="vm.supprimerPaiement_mobilier_moe(paiement_mobilier_moe)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="paiement_mobilier_moe.$edit" ng-click="vm.annulerPaiement_mobilier_moe(paiement_mobilier_moe)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="paiement_mobilier_moe.$edit && paiement_mobilier_moe.montant_paiement && paiement_mobilier_moe.date_paiement >''" ng-click="vm.ajoutPaiement_mobilier_moe(paiement_mobilier_moe,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab >
+
+    <!-----FIN paiement_mobilier_moe------>
+    <!-----FIN demande_debut_travaux_moe ------>
+
+        </ms-form-wizard>
+      </md-tabs>                   
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>
