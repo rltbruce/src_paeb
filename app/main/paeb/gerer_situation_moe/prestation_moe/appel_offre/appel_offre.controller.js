@@ -90,7 +90,7 @@
 
 /**********************************debut bureau etude****************************************/
 //col table
-        vm.bureau_etude_column = [
+        /*vm.bureau_etude_column = [
         {titre:"Nom"},
         {titre:"Nif"},
         {titre:"Stat"},
@@ -135,12 +135,12 @@
                 item.$selected = false;
              });
              vm.selectedItemBureau_etude.$selected = true;
-        });
+        });*/
  
 /**********************************fin bureau etude****************************************/ 
 
 /**********************************contrat prestataire****************************************/
-
+/*
        vm.contrat_bureau_etude_column = [
         {titre:"Bureau d'etude"
         },
@@ -188,14 +188,34 @@
                 item.$selected = false;
              });
              vm.selectedItemContrat_bureau_etude.$selected = true;
-        });        
+        }); */       
 
 /**********************************fin contrat prestataire****************************************/
 
 
 /**********************************fin justificatif attachement****************************************/
 
+      apiFactory.getAll("contrat_be/index").then(function(result)
+      {
+          vm.allcontrat_bureau_etude = result.data.response; 
+          console.log(vm.allcontrat_bureau_etude);
+      });
 
+      apiFactory.getAPIgeneraliserREST("appel_offre/index",'menu','getappelByvalidation','validation',0).then(function(result)
+      {
+        vm.allappel_offre = result.data.response;
+        
+        if (vm.allappel_offre.length>0)
+        {
+            vm.showbuttonNouvAppel = false;
+        }
+                  
+      });
+      apiFactory.getAPIgeneraliserREST("appel_offre/index",'menu','getappelByvalidation','validation',1).then(function(result)
+      {
+        vm.allappel_offre_valide = result.data.response;
+                  
+      });
 
         $scope.uploadFile = function(event)
        {
@@ -220,7 +240,8 @@
               fichier: '',
               date_livraison: '',
               date_approbation: '',
-              observation: ''
+              observation: '',
+              id_contrat_bureau_etude: ''
             };
         
             vm.allappel_offre.push(items);
@@ -266,6 +287,7 @@
             item.date_livraison   = currentItemAppel_offre.date_livraison ;
             item.date_approbation   = currentItemAppel_offre.date_approbation ;
             item.observation   = currentItemAppel_offre.observation ;
+            item.id_contrat_bureau_etude   = currentItemAppel_offre.id_contrat_bureau_etude ;
           }else
           {
             vm.allappel_offre = vm.allappel_offre.filter(function(obj)
@@ -314,6 +336,7 @@
             item.date_livraison   = new Date(vm.selectedItemAppel_offre.date_livraison) ;
             item.date_approbation   = new Date(vm.selectedItemAppel_offre.date_approbation) ;
             item.observation   = vm.selectedItemAppel_offre.observation ;
+            item.id_contrat_bureau_etude   = vm.selectedItemAppel_offre.contrat_be.id ;
             //vm.showThParcourir = true;
         };
 
@@ -350,7 +373,8 @@
                     ||(mem[0].fichier   != currentItemAppel_offre.fichier )
                     ||(mem[0].date_livraison   != currentItemAppel_offre.date_livraison )
                     ||(mem[0].date_approbation   != currentItemAppel_offre.date_approbation )
-                    ||(mem[0].observation   != currentItemAppel_offre.observation ))                   
+                    ||(mem[0].observation   != currentItemAppel_offre.observation )                    
+                    ||(mem[0].id_contrat_bureau_etude   != currentItemAppel_offre.contrat_be.id ))                   
                       { 
                          insert_in_baseAppel_offre(item,suppression);
                       }
@@ -387,13 +411,17 @@
                     date_livraison: convertionDate(new Date(appel_offre.date_livraison)),
                     date_approbation: convertionDate(new Date(appel_offre.date_approbation)),
                     observation: appel_offre.observation,
-                    id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                    id_contrat_bureau_etude: appel_offre.id_contrat_bureau_etude,
                     validation:0               
                 });
                 console.log(datas);
                 //factory
             apiFactory.add("appel_offre/index",datas, config).success(function (data)
-            {   
+            {  
+              var contr= vm.allcontrat_bureau_etude.filter(function(obj)
+                {
+                    return obj.id == appel_offre.id_contrat_bureau_etude;
+                }); 
 
               if (NouvelItemAppel_offre == false)
               {
@@ -409,7 +437,7 @@
                           if(file)
                           { 
 
-                            var name_file = vm.selectedItemContrat_bureau_etude.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                            var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                             var fd = new FormData();
                             fd.append('file', file);
@@ -436,7 +464,7 @@
                                                       date_livraison: convertionDate(new Date(appel_offre.date_livraison)),
                                                       date_approbation: convertionDate(new Date(appel_offre.date_approbation)),
                                                       observation: appel_offre.observation,
-                                                      id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                                      id_contrat_bureau_etude: appel_offre.id_contrat_bureau_etude,
                                                       validation:0
                                         });
                                       apiFactory.add("appel_offre/index",datas, config).success(function (data)
@@ -460,7 +488,7 @@
                                         date_livraison: convertionDate(new Date(appel_offre.date_livraison)),
                                         date_approbation: convertionDate(new Date(appel_offre.date_approbation)),
                                         observation: appel_offre.observation,
-                                        id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                        id_contrat_bureau_etude: appel_offre.id_contrat_bureau_etude,
                                         validation:0               
                                     });
                                   apiFactory.add("appel_offre/index",datas, config).success(function (data)
@@ -478,7 +506,7 @@
                             });
                           }
 
-
+                        vm.selectedItemAppel_offre.contrat_be = contr[0];
                         vm.selectedItemAppel_offre.$selected  = false;
                         vm.selectedItemAppel_offre.$edit      = false;
                         vm.selectedItemAppel_offre ={};
@@ -524,7 +552,7 @@
                     if(file)
                     { 
 
-                      var name_file = vm.selectedItemContrat_bureau_etude.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                      var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                       var fd = new FormData();
                       fd.append('file', file);
@@ -551,7 +579,7 @@
                                                 date_livraison: convertionDate(new Date(appel_offre.date_livraison)),
                                                 date_approbation: convertionDate(new Date(appel_offre.date_approbation)),
                                                 observation: appel_offre.observation,
-                                                id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                                id_contrat_bureau_etude: appel_offre.id_contrat_bureau_etude,
                                                 validation:0
                                   });
                                 apiFactory.add("appel_offre/index",datas, config).success(function (data)
@@ -575,7 +603,7 @@
                                   date_livraison: convertionDate(new Date(appel_offre.date_livraison)),
                                   date_approbation: convertionDate(new Date(appel_offre.date_approbation)),
                                   observation: appel_offre.observation,
-                                  id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                  id_contrat_bureau_etude: appel_offre.id_contrat_bureau_etude,
                                   validation:0               
                               });
                             apiFactory.add("appel_offre/index",datas, config).success(function (data)
@@ -593,6 +621,7 @@
                       });
                     }
               }
+              appel_offre.contrat_be = contr[0];
               appel_offre.$selected = false;
               appel_offre.$edit = false;
               vm.selectedItemAppel_offre = {};
@@ -636,7 +665,7 @@
                     date_livraison: convertionDate(new Date(appel_offre.date_livraison)),
                     date_approbation: convertionDate(new Date(appel_offre.date_approbation)),
                     observation: appel_offre.observation,
-                    id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                    id_contrat_bureau_etude: appel_offre.contrat_be.id,
                     validation:1               
                 });
                 console.log(datas);

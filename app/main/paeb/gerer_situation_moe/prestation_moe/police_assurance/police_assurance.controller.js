@@ -90,7 +90,7 @@
 
 /**********************************debut bureau etude****************************************/
 //col table
-        vm.bureau_etude_column = [
+       /* vm.bureau_etude_column = [
         {titre:"Nom"},
         {titre:"Nif"},
         {titre:"Stat"},
@@ -135,13 +135,13 @@
                 item.$selected = false;
              });
              vm.selectedItemBureau_etude.$selected = true;
-        });
+        });*/
  
 /**********************************fin bureau etude****************************************/ 
 
 /**********************************contrat prestataire****************************************/
 
-       vm.contrat_bureau_etude_column = [
+   /*    vm.contrat_bureau_etude_column = [
         {titre:"Bureau d'etude"
         },
         {titre:"Intitule"
@@ -188,13 +188,33 @@
                 item.$selected = false;
              });
              vm.selectedItemContrat_bureau_etude.$selected = true;
-        });        
+        }); */       
 
 /**********************************fin contrat prestataire****************************************/
 
 
 /**********************************fin justificatif attachement****************************************/
+      apiFactory.getAll("contrat_be/index").then(function(result)
+      {
+          vm.allcontrat_bureau_etude = result.data.response; 
+          console.log(vm.allcontrat_bureau_etude);
+      });
 
+      apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpoliceByvalidation','validation',0).then(function(result)
+      {
+        vm.allpolice_assurance = result.data.response;
+        
+        if (vm.allpolice_assurance.length>0)
+        {
+            vm.showbuttonNouvAppel = false;
+        }
+                  
+      });
+      apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpoliceByvalidation','validation',1).then(function(result)
+      {
+        vm.allpolice_assurance_valide = result.data.response;
+                  
+      });
 
 
         $scope.uploadFile = function(event)
@@ -219,7 +239,8 @@
               description: '',
               fichier: '',
               date_expiration: '',
-              observation: ''
+              observation: '',
+              id_contrat_bureau_etude: ''
             };
         
             vm.allpolice_assurance.push(items);
@@ -264,6 +285,7 @@
             item.fichier   = currentItemPolice_assurance.fichier ;
             item.date_expiration   = currentItemPolice_assurance.date_expiration ;
             item.observation   = currentItemPolice_assurance.observation ;
+            item.id_contrat_bureau_etude   = currentItemPolice_assurance.id_contrat_bureau_etude ;
           }else
           {
             vm.allpolice_assurance = vm.allpolice_assurance.filter(function(obj)
@@ -311,6 +333,7 @@
             item.fichier   = vm.selectedItemPolice_assurance.fichier ;
             item.date_expiration   = new Date(vm.selectedItemPolice_assurance.date_expiration) ;
             item.observation   = vm.selectedItemPolice_assurance.observation ;
+            item.id_contrat_bureau_etude   = vm.selectedItemPolice_assurance.contrat_be.id ;
             //vm.showThParcourir = true;
         };
 
@@ -346,7 +369,8 @@
                    if((mem[0].description   != currentItemPolice_assurance.description )
                     ||(mem[0].fichier   != currentItemPolice_assurance.fichier )
                     ||(mem[0].date_expiration   != currentItemPolice_assurance.date_expiration )
-                    ||(mem[0].observation   != currentItemPolice_assurance.observation ))                   
+                    ||(mem[0].observation   != currentItemPolice_assurance.observation )                    
+                    ||(mem[0].id_contrat_bureau_etude   != currentItemPolice_assurance.contrat_be.id ))                   
                       { 
                          insert_in_basePolice_assurance(item,suppression);
                       }
@@ -382,7 +406,7 @@
                     fichier: police_assurance.fichier,
                     date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
                     observation: police_assurance.observation,
-                    id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                    id_contrat_bureau_etude: police_assurance.id_contrat_bureau_etude,
                     validation:0               
                 });
                 console.log(datas);
@@ -390,6 +414,11 @@
             apiFactory.add("police_assurance/index",datas, config).success(function (data)
             {   
 
+
+              var contr= vm.allcontrat_bureau_etude.filter(function(obj)
+                {
+                    return obj.id == police_assurance.id_contrat_bureau_etude;
+                });
               if (NouvelItemPolice_assurance == false)
               {
                     // Update_paiement or delete: id exclu                 
@@ -404,7 +433,7 @@
                           if(file)
                           { 
 
-                            var name_file = vm.selectedItemContrat_bureau_etude.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                            var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                             var fd = new FormData();
                             fd.append('file', file);
@@ -430,7 +459,7 @@
                                                       fichier: police_assurance.fichier,
                                                       date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
                                                       observation: police_assurance.observation,
-                                                      id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                                      id_contrat_bureau_etude: police_assurance.id_contrat_bureau_etude,
                                                       validation:0
                                         });
                                       apiFactory.add("police_assurance/index",datas, config).success(function (data)
@@ -453,7 +482,7 @@
                                         fichier: police_assurance.fichier,
                                         date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
                                        observation: police_assurance.observation,
-                                        id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                        id_contrat_bureau_etude: police_assurance.id_contrat_bureau_etude,
                                         validation:0               
                                     });
                                   apiFactory.add("police_assurance/index",datas, config).success(function (data)
@@ -471,7 +500,7 @@
                             });
                           }
 
-
+                        vm.selectedItemPolice_assurance.contrat_be = contr[0];
                         vm.selectedItemPolice_assurance.$selected  = false;
                         vm.selectedItemPolice_assurance.$edit      = false;
                         vm.selectedItemPolice_assurance ={};
@@ -517,7 +546,7 @@
                     if(file)
                     { 
 
-                      var name_file = vm.selectedItemContrat_bureau_etude.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                      var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                       var fd = new FormData();
                       fd.append('file', file);
@@ -543,7 +572,7 @@
                                                 fichier: police_assurance.fichier,
                                                 date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
                                                observation: police_assurance.observation,
-                                                id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                                id_contrat_bureau_etude: police_assurance.id_contrat_bureau_etude,
                                                 validation:0
                                   });
                                 apiFactory.add("police_assurance/index",datas, config).success(function (data)
@@ -566,7 +595,7 @@
                                   fichier: police_assurance.fichier,
                                   date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
                                   observation: police_assurance.observation,
-                                  id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                  id_contrat_bureau_etude: police_assurance.id_contrat_bureau_etude,
                                   validation:0               
                               });
                             apiFactory.add("police_assurance/index",datas, config).success(function (data)
@@ -584,6 +613,7 @@
                       });
                     }
               }
+              police_assurance.contrat_be = contr[0];
               police_assurance.$selected = false;
               police_assurance.$edit = false;
               vm.selectedItemPolice_assurance = {};
@@ -626,7 +656,7 @@
                     fichier: police_assurance.fichier,
                     date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
                    observation: police_assurance.observation,
-                    id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                    id_contrat_bureau_etude: police_assurance.contrat_be.id,
                     validation:1               
                 });
                 console.log(datas);

@@ -27,18 +27,12 @@
 
  <!-----debut Bureau etude ------>
 
-            <md-tab>
+            <!--md-tab>
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
                     <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepOne==true">1
                     </span>
-                    <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
-                      <i class="icon-check s16"></i>
-                    </span-->
-                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                        <i class="icon-check s16"></i>
-                    </span-->
                     <span class="ms-form-wizard-step-text">MOE</span>
                 </span>
               </md-tab-label>
@@ -83,20 +77,17 @@
                   </table>
                 </div>
               </md-tab-body>
-            </md-tab>
+            </md-tab-->
     <!-----FIN Bureau etude ------>
 
         <!-----Debut contrat prstataire ------>
-          <md-tab ng-disabled="vm.stepOne==false">
+          <!--md-tab ng-disabled="vm.stepOne==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
                       <i class="icon-check s16"></i>
                     </span>
-                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                        <i class="icon-check s16"></i>
-                    </span-->
                     <span class="ms-form-wizard-step-text">Contrat moe</span>
                 </span>
               </md-tab-label>
@@ -145,14 +136,14 @@
               </div>
 
             </md-tab-body>
-          </md-tab>
+          </md-tab-->
     <!-----FIN contrat moe ------>   
 
     <!-----Debut memoire technique ------>
-          <md-tab ng-disabled="vm.stepTwo==false">
+          <md-tab >
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">I</span>
                     <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
                       <i class="icon-check s16"></i>
                     </span-->
@@ -178,6 +169,11 @@
                 <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                   <thead>
                     <tr>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Contrat</span>
+                        </div>
+                      </th>
                       <th class="secondary-text">
                         <div class="table-header">
                           <span class="column-title">Description</span>
@@ -212,7 +208,21 @@
                   </thead>
                            
                   <tbody>
-                    <tr ng-repeat="memoire_technique in vm.allmemoire_technique"  ng-class="{selected: memoire_technique.$selected}" ng-click="vm.selectionMemoire_technique(memoire_technique)">
+                    <tr ng-repeat="memoire_technique in vm.allmemoire_technique"  ng-class="{selected: memoire_technique.$selected}" ng-click="vm.selectionMemoire_technique(memoire_technique)">           
+                      <td>
+                        <span ng-if="memoire_technique.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Contrat</label>
+                            <md-select ng-model="memoire_technique.id_contrat_bureau_etude"style="overflow: hidden;text-overflow: ellipsis;">
+                              <md-option ng-repeat="contrat_bureau_etude in vm.allcontrat_bureau_etude" value="{{contrat_bureau_etude.id}}">
+                                                                    {{contrat_bureau_etude.ref_contrat}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!memoire_technique.$edit">{{memoire_technique.contrat_be.ref_contrat}}</span>
+                      </td>
                                
                       <td>
                         <span ng-if="memoire_technique.$edit">
@@ -301,10 +311,10 @@
     <!-----FIN memoire technique ------> 
 
     <!-----Debut memoire technique ------>
-          <md-tab ng-disabled="vm.stepTwo==false">
+          <md-tab>
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">4</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">V</span>
                     <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
                       <i class="icon-check s16"></i>
                     </span-->
@@ -389,9 +399,10 @@
 
             </md-tab-body>
           </md-tab>
-    <!-----FIN memoire technique ------>         
+    <!-----FIN memoire technique ------> 
+          </md-tabs>        
         </ms-form-wizard>
-      </md-tabs>                   
+                         
       </div>
     </div>
     <!-- / CONTENT -->

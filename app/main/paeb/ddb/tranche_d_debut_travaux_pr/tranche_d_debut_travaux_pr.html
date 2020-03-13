@@ -1,0 +1,132 @@
+ <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Tranche demande pr</span>
+            </div>
+
+            <div class="title">Tranche demande pr</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Tranche demande pr -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Tranche demande pr</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add tranche demande pr" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout tranche demande pr</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="prestc in ::vm.tranche_d_debut_travaux_pr_column">
+                  <div class="table-header">
+                    <span class="column-title">{{prestc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="tranche_d_debut_travaux_pr in vm.alltranche_d_debut_travaux_pr"  ng-class="{selected: tranche_d_debut_travaux_pr.$selected}" ng-click="vm.selection(tranche_d_debut_travaux_pr)">
+                          
+                <td>
+                  <span ng-if="tranche_d_debut_travaux_pr.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Libelle</label>
+                      <input name="libelle" type="text" ng-model="tranche_d_debut_travaux_pr.libelle"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!tranche_d_debut_travaux_pr.$edit">{{tranche_d_debut_travaux_pr.libelle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="tranche_d_debut_travaux_pr.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Periode</label>
+                      <input name="periode" type="text" ng-model="tranche_d_debut_travaux_pr.periode"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!tranche_d_debut_travaux_pr.$edit">{{tranche_d_debut_travaux_pr.periode}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="tranche_d_debut_travaux_pr.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Pourcentage</label>
+                      <input name="pourcentage" type="text" ng-model="tranche_d_debut_travaux_pr.pourcentage"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!tranche_d_debut_travaux_pr.$edit">{{tranche_d_debut_travaux_pr.pourcentage}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="tranche_d_debut_travaux_pr.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Description</label>
+                      <input name="description" type="text" ng-model="tranche_d_debut_travaux_pr.description"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!tranche_d_debut_travaux_pr.$edit">{{tranche_d_debut_travaux_pr.description}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="tranche_d_debut_travaux_pr.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Code</label>
+                      <input name="code" type="text" ng-model="tranche_d_debut_travaux_pr.code" disabled/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!tranche_d_debut_travaux_pr.$edit">{{tranche_d_debut_travaux_pr.code}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!tranche_d_debut_travaux_pr.$edit" ng-click="vm.modifier(tranche_d_debut_travaux_pr)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!tranche_d_debut_travaux_pr.$edit" ng-click="vm.supprimer(tranche_d_debut_travaux_pr)" title="Supprimer">
+                    <span class="icon-delete" ></span>
+                  </a>
+                            
+                  <a ng-if="tranche_d_debut_travaux_pr.$edit" ng-click="vm.annuler(tranche_d_debut_travaux_pr)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="tranche_d_debut_travaux_pr.$edit && tranche_d_debut_travaux_pr.libelle && tranche_d_debut_travaux_pr.periode && tranche_d_debut_travaux_pr.pourcentage&& tranche_d_debut_travaux_pr.description && tranche_d_debut_travaux_pr.code>''" ng-click="vm.ajout(tranche_d_debut_travaux_pr,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>                   
+      </div>
+      <!-- / tranche_demande_pr -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

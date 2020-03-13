@@ -1,0 +1,1012 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation feffi</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Feffi</span>
+            </div>
+
+            <div class="title">Feffi</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+    <!-----debut contrat ------>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">Contrat</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="ciscT in ::vm.contrat_prestataire_column">
+                          <div class="table-header">
+                            <span class="column-title">{{ciscT.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="contrat_prestataire in vm.allcontrat_prestataire"  ng-class="{selected: contrat_prestataire.$selected}" ng-click="vm.selectionContrat_prestataire(contrat_prestataire)"> 
+
+                        <td>
+                        <span ng-if="contrat_prestataire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Prestataire</label>
+                            <md-select ng-model="contrat_prestataire.id_prestataire"style="overflow: hidden;text-overflow: ellipsis;">
+                              <md-option ng-repeat="prestataire in vm.allprestataire" value="{{prestataire.id}}">
+                                                                    {{prestataire.nom}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.prestataire.nom}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="contrat_prestataire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Descriprtion</label>
+                            <input name="description" type="text" ng-model="contrat_prestataire.description"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.description}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="contrat_prestataire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Numero contrat</label>
+                            <input name="num_contrat" type="text" ng-model="contrat_prestataire.num_contrat"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.num_contrat}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="contrat_prestataire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Cout batiment</label>
+                            <input name="cout_batiment" type="number" ng-model="contrat_prestataire.cout_batiment"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.cout_batiment}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="contrat_prestataire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Cout latrine</label>
+                            <input name="cout_latrine" type="number" ng-model="contrat_prestataire.cout_latrine"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.cout_latrine}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="contrat_prestataire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Cout Mobilier</label>
+                            <input name="cout_mobilier" type="number" ng-model="contrat_prestataire.cout_mobilier"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.cout_mobilier}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="contrat_prestataire.$edit">
+                          <md-datepicker ng-model="contrat_prestataire.date_signature" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!contrat_prestataire.$edit">{{vm.affichageDate(contrat_prestataire.date_signature)}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="contrat_prestataire.$edit">
+                          <md-datepicker ng-model="contrat_prestataire.date_prev_deb_trav" md-placeholder="Date prévisionnel travaux" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!contrat_prestataire.$edit">{{vm.affichageDate(contrat_prestataire.date_prev_deb_trav)}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="contrat_prestataire.$edit">
+                          <md-datepicker ng-model="contrat_prestataire.date_reel_deb_trav" md-placeholder="Date réel travaux" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!contrat_prestataire.$edit">{{vm.affichageDate(contrat_prestataire.date_reel_deb_trav)}}</span>
+                      </td>
+
+                                
+                      <td>
+                        <span ng-if="contrat_prestataire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Delai éxecution</label>
+                            <input name="delai_execution" type="number" ng-model="contrat_prestataire.delai_execution"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.delai_execution}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!contrat_prestataire.$edit" ng-click="vm.modifierContrat_prestataire(contrat_prestataire)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!contrat_prestataire.$edit" ng-click="vm.supprimerContrat_prestataire(contrat_prestataire)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="contrat_prestataire.$edit" ng-click="vm.annulerContrat_prestataire(contrat_prestataire)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="contrat_prestataire.$edit && contrat_prestataire.description && contrat_prestataire.num_contrat && contrat_prestataire.cout_mobilier && contrat_prestataire.cout_latrine && contrat_prestataire.cout_batiment &&  contrat_prestataire.date_signature && contrat_prestataire.id_prestataire>''" ng-click="vm.ajoutContrat_prestataire(contrat_prestataire,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+    <!-----FIN contrat ------>
+
+   <!-----debut batiment construction ------>
+            <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">B</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                  </span>
+                  <span class="ms-form-wizard-step-text">Batiment</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+                <div>
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="ouv in ::vm.batiment_construction_column">
+                          <div class="table-header">
+                            <span class="column-title">{{ouv.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="batiment_construction in vm.allbatiment_construction"  ng-class="{selected: batiment_construction.$selected}" ng-click="vm.selectionBatiment_construction(batiment_construction)">
+
+                        <td>
+                          <span>{{batiment_construction.type_batiment.libelle}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{batiment_construction.nbr_batiment}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{batiment_construction.cout_unitaire}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+              </md-tab-body>
+            </md-tab>
+            <!-----debut ouvrage construction ------>
+
+             <!-----Debut avancement_batiment ------>
+          <md-tab ng-disabled="vm.stepTwo==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">B.1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Avancement batiment</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvancement_batiment()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.avancement_batiment_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="avancement_batiment in vm.allavancement_batiment"  ng-class="{selected: avancement_batiment.$selected}" ng-click="vm.selectionAvancement_batiment(avancement_batiment)">
+                                                       
+                      <td>
+                        <span ng-if="avancement_batiment.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Intitule</label>
+                            <input name="intitule" type="text" ng-model="avancement_batiment.intitule"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_batiment.$edit">{{avancement_batiment.intitule}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="avancement_batiment.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Descriprtion</label>
+                            <input name="description" type="text" ng-model="avancement_batiment.description"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_batiment.$edit">{{avancement_batiment.description}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="avancement_batiment.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Attachement</label>
+                            <md-select ng-model="avancement_batiment.id_attachement_batiment"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changeAttachement_batiment(avancement_batiment)">
+                              <md-option ng-repeat="attachement_batiment in vm.allcurrentattachement_batiment" value="{{attachement_batiment.id}}">
+                                      {{attachement_batiment.ponderation_batiment}}%  {{attachement_batiment.libelle}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_batiment.$edit">{{avancement_batiment.attachement_batiment.ponderation_batiment}}% {{avancement_batiment.attachement_batiment.libelle}}</span>
+                      </td>
+                                
+                      <!--td>
+                        <span ng-if="avancement_batiment.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>ponderation_batiment</label>
+                            <input name="cout_latrine" type="number" ng-model="avancement_batiment.ponderation_batiment" disabled/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_batiment.$edit">{{avancement_batiment.attachement_batiment.ponderation_batiment}}</span>
+                      </td-->
+
+                      <td>
+                        <span ng-if="avancement_batiment.$edit">
+                          <md-datepicker ng-model="avancement_batiment.date" md-placeholder="Date" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!avancement_batiment.$edit">{{vm.affichageDate(avancement_batiment.date)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="avancement_batiment.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Observation</label>
+                            <input name="cout_batiment" type="text" ng-model="avancement_batiment.observation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_batiment.$edit">{{avancement_batiment.observation}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!avancement_batiment.$edit" ng-click="vm.modifierAvancement_batiment(avancement_batiment)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!avancement_batiment.$edit" ng-click="vm.supprimerAvancement_batiment(avancement_batiment)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="avancement_batiment.$edit" ng-click="vm.annulerAvancement_batiment(avancement_batiment)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="avancement_batiment.$edit && avancement_batiment.description && avancement_batiment.intitule && avancement_batiment.id_attachement_batiment && avancement_batiment.date>''" ng-click="vm.ajoutAvancement_batiment(avancement_batiment,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN avancement_batiment ------>
+
+     <!-----Debut avancement_batiment_doc ------>
+          <md-tab ng-disabled="vm.stepThree==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">B.2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Rapport scanné</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvancement_batiment_doc()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="anva_do in ::vm.avancement_batiment_doc_column">
+                          <div class="table-header">
+                            <span class="column-title">{{anva_do.titre}}</span>
+                          </div>
+                        </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="avancement_batiment_doc in vm.allavancement_batiment_doc"  ng-class="{selected: avancement_batiment_doc.$selected}" ng-click="vm.selectionAvancement_batiment_doc(avancement_batiment_doc)">
+                               
+                      <td>
+                        <span ng-if="avancement_batiment_doc.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Description</label>
+                            <input name="description" type="text" ng-model="avancement_batiment_doc.description"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_batiment_doc.$edit">{{avancement_batiment_doc.description}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="avancement_batiment_doc.$edit" style="display: inline-block;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                            <input name="fichier" type="text" ng-model="avancement_batiment_doc.fichier" disabled/>
+                          </md-input-container>   
+                        </span>
+                        <span ng-if="avancement_batiment_doc.$edit" style="display: inline-block;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                          <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFileAvancement_batiment_doc"  ng-model="fichier" id="fileid"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_batiment_doc.$edit">{{avancement_batiment_doc.fichier}}</span>
+                      </td>
+                      <!--td ng-if="vm.showThParcourir">
+                        <span style="display: inline-block;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                          <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFileAvancement_batiment_doc"  ng-model="fichier" id="fileid"/>
+                          </md-input-container>   
+                        </span>
+                      </td-->                       
+                      <td>
+                        <a ng-if="!avancement_batiment_doc.$edit" ng-click="vm.modifierAvancement_batiment_doc(avancement_batiment_doc)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!avancement_batiment_doc.$edit" ng-click="vm.supprimerAvancement_batiment_doc(avancement_batiment_doc)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="avancement_batiment_doc.$edit" ng-click="vm.annulerAvancement_batiment_doc(avancement_batiment_doc)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="avancement_batiment_doc.$edit && avancement_batiment_doc.description && avancement_batiment_doc.fichier>''" ng-click="vm.ajoutAvancement_batiment_doc(avancement_batiment_doc,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN davancement_batiment_doc------> 
+
+            <!-----debut detail latrine ------>
+            <md-tab ng-disabled="vm.stepTwo==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFive==false">L</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFive==true">
+                      <i class="icon-check s16"></i>
+                  </span>
+                  <span class="ms-form-wizard-step-text">latrine</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+
+                <div>
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="lat in ::vm.latrine_construction_column">
+                          <div class="table-header">
+                            <span class="column-title">{{lat.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="latrine_construction in vm.alllatrine_construction"  ng-class="{selected: latrine_construction.$selected}" ng-click="vm.selectionLatrine_construction(latrine_construction)">
+
+                        <td>
+                          <span>{{latrine_construction.type_latrine.libelle}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{latrine_construction.nbr_latrine}}</span>
+                        </td>
+                        <td>
+                          <span>{{latrine_construction.cout_unitaire}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+            <!-----debut detail latrine ------>
+
+
+             <!-----Debut avancement_latrine ------>
+          <md-tab ng-disabled="vm.stepFive==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepSixe==false">L.1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepSixe==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Avancement latrine</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvancement_latrine()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.avancement_latrine_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="avancement_latrine in vm.allavancement_latrine"  ng-class="{selected: avancement_latrine.$selected}" ng-click="vm.selectionAvancement_latrine(avancement_latrine)">
+                                                       
+                      <td>
+                        <span ng-if="avancement_latrine.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Intitule</label>
+                            <input name="intitule" type="text" ng-model="avancement_latrine.intitule"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_latrine.$edit">{{avancement_latrine.intitule}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="avancement_latrine.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Descriprtion</label>
+                            <input name="description" type="text" ng-model="avancement_latrine.description"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_latrine.$edit">{{avancement_latrine.description}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="avancement_latrine.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Attachement</label>
+                            <md-select ng-model="avancement_latrine.id_attachement_latrine"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changeAttachement_latrine(avancement_latrine)">
+                              <md-option ng-repeat="attachement_latrine in vm.allcurrentattachement_latrine" value="{{attachement_latrine.id}}">
+                                                                    {{attachement_latrine.libelle}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_latrine.$edit">{{avancement_latrine.attachement_latrine.libelle}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="avancement_latrine.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>ponderation_latrine</label>
+                            <input name="cout_latrine" type="number" ng-model="avancement_latrine.ponderation_latrine"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_latrine.$edit">{{avancement_latrine.attachement_latrine.ponderation_latrine}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="avancement_latrine.$edit">
+                          <md-datepicker ng-model="avancement_latrine.date" md-placeholder="Date" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!avancement_latrine.$edit">{{vm.affichageDate(avancement_latrine.date)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="avancement_latrine.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Observation</label>
+                            <input name="cout_latrine" type="text" ng-model="avancement_latrine.observation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_latrine.$edit">{{avancement_latrine.observation}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!avancement_latrine.$edit" ng-click="vm.modifierAvancement_latrine(avancement_latrine)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!avancement_latrine.$edit" ng-click="vm.supprimerAvancement_latrine(avancement_latrine)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="avancement_latrine.$edit" ng-click="vm.annulerAvancement_latrine(avancement_latrine)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="avancement_latrine.$edit && avancement_latrine.description && avancement_latrine.intitule && avancement_latrine.id_attachement_latrine && avancement_latrine.date>''" ng-click="vm.ajoutAvancement_latrine(avancement_latrine,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN avancement_batiment ------>
+
+         <!-----Debut avancement_latrine_doc ------>
+          <md-tab ng-disabled="vm.stepSixe==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepSeven==false">F.2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepSeven==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Rapport scanné</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvancement_latrine_doc()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="lat_do in ::vm.avancement_latrine_doc_column">
+                          <div class="table-header">
+                            <span class="column-title">{{lat_do.titre}}</span>
+                          </div>
+                        </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="avancement_latrine_doc in vm.allavancement_latrine_doc"  ng-class="{selected: avancement_latrine_doc.$selected}" ng-click="vm.selectionAvancement_latrine_doc(avancement_latrine_doc)">
+                               
+                      <td>
+                        <span ng-if="avancement_latrine_doc.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Description</label>
+                            <input name="description" type="text" ng-model="avancement_latrine_doc.description"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_latrine_doc.$edit">{{avancement_latrine_doc.description}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="avancement_latrine_doc.$edit" style="display: inline-block;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                            <input name="fichier" type="text" ng-model="avancement_latrine_doc.fichier" disabled/>
+                          </md-input-container>   
+                        </span>
+                        <span ng-if="avancement_latrine_doc.$edit" style="display: inline-block;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                          <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFileAvancement_latrine_doc"  ng-model="fichier" id="fileid"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_latrine_doc.$edit">{{avancement_latrine_doc.fichier}}</span>
+                      </td>
+                      <!--td ng-if="vm.showThParcourir">
+                        <span>
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                          <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFileAvancement_latrine_doc"  ng-model="fichier" id="fileid"/>
+                          </md-input-container>   
+                        </span>
+                      </td-->                       
+                      <td>
+                        <a ng-if="!avancement_latrine_doc.$edit" ng-click="vm.modifierAvancement_latrine_doc(avancement_latrine_doc)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!avancement_latrine_doc.$edit" ng-click="vm.supprimerAvancement_latrine_doc(avancement_latrine_doc)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="avancement_latrine_doc.$edit" ng-click="vm.annulerAvancement_latrine_doc(avancement_latrine_doc)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="avancement_latrine_doc.$edit && avancement_latrine_doc.description && avancement_latrine_doc.fichier>''" ng-click="vm.ajoutAvancement_latrine_doc(avancement_latrine_doc,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN davancement_batiment_doc------>
+
+             <!-----debut detail mobilier ------>
+            <md-tab ng-disabled="vm.stepTwo==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepEight==false">M</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepEight==true">
+                      <i class="icon-check s16"></i>
+                  </span>
+                  <span class="ms-form-wizard-step-text">Mobilier</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+
+                <div>
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="lat in ::vm.mobilier_construction_column">
+                          <div class="table-header">
+                            <span class="column-title">{{lat.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="mobilier_construction in vm.allmobilier_construction"  ng-class="{selected: mobilier_construction.$selected}" ng-click="vm.selectionMobilier_construction(mobilier_construction)">
+
+                        <td>
+                          <span>{{mobilier_construction.type_mobilier.libelle}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{mobilier_construction.nbr_mobilier}}</span>
+                        </td>
+                        <td>
+                          <span>{{mobilier_construction.cout_unitaire}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+            <!-----debut detail mobilier ------>
+
+                       <!-----Debut avancement_mobilier ------>
+          <md-tab ng-disabled="vm.stepEight==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepNine==false">M.1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepNine==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Avancement mobilier</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvancement_mobilier()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.avancement_mobilier_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="avancement_mobilier in vm.allavancement_mobilier"  ng-class="{selected: avancement_mobilier.$selected}" ng-click="vm.selectionAvancement_mobilier(avancement_mobilier)">
+                                                       
+                      <td>
+                        <span ng-if="avancement_mobilier.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Intitule</label>
+                            <input name="intitule" type="text" ng-model="avancement_mobilier.intitule"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_mobilier.$edit">{{avancement_mobilier.intitule}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="avancement_mobilier.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Descriprtion</label>
+                            <input name="description" type="text" ng-model="avancement_mobilier.description"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_mobilier.$edit">{{avancement_mobilier.description}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="avancement_mobilier.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Attachement</label>
+                            <md-select ng-model="avancement_mobilier.id_attachement_mobilier"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changeAttachement_mobilier(avancement_mobilier)">
+                              <md-option ng-repeat="attachement_mobilier in vm.allcurrentattachement_mobilier" value="{{attachement_mobilier.id}}">
+                                                                    {{attachement_mobilier.libelle}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_mobilier.$edit">{{avancement_mobilier.attachement_mobilier.libelle}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="avancement_mobilier.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>ponderation_mobilier</label>
+                            <input name="cout_mobilier" type="number" ng-model="avancement_mobilier.ponderation_mobilier"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_mobilier.$edit">{{avancement_mobilier.attachement_mobilier.ponderation_mobilier}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="avancement_mobilier.$edit">
+                          <md-datepicker ng-model="avancement_mobilier.date" md-placeholder="Date" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!avancement_mobilier.$edit">{{vm.affichageDate(avancement_mobilier.date)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="avancement_mobilier.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Observation</label>
+                            <input name="cout_mobilier" type="text" ng-model="avancement_mobilier.observation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_mobilier.$edit">{{avancement_mobilier.observation}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!avancement_mobilier.$edit" ng-click="vm.modifierAvancement_mobilier(avancement_mobilier)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!avancement_mobilier.$edit" ng-click="vm.supprimerAvancement_mobilier(avancement_mobilier)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="avancement_mobilier.$edit" ng-click="vm.annulerAvancement_mobilier(avancement_mobilier)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="avancement_mobilier.$edit && avancement_mobilier.description && avancement_mobilier.intitule && avancement_mobilier.id_attachement_mobilier && avancement_mobilier.date>''" ng-click="vm.ajoutAvancement_mobilier(avancement_mobilier,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN avancement_batiment ------>
+
+         <!-----Debut avancement_mobilier_doc ------>
+          <md-tab ng-disabled="vm.stepNine==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTen==false">F</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTen==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">Rapport scanné</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvancement_mobilier_doc()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="anva_do in ::vm.avancement_mobilier_doc_column">
+                          <div class="table-header">
+                            <span class="column-title">{{anva_do.titre}}</span>
+                          </div>
+                        </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="avancement_mobilier_doc in vm.allavancement_mobilier_doc"  ng-class="{selected: avancement_mobilier_doc.$selected}" ng-click="vm.selectionAvancement_mobilier_doc(avancement_mobilier_doc)">
+                               
+                      <td>
+                        <span ng-if="avancement_mobilier_doc.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Description</label>
+                            <input name="description" type="text" ng-model="avancement_mobilier_doc.description"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_mobilier_doc.$edit">{{avancement_mobilier_doc.description}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="avancement_mobilier_doc.$edit" style="display: inline-block;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                            <input name="fichier" type="text" ng-model="avancement_mobilier_doc.fichier" disabled/>
+                          </md-input-container>   
+                        </span>
+                        <span ng-if="avancement_mobilier_doc.$edit" style="display: inline-block;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <!--label>Fichier</label-->
+                          <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFileAvancement_mobilier_doc"  ng-model="fichier" id="fileid"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avancement_mobilier_doc.$edit">{{avancement_mobilier_doc.fichier}}</span>
+                      </td>
+                      <!--td ng-if="vm.showThParcourir">
+                        <span ng-if="avancement_mobilier_doc.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                          <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFileAvancement_mobilier_doc"  ng-model="fichier" id="fileid"/>
+                          </md-input-container>   
+                        </span>
+                      </td-->                       
+                      <td>
+                        <a ng-if="!avancement_mobilier_doc.$edit" ng-click="vm.modifierAvancement_mobilier_doc(avancement_mobilier_doc)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!avancement_mobilier_doc.$edit" ng-click="vm.supprimerAvancement_mobilier_doc(avancement_mobilier_doc)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="avancement_mobilier_doc.$edit" ng-click="vm.annulerAvancement_mobilier_doc(avancement_mobilier_doc)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="avancement_mobilier_doc.$edit && avancement_mobilier_doc.description && avancement_mobilier_doc.fichier>''" ng-click="vm.ajoutAvancement_mobilier_doc(avancement_mobilier_doc,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN davancement_batiment_doc------>
+          </md-tabs>
+        </ms-form-wizard>
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

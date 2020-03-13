@@ -442,7 +442,7 @@
             item.$selected = true;            
             item.nom      = vm.selectedItemMembre.nom ;
             item.prenom = vm.selectedItemMembre.prenom;
-            item.sexe  = parseInt(vm.selectedItemMembre.sexe);
+            item.sexe  = vm.selectedItemMembre.sexe;
             item.age      =parseInt(vm.selectedItemMembre.age)  ;
             item.occupation = vm.selectedItemMembre.occupation; 
         };

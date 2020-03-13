@@ -67,6 +67,8 @@
         var NouvelItemDemande_batiment_moe=false;
         var currentItemDemande_batiment_moe;
         vm.selectedItemDemande_batiment_moe = {};
+        vm.alldemande_batiment_moe_invalide = [];
+
         vm.alldemande_batiment_moe = [];
 
         vm.ajoutJustificatif_batiment_moe = ajoutJustificatif_batiment_moe;
@@ -83,6 +85,7 @@
 
         vm.alltranche_d_debut_travaux_moe = [];
         vm.alldemande_debut_travaux_moe = [];
+       // vm.alldemande_bat = [];
 
         vm.stepOne = false;
         vm.stepTwo = false;
@@ -124,6 +127,7 @@
             vm.allcontrat_bureau_etude = result.data.response; 
             console.log(vm.allcontrat_bureau_etude);
         });
+
 
         //fonction selection item entete convention cisco/feffi
         vm.selectionContrat_bureau_etude = function (item)
@@ -181,10 +185,20 @@
             if (vm.selectedItemBatiment_construction.id!=0)
             {  
 
-              apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index",'menu','getdemandeInvalideBybatiment','id_batiment_construction',item.id).then(function(result)
+             /* apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index",'menu','getdemandeInvalideBybatiment','id_batiment_construction',item.id).then(function(result)
               {
+                  vm.alldemande_batiment_moe_invalide = result.data.response;
+              }); */
+
+              apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index",'menu','getalldemandeBybatiment','id_batiment_construction',item.id).then(function(result)
+              {
+                  vm.alldemande_batiment_moe_invalide = result.data.response.filter(function(obj)
+                  {
+                      return obj.validation == 0;
+                  });
+
                   vm.alldemande_batiment_moe = result.data.response;
-              });           
+              });          
               vm.stepTwo = true;
               vm.stepThree = false;
               vm.stepFor = false;
@@ -249,101 +263,96 @@
 
         //Masque de saisi ajout
         vm.ajouterDemande_batiment_moe = function ()
-        {
+        { 
+          var items = {
+                        $edit: true,
+                        $selected: true,
+                        id: '0',         
+                        objet: '',
+                        description: '',
+                        ref_facture: '',
+                        tranche: '',
+                        montant: '',
+                        cumul: '',
+                        anterieur: '',
+                        periode: '',
+                        pourcentage:'',
+                        reste:'',
+                        date: ''
+                      };
+
+          //var validation_derndemane_bat=0;
           apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index",'menu','getalldemandeByContrat','id_contrat_bureau_etude',vm.selectedItemContrat_bureau_etude.id).then(function(result)
           {
-            vm.alldemande_debut_travaux_moe = result.data.response;
-
-            if(vm.alldemande_batiment_moe.length>0)
-          {
-            var last_id_demande = Math.max.apply(Math, vm.alldemande_batiment_moe.map(function(o)
-            { 
-              return o.id;
-            }));
-
-            vm.dernierdemande = vm.alldemande_batiment_moe.filter(function(obj)
-            {
-                return obj.id == last_id_demande;
-            });
-            var numcode=vm.dernierdemande[0].tranche.code.split(' ')[1];
-
-            vm.allcurenttranche_demande_batiment_moe = vm.alltranche_demande_batiment_moe.filter(function(obj)
-            {
-                return obj.code == 'tranche '+(parseInt(numcode)+1);
-            });
-
-          }
-          else
-          {
-            vm.allcurenttranche_demande_batiment_moe = vm.alltranche_demande_batiment_moe.filter(function(obj)
-            {
-                return obj.code == 'tranche 1';
-            });
-            vm.dernierdemande = [];
-          }
-           console.log(vm.alldemande_debut_travaux_moe.length);
-           console.log(vm.alltranche_d_debut_travaux_moe.length);
-          if (vm.alldemande_debut_travaux_moe.length==vm.alltranche_d_debut_travaux_moe.length)
-          {
-              var last_id_demande_debut = Math.max.apply(Math, vm.alldemande_debut_travaux_moe.map(function(o)
-              { 
-                return o.id;
-              }));
-
-              var dernierdemande_debut = vm.alldemande_debut_travaux_moe.filter(function(obj)
+              vm.alldemande_debut_travaux_moe = result.data.response.filter(function(obj)
               {
-                  return obj.id == last_id_demande_debut;
+                  return obj.validation == 3;
               });
-              if (dernierdemande_debut[0].validation==3)
-              {
-                  if (NouvelItemDemande_batiment_moe == false)
-                  {
-                    var items = {
-                      $edit: true,
-                      $selected: true,
-                      id: '0',         
-                      objet: '',
-                      description: '',
-                      ref_facture: '',
-                      tranche: '',
-                      montant: '',
-                      cumul: '',
-                      anterieur: '',
-                      periode: '',
-                      pourcentage:'',
-                      reste:'',
-                      date: ''
-                    };         
-                    vm.alldemande_batiment_moe.push(items);
-                    vm.alldemande_batiment_moe.forEach(function(mem)
-                    {
-                      if(mem.$selected==true)
-                      {
-                        vm.selectedItemDemande_batiment_moe = mem;
-                      }
-                    });
 
-                    NouvelItemDemande_batiment_moe = true ;
-                  }else
+              if (vm.alldemande_debut_travaux_moe.length==vm.alltranche_d_debut_travaux_moe.length)
+              {
+                  if(vm.alldemande_batiment_moe.length>0)
                   {
-                    vm.showAlert('Ajout demande batiment','Un formulaire d\'ajout est déjà ouvert!!!');
+                      var last_id_demande = Math.max.apply(Math, vm.alldemande_batiment_moe.map(function(o){ return o.id;}));
+                      vm.dernierdemande = vm.alldemande_batiment_moe.filter(function(obj){return obj.id == last_id_demande;});
+                      var numcode=vm.dernierdemande[0].tranche.code.split(' ')[1];
+
+                      if (vm.dernierdemande[0].validation==3)
+                      {
+                          if (NouvelItemDemande_batiment_moe == false)
+                          {
+                              vm.alldemande_batiment_moe_invalide.push(items);                        
+                              vm.alldemande_batiment_moe_invalide.forEach(function(mem)
+                              {
+                                  if(mem.$selected==true)
+                                  {
+                                    vm.selectedItemDemande_batiment_moe = mem;
+                                  }
+                              });
+
+                              NouvelItemDemande_batiment_moe = true ;
+                          }                    
+                          else
+                          {
+                              vm.showAlert('Ajout demande batiment','Un formulaire d\'ajout est déjà ouvert!!!');
+                          }
+
+                          vm.allcurenttranche_demande_batiment_moe = vm.alltranche_demande_batiment_moe.filter(function(obj){ return obj.code == 'tranche '+(parseInt(numcode)+1);});
+                      } 
+                      else
+                      {
+                          vm.showAlert('Ajout demande batiment','Dernier demande en-cours!!!');
+                      }
+                  }
+                  else
+                  { 
+                      if (NouvelItemDemande_batiment_moe == false)
+                      {                              
+                          vm.alldemande_batiment_moe_invalide.push(items);                        
+                          vm.alldemande_batiment_moe_invalide.forEach(function(mem)
+                          {
+                              if(mem.$selected==true)
+                              {
+                                  vm.selectedItemDemande_batiment_moe = mem;
+                              }
+                          });
+
+                          NouvelItemDemande_batiment_moe = true ;
+                      }                    
+                      else
+                      {
+                          vm.showAlert('Ajout demande batiment','Un formulaire d\'ajout est déjà ouvert!!!');
+                      }
+
+                      vm.allcurenttranche_demande_batiment_moe = vm.alltranche_demande_batiment_moe.filter(function(obj){return obj.code == 'tranche 1';});
+                    //vm.dernierdemande = [];
                   }
               }
               else
               {
-                vm.showAlert('Ajout demande batiment','La dernière demande n\'est pas encore valide');
+                vm.showAlert('Ajout demande batiment','La demande avant travaux incomplète ou en-cours de validation');
               }
-
-          }
-          else
-          {
-            vm.showAlert('Ajout demande batiment','Ile faut remplir les demandes avant le l\'execution travaux');
-          }
-          });
-
-          
-                
-                      
+          });         
         };
 
         //fonction ajout dans bdd
@@ -379,7 +388,7 @@
             item.date  = currentItemDemande_batiment_moe.date;
           }else
           {
-            vm.alldemande_batiment_moe = vm.alldemande_batiment_moe.filter(function(obj)
+            vm.alldemande_batiment_moe_invalide = vm.alldemande_batiment_moe_invalide.filter(function(obj)
             {
                 return obj.id !== vm.selectedItemDemande_batiment_moe.id;
             });
@@ -423,8 +432,8 @@
         };
         $scope.$watch('vm.selectedItemDemande_batiment_moe', function()
         {
-             if (!vm.alldemande_batiment_moe) return;
-             vm.alldemande_batiment_moe.forEach(function(item)
+             if (!vm.alldemande_batiment_moe_invalide) return;
+             vm.alldemande_batiment_moe_invalide.forEach(function(item)
              {
                 item.$selected = false;
              });
@@ -437,7 +446,7 @@
             NouvelItemDemande_batiment_moe = false ;
             vm.selectedItemDemande_batiment_moe = item;
             currentItemDemande_batiment_moe = angular.copy(vm.selectedItemDemande_batiment_moe);
-            $scope.vm.alldemande_batiment_moe.forEach(function(mem) {
+            $scope.vm.alldemande_batiment_moe_invalide.forEach(function(mem) {
               mem.$edit = false;
             });
 
@@ -479,7 +488,7 @@
         {          
             if (suppression!=1)
             {
-               var pass = vm.alldemande_batiment_moe.filter(function(obj)
+               var pass = vm.alldemande_batiment_moe_invalide.filter(function(obj)
                 {
                    return obj.id == currentItemDemande_batiment_moe.id;
                 });
@@ -563,7 +572,7 @@
                     }
                     else 
                     {    
-                      vm.alldemande_batiment_moe = vm.alldemande_batiment_moe.filter(function(obj)
+                      vm.alldemande_batiment_moe_invalide = vm.alldemande_batiment_moe_invalide.filter(function(obj)
                       {
                           return obj.id !== vm.selectedItemDemande_batiment_moe.id;
                       });
@@ -595,7 +604,7 @@
           var montant = (parseInt(vm.selectedItemContrat_bureau_etude.montant_contrat) * vm.allcurenttranche_demande_batiment_moe[0].pourcentage)/100;
           var cumul = montant;
 
-          if (vm.alldemande_batiment_moe.length>1)
+          if (vm.alldemande_batiment_moe_invalide.length>1)
           {                 
               anterieur = vm.dernierdemande[0].montant;           
               cumul = montant + parseInt(vm.dernierdemande[0].cumul);

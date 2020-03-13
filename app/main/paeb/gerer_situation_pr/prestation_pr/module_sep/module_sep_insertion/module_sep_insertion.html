@@ -1,0 +1,428 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation feffi</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Feffi</span>
+            </div>
+
+            <div class="title">Feffi</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+     <!-----Debut module_sep ------>
+          <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Module sep</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_sep()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPassation">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.module_sep_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="module_sep in vm.allmodule_sep"  ng-class="{selected: module_sep.$selected}" ng-click="vm.selectionModule_sep(module_sep)">
+                      <td>
+                      <span ng-if="module_sep.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Contrat</label>
+                          <md-select ng-model="module_sep.id_contrat_partenaire_relai"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(module_sep)">
+                            <md-option ng-repeat="contrat_partenaire_relai in vm.allcontrat_partenaire_relai" value="{{contrat_partenaire_relai.id}}">
+                                                                        {{contrat_partenaire_relai.ref_contrat}}
+                            </md-option>
+                          </md-select>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!module_sep.$edit">{{module_sep.contrat_partenaire_relai.ref_contrat}}</span>
+                    </td>
+                      <td>
+                        <span ng-if="module_sep.$edit">
+                          <md-datepicker ng-model="module_sep.date_debut_previ_form" md-placeholder="Date de debut prévisionnelle" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!module_sep.$edit">{{vm.affichageDate(module_sep.date_debut_previ_form)}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="module_sep.$edit">
+                          <md-datepicker ng-model="module_sep.date_fin_previ_form" md-placeholder="Date de fin prévisionnelle" md-max-date="vm.date_now" md-min-date="module_sep.date_debut_previ_form" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!module_sep.$edit">{{vm.affichageDate(module_sep.date_fin_previ_form)}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="module_sep.$edit">
+                          <md-datepicker ng-model="module_sep.date_previ_resti" md-placeholder="Date prévisionnelle de restitution" md-max-date="vm.date_now" md-min-date="module_sep.date_debut_previ_form" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!module_sep.$edit">{{vm.affichageDate(module_sep.date_previ_resti)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_sep.$edit">
+                          <md-datepicker ng-model="module_sep.date_debut_reel_form" md-placeholder="Date de debut réelle" md-min-date="module_sep.date_previ_resti" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>   
+                        </span>
+                                  
+                        <span ng-if="!module_sep.$edit">{{vm.affichageDate(module_sep.date_debut_reel_form)}}</span>
+                      </td>
+                      <td>
+                        <span ng-if="module_sep.$edit">
+                          <md-datepicker ng-model="module_sep.date_fin_reel_form" md-placeholder="Date de fin réelle" md-min-date="module_sep.date_debut_reel_form" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!module_sep.$edit">{{vm.affichageDate(module_sep.date_fin_reel_form)}}</span>
+                      </td>
+                      <td>
+                        <span ng-if="module_sep.$edit">
+                          <md-datepicker ng-model="module_sep.date_reel_resti" md-placeholder="Date réelle de restitution" md-min-date="module_sep.date_previ_resti" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!module_sep.$edit">{{vm.affichageDate(module_sep.date_reel_resti)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_sep.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nombre previsionnel participant</label>
+                            <input name="nbr_previ_parti" type="number" ng-model="module_sep.nbr_previ_parti"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!module_sep.$edit">{{module_sep.nbr_previ_parti}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_sep.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nombre participant</label>
+                            <input name="nbr_parti" type="number" ng-model="module_sep.nbr_parti" disabled />
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!module_sep.$edit">{{module_sep.nbr_parti}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_sep.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nombre previsionnel femme participant</label>
+                            <input name="nbr_previ_fem_parti" type="number" ng-model="module_sep.nbr_previ_fem_parti"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!module_sep.$edit">{{module_sep.nbr_previ_fem_parti}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_sep.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nombre réel femme participant</label>
+                            <input name="nbr_reel_fem_parti" type="number" ng-model="module_sep.nbr_reel_fem_parti" disabled />
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!module_sep.$edit">{{module_sep.nbr_reel_fem_parti}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_sep.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Lieu formation</label>
+                            <input name="lieu_formation" type="text" ng-model="module_sep.lieu_formation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!module_sep.$edit">{{module_sep.lieu_formation}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_sep.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Observation</label>
+                            <input name="observation" type="text" ng-model="module_sep.observation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!module_sep.$edit">{{module_sep.observation}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!module_sep.$edit" ng-click="vm.modifierModule_sep(module_sep)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!module_sep.$edit" ng-click="vm.supprimerModule_sep(module_sep)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="module_sep.$edit" ng-click="vm.annulerModule_sep(module_sep)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="module_sep.$edit && module_sep.date_debut_previ_form && module_sep.date_fin_previ_form && module_sep.date_previ_resti && module_sep.date_debut_reel_form && module_sep.nbr_previ_parti && module_sep.date_fin_reel_form && module_sep.date_reel_resti && module_sep.nbr_previ_fem_parti && module_sep.lieu_formation && module_sep.observation >''" ng-click="vm.ajoutModule_sep(module_sep,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN module_sep ------>
+
+     <!-----Debut participant_sep ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">P</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">Participant</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_sep()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.participant_sep_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="participant_sep in vm.allparticipant_sep"  ng-class="{selected: participant_sep.$selected}" ng-click="vm.selectionParticipant_sep(participant_sep)">           
+                      <td>
+                        <span ng-if="participant_sep.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nom</label>
+                            <input name="nom" type="text" ng-model="participant_sep.nom"/>
+                          </md-input-container>
+                        </span>                          
+                        <span ng-if="!participant_sep.$edit">{{participant_sep.nom}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="participant_sep.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Prenom</label>
+                            <input name="prenom" type="text" ng-model="participant_sep.prenom"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!participant_sep.$edit">{{participant_sep.prenom}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="participant_sep.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Sexe</label>
+                            <md-select ng-model="participant_sep.sexe"style="overflow: hidden;text-overflow: ellipsis;">
+                                <md-option value="1">Masculin
+                                </md-option>
+                                <md-option value="2">Femimin
+                                </md-option>
+                              </md-select>
+                          </md-input-container>
+                        </span>                          
+                        <span ng-if="!participant_sep.$edit">{{vm.affichage_sexe(participant_sep.sexe)}}</span>
+                      </td> 
+
+                      <td>
+                        <span ng-if="participant_sep.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Site</label>
+                            <md-select ng-model="participant_sep.id_situation_participant_sep"style="overflow: hidden;text-overflow: ellipsis;">
+                              <md-option ng-repeat="situation_participant_sep in vm.allsituation_participant_sep" value="{{situation_participant_sep.id}}">
+                                                                    {{situation_participant_sep.libelle}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!participant_sep.$edit">{{participant_sep.situation_participant_sep.libelle}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!participant_sep.$edit" ng-click="vm.modifierParticipant_sep(participant_sep)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!participant_sep.$edit" ng-click="vm.supprimerParticipant_sep(participant_sep)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="participant_sep.$edit" ng-click="vm.annulerParticipant_sep(participant_sep)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="participant_sep.$edit && participant_sep.nom && participant_sep.prenom && participant_sep.sexe && participant_sep.id_situation_participant_sep>''" ng-click="vm.ajoutParticipant_sep(participant_sep,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN participant_sep ------>
+        <!-----Debut rapport_sep ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">R</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Rapport sep</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterRapport_sep()" style="width:10%;" ng-show ="vm.showbuttonNouvRapport">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Intitule</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Fichier</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Action</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="rapport_sep in vm.allrapport_sep"  ng-class="{selected: rapport_sep.$selected}" ng-click="vm.selectionRapport_sep(rapport_sep)">
+                               
+                      <td>
+                        <span ng-if="rapport_sep.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Intitule</label>
+                            <input name="intitule" type="text" ng-model="rapport_sep.intitule"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!rapport_sep.$edit">{{rapport_sep.intitule}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="rapport_sep.$edit" style="display: inline-block !important;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                            <input name="fichier" type="text" ng-model="rapport_sep.fichier" disabled/>
+                          </md-input-container>   
+                        </span>
+
+                        <span ng-if="rapport_sep.$edit" style="display: inline-block !important;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                          <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile"  ng-model="fichier" id="fileid"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!rapport_sep.$edit">{{rapport_sep.fichier}}</span>
+                      </td>                       
+                      <td>
+                        <a ng-if="!rapport_sep.$edit" ng-click="vm.modifierRapport_sep(rapport_sep)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!rapport_sep.$edit" ng-click="vm.supprimerRapport_sep(rapport_sep)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="rapport_sep.$edit" ng-click="vm.annulerRapport_sep(rapport_sep)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="rapport_sep.$edit && rapport_sep.intitule && rapport_sep.fichier>''" ng-click="vm.ajoutRapport_sep(rapport_sep,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN rapport_sep ------>
+    
+          </md-tabs>  
+        </ms-form-wizard>             
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

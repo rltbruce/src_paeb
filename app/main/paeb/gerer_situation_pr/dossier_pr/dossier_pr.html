@@ -1,0 +1,192 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation entreprise</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Dossier partenaires relai</span>
+            </div>
+
+            <div class="title">Dossier partenaires relai</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+ <!-----Debut contrat prstataire ------>
+              <md-tab >
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">Contrat partenaires relai</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.contrat_partenaire_relai_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="contrat_partenaire_relai in vm.allcontrat_partenaire_relai"  ng-class="{selected: contrat_partenaire_relai.$selected}" ng-click="vm.selectionContrat_partenaire_relai(contrat_partenaire_relai)">
+                                
+                      <td>                                  
+                        <span>{{contrat_partenaire_relai.partenaire_relai.nom}}</span>
+                      </td>
+                                
+                      <td>
+                                  
+                        <span>{{contrat_partenaire_relai.intitule}}</span>
+                      </td>
+                                
+                      <td>
+                                  
+                        <span>{{contrat_partenaire_relai.ref_contrat}}</span>
+                      </td>
+                                
+                      <td>
+                                  
+                        <span>{{contrat_partenaire_relai.montant_contrat}}</span>
+                      </td>
+
+                      <td>                         
+                        <span>{{vm.affichageDate(contrat_partenaire_relai.date_signature)}}</span>
+                      </td>
+                                  
+                        <span>{{contrat_partenaire_relai.delai_execution}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN contrat pr ------>   
+
+    <!-----Debut memoire technique ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+          
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
+                      <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepTwo==true">2
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Dossier pr</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Code</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Intitule</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Existance</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Date Elaboration</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Observation</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Action</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="dossier_pr in vm.alldossier_pr"  ng-class="{selected: dossier_pr.$selected}" ng-click="vm.selectionDossier_pr(dossier_pr)">           
+                      <td>
+                                  
+                        <span>{{dossier_pr.code}}</span>
+                      </td>
+                                
+                      <td>                                  
+                        <span>{{dossier_pr.intitule}}</span>
+                      </td>
+                                
+                      <td>                                 
+                         <md-checkbox ng-model="dossier_pr.existance" aria-label="Checkbox 1" disabled>
+                        </md-checkbox>
+                      </td>
+
+                      <td>                          
+                        <span>{{vm.affichageDate(dossier_pr.date_elaboration)}}</span>
+                      </td>
+
+                      <td>        
+                        <span>{{dossier_pr.observation}}</span>
+                      </td>
+
+                      <td>                        
+                                  
+                        <a ng-click="vm.download_dossier_pr(dossier_pr)" title="Telecharger fichier">
+                          <span class="icon-box-download"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+          <md-tab>
+          </md-tab>
+    <!-----FIN memoire technique ------> 
+          </md-tabs>        
+        </ms-form-wizard>
+                         
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

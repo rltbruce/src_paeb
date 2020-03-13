@@ -177,7 +177,7 @@
                   </thead>
                            
                   <tbody>
-                    <tr ng-repeat="demande_latrine_moe in vm.alldemande_latrine_moe"  ng-class="{selected: demande_latrine_moe.$selected}" ng-click="vm.selectionDemande_latrine_moe(demande_latrine_moe)">
+                    <tr ng-repeat="demande_latrine_moe in vm.alldemande_latrine_moe_invalide"  ng-class="{selected: demande_latrine_moe.$selected}" ng-click="vm.selectionDemande_latrine_moe(demande_latrine_moe)">
                                 
                       <td>
                         <span ng-if="demande_latrine_moe.$edit">
@@ -423,13 +423,9 @@
           </md-tab>
     <!-----FIN demande_latrine_moe ------>
     <!-----FIN demande_debut_travaux_moe ------>
-
-        <md-tab-body>
-          <md-tab>
-           </md-tab-body>
-          </md-tab>
+        </md-tabs> 
         </ms-form-wizard>
-      </md-tabs>                   
+                        
       </div>
     </div>
     <!-- / CONTENT -->

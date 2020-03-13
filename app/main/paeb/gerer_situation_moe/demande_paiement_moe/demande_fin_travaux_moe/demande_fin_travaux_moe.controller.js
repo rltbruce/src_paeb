@@ -64,6 +64,8 @@
         var NouvelItemDemande_fin_travaux_moe=false;
         var currentItemDemande_fin_travaux_moe;
         vm.selectedItemDemande_fin_travaux_moe = {};
+        vm.alldemande_fin_travaux_moe_invalide = [];
+
         vm.alldemande_fin_travaux_moe = [];
 
         vm.ajoutJustificatif_fin_travaux_moe = ajoutJustificatif_fin_travaux_moe;
@@ -124,10 +126,13 @@
             if (vm.selectedItemContrat_bureau_etude.id!=0)
             {
               
-              apiFactory.getAPIgeneraliserREST("demande_fin_travaux_moe/index",'menu','getdemandeByContrat_bureau_etude','id_contrat_bureau_etude',vm.selectedItemContrat_bureau_etude.id).then(function(result)
+              apiFactory.getAPIgeneraliserREST("demande_fin_travaux_moe/index",'menu','getalldemandeByContrat','id_contrat_bureau_etude',vm.selectedItemContrat_bureau_etude.id).then(function(result)
               {
+                  vm.alldemande_fin_travaux_moe_invalide = result.data.response.filter(function(obj)
+                  {
+                      return obj.validation == 0;
+                  });
                   vm.alldemande_fin_travaux_moe = result.data.response;
-                  console.log(vm.alldemande_fin_travaux_moe);
               });
 
               vm.stepOne = true;
@@ -185,68 +190,116 @@
           //console.log(vm.allcurenttranche_d_fin_travaux_moe);
         });
 
+       /*  apiFactory.getAll("tranche_d_debut_travaux_moe/index").then(function(result)
+        {
+          vm.alltranche_d_debut_travaux_moe= result.data.response;
+          //console.log(vm.allcurenttranche_d_fin_travaux_moe);
+        });
+         apiFactory.getAll("tranche_demande_batiment_moe/index").then(function(result)
+        {
+          vm.alltranche_demande_batime_moe= result.data.response;
+          //console.log(vm.allcurenttranche_d_fin_travaux_moe);
+        });
+         apiFactory.getAll("tranche_demande_latrine_moe/index").then(function(result)
+        {
+          vm.alltranche_demande_latrine_moe= result.data.response;
+          //console.log(vm.allcurenttranche_d_fin_travaux_moe);
+        });
+         apiFactory.getAll("tranche_demande_mobilier_moe/index").then(function(result)
+        {
+          vm.alltranche_demande_mobilier_moe= result.data.response;
+          //console.log(vm.allcurenttranche_d_fin_travaux_moe);
+        }); */                        
+
         //Masque de saisi ajout
         vm.ajouterDemande_fin_travaux_moe = function ()
-        { 
-          if(vm.alldemande_fin_travaux_moe.length>0)
-          {
-            var last_id_demande = Math.max.apply(Math, vm.alldemande_fin_travaux_moe.map(function(o)
-            { 
-              return o.id;
-            }));
-
-            vm.dernierdemande = vm.alldemande_fin_travaux_moe.filter(function(obj)
-            {
-                return obj.id == last_id_demande;
-            });
-            var numcode=vm.dernierdemande[0].tranche.code.split(' ')[1];
-
-            vm.allcurenttranche_d_fin_travaux_moe = vm.alltranche_d_fin_travaux_moe.filter(function(obj)
-            {
-                return obj.code == 'tranche '+(parseInt(numcode)+1);
-            });
-
-          }
-          else
-          {
-            vm.allcurenttranche_d_fin_travaux_moe = vm.alltranche_d_fin_travaux_moe.filter(function(obj)
-            {
-                return obj.code == 'tranche 1';
-            });
-            vm.dernierdemande = [];console.log(vm.allcurenttranche_d_fin_travaux_moe);
-          }
-          if (NouvelItemDemande_fin_travaux_moe == false)
-          {
-            var items = {
-              $edit: true,
-              $selected: true,
-              id: '0',         
-              objet: '',
-              description: '',
-              ref_facture: '',
-              tranche: '',
-              montant: '',
-              cumul: '',
-              anterieur: '',
-              periode: '',
-              pourcentage:'',
-              reste:'',
-              date: ''
-            };         
-            vm.alldemande_fin_travaux_moe.push(items);
-            vm.alldemande_fin_travaux_moe.forEach(function(mem)
-            {
-              if(mem.$selected==true)
+        {      var items = {
+                          $edit: true,
+                          $selected: true,
+                          id: '0',         
+                          objet: '',
+                          description: '',
+                          ref_facture: '',
+                          tranche: '',
+                          montant: '',
+                          cumul: '',
+                          anterieur: '',
+                          periode: '',
+                          pourcentage:'',
+                          reste:'',
+                          date: ''
+                        };
+              apiFactory.getAPIgeneraliserREST("demande_fin_travaux_moe/index",'menu','summePourcentageCurrent','id_contrat_bureau_etude',vm.selectedItemContrat_bureau_etude.id).then(function(result)
               {
-                vm.selectedItemDemande_fin_travaux_moe = mem;
-              }
-            });
+                  var pourcentagecurrenttotal = result.data.response[0].pourcentage_total;
+                  console.log(pourcentagecurrenttotal);
+              
+                  if (pourcentagecurrenttotal == 100)
+                  {
+                      if(vm.alldemande_fin_travaux_moe.length>0)
+                      {
+                          var last_id_demande = Math.max.apply(Math, vm.alldemande_fin_travaux_moe.map(function(o){ return o.id;}));
+                          vm.dernierdemande = vm.alldemande_fin_travaux_moe.filter(function(obj){return obj.id == last_id_demande;});
+                          var numcode=vm.dernierdemande[0].tranche.code.split(' ')[1];
 
-            NouvelItemDemande_fin_travaux_moe = true ;
-          }else
-          {
-            vm.showAlert('Ajout demande batiment','Un formulaire d\'ajout est déjà ouvert!!!');
-          }                
+                          if (vm.dernierdemande[0].validation==3)
+                          {
+                              if (NouvelItemDemande_fin_travaux_moe == false)
+                              {
+                                  vm.alldemande_fin_travaux_moe_invalide.push(items);                        
+                                  vm.alldemande_fin_travaux_moe_invalide.forEach(function(mem)
+                                  {
+                                      if(mem.$selected==true)
+                                      {
+                                        vm.selectedItemDemande_fin_travaux_moe = mem;
+                                      }
+                                  });
+
+                                  NouvelItemDemande_fin_travaux_moe = true ;
+                              }                    
+                              else
+                              {
+                                  vm.showAlert('Ajout demande fin_travaux','Un formulaire d\'ajout est déjà ouvert!!!');
+                              }
+
+                              vm.allcurenttranche_d_fin_travaux_moe = vm.alltranche_d_fin_travaux_moe.filter(function(obj){ return obj.code == 'tranche '+(parseInt(numcode)+1);});
+                          } 
+                          else
+                          {
+                              vm.showAlert('Ajout demande fin_travaux','Dernier demande en-cours!!!');
+                          }
+                      }
+                      else
+                      { 
+                          if (NouvelItemDemande_fin_travaux_moe == false)
+                          {                              
+                              vm.alldemande_fin_travaux_moe_invalide.push(items);                        
+                              vm.alldemande_fin_travaux_moe_invalide.forEach(function(mem)
+                              {
+                                  if(mem.$selected==true)
+                                  {
+                                      vm.selectedItemDemande_fin_travaux_moe = mem;
+                                  }
+                              });
+
+                              NouvelItemDemande_fin_travaux_moe = true ;
+                          }                    
+                          else
+                          {
+                              vm.showAlert('Ajout demande fin_travaux','Un formulaire d\'ajout est déjà ouvert!!!');
+                          }
+
+                          vm.allcurenttranche_d_fin_travaux_moe = vm.alltranche_d_fin_travaux_moe.filter(function(obj){return obj.code == 'tranche 1';});
+                        //vm.dernierdemande = [];
+                      }
+                  }
+                  else
+                  {
+                    vm.showAlert('Ajout demande fin travaux',' Les demandes durant les travaux ne sont pas achevées !!!');
+                  }
+
+                  
+              });              
                       
         };
 
@@ -283,7 +336,7 @@
             item.date  = currentItemDemande_fin_travaux_moe.date;
           }else
           {
-            vm.alldemande_fin_travaux_moe = vm.alldemande_fin_travaux_moe.filter(function(obj)
+            vm.alldemande_fin_travaux_moe_invalide = vm.alldemande_fin_travaux_moe_invalide.filter(function(obj)
             {
                 return obj.id !== vm.selectedItemDemande_fin_travaux_moe.id;
             });
@@ -315,8 +368,8 @@
         };
         $scope.$watch('vm.selectedItemDemande_fin_travaux_moe', function()
         {
-             if (!vm.alldemande_fin_travaux_moe) return;
-             vm.alldemande_fin_travaux_moe.forEach(function(item)
+             if (!vm.alldemande_fin_travaux_moe_invalide) return;
+             vm.alldemande_fin_travaux_moe_invalide.forEach(function(item)
              {
                 item.$selected = false;
              });
@@ -329,7 +382,7 @@
             NouvelItemDemande_fin_travaux_moe = false ;
             vm.selectedItemDemande_fin_travaux_moe = item;
             currentItemDemande_fin_travaux_moe = angular.copy(vm.selectedItemDemande_fin_travaux_moe);
-            $scope.vm.alldemande_fin_travaux_moe.forEach(function(mem) {
+            $scope.vm.alldemande_fin_travaux_moe_invalide.forEach(function(mem) {
               mem.$edit = false;
             });
 
@@ -371,7 +424,7 @@
         {          
             if (suppression!=1)
             {
-               var pass = vm.alldemande_fin_travaux_moe.filter(function(obj)
+               var pass = vm.alldemande_fin_travaux_moe_invalide.filter(function(obj)
                 {
                    return obj.id == currentItemDemande_fin_travaux_moe.id;
                 });
@@ -463,7 +516,7 @@
                     }
                     else 
                     {    
-                      vm.alldemande_fin_travaux_moe = vm.alldemande_fin_travaux_moe.filter(function(obj)
+                      vm.alldemande_fin_travaux_moe_invalide = vm.alldemande_fin_travaux_moe_invalide.filter(function(obj)
                       {
                           return obj.id !== vm.selectedItemDemande_fin_travaux_moe.id;
                       });
@@ -504,7 +557,7 @@
             var montant = (parseInt(vm.selectedItemContrat_bureau_etude.montant_contrat) * (vm.allcurenttranche_d_fin_travaux_moe[0].pourcentage))/100;
             var cumul = montant;
 
-          if (vm.alldemande_fin_travaux_moe.length>1)
+          if (vm.alldemande_fin_travaux_moe_invalide.length>1)
           {                 
               anterieur = vm.dernierdemande[0].montant;           
               cumul = montant + parseInt(vm.dernierdemande[0].cumul);
@@ -523,7 +576,7 @@
           console.log(item);
           console.log(vm.selectedItemContrat_bureau_etude);
          
-          //var nbr_batiment_total = vm.alldemande_fin_travaux_moe.length;
+          //var nbr_batiment_total = vm.alldemande_fin_travaux_moe_invalide.length;
           
         }
 /**********************************fin demande_fin_travaux_moe****************************************/

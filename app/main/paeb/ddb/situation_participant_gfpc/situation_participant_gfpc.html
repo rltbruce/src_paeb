@@ -1,0 +1,98 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Fonction participant</span>
+            </div>
+
+            <div class="title">Fonction participant</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Categorie ouvrage -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Fonction participant</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add type ouvrage" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout fonction participant</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="acce in ::vm.situation_participant_gfpc_column">
+                  <div class="table-header">
+                    <span class="column-title">{{acce.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="situation_participant_gfpc in vm.allsituation_participant_gfpc"  ng-class="{selected: situation_participant_gfpc.$selected}" ng-click="vm.selection(situation_participant_gfpc)">           
+                <td>
+                  <span ng-if="situation_participant_gfpc.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Libelle</label>
+                      <input name="libelle" type="text" ng-model="situation_participant_gfpc.libelle"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!situation_participant_gfpc.$edit">{{situation_participant_gfpc.libelle}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="situation_participant_gfpc.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Description</label>
+                      <input name="Description" type="text" ng-model="situation_participant_gfpc.description"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!situation_participant_gfpc.$edit">{{situation_participant_gfpc.description}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!situation_participant_gfpc.$edit" ng-click="vm.modifier(situation_participant_gfpc)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!situation_participant_gfpc.$edit" ng-click="vm.supprimer(situation_participant_gfpc)" title="Supprimer">
+                    <span class="icon-delete" ></span>
+                  </a>
+                            
+                  <a ng-if="situation_participant_gfpc.$edit" ng-click="vm.annuler(situation_participant_gfpc)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="situation_participant_gfpc.$edit && situation_participant_gfpc.libelle && situation_participant_gfpc.description>''" ng-click="vm.ajout(situation_participant_gfpc,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>                   
+      </div>
+      <!-- / situation_participant_gfpc -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

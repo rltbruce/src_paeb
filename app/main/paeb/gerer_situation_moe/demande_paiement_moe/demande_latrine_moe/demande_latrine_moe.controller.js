@@ -67,6 +67,8 @@
         var NouvelItemDemande_latrine_moe=false;
         var currentItemDemande_latrine_moe;
         vm.selectedItemDemande_latrine_moe = {};
+        vm.alldemande_latrine_moe_invalide = [];
+
         vm.alldemande_latrine_moe = [];
 
         vm.ajoutJustificatif_latrine_moe = ajoutJustificatif_latrine_moe;
@@ -80,6 +82,9 @@
         vm.allcurenttranche_demande_latrine_moe = [];
         vm.alltranche_demande_latrine_moe = [];
         vm.dernierdemande = [];
+
+        vm.alltranche_d_debut_travaux_moe = [];
+        vm.alldemande_debut_travaux_moe = [];
 
         vm.stepOne = false;
         vm.stepTwo = false;
@@ -178,8 +183,12 @@
             if (vm.selectedItemlatrine_construction.id!=0)
             {  
 
-              apiFactory.getAPIgeneraliserREST("demande_latrine_moe/index",'menu','getdemandeInvalideBylatrine','id_latrine_construction',item.id).then(function(result)
+              apiFactory.getAPIgeneraliserREST("demande_latrine_moe/index",'menu','getalldemandeBylatrine','id_latrine_construction',item.id).then(function(result)
               {
+                  vm.alldemande_latrine_moe_invalide = result.data.response.filter(function(obj)
+                  {
+                      return obj.validation == 0;
+                  });
                   vm.alldemande_latrine_moe = result.data.response;
               });           
               vm.stepTwo = true;
@@ -238,17 +247,112 @@
           console.log(vm.allcurenttranche_demande_latrine_moe);
         });
 
+        apiFactory.getAll("tranche_d_debut_travaux_moe/index").then(function(result)
+        {
+            vm.alltranche_d_debut_travaux_moe= result.data.response;
+        });
+
         //Masque de saisi ajout
         vm.ajouterDemande_latrine_moe = function ()
         { 
-          if(vm.alldemande_latrine_moe.length>0)
+           var items = {
+                        $edit: true,
+                        $selected: true,
+                        id: '0',         
+                        objet: '',
+                        description: '',
+                        ref_facture: '',
+                        tranche: '',
+                        montant: '',
+                        cumul: '',
+                        anterieur: '',
+                        periode: '',
+                        pourcentage:'',
+                        reste:'',
+                        date: ''
+                      };
+
+          //var validation_derndemane_bat=0;
+          apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index",'menu','getalldemandeByContrat','id_contrat_bureau_etude',vm.selectedItemContrat_bureau_etude.id).then(function(result)
           {
-            var last_id_demande = Math.max.apply(Math, vm.alldemande_latrine_moe.map(function(o)
+              vm.alldemande_debut_travaux_moe = result.data.response.filter(function(obj)
+              {
+                  return obj.validation == 3;
+              });
+
+              if (vm.alldemande_debut_travaux_moe.length==vm.alltranche_d_debut_travaux_moe.length)
+              {
+                  if(vm.alldemande_latrine_moe.length>0)
+                  {
+                      var last_id_demande = Math.max.apply(Math, vm.alldemande_latrine_moe.map(function(o){ return o.id;}));
+                      vm.dernierdemande = vm.alldemande_latrine_moe.filter(function(obj){return obj.id == last_id_demande;});
+                      var numcode=vm.dernierdemande[0].tranche.code.split(' ')[1];
+
+                      if (vm.dernierdemande[0].validation==3)
+                      {
+                          if (NouvelItemDemande_latrine_moe == false)
+                          {
+                              vm.alldemande_latrine_moe_invalide.push(items);                        
+                              vm.alldemande_latrine_moe_invalide.forEach(function(mem)
+                              {
+                                  if(mem.$selected==true)
+                                  {
+                                    vm.selectedItemDemande_latrine_moe = mem;
+                                  }
+                              });
+
+                              NouvelItemDemande_latrine_moe = true ;
+                          }                    
+                          else
+                          {
+                              vm.showAlert('Ajout demande latrine','Un formulaire d\'ajout est déjà ouvert!!!');
+                          }
+
+                          vm.allcurenttranche_demande_latrine_moe = vm.alltranche_demande_latrine_moe.filter(function(obj){ return obj.code == 'tranche '+(parseInt(numcode)+1);});
+                      } 
+                      else
+                      {
+                          vm.showAlert('Ajout demande latrine','Dernier demande en-cours!!!');
+                      }
+                  }
+                  else
+                  { 
+                      if (NouvelItemDemande_latrine_moe == false)
+                      {                              
+                          vm.alldemande_latrine_moe_invalide.push(items);                        
+                          vm.alldemande_latrine_moe_invalide.forEach(function(mem)
+                          {
+                              if(mem.$selected==true)
+                              {
+                                  vm.selectedItemDemande_latrine_moe = mem;
+                              }
+                          });
+
+                          NouvelItemDemande_latrine_moe = true ;
+                      }                    
+                      else
+                      {
+                          vm.showAlert('Ajout demande latrine','Un formulaire d\'ajout est déjà ouvert!!!');
+                      }
+
+                      vm.allcurenttranche_demande_latrine_moe = vm.alltranche_demande_latrine_moe.filter(function(obj){return obj.code == 'tranche 1';});
+                    //vm.dernierdemande = [];
+                  }
+              }
+              else
+              {
+                vm.showAlert('Ajout demande latrine','La demande avant travaux incomplète ou en-cours de validation');
+              }
+          }); 
+
+          /*if(vm.alldemande_latrine_moe_invalide.length>0)
+          {
+            var last_id_demande = Math.max.apply(Math, vm.alldemande_latrine_moe_invalide.map(function(o)
             { 
               return o.id;
             }));
 
-            vm.dernierdemande = vm.alldemande_latrine_moe.filter(function(obj)
+            vm.dernierdemande = vm.alldemande_latrine_moe_invalide.filter(function(obj)
             {
                 return obj.id == last_id_demande;
             });
@@ -286,8 +390,8 @@
               reste:'',
               date: ''
             };         
-            vm.alldemande_latrine_moe.push(items);
-            vm.alldemande_latrine_moe.forEach(function(mem)
+            vm.alldemande_latrine_moe_invalide.push(items);
+            vm.alldemande_latrine_moe_invalide.forEach(function(mem)
             {
               if(mem.$selected==true)
               {
@@ -299,7 +403,7 @@
           }else
           {
             vm.showAlert('Ajout demande latrine','Un formulaire d\'ajout est déjà ouvert!!!');
-          }                
+          } */               
                       
         };
 
@@ -336,7 +440,7 @@
             item.date  = currentItemDemande_latrine_moe.date;
           }else
           {
-            vm.alldemande_latrine_moe = vm.alldemande_latrine_moe.filter(function(obj)
+            vm.alldemande_latrine_moe_invalide = vm.alldemande_latrine_moe_invalide.filter(function(obj)
             {
                 return obj.id !== vm.selectedItemDemande_latrine_moe.id;
             });
@@ -368,8 +472,8 @@
         };
         $scope.$watch('vm.selectedItemDemande_latrine_moe', function()
         {
-             if (!vm.alldemande_latrine_moe) return;
-             vm.alldemande_latrine_moe.forEach(function(item)
+             if (!vm.alldemande_latrine_moe_invalide) return;
+             vm.alldemande_latrine_moe_invalide.forEach(function(item)
              {
                 item.$selected = false;
              });
@@ -382,7 +486,7 @@
             NouvelItemDemande_latrine_moe = false ;
             vm.selectedItemDemande_latrine_moe = item;
             currentItemDemande_latrine_moe = angular.copy(vm.selectedItemDemande_latrine_moe);
-            $scope.vm.alldemande_latrine_moe.forEach(function(mem) {
+            $scope.vm.alldemande_latrine_moe_invalide.forEach(function(mem) {
               mem.$edit = false;
             });
 
@@ -424,7 +528,7 @@
         {          
             if (suppression!=1)
             {
-               var pass = vm.alldemande_latrine_moe.filter(function(obj)
+               var pass = vm.alldemande_latrine_moe_invalide.filter(function(obj)
                 {
                    return obj.id == currentItemDemande_latrine_moe.id;
                 });
@@ -508,7 +612,7 @@
                     }
                     else 
                     {    
-                      vm.alldemande_latrine_moe = vm.alldemande_latrine_moe.filter(function(obj)
+                      vm.alldemande_latrine_moe_invalide = vm.alldemande_latrine_moe_invalide.filter(function(obj)
                       {
                           return obj.id !== vm.selectedItemDemande_latrine_moe.id;
                       });
@@ -540,7 +644,7 @@
           var montant = (parseInt(vm.selectedItemContrat_bureau_etude.montant_contrat) * vm.allcurenttranche_demande_latrine_moe[0].pourcentage)/100;
           var cumul = montant;
 
-          if (vm.alldemande_latrine_moe.length>1)
+          if (vm.alldemande_latrine_moe_invalide.length>1)
           {                 
               anterieur = vm.dernierdemande[0].montant;           
               cumul = montant + parseInt(vm.dernierdemande[0].cumul);

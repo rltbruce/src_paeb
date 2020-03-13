@@ -126,7 +126,7 @@
                   </thead>
                            
                   <tbody>
-                    <tr ng-repeat="demande_debut_travaux_moe in vm.alldemande_debut_travaux_moe"  ng-class="{selected: demande_debut_travaux_moe.$selected}" ng-click="vm.selectionDemande_debut_travaux_moe(demande_debut_travaux_moe)">
+                    <tr ng-repeat="demande_debut_travaux_moe in vm.alldemande_debut_travaux_moe_invalide"  ng-class="{selected: demande_debut_travaux_moe.$selected}" ng-click="vm.selectionDemande_debut_travaux_moe(demande_debut_travaux_moe)">
                                 
                       <td>
                         <span ng-if="demande_debut_travaux_moe.$edit">
@@ -372,12 +372,8 @@
           </md-tab>
     <!-----FIN demande_debut_travaux_moe ------>
 
-        <md-tab-body>
-          <md-tab>
-           </md-tab-body>
-          </md-tab>
-        </ms-form-wizard>
-      </md-tabs>                   
+        <</md-tabs>
+        </ms-form-wizard>                   
       </div>
     </div>
     <!-- / CONTENT -->

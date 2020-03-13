@@ -6,7 +6,9 @@
         .module('app.paeb.gerer_situation_feffi', [			
             'app.paeb.gerer_situation_feffi.convention_cisco_feffi',
             //'app.paeb.gerer_situation_feffi.convention_cisco_feffi_valide',
-            'app.paeb.gerer_situation_feffi.feffi'
+            'app.paeb.gerer_situation_feffi.feffi',
+            'app.paeb.gerer_situation_feffi.dossier_feffi',
+            'app.paeb.gerer_situation_feffi.document_feffi_scan'
             ])       
         .config(config);
         var vs ;
@@ -17,7 +19,7 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_feffi', {
             title : 'Gérer situation feffi',
             icon  : 'icon-data',
-            weight: 3
+            weight: 2
         });
 
 

@@ -89,7 +89,7 @@
 
 /**********************************debut bureau etude****************************************/
 //col table
-        vm.bureau_etude_column = [
+   /*     vm.bureau_etude_column = [
         {titre:"Nom"},
         {titre:"Nif"},
         {titre:"Stat"},
@@ -134,12 +134,12 @@
                 item.$selected = false;
              });
              vm.selectedItemBureau_etude.$selected = true;
-        });
+        });*/
  
 /**********************************fin bureau etude****************************************/ 
 
 /**********************************contrat prestataire****************************************/
-
+/*
        vm.contrat_bureau_etude_column = [
         {titre:"Bureau d'etude"
         },
@@ -183,14 +183,33 @@
                 item.$selected = false;
              });
              vm.selectedItemContrat_bureau_etude.$selected = true;
-        });        
+        }); */       
 
 /**********************************fin contrat prestataire****************************************/
 
 
 /**********************************fin justificatif attachement****************************************/
+      apiFactory.getAll("contrat_be/index").then(function(result)
+      {
+          vm.allcontrat_bureau_etude = result.data.response; 
+          console.log(vm.allcontrat_bureau_etude);
+      });
 
-
+      apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportByvalidation','validation',0).then(function(result)
+      {
+        vm.allrapport_mensuel = result.data.response;
+        
+        if (vm.allrapport_mensuel.length>0)
+        {
+            vm.showbuttonNouvAppel = false;
+        }
+                  
+      });
+      apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportByvalidation','validation',1).then(function(result)
+      {
+        vm.allappel_offre_valide = result.data.response;
+                  
+      });
 
         $scope.uploadFile = function(event)
        {
@@ -214,7 +233,8 @@
               description: '',
               fichier: '',
               date_livraison: '',
-              observation: ''
+              observation: '',
+              id_contrat_bureau_etude: ''
             };
         
             vm.allrapport_mensuel.push(items);
@@ -259,6 +279,7 @@
             item.fichier   = currentItemRapport_mensuel.fichier ;
             item.date_livraison   = currentItemRapport_mensuel.date_livraison ;
             item.observation   = currentItemRapport_mensuel.observation ;
+            item.id_contrat_bureau_etude   = currentItemRapport_mensuel.id_contrat_bureau_etude ;
           }else
           {
             vm.allrapport_mensuel = vm.allrapport_mensuel.filter(function(obj)
@@ -306,6 +327,7 @@
             item.fichier   = vm.selectedItemRapport_mensuel.fichier ;
             item.date_livraison   = new Date(vm.selectedItemRapport_mensuel.date_livraison) ;
             item.observation   = vm.selectedItemRapport_mensuel.observation ;
+            item.id_contrat_bureau_etude   = vm.selectedItemRapport_mensuel.contrat_be.id ;
             //vm.showThParcourir = true;
         };
 
@@ -341,7 +363,8 @@
                    if((mem[0].description   != currentItemRapport_mensuel.description )
                     ||(mem[0].fichier   != currentItemRapport_mensuel.fichier )
                     ||(mem[0].date_livraison   != currentItemRapport_mensuel.date_livraison )
-                    ||(mem[0].observation   != currentItemRapport_mensuel.observation ))                   
+                    ||(mem[0].observation   != currentItemRapport_mensuel.observation )                    
+                    ||(mem[0].id_contrat_bureau_etude   != currentItemRapport_mensuel.contrat_be.id ))                   
                       { 
                          insert_in_baseRapport_mensuel(item,suppression);
                       }
@@ -377,7 +400,7 @@
                     fichier: rapport_mensuel.fichier,
                     date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
                     observation: rapport_mensuel.observation,
-                    id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                    id_contrat_bureau_etude: rapport_mensuel.id_contrat_bureau_etude,
                     validation:0               
                 });
                 console.log(datas);
@@ -385,6 +408,10 @@
             apiFactory.add("rapport_mensuel/index",datas, config).success(function (data)
             {   
 
+              var contr= vm.allcontrat_bureau_etude.filter(function(obj)
+                {
+                    return obj.id == rapport_mensuel.id_contrat_bureau_etude;
+                });
               if (NouvelItemRapport_mensuel == false)
               {
                     // Update_paiement or delete: id exclu                 
@@ -399,7 +426,7 @@
                           if(file)
                           { 
 
-                            var name_file = vm.selectedItemContrat_bureau_etude.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                            var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                             var fd = new FormData();
                             fd.append('file', file);
@@ -425,7 +452,7 @@
                                                       fichier: rapport_mensuel.fichier,
                                                       date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
                                                       observation: rapport_mensuel.observation,
-                                                      id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                                      id_contrat_bureau_etude: rapport_mensuel.id_contrat_bureau_etude,
                                                       validation:0
                                         });
                                       apiFactory.add("rapport_mensuel/index",datas, config).success(function (data)
@@ -447,7 +474,7 @@
                                         fichier: rapport_mensuel.fichier,
                                         date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
                                         observation: rapport_mensuel.observation,
-                                        id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                        id_contrat_bureau_etude: rapport_mensuel.id_contrat_bureau_etude,
                                         validation:0               
                                     });
                                   apiFactory.add("rapport_mensuel/index",datas, config).success(function (data)
@@ -465,7 +492,7 @@
                             });
                           }
 
-
+                        vm.selectedItemRapport_mensuel.contrat_be = contr[0];
                         vm.selectedItemRapport_mensuel.$selected  = false;
                         vm.selectedItemRapport_mensuel.$edit      = false;
                         vm.selectedItemRapport_mensuel ={};
@@ -509,7 +536,7 @@
                     if(file)
                     { 
 
-                      var name_file = vm.selectedItemContrat_bureau_etude.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                      var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                       var fd = new FormData();
                       fd.append('file', file);
@@ -535,7 +562,7 @@
                                                 fichier: rapport_mensuel.fichier,
                                                 date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
                                                 observation: rapport_mensuel.observation,
-                                                id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                                id_contrat_bureau_etude: rapport_mensuel.id_contrat_bureau_etude,
                                                 validation:0
                                   });
                                 apiFactory.add("rapport_mensuel/index",datas, config).success(function (data)
@@ -557,7 +584,7 @@
                                   fichier: rapport_mensuel.fichier,
                                   date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
                                  observation: rapport_mensuel.observation,
-                                  id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                  id_contrat_bureau_etude: rapport_mensuel.id_contrat_bureau_etude,
                                   validation:0               
                               });
                             apiFactory.add("rapport_mensuel/index",datas, config).success(function (data)
@@ -575,6 +602,7 @@
                       });
                     }
               }
+              rapport_mensuel.contrat_be = contr[0];
               rapport_mensuel.$selected = false;
               rapport_mensuel.$edit = false;
               vm.selectedItemRapport_mensuel = {};
@@ -618,7 +646,7 @@
                     fichier: rapport_mensuel.fichier,
                     date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
                     observation: rapport_mensuel.observation,
-                    id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                    id_contrat_bureau_etude: rapport_mensuel.contrat_be.id,
                     validation:1               
                 });
                 console.log(datas);

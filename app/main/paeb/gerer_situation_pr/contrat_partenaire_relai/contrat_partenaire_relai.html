@@ -34,9 +34,6 @@
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
                       <i class="icon-check s16"></i>
                     </span>
-                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                        <i class="icon-check s16"></i>
-                    </span-->
                     <span class="ms-form-wizard-step-text">Convention</span>
                 </span>
               </md-tab-label>
@@ -92,11 +89,11 @@
             </md-tab>
     <!-----FIN FEFFI ------>
     <!-----Debut contrat prstataire ------>
-          <md-tab ng-disabled="vm.stepOne==false">
+          <md-tab >
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
                       <i class="icon-check s16"></i>
                     </span>
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -213,11 +210,11 @@
     <!-----FIN contrat prstataire ------>
 
     <!-----Debut avenant_partenaire_relai ------>
-          <md-tab ng-disabled="vm.stepTwo==false">
+          <md-tab ng-disabled="vm.stepOne==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
                       <i class="icon-check s16"></i>
                     </span>
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -312,7 +309,9 @@
 
             </md-tab-body>
           </md-tab>
-    <!-----FIN passation_marches ------>                    
+    <!-----FIN passation_marches ------> 
+          </md-tabs>
+        </ms-form-wizard>                   
       </div>
     </div>
     <!-- / CONTENT -->

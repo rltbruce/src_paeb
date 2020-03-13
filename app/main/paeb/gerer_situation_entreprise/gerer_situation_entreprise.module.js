@@ -13,9 +13,12 @@
             'app.paeb.gerer_situation_entreprise.validation_demande_bcaf',
             'app.paeb.gerer_situation_entreprise.validation_demande_dpfi',
             'app.paeb.gerer_situation_entreprise.validation_demande_daaf',
-            'app.paeb.gerer_situation_entreprise.paiement_mpe'
+            'app.paeb.gerer_situation_entreprise.paiement_mpe',
+            'app.paeb.gerer_situation_entreprise.document_prestataire_scan',
+            'app.paeb.gerer_situation_entreprise.dossier_prestataire',
+            'app.paeb.gerer_situation_entreprise.suivi_physique_travaux'
 
-            ])       
+            ])      
         .config(config);
         var vs ;
 

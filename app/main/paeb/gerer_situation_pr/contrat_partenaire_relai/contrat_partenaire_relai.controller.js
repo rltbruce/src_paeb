@@ -107,7 +107,7 @@
                 item.$selected = false;
              });
              vm.selectedItemConvention_entete.$selected = true;
-        });        
+        });       
 
 /**********************************fin convention entete****************************************/
 
@@ -126,6 +126,12 @@
         },
         {titre:"Action"
         }];
+
+        apiFactory.getAll("contrat_partenaire_relai/index").then(function(result)
+        {
+            vm.allcontrat_partenaire_relai = result.data.response;
+
+        });
         //Masque de saisi ajout
         vm.ajouterContrat_partenaire_relai = function ()
         { 
@@ -204,9 +210,9 @@
 
            if(item.id!=0)
            {
-            vm.stepTwo = true;
-            vm.stepThree = false;
-            apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menus','getavenanttBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            vm.stepOne = true;
+            vm.stepTwo = false;
+            apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
               {
                   vm.allavenant_partenaire_relai = result.data.response;
               });

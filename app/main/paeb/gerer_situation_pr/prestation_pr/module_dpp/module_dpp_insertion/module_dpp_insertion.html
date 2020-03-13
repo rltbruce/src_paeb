@@ -1,0 +1,546 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation feffi</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Feffi</span>
+            </div>
+
+            <div class="title">Feffi</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+    <!-----debut Bureau etude ------>
+
+            <!--md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">Paretenaires relais</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="part in ::vm.partenaire_relai_column">
+                          <div class="table-header">
+                            <span class="column-title">{{part.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="partenaire_relai in vm.allpartenaire_relai"  ng-class="{selected: partenaire_relai.$selected}" ng-click="vm.selectionPartenaire_relai(partenaire_relai)">           
+                       <td>                                    
+                          <span>{{partenaire_relai.nom}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{partenaire_relai.nif}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{partenaire_relai.stat}}</span>
+                        </td>
+
+                        <td>  
+                          <span>{{partenaire_relai.siege}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{partenaire_relai.telephone}}</span>
+                        </td>                        
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab-->
+    <!-----FIN Bureau etude ------>
+
+       <!-----Debut passation_marches_pr ------>
+          <!--md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">Contrat</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.contrat_partenaire_relai_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="contrat_partenaire_relai in vm.allcontrat_partenaire_relai"  ng-class="{selected: contrat_partenaire_relai.$selected}" ng-click="vm.selectionContrat_partenaire_relai(contrat_partenaire_relai)">
+                                                     
+                      <td>                                  
+                        <span>{{contrat_partenaire_relai.intitule}}</span>
+                      </td>
+                                
+                      <td>                                  
+                        <span>{{contrat_partenaire_relai.ref_contrat}}</span>
+                      </td>
+                                
+                      <td>                                  
+                        <span>{{contrat_partenaire_relai.montant_contrat}}</span>
+                      </td>
+
+                      <td>                          
+                        <span>{{vm.affichageDate(contrat_partenaire_relai.date_signature)}}</span>
+                      </td>
+                                  
+                        <span>{{contrat_partenaire_relai.delai_execution}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab-->
+    <!-----FIN passation_marches_pr ------>
+     <!-----Debut module_dpp ------>
+          <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Module dpp</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_dpp()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPassation">
+                      Nouveau
+                    </md-button>
+
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.validerModule_dpp()" style="width:10%;" ng-disabled="" ng-show="vm.showbuttonValider">
+                      Valider
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.module_dpp_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="module_dpp in vm.allmodule_dpp"  ng-class="{selected: module_dpp.$selected}" ng-click="vm.selectionModule_dpp(module_dpp)">
+
+                    <td>
+                      <span ng-if="module_dpp.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Contrat</label>
+                          <md-select ng-model="module_dpp.id_contrat_partenaire_relai"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(module_dpp)">
+                            <md-option ng-repeat="contrat_partenaire_relai in vm.allcontrat_partenaire_relai" value="{{contrat_partenaire_relai.id}}">
+                                                                        {{contrat_partenaire_relai.ref_contrat}}
+                            </md-option>
+                          </md-select>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!module_dpp.$edit">{{module_dpp.contrat_partenaire_relai.ref_contrat}}</span>
+                    </td>
+                    <td>
+                        <span ng-if="module_dpp.$edit">
+                          <md-datepicker ng-model="module_dpp.date_debut_previ_form" md-placeholder="Date de debut prévisionnelle" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!module_dpp.$edit">{{vm.affichageDate(module_dpp.date_debut_previ_form)}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="module_dpp.$edit">
+                          <md-datepicker ng-model="module_dpp.date_fin_previ_form" md-placeholder="Date de fin prévisionnelle" md-max-date="vm.date_now" md-min-date="module_dpp.date_debut_previ_form" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!module_dpp.$edit">{{vm.affichageDate(module_dpp.date_fin_previ_form)}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="module_dpp.$edit">
+                          <md-datepicker ng-model="module_dpp.date_previ_resti" md-placeholder="Date prévisionnelle de restitution" md-max-date="vm.date_now" md-min-date="module_dpp.date_debut_previ_form" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!module_dpp.$edit">{{vm.affichageDate(module_dpp.date_previ_resti)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_dpp.$edit">
+                          <md-datepicker ng-model="module_dpp.date_debut_reel_form" md-placeholder="Date de debut réelle" md-min-date="module_dpp.date_previ_resti" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>   
+                        </span>
+                                  
+                        <span ng-if="!module_dpp.$edit">{{vm.affichageDate(module_dpp.date_debut_reel_form)}}</span>
+                      </td>
+                      <td>
+                        <span ng-if="module_dpp.$edit">
+                          <md-datepicker ng-model="module_dpp.date_fin_reel_form" md-placeholder="Date de fin réelle" md-min-date="module_dpp.date_debut_reel_form" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!module_dpp.$edit">{{vm.affichageDate(module_dpp.date_fin_reel_form)}}</span>
+                      </td>
+                      <td>
+                        <span ng-if="module_dpp.$edit">
+                          <md-datepicker ng-model="module_dpp.date_reel_resti" md-placeholder="Date réelle de restitution" md-min-date="module_dpp.date_previ_resti" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!module_dpp.$edit">{{vm.affichageDate(module_dpp.date_reel_resti)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_dpp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nombre previsionnel participant</label>
+                            <input name="nbr_previ_parti" type="number" ng-model="module_dpp.nbr_previ_parti"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!module_dpp.$edit">{{module_dpp.nbr_previ_parti}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_dpp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nombre participant</label>
+                            <input name="nbr_parti" type="number" ng-model="module_dpp.nbr_parti" disabled />
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!module_dpp.$edit">{{module_dpp.nbr_parti}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_dpp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nombre previsionnel femme participant</label>
+                            <input name="nbr_previ_fem_parti" type="number" ng-model="module_dpp.nbr_previ_fem_parti"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!module_dpp.$edit">{{module_dpp.nbr_previ_fem_parti}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_dpp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nombre réel femme participant</label>
+                            <input name="nbr_reel_fem_parti" type="number" ng-model="module_dpp.nbr_reel_fem_parti" disabled />
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!module_dpp.$edit">{{module_dpp.nbr_reel_fem_parti}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_dpp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Lieu formation</label>
+                            <input name="lieu_formation" type="text" ng-model="module_dpp.lieu_formation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!module_dpp.$edit">{{module_dpp.lieu_formation}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="module_dpp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Observation</label>
+                            <input name="observation" type="text" ng-model="module_dpp.observation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!module_dpp.$edit">{{module_dpp.observation}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!module_dpp.$edit" ng-click="vm.modifierModule_dpp(module_dpp)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!module_dpp.$edit" ng-click="vm.supprimerModule_dpp(module_dpp)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="module_dpp.$edit" ng-click="vm.annulerModule_dpp(module_dpp)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="module_dpp.$edit && module_dpp.date_debut_previ_form && module_dpp.date_fin_previ_form && module_dpp.date_previ_resti && module_dpp.date_debut_reel_form && module_dpp.nbr_previ_parti && module_dpp.date_fin_reel_form && module_dpp.date_reel_resti && module_dpp.nbr_previ_fem_parti && module_dpp.lieu_formation && module_dpp.observation >''" ng-click="vm.ajoutModule_dpp(module_dpp,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN module_dpp ------>
+
+     <!-----Debut participant_dpp ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">P</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Participant</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_dpp()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.participant_dpp_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="participant_dpp in vm.allparticipant_dpp"  ng-class="{selected: participant_dpp.$selected}" ng-click="vm.selectionParticipant_dpp(participant_dpp)">           
+                      <td>
+                        <span ng-if="participant_dpp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Nom</label>
+                            <input name="nom" type="text" ng-model="participant_dpp.nom"/>
+                          </md-input-container>
+                        </span>                          
+                        <span ng-if="!participant_dpp.$edit">{{participant_dpp.nom}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="participant_dpp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Prenom</label>
+                            <input name="prenom" type="text" ng-model="participant_dpp.prenom"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!participant_dpp.$edit">{{participant_dpp.prenom}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="participant_dpp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Sexe</label>
+                            <md-select ng-model="participant_dpp.sexe"style="overflow: hidden;text-overflow: ellipsis;">
+                                <md-option value="1">Masculin
+                                </md-option>
+                                <md-option value="2">Femimin
+                                </md-option>
+                              </md-select>
+                          </md-input-container>
+                        </span>                          
+                        <span ng-if="!participant_dpp.$edit">{{vm.affichage_sexe(participant_dpp.sexe)}}</span>
+                      </td> 
+
+                      <td>
+                        <span ng-if="participant_dpp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Site</label>
+                            <md-select ng-model="participant_dpp.id_situation_participant_dpp"style="overflow: hidden;text-overflow: ellipsis;">
+                              <md-option ng-repeat="situation_participant_dpp in vm.allsituation_participant_dpp" value="{{situation_participant_dpp.id}}">
+                                                                    {{situation_participant_dpp.libelle}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!participant_dpp.$edit">{{participant_dpp.situation_participant_dpp.libelle}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!participant_dpp.$edit" ng-click="vm.modifierParticipant_dpp(participant_dpp)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!participant_dpp.$edit" ng-click="vm.supprimerParticipant_dpp(participant_dpp)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="participant_dpp.$edit" ng-click="vm.annulerParticipant_dpp(participant_dpp)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="participant_dpp.$edit && participant_dpp.nom && participant_dpp.prenom && participant_dpp.sexe && participant_dpp.id_situation_participant_dpp>''" ng-click="vm.ajoutParticipant_dpp(participant_dpp,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN participant_dpp ------>
+
+    <!-----Debut rapport_dpp ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">R</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Rapport DPP</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterRapport_dpp()" style="width:10%;" ng-show ="vm.showbuttonNouvRapport">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Intitule</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Fichier</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Action</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="rapport_dpp in vm.allrapport_dpp"  ng-class="{selected: rapport_dpp.$selected}" ng-click="vm.selectionRapport_dpp(rapport_dpp)">
+                               
+                      <td>
+                        <span ng-if="rapport_dpp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Intitule</label>
+                            <input name="intitule" type="text" ng-model="rapport_dpp.intitule"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!rapport_dpp.$edit">{{rapport_dpp.intitule}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="rapport_dpp.$edit" style="display: inline-block !important;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                            <input name="fichier" type="text" ng-model="rapport_dpp.fichier" disabled/>
+                          </md-input-container>   
+                        </span>
+
+                        <span ng-if="rapport_dpp.$edit" style="display: inline-block !important;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                          <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile"  ng-model="fichier" id="fileid"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!rapport_dpp.$edit">{{rapport_dpp.fichier}}</span>
+                      </td>                       
+                      <td>
+                        <a ng-if="!rapport_dpp.$edit" ng-click="vm.modifierRapport_dpp(rapport_dpp)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!rapport_dpp.$edit" ng-click="vm.supprimerRapport_dpp(rapport_dpp)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="rapport_dpp.$edit" ng-click="vm.annulerRapport_dpp(rapport_dpp)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="rapport_dpp.$edit && rapport_dpp.intitule && rapport_dpp.fichier>''" ng-click="vm.ajoutRapport_dpp(rapport_dpp,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN rapport_dpp ------>
+          </md-tabs>  
+        </ms-form-wizard>             
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

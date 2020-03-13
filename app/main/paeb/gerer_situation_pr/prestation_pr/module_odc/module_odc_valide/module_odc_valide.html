@@ -1,0 +1,226 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation feffi</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Feffi</span>
+            </div>
+
+            <div class="title">Feffi</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+   
+     <!-----Debut module_odc ------>
+          <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Module odc</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.module_odc_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="module_odc in vm.allmodule_odc"  ng-class="{selected: module_odc.$selected}" ng-click="vm.selectionModule_odc(module_odc)">
+
+                    <td>
+                      <span ng-if="!module_odc.$edit">{{module_odc.contrat_partenaire_relai.ref_contrat}}</span>
+                    </td>
+                    <td>                          
+                        <span ng-if="!module_odc.$edit">{{vm.affichageDate(module_odc.date_debut_previ_form)}}</span>
+                      </td>
+                      <td>                         
+                        <span ng-if="!module_odc.$edit">{{vm.affichageDate(module_odc.date_fin_previ_form)}}</span>
+                      </td>
+                      <td>                          
+                        <span ng-if="!module_odc.$edit">{{vm.affichageDate(module_odc.date_previ_resti)}}</span>
+                      </td>
+                                
+                      <td>        
+                        <span ng-if="!module_odc.$edit">{{vm.affichageDate(module_odc.date_debut_reel_form)}}</span>
+                      </td>
+                      <td>                         
+                        <span ng-if="!module_odc.$edit">{{vm.affichageDate(module_odc.date_fin_reel_form)}}</span>
+                      </td>
+                      <td>                         
+                        <span ng-if="!module_odc.$edit">{{vm.affichageDate(module_odc.date_reel_resti)}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span ng-if="!module_odc.$edit">{{module_odc.nbr_previ_parti}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span ng-if="!module_odc.$edit">{{module_odc.nbr_parti}}</span>
+                      </td>
+                                
+                      <td>        
+                        <span ng-if="!module_odc.$edit">{{module_odc.nbr_previ_fem_parti}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span ng-if="!module_odc.$edit">{{module_odc.nbr_reel_fem_parti}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span ng-if="!module_odc.$edit">{{module_odc.lieu_formation}}</span>
+                      </td>
+                                
+                      <td>        
+                        <span ng-if="!module_odc.$edit">{{module_odc.observation}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN module_odc ------>
+
+     <!-----Debut participant_odc ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">P</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Participant</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.participant_odc_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="participant_odc in vm.allparticipant_odc"  ng-class="{selected: participant_odc.$selected}" ng-click="vm.selectionParticipant_odc(participant_odc)">           
+                      <td>                         
+                        <span ng-if="!participant_odc.$edit">{{participant_odc.nom}}</span>
+                      </td>
+                                
+                      <td>                                  
+                        <span ng-if="!participant_odc.$edit">{{participant_odc.prenom}}</span>
+                      </td>
+
+                      <td>                          
+                        <span ng-if="!participant_odc.$edit">{{vm.affichage_sexe(participant_odc.sexe)}}</span>
+                      </td> 
+
+                      <td>
+                                  
+                        <span ng-if="!participant_odc.$edit">{{participant_odc.situation_participant_odc.libelle}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN participant_odc ------>
+
+    <!-----Debut rapport_odc ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">R</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Rapport odc</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Intitule</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Fichier</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="rapport_odc in vm.allrapport_odc"  ng-class="{selected: rapport_odc.$selected}" ng-click="vm.selectionRapport_odc(rapport_odc)">
+                               
+                      <td>      
+                        <span ng-if="!rapport_odc.$edit">{{rapport_odc.intitule}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span ng-if="!rapport_odc.$edit">{{rapport_odc.fichier}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN rapport_odc ------>
+          </md-tabs>  
+        </ms-form-wizard>             
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

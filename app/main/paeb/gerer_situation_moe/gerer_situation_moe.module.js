@@ -11,7 +11,9 @@
             'app.paeb.gerer_situation_moe.validation_demande_paiement_moe_bcaf',
             'app.paeb.gerer_situation_moe.validation_demande_paiement_moe_dpfi',
             'app.paeb.gerer_situation_moe.validation_demande_paiement_moe_daaf',
-            'app.paeb.gerer_situation_moe.paiement_moe'
+            'app.paeb.gerer_situation_moe.paiement_moe',
+            'app.paeb.gerer_situation_moe.document_moe_scan',
+            'app.paeb.gerer_situation_moe.dossier_moe'
             ])       
         .config(config);
         var vs ;
@@ -22,7 +24,7 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_moe', {
             title : 'Gérer situation BE',
             icon  : 'icon-data',
-            weight: 3
+            weight: 4
         });
 
 

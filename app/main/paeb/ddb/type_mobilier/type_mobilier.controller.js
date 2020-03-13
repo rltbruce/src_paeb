@@ -52,9 +52,9 @@ vm.mainGridOptions = {
                           code:  e.data.models[0].code,    
                           libelle:   e.data.models[0].libelle,
                           description: e.data.models[0].description,
-                          /*nbr_banc: e.data.models[0].nbr_banc,
+                          nbr_table_banc: e.data.models[0].nbr_table_banc,
                           nbr_table_maitre: e.data.models[0].nbr_table_maitre,
-                          nbr_chais_maitre: e.data.models[0].nbr_chais_maitre,*/
+                          nbr_chaise_maitre: e.data.models[0].nbr_chaise_maitre,
                           cout_mobilier: e.data.models[0].cout_mobilier,
                           id_zone_subvention:   e.data.models[0].zone_subvention.id,      
                           id_acces_zone:        e.data.models[0].acces_zone.id               
@@ -92,9 +92,9 @@ vm.mainGridOptions = {
                           code:  e.data.models[0].code,       
                           libelle:      e.data.models[0].libelle,
                           description:  e.data.models[0].description,
-                          /*nbr_banc: e.data.models[0].nbr_banc,
+                          nbr_table_banc: e.data.models[0].nbr_table_banc,
                           nbr_table_maitre: e.data.models[0].nbr_table_maitre,
-                          nbr_chais_maitre: e.data.models[0].nbr_chais_maitre,*/
+                          nbr_chaise_maitre: e.data.models[0].nbr_chaise_maitre,
                           cout_mobilier:  e.data.models[0].cout_mobilier,
                           id_zone_subvention:   e.data.models[0].zone_subvention,      
                           id_acces_zone:        e.data.models[0].acces_zone                
@@ -135,9 +135,9 @@ vm.mainGridOptions = {
                         code: {type: "string",validation: {required: true}},
                         libelle: {type: "string",validation: {required: true}},
                         description: {type: "string", validation: {required: true}},
-                       /* nbr_banc: {type: "number",validation: {required: true}},
+                       nbr_table_banc: {type: "number",validation: {required: true}},
                         nbr_table_maitre: {type: "number",validation: {required: true}},
-                        nbr_chais_maitre: {type: "number",validation: {required: true}},*/
+                        nbr_chaise_maitre: {type: "number",validation: {required: true}},
                         cout_mobilier: {type: "number", validation: {required: true}},
                         zone_subvention: {validation: {required: true}},
                         acces_zone: { validation: {required: true}}
@@ -192,6 +192,21 @@ vm.mainGridOptions = {
             {
               field: "description",
               title: "Description",
+              width: "Auto"
+            },
+            {
+              field: "nbr_table_banc",
+              title: "Nombre banc",
+              width: "Auto"
+            },
+            {
+              field: "nbr_table_maitre",
+              title: "Nombre table",
+              width: "Auto"
+            },
+            {
+              field: "nbr_chaise_maitre",
+              title: "Nombre chaise",
               width: "Auto"
             },{
               field: "zone_subvention",

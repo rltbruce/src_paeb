@@ -90,7 +90,7 @@
 
 /**********************************debut bureau etude****************************************/
 //col table
-        vm.bureau_etude_column = [
+     /*   vm.bureau_etude_column = [
         {titre:"Nom"},
         {titre:"Nif"},
         {titre:"Stat"},
@@ -135,12 +135,12 @@
                 item.$selected = false;
              });
              vm.selectedItemBureau_etude.$selected = true;
-        });
+        });*/
  
 /**********************************fin bureau etude****************************************/ 
 
 /**********************************contrat prestataire****************************************/
-
+/*
        vm.contrat_bureau_etude_column = [
         {titre:"Bureau d'etude"
         },
@@ -189,12 +189,32 @@
              });
              vm.selectedItemContrat_bureau_etude.$selected = true;
         });        
-
+*/
 /**********************************fin contrat prestataire****************************************/
 
 
 /**********************************fin justificatif attachement****************************************/
+      apiFactory.getAll("contrat_be/index").then(function(result)
+      {
+          vm.allcontrat_bureau_etude = result.data.response; 
+          console.log(vm.allcontrat_bureau_etude);
+      });
 
+      apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelByvalidation','validation',0).then(function(result)
+      {
+        vm.allmanuel_gestion = result.data.response;
+        
+        if (vm.allmanuel_gestion.length>0)
+        {
+            vm.showbuttonNouvAppel = false;
+        }
+                  
+      });
+      apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelByvalidation','validation',1).then(function(result)
+      {
+        vm.allappel_offre_valide = result.data.response;
+                  
+      });
 
 
         $scope.uploadFile = function(event)
@@ -219,7 +239,8 @@
               description: '',
               fichier: '',
               date_livraison: '',
-              observation: ''
+              observation: '',
+              id_contrat_bureau_etude: ''
             };
         
             vm.allmanuel_gestion.push(items);
@@ -264,6 +285,7 @@
             item.fichier   = currentItemManuel_gestion.fichier ;
             item.date_livraison   = currentItemManuel_gestion.date_livraison ;
             item.observation   = currentItemManuel_gestion.observation ;
+            item.id_contrat_bureau_etude   = currentItemManuel_gestion.id_contrat_bureau_etude ;
           }else
           {
             vm.allmanuel_gestion = vm.allmanuel_gestion.filter(function(obj)
@@ -311,6 +333,7 @@
             item.fichier   = vm.selectedItemManuel_gestion.fichier ;
             item.date_livraison   = new Date(vm.selectedItemManuel_gestion.date_livraison) ;
             item.observation   = vm.selectedItemManuel_gestion.observation ;
+            item.id_contrat_bureau_etude   = vm.selectedItemManuel_gestion.contrat_be.id ;
             //vm.showThParcourir = true;
         };
 
@@ -346,7 +369,8 @@
                    if((mem[0].description   != currentItemManuel_gestion.description )
                     ||(mem[0].fichier   != currentItemManuel_gestion.fichier )
                     ||(mem[0].date_livraison   != currentItemManuel_gestion.date_livraison )
-                    ||(mem[0].observation   != currentItemManuel_gestion.observation ))                   
+                    ||(mem[0].observation   != currentItemManuel_gestion.observation )                    
+                    ||(mem[0].id_contrat_bureau_etude   != currentItemManuel_gestion.contrat_be.id ))                   
                       { 
                          insert_in_baseManuel_gestion(item,suppression);
                       }
@@ -382,7 +406,7 @@
                     fichier: manuel_gestion.fichier,
                     date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
                     observation: manuel_gestion.observation,
-                    id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                    id_contrat_bureau_etude: manuel_gestion.id_contrat_bureau_etude,
                     validation:0               
                 });
                 console.log(datas);
@@ -390,6 +414,11 @@
             apiFactory.add("manuel_gestion/index",datas, config).success(function (data)
             {   
 
+
+              var contr= vm.allcontrat_bureau_etude.filter(function(obj)
+                {
+                    return obj.id == manuel_gestion.id_contrat_bureau_etude;
+                });
               if (NouvelItemManuel_gestion == false)
               {
                     // Update_paiement or delete: id exclu                 
@@ -404,7 +433,7 @@
                           if(file)
                           { 
 
-                            var name_file = vm.selectedItemContrat_bureau_etude.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                            var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                             var fd = new FormData();
                             fd.append('file', file);
@@ -430,7 +459,7 @@
                                                       fichier: manuel_gestion.fichier,
                                                       date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
                                                       observation: manuel_gestion.observation,
-                                                      id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                                      id_contrat_bureau_etude: manuel_gestion.id_contrat_bureau_etude,
                                                       validation:0
                                         });
                                       apiFactory.add("manuel_gestion/index",datas, config).success(function (data)
@@ -453,7 +482,7 @@
                                         fichier: manuel_gestion.fichier,
                                         date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
                                        observation: manuel_gestion.observation,
-                                        id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                        id_contrat_bureau_etude: manuel_gestion.id_contrat_bureau_etude,
                                         validation:0               
                                     });
                                   apiFactory.add("manuel_gestion/index",datas, config).success(function (data)
@@ -471,7 +500,7 @@
                             });
                           }
 
-
+                        vm.selectedItemManuel_gestion.contrat_be = contr[0];
                         vm.selectedItemManuel_gestion.$selected  = false;
                         vm.selectedItemManuel_gestion.$edit      = false;
                         vm.selectedItemManuel_gestion ={};
@@ -517,7 +546,7 @@
                     if(file)
                     { 
 
-                      var name_file = vm.selectedItemContrat_bureau_etude.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                      var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                       var fd = new FormData();
                       fd.append('file', file);
@@ -543,7 +572,7 @@
                                                 fichier: manuel_gestion.fichier,
                                                 date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
                                                observation: manuel_gestion.observation,
-                                                id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                                id_contrat_bureau_etude: manuel_gestion.id_contrat_bureau_etude,
                                                 validation:0
                                   });
                                 apiFactory.add("manuel_gestion/index",datas, config).success(function (data)
@@ -566,7 +595,7 @@
                                   fichier: manuel_gestion.fichier,
                                   date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
                                   observation: manuel_gestion.observation,
-                                  id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                                  id_contrat_bureau_etude: manuel_gestion.id_contrat_bureau_etude,
                                   validation:0               
                               });
                             apiFactory.add("manuel_gestion/index",datas, config).success(function (data)
@@ -584,6 +613,7 @@
                       });
                     }
               }
+              manuel_gestion.contrat_be = contr[0];
               manuel_gestion.$selected = false;
               manuel_gestion.$edit = false;
               vm.selectedItemManuel_gestion = {};
@@ -626,7 +656,7 @@
                     fichier: manuel_gestion.fichier,
                     date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
                    observation: manuel_gestion.observation,
-                    id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                    id_contrat_bureau_etude: manuel_gestion.contrat_be.id,
                     validation:1               
                 });
                 console.log(datas);
