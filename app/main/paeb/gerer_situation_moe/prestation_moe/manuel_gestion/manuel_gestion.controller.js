@@ -4,7 +4,7 @@
 
     angular
         .module('app.paeb.gerer_situation_moe.prestation_moe.manuel_gestion')
-        .directive('customOnChange', function() {
+      /*  .directive('customOnChange', function() {
       return {
         restrict: 'A',
         require:'ngModel',
@@ -48,11 +48,11 @@
            console.log('Rivotra');
         });
       }
-    }])
+    }])*/
     //.controller('DialogController', DialogController)
         .controller('Manuel_gestionController', Manuel_gestionController);
     /** @ngInject */
-    function Manuel_gestionController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Manuel_gestionController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
         vm.selectedItemBureau_etude = {} ;
@@ -191,10 +191,48 @@
         });        
 */
 /**********************************fin contrat prestataire****************************************/
+      var id_user = $cookieStore.get('id');
 
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_bureau_etude = result.data.response; 
+                console.log(vm.allcontrat_bureau_etude);
+            });
+
+            apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelvalidationBycisco','validation',0).then(function(result)
+            {
+              vm.allmanuel_gestion = result.data.response;
+              
+              if (vm.allmanuel_gestion.length>0)
+              {
+                  vm.showbuttonNouvAppel = false;
+              }
+                        
+            });
+            apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelvalidationBycisco','validation',1).then(function(result)
+            {
+              vm.allmanuel_gestion_valide = result.data.response;
+                        
+            });
+          }
+        });
 
 /**********************************fin justificatif attachement****************************************/
-      apiFactory.getAll("contrat_be/index").then(function(result)
+     /* apiFactory.getAll("contrat_be/index").then(function(result)
       {
           vm.allcontrat_bureau_etude = result.data.response; 
           console.log(vm.allcontrat_bureau_etude);
@@ -214,17 +252,17 @@
       {
         vm.allappel_offre_valide = result.data.response;
                   
-      });
+      });*/
 
 
-        $scope.uploadFile = function(event)
+      /*  $scope.uploadFile = function(event)
        {
           console.dir(event);
           var files = event.target.files;
           vm.myFile = files;
           vm.selectedItemManuel_gestion.fichier = vm.myFile[0].name;
           //console.log(vm.selectedItemManuel_gestion.fichier);
-        } 
+        } */
 
         //Masque de saisi ajout
         vm.ajouterManuel_gestion = function ()
@@ -237,7 +275,7 @@
               $selected: true,
               id: '0',         
               description: '',
-              fichier: '',
+             // fichier: '',
               date_livraison: '',
               observation: '',
               id_contrat_bureau_etude: ''
@@ -282,7 +320,7 @@
             item.$edit = false;
             item.$selected = false;
             item.description   = currentItemManuel_gestion.description ;
-            item.fichier   = currentItemManuel_gestion.fichier ;
+            //item.fichier   = currentItemManuel_gestion.fichier ;
             item.date_livraison   = currentItemManuel_gestion.date_livraison ;
             item.observation   = currentItemManuel_gestion.observation ;
             item.id_contrat_bureau_etude   = currentItemManuel_gestion.id_contrat_bureau_etude ;
@@ -330,7 +368,7 @@
             item.$edit = true;
             item.$selected = true;
             item.description   = vm.selectedItemManuel_gestion.description ;
-            item.fichier   = vm.selectedItemManuel_gestion.fichier ;
+            //item.fichier   = vm.selectedItemManuel_gestion.fichier ;
             item.date_livraison   = new Date(vm.selectedItemManuel_gestion.date_livraison) ;
             item.observation   = vm.selectedItemManuel_gestion.observation ;
             item.id_contrat_bureau_etude   = vm.selectedItemManuel_gestion.contrat_be.id ;
@@ -367,7 +405,7 @@
                 if(mem[0])
                 {
                    if((mem[0].description   != currentItemManuel_gestion.description )
-                    ||(mem[0].fichier   != currentItemManuel_gestion.fichier )
+                    //||(mem[0].fichier   != currentItemManuel_gestion.fichier )
                     ||(mem[0].date_livraison   != currentItemManuel_gestion.date_livraison )
                     ||(mem[0].observation   != currentItemManuel_gestion.observation )                    
                     ||(mem[0].id_contrat_bureau_etude   != currentItemManuel_gestion.contrat_be.id ))                   
@@ -403,7 +441,7 @@
                     supprimer: suppression,
                     id:        getId,
                     description: manuel_gestion.description,
-                    fichier: manuel_gestion.fichier,
+                    //fichier: manuel_gestion.fichier,
                     date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
                     observation: manuel_gestion.observation,
                     id_contrat_bureau_etude: manuel_gestion.id_contrat_bureau_etude,
@@ -424,82 +462,7 @@
                     // Update_paiement or delete: id exclu                 
                     if(suppression==0)
                     {
-                         var file= vm.myFile[0];
-                    
-                          var repertoire = 'manuel_gestion/';
-                          var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
-                          var getIdFile = vm.selectedItemManuel_gestion.id
-                                              
-                          if(file)
-                          { 
-
-                            var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
-
-                            var fd = new FormData();
-                            fd.append('file', file);
-                            fd.append('repertoire',repertoire);
-                            fd.append('name_fichier',name_file);
-
-                            var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
-                            headers: {'Content-Type': undefined}, repertoire: repertoire
-                            }).success(function(data)
-                            {
-                                if(data['erreur'])
-                                {
-                                  var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
-                                 
-                                  var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
-                                  $mdDialog.show( alert ).finally(function()
-                                  { 
-                                    manuel_gestion.fichier='';
-                                  var datas = $.param({
-                                                      supprimer: suppression,
-                                                      id:        getIdFile,
-                                                      description: manuel_gestion.description,
-                                                      fichier: manuel_gestion.fichier,
-                                                      date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
-                                                      observation: manuel_gestion.observation,
-                                                      id_contrat_bureau_etude: manuel_gestion.id_contrat_bureau_etude,
-                                                      validation:0
-                                        });
-                                      apiFactory.add("manuel_gestion/index",datas, config).success(function (data)
-                                      {  
-                                          vm.showbuttonNouvManuel = true;
-                                          manuel_gestion.$selected = false;
-                                          manuel_gestion.$edit = false;
-                                          vm.selectedItemManuel_gestion = {};
-                                      console.log('b');
-                                      }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-                                  });
-                                }
-                                else
-                                {
-                                  manuel_gestion.fichier=repertoire+data['nomFile'];
-                                  var datas = $.param({
-                                        supprimer: suppression,
-                                        id:        getIdFile,
-                                        description: manuel_gestion.description,
-                                        fichier: manuel_gestion.fichier,
-                                        date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
-                                       observation: manuel_gestion.observation,
-                                        id_contrat_bureau_etude: manuel_gestion.id_contrat_bureau_etude,
-                                        validation:0               
-                                    });
-                                  apiFactory.add("manuel_gestion/index",datas, config).success(function (data)
-                                  {
-                                        
-                                      manuel_gestion.$selected = false;
-                                      manuel_gestion.$edit = false;
-                                      vm.selectedItemManuel_gestion = {};
-                                      console.log('e');
-                                  }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-                                }
-                            }).error(function()
-                            {
-                              vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
-                            });
-                          }
-
+                        
                         vm.selectedItemManuel_gestion.contrat_be = contr[0];
                         vm.selectedItemManuel_gestion.$selected  = false;
                         vm.selectedItemManuel_gestion.$edit      = false;
@@ -513,107 +476,20 @@
                           return obj.id !== vm.selectedItemManuel_gestion.id;
                       });
                       vm.showbuttonNouvManuel = true;
-                      var chemin= vm.selectedItemManuel_gestion.fichier;
-                      var fd = new FormData();
-                          fd.append('chemin',chemin);
-                     
-                      var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
-
-                      var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
-                      headers: {'Content-Type': undefined}, chemin: chemin
-                      }).success(function(data)
-                      {
-                         console.log('ok');
-                      }).error(function()
-                      {
-                          showDialog(event,chemin);
-                      });
+                    
                       vm.showbuttonValidation = false;
                     }
               }
               else
-              {
+              {   
+                  manuel_gestion.contrat_be = contr[0];
                   manuel_gestion.id  =   String(data.response);              
                   NouvelItemManuel_gestion = false;
 
                   vm.showbuttonNouvManuel = false;
-                    var file= vm.myFile[0];
                     
-                    var repertoire = 'manuel_gestion/';
-                    var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
-                    var getIdFile = String(data.response);
-                                        
-                    if(file)
-                    { 
-
-                      var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
-
-                      var fd = new FormData();
-                      fd.append('file', file);
-                      fd.append('repertoire',repertoire);
-                      fd.append('name_fichier',name_file);
-
-                      var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
-                      headers: {'Content-Type': undefined}, repertoire: repertoire
-                      }).success(function(data)
-                      {
-                          if(data['erreur'])
-                          {
-                            var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
-                           
-                            var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
-                            $mdDialog.show( alert ).finally(function()
-                            { 
-                              manuel_gestion.fichier='';
-                            var datas = $.param({
-                                                supprimer: suppression,
-                                                id:        getIdFile,
-                                                description: manuel_gestion.description,
-                                                fichier: manuel_gestion.fichier,
-                                                date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
-                                               observation: manuel_gestion.observation,
-                                                id_contrat_bureau_etude: manuel_gestion.id_contrat_bureau_etude,
-                                                validation:0
-                                  });
-                                apiFactory.add("manuel_gestion/index",datas, config).success(function (data)
-                                {  
-                                    vm.showbuttonNouvManuel = true;
-                                    manuel_gestion.$selected = false;
-                                    manuel_gestion.$edit = false;
-                                    vm.selectedItemManuel_gestion = {};
-                                console.log('b');
-                                }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-                            });
-                          }
-                          else
-                          {
-                            manuel_gestion.fichier=repertoire+data['nomFile'];
-                            var datas = $.param({
-                                  supprimer: suppression,
-                                  id:        getIdFile,
-                                  description: manuel_gestion.description,
-                                  fichier: manuel_gestion.fichier,
-                                  date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
-                                  observation: manuel_gestion.observation,
-                                  id_contrat_bureau_etude: manuel_gestion.id_contrat_bureau_etude,
-                                  validation:0               
-                              });
-                            apiFactory.add("manuel_gestion/index",datas, config).success(function (data)
-                            {
-                                  
-                                manuel_gestion.$selected = false;
-                                manuel_gestion.$edit = false;
-                                vm.selectedItemManuel_gestion = {};
-                                console.log('e');
-                            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-                          }
-                      }).error(function()
-                      {
-                        vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
-                      });
-                    }
               }
-              manuel_gestion.contrat_be = contr[0];
+              
               manuel_gestion.$selected = false;
               manuel_gestion.$edit = false;
               vm.selectedItemManuel_gestion = {};
@@ -653,9 +529,9 @@
                     supprimer: suppression,
                     id:        manuel_gestion.id,
                     description: manuel_gestion.description,
-                    fichier: manuel_gestion.fichier,
+                    //fichier: manuel_gestion.fichier,
                     date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
-                   observation: manuel_gestion.observation,
+                    observation: manuel_gestion.observation,
                     id_contrat_bureau_etude: manuel_gestion.contrat_be.id,
                     validation:1               
                 });
@@ -676,10 +552,10 @@
 
         }
 
-        vm.download_manuel_gestion = function(item)
+       /* vm.download_manuel_gestion = function(item)
         {
             window.location = apiUrlFile+item.fichier;
-        }
+        }*/
 /**********************************fin justificatif batiment****************************************/
 
 /**********************************fin mpe_sousmissionnaire****************************************/

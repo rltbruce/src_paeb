@@ -51,7 +51,7 @@
     }])
         .controller('Demande_batiment_moeController', Demande_batiment_moeController);
     /** @ngInject */
-    function Demande_batiment_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http)
+    function Demande_batiment_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore)
     {
 		    var vm = this;
         vm.selectedItemContrat_bureau_etude = {};
@@ -77,7 +77,7 @@
         vm.selectedItemJustificatif_batiment_moe = {} ;
         vm.alljustificatif_batiment_moe = [] ;
 
-       
+       vm.showbuttonValidation = false;
 
         vm.allcurenttranche_demande_batiment_moe = [];
         vm.alltranche_demande_batiment_moe = [];
@@ -90,11 +90,6 @@
         vm.stepOne = false;
         vm.stepTwo = false;
         vm.stepThree = false;
-        vm.stepFor = false;
-        vm.stepThree = false;
-        vm.stepFor = false;
-        vm.stepFive = false;
-        vm.stepSixe = false;
 
                 //vm.showThParcourir = false;
         vm.date_now         = new Date();
@@ -109,7 +104,7 @@
 /**********************************contrat bureau_etude****************************************/
 
         //col table
-       vm.contrat_bureau_etude_column = [
+     /*  vm.contrat_bureau_etude_column = [
         {titre:"Bureau d'etude"
         },
         {titre:"Intitule"
@@ -159,14 +154,43 @@
                 item.$selected = false;
              });
              vm.selectedItemContrat_bureau_etude.$selected = true;
-        });        
+        });  */      
 
 /**********************************fin contrat bureau_etude****************************************/
+        var id_user = $cookieStore.get('id');
 
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_bureau_etude = result.data.response; 
+                console.log(vm.allcontrat_bureau_etude);
+            });
+
+            apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index",'menu','getalldemandeinvalideBycisco','id_cisco',usercisco.id).then(function(result)
+              {
+                  vm.alldemande_batiment_moe_invalide = result.data.response;
+                  console.log(vm.alldemande_batiment_moe_invalide);
+              });
+
+          }
+        });
 
 /**********************************fin batiment construction****************************************/       
 //col table
-       vm.batiment_construction_column = [        
+   /*   vm.batiment_construction_column = [        
         {
           titre:"Batiment"
         },
@@ -183,14 +207,14 @@
             vm.selectedItemBatiment_construction = item;
            
             if (vm.selectedItemBatiment_construction.id!=0)
-            {  
+            {  */
 
              /* apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index",'menu','getdemandeInvalideBybatiment','id_batiment_construction',item.id).then(function(result)
               {
                   vm.alldemande_batiment_moe_invalide = result.data.response;
               }); */
 
-              apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index",'menu','getalldemandeBybatiment','id_batiment_construction',item.id).then(function(result)
+           /*   apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index",'menu','getalldemandeBybatiment','id_batiment_construction',item.id).then(function(result)
               {
                   vm.alldemande_batiment_moe_invalide = result.data.response.filter(function(obj)
                   {
@@ -215,13 +239,15 @@
                 item.$selected = false;
              });
              vm.selectedItemBatiment_construction.$selected = true;
-        });           
+        }); */          
 
 /**********************************fin batiment construction****************************************/
 
 /**********************************debut demande_batiment_moe****************************************/
 //col table
         vm.demande_batiment_moe_column = [
+        {titre:"Contrat"
+        },
         {titre:"Objet"
         },
         {titre:"Description"
@@ -259,10 +285,101 @@
           {
             vm.alltranche_d_debut_travaux_moe= result.data.response;
           });
-
-
-        //Masque de saisi ajout
+        
         vm.ajouterDemande_batiment_moe = function ()
+        { 
+          var items = {
+                        $edit: true,
+                        $selected: true,
+                        id: '0',         
+                        id_contrat_bureau_etude: '',         
+                        objet: '',
+                        description: '',
+                        ref_facture: '',
+                        id_tranche: '',
+                        montant: '',
+                        cumul: '',
+                        anterieur: '',
+                        periode: '',
+                        pourcentage:'',
+                        reste:'',
+                        date: ''
+                      };
+
+            if (NouvelItemDemande_batiment_moe == false)
+            {
+              vm.alldemande_batiment_moe_invalide.push(items);                        
+              vm.alldemande_batiment_moe_invalide.forEach(function(mem)
+              {
+                 if(mem.$selected==true)
+                   {
+                      vm.selectedItemDemande_batiment_moe = mem;
+                   }
+              });
+
+                NouvelItemDemande_batiment_moe = true ;
+              }                    
+              else
+              {
+                vm.showAlert('Ajout demande batiment','Un formulaire d\'ajout est déjà ouvert!!!');
+              }                   
+        };
+        vm.change_contrat = function(item)
+        { 
+          apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index",'menu','getalldemandeBycontrat','id_contrat_bureau_etude',item.id_contrat_bureau_etude).then(function(result)
+          {
+              if (NouvelItemDemande_batiment_moe ==false)
+              {
+                vm.alldemande_batiment_moe = result.data.response.filter(function(obj){return obj.id == item.id;});
+                console.log(vm.alldemande_batiment_moe);
+              }
+              else
+              {
+                vm.alldemande_batiment_moe = result.data.response;
+              }
+              
+          });
+          //var validation_derndemane_bat=0;
+          apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index",'menu','getalldemandeByContrat','id_contrat_bureau_etude',item.id_contrat_bureau_etude).then(function(result)
+          {
+              vm.alldemande_debut_travaux_moe = result.data.response.filter(function(obj)
+              {
+                  return obj.validation == 3;
+              });
+              
+              if (vm.alldemande_debut_travaux_moe.length==vm.alltranche_d_debut_travaux_moe.length)
+              {
+                  if(vm.alldemande_batiment_moe.length>0)
+                  {
+                      var last_id_demande = Math.max.apply(Math, vm.alldemande_batiment_moe.map(function(o){ return o.id;}));
+                      vm.dernierdemande = vm.alldemande_batiment_moe.filter(function(obj){return obj.id == last_id_demande;});
+                      var numcode=vm.dernierdemande[0].tranche.code.split(' ')[1];
+
+                      if (vm.dernierdemande[0].validation==3)
+                      { 
+                          vm.allcurenttranche_demande_batiment_moe = vm.alltranche_demande_batiment_moe.filter(function(obj){ return obj.code == 'tranche '+(parseInt(numcode)+1);});
+                      } 
+                      else
+                      {
+                          vm.showAlert('Impossible d\'ajouter la demande','Dernier demande en-cours!!!');
+                          vm.allcurenttranche_demande_batiment_moe = [];
+                      }
+                  }
+                  else
+                  { 
+                      vm.allcurenttranche_demande_batiment_moe = vm.alltranche_demande_batiment_moe.filter(function(obj){return obj.code == 'tranche 1';});
+                    //vm.dernierdemande = [];
+                  }
+              }
+              else
+              {
+                vm.showAlert('Ajout demande batiment','La demande avant travaux incomplète ou en-cours de validation');
+                vm.allcurenttranche_demande_batiment_moe = [];
+              }
+          });
+        }
+        //Masque de saisi ajout
+       /* vm.ajouterDemande_batiment_moe = function ()
         { 
           var items = {
                         $edit: true,
@@ -354,7 +471,7 @@
               }
           });         
         };
-
+*/
         //fonction ajout dans bdd
         function ajoutDemande_batiment_moe(demande_batiment_moe,suppression)
         {
@@ -375,6 +492,7 @@
           {
             item.$edit = false;
             item.$selected = false;
+            item.id_contrat_bureau_etude   = currentItemDemande_batiment_moe.id_contrat_bureau_etude ;
             item.objet   = currentItemDemande_batiment_moe.objet ;
             item.description   = currentItemDemande_batiment_moe.description ;
             item.ref_facture   = currentItemDemande_batiment_moe.ref_facture ;
@@ -412,7 +530,7 @@
                 vm.alljustificatif_batiment_moe = result.data.response;
                 console.log(vm.alljustificatif_batiment_moe);
             });
-
+            vm.showbuttonValidation = true;
            /* apiFactory.getAPIgeneraliserREST("justificatif_facture/index",'id_demande_batiment_moe',vm.selectedItemDemande_batiment_moe.id).then(function(result)
             {
                 vm.alljustificatif_facture = result.data.response;
@@ -452,6 +570,7 @@
 
             item.$edit = true;
             item.$selected = true;
+            item.id_contrat_bureau_etude   = vm.selectedItemDemande_batiment_moe.contrat_bureau_etude.id ;
             item.objet   = vm.selectedItemDemande_batiment_moe.objet ;
             item.description   = vm.selectedItemDemande_batiment_moe.description ;
             item.ref_facture   = vm.selectedItemDemande_batiment_moe.ref_facture ;
@@ -495,6 +614,7 @@
                 if(pass[0])
                 {
                    if((pass[0].objet   != currentItemDemande_batiment_moe.objet )
+                    || (pass[0].id_contrat_bureau_etude   != currentItemDemande_batiment_moe.id_contrat_bureau_etude )
                     || (pass[0].description   != currentItemDemande_batiment_moe.description )
                     || (pass[0].id_tranche_demande_batiment_moe != currentItemDemande_batiment_moe.id_tranche_demande_batiment_moe )
                     || (pass[0].montant   != currentItemDemande_batiment_moe.montant )
@@ -543,7 +663,7 @@
                     anterieur: demande_batiment_moe.anterieur ,
                     reste: demande_batiment_moe.reste ,
                     date: convertionDate(new Date(demande_batiment_moe.date)),
-                    id_batiment_construction: vm.selectedItemBatiment_construction.id,
+                    id_contrat_bureau_etude: demande_batiment_moe.id_contrat_bureau_etude,
                     validation: 0               
                 });
                 console.log(datas);
@@ -556,11 +676,17 @@
                     return obj.id == demande_batiment_moe.id_tranche_demande_batiment_moe;
                 });
 
+                var contra= vm.allcontrat_bureau_etude.filter(function(obj)
+                {
+                    return obj.id == demande_batiment_moe.id_contrat_bureau_etude;
+                });
+
                 if (NouvelItemDemande_batiment_moe == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
-                    {
+                    {   
+                        vm.selectedItemDemande_batiment_moe.contrat_bureau_etude = contra[0] ;
                         vm.selectedItemDemande_batiment_moe.tranche = tran[0] ;
                         vm.selectedItemDemande_batiment_moe.periode = tran[0].periode ;
                         vm.selectedItemDemande_batiment_moe.pourcentage = tran[0].pourcentage ;
@@ -581,6 +707,7 @@
                 }
                 else
                 {
+                  demande_batiment_moe.contrat_bureau_etude = contra[0] ;
                   demande_batiment_moe.tranche = tran[0] ;
                   demande_batiment_moe.periode = tran[0].periode ;
                   demande_batiment_moe.pourcentage = tran[0].pourcentage ;
@@ -588,6 +715,7 @@
                   demande_batiment_moe.id  =   String(data.response);              
                   NouvelItemDemande_batiment_moe=false;
             }
+              vm.showbuttonValidation = false;
               demande_batiment_moe.$selected = false;
               demande_batiment_moe.$edit = false;
               vm.selectedItemDemande_batiment_moe = {};
@@ -598,19 +726,22 @@
 
         vm.tranchechange = function(item)
         { 
-          
+          var contra= vm.allcontrat_bureau_etude.filter(function(obj)
+          {
+              return obj.id == item.id_contrat_bureau_etude;
+          });
           var reste = 0;
           var anterieur = 0;
-          var montant = (parseInt(vm.selectedItemContrat_bureau_etude.montant_contrat) * vm.allcurenttranche_demande_batiment_moe[0].pourcentage)/100;
+          var montant = (parseInt(contra[0].montant_contrat) * vm.allcurenttranche_demande_batiment_moe[0].pourcentage)/100;
           var cumul = montant;
 
-          if (vm.alldemande_batiment_moe_invalide.length>1)
+          if (vm.alldemande_batiment_moe.length>0) //mila jerene le invalide esorina ngamba
           {                 
               anterieur = vm.dernierdemande[0].montant;           
               cumul = montant + parseInt(vm.dernierdemande[0].cumul);
           }
 
-          reste= parseInt(vm.selectedItemContrat_bureau_etude.montant_contrat) - cumul;
+          reste= parseInt(contra[0].montant_contrat) - cumul;
 
           item.periode = vm.allcurenttranche_demande_batiment_moe[0].periode;
           item.pourcentage = vm.allcurenttranche_demande_batiment_moe[0].pourcentage;
@@ -619,6 +750,51 @@
           item.anterieur = anterieur;
           item.cumul = cumul;
           item.reste = reste;
+        }
+
+        vm.validerDemande_batiment_moe = function()
+        {
+          maj_in_baseDemande_batiment_moe(vm.selectedItemDemande_batiment_moe,0,1);
+        }
+
+        function maj_in_baseDemande_batiment_moe(demande_batiment_moe,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        demande_batiment_moe.id,
+                    objet: demande_batiment_moe.objet,
+                    description:demande_batiment_moe.description,
+                    ref_facture:demande_batiment_moe.ref_facture,
+                    id_tranche_demande_batiment_moe: demande_batiment_moe.tranche.id ,
+                    montant: demande_batiment_moe.montant,
+                    cumul: demande_batiment_moe.cumul ,
+                    anterieur: demande_batiment_moe.anterieur ,
+                    reste: demande_batiment_moe.reste ,
+                    date: convertionDate(new Date(demande_batiment_moe.date)),
+                    id_contrat_bureau_etude: demande_batiment_moe.contrat_bureau_etude.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("demande_batiment_moe/index",datas, config).success(function (data)
+            {   
+
+                vm.alldemande_batiment_moe_invalide = vm.alldemande_batiment_moe_invalide.filter(function(obj)
+                {
+                    return obj.id != vm.selectedItemDemande_batiment_moe.id;
+                });
+              demande_batiment_moe.$selected = false;
+              demande_batiment_moe.$edit = false;
+              vm.selectedItemDemande_batiment_moe = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
         }
 /**********************************fin demande_batiment_moe****************************************/
 

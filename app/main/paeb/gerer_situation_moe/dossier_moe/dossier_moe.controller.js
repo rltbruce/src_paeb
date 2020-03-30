@@ -7,7 +7,7 @@
     //.controller('DialogController', DialogController)
         .controller('Dossier_moeController', Dossier_moeController);
     /** @ngInject */
-    function Dossier_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Dossier_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
 
@@ -51,11 +51,27 @@
         {titre:"Date signature"
         }];
       
-      apiFactory.getAll("contrat_be/index").then(function(result)
+      /*apiFactory.getAll("contrat_be/index").then(function(result)
       {
           vm.allcontrat_bureau_etude = result.data.response; 
           console.log(vm.allcontrat_bureau_etude);
-      });
+      });*/
+      var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_bureau_etude = result.data.response; 
+                console.log(vm.allcontrat_bureau_etude);
+            });
+
+          }
+        });
          //fonction selection item contrat
         vm.selectionContrat_bureau_etude= function (item)
         {

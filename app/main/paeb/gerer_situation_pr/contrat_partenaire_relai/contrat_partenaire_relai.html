@@ -27,7 +27,7 @@
 
     <!-----debut FEFFI ------>
 
-            <md-tab>
+            <!--md-tab>
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
@@ -86,7 +86,7 @@
                   </table>
                 </div>
               </md-tab-body>
-            </md-tab>
+            </md-tab-->
     <!-----FIN FEFFI ------>
     <!-----Debut contrat prstataire ------>
           <md-tab >
@@ -105,8 +105,11 @@
               
               <md-tab-body>
                 <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterContrat_partenaire_relai()" style="width:10%;" ng-disabled="!vm.showbuttonNouvContrat_partenaire_relai">
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterContrat_partenaire_relai()" style="width:10%;" ng-show="vm.showbuttonNouvContrat_partenaire_relai==1">
                       Nouveau
+                    </md-button>
+                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.valider_contrat()" style="width:10%;" ng-show="vm.showbuttonValidation && vm.permissionboutonValider">
+                      Validation
                     </md-button>
                 </div>
                <div>        
@@ -124,6 +127,21 @@
                   <tbody>
                     <tr ng-repeat="contrat_partenaire_relai in vm.allcontrat_partenaire_relai"  ng-class="{selected: contrat_partenaire_relai.$selected}" ng-click="vm.selectionContrat_partenaire_relai(contrat_partenaire_relai)">
                                 
+                      <td>
+                        <span ng-if="contrat_partenaire_relai.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Convention</label>
+                            <md-select ng-model="contrat_partenaire_relai.id_convention_entete"style="overflow: hidden;text-overflow: ellipsis;">
+                              <md-option ng-repeat="convention_entete in vm.allconvention_entete" value="{{convention_entete.id}}">
+                                                                    {{convention_entete.ref_convention}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!contrat_partenaire_relai.$edit">{{contrat_partenaire_relai.convention_entete.ref_convention}}</span>
+                      </td>
+
                       <td>
                         <span ng-if="contrat_partenaire_relai.$edit">
                           <md-input-container style="width:100%;display: flex !important;">

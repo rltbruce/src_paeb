@@ -148,7 +148,7 @@
                     anterieur: demande_latrine_prest.anterieur ,
                     reste: demande_latrine_prest.reste ,
                     date: convertionDate(new Date(demande_latrine_prest.date)),
-                    id_latrine_construction: demande_latrine_prest.latrine_construction.id,
+                    id_contrat_prestataire: demande_latrine_prest.contrat_prestataire.id,
                     validation: validation               
                 });
                 console.log(datas);

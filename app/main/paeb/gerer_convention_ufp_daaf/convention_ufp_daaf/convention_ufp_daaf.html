@@ -29,10 +29,6 @@
           <md-tab>
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
-                <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">p</span>
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
-                    <i class="icon-check s16"></i>
-                  </span-->
                   <span class="ms-form-wizard-step-number md-accent-bg">
                     <i class="icon-check s16"></i>
                 </span>
@@ -45,7 +41,6 @@
                   <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterConvention_ufp_daaf_entete()" style="width:10%;">
                     Nouveau
                   </md-button>
-
                   <md-button type="submit" ng-show="vm.afficherboutonValider==1 && vm.permissionboutonValider" class="md-raised md-warn" aria-label="Valider" ng-click="vm.validerConvention()" style="width:10%;">
                     Valider
                   </md-button>
@@ -153,7 +148,7 @@
 
           <!-----debut convention_detail ------>
 
-            <md-tab ng-disabled="vm.stepOne==false">
+            <!--md-tab ng-disabled="vm.stepOne==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
 
@@ -175,10 +170,46 @@
                 <div>        
                   <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                     <thead>
-                      <tr>
-                        <th class="secondary-text" ng-repeat="ciscT in ::vm.convention_ufp_daaf_detail_column">
+                      <tr-->
+                        <!--th class="secondary-text" ng-repeat="ciscT in ::vm.convention_ufp_daaf_detail_column">
                           <div class="table-header">
                             <span class="column-title">{{ciscT.titre}}</span>
+                          </div>
+                        </th-->
+
+                          <!--th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Description</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Description</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Description</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Description</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Description</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Description</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Description</span>
                           </div>
                         </th>
                       </tr>
@@ -186,7 +217,7 @@
                              
                     <tbody>
                       <tr ng-repeat="convention_ufp_daaf_detail in vm.allconvention_ufp_daaf_detail"  ng-class="{selected: convention_ufp_daaf_detail.$selected}" ng-click="vm.selectionConvention_ufp_daaf_detail(convention_ufp_daaf_detail)">
-
+                       
 
                         <td>
                           <span ng-if="convention_ufp_daaf_detail.$edit">
@@ -213,7 +244,7 @@
                                     
                           <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.adresse_banque}}</span>
                         </td>
-
+                   
                         <td>
                           <span ng-if="convention_ufp_daaf_detail.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
@@ -273,10 +304,223 @@
                             <span class="icon-content-save"></span>
                           </a>
                         </td>
+                 
                       </tr>
                     </tbody>
                   </table>
                 </div> 
+              </md-tab-body>
+            </md-tab-->
+
+            <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                  </span>
+                  <span class="ms-form-wizard-step-text">Detail</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterConvention_ufp_daaf_detail()" style="width:10%;" ng-disabled="vm.showbuttonNouvDetail==false" ng-disabled="!vm.showbuttonNouvDetail">
+                      Nouveau
+                    </md-button>
+                </div>
+                
+            <fieldset class="standard" >
+                <legend><code>Compte</code></legend>
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptionsperso" ms-responsive-table>
+                    <thead>
+                      <tr>
+
+                          <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Nom banque</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Adresse banque</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">RIB</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="convention_ufp_daaf_detail in vm.allconvention_ufp_daaf_detail"  ng-class="{selected: convention_ufp_daaf_detail.$selected}" ng-click="vm.selectionConvention_ufp_daaf_detail(convention_ufp_daaf_detail)">
+                       
+
+                        <td>
+                          <span ng-if="convention_ufp_daaf_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Nom banque</label>
+                              <md-select ng-model="convention_ufp_daaf_detail.id_compte_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changecompte_daaf(convention_ufp_daaf_detail)">
+                                <md-option ng-repeat="compte_daaf in vm.allcompte_daaf" value="{{compte_daaf.id}}">
+                                                                    {{compte_daaf.nom_banque}}
+                                </md-option>
+                              </md-select>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.nom_banque}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="convention_ufp_daaf_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Adresse banque</label>
+                              <input name="adresse_banque" type="text" ng-model="convention_ufp_daaf_detail.adresse_banque" disabled/>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.adresse_banque}}</span>
+                        </td>
+                   
+                        <td>
+                          <span ng-if="convention_ufp_daaf_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>RIB</label>
+                              <input name="rib" type="text" ng-model="convention_ufp_daaf_detail.rib" disabled/>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.rib}}</span>
+                        </td>
+                 
+                      </tr>
+                    </tbody>
+                  </table>
+                </div> 
+            </fieldset><br>
+
+            <fieldset class="standard" >
+                <legend><code>Autre</code></legend>
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptionsperso" ms-responsive-table>
+                    <thead>
+                      <tr>
+
+                          
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Delai</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Date signature</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Observation</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="convention_ufp_daaf_detail in vm.allconvention_ufp_daaf_detail"  ng-class="{selected: convention_ufp_daaf_detail.$selected}" ng-click="vm.selectionConvention_ufp_daaf_detail(convention_ufp_daaf_detail)">
+                       
+
+
+                        <td>
+                          <span ng-if="convention_ufp_daaf_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Delai</label>
+                              <input name="delai" type="text" ng-model="convention_ufp_daaf_detail.delai" md-placeholder="en mois"/>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.delai}}</span>
+                        </td>
+                        
+
+                        <td>
+                          <span ng-if="convention_ufp_daaf_detail.$edit">
+                            <md-datepicker ng-model="convention_ufp_daaf_detail.date_signature" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>  
+                          </span>
+                                    
+                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{vm.formatDate(convention_ufp_daaf_detail.date_signature)}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="convention_ufp_daaf_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Observation</label>
+                              <input name="observation" type="text" ng-model="convention_ufp_daaf_detail.observation" md-placeholder="en mois"/>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.observation}}</span>
+                        </td>
+                 
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </fieldset><br>
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptionsperso2" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title"></span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="convention_ufp_daaf_detail in vm.allconvention_ufp_daaf_detail" ng-click="vm.selectionConvention_ufp_daaf_detail(convention_ufp_daaf_detail)">                       
+                                                   
+                        <td>  
+                          <!--a ng-if="!convention_ufp_daaf_detail.$edit" ng-click="vm.modifierConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" title="Modifier">
+                            <span class="icon-table-edit"></span>
+                          </a-->
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Modifier" ng-if="!convention_ufp_daaf_detail.$edit" ng-click="vm.modifierConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" style="width:10%;">
+                            Modifier
+                          </md-button>
+                                    
+                          <!--a ng-if="!convention_ufp_daaf_detail.$edit" ng-click="vm.supprimerConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" title="Supprimer">
+                            <span class="icon-delete"></span>
+                          </a-->
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Supprimer" ng-if="!convention_ufp_daaf_detail.$edit" ng-click="vm.supprimerConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" style="width:10%;">
+                            Supprimer
+                          </md-button>
+                                    
+                          <!--a ng-if="convention_ufp_daaf_detail.$edit" ng-click="vm.annulerConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" title="Annuler modification">
+                            <span class="icon-cancel"></span>
+                          </a-->
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Annuler" ng-if="convention_ufp_daaf_detail.$edit" ng-click="vm.annulerConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" style="width:10%;">
+                            Annuler
+                          </md-button>
+                                    
+                          <!--a ng-if="convention_ufp_daaf_detail.$edit && convention_ufp_daaf_detail.id_compte_daaf && convention_ufp_daaf_detail.delai && convention_ufp_daaf_detail.date_signature>''" ng-click="vm.ajoutConvention_ufp_daaf_detail(convention_ufp_daaf_detail,0)" title="Sauvegarder">
+                            <span class="icon-content-save"></span>
+                          </a-->
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Sauvegarder" ng-if="convention_ufp_daaf_detail.$edit && convention_ufp_daaf_detail.id_compte_daaf && convention_ufp_daaf_detail.delai && convention_ufp_daaf_detail.date_signature>''" ng-click="vm.ajoutConvention_ufp_daaf_detail(convention_ufp_daaf_detail,0)" style="width:10%;">
+                            Sauvegarder
+                          </md-button>
+                        </td>
+                 
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+  
               </md-tab-body>
             </md-tab>
 

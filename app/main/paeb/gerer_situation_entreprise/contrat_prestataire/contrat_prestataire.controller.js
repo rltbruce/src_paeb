@@ -6,7 +6,7 @@
         .module('app.paeb.gerer_situation_entreprise.contrat_prestataire')
         .controller('Contrat_prestataireController', Contrat_prestataireController);
     /** @ngInject */
-    function Contrat_prestataireController($mdDialog, $scope, apiFactory, $state)
+    function Contrat_prestataireController($mdDialog, $scope, apiFactory, $state,$cookieStore)
     {
 		    var vm = this;
         vm.selectedItemConvention_entete = {} ;
@@ -61,10 +61,35 @@
  
 /**********************************fin convention entete****************************************/       
         //recuperation donnée convention
-        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalide').then(function(result)
+       /* apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalide').then(function(result)
         {
             vm.allconvention_entete = result.data.response; 
             console.log(vm.allconvention_entete);
+        });*/
+        var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allconvention_entete = result.data.response; 
+                console.log(vm.allconvention_entete);
+            });
+          }
+          
+
         });
 
         //recuperation donnée prestataire

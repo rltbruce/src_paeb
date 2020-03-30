@@ -51,7 +51,7 @@
       }])
         .controller('Suivi_physique_latrineController', Suivi_physique_latrineController);
     /** @ngInject */
-    function Suivi_physique_latrineController($mdDialog, $scope, apiFactory, $state,apiUrl,$http)
+    function Suivi_physique_latrineController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore)
     {
 		    var vm = this;
         vm.selectedItemConvention_entete = {} ;
@@ -165,10 +165,34 @@
         {titre:"Action"
         }];     
         //recuperation donnée convention
-        apiFactory.getAll("contrat_prestataire/index").then(function(result)
+        /*apiFactory.getAll("contrat_prestataire/index").then(function(result)
         {
             vm.allcontrat_prestataire = result.data.response; 
             console.log(vm.allcontrat_prestataire);
+        });*/
+
+        var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontrat_prestataireBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_prestataire = result.data.response; 
+                console.log(vm.allcontrat_prestataire);
+            });
+          }
         });
 
         //fonction selection item entete convention cisco/feffi

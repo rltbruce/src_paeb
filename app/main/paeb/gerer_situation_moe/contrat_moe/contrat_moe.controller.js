@@ -6,7 +6,7 @@
         .module('app.paeb.gerer_situation_moe.contrat_moe')
         .controller('Contrat_moeController', Contrat_moeController);
     /** @ngInject */
-    function Contrat_moeController($mdDialog, $scope, apiFactory, $state)
+    function Contrat_moeController($mdDialog, $scope, apiFactory, $state,$cookieStore)
     {
         var vm = this;
         vm.selectedItemConvention_entete = {} ;
@@ -58,14 +58,40 @@
         },
         {titre:"Avancement"
         }];
+
+        var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allconvention_entete = result.data.response; 
+                console.log(vm.allconvention_entete);
+            });
+          }
+          
+
+        });
  
 /**********************************fin convention entete****************************************/       
         //recuperation donnée convention
-        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalide').then(function(result)
+       /* apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalide').then(function(result)
         {
             vm.allconvention_entete = result.data.response; 
             console.log(vm.allconvention_entete);
-        });
+        });*/
 
         //recuperation donnée moe
         apiFactory.getAll("bureau_etude/index").then(function(result)
@@ -328,11 +354,7 @@
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItemContrat_moe.intitule   = contrat_moe.intitule ;
-                        vm.selectedItemContrat_moe.ref_contrat   = contrat_moe.ref_contrat ;
-                        vm.selectedItemContrat_moe.montant_contrat   = contrat_moe.montant_contrat ;
-                        vm.selectedItemContrat_moe.date_signature = contrat_moe.date_signature ;
-                        vm.selectedItemContrat_moe.moe = pres[0];
+                        vm.selectedItemContrat_moe.bureau_etude = pres[0];
                         
                         vm.selectedItemContrat_moe.$selected  = false;
                         vm.selectedItemContrat_moe.$edit      = false;
@@ -351,10 +373,7 @@
                 }
                 else
                 {
-                  contrat_moe.intitule   = contrat_moe.intitule ;
-                  contrat_moe.montant_contrat = contrat_moe.montant_contrat ;
-                  contrat_moe.date_signature = contrat_moe.date_signature;
-                  contrat_moe.moe = pres[0];
+                  contrat_moe.bureau_etude = pres[0];
 
                   contrat_moe.id  =   String(data.response);              
                   NouvelItemContrat_moe=false;

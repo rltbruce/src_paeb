@@ -176,7 +176,7 @@
                     anterieur: demande_batiment_prest.anterieur ,
                     reste: demande_batiment_prest.reste ,
                     date: convertionDate(new Date(demande_batiment_prest.date)),
-                    id_batiment_construction: demande_batiment_prest.batiment_construction.id,
+                    id_contrat_prestataire: demande_batiment_prest.contrat_prestataire.id,
                     validation: validation               
                 });
                 console.log(datas);

@@ -6,7 +6,7 @@
         .module('app.paeb.gerer_situation_pr.prestation_pr.module_sep.module_sep_insertion')
         .controller('Module_sep_insertionController', Module_sep_insertionController);
     /** @ngInject */
-    function Module_sep_insertionController($mdDialog, $scope, apiFactory, $state,apiUrl,$http)
+    function Module_sep_insertionController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore)
     {
 		   var vm = this;
         vm.selectedItemPartenaire_relai = {} ;
@@ -43,6 +43,7 @@
         vm.showbuttonNouvPassation=true;
         vm.showbuttonNouvRapport =true;
         vm.date_now         = new Date();
+        vm.showbuttonValidation = false;
 
         //style
         vm.dtOptions = {
@@ -50,7 +51,21 @@
           pagingType: 'simple',
           autoWidth: false          
         };
+      var id_user = $cookieStore.get('id');
 
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'DPFI'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }          
+        });
 
 /**********************************debut passation_marches_moe****************************************/
 
@@ -190,7 +205,7 @@
                 return obj.id !== vm.selectedItemModule_sep.id;
             });
           }
-
+          vm.showbuttonValidation = false;
           vm.selectedItemModule_sep = {} ;
           NouvelItemModule_sep      = false;
           
@@ -223,6 +238,11 @@
 
               vm.stepOne = true;
               vm.stepTwo = false;
+              vm.showbuttonValidation = true;
+              if (item.$edit==true)
+              {
+                vm.showbuttonValidation = false;
+              }
             }
         };
         $scope.$watch('vm.selectedItemModule_sep', function()
@@ -260,6 +280,7 @@
             item.date_fin_previ_form   = new Date(vm.selectedItemModule_sep.date_fin_previ_form) ;
             item.id_contrat_partenaire_relai  = vm.selectedItemModule_sep.contrat_partenaire_relai.id;
             item.lieu_formation  = vm.selectedItemModule_sep.lieu_formation;
+            vm.showbuttonValidation = false;
         };
 
         //fonction bouton suppression item passation_marches_moe
@@ -275,6 +296,7 @@
                     .cancel('annuler');
               $mdDialog.show(confirm).then(function() {
                 vm.ajoutModule_sep(vm.selectedItemModule_sep,1);
+                vm.showbuttonValidation = false;
               }, function() {
                 //alert('rien');
               });
@@ -391,9 +413,59 @@
                   NouvelItemModule_sep=false;
                   vm.showbuttonNouvPassation= false;
             }
+              vm.showbuttonValidation = false;
               module_sep.$selected = false;
               module_sep.$edit = false;
               vm.selectedItemModule_sep = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.validerModule_sep = function()
+        {
+          valide_insert_in_baseModule_sep(vm.selectedItemModule_sep,0);
+        }
+
+        function valide_insert_in_baseModule_sep(module_sep,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemModule_sep==false)
+            {
+                getId = vm.selectedItemModule_sep.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    date_previ_resti: convertionDate(new Date(module_sep.date_previ_resti)),
+                    date_debut_reel_form: convertionDate(new Date(module_sep.date_debut_reel_form)),
+                    date_fin_reel_form: convertionDate(new Date(module_sep.date_fin_reel_form)),
+                    date_reel_resti:convertionDate(new Date(module_sep.date_reel_resti)),
+                    nbr_previ_parti: module_sep.nbr_previ_parti,
+                    nbr_previ_fem_parti: module_sep.nbr_previ_fem_parti,
+                    date_debut_previ_form: convertionDate(new Date(module_sep.date_debut_previ_form)),
+                    date_fin_previ_form: convertionDate(new Date(module_sep.date_fin_previ_form)),
+                    id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
+                    lieu_formation: module_sep.lieu_formation,
+                    observation:module_sep.observation,
+                    validation : 1              
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("module_sep/index",datas, config).success(function (data)
+            {   
+                vm.allmodule_sep = vm.allmodule_sep.filter(function(obj)
+                {
+                    return obj.id !== vm.selectedItemModule_sep.id;
+                });
+                vm.showbuttonValidation = false;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 

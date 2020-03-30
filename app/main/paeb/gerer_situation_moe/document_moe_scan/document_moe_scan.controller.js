@@ -52,7 +52,7 @@
     //.controller('DialogController', DialogController)
         .controller('Document_moe_scanController', Document_moe_scanController);
     /** @ngInject */
-    function Document_moe_scanController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Document_moe_scanController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
 
@@ -87,11 +87,11 @@
         };
 
 /**********************************fin justificatif attachement****************************************/
-      apiFactory.getAll("contrat_be/index").then(function(result)
+      /*apiFactory.getAll("contrat_be/index").then(function(result)
       {
           vm.allcontrat_bureau_etude = result.data.response; 
           console.log(vm.allcontrat_bureau_etude);
-      });
+      });*/
 
       apiFactory.getAll("document_moe/index").then(function(result)
       {
@@ -99,11 +99,47 @@
           console.log(vm.alldocument_moe);
       });
 
-      apiFactory.getAll("document_moe_scan/index").then(function(result)
+      /*apiFactory.getAll("document_moe_scan/index").then(function(result)
       {
         vm.alldocument_moe_scan = result.data.response;
           console.log(vm.alldocument_moe_scan);        
-      });
+      });*/
+
+        var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_bureau_etude = result.data.response; 
+                console.log(vm.allcontrat_bureau_etude);
+            });
+
+            apiFactory.getAPIgeneraliserREST("document_moe_scan/index",'menu','getalldocumentinvalideBycisco','id_cisco',usercisco.id).then(function(result)
+              {
+                  vm.alldocument_moe_scan = result.data.response;
+                  console.log(vm.alldocument_moe_scan);
+              });
+            apiFactory.getAPIgeneraliserREST("document_moe_scan/index",'menu','getalldocumentvalideBycisco','id_cisco',usercisco.id).then(function(result)
+              {
+                  vm.alldocument_moe_scan_valide = result.data.response;
+                  console.log(vm.alldocument_moe_scan_valide);
+              });
+
+          }
+        });
 
         $scope.uploadFile = function(event)
        {

@@ -35,6 +35,13 @@
           autoWidth: false          
         };
 
+         //style
+        vm.dtOptionsperso = {
+          dom: '<"top">rt<"bottom"<"left"<"length">><"right"<"info"><"pagination">>>',
+          pagingType: 'simple',
+          autoWidth: false          
+        };
+
 /*****************Debut StepOne convention_ufp_daaf_entete****************/
 
   //col table

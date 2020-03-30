@@ -15,7 +15,10 @@
         vm.allfeffi = [] ;
 
         vm.selectedItemContrat_feffi = {} ;
-        vm.allcontrat_feffi = [] ;        
+        vm.allcontrat_feffi = [] ;
+        vm.allregion = [];
+        vm.alldistrict = [];
+        vm.allcisco = [];       
 
        // vm.ajoutDossier_feffi = ajoutDossier_feffi;
         //var NouvelItemDossier_feffi=false;
@@ -52,11 +55,66 @@
           {titre:"Observation"}];
 
         //recuperation donnée feffi
-        apiFactory.getAll("feffi/index").then(function(result)
+        /*apiFactory.getAll("feffi/index").then(function(result)
         {
             vm.allfeffi = result.data.response; 
             console.log(vm.allfeffi);
+        });*/
+        /*var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          
+          //vm.allcisco.push(usercisco);
+          
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("feffi/index",'menus','getfeffiBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allfeffi = result.data.response; 
+                console.log(vm.allfeffi);
+            });
+
+            apiFactory.getAPIgeneraliserREST("ecole/index",'menus','getecoleBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allecole = result.data.response; 
+                console.log(vm.allecole);
+            });
+          }
+          
+
+        });*/
+
+        apiFactory.getAll("region/index").then(function(result)
+        {
+            vm.allregion= result.data.response;
         });
+        vm.filtrer = function(filtre)
+        {
+          apiFactory.getAPIgeneraliserREST("feffi/index",'menus','getfeffiByfiltre','id_cisco',filtre.id_cisco,'id_district',filtre.id_district,'id_region',filtre.id_region).then(function(result)
+            {
+                vm.allfeffi = result.data.response; 
+                console.log(vm.allfeffi);
+            });
+        }
+        vm.change_region = function(filtre)
+        {
+            apiFactory.getAPIgeneraliserREST("district/index","id_region",filtre.id_region).then(function(result)
+            {
+                vm.alldistrict = result.data.response; 
+                console.log(vm.alldistrict);
+            });
+        }
+
+        vm.change_district = function(filtre)
+        {
+            apiFactory.getAPIgeneraliserREST("cisco/index","id_district",filtre.id_district).then(function(result)
+            {
+                vm.allcisco = result.data.response; 
+                console.log(vm.allcisco);
+            });
+        }
 
         vm.selectionFeffi= function (item)
         {

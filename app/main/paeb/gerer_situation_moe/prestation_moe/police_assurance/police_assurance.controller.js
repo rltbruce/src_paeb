@@ -4,7 +4,7 @@
 
     angular
         .module('app.paeb.gerer_situation_moe.prestation_moe.police_assurance')
-        .directive('customOnChange', function() {
+       /* .directive('customOnChange', function() {
       return {
         restrict: 'A',
         require:'ngModel',
@@ -48,11 +48,11 @@
            console.log('Rivotra');
         });
       }
-    }])
+    }])*/
     //.controller('DialogController', DialogController)
         .controller('Police_assuranceController', Police_assuranceController);
     /** @ngInject */
-    function Police_assuranceController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Police_assuranceController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
         vm.selectedItemBureau_etude = {} ;
@@ -191,10 +191,48 @@
         }); */       
 
 /**********************************fin contrat prestataire****************************************/
+        var id_user = $cookieStore.get('id');
 
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_bureau_etude = result.data.response; 
+                console.log(vm.allcontrat_bureau_etude);
+            });
+
+            apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpolicevalidationBycisco','validation',0).then(function(result)
+            {
+              vm.allpolice_assurance = result.data.response;
+              
+              if (vm.allpolice_assurance.length>0)
+              {
+                  vm.showbuttonNouvAppel = false;
+              }
+                        
+            });
+            apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpolicevalidationBycisco','validation',1).then(function(result)
+            {
+              vm.allpolice_assurance_valide = result.data.response;
+                        
+            });
+          }
+        });
 
 /**********************************fin justificatif attachement****************************************/
-      apiFactory.getAll("contrat_be/index").then(function(result)
+     /* apiFactory.getAll("contrat_be/index").then(function(result)
       {
           vm.allcontrat_bureau_etude = result.data.response; 
           console.log(vm.allcontrat_bureau_etude);
@@ -214,17 +252,17 @@
       {
         vm.allpolice_assurance_valide = result.data.response;
                   
-      });
+      });*/
 
 
-        $scope.uploadFile = function(event)
+       /* $scope.uploadFile = function(event)
        {
           console.dir(event);
           var files = event.target.files;
           vm.myFile = files;
           vm.selectedItemPolice_assurance.fichier = vm.myFile[0].name;
           //console.log(vm.selectedItemPolice_assurance.fichier);
-        } 
+        } */
 
         //Masque de saisi ajout
         vm.ajouterPolice_assurance = function ()
@@ -237,7 +275,7 @@
               $selected: true,
               id: '0',         
               description: '',
-              fichier: '',
+              //fichier: '',
               date_expiration: '',
               observation: '',
               id_contrat_bureau_etude: ''
@@ -282,7 +320,7 @@
             item.$edit = false;
             item.$selected = false;
             item.description   = currentItemPolice_assurance.description ;
-            item.fichier   = currentItemPolice_assurance.fichier ;
+            //item.fichier   = currentItemPolice_assurance.fichier ;
             item.date_expiration   = currentItemPolice_assurance.date_expiration ;
             item.observation   = currentItemPolice_assurance.observation ;
             item.id_contrat_bureau_etude   = currentItemPolice_assurance.id_contrat_bureau_etude ;
@@ -330,7 +368,7 @@
             item.$edit = true;
             item.$selected = true;
             item.description   = vm.selectedItemPolice_assurance.description ;
-            item.fichier   = vm.selectedItemPolice_assurance.fichier ;
+            //item.fichier   = vm.selectedItemPolice_assurance.fichier ;
             item.date_expiration   = new Date(vm.selectedItemPolice_assurance.date_expiration) ;
             item.observation   = vm.selectedItemPolice_assurance.observation ;
             item.id_contrat_bureau_etude   = vm.selectedItemPolice_assurance.contrat_be.id ;
@@ -367,7 +405,7 @@
                 if(mem[0])
                 {
                    if((mem[0].description   != currentItemPolice_assurance.description )
-                    ||(mem[0].fichier   != currentItemPolice_assurance.fichier )
+                    //||(mem[0].fichier   != currentItemPolice_assurance.fichier )
                     ||(mem[0].date_expiration   != currentItemPolice_assurance.date_expiration )
                     ||(mem[0].observation   != currentItemPolice_assurance.observation )                    
                     ||(mem[0].id_contrat_bureau_etude   != currentItemPolice_assurance.contrat_be.id ))                   
@@ -403,7 +441,7 @@
                     supprimer: suppression,
                     id:        getId,
                     description: police_assurance.description,
-                    fichier: police_assurance.fichier,
+                    //fichier: police_assurance.fichier,
                     date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
                     observation: police_assurance.observation,
                     id_contrat_bureau_etude: police_assurance.id_contrat_bureau_etude,
@@ -423,83 +461,7 @@
               {
                     // Update_paiement or delete: id exclu                 
                     if(suppression==0)
-                    {
-                         var file= vm.myFile[0];
-                    
-                          var repertoire = 'police_assurance/';
-                          var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
-                          var getIdFile = vm.selectedItemPolice_assurance.id
-                                              
-                          if(file)
-                          { 
-
-                            var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
-
-                            var fd = new FormData();
-                            fd.append('file', file);
-                            fd.append('repertoire',repertoire);
-                            fd.append('name_fichier',name_file);
-
-                            var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
-                            headers: {'Content-Type': undefined}, repertoire: repertoire
-                            }).success(function(data)
-                            {
-                                if(data['erreur'])
-                                {
-                                  var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
-                                 
-                                  var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
-                                  $mdDialog.show( alert ).finally(function()
-                                  { 
-                                    police_assurance.fichier='';
-                                  var datas = $.param({
-                                                      supprimer: suppression,
-                                                      id:        getIdFile,
-                                                      description: police_assurance.description,
-                                                      fichier: police_assurance.fichier,
-                                                      date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
-                                                      observation: police_assurance.observation,
-                                                      id_contrat_bureau_etude: police_assurance.id_contrat_bureau_etude,
-                                                      validation:0
-                                        });
-                                      apiFactory.add("police_assurance/index",datas, config).success(function (data)
-                                      {  
-                                          vm.showbuttonNouvPolice = true;
-                                          police_assurance.$selected = false;
-                                          police_assurance.$edit = false;
-                                          vm.selectedItemPolice_assurance = {};
-                                      console.log('b');
-                                      }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-                                  });
-                                }
-                                else
-                                {
-                                  police_assurance.fichier=repertoire+data['nomFile'];
-                                  var datas = $.param({
-                                        supprimer: suppression,
-                                        id:        getIdFile,
-                                        description: police_assurance.description,
-                                        fichier: police_assurance.fichier,
-                                        date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
-                                       observation: police_assurance.observation,
-                                        id_contrat_bureau_etude: police_assurance.id_contrat_bureau_etude,
-                                        validation:0               
-                                    });
-                                  apiFactory.add("police_assurance/index",datas, config).success(function (data)
-                                  {
-                                        
-                                      police_assurance.$selected = false;
-                                      police_assurance.$edit = false;
-                                      vm.selectedItemPolice_assurance = {};
-                                      console.log('e');
-                                  }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-                                }
-                            }).error(function()
-                            {
-                              vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
-                            });
-                          }
-
+                    {                         
                         vm.selectedItemPolice_assurance.contrat_be = contr[0];
                         vm.selectedItemPolice_assurance.$selected  = false;
                         vm.selectedItemPolice_assurance.$edit      = false;
@@ -513,107 +475,19 @@
                           return obj.id !== vm.selectedItemPolice_assurance.id;
                       });
                       vm.showbuttonNouvPolice = true;
-                      var chemin= vm.selectedItemPolice_assurance.fichier;
-                      var fd = new FormData();
-                          fd.append('chemin',chemin);
-                     
-                      var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
-
-                      var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
-                      headers: {'Content-Type': undefined}, chemin: chemin
-                      }).success(function(data)
-                      {
-                         console.log('ok');
-                      }).error(function()
-                      {
-                          showDialog(event,chemin);
-                      });
                       vm.showbuttonValidation = false;
                     }
               }
               else
-              {
+              {   
+                  police_assurance.contrat_be = contr[0];
                   police_assurance.id  =   String(data.response);              
                   NouvelItemPolice_assurance = false;
 
                   vm.showbuttonNouvPolice = false;
-                    var file= vm.myFile[0];
                     
-                    var repertoire = 'police_assurance/';
-                    var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
-                    var getIdFile = String(data.response);
-                                        
-                    if(file)
-                    { 
-
-                      var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
-
-                      var fd = new FormData();
-                      fd.append('file', file);
-                      fd.append('repertoire',repertoire);
-                      fd.append('name_fichier',name_file);
-
-                      var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
-                      headers: {'Content-Type': undefined}, repertoire: repertoire
-                      }).success(function(data)
-                      {
-                          if(data['erreur'])
-                          {
-                            var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
-                           
-                            var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
-                            $mdDialog.show( alert ).finally(function()
-                            { 
-                              police_assurance.fichier='';
-                            var datas = $.param({
-                                                supprimer: suppression,
-                                                id:        getIdFile,
-                                                description: police_assurance.description,
-                                                fichier: police_assurance.fichier,
-                                                date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
-                                               observation: police_assurance.observation,
-                                                id_contrat_bureau_etude: police_assurance.id_contrat_bureau_etude,
-                                                validation:0
-                                  });
-                                apiFactory.add("police_assurance/index",datas, config).success(function (data)
-                                {  
-                                    vm.showbuttonNouvPolice = true;
-                                    police_assurance.$selected = false;
-                                    police_assurance.$edit = false;
-                                    vm.selectedItemPolice_assurance = {};
-                                console.log('b');
-                                }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-                            });
-                          }
-                          else
-                          {
-                            police_assurance.fichier=repertoire+data['nomFile'];
-                            var datas = $.param({
-                                  supprimer: suppression,
-                                  id:        getIdFile,
-                                  description: police_assurance.description,
-                                  fichier: police_assurance.fichier,
-                                  date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
-                                  observation: police_assurance.observation,
-                                  id_contrat_bureau_etude: police_assurance.id_contrat_bureau_etude,
-                                  validation:0               
-                              });
-                            apiFactory.add("police_assurance/index",datas, config).success(function (data)
-                            {
-                                  
-                                police_assurance.$selected = false;
-                                police_assurance.$edit = false;
-                                vm.selectedItemPolice_assurance = {};
-                                console.log('e');
-                            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-                          }
-                      }).error(function()
-                      {
-                        vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
-                      });
-                    }
               }
-              police_assurance.contrat_be = contr[0];
+              
               police_assurance.$selected = false;
               police_assurance.$edit = false;
               vm.selectedItemPolice_assurance = {};
@@ -653,7 +527,7 @@
                     supprimer: suppression,
                     id:        police_assurance.id,
                     description: police_assurance.description,
-                    fichier: police_assurance.fichier,
+                    //fichier: police_assurance.fichier,
                     date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
                    observation: police_assurance.observation,
                     id_contrat_bureau_etude: police_assurance.contrat_be.id,
@@ -676,10 +550,10 @@
 
         }
 
-        vm.download_police_assurance = function(item)
+       /* vm.download_police_assurance = function(item)
         {
             window.location = apiUrlFile+item.fichier;
-        }
+        }*/
 /**********************************fin justificatif batiment****************************************/
 
 /**********************************fin mpe_sousmissionnaire****************************************/

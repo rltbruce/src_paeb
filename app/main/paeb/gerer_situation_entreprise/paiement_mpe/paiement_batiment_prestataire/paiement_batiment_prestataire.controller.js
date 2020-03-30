@@ -6,7 +6,7 @@
         .module('app.paeb.gerer_situation_entreprise.paiement_mpe.paiement_batiment_prestataire')
         .controller('Paiement_batiment_prestataireController', Paiement_batiment_prestataireController);
     /** @ngInject */
-    function Paiement_batiment_prestataireController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Paiement_batiment_prestataireController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
        /* vm.selectedItemContrat_prestataire = {} ;
@@ -37,28 +37,38 @@
 
 /**********************************debut feffi****************************************/
 
-        //col table
-      /*  vm.contrat_prestataire_column = [
-        {titre:"Numero contrat"
-        },
-        {titre:"cumul"
-        },
-        {titre:"Cout batiment"
-        },
-        {titre:"Cout latrine"
-        },
-        {titre:"Cout mobilier"
-        },
-        {titre:"Nom entreprise"
-        },
-        {titre:"Date signature"
-        }];*/
+        var id_user = $cookieStore.get('id');
 
-
-          apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index",'menu','getdemandeValide').then(function(result)
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
           {
-            vm.alldemande_batiment_prest = result.data.response;
-          });
+            /*apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontrat_prestataireBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_prestataire = result.data.response; 
+                console.log(vm.allcontrat_prestataire);
+            });*/
+            
+            apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index",'menu','getdemandeValideBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+              vm.alldemande_batiment_prest = result.data.response;
+            });
+          }
+          
+
+        });
+
+          
 
 /**********************************debut demande_batiment_prest****************************************/
 //col table

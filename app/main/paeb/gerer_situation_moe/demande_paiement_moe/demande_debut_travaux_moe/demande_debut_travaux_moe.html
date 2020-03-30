@@ -27,18 +27,14 @@
 
     <!-----debut contrat ------>
 
-            <md-tab>
+            <!--md-tab>
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-number md-accent-bg " ng-if="vm.stepOne==false">1</span>
-                    <!--span class="ms-form-wizard-step-number md-accent-bg " ng-if="vm.stepOne==true">
-                      <i class="icon-check s16"></i>
-                    </span-->
+                   
                     <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepOne==true">1
                     </span>
-                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                        <i class="icon-check s16"></i>
-                    </span-->
+                      
                     <span class="ms-form-wizard-step-text">Contrat</span>
                 </span>
               </md-tab-label>
@@ -87,21 +83,21 @@
                   </table>
                 </div>
               </md-tab-body>
-            </md-tab>
+            </md-tab-->
     <!-----FIN contrat ------>
    
     <!-----Debut demande_debut_travaux_moe ------>
-          <md-tab ng-disabled="vm.stepOne==false">
+          <md-tab>
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
                     <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
                       <i class="icon-check s16"></i>
                     </span-->
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
                         <i class="icon-check s16"></i>
                     </span-->
-                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepTwo==true">2
+                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepOne==true">1
                     </span>
                     <span class="ms-form-wizard-step-text">demande à la signature</span>
                 </span>
@@ -111,6 +107,9 @@
                 <div style="widht:100%;">  
                     <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_debut_travaux_moe()" style="width:10%;">
                       Nouveau
+                    </md-button>
+                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_debut_travaux_moe()" style="width:10%;" ng-show="vm.showbuttonValidation && vm.permissionboutonValider">
+                      Validation
                     </md-button>
                 </div>
                <div>        
@@ -127,7 +126,20 @@
                            
                   <tbody>
                     <tr ng-repeat="demande_debut_travaux_moe in vm.alldemande_debut_travaux_moe_invalide"  ng-class="{selected: demande_debut_travaux_moe.$selected}" ng-click="vm.selectionDemande_debut_travaux_moe(demande_debut_travaux_moe)">
-                                
+                      <td>
+                        <span ng-if="demande_debut_travaux_moe.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Contrat</label>
+                            <md-select ng-model="demande_debut_travaux_moe.id_contrat_bureau_etude"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_contrat(demande_debut_travaux_moe)">
+                              <md-option ng-repeat="contrat_bureau_etude in vm.allcontrat_bureau_etude" value="{{contrat_bureau_etude.id}}">
+                                                                    {{contrat_bureau_etude.ref_contrat}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!demande_debut_travaux_moe.$edit">{{demande_debut_travaux_moe.contrat_bureau_etude.ref_contrat}}</span>
+                      </td>          
                       <td>
                         <span ng-if="demande_debut_travaux_moe.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
@@ -165,7 +177,7 @@
                       <span ng-if="demande_debut_travaux_moe.$edit">
                         <md-input-container style="width:100%;display: flex !important;">
                           <label>Tranche</label>
-                          <md-select ng-model="demande_debut_travaux_moe.id_tranche_d_debut_travaux_moe"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(demande_debut_travaux_moe)">
+                          <md-select ng-model="demande_debut_travaux_moe.id_tranche_d_debut_travaux_moe"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(demande_debut_travaux_moe)" ng-disabled="!demande_debut_travaux_moe.id_contrat_bureau_etude">
                             <md-option ng-repeat="tranche in vm.allcurenttranche_d_debut_travaux_moe" value="{{tranche.id}}">
                                                                         {{tranche.libelle}}
                             </md-option>

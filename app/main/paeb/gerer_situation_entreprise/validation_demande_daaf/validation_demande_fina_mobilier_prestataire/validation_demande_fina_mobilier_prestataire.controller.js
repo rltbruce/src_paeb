@@ -148,7 +148,7 @@
                     anterieur: demande_mobilier_prest.anterieur ,
                     reste: demande_mobilier_prest.reste ,
                     date: convertionDate(new Date(demande_mobilier_prest.date)),
-                    id_mobilier_construction: demande_mobilier_prest.mobilier_construction.id,
+                    id_contrat_prestataire: demande_mobilier_prest.contrat_prestataire.id,
                     validation: validation               
                 });
                 console.log(datas);

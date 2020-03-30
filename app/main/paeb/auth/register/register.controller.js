@@ -13,7 +13,7 @@
 
       vm.allSite = [];
 
-      /*apiFactory.getAll("region/index").then(function(result)
+      apiFactory.getAll("region/index").then(function(result)
       {
           vm.allregion= result.data.response;
       });
@@ -22,12 +22,18 @@
       {
           vm.alldistrict = result.data.response;
           vm.districts = vm.alldistrict ;
-      });*/
+      });
+
+      apiFactory.getAll("cisco/index").then(function(result)
+      {
+          vm.allcisco = result.data.response;
+          vm.ciscos = vm.allcisco ;
+      });
 
       //enregistrer
       vm.enregistrer = enregistrer;
 
-     /* vm.filtre_district = function()
+     vm.filtre_district = function()
       {
           var ds = vm.alldistrict ;
           if (vm.registerForm.id_region) 
@@ -38,7 +44,20 @@
             });
           }
                  
-      }*/
+      }
+
+      vm.filtre_cisco = function()
+      {
+          var ds = vm.allcisco ;
+          if (vm.registerForm.id_district) 
+          {
+            vm.ciscos = ds.filter(function(obj)
+            {
+                return obj.district.id == vm.registerForm.id_district;
+            });
+          }
+                 
+      }
 
       function enregistrer(utilisateur, ev)
       {
@@ -55,8 +74,9 @@
           prenom: utilisateur.lastname,
           email: utilisateur.email,
           password: utilisateur.password,
-          //id_region: utilisateur.id_region,
-          //id_district: utilisateur.id_district
+          id_region: utilisateur.id_region,
+          id_district: utilisateur.id_district,
+          id_cisco: utilisateur.id_cisco
         });
 
         //ajout user

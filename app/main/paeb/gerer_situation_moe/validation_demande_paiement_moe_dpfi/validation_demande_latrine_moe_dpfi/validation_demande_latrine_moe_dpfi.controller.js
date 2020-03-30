@@ -129,7 +129,7 @@
                     anterieur: demande_latrine_moe.anterieur ,
                     reste: demande_latrine_moe.reste ,
                     date: convertionDate(new Date(demande_latrine_moe.date)),
-                    id_latrine_construction: demande_latrine_moe.latrine_construction.id,
+                    id_contrat_bureau_etude: demande_latrine_moe.contrat_bureau_etude.id,
                     validation: validation               
                 });
                 console.log(datas);

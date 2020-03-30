@@ -3,42 +3,24 @@
     'use strict';
 
     angular
-        .module('app.paeb.gerer_situation_entreprise.prestation_mpe', [])
-        .run(testPermission)
+        .module('app.paeb.gerer_situation_entreprise.prestation_mpe', [
+            'app.paeb.gerer_situation_entreprise.prestation_mpe.prestation_mpe_validation',
+            'app.paeb.gerer_situation_entreprise.prestation_mpe.phase_sous_projet_validation'
+            ])       
         .config(config);
         var vs ;
 
     /** @ngInject */
-    function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
+    function config(msNavigationServiceProvider)
     {
-        // State
-        $stateProvider.state('app.paeb_gerer_situation_entreprise_prestation_mpe', {
-            url      : '/donnees-de-base/prestation_mpe',
-            views    : {
-                'content@app': {
-                    templateUrl: 'app/main/paeb/gerer_situation_entreprise/prestation_mpe/prestation_mpe.html',
-                    controller : 'Prestation_mpeController as vm'
-                }
-            },
-            bodyClass: 'prestation_mpe',
-            data : {
-              authorizer : true,
-              permitted : ["USER","PERSONNEL","ADMIN"],
-              page: "prestation_mpe"
-            }
+        msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.prestation_mpe', {
+            title : 'Prestation',
+            icon  : 'icon-data',
+            weight: 3
         });
 
-        // Navigation
-        msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.prestation_mpe', {
-            title: 'Prestation mpe',
-            icon  : 'icon-blur-radial',
-            state: 'app.paeb_gerer_situation_entreprise_prestation_mpe',
-			weight: 17,
-            hidden: function()
-            {
-                    return vs;
-            }
-        });
+
+
     }
 
     function testPermission(loginService,$cookieStore,apiFactory)
@@ -54,7 +36,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["OBCAF"];
+                var permissions = ["DDB"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('app.paeb.gerer_situation_feffi.dossier_feffi', [])
+        .module('app.paeb.gerer_situation_entreprise.dossier_prestataire', [])
         .run(testPermission)
         .config(config);
         var vs ;
@@ -12,27 +12,27 @@
     function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
     {
         // State
-        $stateProvider.state('app.paeb_gerer_situation_feffi_dossier_feffi', {
-            url      : '/donnees-de-base/dossier_feffi',
+        $stateProvider.state('app.paeb_gerer_situation_entreprise_dossier_prestataire', {
+            url      : '/donnees-de-base/dossier_prestataire',
             views    : {
                 'content@app': {
-                    templateUrl: 'app/main/paeb/gerer_situation_feffi/dossier_feffi/dossier_feffi.html',
-                    controller : 'Dossier_feffiController as vm'
+                    templateUrl: 'app/main/paeb/gerer_situation_entreprise/dossier_prestataire/dossier_prestataire.html',
+                    controller : 'Dossier_prestataireController as vm'
                 }
             },
-            bodyClass: 'dossier_feffi',
+            bodyClass: 'dossier_prestataire',
             data : {
               authorizer : true,
               permitted : ["USER","PERSONNEL","ADMIN"],
-              page: "dossier_feffi"
+              page: "dossier_prestataire"
             }
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.gerer_situation_feffi.dossier_feffi', {
-            title: 'Dossier feffi',
+        msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.dossier_prestataire', {
+            title: 'Dossier prestataire',
             icon  : 'icon-blur-radial',
-            state: 'app.paeb_gerer_situation_feffi_dossier_feffi',
+            state: 'app.paeb_gerer_situation_entreprise_dossier_prestataire',
 			weight: 3,
             hidden: function()
             {

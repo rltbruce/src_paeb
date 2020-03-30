@@ -134,11 +134,36 @@
         },
         {titre:"Action"
         }];     
+        
         //recuperation donnée convention
-        apiFactory.getAll("contrat_prestataire/index").then(function(result)
+       /* apiFactory.getAll("contrat_prestataire/index").then(function(result)
         {
             vm.allcontrat_prestataire = result.data.response; 
             console.log(vm.allcontrat_prestataire);
+        });*/
+
+        var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontrat_prestataireBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_prestataire = result.data.response; 
+                console.log(vm.allcontrat_prestataire);
+            });
+          }
         });
 
         //fonction selection item entete convention cisco/feffi
@@ -202,7 +227,7 @@
         {
             vm.selectedItemMobilier_construction = item;
            // vm.allconvention= [] ;
-           apiFactory.getAPIgeneraliserREST("attachement_mobilier/index",'id_type_mobilier',vm.selectedItemMobilier_construction.type_mobilier.id).then(function(result)
+            apiFactory.getAPIgeneraliserREST("attachement_mobilier/index",'id_type_mobilier',vm.selectedItemMobilier_construction.type_mobilier.id).then(function(result)
             {
                   vm.allattachement_mobilier = result.data.response;
                   vm.allcurrentattachement_mobilier = result.data.response;

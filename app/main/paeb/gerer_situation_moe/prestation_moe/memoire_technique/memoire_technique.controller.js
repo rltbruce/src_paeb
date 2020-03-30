@@ -4,7 +4,7 @@
 
     angular
         .module('app.paeb.gerer_situation_moe.prestation_moe.memoire_technique')
-        .directive('customOnChange', function() {
+      /*  .directive('customOnChange', function() {
       return {
         restrict: 'A',
         require:'ngModel',
@@ -48,11 +48,11 @@
            console.log('Rivotra');
         });
       }
-    }])
+    }])*/
     //.controller('DialogController', DialogController)
         .controller('Memoire_techniqueController', Memoire_techniqueController);
     /** @ngInject */
-    function Memoire_techniqueController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Memoire_techniqueController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
         vm.selectedItemBureau_etude = {} ;
@@ -191,30 +191,56 @@
         });  */      
 
 /**********************************fin contrat prestataire****************************************/
+      var id_user = $cookieStore.get('id');
 
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_bureau_etude = result.data.response; 
+                console.log(vm.allcontrat_bureau_etude);
+            });
+
+            apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoirevalidationBycisco','validation',0).then(function(result)
+            {
+              vm.allmemoire_technique = result.data.response;
+              
+              if (vm.allmemoire_technique.length>0)
+              {
+                  vm.showbuttonNouvMemoire = false;
+              }
+                        
+            });
+            apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoirevalidationBycisco','validation',1).then(function(result)
+            {
+              vm.allmemoire_technique_valide = result.data.response;
+                        
+            });
+          }
+          
+
+        });
 
 /**********************************fin justificatif attachement****************************************/
-      apiFactory.getAll("contrat_be/index").then(function(result)
+      /*apiFactory.getAll("contrat_be/index").then(function(result)
       {
           vm.allcontrat_bureau_etude = result.data.response; 
           console.log(vm.allcontrat_bureau_etude);
-      });
+      });*/
 
-      apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireByvalidation','validation',0).then(function(result)
-      {
-        vm.allmemoire_technique = result.data.response;
-        
-        if (vm.allmemoire_technique.length>0)
-        {
-            vm.showbuttonNouvMemoire = false;
-        }
-                  
-      });
-      apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireByvalidation','validation',1).then(function(result)
-      {
-        vm.allmemoire_technique_valide = result.data.response;
-                  
-      });
+      
         $scope.uploadFile = function(event)
        {
           console.dir(event);
@@ -235,7 +261,7 @@
               $selected: true,
               id: '0',         
               description: '',
-              fichier: '',
+             // fichier: '',
               date_livraison: '',
               date_approbation: '',
               observation: '',
@@ -281,7 +307,7 @@
             item.$edit = false;
             item.$selected = false;
             item.description   = currentItemMemoire_technique.description ;
-            item.fichier   = currentItemMemoire_technique.fichier ;
+            //item.fichier   = currentItemMemoire_technique.fichier ;
             item.date_livraison   = currentItemMemoire_technique.date_livraison ;
             item.date_approbation   = currentItemMemoire_technique.date_approbation ;
             item.observation   = currentItemMemoire_technique.observation ;
@@ -330,7 +356,7 @@
             item.$edit = true;
             item.$selected = true;
             item.description   = vm.selectedItemMemoire_technique.description ;
-            item.fichier   = vm.selectedItemMemoire_technique.fichier ;
+            //item.fichier   = vm.selectedItemMemoire_technique.fichier ;
             item.date_livraison   = new Date(vm.selectedItemMemoire_technique.date_livraison) ;
             item.date_approbation   = new Date(vm.selectedItemMemoire_technique.date_approbation) ;
             item.observation   = vm.selectedItemMemoire_technique.observation ;
@@ -369,7 +395,7 @@
                 if(mem[0])
                 {
                    if((mem[0].description   != currentItemMemoire_technique.description )
-                    ||(mem[0].fichier   != currentItemMemoire_technique.fichier )
+                    //||(mem[0].fichier   != currentItemMemoire_technique.fichier )
                     ||(mem[0].date_livraison   != currentItemMemoire_technique.date_livraison )
                     ||(mem[0].date_approbation   != currentItemMemoire_technique.date_approbation )
                     ||(mem[0].observation   != currentItemMemoire_technique.observation )
@@ -388,7 +414,80 @@
         }
 
         //insertion ou mise a jours ou suppression item dans bdd memoire_technique
+
         function insert_in_baseMemoire_technique(memoire_technique,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemMemoire_technique==false)
+            {
+                getId = vm.selectedItemMemoire_technique.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    description: memoire_technique.description,
+                    //fichier: memoire_technique.fichier,
+                    date_livraison: convertionDate(new Date(memoire_technique.date_livraison)),
+                    date_approbation: convertionDate(new Date(memoire_technique.date_approbation)),
+                    observation: memoire_technique.observation,
+                    id_contrat_bureau_etude: memoire_technique.id_contrat_bureau_etude,
+                    validation:0               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("memoire_technique/index",datas, config).success(function (data)
+            {   
+              var contr= vm.allcontrat_bureau_etude.filter(function(obj)
+                {
+                    return obj.id == memoire_technique.id_contrat_bureau_etude;
+                });
+
+              if (NouvelItemMemoire_technique == false)
+              {
+                    // Update_paiement or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                         
+                        vm.selectedItemMemoire_technique.contrat_be = contr[0];
+                        vm.selectedItemMemoire_technique.$selected  = false;
+                        vm.selectedItemMemoire_technique.$edit      = false;
+                        vm.selectedItemMemoire_technique ={};
+                        vm.showbuttonValidation = false;
+                    }
+                    else 
+                    {    
+                      vm.allmemoire_technique = vm.allmemoire_technique.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemMemoire_technique.id;
+                      });
+                      vm.showbuttonNouvMemoire = true;                     
+                      vm.showbuttonValidation = false;
+                    }
+              }
+              else
+              {
+                  memoire_technique.id  =   String(data.response);              
+                  NouvelItemMemoire_technique = false;
+                  vm.showbuttonNouvMemoire = false;                
+                    
+              }
+              memoire_technique.contrat_be = contr[0];
+              memoire_technique.$selected = false;
+              memoire_technique.$edit = false;
+              vm.selectedItemMemoire_technique = {};
+              vm.showbuttonValidation = false;
+
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        /*function insert_in_baseMemoire_technique(memoire_technique,suppression)
         {
             //add
             var config =
@@ -629,7 +728,7 @@
 
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
-        }
+        }*/
         vm.validerMemoire_technique = function()
         {
           maj_in_baseMemoire_technique(vm.selectedItemMemoire_technique,0);
@@ -661,7 +760,7 @@
                     supprimer: suppression,
                     id:        memoire_technique.id,
                     description: memoire_technique.description,
-                    fichier: memoire_technique.fichier,
+                    //fichier: memoire_technique.fichier,
                     date_livraison: convertionDate(new Date(memoire_technique.date_livraison)),
                     date_approbation: convertionDate(new Date(memoire_technique.date_approbation)),
                     observation: memoire_technique.observation,

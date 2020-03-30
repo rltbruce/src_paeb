@@ -25,7 +25,7 @@
                 {
                     apiFactory.getAll("region/index").then(function success(response)
                     {
-                        e.success(response.data.response)
+                        e.success(response.data.response);
      
 
                         console.log(response.data.response);
@@ -213,7 +213,7 @@ function clicke()
                 }, function error(result)
                   {
                       alert('something went wrong')
-                  })
+                  });
               },
               update : function (e)
               {

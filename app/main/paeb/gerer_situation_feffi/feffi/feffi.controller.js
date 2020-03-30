@@ -6,7 +6,7 @@
         .module('app.paeb.gerer_situation_feffi.feffi')
         .controller('FeffiController', FeffiController);
     /** @ngInject */
-    function FeffiController($mdDialog, $scope, apiFactory, $state)
+    function FeffiController($mdDialog, $scope, apiFactory, $state,$cookieStore)
     {
 		    var vm = this;
         vm.ajout = ajout ;
@@ -51,8 +51,35 @@
           {titre:"Observation"},
           {titre:"Action"}];
         
+        
+          var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          
+          //vm.allcisco.push(usercisco);
+          
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("feffi/index",'menus','getfeffiBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allfeffi = result.data.response; 
+                console.log(vm.allfeffi);
+            });
+
+            apiFactory.getAPIgeneraliserREST("ecole/index",'menus','getecoleBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allecole = result.data.response; 
+                console.log(vm.allecole);
+            });
+          }
+          
+
+        });
+
         //recuperation donnée feffi
-        apiFactory.getAll("feffi/index").then(function(result)
+        /*apiFactory.getAll("feffi/index").then(function(result)
         {
             vm.allfeffi = result.data.response; 
             console.log(vm.allfeffi);
@@ -62,7 +89,7 @@
         apiFactory.getAll("ecole/index").then(function(result)
         {
           vm.allecole= result.data.response;
-        });
+        });*/
 
         //Masque de saisi ajout
         vm.ajouter = function ()
@@ -286,12 +313,12 @@
                     {
                         vm.selectedItem.ecole       = eco[0];
 
-                        vm.selectedItem.identifiant      = feffi.identifiant ;
+                        /*vm.selectedItem.identifiant      = feffi.identifiant ;
                         vm.selectedItem.denomination      = feffi.denomination ;
                         vm.selectedItem.nbr_feminin      = feffi.nbr_feminin ;
                         vm.selectedItem.nbr_membre      = feffi.nbr_membre ;
                         vm.selectedItem.adresse      = feffi.adresse ;
-                        vm.selectedItem.observation      = feffi.observation ;
+                        vm.selectedItem.observation      = feffi.observation ;*/
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
                         vm.selectedItem ={};
@@ -307,12 +334,12 @@
                 else
                 {
 
-                  feffi.identifiant      = feffi.identifiant ;
+                  /*feffi.identifiant      = feffi.identifiant ;
                   feffi.denomination      = feffi.denomination ;
                   feffi.nbr_feminin      = feffi.nbr_feminin ;
                   feffi.nbr_membre      = feffi.nbr_membre ;
                   feffi.adresse      = feffi.adresse ;
-                  feffi.observation      = feffi.observation ;
+                  feffi.observation      = feffi.observation ;*/
 
                   feffi.ecole = eco[0];
                   feffi.id  =   String(data.response);              
@@ -321,6 +348,7 @@
               feffi.$selected = false;
               feffi.$edit = false;
               vm.selectedItem = {};
+              vm.stepOne = false;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 

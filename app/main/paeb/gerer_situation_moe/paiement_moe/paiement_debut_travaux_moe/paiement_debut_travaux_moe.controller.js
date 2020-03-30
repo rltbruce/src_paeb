@@ -7,7 +7,7 @@
 
         .controller('Paiement_debut_travaux_moeController', Paiement_debut_travaux_moeController);
     /** @ngInject */
-    function Paiement_debut_travaux_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Paiement_debut_travaux_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
         vm.selectedItemDemande_debut_travaux_moe = {};
@@ -35,11 +35,28 @@
 
 
 /**********************************debut demande_debut_travaux_moe****************************************/
-    apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index",'menu','getdemandeByValide').then(function(result)
+   /* apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index",'menu','getdemandeByValide').then(function(result)
     {
         vm.alldemande_debut_travaux_moe = result.data.response;
         console.log(vm.alldemande_debut_travaux_moe);
-    });
+    });*/
+
+            var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+        
+          if (usercisco.id!=undefined)
+          {
+              apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index",'menu','getalldemandevalideBycisco','id_cisco',usercisco.id).then(function(result)
+              {
+                  vm.alldemande_debut_travaux_moe = result.data.response;
+                  console.log(vm.alldemande_debut_travaux_moe);
+              });
+
+          }
+        });
 
 //col table
         vm.demande_debut_travaux_moe_column = [

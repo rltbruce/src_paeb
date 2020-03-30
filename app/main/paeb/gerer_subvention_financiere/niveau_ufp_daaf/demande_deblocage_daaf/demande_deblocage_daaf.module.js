@@ -5,6 +5,7 @@
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_ufp_daaf.demande_deblocage_daaf', [])
         .run(testPermission)
+        .run(insertiondemande_ufp_daaf_syst)
         .config(config);
         var vs ;
     /** @ngInject */
@@ -59,6 +60,30 @@
 
             });
         }
+     
+    }
+
+    function insertiondemande_ufp_daaf_syst($cookieStore,apiFactory,$interval,loginService)
+    {
+                   
+            apiFactory.getAll("count_avancement_travaux/index").then(function(result)
+            {
+                var allavan= result.data.response;
+                console.log(allavan);
+            });
+            
+
+                //**************************************************
+
+                    $interval(function(){apiFactory.getAll("count_avancement_travaux/index").then(function(result)
+                    {
+                        var allavan= result.data.response;
+                        console.log(allavan);
+                    });},15000) ;
+              
+                //**************************************************
+
+       
      
     }
 

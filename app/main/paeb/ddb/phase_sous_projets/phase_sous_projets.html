@@ -1,0 +1,209 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;">Phase sous projet</span>
+            </div>
+
+            <div class="title">Phase sous projet</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Categorie ouvrage -->
+      <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+    <!-----debut FEFFI ------>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Phase sous projet</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="prestc in ::vm.phase_sous_projets_column">
+                  <div class="table-header">
+                    <span class="column-title">{{prestc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="phase_sous_projets in vm.allphase_sous_projets"  ng-class="{selected: phase_sous_projets.$selected}" ng-click="vm.selection(phase_sous_projets)">
+                          
+                <td>
+                  <span ng-if="phase_sous_projets.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Libelle</label>
+                      <input name="libelle" type="text" ng-model="phase_sous_projets.libelle"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!phase_sous_projets.$edit">{{phase_sous_projets.libelle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="phase_sous_projets.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Description</label>
+                      <input name="description" type="text" ng-model="phase_sous_projets.description"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!phase_sous_projets.$edit">{{phase_sous_projets.description}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="phase_sous_projets.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Code</label>
+                      <input name="code" type="text" ng-model="phase_sous_projets.code" disabled/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!phase_sous_projets.$edit">{{phase_sous_projets.code}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!phase_sous_projets.$edit" ng-click="vm.modifier(phase_sous_projets)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!phase_sous_projets.$edit" ng-click="vm.supprimer(phase_sous_projets)" title="Supprimer">
+                    <span class="icon-delete" ></span>
+                  </a>
+                            
+                  <a ng-if="phase_sous_projets.$edit" ng-click="vm.annuler(phase_sous_projets)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="phase_sous_projets.$edit && phase_sous_projets.libelle && phase_sous_projets.description && phase_sous_projets.code>''" ng-click="vm.ajout(phase_sous_projets,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        </md-tab-body>
+      </md-tab>
+
+      <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepTwo==true">2
+                    </span>
+                    <span class="ms-form-wizard-step-text">Rubrique</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterRubrique_phase_sous_projet()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Designation</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Element à verifier</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Action</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="rubrique_phase_sous_projet in vm.allrubrique_phase_sous_projet"  ng-class="{selected: rubrique_phase_sous_projet.$selected}" ng-click="vm.selectionRubrique_phase_sous_projet(rubrique_phase_sous_projet)">
+                             
+                      <td>
+                        <span ng-if="rubrique_phase_sous_projet.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Designation</label>
+                            <input name="designation" type="text" ng-model="rubrique_phase_sous_projet.designation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!rubrique_phase_sous_projet.$edit">{{rubrique_phase_sous_projet.designation}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="rubrique_phase_sous_projet.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>element à verifier</label>
+                            <input name="element_verifier" type="text" ng-model="rubrique_phase_sous_projet.element_verifier"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!rubrique_phase_sous_projet.$edit">{{rubrique_phase_sous_projet.element_verifier}}</span>
+                      </td>
+
+                      <td>
+                        <a ng-if="!rubrique_phase_sous_projet.$edit" ng-click="vm.modifierRubrique_phase_sous_projet(rubrique_phase_sous_projet)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!rubrique_phase_sous_projet.$edit" ng-click="vm.supprimerRubrique_phase_sous_projet(rubrique_phase_sous_projet)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a> 
+                                  
+                        <a ng-if="rubrique_phase_sous_projet.$edit" ng-click="vm.annulerRubrique_phase_sous_projet(rubrique_phase_sous_projet)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="rubrique_phase_sous_projet.$edit && rubrique_phase_sous_projet.designation && rubrique_phase_sous_projet.element_verifier>''" ng-click="vm.ajoutRubrique_phase_sous_projet(rubrique_phase_sous_projet,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab> 
+      </md-tabs>
+        </ms-form-wizard>                  
+      </div>
+      <!-- / phase_sous_projets -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

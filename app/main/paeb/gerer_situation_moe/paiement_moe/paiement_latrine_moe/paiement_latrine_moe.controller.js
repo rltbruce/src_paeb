@@ -6,7 +6,7 @@
         .module('app.paeb.gerer_situation_moe.paiement_moe.paiement_latrine_moe')
         .controller('Paiement_latrine_moeController', Paiement_latrine_moeController);
     /** @ngInject */
-    function Paiement_latrine_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Paiement_latrine_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
 
@@ -44,10 +44,27 @@
 
 
 /**********************************debut demande_latrine_moe****************************************/
-      apiFactory.getAPIgeneraliserREST("demande_latrine_moe/index",'menu','getdemandeByValide').then(function(result)
+      /*apiFactory.getAPIgeneraliserREST("demande_latrine_moe/index",'menu','getdemandeByValide').then(function(result)
       {
           vm.alldemande_latrine_moe = result.data.response;
-      });
+      });*/
+
+      var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("demande_latrine_moe/index",'menu','getalldemandevalideBycisco','id_cisco',usercisco.id).then(function(result)
+              {
+                  vm.alldemande_latrine_moe = result.data.response;
+                  console.log(vm.alldemande_latrine_moe);
+              });
+
+          }
+        });
 
 //col table
         vm.demande_latrine_moe_column = [

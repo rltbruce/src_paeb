@@ -97,6 +97,54 @@
                             </md-input-container>
                          
                         </div>
+                        <div layout="column"  layout-gt-xs="row" flex>
+                        
+                            <md-input-container flex="100" flex-gt-xs="10">
+                                <label>Region</label>
+                                <md-select name="cisco" ng-model="vm.user.id_region" ng-change="vm.filtre_district()">
+                                  <md-option ng-repeat="region in vm.allregion" value="{{region.id}}">
+                                    {{region.nom}}
+                                  </md-option>
+                                </md-select>
+                                <div ng-messages="enabled.$error"
+                                   role="alert">
+                                  <div ng-message="">
+                                      <span>Etat</span>
+                                  </div>
+                                </div>
+                            </md-input-container> 
+                            <md-input-container flex="100" flex-gt-xs="10" >
+                                <label>District</label>
+                                <md-select ng-model="vm.user.id_district" name="district" ng-disabled="!vm.user.id_region" ng-change="vm.filtre_cisco()">
+                               
+                                  <md-option ng-repeat="district in vm.districts" value="{{district.id}}">
+                                    {{district.nom}}
+                                  </md-option>                                  
+                                </md-select>
+
+                                <div ng-messages="district.$error"
+                                  role="alert">
+                                  <div ng-message="required">
+                                    <span>Région obligatoire.</span>
+                                  </div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex="100" flex-gt-xs="10">
+                                <label>Cisco</label>
+                                <md-select name="cisco" ng-model="vm.user.id_cisco" >
+                                  <md-option ng-repeat="cisco in vm.ciscos" value="{{cisco.id}}">
+                                    {{cisco.code}}
+                                  </md-option>
+                                </md-select>
+                                <div ng-messages="cisco.$error"
+                                   role="alert">
+                                  <div ng-message="">
+                                      <span>Etat</span>
+                                  </div>
+                                </div>
+                            </md-input-container> 
+                         
+                        </div>
 
                         <fieldset class="standard" >
                               <legend><code>Privilèges</code></legend>

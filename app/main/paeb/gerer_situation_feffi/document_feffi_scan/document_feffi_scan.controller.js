@@ -52,7 +52,7 @@
     //.controller('DialogController', DialogController)
         .controller('Document_feffi_scanController', Document_feffi_scanController);
     /** @ngInject */
-    function Document_feffi_scanController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Document_feffi_scanController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
 
@@ -92,11 +92,11 @@
 
 
 /**********************************fin justificatif attachement****************************************/
-      apiFactory.getAll("feffi/index").then(function(result)
+      /*apiFactory.getAll("feffi/index").then(function(result)
         {
             vm.allfeffi = result.data.response; 
             console.log(vm.allfeffi);
-        });
+        });*/
 
       apiFactory.getAll("document_feffi/index").then(function(result)
       {
@@ -104,7 +104,7 @@
           console.log(vm.alldocument_feffi);
       });
 
-      apiFactory.getAPIgeneraliserREST("document_feffi_scan/index",'menu','getdocumentByvalidation','validation',0).then(function(result)
+     /* apiFactory.getAPIgeneraliserREST("document_feffi_scan/index",'menu','getdocumentByvalidation','validation',0).then(function(result)
       {
         vm.alldocument_feffi_scan = result.data.response;
           console.log(vm.alldocument_feffi_scan);        
@@ -113,7 +113,47 @@
       {
         vm.alldocument_feffi_scan_valide = result.data.response;
           console.log(vm.alldocument_feffi_scan_valide);        
-      });
+      });*/
+
+
+        var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("feffi/index",'menus','getfeffiBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allfeffi = result.data.response; 
+                console.log(vm.allfeffi);
+            });
+
+            apiFactory.getAPIgeneraliserREST("document_feffi_scan/index",'menu','getdocument_invalideBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.alldocument_feffi_scan = result.data.response; 
+                console.log(vm.alldocument_feffi_scan);
+            });
+
+            apiFactory.getAPIgeneraliserREST("document_feffi_scan/index",'menu','getdocument_valideBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.alldocument_feffi_scan_valide = result.data.response; 
+                console.log(vm.alldocument_feffi_scan_valide);
+            });
+          }
+          
+
+        });
 
         $scope.uploadFile = function(event)
        {

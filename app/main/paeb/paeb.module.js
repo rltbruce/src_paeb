@@ -16,7 +16,8 @@
             'app.paeb.gerer_convention_ufp_daaf',
             'app.paeb.gerer_situation_entreprise',
             'app.paeb.gerer_situation_moe',
-            'app.paeb.gerer_situation_pr'
+            'app.paeb.gerer_situation_pr',
+            'app.paeb.gerer_situation_reliquat'
         ] ;
 
     angular

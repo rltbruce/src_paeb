@@ -52,7 +52,7 @@
     //.controller('DialogController', DialogController)
         .controller('Document_pr_scanController', Document_pr_scanController);
     /** @ngInject */
-    function Document_pr_scanController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Document_pr_scanController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
 
@@ -145,7 +145,21 @@
         });  */           
 
   /*****************Fin StepOne convention_cisco_feffi_entete****************/
+        var id_user = $cookieStore.get('id');
 
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'DPFI'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }          
+        });
 
 
 /**********************************fin justificatif attachement****************************************/
@@ -245,6 +259,7 @@
 
           vm.selectedItemDocument_pr_scan = {} ;
           NouvelItemDocument_pr_scan      = false;
+          vm.showbuttonValidation = false;
           
         };
 
@@ -283,6 +298,7 @@
             item.observation   = vm.selectedItemDocument_pr_scan.observation ;
             item.id_document_pr   = vm.selectedItemDocument_pr_scan.document_pr.id ;
             item.id_contrat_partenaire_relai   = vm.selectedItemDocument_pr_scan.contrat_partenaire_relai.id ;
+            vm.showbuttonValidation = false;
             //console.log(item);
             //vm.showThParcourir = true;
         };
@@ -300,6 +316,7 @@
                     .cancel('annuler');
               $mdDialog.show(confirm).then(function() {
                 vm.ajoutDocument_pr_scan(vm.selectedItemDocument_pr_scan,1);
+                vm.showbuttonValidation = false;
               }, function() {
                 //alert('rien');
               });
@@ -574,7 +591,7 @@
               document_pr_scan.$edit = false;
               vm.selectedItemDocument_pr_scan = {};
               vm.showbuttonValidation = false;
-
+              vm.showbuttonValidation = false;
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }

@@ -106,7 +106,7 @@
                     <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDocument_pr_scan()" style="width:10%;">
                       Nouveau
                     </md-button>  
-                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDocument_pr_scan()" style="width:10%;" ng-show="vm.showbuttonValidation">
+                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDocument_pr_scan()" style="width:10%;" ng-show="vm.showbuttonValidation && vm.permissionboutonValider">
                       Validation
                     </md-button>
                 </div><br>
@@ -180,19 +180,30 @@
                       </td>
                                 
                       <td>
-                        <span ng-if="document_pr_scan.$edit" style="display: inline-block !important;">
+                        <span ng-if="document_pr_scan.$edit" style="display: inline !important;" layout-gt-sm="row">
+                          <md-input-container style="width:100%;display: flex !important;" class="md-block">
+                            <label>Fichier</label>
+                            <input name="fichier" type="text" ng-model="document_pr_scan.fichier" disabled/>
+                          </md-input-container>   
+                        
+                          <md-input-container style="width:100%;display: flex !important;"class="md-block">
+                            <label>Fichier</label>
+                          <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile"  ng-model="fichier" id="fileid"/>
+                          </md-input-container>   
+                        </span>
+                        <!--span ng-if="document_pr_scan.$edit" style="display: inline !important;">
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Fichier</label>
                             <input name="fichier" type="text" ng-model="document_pr_scan.fichier" disabled/>
                           </md-input-container>   
                         </span>
 
-                        <span ng-if="document_pr_scan.$edit" style="display: inline-block !important;">
+                        <span ng-if="document_pr_scan.$edit" style="display: inline !important;">
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Fichier</label>
                           <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile"  ng-model="fichier" id="fileid"/>
                           </md-input-container>   
-                        </span>
+                        </span-->
                                   
                         <span ng-if="!document_pr_scan.$edit">{{document_pr_scan.fichier}}</span>
                       </td>

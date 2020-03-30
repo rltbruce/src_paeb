@@ -8,7 +8,7 @@
             'app.paeb.gerer_situation_moe.contrat_moe',
             'app.paeb.gerer_situation_moe.prestation_moe',
             'app.paeb.gerer_situation_moe.demande_paiement_moe',
-            'app.paeb.gerer_situation_moe.validation_demande_paiement_moe_bcaf',
+            //'app.paeb.gerer_situation_moe.validation_demande_paiement_moe_bcaf',
             'app.paeb.gerer_situation_moe.validation_demande_paiement_moe_dpfi',
             'app.paeb.gerer_situation_moe.validation_demande_paiement_moe_daaf',
             'app.paeb.gerer_situation_moe.paiement_moe',

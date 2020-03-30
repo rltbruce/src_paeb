@@ -498,11 +498,11 @@
                         vm.selectedItemPassation_marches.date_rapport_evaluation  = passation_marches.date_rapport_evaluation ;
                         vm.selectedItemPassation_marches.notification_intention   = passation_marches.notification_intention;
                         vm.selectedItemPassation_marches.date_notification_attribution  = passation_marches.date_notification_attribution ;
-                        
+                        */
                         vm.selectedItemPassation_marches.$selected  = false;
                         vm.selectedItemPassation_marches.$edit      = false;
                         vm.selectedItemPassation_marches ={};
-                        vm.showbuttonNouvPassation= false;*/
+                        vm.showbuttonNouvPassation= false;
                     }
                     else 
                     {    

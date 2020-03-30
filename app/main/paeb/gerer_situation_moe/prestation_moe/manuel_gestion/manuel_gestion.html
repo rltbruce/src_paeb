@@ -6,13 +6,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Gerer situation feffi</span>
+                <span class="parent">Gerer situation MOE</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Feffi</span>
+                <span class="parent" href="javascript:;"> Manuel de gestion</span>
             </div>
 
-            <div class="title">Feffi</div>
+            <div class="title">Manuel de gestion</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -161,7 +161,7 @@
                     <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterManuel_gestion()" style="width:10%;" ng-show="vm.showbuttonNouvManuel">
                       Nouveau
                     </md-button>  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.validerManuel_gestion()" style="width:10%;" ng-show="vm.showbuttonValidation">
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.validerManuel_gestion()" style="width:10%;" ng-show="vm.showbuttonValidation && vm.permissionboutonValider">
                       Validation
                     </md-button>
                 </div><br>

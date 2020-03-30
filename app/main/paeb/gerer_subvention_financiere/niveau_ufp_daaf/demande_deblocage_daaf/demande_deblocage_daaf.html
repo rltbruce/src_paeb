@@ -27,7 +27,7 @@
         <ms-form-wizard flex>
           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
-          <md-tab>
+          <!--md-tab>
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
                 <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
@@ -80,13 +80,13 @@
                 </tbody>
               </table>
             </md-tab-body>
-          </md-tab>
+          </md-tab-->
 
-          <md-tab ng-disabled="vm.stepOne==false">
+          <md-tab >
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
-                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
-                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
                       <i class="icon-check s16"></i>
                 </span>
                 <span class="ms-form-wizard-step-text">Demande déblocage de fond</span>
@@ -98,6 +98,9 @@
                   <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_deblocage_daaf()" style="width:10%;">
                     Nouveau
                   </md-button>
+                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.valider_convention()" style="width:10%;" ng-show="vm.showbuttonValidation && vm.permissionboutonValider">
+                      Validation
+                    </md-button>
               </div> <br>
 
               <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
@@ -111,8 +114,21 @@
                   </tr>
                 </thead>                     
                 <tbody>
-                  <tr ng-repeat="demande_deblocage_daaf in vm.alldemande_deblocage_daaf"  ng-class="{selected: demande_deblocage_daaf.$selected}" ng-click="vm.selectionDemande_deblocage_daaf(demande_deblocage_daaf)">
+                  <tr ng-repeat="demande_deblocage_daaf in vm.alldemande_deblocage_daaf"  ng-class="{selected: demande_deblocage_daaf.$selected}" ng-click="vm.selectionDemande_deblocage_daaf(demande_deblocage_daaf)">                    
 
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Convention</label>
+                          <md-select ng-model="demande_deblocage_daaf.id_convention_ufp_daaf_entete"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_convention(demande_deblocage_daaf)" >
+                            <md-option ng-repeat="convention_ufp_daaf_entete in vm.allconvention_ufp_daaf_entete" value="{{convention_ufp_daaf_entete.id}}">
+                                                                        {{convention_ufp_daaf_entete.ref_convention}}
+                            </md-option>
+                          </md-select>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.convention_ufp_daaf_entete.ref_convention}}</span>
+                    </td>
                     <td>
                       <span ng-if="demande_deblocage_daaf.$edit">
                         <md-input-container style="width:100%;display: flex !important;">
@@ -137,7 +153,7 @@
                       <span ng-if="demande_deblocage_daaf.$edit">
                         <md-input-container style="width:100%;display: flex !important;">
                           <label>Tranche</label>
-                          <md-select ng-model="demande_deblocage_daaf.id_tranche_deblocage_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(demande_deblocage_daaf)" ng-disabled="demande_deblocage_daaf.validation!=0 || vm.modificationdemande">
+                          <md-select ng-model="demande_deblocage_daaf.id_tranche_deblocage_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(demande_deblocage_daaf)" ng-disabled="demande_deblocage_daaf.validation!=0 || vm.modificationdemande || !demande_deblocage_daaf.id_convention_ufp_daaf_entete">
                             <md-option ng-repeat="tranche in vm.allcurenttranche_deblocage_daaf" value="{{tranche.id}}">
                                                                         {{tranche.libelle}}
                             </md-option>
@@ -243,7 +259,7 @@
                         <span class="icon-cancel"></span>
                       </a>
                                 
-                      <a ng-if="demande_deblocage_daaf.$edit && demande_deblocage_daaf.date && demande_deblocage_daaf.id_tranche_deblocage_daaf>''" ng-click="vm.ajoutDemande_deblocage_daaf(demande_deblocage_daaf,0)" title="Sauvegarder">
+                      <a ng-if="demande_deblocage_daaf.$edit && demande_deblocage_daaf.date && demande_deblocage_daaf.id_tranche_deblocage_daaf && demande_deblocage_daaf.id_convention_ufp_daaf_entete && demande_deblocage_daaf.ref_demande && demande_deblocage_daaf.objet>''" ng-click="vm.ajoutDemande_deblocage_daaf(demande_deblocage_daaf,0)" title="Sauvegarder">
                         <span class="icon-content-save"></span>
                       </a>
                     </td>
@@ -254,11 +270,11 @@
             </md-tab-body>
           </md-tab>         
 
-          <md-tab ng-disabled="vm.stepTwo==false">
+          <md-tab ng-disabled="vm.stepOne==false">
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
-                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
                       <i class="icon-check s16"></i>
                   </span>
                 <span class="ms-form-wizard-step-text">Pièce justificatif</span>
@@ -296,7 +312,13 @@
                 </td>
 
                 <td>
-                  <span ng-if="justificatif_daaf.$edit">
+                  <span ng-if="justificatif_daaf.$edit" style="display: inline-block !important;">
+                      <md-input-container style="width:100%;display: flex !important;">
+                        <label>Fichier</label>
+                        <input name="fichier" type="text" ng-model="justificatif_daaf.fichier" disabled/>
+                      </md-input-container>   
+                  </span>
+                  <span ng-if="justificatif_daaf.$edit" style="display: inline-block !important;">
                     <md-input-container style="width:100%;display: flex !important;">
                       <label>Fichier</label>
                     <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile"  ng-model="fichier" id="fileid"/>
@@ -314,6 +336,10 @@
                   <a ng-if="!justificatif_daaf.$edit" ng-click="vm.supprimerJustificatif_daaf(justificatif_daaf)" title="Supprimer">
                     <span class="icon-delete"></span>
                   </a>
+                                  
+                  <a ng-if="!justificatif_daaf.$edit" ng-click="vm.download_justificatif(justificatif_daaf)" title="Telecharger fichier">
+                    <span class="icon-box-download"></span>
+                  </a>
                             
                   <a ng-if="justificatif_daaf.$edit" ng-click="vm.annulerJustificatif_daaf(justificatif_daaf)" title="Annuler modification">
                     <span class="icon-cancel"></span>
@@ -328,8 +354,8 @@
           </table>
             </md-tab-body>
           </md-tab>
-
-
+          <md-tab>
+          </md-tab>
           </md-tabs>
           </ms-form-wizard>       
                   

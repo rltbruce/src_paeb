@@ -1,0 +1,286 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation feffi</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Feffi</span>
+            </div>
+
+            <div class="title">Feffi</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">   
+
+    <!-----Debut memoire technique ------>
+          <md-tab >
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">I</span>
+                    <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
+                      <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepThree==true">3
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Memoire technique</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDocument_feffi_scan()" style="width:10%;">
+                      Nouveau
+                    </md-button>  
+                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDocument_feffi_scan()" style="width:10%;" ng-show="vm.showbuttonValidation">
+                      Validation
+                    </md-button>
+                </div><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Feffi</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Convention</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Type document</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Fichier</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Date Elaboration</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Observation</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Action</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="document_feffi_scan in vm.alldocument_feffi_scan"  ng-class="{selected: document_feffi_scan.$selected}" ng-click="vm.selectionDocument_feffi_scan(document_feffi_scan)">  
+                        <td>
+                          <span ng-if="document_feffi_scan.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Feffi</label>
+                              <md-select ng-model="document_feffi_scan.id_feffi"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_feffi(document_feffi_scan)">
+                                <md-option ng-repeat="feffi in vm.allfeffi" value="{{feffi.id}}">
+                                                                    {{feffi.denomination}}
+                                </md-option>
+                              </md-select>
+                            </md-input-container>  
+                          </span>
+                          <span ng-if="!document_feffi_scan.$edit">{{document_feffi_scan.feffi.denomination}}</span>
+                        </td>
+
+                      <td>
+                        <span ng-if="document_feffi_scan.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Convention</label>
+                            <md-select ng-model="document_feffi_scan.id_convention_entete"style="overflow: hidden;text-overflow: ellipsis;"  ng-disabled="!document_feffi_scan.id_feffi">
+                              <md-option ng-repeat="convention_entete in vm.allconvention_entete" value="{{convention_entete.id}}">
+                                                                    {{convention_entete.ref_convention}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!document_feffi_scan.$edit">{{document_feffi_scan.convention_entete.ref_convention}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="document_feffi_scan.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Document</label>
+                            <md-select ng-model="document_feffi_scan.id_document_feffi"style="overflow: hidden;text-overflow: ellipsis;">
+                              <md-option ng-repeat="document_feffi in vm.alldocument_feffi" value="{{document_feffi.id}}">
+                                                                    {{document_feffi.code}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!document_feffi_scan.$edit">{{document_feffi_scan.document_feffi.code}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="document_feffi_scan.$edit" style="display: inline-block !important;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                            <input name="fichier" type="text" ng-model="document_feffi_scan.fichier" disabled/>
+                          </md-input-container>   
+                        </span>
+
+                        <span ng-if="document_feffi_scan.$edit" style="display: inline-block !important;">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                          <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile"  ng-model="fichier" id="fileid"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!document_feffi_scan.$edit">{{document_feffi_scan.fichier}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="document_feffi_scan.$edit">
+                          <md-datepicker ng-model="document_feffi_scan.date_elaboration" md-placeholder="Date de elaboration" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!document_feffi_scan.$edit">{{vm.affichageDate(document_feffi_scan.date_elaboration)}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="document_feffi_scan.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Observation</label>
+                            <input name="observation" type="text" ng-model="document_feffi_scan.observation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!document_feffi_scan.$edit">{{document_feffi_scan.observation}}</span>
+                      </td>
+
+                      <td>
+                        <a ng-if="!document_feffi_scan.$edit" ng-click="vm.modifierDocument_feffi_scan(document_feffi_scan)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!document_feffi_scan.$edit" ng-click="vm.supprimerDocument_feffi_scan(document_feffi_scan)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>                        
+                                  
+                        <a ng-if="!document_feffi_scan.$edit" ng-click="vm.download_document_feffi_scan(document_feffi_scan)" title="Telecharger fichier">
+                          <span class="icon-box-download"></span>
+                        </a>
+                                  
+                        <a ng-if="document_feffi_scan.$edit" ng-click="vm.annulerDocument_feffi_scan(document_feffi_scan)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="document_feffi_scan.$edit && document_feffi_scan.id_document_feffi && document_feffi_scan.fichier && document_feffi_scan.date_elaboration >''" ng-click="vm.ajoutDocument_feffi_scan(document_feffi_scan,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN memoire technique ------> 
+
+    <!-----Debut memoire technique ------>
+          <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">V</span>
+                    <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
+                      <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepThree==true">4
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Memoire technique valide</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Fichier</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Date elaboration</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Observation</span>
+                        </div>
+                      </th>
+                      <th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Action</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="document_feffi_scan_valide in vm.alldocument_feffi_scan_valide"  ng-class="{selected: document_feffi_scan_valide.$selected}" ng-click="vm.selectiondocument_feffi_scan_valide(document_feffi_scan_valide)">
+                         
+                      <td>                                  
+                        <span>{{document_feffi_scan_valide.fichier}}</span>
+                      </td>
+
+                      <td>                         
+                        <span>{{vm.affichageDate(document_feffi_scan_valide.date_elaboration)}}</span>
+                      </td>
+
+                      <td>     
+                        <span>{{document_feffi_scan_valide.observation}}</span>
+                      </td>
+                       <td>         
+                        <a ng-click="vm.download_document_feffi_scan(document_feffi_scan_valide)" title="Telecharger fichier">
+                          <span class="icon-box-download"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN memoire technique ------> 
+          </md-tabs>        
+        </ms-form-wizard>
+                         
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

@@ -52,7 +52,7 @@
     //.controller('DialogController', DialogController)
         .controller('Document_prestataire_scanController', Document_prestataire_scanController);
     /** @ngInject */
-    function Document_prestataire_scanController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Document_prestataire_scanController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
 
@@ -89,11 +89,49 @@
 
 
 /**********************************fin justificatif attachement****************************************/
-      apiFactory.getAll("contrat_prestataire/index").then(function(result)
+var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontrat_prestataireBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_prestataire = result.data.response; 
+                console.log(vm.allcontrat_prestataire);
+            });
+
+            apiFactory.getAPIgeneraliserREST("document_prestataire_scan/index",'menu','getdocument_invalideBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.alldocument_prestataire_scan = result.data.response; 
+                console.log(vm.alldocument_prestataire);
+            });
+            apiFactory.getAPIgeneraliserREST("document_prestataire_scan/index",'menu','getdocument_valideBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.alldocument_prestataire_scan_valide = result.data.response; 
+                console.log(vm.alldocument_prestataire_scan);
+            });
+            
+            
+          }
+          
+
+        });
+      /*apiFactory.getAll("contrat_prestataire/index").then(function(result)
       {
           vm.allcontrat_prestataire = result.data.response; 
           console.log(vm.allcontrat_prestataire);
-      });
+      });*/
 
       apiFactory.getAll("document_prestataire/index").then(function(result)
       {

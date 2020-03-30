@@ -28,10 +28,10 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_convention_ufp_daaf.convention_ufp_daaf', {
-            title: 'Convention DAAF/UFP',
+            title: 'Saisie convention',
             icon  : 'icon-tile-four',
             state: 'app.paeb_gerer_convention_ufp_daaf_convention_ufp_daaf',
-			weight: 2
+			weight: 1
         });
     }
 

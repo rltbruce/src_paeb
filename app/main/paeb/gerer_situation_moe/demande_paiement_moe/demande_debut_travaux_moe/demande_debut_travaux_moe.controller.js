@@ -51,14 +51,14 @@
     }])
         .controller('Demande_debut_travaux_moeController', Demande_debut_travaux_moeController);
     /** @ngInject */
-    function Demande_debut_travaux_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http)
+    function Demande_debut_travaux_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore)
     {
 		    var vm = this;
-        vm.selectedItemContrat_bureau_etude = {};
+        /*vm.selectedItemContrat_bureau_etude = {};
         vm.allcontrat_bureau_etude = [];
 
         vm.selectedItemLatrine_construction = {};
-        vm.alllatrine_construction  = [];
+        vm.alllatrine_construction  = [];*/
 
         vm.ajoutDemande_debut_travaux_moe = ajoutDemande_debut_travaux_moe;
         var NouvelItemDemande_debut_travaux_moe=false;
@@ -74,6 +74,7 @@
         vm.selectedItemJustificatif_debut_travaux_moe = {} ;
         vm.alljustificatif_debut_travaux_moe = [] ;
 
+        vm.showbuttonValidation = false;
        
 
         vm.allcurenttranche_d_debut_travaux_moe = [];
@@ -108,16 +109,47 @@
         },
         {titre:"Date signature"
         }];
+
+        var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_bureau_etude = result.data.response; 
+                console.log(vm.allcontrat_bureau_etude);
+            });
+
+            apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index",'menu','getalldemandeinvalideBycisco','id_cisco',usercisco.id).then(function(result)
+              {
+                  vm.alldemande_debut_travaux_moe_invalide = result.data.response;
+                  console.log(vm.alldemande_debut_travaux_moe_invalide);
+              });
+
+          }
+        });
        
         //recuperation donnée convention
-        apiFactory.getAll("contrat_be/index").then(function(result)
+       /* apiFactory.getAll("contrat_be/index").then(function(result)
         {
             vm.allcontrat_bureau_etude = result.data.response; 
             console.log(vm.allcontrat_bureau_etude);
-        });
+        });*/
 
         //fonction selection item entete convention cisco/feffi
-        vm.selectionContrat_bureau_etude = function (item)
+       /* vm.selectionContrat_bureau_etude = function (item)
         {
             vm.selectedItemContrat_bureau_etude = item;
            // vm.allconvention= [] ;
@@ -133,6 +165,8 @@
                       return obj.validation == 0;
                   });
                   vm.alldemande_debut_travaux_moe = result.data.response;
+                  console.log(vm.alldemande_debut_travaux_moe);
+                  console.log(vm.alldemande_debut_travaux_moe_invalide);
               });
 
               vm.stepOne = true;
@@ -149,7 +183,7 @@
                 item.$selected = false;
              });
              vm.selectedItemContrat_bureau_etude.$selected = true;
-        });        
+        });  */      
 
 /**********************************fin contrat bureau_etude****************************************/
 
@@ -157,6 +191,8 @@
 /**********************************debut demande_debut_travaux_moe****************************************/
 //col table
         vm.demande_debut_travaux_moe_column = [
+        {titre:"Contrat"
+        },
         {titre:"Objet"
         },
         {titre:"Description"
@@ -191,11 +227,12 @@
         });
 
         //Masque de saisi ajout
-        vm.ajouterDemande_debut_travaux_moe = function ()
+       /* vm.ajouterDemande_debut_travaux_moe = function ()
         {     var items = {
                           $edit: true,
                           $selected: true,
                           id: '0',         
+                          id_contrat_bureau_etude: '',         
                           objet: '',
                           description: '',
                           ref_facture: '',
@@ -208,7 +245,7 @@
                           reste:'',
                           date: ''
                         };
-            if(vm.alldemande_debut_travaux_moe.length>0)
+                  if(vm.alldemande_debut_travaux_moe.length>0)
                   {
                       var last_id_demande = Math.max.apply(Math, vm.alldemande_debut_travaux_moe.map(function(o){ return o.id;}));
                       vm.dernierdemande = vm.alldemande_debut_travaux_moe.filter(function(obj){return obj.id == last_id_demande;});
@@ -263,69 +300,91 @@
 
                       vm.allcurenttranche_d_debut_travaux_moe = vm.alltranche_d_debut_travaux_moe.filter(function(obj){return obj.code == 'tranche 1';});
                     //vm.dernierdemande = [];
-                  }
+                  }             
                       
-         /* if(vm.alldemande_debut_travaux_moe_invalide.length>0)
-          {
-            var last_id_demande = Math.max.apply(Math, vm.alldemande_debut_travaux_moe_invalide.map(function(o)
-            { 
-              return o.id;
-            }));
+        };*/
 
-            vm.dernierdemande = vm.alldemande_debut_travaux_moe_invalide.filter(function(obj)
-            {
-                return obj.id == last_id_demande;
-            });
-            var numcode=vm.dernierdemande[0].tranche.code.split(' ')[1];
+         vm.ajouterDemande_debut_travaux_moe = function ()
+        {     
+          var items = {
+                          $edit: true,
+                          $selected: true,
+                          id: '0',         
+                          id_contrat_bureau_etude: '',         
+                          objet: '',
+                          description: '',
+                          ref_facture: '',
+                          tranche: '',
+                          montant: '',
+                          cumul: '',
+                          anterieur: '',
+                          periode: '',
+                          pourcentage:'',
+                          reste:'',
+                          date: ''
+                        };
 
-            vm.allcurenttranche_d_debut_travaux_moe = vm.alltranche_d_debut_travaux_moe.filter(function(obj)
-            {
-                return obj.code == 'tranche '+(parseInt(numcode)+1);
-            });
+            if (NouvelItemDemande_debut_travaux_moe == false)
+            {                              
+                vm.alldemande_debut_travaux_moe_invalide.push(items);                        
+                vm.alldemande_debut_travaux_moe_invalide.forEach(function(mem)
+                {
+                    if(mem.$selected==true)
+                    {
+                        vm.selectedItemDemande_debut_travaux_moe = mem;
+                    }
+                });
 
-          }
-          else
-          {
-            vm.allcurenttranche_d_debut_travaux_moe = vm.alltranche_d_debut_travaux_moe.filter(function(obj)
+                      NouvelItemDemande_debut_travaux_moe = true ;
+            }                    
+            else
             {
-                return obj.code == 'tranche 1';
-            });
-            vm.dernierdemande = [];console.log(vm.allcurenttranche_d_debut_travaux_moe);
-          }
-          if (NouvelItemDemande_debut_travaux_moe == false)
-          {
-            var items = {
-              $edit: true,
-              $selected: true,
-              id: '0',         
-              objet: '',
-              description: '',
-              ref_facture: '',
-              tranche: '',
-              montant: '',
-              cumul: '',
-              anterieur: '',
-              periode: '',
-              pourcentage:'',
-              reste:'',
-              date: ''
-            };         
-            vm.alldemande_debut_travaux_moe_invalide.push(items);
-            vm.alldemande_debut_travaux_moe_invalide.forEach(function(mem)
-            {
-              if(mem.$selected==true)
-              {
-                vm.selectedItemDemande_debut_travaux_moe = mem;
-              }
-            });
-
-            NouvelItemDemande_debut_travaux_moe = true ;
-          }else
-          {
-            vm.showAlert('Ajout demande debut_travaux','Un formulaire d\'ajout est déjà ouvert!!!');
-          } */               
+                vm.showAlert('Ajout demande debut_travaux','Un formulaire d\'ajout est déjà ouvert!!!');
+            }                            
                       
         };
+
+        vm.change_contrat= function(item)
+        { 
+
+          apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index",'menu','getalldemandeBycontrat','id_contrat_bureau_etude',item.id_contrat_bureau_etude).then(function(result)
+          {
+              if (NouvelItemDemande_debut_travaux_moe ==false)
+              {
+                vm.alldemande_debut_travaux_moe = result.data.response.filter(function(obj){return obj.id == item.id;});
+                console.log(vm.alldemande_debut_travaux_moe);
+              }
+              else
+              {
+                vm.alldemande_debut_travaux_moe = result.data.response;
+                console.log(vm.alldemande_debut_travaux_moe);
+              }
+              
+          
+
+          if(vm.alldemande_debut_travaux_moe.length>0)
+          {
+              var last_id_demande = Math.max.apply(Math, vm.alldemande_debut_travaux_moe.map(function(o){ return o.id;}));
+              vm.dernierdemande = vm.alldemande_debut_travaux_moe.filter(function(obj){return obj.id == last_id_demande;});
+              var numcode=vm.dernierdemande[0].tranche.code.split(' ')[1];
+
+              if (vm.dernierdemande[0].validation==3)
+              {
+                  vm.allcurenttranche_d_debut_travaux_moe = vm.alltranche_d_debut_travaux_moe.filter(function(obj){ return obj.code == 'tranche '+(parseInt(numcode)+1);});
+              } 
+              else
+              {
+                vm.showAlert('Impossible d\'ajouter la demande','Dernier demande en-cours!!!');
+                vm.allcurenttranche_d_debut_travaux_moe = [];
+              }
+            }
+            else
+            { 
+              vm.allcurenttranche_d_debut_travaux_moe = vm.alltranche_d_debut_travaux_moe.filter(function(obj){return obj.code == 'tranche 1';});
+                    //vm.dernierdemande = [];
+            }
+          });   
+        }
 
         //fonction ajout dans bdd
         function ajoutDemande_debut_travaux_moe(demande_debut_travaux_moe,suppression)
@@ -347,6 +406,7 @@
           {
             item.$edit = false;
             item.$selected = false;
+            item.id_contrat_bureau_etude   = currentItemDemande_debut_travaux_moe.id_contrat_bureau_etude ;
             item.objet   = currentItemDemande_debut_travaux_moe.objet ;
             item.description   = currentItemDemande_debut_travaux_moe.description ;
             item.ref_facture   = currentItemDemande_debut_travaux_moe.ref_facture ;
@@ -383,6 +443,7 @@
             {
                 vm.alljustificatif_debut_travaux_moe = result.data.response;
                 console.log(vm.alljustificatif_debut_travaux_moe);
+                vm.showbuttonValidation = true;
             });
 
             vm.stepTwo = true;
@@ -412,6 +473,7 @@
 
             item.$edit = true;
             item.$selected = true;
+            item.id_contrat_bureau_etude   = vm.selectedItemDemande_debut_travaux_moe.contrat_bureau_etude.id ;
             item.objet   = vm.selectedItemDemande_debut_travaux_moe.objet ;
             item.description   = vm.selectedItemDemande_debut_travaux_moe.description ;
             item.ref_facture   = vm.selectedItemDemande_debut_travaux_moe.ref_facture ;
@@ -423,6 +485,10 @@
             item.pourcentage = vm.selectedItemDemande_debut_travaux_moe.tranche.pourcentage ;
             item.reste = vm.selectedItemDemande_debut_travaux_moe.reste ;
             item.date   =new Date(vm.selectedItemDemande_debut_travaux_moe.date) ;
+            vm.allcurenttranche_d_debut_travaux_moe = vm.alltranche_d_debut_travaux_moe.filter(function(obj)
+            {
+                return obj.id == vm.selectedItemDemande_debut_travaux_moe.tranche.id;
+            });
         };
 
         //fonction bouton suppression item Demande_debut_travaux_moe
@@ -462,7 +528,8 @@
                     || (pass[0].anterieur != currentItemDemande_debut_travaux_moe.anterieur )
                     || (pass[0].reste != currentItemDemande_debut_travaux_moe.reste )
                     || (pass[0].date   != currentItemDemande_debut_travaux_moe.date )
-                    || (pass[0].ref_facture   != currentItemDemande_debut_travaux_moe.ref_facture ) )                   
+                    || (pass[0].ref_facture   != currentItemDemande_debut_travaux_moe.ref_facture ) 
+                    || (pass[0].id_contrat_bureau_etude   != currentItemDemande_debut_travaux_moe.id_contrat_bureau_etude ) )                   
                       { 
                          insert_in_baseDemande_debut_travaux_moe(item,suppression);
                       }
@@ -503,7 +570,7 @@
                     anterieur: demande_debut_travaux_moe.anterieur ,
                     reste: demande_debut_travaux_moe.reste ,
                     date: convertionDate(new Date(demande_debut_travaux_moe.date)),
-                    id_contrat_bureau_etude: vm.selectedItemContrat_bureau_etude.id,
+                    id_contrat_bureau_etude: demande_debut_travaux_moe.id_contrat_bureau_etude,
                     validation: 0               
                 });
                 console.log(datas);
@@ -516,22 +583,21 @@
                     return obj.id == demande_debut_travaux_moe.id_tranche_d_debut_travaux_moe;
                 });
 
+                var contra= vm.allcontrat_bureau_etude.filter(function(obj)
+                {
+                    return obj.id == demande_debut_travaux_moe.id_contrat_bureau_etude;
+                });
+
                 if (NouvelItemDemande_debut_travaux_moe == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        /*vm.selectedItemDemande_debut_travaux_moe.objet   = demande_debut_travaux_moe.objet ;
-                        vm.selectedItemDemande_debut_travaux_moe.description   = demande_debut_travaux_moe.description ;
-                        vm.selectedItemDemande_debut_travaux_moe.ref_facture   = demande_debut_travaux_moe.ref_facture ;
-                        vm.selectedItemDemande_debut_travaux_moe.montant   = demande_debut_travaux_moe.montant ;*/
+                        vm.selectedItemDemande_debut_travaux_moe.contrat_bureau_etude = contra[0] ;
                         vm.selectedItemDemande_debut_travaux_moe.tranche = tran[0] ;
-                        /*vm.selectedItemDemande_debut_travaux_moe.cumul = demande_debut_travaux_moe.cumul ;
-                        vm.selectedItemDemande_debut_travaux_moe.anterieur = demande_debut_travaux_moe.anterieur ;*/
+
                         vm.selectedItemDemande_debut_travaux_moe.periode = tran[0].periode ;
                         vm.selectedItemDemande_debut_travaux_moe.pourcentage = tran[0].pourcentage ;
-                        /*vm.selectedItemDemande_debut_travaux_moe.reste = demande_debut_travaux_moe.reste ;
-                        vm.selectedItemDemande_debut_travaux_moe.date   = demande_debut_travaux_moe.date ;*/
                         
                         vm.selectedItemDemande_debut_travaux_moe.$selected  = false;
                         vm.selectedItemDemande_debut_travaux_moe.$edit      = false;
@@ -548,26 +614,18 @@
                     
                 }
                 else
-                {
-                  /*demande_debut_travaux_moe.objet   = demande_debut_travaux_moe.objet ;
-                  demande_debut_travaux_moe.description   = demande_debut_travaux_moe.description ;
-                  demande_debut_travaux_moe.ref_facture   = demande_debut_travaux_moe.ref_facture ;
-                  demande_debut_travaux_moe.montant   = demande_debut_travaux_moe.montant ;*/
+                {                  
+                  demande_debut_travaux_moe.contrat_bureau_etude = contra[0] ;
                   demande_debut_travaux_moe.tranche = tran[0] ;
-                  /*demande_debut_travaux_moe.cumul = demande_debut_travaux_moe.cumul ;
-                  demande_debut_travaux_moe.anterieur = demande_debut_travaux_moe.anterieur ;*/
                   demande_debut_travaux_moe.periode = tran[0].periode ;
                   demande_debut_travaux_moe.pourcentage = tran[0].pourcentage ;
-                  /*demande_debut_travaux_moe.reste = demande_debut_travaux_moe.reste ;
-                  demande_debut_travaux_moe.date   = demande_debut_travaux_moe.date ;*/
-
                   demande_debut_travaux_moe.id  =   String(data.response);              
                   NouvelItemDemande_debut_travaux_moe=false;
             }
               demande_debut_travaux_moe.$selected = false;
               demande_debut_travaux_moe.$edit = false;
               vm.selectedItemDemande_debut_travaux_moe = {};
-            
+            vm.showbuttonValidation = false;
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
@@ -577,18 +635,21 @@
           var nbr_t = [];
           var reste = 0;
           var anterieur = 0;
-
-            var montant = (parseInt(vm.selectedItemContrat_bureau_etude.montant_contrat) * (vm.allcurenttranche_d_debut_travaux_moe[0].pourcentage))/100;
+          var contr = vm.allcontrat_bureau_etude.filter(function(obj)
+          {
+              return obj.id == item.id_contrat_bureau_etude;
+          });
+            var montant = (parseInt(contr[0].montant_contrat) * (vm.allcurenttranche_d_debut_travaux_moe[0].pourcentage))/100;
             var cumul = montant;
 
-          if (vm.alldemande_debut_travaux_moe_invalide.length>1)
+          if (vm.alldemande_debut_travaux_moe.length>0)
           {                 
               anterieur = vm.dernierdemande[0].montant;           
               cumul = montant + parseInt(vm.dernierdemande[0].cumul);
           }
           
 
-          reste= (parseInt(vm.selectedItemContrat_bureau_etude.montant_contrat)) - cumul;
+          reste= (parseInt(contr[0].montant_contrat)) - cumul;
 
           item.periode = vm.allcurenttranche_d_debut_travaux_moe[0].periode;
           item.pourcentage = vm.allcurenttranche_d_debut_travaux_moe[0].pourcentage;
@@ -598,10 +659,61 @@
           item.cumul = cumul;
           item.reste = reste;
           console.log(item);
-          console.log(vm.selectedItemContrat_bureau_etude);
+          console.log(contr[0]);
          
           //var nbr_debut_travaux_total = vm.alldemande_debut_travaux_moe_invalide.length;
           
+        }
+
+        vm.validerDemande_debut_travaux_moe = function()
+        {
+          maj_in_baseDemande_debut_travaux_moe(vm.selectedItemDemande_debut_travaux_moe,0);
+        }
+
+        function maj_in_baseDemande_debut_travaux_moe(demande_debut_travaux_moe,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemDemande_debut_travaux_moe==false)
+            {
+                getId = vm.selectedItemDemande_debut_travaux_moe.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    objet: demande_debut_travaux_moe.objet,
+                    description:demande_debut_travaux_moe.description,
+                    ref_facture:demande_debut_travaux_moe.ref_facture,
+                    id_tranche_d_debut_travaux_moe: demande_debut_travaux_moe.tranche.id ,
+                    montant: demande_debut_travaux_moe.montant,
+                    cumul: demande_debut_travaux_moe.cumul ,
+                    anterieur: demande_debut_travaux_moe.anterieur ,
+                    reste: demande_debut_travaux_moe.reste ,
+                    date: convertionDate(new Date(demande_debut_travaux_moe.date)),
+                    id_contrat_bureau_etude: demande_debut_travaux_moe.contrat_bureau_etude.id,
+                    validation: 1               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("demande_debut_travaux_moe/index",datas, config).success(function (data)
+            {   
+
+                vm.alldemande_debut_travaux_moe_invalide = vm.alldemande_debut_travaux_moe_invalide.filter(function(obj)
+                {
+                    return obj.id !== demande_debut_travaux_moe.id;
+                });
+              demande_debut_travaux_moe.$selected = false;
+              demande_debut_travaux_moe.$edit = false;
+              vm.selectedItemDemande_debut_travaux_moe = {};
+            vm.showbuttonValidation = false;
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
         }
 /**********************************fin demande_debut_travaux_moe****************************************/
 

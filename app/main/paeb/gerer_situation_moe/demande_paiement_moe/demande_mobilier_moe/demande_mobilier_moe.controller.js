@@ -51,17 +51,17 @@
     }])
         .controller('Demande_mobilier_moeController', Demande_mobilier_moeController);
     /** @ngInject */
-    function Demande_mobilier_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http)
+    function Demande_mobilier_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore)
     {
 		    var vm = this;
-        vm.selectedItemContrat_bureau_etude = {};
-        vm.allcontrat_bureau_etude = [];
+        /*vm.selectedItemContrat_bureau_etude = {};
+        vm.allcontrat_bureau_etude = [];*/
 
-         vm.selectedItemmobilier_construction = {};
+        /* vm.selectedItemmobilier_construction = {};
         vm.allmobilier_construction  = [];
 
         vm.selectedItemmobilier_construction = {};
-        vm.allmobilier_construction  = [];
+        vm.allmobilier_construction  = [];*/
 
         vm.ajoutDemande_mobilier_moe = ajoutDemande_mobilier_moe;
         var NouvelItemDemande_mobilier_moe=false;
@@ -77,7 +77,7 @@
         vm.selectedItemJustificatif_mobilier_moe = {} ;
         vm.alljustificatif_mobilier_moe = [] ;
 
-       
+        vm.showbuttonValidation = false;
 
         vm.allcurenttranche_demande_mobilier_moe = [];
         vm.alltranche_demande_mobilier_moe = [];
@@ -108,7 +108,7 @@
 /**********************************contrat bureau_etude****************************************/
 
         //col table
-       vm.contrat_bureau_etude_column = [
+      /* vm.contrat_bureau_etude_column = [
         {titre:"Bureau d'etude"
         },
         {titre:"Intitule"
@@ -157,14 +157,14 @@
                 item.$selected = false;
              });
              vm.selectedItemContrat_bureau_etude.$selected = true;
-        });        
+        });  */      
 
 /**********************************fin contrat bureau_etude****************************************/
 
 
 /**********************************fin mobilier construction****************************************/       
 //col table
-       vm.mobilier_construction_column = [        
+  /*     vm.mobilier_construction_column = [        
         {
           titre:"mobilier"
         },
@@ -189,7 +189,6 @@
                   {
                       return obj.validation == 0;
                   });
-
                   vm.alldemande_mobilier_moe = result.data.response;
               });           
               vm.stepTwo = true;
@@ -208,13 +207,44 @@
                 item.$selected = false;
              });
              vm.selectedItemmobilier_construction.$selected = true;
-        });           
+        });  */         
 
 /**********************************fin mobilier construction****************************************/
+        var id_user = $cookieStore.get('id');
 
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_bureau_etude = result.data.response; 
+                console.log(vm.allcontrat_bureau_etude);
+            });
+
+            apiFactory.getAPIgeneraliserREST("demande_mobilier_moe/index",'menu','getalldemandeinvalideBycisco','id_cisco',usercisco.id).then(function(result)
+              {
+                  vm.alldemande_mobilier_moe_invalide = result.data.response;
+                  console.log(vm.alldemande_mobilier_moe_invalide);
+              });
+
+          }
+        });
 /**********************************debut demande_mobilier_moe****************************************/
 //col table
         vm.demande_mobilier_moe_column = [
+        {titre:"Contrat"
+        },
         {titre:"Objet"
         },
         {titre:"Description"
@@ -253,13 +283,108 @@
             vm.alltranche_d_debut_travaux_moe= result.data.response;
         });
 
-        //Masque de saisi ajout
         vm.ajouterDemande_mobilier_moe = function ()
         { 
-          var items = {
+           var items = {
                         $edit: true,
                         $selected: true,
                         id: '0',         
+                        id_contrat_bureau_etude: '',         
+                        objet: '',
+                        description: '',
+                        ref_facture: '',
+                        tranche: '',
+                        montant: '',
+                        cumul: '',
+                        anterieur: '',
+                        periode: '',
+                        pourcentage:'',
+                        reste:'',
+                        date: ''
+                      };
+            if (NouvelItemDemande_mobilier_moe == false)
+            {
+                vm.alldemande_mobilier_moe_invalide.push(items);                        
+                vm.alldemande_mobilier_moe_invalide.forEach(function(mem)
+                {
+                  if(mem.$selected==true)
+                  {
+                      vm.selectedItemDemande_mobilier_moe = mem;
+                  }
+                });
+
+                NouvelItemDemande_mobilier_moe = true ;
+            }                    
+            else
+            {
+                vm.showAlert('Ajout demande mobilier','Un formulaire d\'ajout est déjà ouvert!!!');
+            }                          
+                      
+        };
+        
+        vm.change_contrat = function(item)
+        { 
+
+          apiFactory.getAPIgeneraliserREST("demande_mobilier_moe/index",'menu','getalldemandeBycontrat','id_contrat_bureau_etude',item.id_contrat_bureau_etude).then(function(result)
+          {
+              if (NouvelItemDemande_mobilier_moe ==false)
+              {
+                vm.alldemande_mobilier_moe = result.data.response.filter(function(obj){return obj.id == item.id;});
+                console.log(vm.alldemande_mobilier_moe);
+              }
+              else
+              {
+                vm.alldemande_mobilier_moe = result.data.response;
+              }
+              
+          });
+          apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index",'menu','getalldemandeByContrat','id_contrat_bureau_etude',item.id_contrat_bureau_etude).then(function(result)
+          {
+              vm.alldemande_debut_travaux_moe = result.data.response.filter(function(obj)
+              {
+                  return obj.validation == 3;
+              });
+
+              if (vm.alldemande_debut_travaux_moe.length==vm.alltranche_d_debut_travaux_moe.length)
+              {
+                  if(vm.alldemande_mobilier_moe.length>0)
+                  {
+                      var last_id_demande = Math.max.apply(Math, vm.alldemande_mobilier_moe.map(function(o){ return o.id;}));
+                      vm.dernierdemande = vm.alldemande_mobilier_moe.filter(function(obj){return obj.id == last_id_demande;});
+                      var numcode=vm.dernierdemande[0].tranche.code.split(' ')[1];
+
+                      if (vm.dernierdemande[0].validation==3)
+                      {
+
+                          vm.allcurenttranche_demande_mobilier_moe = vm.alltranche_demande_mobilier_moe.filter(function(obj){ return obj.code == 'tranche '+(parseInt(numcode)+1);});
+                      } 
+                      else
+                      {
+                          vm.showAlert('Impossible d\'ajouter la demande','Dernier demande en-cours!!!');
+                          vm.allcurenttranche_demande_mobilier_moe = [];
+                      }
+                  }
+                  else
+                  {
+                      vm.allcurenttranche_demande_mobilier_moe = vm.alltranche_demande_mobilier_moe.filter(function(obj){return obj.code == 'tranche 1';});
+                    //vm.dernierdemande = [];
+                  }
+              }
+              else
+              {
+                vm.showAlert('Ajout demande mobilier','La demande avant travaux incomplète ou en-cours de validation');
+                vm.allcurenttranche_demande_mobilier_moe = [];
+              }
+          });
+        }
+        //Masque de saisi ajout
+        /*vm.ajouterDemande_mobilier_moe = function ()
+        { 
+           var items = {
+                        $edit: true,
+                        $selected: true,
+                        id: '0',         
+                        id_contrat_bureau_etude: '',         
                         objet: '',
                         description: '',
                         ref_facture: '',
@@ -344,9 +469,69 @@
               {
                 vm.showAlert('Ajout demande mobilier','La demande avant travaux incomplète ou en-cours de validation');
               }
-          });                
+          }); */
+
+          /*if(vm.alldemande_mobilier_moe_invalide.length>0)
+          {
+            var last_id_demande = Math.max.apply(Math, vm.alldemande_mobilier_moe_invalide.map(function(o)
+            { 
+              return o.id;
+            }));
+
+            vm.dernierdemande = vm.alldemande_mobilier_moe_invalide.filter(function(obj)
+            {
+                return obj.id == last_id_demande;
+            });
+            var numcode=vm.dernierdemande[0].tranche.code.split(' ')[1];
+
+            vm.allcurenttranche_demande_mobilier_moe = vm.alltranche_demande_mobilier_moe.filter(function(obj)
+            {
+                return obj.code == 'tranche '+(parseInt(numcode)+1);
+            });
+
+          }
+          else
+          {
+            vm.allcurenttranche_demande_mobilier_moe = vm.alltranche_demande_mobilier_moe.filter(function(obj)
+            {
+                return obj.code == 'tranche 1';
+            });
+            vm.dernierdemande = [];console.log(vm.allcurenttranche_demande_mobilier_moe);
+          }
+          if (NouvelItemDemande_mobilier_moe == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              objet: '',
+              description: '',
+              ref_facture: '',
+              tranche: '',
+              montant: '',
+              cumul: '',
+              anterieur: '',
+              periode: '',
+              pourcentage:'',
+              reste:'',
+              date: ''
+            };         
+            vm.alldemande_mobilier_moe_invalide.push(items);
+            vm.alldemande_mobilier_moe_invalide.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemDemande_mobilier_moe = mem;
+              }
+            });
+
+            NouvelItemDemande_mobilier_moe = true ;
+          }else
+          {
+            vm.showAlert('Ajout demande mobilier','Un formulaire d\'ajout est déjà ouvert!!!');
+          } */               
                       
-        };
+       // };
 
         //fonction ajout dans bdd
         function ajoutDemande_mobilier_moe(demande_mobilier_moe,suppression)
@@ -368,6 +553,7 @@
           {
             item.$edit = false;
             item.$selected = false;
+            item.id_contrat_bureau_etude   = currentItemDemande_mobilier_moe.id_contrat_bureau_etude ;
             item.objet   = currentItemDemande_mobilier_moe.objet ;
             item.description   = currentItemDemande_mobilier_moe.description ;
             item.ref_facture   = currentItemDemande_mobilier_moe.ref_facture ;
@@ -405,7 +591,7 @@
                 vm.alljustificatif_mobilier_moe = result.data.response;
                 console.log(vm.alljustificatif_mobilier_moe);
             });
-
+            vm.showbuttonValidation = true;
             vm.stepThree = true;
             vm.stepFor = false;
            }
@@ -433,6 +619,7 @@
 
             item.$edit = true;
             item.$selected = true;
+            item.id_contrat_bureau_etude   = vm.selectedItemDemande_mobilier_moe.contrat_bureau_etude.id ;
             item.objet   = vm.selectedItemDemande_mobilier_moe.objet ;
             item.description   = vm.selectedItemDemande_mobilier_moe.description ;
             item.ref_facture   = vm.selectedItemDemande_mobilier_moe.ref_facture ;
@@ -476,6 +663,7 @@
                 if(pass[0])
                 {
                    if((pass[0].objet   != currentItemDemande_mobilier_moe.objet )
+                    || (pass[0].id_contrat_bureau_etude   != currentItemDemande_mobilier_moe.id_contrat_bureau_etude )
                     || (pass[0].description   != currentItemDemande_mobilier_moe.description )
                     || (pass[0].id_tranche_demande_mobilier_moe != currentItemDemande_mobilier_moe.id_tranche_demande_mobilier_moe )
                     || (pass[0].montant   != currentItemDemande_mobilier_moe.montant )
@@ -516,6 +704,7 @@
                     supprimer: suppression,
                     id:        getId,
                     objet: demande_mobilier_moe.objet,
+                    id_contrat_bureau_etude: demande_mobilier_moe.id_contrat_bureau_etude,
                     description:demande_mobilier_moe.description,
                     ref_facture:demande_mobilier_moe.ref_facture,
                     id_tranche_demande_mobilier_moe: demande_mobilier_moe.id_tranche_demande_mobilier_moe ,
@@ -524,7 +713,7 @@
                     anterieur: demande_mobilier_moe.anterieur ,
                     reste: demande_mobilier_moe.reste ,
                     date: convertionDate(new Date(demande_mobilier_moe.date)),
-                    id_mobilier_construction: vm.selectedItemmobilier_construction.id,
+                    id_contrat_bureau_etude: demande_mobilier_moe.id_contrat_bureau_etude,
                     validation: 0               
                 });
                 console.log(datas);
@@ -536,12 +725,18 @@
                 {
                     return obj.id == demande_mobilier_moe.id_tranche_demande_mobilier_moe;
                 });
+                var contra= vm.allcontrat_bureau_etude.filter(function(obj)
+                {
+                    return obj.id == demande_mobilier_moe.id_contrat_bureau_etude;
+                });
 
                 if (NouvelItemDemande_mobilier_moe == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
+                        
+                        vm.selectedItemDemande_mobilier_moe.contrat_bureau_etude = contra[0] ;
                         vm.selectedItemDemande_mobilier_moe.tranche = tran[0] ;
                         vm.selectedItemDemande_mobilier_moe.periode = tran[0].periode ;
                         vm.selectedItemDemande_mobilier_moe.pourcentage = tran[0].pourcentage ;
@@ -562,6 +757,7 @@
                 }
                 else
                 {
+                  demande_mobilier_moe.contrat_bureau_etude = contra[0] ;
                   demande_mobilier_moe.tranche = tran[0] ;
                   demande_mobilier_moe.periode = tran[0].periode ;
                   demande_mobilier_moe.pourcentage = tran[0].pourcentage ;
@@ -569,6 +765,7 @@
                   demande_mobilier_moe.id  =   String(data.response);              
                   NouvelItemDemande_mobilier_moe=false;
             }
+              vm.showbuttonValidation = false;
               demande_mobilier_moe.$selected = false;
               demande_mobilier_moe.$edit = false;
               vm.selectedItemDemande_mobilier_moe = {};
@@ -579,19 +776,22 @@
 
         vm.tranchechange = function(item)
         { 
-          
+          var contra= vm.allcontrat_bureau_etude.filter(function(obj)
+          {
+              return obj.id == item.id_contrat_bureau_etude;
+          });
           var reste = 0;
           var anterieur = 0;
-          var montant = (parseInt(vm.selectedItemContrat_bureau_etude.montant_contrat) * vm.allcurenttranche_demande_mobilier_moe[0].pourcentage)/100;
+          var montant = (parseInt(contra[0].montant_contrat) * vm.allcurenttranche_demande_mobilier_moe[0].pourcentage)/100;
           var cumul = montant;
 
-          if (vm.alldemande_mobilier_moe_invalide.length>1)
+          if (vm.alldemande_mobilier_moe.length>0)
           {                 
               anterieur = vm.dernierdemande[0].montant;           
               cumul = montant + parseInt(vm.dernierdemande[0].cumul);
           }
 
-          reste= parseInt(vm.selectedItemContrat_bureau_etude.montant_contrat) - cumul;
+          reste= parseInt(contra[0].montant_contrat) - cumul;
 
           item.periode = vm.allcurenttranche_demande_mobilier_moe[0].periode;
           item.pourcentage = vm.allcurenttranche_demande_mobilier_moe[0].pourcentage;
@@ -600,6 +800,52 @@
           item.anterieur = anterieur;
           item.cumul = cumul;
           item.reste = reste;
+        }
+
+        vm.validerDemande_mobilier_moe = function()
+        {
+          maj_in_baseDemande_mobilier_moe(vm.selectedItemDemande_mobilier_moe,0,1);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd Demande_mobilier_moe
+        function maj_in_baseDemande_mobilier_moe(demande_mobilier_moe,suppression,validation)
+        {console.log(demande_mobilier_moe);
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        demande_mobilier_moe.id,
+                    objet: demande_mobilier_moe.objet,
+                    description:demande_mobilier_moe.description,
+                    ref_facture:demande_mobilier_moe.ref_facture,
+                    id_tranche_demande_mobilier_moe: demande_mobilier_moe.tranche.id ,
+                    montant: demande_mobilier_moe.montant,
+                    cumul: demande_mobilier_moe.cumul,
+                    anterieur: demande_mobilier_moe.anterieur ,
+                    reste: demande_mobilier_moe.reste ,
+                    date: convertionDate(new Date(demande_mobilier_moe.date)),
+                    id_contrat_bureau_etude: demande_mobilier_moe.contrat_bureau_etude.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("demande_mobilier_moe/index",datas, config).success(function (data)
+            {   
+
+                vm.alldemande_mobilier_moe_invalide = vm.alldemande_mobilier_moe_invalide.filter(function(obj)
+                {
+                    return obj.id != vm.selectedItemDemande_mobilier_moe.id;
+                });
+              demande_mobilier_moe.$selected = false;
+              demande_mobilier_moe.$edit = false;
+              vm.selectedItemDemande_mobilier_moe = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
         }
 /**********************************fin demande_mobilier_moe****************************************/
 

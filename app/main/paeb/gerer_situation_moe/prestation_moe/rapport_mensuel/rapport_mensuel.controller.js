@@ -4,7 +4,7 @@
 
     angular
         .module('app.paeb.gerer_situation_moe.prestation_moe.rapport_mensuel')
-        .directive('customOnChange', function() {
+       /* .directive('customOnChange', function() {
       return {
         restrict: 'A',
         require:'ngModel',
@@ -48,11 +48,11 @@
            console.log('Rivotra');
         });
       }
-    }])
+    }])*/
     //.controller('DialogController', DialogController)
         .controller('Rapport_mensuelController', Rapport_mensuelController);
     /** @ngInject */
-    function Rapport_mensuelController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Rapport_mensuelController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
         vm.selectedItemBureau_etude = {} ;
@@ -186,39 +186,61 @@
         }); */       
 
 /**********************************fin contrat prestataire****************************************/
+      var id_user = $cookieStore.get('id');
 
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_bureau_etude = result.data.response; 
+                console.log(vm.allcontrat_bureau_etude);
+            });
+
+            apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportvalidationBycisco','validation',0).then(function(result)
+            {
+              vm.allrapport_mensuel = result.data.response;
+              
+              if (vm.allrapport_mensuel.length>0)
+              {
+                  vm.showbuttonNouvAppel = false;
+              }
+                        
+            });
+            apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportvalidationBycisco','validation',1).then(function(result)
+            {
+              vm.allrapport_mensuel_valide = result.data.response;
+                        
+            });
+          }
+        });
 
 /**********************************fin justificatif attachement****************************************/
-      apiFactory.getAll("contrat_be/index").then(function(result)
+      /*apiFactory.getAll("contrat_be/index").then(function(result)
       {
           vm.allcontrat_bureau_etude = result.data.response; 
           console.log(vm.allcontrat_bureau_etude);
-      });
+      });*/
 
-      apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportByvalidation','validation',0).then(function(result)
-      {
-        vm.allrapport_mensuel = result.data.response;
-        
-        if (vm.allrapport_mensuel.length>0)
-        {
-            vm.showbuttonNouvAppel = false;
-        }
-                  
-      });
-      apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportByvalidation','validation',1).then(function(result)
-      {
-        vm.allappel_offre_valide = result.data.response;
-                  
-      });
-
-        $scope.uploadFile = function(event)
+        /*  $scope.uploadFile = function(event)
        {
           console.dir(event);
           var files = event.target.files;
           vm.myFile = files;
           vm.selectedItemRapport_mensuel.fichier = vm.myFile[0].name;
           //console.log(vm.selectedItemRapport_mensuel.fichier);
-        } 
+        } */
 
         //Masque de saisi ajout
         vm.ajouterRapport_mensuel = function ()
@@ -231,7 +253,7 @@
               $selected: true,
               id: '0',         
               description: '',
-              fichier: '',
+              //fichier: '',
               date_livraison: '',
               observation: '',
               id_contrat_bureau_etude: ''
@@ -276,7 +298,7 @@
             item.$edit = false;
             item.$selected = false;
             item.description   = currentItemRapport_mensuel.description ;
-            item.fichier   = currentItemRapport_mensuel.fichier ;
+            //item.fichier   = currentItemRapport_mensuel.fichier ;
             item.date_livraison   = currentItemRapport_mensuel.date_livraison ;
             item.observation   = currentItemRapport_mensuel.observation ;
             item.id_contrat_bureau_etude   = currentItemRapport_mensuel.id_contrat_bureau_etude ;
@@ -324,7 +346,7 @@
             item.$edit = true;
             item.$selected = true;
             item.description   = vm.selectedItemRapport_mensuel.description ;
-            item.fichier   = vm.selectedItemRapport_mensuel.fichier ;
+            //item.fichier   = vm.selectedItemRapport_mensuel.fichier ;
             item.date_livraison   = new Date(vm.selectedItemRapport_mensuel.date_livraison) ;
             item.observation   = vm.selectedItemRapport_mensuel.observation ;
             item.id_contrat_bureau_etude   = vm.selectedItemRapport_mensuel.contrat_be.id ;
@@ -361,7 +383,7 @@
                 if(mem[0])
                 {
                    if((mem[0].description   != currentItemRapport_mensuel.description )
-                    ||(mem[0].fichier   != currentItemRapport_mensuel.fichier )
+                    //||(mem[0].fichier   != currentItemRapport_mensuel.fichier )
                     ||(mem[0].date_livraison   != currentItemRapport_mensuel.date_livraison )
                     ||(mem[0].observation   != currentItemRapport_mensuel.observation )                    
                     ||(mem[0].id_contrat_bureau_etude   != currentItemRapport_mensuel.contrat_be.id ))                   
@@ -397,7 +419,7 @@
                     supprimer: suppression,
                     id:        getId,
                     description: rapport_mensuel.description,
-                    fichier: rapport_mensuel.fichier,
+                    //fichier: rapport_mensuel.fichier,
                     date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
                     observation: rapport_mensuel.observation,
                     id_contrat_bureau_etude: rapport_mensuel.id_contrat_bureau_etude,
@@ -416,82 +438,7 @@
               {
                     // Update_paiement or delete: id exclu                 
                     if(suppression==0)
-                    {
-                         var file= vm.myFile[0];
-                    
-                          var repertoire = 'rapport_mensuel/';
-                          var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
-                          var getIdFile = vm.selectedItemRapport_mensuel.id
-                                              
-                          if(file)
-                          { 
-
-                            var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
-
-                            var fd = new FormData();
-                            fd.append('file', file);
-                            fd.append('repertoire',repertoire);
-                            fd.append('name_fichier',name_file);
-
-                            var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
-                            headers: {'Content-Type': undefined}, repertoire: repertoire
-                            }).success(function(data)
-                            {
-                                if(data['erreur'])
-                                {
-                                  var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
-                                 
-                                  var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
-                                  $mdDialog.show( alert ).finally(function()
-                                  { 
-                                    rapport_mensuel.fichier='';
-                                  var datas = $.param({
-                                                      supprimer: suppression,
-                                                      id:        getIdFile,
-                                                      description: rapport_mensuel.description,
-                                                      fichier: rapport_mensuel.fichier,
-                                                      date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
-                                                      observation: rapport_mensuel.observation,
-                                                      id_contrat_bureau_etude: rapport_mensuel.id_contrat_bureau_etude,
-                                                      validation:0
-                                        });
-                                      apiFactory.add("rapport_mensuel/index",datas, config).success(function (data)
-                                      {                                         
-                                          rapport_mensuel.$selected = false;
-                                          rapport_mensuel.$edit = false;
-                                          vm.selectedItemRapport_mensuel = {};
-                                      console.log('b');
-                                      }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-                                  });
-                                }
-                                else
-                                {
-                                  rapport_mensuel.fichier=repertoire+data['nomFile'];
-                                  var datas = $.param({
-                                        supprimer: suppression,
-                                        id:        getIdFile,
-                                        description: rapport_mensuel.description,
-                                        fichier: rapport_mensuel.fichier,
-                                        date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
-                                        observation: rapport_mensuel.observation,
-                                        id_contrat_bureau_etude: rapport_mensuel.id_contrat_bureau_etude,
-                                        validation:0               
-                                    });
-                                  apiFactory.add("rapport_mensuel/index",datas, config).success(function (data)
-                                  {
-                                        
-                                      rapport_mensuel.$selected = false;
-                                      rapport_mensuel.$edit = false;
-                                      vm.selectedItemRapport_mensuel = {};
-                                      console.log('e');
-                                  }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-                                }
-                            }).error(function()
-                            {
-                              vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
-                            });
-                          }
-
+                    {                         
                         vm.selectedItemRapport_mensuel.contrat_be = contr[0];
                         vm.selectedItemRapport_mensuel.$selected  = false;
                         vm.selectedItemRapport_mensuel.$edit      = false;
@@ -504,105 +451,17 @@
                       {
                           return obj.id !== vm.selectedItemRapport_mensuel.id;
                       });
-                      var chemin= vm.selectedItemRapport_mensuel.fichier;
-                      var fd = new FormData();
-                          fd.append('chemin',chemin);
-                     
-                      var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
-
-                      var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
-                      headers: {'Content-Type': undefined}, chemin: chemin
-                      }).success(function(data)
-                      {
-                         console.log('ok');
-                      }).error(function()
-                      {
-                          showDialog(event,chemin);
-                      });
+                      
                       vm.showbuttonValidation = false;
                     }
               }
               else
-              {
+              {   
+                  rapport_mensuel.contrat_be = contr[0];
                   rapport_mensuel.id  =   String(data.response);              
-                  NouvelItemRapport_mensuel = false;
-                  
-                    var file= vm.myFile[0];
-                    
-                    var repertoire = 'rapport_mensuel/';
-                    var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
-                    var getIdFile = String(data.response);
-                                        
-                    if(file)
-                    { 
-
-                      var name_file = contr[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
-
-                      var fd = new FormData();
-                      fd.append('file', file);
-                      fd.append('repertoire',repertoire);
-                      fd.append('name_fichier',name_file);
-
-                      var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
-                      headers: {'Content-Type': undefined}, repertoire: repertoire
-                      }).success(function(data)
-                      {
-                          if(data['erreur'])
-                          {
-                            var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
-                           
-                            var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
-                            $mdDialog.show( alert ).finally(function()
-                            { 
-                              rapport_mensuel.fichier='';
-                            var datas = $.param({
-                                                supprimer: suppression,
-                                                id:        getIdFile,
-                                                description: rapport_mensuel.description,
-                                                fichier: rapport_mensuel.fichier,
-                                                date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
-                                                observation: rapport_mensuel.observation,
-                                                id_contrat_bureau_etude: rapport_mensuel.id_contrat_bureau_etude,
-                                                validation:0
-                                  });
-                                apiFactory.add("rapport_mensuel/index",datas, config).success(function (data)
-                                {  
-                                    rapport_mensuel.$selected = false;
-                                    rapport_mensuel.$edit = false;
-                                    vm.selectedItemRapport_mensuel = {};
-                                console.log('b');
-                                }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-                            });
-                          }
-                          else
-                          {
-                            rapport_mensuel.fichier=repertoire+data['nomFile'];
-                            var datas = $.param({
-                                  supprimer: suppression,
-                                  id:        getIdFile,
-                                  description: rapport_mensuel.description,
-                                  fichier: rapport_mensuel.fichier,
-                                  date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
-                                 observation: rapport_mensuel.observation,
-                                  id_contrat_bureau_etude: rapport_mensuel.id_contrat_bureau_etude,
-                                  validation:0               
-                              });
-                            apiFactory.add("rapport_mensuel/index",datas, config).success(function (data)
-                            {
-                                  
-                                rapport_mensuel.$selected = false;
-                                rapport_mensuel.$edit = false;
-                                vm.selectedItemRapport_mensuel = {};
-                                console.log('e');
-                            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-                          }
-                      }).error(function()
-                      {
-                        vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
-                      });
-                    }
+                  NouvelItemRapport_mensuel = false; 
               }
-              rapport_mensuel.contrat_be = contr[0];
+              
               rapport_mensuel.$selected = false;
               rapport_mensuel.$edit = false;
               vm.selectedItemRapport_mensuel = {};
@@ -643,7 +502,7 @@
                     supprimer: suppression,
                     id:        rapport_mensuel.id,
                     description: rapport_mensuel.description,
-                    fichier: rapport_mensuel.fichier,
+                    //fichier: rapport_mensuel.fichier,
                     date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
                     observation: rapport_mensuel.observation,
                     id_contrat_bureau_etude: rapport_mensuel.contrat_be.id,

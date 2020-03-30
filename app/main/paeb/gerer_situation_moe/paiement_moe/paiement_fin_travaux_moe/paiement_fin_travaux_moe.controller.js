@@ -7,7 +7,7 @@
 
         .controller('Paiement_fin_travaux_moeController', Paiement_fin_travaux_moeController);
     /** @ngInject */
-    function Paiement_fin_travaux_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Paiement_fin_travaux_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
         vm.selectedItemDemande_fin_travaux_moe = {};
@@ -62,12 +62,27 @@
         {titre:"Action"
         }];
     
-    apiFactory.getAPIgeneraliserREST("demande_fin_travaux_moe/index",'menu','getdemandeByValide').then(function(result)
+    /*apiFactory.getAPIgeneraliserREST("demande_fin_travaux_moe/index",'menu','getdemandeByValide').then(function(result)
     {
         vm.alldemande_fin_travaux_moe = result.data.response;
                   console.log(vm.alldemande_fin_travaux_moe);
-    });
+    });*/
+    var id_user = $cookieStore.get('id');
 
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("demande_fin_travaux_moe/index",'menu','getalldemandevalideBycisco','id_cisco',usercisco.id).then(function(result)
+              {
+                  vm.alldemande_fin_travaux_moe = result.data.response;
+                  console.log(vm.alldemande_fin_travaux_moe);
+              });
+
+          }
+        });
         //fonction selection item Demande_fin_travaux_moe
         vm.selectionDemande_fin_travaux_moe= function (item)
         {

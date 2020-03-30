@@ -121,7 +121,7 @@
                     anterieur: demande_debut_travaux_pr.anterieur ,
                     reste: demande_debut_travaux_pr.reste ,
                     date: convertionDate(new Date(demande_debut_travaux_pr.date)),
-                    id_contrat_bureau_etude: demande_debut_travaux_pr.contrat_bureau_etude.id,
+                    id_contrat_partenaire_relai: demande_debut_travaux_pr.contrat_partenaire_relai.id,
                     validation: validation               
                 });
                 console.log(datas);

@@ -6,7 +6,7 @@
         .module('app.paeb.gerer_situation_entreprise.paiement_mpe.paiement_mobilier_prestataire')
         .controller('Paiement_mobilier_prestataireController', Paiement_mobilier_prestataireController);
     /** @ngInject */
-    function Paiement_mobilier_prestataireController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Paiement_mobilier_prestataireController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
        /* vm.selectedItemContrat_prestataire = {} ;
@@ -52,12 +52,36 @@
         },
         {titre:"Date signature"
         }];*/
+var id_user = $cookieStore.get('id');
 
-
-          apiFactory.getAPIgeneraliserREST("demande_mobilier_prestataire/index",'menu','getdemandeValide').then(function(result)
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'BCAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+          if (usercisco.id!=undefined)
           {
-            vm.alldemande_mobilier_prest = result.data.response;
-          });
+            /*apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontrat_prestataireBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+                vm.allcontrat_prestataire = result.data.response; 
+                console.log(vm.allcontrat_prestataire);
+            });*/
+            
+            apiFactory.getAPIgeneraliserREST("demande_mobilier_prestataire/index",'menu','getdemandeValideBycisco','id_cisco',usercisco.id).then(function(result)
+            {
+              vm.alldemande_mobilier_prest = result.data.response;
+            });
+          }
+          
+
+        });
 
 /**********************************debut demande_mobilier_prest****************************************/
 //col table

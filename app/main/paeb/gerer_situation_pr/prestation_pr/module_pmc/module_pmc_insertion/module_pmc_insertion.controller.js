@@ -6,7 +6,7 @@
         .module('app.paeb.gerer_situation_pr.prestation_pr.module_pmc.module_pmc_insertion')
         .controller('Module_pmc_insertionController', Module_pmc_insertionController);
     /** @ngInject */
-    function Module_pmc_insertionController($mdDialog, $scope, apiFactory, $state,apiUrl,$http)
+    function Module_pmc_insertionController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore)
     {
 		   var vm = this;
         vm.selectedItemPartenaire_relai = {} ;
@@ -43,6 +43,7 @@
         vm.showbuttonNouvPassation=true;
         vm.showbuttonNouvRapport =true;
         vm.date_now         = new Date();
+        vm.showbuttonValidation = false;
 
         //style
         vm.dtOptions = {
@@ -71,7 +72,21 @@
           vm.showbuttonNouvPassation=false;
       }
   });
+      var id_user = $cookieStore.get('id');
 
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'DPFI'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }          
+        });
 //col table
         vm.module_pmc_column = [
         {titre:"Contrat"
@@ -193,6 +208,7 @@
 
           vm.selectedItemModule_pmc = {} ;
           NouvelItemModule_pmc      = false;
+          vm.showbuttonValidation = false;
           
         };
 
@@ -223,6 +239,11 @@
 
               vm.stepOne = true;
               vm.stepTwo = false;
+              vm.showbuttonValidation = true;
+              if (item.$edit==true)
+              {
+                vm.showbuttonValidation = false;
+              }
             }
         };
         $scope.$watch('vm.selectedItemModule_pmc', function()
@@ -260,6 +281,7 @@
             item.date_fin_previ_form   = new Date(vm.selectedItemModule_pmc.date_fin_previ_form) ;
             item.id_contrat_partenaire_relai  = vm.selectedItemModule_pmc.contrat_partenaire_relai.id;
             item.lieu_formation  = vm.selectedItemModule_pmc.lieu_formation;
+            vm.showbuttonValidation = false;
         };
 
         //fonction bouton suppression item passation_marches_moe
@@ -275,6 +297,7 @@
                     .cancel('annuler');
               $mdDialog.show(confirm).then(function() {
                 vm.ajoutModule_pmc(vm.selectedItemModule_pmc,1);
+                vm.showbuttonValidation = false;
               }, function() {
                 //alert('rien');
               });
@@ -391,9 +414,59 @@
                   NouvelItemModule_pmc=false;
                   vm.showbuttonNouvPassation= false;
             }
+              vm.showbuttonValidation = false;
               module_pmc.$selected = false;
               module_pmc.$edit = false;
               vm.selectedItemModule_pmc = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.validerModule_pmc = function()
+        {
+          valide_insert_in_baseModule_pmc(vm.selectedItemModule_pmc,0);
+        }
+
+        function valide_insert_in_baseModule_pmc(module_pmc,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemModule_pmc==false)
+            {
+                getId = vm.selectedItemModule_pmc.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    date_previ_resti: convertionDate(new Date(module_pmc.date_previ_resti)),
+                    date_debut_reel_form: convertionDate(new Date(module_pmc.date_debut_reel_form)),
+                    date_fin_reel_form: convertionDate(new Date(module_pmc.date_fin_reel_form)),
+                    date_reel_resti:convertionDate(new Date(module_pmc.date_reel_resti)),
+                    nbr_previ_parti: module_pmc.nbr_previ_parti,
+                    nbr_previ_fem_parti: module_pmc.nbr_previ_fem_parti,
+                    date_debut_previ_form: convertionDate(new Date(module_pmc.date_debut_previ_form)),
+                    date_fin_previ_form: convertionDate(new Date(module_pmc.date_fin_previ_form)),
+                    id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
+                    lieu_formation: module_pmc.lieu_formation,
+                    observation:module_pmc.observation,
+                    validation : 1              
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("module_pmc/index",datas, config).success(function (data)
+            {   
+                vm.allmodule_pmc = vm.allmodule_pmc.filter(function(obj)
+                {
+                    return obj.id !== vm.selectedItemModule_pmc.id;
+                });
+                vm.showbuttonValidation = false;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 

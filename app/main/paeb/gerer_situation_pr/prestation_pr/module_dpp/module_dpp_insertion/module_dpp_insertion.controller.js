@@ -6,7 +6,7 @@
         .module('app.paeb.gerer_situation_pr.prestation_pr.module_dpp.module_dpp_insertion')
         .controller('Module_dpp_insertionController', Module_dpp_insertionController);
     /** @ngInject */
-    function Module_dpp_insertionController($mdDialog, $scope, apiFactory, $state,apiUrl,$http)
+    function Module_dpp_insertionController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore)
     {
 		   var vm = this;
         vm.selectedItemPartenaire_relai = {} ;
@@ -44,7 +44,7 @@
 
         vm.showbuttonNouvPassation=true;
         vm.showbuttonNouvRapport =true;
-        vm.showbuttonValider = false;
+        vm.showbuttonValidation = false;
         vm.date_now         = new Date();
 
         //style
@@ -153,7 +153,21 @@
              vm.selectedItemContrat_partenaire_relai.$selected = true;
         });*/
 /**********************************fin contrat bureau etude****************************************/
+        var id_user = $cookieStore.get('id');
 
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'DPFI'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }          
+        });
 
 /**********************************debut passation_marches_moe****************************************/
 
@@ -292,7 +306,7 @@
                 return obj.id !== vm.selectedItemModule_dpp.id;
             });
           }
-
+          vm.showbuttonValidation = false;
           vm.selectedItemModule_dpp = {} ;
           NouvelItemModule_dpp      = false;
           
@@ -312,7 +326,7 @@
                   vm.allparticipant_dpp = result.data.response; 
                   console.log( vm.allparticipant_dpp);
               });
-              vm.showbuttonValider = true;
+              vm.showbuttonValidation = true;
               apiFactory.getAPIgeneraliserREST("rapport_dpp/index",'id_module_dpp',vm.selectedItemModule_dpp.id).then(function(result)
               {
                   vm.allrapport_dpp = result.data.response; 
@@ -321,7 +335,10 @@
                     vm.showbuttonNouvRapport =false;
                   }
               });
-
+              if (item.$edit==true)
+              {
+                vm.showbuttonValidation = false;
+              }
 
               vm.stepOne = true;
               vm.stepTwo = false;
@@ -497,7 +514,7 @@
               module_dpp.$selected = false;
               module_dpp.$edit = false;
               vm.selectedItemModule_dpp = {};
-              vm.showbuttonValider = false;
+              vm.showbuttonValidation = false;
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
@@ -545,7 +562,7 @@
                 {
                     return obj.id !== vm.selectedItemModule_dpp.id;
                 });
-                vm.showbuttonValider = false;
+                vm.showbuttonValidation = false;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 

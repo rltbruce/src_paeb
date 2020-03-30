@@ -33,6 +33,49 @@
 
       });
 
+      apiFactory.getAll("region/index").then(function(result)
+      {
+          vm.allregion= result.data.response;
+      });
+
+      apiFactory.getAll("district/index").then(function(result)
+      {
+          vm.alldistrict = result.data.response;
+          vm.districts = vm.alldistrict ;
+      });
+
+      apiFactory.getAll("cisco/index").then(function(result)
+      {
+          vm.allcisco = result.data.response;
+          vm.ciscos = vm.allcisco ;
+      });
+
+     vm.filtre_district = function()
+      {
+          var ds = vm.alldistrict ;
+          if (vm.user.id_region) 
+          {
+            vm.districts = ds.filter(function(obj)
+            {
+                return obj.region.id == vm.user.id_region;
+            });
+          }
+                 
+      }
+
+      vm.filtre_cisco = function()
+      {
+          var ds = vm.allcisco ;
+          if (vm.user.id_district) 
+          {
+            vm.ciscos = ds.filter(function(obj)
+            {
+                return obj.district.id == vm.user.id_district;
+            });
+          }
+                 
+      }
+
       vm.formatMillier = function (nombre) 
       {
             if (typeof nombre != 'undefined' && parseInt(nombre) >= 0) {
@@ -193,10 +236,23 @@
           vm.user.nom = vm.selectedItem.nom ;
           vm.user.prenom = vm.selectedItem.prenom ;
           vm.user.email = vm.selectedItem.email ;
-          vm.user.enabled = vm.selectedItem.enabled ;
+          vm.user.enabled = vm.selectedItem.enabled ;          
+          vm.user.id_region = vm.selectedItem.region.id ;          
+          vm.user.id_district = vm.selectedItem.district.id ;          
+          vm.user.id_cisco = vm.selectedItem.cisco.id ;
           /*vm.user.sigle = vm.selectedItem.sigle ;
 		  vm.user.envoi_donnees = parseInt(vm.selectedItem.envoi_donnees) ;*/
-        
+          vm.districts = vm.alldistrict.filter(function(obj)
+                {
+                    return obj.region.id == vm.selectedItem.region.id;
+                });
+         
+          vm.ciscos = vm.allcisco.filter(function(obj)
+                {
+                    return obj.district.id == vm.selectedItem.district.id;
+                });
+         console.log(vm.selectedItem.district.id);
+console.log(vm.ciscos);
           vm.searchText="";
           vm.searchTextPers="";
           
@@ -342,7 +398,10 @@
                   supprimer:suppression,
                   id:vm.selectedItem.id,
                   nom: user.nom,
-                  prenom: user.prenom,                           
+                  prenom: user.prenom,                  
+                  id_region: user.id_region,
+                  id_district: user.id_district,
+                  id_cisco: user.id_cisco,                           
                  // sigle: user.sigle,                           
                   email: user.email ,
                   enabled: user.enabled ,

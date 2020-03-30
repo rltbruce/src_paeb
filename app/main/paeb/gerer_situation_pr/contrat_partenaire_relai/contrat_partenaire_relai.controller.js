@@ -6,7 +6,7 @@
         .module('app.paeb.gerer_situation_pr.contrat_partenaire_relai')
         .controller('Contrat_partenaire_relaiController', Contrat_partenaire_relaiController);
     /** @ngInject */
-    function Contrat_partenaire_relaiController($mdDialog, $scope, apiFactory, $state)
+    function Contrat_partenaire_relaiController($mdDialog, $scope, apiFactory, $state,$cookieStore)
     {
         var vm = this;
         vm.selectedItemConvention_entete = {} ;
@@ -25,12 +25,14 @@
         vm.allavenant_partenaire_relai = [] ;
 
         vm.allpartenaire_relai = [] ;
+        
+        vm.showbuttonNouvContrat_partenaire_relai = 1;
+        vm.showbuttonValidation = false;
 
         vm.stepOne = false;
         vm.stepTwo = false;
         vm.stepThree = false;
 
-        vm.showbuttonNouvContrat_partenaire_relai=true;
         vm.date_now         = new Date();
 
         //style
@@ -43,28 +45,19 @@
 /**********************************debut feffi****************************************/
 
         //col table
-        vm.convention_entete_column = [
-        {titre:"Cisco"
-        },
-        {titre:"Feffi"
-        },
-        {titre:"Reference convention"
-        },
-        {titre:"Objet"
-        },
-        {titre:"Reference Financement"
-        },
-        {titre:"Cout éstimé"
-        },
-        {titre:"Avancement"
-        }];
+        /*vm.convention_entete_column = [        
+        {titre:"Référence convention"},
+        {titre:"Objet"},        
+        {titre:"Référence financement"},
+        {titre:"Montant à transferer"},
+        {titre:"Frais bancaire"},        
+        {titre:"Montant convention"}];*/
  
 /**********************************fin convention entete****************************************/       
-        //recuperation donnée convention
-        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalide').then(function(result)
+       
+        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionvalide").then(function(result)
         {
-            vm.allconvention_entete = result.data.response; 
-            console.log(vm.allconvention_entete);
+            vm.allconvention_entete = result.data.response;
         });
 
         //recuperation donnée partenaire_relai
@@ -75,7 +68,7 @@
         });
 
         //fonction selection item entete convention cisco/feffi
-        vm.selectionConvention_entete = function (item)
+       /* vm.selectionConvention_entete = function (item)
         {
             vm.selectedItemConvention_entete = item;
            // vm.allconvention= [] ;
@@ -107,13 +100,29 @@
                 item.$selected = false;
              });
              vm.selectedItemConvention_entete.$selected = true;
-        });       
+        }); */      
 
 /**********************************fin convention entete****************************************/
+      var id_user = $cookieStore.get('id');
 
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          //console.log(userc.id);
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'DPFI'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }          
+        });
 /**********************************debut passation_marches****************************************/
 //col table
         vm.contrat_partenaire_relai_column = [
+        {titre:"Convention"
+        },
         {titre:"Partenaire relai"
         },
         {titre:"Intitule"
@@ -127,10 +136,14 @@
         {titre:"Action"
         }];
 
-        apiFactory.getAll("contrat_partenaire_relai/index").then(function(result)
+       /* apiFactory.getAll("contrat_partenaire_relai/index").then(function(result)
         {
             vm.allcontrat_partenaire_relai = result.data.response;
-
+            console.log(vm.allcontrat_partenaire_relai);
+        });*/
+        apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index","menus","getcontratByvalidation","validation",0).then(function(result)
+        {
+            vm.allcontrat_partenaire_relai = result.data.response;
         });
         //Masque de saisi ajout
         vm.ajouterContrat_partenaire_relai = function ()
@@ -144,7 +157,8 @@
               intitule: '',
               ref_contrat: '',
               montant_contrat: 0,
-              id_partenaire_relai:''
+              id_partenaire_relai:'',
+              id_convention_entete:''
             };         
             vm.allcontrat_partenaire_relai.push(items);
             vm.allcontrat_partenaire_relai.forEach(function(mem)
@@ -187,7 +201,8 @@
             item.ref_contrat   = currentItemContrat_partenaire_relai.ref_contrat ;
             item.montant_contrat   = currentItemContrat_partenaire_relai.montant_contrat ;            
             item.date_signature = currentItemContrat_partenaire_relai.date_signature ;            
-            item.id_partenaire_relai = currentItemContrat_partenaire_relai.id_partenaire_relai ;
+            item.id_partenaire_relai = currentItemContrat_partenaire_relai.id_partenaire_relai ;            
+            item.id_convention_entete = currentItemContrat_partenaire_relai.id_convention_entete ;
           }else
           {
             vm.allcontrat_partenaire_relai = vm.allcontrat_partenaire_relai.filter(function(obj)
@@ -195,7 +210,7 @@
                 return obj.id !== vm.selectedItemContrat_partenaire_relai.id;
             });
           }
-
+          vm.showbuttonNouvContrat_partenaire_relai = 1;
           vm.selectedItemContrat_partenaire_relai = {} ;
           NouvelItemContrat_partenaire_relai      = false;
           
@@ -216,6 +231,12 @@
               {
                   vm.allavenant_partenaire_relai = result.data.response;
               });
+              vm.showbuttonValidation = true;
+              if (item.$edit==true)
+              {
+                vm.showbuttonValidation = false;
+              }
+              
            }
              
         };
@@ -238,14 +259,16 @@
             $scope.vm.allcontrat_partenaire_relai.forEach(function(mem) {
               mem.$edit = false;
             });
-
+            vm.showbuttonNouvContrat_partenaire_relai = 0;
             item.$edit = true;
             item.$selected = true;
             item.intitule   = vm.selectedItemContrat_partenaire_relai.intitule ;
             item.ref_contrat   = vm.selectedItemContrat_partenaire_relai.ref_contrat ;
             item.montant_contrat   = parseInt(vm.selectedItemContrat_partenaire_relai.montant_contrat);           
             item.date_signature = new Date(vm.selectedItemContrat_partenaire_relai.date_signature) ;           
-            item.id_partenaire_relai = vm.selectedItemContrat_partenaire_relai.partenaire_relai.id ;
+            item.id_partenaire_relai = vm.selectedItemContrat_partenaire_relai.partenaire_relai.id ;           
+            item.id_convention_entete = vm.selectedItemContrat_partenaire_relai.convention_entete.id ;
+            vm.showbuttonValidation = false;
         };
 
         //fonction bouton suppression item Contrat_partenaire_relai
@@ -281,7 +304,8 @@
                     || (pass[0].ref_contrat  != currentItemContrat_partenaire_relai.ref_contrat)
                     || (pass[0].montant_contrat   != currentItemContrat_partenaire_relai.montant_contrat )                    
                     || (pass[0].date_signature != currentItemContrat_partenaire_relai.date_signature )                   
-                    || (pass[0].id_partenaire_relai != currentItemContrat_partenaire_relai.id_partenaire_relai ))                   
+                    || (pass[0].id_partenaire_relai != currentItemContrat_partenaire_relai.id_partenaire_relai )                   
+                    || (pass[0].id_convention_entete != currentItemContrat_partenaire_relai.id_convention_entete))                   
                       { 
                          insert_in_baseContrat_partenaire_relai(item,suppression);
                       }
@@ -318,7 +342,8 @@
                     montant_contrat: contrat_partenaire_relai.montant_contrat,
                     date_signature:convertionDate(new Date(contrat_partenaire_relai.date_signature)),
                     id_partenaire_relai:contrat_partenaire_relai.id_partenaire_relai,
-                    id_convention_entete: vm.selectedItemConvention_entete.id               
+                    id_convention_entete: contrat_partenaire_relai.id_convention_entete,
+                    validation : 0               
                 });
                 console.log(datas);
                 //factory
@@ -329,15 +354,21 @@
                     return obj.id == contrat_partenaire_relai.id_partenaire_relai;
                 });
 
+                var conv= vm.allconvention_entete.filter(function(obj)
+                {
+                    return obj.id == contrat_partenaire_relai.id_convention_entete;
+                });
+
                 if (NouvelItemContrat_partenaire_relai == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItemContrat_partenaire_relai.intitule   = contrat_partenaire_relai.intitule ;
+                        /*vm.selectedItemContrat_partenaire_relai.intitule   = contrat_partenaire_relai.intitule ;
                         vm.selectedItemContrat_partenaire_relai.ref_contrat   = contrat_partenaire_relai.ref_contrat ;
                         vm.selectedItemContrat_partenaire_relai.montant_contrat   = contrat_partenaire_relai.montant_contrat ;
-                        vm.selectedItemContrat_partenaire_relai.date_signature = contrat_partenaire_relai.date_signature ;
+                        vm.selectedItemContrat_partenaire_relai.date_signature = contrat_partenaire_relai.date_signature ;*/
+                        vm.selectedItemContrat_partenaire_relai.convention_entete= conv[0];
                         vm.selectedItemContrat_partenaire_relai.partenaire_relai = pres[0];
                         
                         vm.selectedItemContrat_partenaire_relai.$selected  = false;
@@ -357,18 +388,61 @@
                 }
                 else
                 {
-                  contrat_partenaire_relai.intitule   = contrat_partenaire_relai.intitule ;
+                  /*contrat_partenaire_relai.intitule   = contrat_partenaire_relai.intitule ;
                   contrat_partenaire_relai.montant_contrat = contrat_partenaire_relai.montant_contrat ;
-                  contrat_partenaire_relai.date_signature = contrat_partenaire_relai.date_signature;
+                  contrat_partenaire_relai.date_signature = contrat_partenaire_relai.date_signature;*/
+                  contrat_partenaire_relai.convention_entete= conv[0];
                   contrat_partenaire_relai.partenaire_relai = pres[0];
 
                   contrat_partenaire_relai.id  =   String(data.response);              
                   NouvelItemContrat_partenaire_relai=false;
                   vm.showbuttonNouvContrat_partenaire_relai= false;
-            }
+            } 
+              vm.showbuttonValidation = false;
+              vm.showbuttonNouvContrat_partenaire_relai = 1;
               contrat_partenaire_relai.$selected = false;
               contrat_partenaire_relai.$edit = false;
               vm.selectedItemContrat_partenaire_relai = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.valider_contrat = function()
+        {
+          maj_in_baseContrat_partenaire_relai(vm.selectedItemContrat_partenaire_relai,0);
+        }
+
+        function maj_in_baseContrat_partenaire_relai(contrat_partenaire_relai,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        contrat_partenaire_relai.id,
+                    intitule: contrat_partenaire_relai.intitule,
+                    ref_contrat: contrat_partenaire_relai.ref_contrat,
+                    montant_contrat: contrat_partenaire_relai.montant_contrat,
+                    date_signature:convertionDate(new Date(contrat_partenaire_relai.date_signature)),
+                    id_partenaire_relai:contrat_partenaire_relai.partenaire_relai.id,
+                    id_convention_entete: contrat_partenaire_relai.convention_entete.id,
+                    validation : 1               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("contrat_partenaire_relai/index",datas, config).success(function (data)
+            {   
+                
+                vm.allcontrat_partenaire_relai = vm.allcontrat_partenaire_relai.filter(function(obj)
+                {
+                    return obj.id !== contrat_partenaire_relai.id;
+                });
+              vm.selectedItemContrat_partenaire_relai = {};
+              vm.showbuttonValidation = false;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 

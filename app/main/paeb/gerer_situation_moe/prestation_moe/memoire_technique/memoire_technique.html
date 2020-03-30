@@ -161,7 +161,7 @@
                     <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterMemoire_technique()" style="width:10%;" ng-show="vm.showbuttonNouvMemoire">
                       Nouveau
                     </md-button>  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.validerMemoire_technique()" style="width:10%;" ng-show="vm.showbuttonValidation">
+                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerMemoire_technique()" style="width:10%;" ng-show="vm.showbuttonValidation && vm.permissionboutonValider">
                       Validation
                     </md-button>
                 </div><br>
@@ -179,11 +179,11 @@
                           <span class="column-title">Description</span>
                         </div>
                       </th>
-                      <th class="secondary-text">
+                      <!--th class="secondary-text">
                         <div class="table-header">
                           <span class="column-title">Fichier</span>
                         </div>
-                      </th>
+                      </th-->
                       <th class="secondary-text">
                         <div class="table-header">
                           <span class="column-title">Date livraison</span>
@@ -235,7 +235,7 @@
                         <span ng-if="!memoire_technique.$edit">{{memoire_technique.description}}</span>
                       </td>
                                 
-                      <td>
+                      <!--td>
                         <span ng-if="memoire_technique.$edit" style="display: inline-block !important;">
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Fichier</label>
@@ -251,7 +251,7 @@
                         </span>
                                   
                         <span ng-if="!memoire_technique.$edit">{{memoire_technique.fichier}}</span>
-                      </td>
+                      </td-->
 
                       <td>
                         <span ng-if="memoire_technique.$edit">
@@ -287,17 +287,13 @@
                                   
                         <a ng-if="!memoire_technique.$edit" ng-click="vm.supprimerMemoire_technique(memoire_technique)" title="Supprimer">
                           <span class="icon-delete"></span>
-                        </a>                        
-                                  
-                        <a ng-if="!memoire_technique.$edit" ng-click="vm.download_memoire_technique(memoire_technique)" title="Telecharger fichier">
-                          <span class="icon-box-download"></span>
                         </a>
                                   
                         <a ng-if="memoire_technique.$edit" ng-click="vm.annulerMemoire_technique(memoire_technique)" title="Annuler modification">
                           <span class="icon-cancel"></span>
                         </a>
                                   
-                        <a ng-if="memoire_technique.$edit && memoire_technique.description && memoire_technique.fichier && memoire_technique.date_livraison && memoire_technique.date_approbation>''" ng-click="vm.ajoutMemoire_technique(memoire_technique,0)" title="Sauvegarder">
+                        <a ng-if="memoire_technique.$edit && memoire_technique.description && memoire_technique.date_livraison && memoire_technique.date_approbation>''" ng-click="vm.ajoutMemoire_technique(memoire_technique,0)" title="Sauvegarder">
                           <span class="icon-content-save"></span>
                         </a>
                       </td>
@@ -334,14 +330,19 @@
                     <tr>
                       <th class="secondary-text">
                         <div class="table-header">
-                          <span class="column-title">Description</span>
+                          <span class="column-title">Contrat</span>
                         </div>
                       </th>
                       <th class="secondary-text">
                         <div class="table-header">
-                          <span class="column-title">Fichier</span>
+                          <span class="column-title">Description</span>
                         </div>
                       </th>
+                      <!--th class="secondary-text">
+                        <div class="table-header">
+                          <span class="column-title">Fichier</span>
+                        </div>
+                      </th-->
                       <th class="secondary-text">
                         <div class="table-header">
                           <span class="column-title">Date livraison</span>
@@ -367,14 +368,17 @@
                            
                   <tbody>
                     <tr ng-repeat="memoire_technique_valide in vm.allmemoire_technique_valide"  ng-class="{selected: memoire_technique_valide.$selected}" ng-click="vm.selectionMemoire_technique_valide(memoire_technique_valide)">
-                               
+                      <td>
+                                  
+                        <span>{{memoire_technique.contrat_be.ref_contrat}}</span>
+                      </td>         
                       <td>                                  
                         <span>{{memoire_technique_valide.description}}</span>
                       </td>
                                 
-                      <td>                                  
+                      <!--td>                                  
                         <span>{{memoire_technique_valide.fichier}}</span>
-                      </td>
+                      </td-->
 
                       <td>                         
                         <span>{{vm.affichageDate(memoire_technique_valide.date_livraison)}}</span>

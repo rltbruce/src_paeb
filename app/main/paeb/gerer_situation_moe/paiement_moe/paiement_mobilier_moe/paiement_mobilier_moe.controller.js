@@ -6,7 +6,7 @@
         .module('app.paeb.gerer_situation_moe.paiement_moe.paiement_mobilier_moe')
         .controller('Paiement_mobilier_moeController', Paiement_mobilier_moeController);
     /** @ngInject */
-    function Paiement_mobilier_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile)
+    function Paiement_mobilier_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,$cookieStore)
     {
 		    var vm = this;
 
@@ -36,10 +36,27 @@
 
 
 /**********************************debut demande_mobilier_moe****************************************/
-      apiFactory.getAPIgeneraliserREST("demande_mobilier_moe/index",'menu','getdemandeByValide').then(function(result)
+     /* apiFactory.getAPIgeneraliserREST("demande_mobilier_moe/index",'menu','getdemandeByValide').then(function(result)
       {
           vm.alldemande_mobilier_moe = result.data.response;
-      });
+      });*/
+
+      var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+          var usercisco = result.data.response.cisco;
+          
+          if (usercisco.id!=undefined)
+          {
+            apiFactory.getAPIgeneraliserREST("demande_mobilier_moe/index",'menu','getalldemandevalideBycisco','id_cisco',usercisco.id).then(function(result)
+              {
+                  vm.alldemande_mobilier_moe = result.data.response;
+                  console.log(vm.alldemande_mobilier_moe);
+              });
+
+          }
+        });
 
 //col table
         vm.demande_mobilier_moe_column = [

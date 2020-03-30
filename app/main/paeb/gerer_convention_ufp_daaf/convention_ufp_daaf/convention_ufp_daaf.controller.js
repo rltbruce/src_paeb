@@ -7,7 +7,7 @@
         .controller('Convention_ufp_daafController', Convention_ufp_daafController)
         .controller('ConventionDialogController', ConventionDialogController);
     /** @ngInject */
-    function Convention_ufp_daafController($mdDialog, $scope, apiFactory, $state,$cookieStore)
+    function Convention_ufp_daafController($mdDialog, $scope, apiFactory, $state,$cookieStore,loginService)
     {
 		    var vm = this;
 
@@ -48,6 +48,36 @@
           autoWidth: false          
         };
 
+        //style
+        vm.dtOptionsperso = {
+          dom: '<"top">rt<"bottom"<"left"<"length">><"right"<"info"><"pagination">>>',
+          pagingType: 'simple',
+          autoWidth: false          
+        };
+
+        //style
+        vm.dtOptionsperso2 = {
+          dom: '<"top"><"bottom"<"left"<"length">><"right"<"info"><"pagination">>>',
+          pagingType: 'simple',
+          autoWidth: false          
+        };
+
+         var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+            //var roles = result.data.response.roles;
+
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'DAAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+
+        });
 /*****************Debut StepOne convention_ufp_daaf_entete****************/
 
   //col table
@@ -73,22 +103,7 @@
             ////console.log(vm.allcompte_daaf);
         });
 
-        var id_user = $cookieStore.get('id');
-
-        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
-        {
-            //var roles = result.data.response.roles;
-
-            var roles = result.data.response.roles.filter(function(obj)
-            {
-                return obj == 'DAAF'
-            });
-            if (roles.length>0)
-            {
-              vm.permissionboutonValider = true;
-            }
-
-        });
+       
 
       //Masque de saisi ajout
         vm.ajouterConvention_ufp_daaf_entete = function ()
