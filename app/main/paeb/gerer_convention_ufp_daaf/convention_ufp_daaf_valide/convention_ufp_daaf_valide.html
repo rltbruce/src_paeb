@@ -6,13 +6,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Traitement</span>
+                <span class="parent">Gerer convention UFP/DAAF</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Programmation annuelle</span>
+                <span class="parent" href="javascript:;"> Convention validée</span>
             </div>
 
-            <div class="title">Programmation annuelle</div>
+            <div class="title">Convention validée</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -36,16 +36,7 @@
               </span>
             </md-tab-label>
             
-            <md-tab-body>
-              <div style="widht:100%;">  
-                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterConvention_ufp_daaf_entete()" style="width:10%;">
-                    Nouveau
-                  </md-button>
-
-                  <md-button type="submit" ng-show="vm.afficherboutonValider==1 && vm.permissionboutonValider" class="md-raised md-warn" aria-label="Valider" ng-click="vm.validerConvention()" style="width:10%;">
-                    Valider
-                  </md-button>
-              </div> <br>
+            <md-tab-body> <br>
               <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                 <thead>
                   <tr>
@@ -104,12 +95,7 @@
                 </span>
               </md-tab-label>
               
-              <md-tab-body>
-                <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterConvention_ufp_daaf_detail()" style="width:10%;" ng-disabled="vm.showbuttonNouvDetail==false" ng-disabled="!vm.showbuttonNouvDetail">
-                      Nouveau
-                    </md-button>
-                </div>
+              <md-tab-body><br>
                 
             <fieldset class="standard" >
                 <legend><code>Compte</code></legend>
@@ -228,13 +214,7 @@
             </md-tab-label>
 
             <md-tab-body ms-form-wizard-form>
-
-              <div style="widht:100%;">  
-                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajoutConventionDialog()" style="width:10%;">
-                    Nouveau
-                  </md-button>
-              </div>
-
+              <br>
               <div>        
                   <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                     <thead>

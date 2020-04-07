@@ -1,3 +1,4 @@
+
 (function ()
 {
     'use strict';
@@ -14,6 +15,7 @@
         var NouvelItemTete = false;
         var currentItemTete;
         vm.allfeffi = [];
+        vm.allsite = [];
 
         var NouvelItemDetail = false;
         var currentItemDetail;
@@ -156,6 +158,8 @@
         },
         {titre:"Feffi"
         },
+        {titre:"Site"
+        },
         {titre:"Reference convention"
         },
         {titre:"Objet"
@@ -204,6 +208,7 @@
               id: '0',
               id_cisco:'',
               id_feffi:'',
+              id_site:'',
               ref_convention: '',
               objet: '',
               ref_financement: '',
@@ -249,6 +254,7 @@
               item.$selected = false;
               item.id_cisco    = currentItemTete.id_cisco ;
               item.id_feffi    = currentItemTete.id_feffi ;
+              item.id_site    = currentItemTete.id_site ;
               item.ref_convention  = currentItemTete.ref_convention ;
               item.objet       = currentItemTete.objet ;              
               item.ref_financement = currentItemTete.ref_financement ;
@@ -374,6 +380,7 @@
 
             item.id_cisco = vm.selectedItemTete.cisco.id ;
             item.id_feffi = vm.selectedItemTete.feffi.id ;
+            item.id_site = vm.selectedItemTete.site.id ;
 
             item.ref_convention  = vm.selectedItemTete.ref_convention ;
             item.objet           = vm.selectedItemTete.objet ;
@@ -386,6 +393,12 @@
           apiFactory.getAPIgeneraliserREST("feffi/index",'menus','getfeffiBycisco','id_cisco',item.id_cisco).then(function(result)
           {
             vm.allfeffi= result.data.response;
+          });
+          apiFactory.getAPIgeneraliserREST("site/index",'menu','getsitecreeByfeffi','id_feffi',item.id_feffi).then(function(result)
+          {
+            vm.allsite= result.data.response;
+            vm.allsite.push(vm.selectedItemTete.site);
+            console.log(vm.allsite);
           });
 
         };
@@ -427,6 +440,7 @@
                    if((convT[0].delai!=currentItemTete.delai)
                     || (convT[0].id_cisco!=currentItemTete.id_cisco)
                     || (convT[0].id_feffi!=currentItemTete.id_feffi)
+                    || (convT[0].id_site!=currentItemTete.id_site)
                     || (convT[0].objet!=currentItemTete.objet)
                     
                     || (convT[0].ref_financement!=currentItemTete.ref_financement)
@@ -470,6 +484,7 @@
                     id:        getId,
                     id_cisco: convention_cife_tete.id_cisco,
                     id_feffi: convention_cife_tete.id_feffi,
+                    id_site: convention_cife_tete.id_site,
                     objet:    convention_cife_tete.objet,
                     ref_financement:  convention_cife_tete.ref_financement,
                     ref_convention:   convention_cife_tete.ref_convention,
@@ -492,6 +507,10 @@
                 {
                     return obj.id == convention_cife_tete.id_feffi;
                 });
+                var sit = vm.allsite.filter(function(obj)
+                {
+                    return obj.id == convention_cife_tete.id_site;
+                });
 
                 if (NouvelItemTete == false)
                 {
@@ -500,16 +519,20 @@
                     {
                         vm.selectedItemTete.cisco   = cis[0];
                         vm.selectedItemTete.feffi = fef[0];
-                        /*vm.selectedItemTete.objet   = convention_cife_tete.objet;
-                        vm.selectedItemTete.ref_financement       = convention_cife_tete.ref_financement;
-                        vm.selectedItemTete.ref_convention = convention_cife_tete.ref_convention;
-                        vm.selectedItemTete.avancement  = convention_cife_tete.avancement;
-                        vm.selectedItemTete.montant_total  = convention_cife_tete.montant_total;*/
+                        vm.selectedItemTete.site = sit[0];
                         vm.selectedItemTete.$selected  = false;
                         vm.selectedItemTete.$edit      = false;
                         vm.selectedItemTete ={};
+                        
+                        if (convention_cife_tete.id_site!=currentItemTete.site.id)
+                        {currentItemTete.site.ecole = {id: currentItemTete.site.id_ecole}
 
-
+                          console.log(currentItemTete.site);
+                            maj_site_in_base(currentItemTete.site,0,0);
+                                maj_site_in_base(sit[0],0,1);
+                              
+                          
+                        }
                     }
                     else 
                     {    
@@ -517,6 +540,8 @@
                       {
                           return obj.id !== vm.selectedItemTete.id;
                       });
+                      
+                      maj_site_in_base(vm.selectedItemTete.site,0,0);
                     }
                 }
                 else
@@ -524,14 +549,10 @@
                   
                   convention_cife_tete.cisco = cis[0];
                   convention_cife_tete.feffi = fef[0];
+                  convention_cife_tete.site = sit[0];
                   convention_cife_tete.id  =   String(data.response);
-
-                 /* convention_cife_tete.ref_convention  = convention_cife_tete.ref_convention ;
-                  convention_cife_tete.objet           = convention_cife_tete.objet ;
-                  convention_cife_tete.ref_financement = convention_cife_tete.ref_financement ;
-                  convention_cife_tete.avancement= convention_cife_tete.avancement;
-                  convention_cife_tete.montant_total= convention_cife_tete.montant_total;*/
                   NouvelItemTete = false;
+                  maj_site_in_base(sit[0],0,1);
             }
               convention_cife_tete.$selected = false;
               convention_cife_tete.$edit = false;
@@ -564,14 +585,29 @@
                     }
              item.ecole=tem;
           });
-
+          item.id_site = null;
           if(NouvelItemTete == false)
           { 
+            apiFactory.getAPIgeneraliserREST("site/index",'menu','getsitecreeByfeffi','id_feffi',item.id_feffi).then(function(result)
+              {
+                vm.allsite= result.data.response;
+                vm.allsite.push(item.site);
+                console.log(vm.allsite);
+              });
+
             if (currentItemTete.feffi.id!=item.id_feffi)
             {
               vm.showAlert('Avertissement','Les detailles ainsi que travaux de construction seront supprimer si vous enregistre cette operation');
             }  
           }
+          else 
+            {
+              apiFactory.getAPIgeneraliserREST("site/index",'menu','getsitecreeByfeffi','id_feffi',item.id_feffi).then(function(result)
+              {
+                vm.allsite= result.data.response;
+                console.log(vm.allsite);
+              });
+            }
         }
 
         vm.change_cisco = function(item)
@@ -638,6 +674,35 @@
         }
 
       /*****************fin convention entete***************/
+
+      function maj_site_in_base(site,suppression,statu)
+        {
+            //add
+            console.log(site);
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        site.id,      
+                    code_sous_projet:      site.code_sous_projet,
+                    denomination_epp:      site.denomination_epp,      
+                    observation:    site.observation,
+                    agence_acc:   site.agence_acc,
+                    statu_convention:    statu,
+                    objet_sous_projet: site.objet_sous_projet,
+                    id_ecole: site.ecole.id,                
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("site/index",datas, config).success(function (data)
+            {
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
       /*****************debut cout maitrise**************/
 
       vm.cout_maitrise_column = 

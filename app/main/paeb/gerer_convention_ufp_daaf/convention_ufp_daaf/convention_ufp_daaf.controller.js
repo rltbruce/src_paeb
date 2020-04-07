@@ -87,7 +87,9 @@
         {titre:"Référence financement"},
         {titre:"Montant à transferer"},
         {titre:"Frais bancaire"},        
-        {titre:"Montant convention"},
+        {titre:"Montant convention"},        
+        {titre:"Numero vague transfert"},        
+        {titre:"Nombre bénéficiaire"},
         {titre:"Action"}];
 
   //recuperation donnée programmation
@@ -119,7 +121,9 @@
               ref_financement: '',
               montant_convention: 0,                            
               montant_trans_comm: 0,
-              frais_bancaire: 0
+              frais_bancaire: 0,
+              num_vague: 0,
+              nbr_beneficiaire: 0
             };         
             vm.allconvention_ufp_daaf_entete.push(items);
             vm.allconvention_ufp_daaf_entete.forEach(function(conv)
@@ -165,6 +169,8 @@
             item.montant_convention = currentItemConvention_ufp_daaf_entete.montant_convention ; 
             item.montant_trans_comm = currentItemConvention_ufp_daaf_entete.montant_trans_comm ;
             item.frais_bancaire = currentItemConvention_ufp_daaf_entete.frais_bancaire ; 
+            item.num_vague = currentItemConvention_ufp_daaf_entete.num_vague ;
+            item.nbr_beneficiaire = currentItemConvention_ufp_daaf_entete.nbr_beneficiaire ;
           }
           else
           {
@@ -239,6 +245,8 @@
             item.montant_convention = parseInt(vm.selectedItemConvention_ufp_daaf_entete.montant_convention) ; 
             item.montant_trans_comm = parseInt(vm.selectedItemConvention_ufp_daaf_entete.montant_trans_comm) ;
             item.frais_bancaire = parseInt(vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire) ;
+            item.num_vague = parseInt(vm.selectedItemConvention_ufp_daaf_entete.num_vague) ;
+            item.nbr_beneficiaire = parseInt(vm.selectedItemConvention_ufp_daaf_entete.nbr_beneficiaire) ;
             vm.afficherboutonValider = false; 
         };
 
@@ -276,7 +284,9 @@
                     || (conv[0].montant_convention!=currentItemConvention_ufp_daaf_entete.montant_convention)
                     || (conv[0].ref_financement!=currentItemConvention_ufp_daaf_entete.ref_financement)
                     || (conv[0].montant_trans_comm!=currentItemConvention_ufp_daaf_entete.montant_trans_comm)
-                    || (conv[0].frais_bancaire!=currentItemConvention_ufp_daaf_entete.frais_bancaire))                    
+                    || (conv[0].frais_bancaire!=currentItemConvention_ufp_daaf_entete.frais_bancaire)
+                    || (conv[0].num_vague!=currentItemConvention_ufp_daaf_entete.num_vague)
+                    || (conv[0].nbr_beneficiaire!=currentItemConvention_ufp_daaf_entete.nbr_beneficiaire))                    
                       { 
                         insert_in_baseConvention_ufp_daaf_entete(item,suppression,validation);
                       }
@@ -314,6 +324,8 @@
                     ref_financement: convention_ufp_daaf_entete.ref_financement,
                     montant_trans_comm: convention_ufp_daaf_entete.montant_trans_comm,
                     frais_bancaire: convention_ufp_daaf_entete.frais_bancaire,
+                    num_vague: convention_ufp_daaf_entete.num_vague,
+                    nbr_beneficiaire: convention_ufp_daaf_entete.nbr_beneficiaire,
                     validation: validation               
                 });
 
@@ -375,6 +387,8 @@
                     ref_financement: vm.selectedItemConvention_ufp_daaf_entete.ref_financement,
                     montant_trans_comm: vm.selectedItemConvention_ufp_daaf_entete.montant_trans_comm,
                     frais_bancaire: vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire,
+                    num_vague: vm.selectedItemConvention_ufp_daaf_entete.num_vague,
+                    nbr_beneficiaire: vm.selectedItemConvention_ufp_daaf_entete.nbr_beneficiaire,
                     validation: 1               
                 });
 

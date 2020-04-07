@@ -19,6 +19,7 @@
 
         vm.vuemap = false;
         vm.liste = [] ;
+        vm.showwindow = false;
         //style
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
@@ -1163,11 +1164,12 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   console.log("mouseover ok");
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
+                    console.log("mouseout Miala");
                   }
                 },
             },
@@ -19778,13 +19780,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District FENOARIVO ANTSINANA 76        
@@ -20000,13 +20007,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District SOANIERANA IVONGO 77        
@@ -20222,13 +20234,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District MANANARA 78        
@@ -20401,13 +20418,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District MAROANTSETRA 79        
@@ -20625,13 +20647,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District ANTALAHA 80        
@@ -20850,13 +20877,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District SAMBAVA 81        
@@ -21095,13 +21127,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District VOHIMARINA 82       
@@ -21335,13 +21372,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District Antsiranana II  83          
@@ -21781,13 +21823,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District AMBANJA 86       
@@ -21955,13 +22002,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District BEALALANA 87       
@@ -22121,13 +22173,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District ANDAPA 88        
@@ -22291,13 +22348,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District BEFANDRIANA AVARATRA 89       
@@ -22487,13 +22549,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District ANTSOHIHY 90       
@@ -22644,13 +22711,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District ANALALAVA 91       
@@ -22907,13 +22979,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District BORIZINY(PORT BERGER) 92       
@@ -23098,13 +23175,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District MAHAJANGA II 93       
@@ -23262,13 +23344,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District MAHAJANGA I 94       
@@ -23323,13 +23410,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District MAROVOAY 95       
@@ -23488,13 +23580,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District MITSINJO 96       
@@ -23638,13 +23735,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District AMBATO BOENI 97       
@@ -23845,13 +23947,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District MAMPIKONY 98      
@@ -24011,13 +24118,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District TSARATANANA 99      
@@ -24211,13 +24323,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District ANDILAMENA 100      
@@ -24395,13 +24512,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District MANDRITSARA 101      
@@ -24619,13 +24741,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District AMPARAFARAVOLA 102      
@@ -24798,13 +24925,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District AMBATONDRAZAKA 103      
@@ -25058,11 +25190,17 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
                   }
                 },
             },
@@ -25225,13 +25363,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District AMBOHIDRATRIMO 105      
@@ -25499,13 +25642,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District ANKAZOBE 106      
@@ -25676,13 +25824,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District MAEVATANANA 107      
@@ -25857,13 +26010,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District KANDREHO 108      
@@ -25981,13 +26139,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District AMBATOMAINTY 109      
@@ -26112,13 +26275,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
              //District MORAFENOBE 110    
@@ -26293,13 +26461,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District MAINTIRANO 111     
@@ -26435,13 +26608,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District BESALAMPY 112     
@@ -26573,13 +26751,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District SOALALA 113     
@@ -26698,13 +26881,18 @@ vm.polylines = [
                   },
                   mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0.5';
-                   
+                   console.log("mouseover Miseo");
+                   vm.showwindow = true;
+                   vm.coords={
+                        latitude: -17.817671745637412,//AMBATONDRAZAKA GAUCHE    
+                        longitude: 47.957017974842735,//AMPARAFARAVOLA AMBAN 
+                    };
                   },
                   mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
                     polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
+                    console.log("mouseout Miala");
+                    vm.showwindow = false;
+                  }                },
             },
 
             //District FENOARIVOBE 114            

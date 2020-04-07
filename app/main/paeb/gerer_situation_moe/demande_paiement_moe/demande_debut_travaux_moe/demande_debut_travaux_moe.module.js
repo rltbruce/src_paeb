@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_moe.demande_paiement_moe.demande_debut_travaux_moe', {
-            title: 'D_debut travaux',
+            title: 'Preparation travaux',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_moe_demande_paiement_moe_demande_debut_travaux_moe',
 			weight: 3,

@@ -13,7 +13,7 @@
             'app.paeb.ddb.bureau_etude',
             'app.paeb.ddb.type_batiment',
             'app.paeb.ddb.zone_subvention',
-            'app.paeb.ddb.infrastructure',
+            //'app.paeb.ddb.infrastructure',
             'app.paeb.ddb.type_cout_divers',
             'app.paeb.ddb.type_mobilier',
             'app.paeb.ddb.type_latrine',

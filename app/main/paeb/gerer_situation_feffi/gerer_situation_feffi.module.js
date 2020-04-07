@@ -11,7 +11,8 @@
             'app.paeb.gerer_situation_feffi.document_feffi_scan',
             'app.paeb.gerer_situation_feffi.reporting',
             'app.paeb.gerer_situation_feffi.decaiss_fonct_feffi',
-            'app.paeb.gerer_situation_feffi.decaiss_fonct_feffi_valide'
+            'app.paeb.gerer_situation_feffi.decaiss_fonct_feffi_valide',
+            'app.paeb.gerer_situation_feffi.convention_cisco_feffi_avenant'
             ])       
         .config(config);
         var vs ;

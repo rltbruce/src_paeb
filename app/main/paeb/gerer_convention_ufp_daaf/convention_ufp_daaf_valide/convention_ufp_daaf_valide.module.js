@@ -29,7 +29,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_convention_ufp_daaf.convention_ufp_daaf_valide', {
-            title: 'Valide convention ',
+            title: 'Convention validée',
             icon  : 'icon-tile-four',
             state: 'app.paeb_gerer_convention_ufp_daaf_convention_ufp_daaf_valide',
 			weight: 2,

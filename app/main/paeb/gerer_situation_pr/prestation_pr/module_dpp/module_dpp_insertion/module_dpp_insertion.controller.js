@@ -549,7 +549,7 @@
                     nbr_previ_fem_parti: module_dpp.nbr_previ_fem_parti,
                     date_debut_previ_form: convertionDate(new Date(module_dpp.date_debut_previ_form)),
                     date_fin_previ_form: convertionDate(new Date(module_dpp.date_fin_previ_form)),
-                    id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
+                    id_contrat_partenaire_relai: module_dpp.contrat_partenaire_relai.id,
                     lieu_formation: module_dpp.lieu_formation,
                     observation:module_dpp.observation,
                     validation : 1              

@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_moe.demande_paiement_moe.demande_fin_travaux_moe', {
-            title: 'D_fin travaux',
+            title: 'Fin travaux',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_moe_demande_paiement_moe_demande_fin_travaux_moe',
 			weight: 3,

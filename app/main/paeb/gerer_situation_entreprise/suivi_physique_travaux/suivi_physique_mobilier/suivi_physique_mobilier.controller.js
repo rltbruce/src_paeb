@@ -51,7 +51,7 @@
       }])
         .controller('Suivi_physique_mobilierController', Suivi_physique_mobilierController);
     /** @ngInject */
-    function Suivi_physique_mobilierController($mdDialog, $scope, apiFactory, $state,apiUrl,$http)
+    function Suivi_physique_mobilierController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore)
     {
 		    var vm = this;
         vm.selectedItemConvention_entete = {} ;
@@ -239,9 +239,9 @@
                 vm.allavancement_mobilier = result.data.response;
                   console.log(vm.allavancement_mobilier);
              });
-              vm.stepEight = true;
-              vm.stepNine = false;
-              vm.stepTen = false;
+              vm.stepTwo = true;
+              vm.stepThree = false;
+              vm.stepFor= false;
                       
 
         };

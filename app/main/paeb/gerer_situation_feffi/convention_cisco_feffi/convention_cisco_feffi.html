@@ -6,13 +6,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Traitement</span>
+                <span class="parent">Gérer situation FEFFI</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> convention cisco/feffi</span>
+                <span class="parent" href="javascript:;"> Convention CISCO/FEFFI</span>
             </div>
 
-            <div class="title">convention cisco/feffi</div>
+            <div class="title">Convention CISCO/FEFFI</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -97,6 +97,20 @@
                         <td>
                           <span ng-if="convention_cife_tete.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
+                              <label>Site</label>
+                              <md-select ng-model="convention_cife_tete.id_site"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="!convention_cife_tete.id_feffi">
+                                <md-option ng-repeat="site in vm.allsite" value="{{site.id}}">
+                                                                    {{site.denomination_epp}}
+                                </md-option>
+                              </md-select>
+                            </md-input-container>  
+                          </span>
+                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.site.denomination_epp}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="convention_cife_tete.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
                               <label>Réference convention</label>
                               <input name="ref_convention" type="text" ng-model="convention_cife_tete.ref_convention"/>
                             </md-input-container>
@@ -158,7 +172,7 @@
                             <span class="icon-cancel"></span>
                           </a>
                                     
-                          <a ng-if="convention_cife_tete.$edit && convention_cife_tete.ref_convention && convention_cife_tete.objet && convention_cife_tete.id_cisco && convention_cife_tete.id_feffi && convention_cife_tete.ref_financement>''" ng-click="vm.ajoutTete(convention_cife_tete,0)" title="Sauvegarder">
+                          <a ng-if="convention_cife_tete.$edit && convention_cife_tete.ref_convention && convention_cife_tete.objet && convention_cife_tete.id_cisco && convention_cife_tete.id_feffi && convention_cife_tete.id_site && convention_cife_tete.ref_financement>''" ng-click="vm.ajoutTete(convention_cife_tete,0)" title="Sauvegarder">
                             <span class="icon-content-save"></span>
                           </a>
                         </td>

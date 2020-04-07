@@ -30,8 +30,8 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_feffi.decaiss_fonct_feffi_valide', {
-            title: 'Valide decaissement',
-            icon  : 'icon-blur-radial',
+            title: 'Decaissement validée',
+            icon  : 'icon-tile-four',
             state: 'app.paeb_gerer_situation_feffi_decaiss_fonct_feffi_valide',
 			weight: 3,
             hidden: function()

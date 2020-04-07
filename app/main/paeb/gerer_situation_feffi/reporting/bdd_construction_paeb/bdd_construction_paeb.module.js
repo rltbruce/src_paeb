@@ -29,7 +29,7 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_feffi.reporting.bdd_construction_paeb', {
             title: 'Bdd construction',
-            icon  : 'icon-tile-four',
+            icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_feffi_reporting_bdd_construction_paeb',
 			weight: 1
         });

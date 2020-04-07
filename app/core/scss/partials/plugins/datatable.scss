@@ -253,6 +253,9 @@ table.dataTable {
             &.selected {
                 background-color: #B0BED9;
             }
+            &.stared {                
+                font-weight: bold;
+            }
 
             &.details-open {
 

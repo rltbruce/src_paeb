@@ -31,7 +31,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.paiement_mpe.paiement_latrine_prestataire', {
-            title: 'P_latrine MPE',
+            title: 'Latrine MPE',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_entreprise_paiement_mpe_paiement_latrine_prestataire',
 			weight: 2,

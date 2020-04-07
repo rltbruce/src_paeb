@@ -81,10 +81,26 @@
                           <span ng-if="transfert_reliquat.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
                               <label>Montant</label>
-                              <input name="montant" type="text" ng-model="transfert_reliquat.montant"/>
+                              <input name="montant" type="text" ng-model="transfert_reliquat.montant" ng-change="vm.change_montant(transfert_reliquat)"/>
                             </md-input-container>
                           </span>                          
                           <span ng-if="!transfert_reliquat.$edit">{{transfert_reliquat.montant}}</span>
+                        </td>
+                        <td>
+                          <span ng-if="transfert_reliquat.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Objet utilisation</label>
+                              <md-select ng-model="transfert_reliquat.objet_utilisation"style="overflow: hidden;text-overflow: ellipsis;" disabled>
+                                <md-option  value="0">
+                                  Amelioration infrastructure
+                                </md-option>
+                                <md-option  value="1">
+                                  Nouvelle construction
+                                </md-option>
+                              </md-select>
+                            </md-input-container>
+                          </span>                          
+                          <span ng-if="!transfert_reliquat.$edit">{{vm.afficheobjet_utilisation(transfert_reliquat.objet_utilisation)}}</span>
                         </td>
 
                         <td>

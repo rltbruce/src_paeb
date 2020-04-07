@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.prestation_mpe.prestation_mpe_validation', {
-            title: 'Prestation validation',
+            title: 'Validation prestation ',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_entreprise_prestation_mpe_prestation_mpe_validation',
 			weight: 1,

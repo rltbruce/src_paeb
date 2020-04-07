@@ -209,9 +209,14 @@
             </div>
           </ui-gmap-google-map-->
           <ui-gmap-google-map center="vm.ecolevueMap.center" zoom="vm.ecolevueMap.zoom" draggable="true" options="options" bounds="">
-        <ui-gmap-polygon ng-repeat="p in vm.polylines" path="p.path" stroke="p.stroke" visible='p.visible'
-                  geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" clickable='true' icons='p.icons' events="p.events" fill="p.fill"></ui-gmap-polygon>
-    </ui-gmap-google-map>
+            <ui-gmap-polygon ng-repeat="p in vm.polylines" path="p.path" stroke="p.stroke" visible='p.visible'
+                  geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" clickable='true' icons='p.icons' events="p.events" fill="p.fill">
+                    
+            </ui-gmap-polygon>
+            <ui-gmap-window show="vm.showwindow" coords="vm.coords" closeclick="polywindow.closeClick()">
+              <h1> test </h1>
+            </ui-gmap-window>
+        </ui-gmap-google-map>
         
       </ms-widget-back>  
       </ms-widget>                     
@@ -220,3 +225,23 @@
     </div>
     <!-- / CONTENT -->
   </div>
+
+  <!--ui-gmap-windows show="'showWindow'" ng-cloak>
+                <div>
+                    <p>This is an info window</p>
+                </div>
+            </ui-gmap-windows-->
+
+            <!--ui-gmap-google-map center='main.map.center' zoom='main.map.zoom' options='main.map.options'>
+     <ui-gmap-markers models="main.markers" coords="'self'" icon="'icon'" options="'options'" click="'onClick'" fit="true">
+         <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
+             <div class="mapinfowindow" data-ui-sref="display({id: id})">                                                                      
+                 <span class="itemname" data-ng-non-bindable>{{ title }}</span>
+             </div>
+         </ui-gmap-windows>
+     </ui-gmap-markers>
+ </ui-gmap-google-map-->
+
+ <!--ui-gmap-window show="polywindow.show" coords="polywindow.coords" closeclick="polywindow.closeClick()">
+        <h1> test </h1>
+      </ui-gmap-window-->

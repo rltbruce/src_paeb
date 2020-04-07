@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_moe.demande_paiement_moe.demande_latrine_moe', {
-            title: 'D_latrine MOE',
+            title: 'Latrine MOE',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_moe_demande_paiement_moe_demande_latrine_moe',
 			weight: 3,

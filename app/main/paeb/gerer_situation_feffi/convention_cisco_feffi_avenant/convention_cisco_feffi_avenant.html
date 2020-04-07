@@ -1,0 +1,198 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gérer situation FEFFI</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Avenant</span>
+            </div>
+
+            <div class="title">Avenant</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+      
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+    <!-----debut convention_cife_tete ------>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Convention</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body> <br>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="ciscT in ::vm.convention_cife_tete_column">
+                          <div class="table-header">
+                            <span class="column-title">{{ciscT.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="convention_cife_tete in vm.allconvention_cife_tete"  ng-class="{selected: convention_cife_tete.$selected , stared: vm.staredItem(convention_cife_tete)} " ng-click="vm.selectionTete(convention_cife_tete)" >           
+                        
+
+                        <td>
+                          <span>{{convention_cife_tete.cisco.code}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{convention_cife_tete.feffi.denomination}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{convention_cife_tete.ref_convention}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{convention_cife_tete.objet}}</span>
+                        </td>
+
+                        <td>      
+                          <span>{{convention_cife_tete.ref_financement}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{convention_cife_tete.montant_total}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{convention_cife_tete.avancement}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+    
+    <!-----fin convention_cife_tete ------>
+
+     <!-----Debut avenant_convention ------>
+          <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">avenant</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvenant_convention()" style="width:10%;" ng-show="vm.showbuttonNouvAvenant">
+                      Nouveau
+                    </md-button>
+                  <md-button type="submit" ng-show="vm.afficherboutonValider && vm.permissionboutonValider" class="md-raised md-warn" aria-label="Valider" ng-click="vm.validerAvenant()" style="width:10%;">
+                    Valider
+                  </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.avenant_convention_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="avenant_convention in vm.allavenant_convention"  ng-class="{selected: avenant_convention.$selected}" ng-click="vm.selectionAvenant_convention(avenant_convention)">
+                                
+                      <td>
+                        <span ng-if="avenant_convention.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Descriprtion</label>
+                            <input name="description" type="text" ng-model="avenant_convention.description"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avenant_convention.$edit">{{avenant_convention.description}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="avenant_convention.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Cout batiment</label>
+                            <input name="montant" type="text" ng-model="avenant_convention.montant"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!avenant_convention.$edit">{{avenant_convention.montant}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="avenant_convention.$edit">
+                          <md-datepicker ng-model="avenant_convention.date_signature" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!avenant_convention.$edit">{{vm.affichageDate(avenant_convention.date_signature)}}</span>
+                      </td>                      
+                      <td>
+                        <a ng-if="!avenant_convention.$edit" ng-click="vm.modifierAvenant_convention(avenant_convention)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!avenant_convention.$edit" ng-click="vm.supprimerAvenant_convention(avenant_convention)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="avenant_convention.$edit" ng-click="vm.annulerAvenant_convention(avenant_convention)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="avenant_convention.$edit && avenant_convention.description &&  avenant_convention.montant &&  avenant_convention.date_signature>''" ng-click="vm.ajoutAvenant_convention(avenant_convention,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN passation_marches ------>
+    <!-----fin convention_detail ------>
+
+          </md-tabs>
+        </ms-form-wizard>                   
+      </div>
+      <!-- / convention_cife_tete -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

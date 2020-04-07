@@ -6,13 +6,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Traitement</span>
+                <span class="parent">Gerer convention UFP/DAAF</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Programmation annuelle</span>
+                <span class="parent" href="javascript:;"> Convention</span>
             </div>
 
-            <div class="title">Programmation annuelle</div>
+            <div class="title">Convention</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -123,6 +123,28 @@
                                 
                       <span ng-if="!convention_ufp_daaf_entete.$edit">{{convention_ufp_daaf_entete.montant_convention}}</span>
                     </td>
+
+                     <td>
+                      <span ng-if="convention_ufp_daaf_entete.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Mumero vague</label>
+                          <input name="num_vague" type="number" ng-model="convention_ufp_daaf_entete.num_vague"/>
+                        </md-input-container>   
+                      </span>
+                                
+                      <span ng-if="!convention_ufp_daaf_entete.$edit">{{convention_ufp_daaf_entete.num_vague}}</span>
+                    </td>
+
+                     <td>
+                      <span ng-if="convention_ufp_daaf_entete.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Nombre bébéficiaire</label>
+                          <input name="nbr_beneficiaire" type="number" ng-model="convention_ufp_daaf_entete.nbr_beneficiaire"/>
+                        </md-input-container>   
+                      </span>
+                                
+                      <span ng-if="!convention_ufp_daaf_entete.$edit">{{convention_ufp_daaf_entete.nbr_beneficiaire}}</span>
+                    </td>
                     <td>  
                       <a ng-if="!convention_ufp_daaf_entete.$edit" ng-click="vm.modifierConvention_ufp_daaf_entete(convention_ufp_daaf_entete)" title="Modifier">
                         <span class="icon-table-edit"></span>
@@ -136,7 +158,7 @@
                         <span class="icon-cancel"></span>
                       </a>
                                 
-                      <a ng-if="convention_ufp_daaf_entete.$edit && convention_ufp_daaf_entete.objet && convention_ufp_daaf_entete.ref_convention && convention_ufp_daaf_entete.ref_financement && convention_ufp_daaf_entete.montant_convention && convention_ufp_daaf_entete.frais_bancaire>''" ng-click="vm.ajoutConvention_ufp_daaf_entete(convention_ufp_daaf_entete,0,0)" title="Sauvegarder">
+                      <a ng-if="convention_ufp_daaf_entete.$edit && convention_ufp_daaf_entete.objet && convention_ufp_daaf_entete.ref_convention && convention_ufp_daaf_entete.num_vague && convention_ufp_daaf_entete.nbr_beneficiaire && convention_ufp_daaf_entete.ref_financement && convention_ufp_daaf_entete.montant_convention && convention_ufp_daaf_entete.frais_bancaire>''" ng-click="vm.ajoutConvention_ufp_daaf_entete(convention_ufp_daaf_entete,0,0)" title="Sauvegarder">
                         <span class="icon-content-save"></span>
                       </a>
                     </td>

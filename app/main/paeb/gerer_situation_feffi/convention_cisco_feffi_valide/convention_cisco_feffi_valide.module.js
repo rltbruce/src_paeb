@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_feffi.convention_cisco_feffi_valide', {
-            title: 'Convention C/F valide',
+            title: 'Convention C/F validée',
             icon  : 'icon-tile-four',
             state: 'app.paeb_gerer_situation_feffi_convention_cisco_feffi_valide',
 			weight: 2

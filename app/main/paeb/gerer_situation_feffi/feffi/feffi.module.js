@@ -29,7 +29,7 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_feffi.feffi', {
             title: 'Feffi',
-            icon  : 'icon-blur-radial',
+            icon  : 'icon-tile-four',
             state: 'app.paeb_gerer_situation_feffi_feffi',
 			weight: 3
         });

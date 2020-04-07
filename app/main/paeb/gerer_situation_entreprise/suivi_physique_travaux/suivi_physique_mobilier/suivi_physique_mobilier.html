@@ -6,13 +6,15 @@
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Gerer situation feffi</span>
+                <span class="parent">Gerer situation entreprise</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Feffi</span>
+                <span class="parent" href="javascript:;"> Suivi physique travaux</span>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Suivi mobilier</span>
             </div>
 
-            <div class="title">Feffi</div>
+            <div class="title">Suivi mobilier</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -188,11 +190,11 @@
 
     
              <!-----debut detail mobilier ------>
-            <md-tab ng-disabled="vm.stepTwo==false">
+            <md-tab ng-disabled="vm.stepOne==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepEight==false">M</span>
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepEight==true">
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">M</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
                       <i class="icon-check s16"></i>
                   </span>
                   <span class="ms-form-wizard-step-text">Mobilier</span>
@@ -235,11 +237,11 @@
             <!-----debut detail mobilier ------>
 
                        <!-----Debut avancement_mobilier ------>
-          <md-tab ng-disabled="vm.stepEight==false">
+          <md-tab ng-disabled="vm.stepTwo==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepNine==false">M.1</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepNine==true">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">M.1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
                       <i class="icon-check s16"></i>
                     </span>
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -364,11 +366,11 @@
     <!-----FIN avancement_batiment ------>
 
          <!-----Debut avancement_mobilier_doc ------>
-          <md-tab ng-disabled="vm.stepNine==false">
+          <md-tab ng-disabled="vm.stepThree==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTen==false">F</span>
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTen==true">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">F</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==true">
                       <i class="icon-check s16"></i>
                     </span>
                     <span class="ms-form-wizard-step-text">Rapport scanné</span>

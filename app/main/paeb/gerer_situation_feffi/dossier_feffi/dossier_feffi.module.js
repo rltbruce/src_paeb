@@ -31,7 +31,7 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_feffi.dossier_feffi', {
             title: 'Dossier feffi',
-            icon  : 'icon-blur-radial',
+            icon  : 'icon-tile-four',
             state: 'app.paeb_gerer_situation_feffi_dossier_feffi',
 			weight: 3,
             hidden: function()

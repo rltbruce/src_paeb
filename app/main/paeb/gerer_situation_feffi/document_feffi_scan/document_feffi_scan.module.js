@@ -31,7 +31,7 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_feffi.document_feffi_scan', {
             title: 'Scan document',
-            icon  : 'icon-blur-radial',
+            icon  : 'icon-tile-four',
             state: 'app.paeb_gerer_situation_feffi_document_feffi_scan',
 			weight: 3,
             hidden: function()

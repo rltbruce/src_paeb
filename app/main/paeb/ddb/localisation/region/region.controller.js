@@ -510,6 +510,162 @@ function clicke()
         };
       };
 
+
+            vm.allfokontany = function(id_commune) {
+        return {
+          dataSource:
+          {
+            type: "json",
+            transport: {
+              read: function (e)
+              {
+                apiFactory.getAPIgeneraliserREST("fokontany/index","id_commune",id_commune).then(function(result)
+                {
+                    e.success(result.data.response)
+                }, function error(result)
+                  {
+                      alert('something went wrong')
+                  })
+              },
+              update : function (e)
+              {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        e.data.models[0].id,      
+                          code:      e.data.models[0].code,
+                          nom:       e.data.models[0].nom,
+                          id_commune: e.data.models[0].commune.id               
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("fokontany/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              },
+              destroy : function (e)
+              {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 1,
+                          id:        e.data.models[0].id               
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("fokontany/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              },
+              create : function (e)
+              {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        0,      
+                          code:      e.data.models[0].code,
+                          nom:       e.data.models[0].nom,
+                          id_commune: id_commune               
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("fokontany/index",datas, config).success(function (data)
+                  { 
+                    e.data.models[0].id = String(data.response);
+                    e.data.models[0].commune={id:id_commune};              
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              }
+            },
+            batch: true,
+            schema:
+            {
+                model:
+                {
+                    id: "id",
+                    fields:
+                    {
+                        code: {type: "string",validation: {required: true}},
+                        nom: {type: "string", validation: {required: true}}
+                    }
+                }
+            },
+            //serverPaging: true,
+            //serverSorting: true,
+            serverFiltering: true,
+            pageSize: 5,
+          },
+          toolbar: [{               
+               template: "<label id='table_titre'>FOKONTANY </label>"
+          },{
+               name: "create",
+               text:"",
+               iconClass: "k-icon k-i-table-light-dialog"
+               
+          }],
+          editable: {
+            mode:"inline"
+          },
+          selectable:"row",
+          scrollable: false,
+          sortable: true,
+          pageable:{refresh: true,
+                    pageSizes: true, 
+                    buttonCount: 3,
+                    messages: {
+                      empty: "Pas de donnée",
+                      display: "{0}-{1} pour {2} items",
+                      itemsPerPage: "items par page",
+                      next: "Page suivant",
+                      previous: "Page précédant",
+                      refresh: "Actualiser",
+                      first: "Première page",
+                      last: "Dernière page"
+                    }
+                  },
+          //dataBound: function() {
+                   // this.expandRow(this.tbody.find("tr.k-master-row").first());
+               // },
+          columns: [
+            {
+              field: "code",
+              title: "Code",
+              width: "Auto"
+            },
+            {
+              field: "nom",
+              title: "Nom",
+              width: "Auto"
+            },
+            { 
+              title: "Action",
+              width: "Auto",
+              command:[{
+                      name: "edit",
+                      text: {edit: "",update: "",cancel: ""},
+                      //iconClass: {edit: "k-icon k-i-edit",update: "k-icon k-i-update",cancel: "k-icon k-i-cancel"
+                       // },
+                  },{name: "destroy", text: ""}]
+            }]
+        };
+      };
+
 /* ***************FIN GEOGRAPHIQUE**********************/
         
         //Alert

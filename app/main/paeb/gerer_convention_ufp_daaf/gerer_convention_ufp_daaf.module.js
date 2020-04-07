@@ -6,6 +6,8 @@
         .module('app.paeb.gerer_convention_ufp_daaf', [			
             'app.paeb.gerer_convention_ufp_daaf.convention_ufp_daaf',
             'app.paeb.gerer_convention_ufp_daaf.convention_ufp_daaf_valide',
+            'app.paeb.gerer_convention_ufp_daaf.site',
+            'app.paeb.gerer_convention_ufp_daaf.reporting',
             ])
         .run(testPermission)       
         .config(config);

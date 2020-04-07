@@ -173,7 +173,7 @@
                   { return obj.id == max_id});
                   var max_phase = Math.max.apply(Math, dernier_phase_sous_projet.map(function(o){ return o.phase_sous_projet.code.split(' ')[1];}));
                   console.log(max_phase);
-                  if (dernier_phase_sous_projet[0].validation == 2)
+                  if (dernier_phase_sous_projet[0].validation == 1)
                   {
                     vm.allcurrentphase_sous_projet = vm.allphase_sous_projet_ddb.filter(function(obj)
                     { return obj.code == 'phase '+(parseInt(max_phase)+1);});

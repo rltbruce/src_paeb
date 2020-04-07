@@ -153,6 +153,8 @@
         },
         {titre:"Montant"
         },
+        {titre:"Objet utilisation"
+        },
         {titre:"Date transfert"
         },
         {titre:"Intitulé du compte"
@@ -175,6 +177,7 @@
               id_convention_entete:'',
               montant:'',
               date_transfert: '',
+              objet_utilisation: '',
               intitule_compte: '',
               rib: ''
             };       
@@ -194,6 +197,22 @@
           }                
                       
         };
+        vm.afficheobjet_utilisation = function(objet)
+        { 
+          var affiche = "Se procurer fourniture";
+          if (objet ==0 )
+          {
+            affiche = "Amelioration infrastructure";
+          }
+          return affiche;
+        }
+        vm.change_montant = function(item)
+        { item.objet_utilisation=1;
+          if (parseInt(item.montant)<=1000000)
+          {
+            item.objet_utilisation=0;
+          }
+        }
 
         //fonction ajout dans bdd
         function ajout(transfert_reliquat,suppression)
@@ -217,6 +236,7 @@
               item.$selected = false;
               item.id_convention_entete    = currentItem.id_convention_entete ;
               item.montant  = currentItem.montant ;
+              item.objet_utilisation  = currentItem.objet_utilisation ;
               item.date_transfert       = new Date(currentItem.date_transfert);              
               item.intitule_compte = currentItem.intitule_compte ;
               item.rib = currentItem.rib;
@@ -289,6 +309,7 @@
 
             item.id_convention_entete = vm.selectedItem.convention_entete.id ;
             item.montant  = vm.selectedItem.montant ;
+            item.objet_utilisation  = vm.selectedItem.objet_utilisation ;
             item.date_transfert  = new Date(vm.selectedItem.date_transfert) ;
             item.intitule_compte = vm.selectedItem.intitule_compte ;
             item.rib = parseInt(vm.selectedItem.rib);
@@ -370,6 +391,7 @@
                     date_transfert:    convertionDate(new Date(transfert_reliquat.date_transfert)),
                     intitule_compte:  transfert_reliquat.intitule_compte,
                     montant:   transfert_reliquat.montant,
+                    objet_utilisation:   transfert_reliquat.objet_utilisation,
                     rib:    transfert_reliquat.rib,
                     validation: 0               
                 });
@@ -468,6 +490,7 @@
                     date_transfert:    vm.selectedItem.date_transfert,
                     intitule_compte:  vm.selectedItem.intitule_compte,
                     montant:   vm.selectedItem.montant,
+                    objet_utilisation:   vm.selectedItem.objet_utilisation,
                     rib:    vm.selectedItem.rib,
                     validation: 1               
                 });

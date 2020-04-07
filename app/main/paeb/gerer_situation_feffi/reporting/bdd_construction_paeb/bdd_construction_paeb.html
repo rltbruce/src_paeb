@@ -6,13 +6,15 @@
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Traitement</span>
+                <span class="parent">Gerer situation feffi</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> convention cisco/feffi</span>
+                <span class="parent" href="javascript:;"> Reporting</span>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> BDD construction PAEB</span>
             </div>
 
-            <div class="title">convention cisco/feffi</div>
+            <div class="title">BDD construction PAEB</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -86,7 +88,7 @@
                     <div>
                       <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid||vm.affiche_load" ng-click="vm.resultatfiltrer(vm.filtre)"> Recherche
                       </md-button>
-                      <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid||vm.affiche_load" ng-click="vm.export_excel(vm.filtre)"> Export excel
+                      <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid||vm.affiche_load" ng-click="vm.exportExcel(vm.filtre)"> Export excel
                       </md-button>
                     </div>
                   </form>
@@ -101,8 +103,8 @@
         <ms-form-wizard flex>           
 
     <!-----debut convention_cife_tete ------>
-          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true"> 
-            <md-tab>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+             <md-tab>
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
@@ -112,7 +114,7 @@
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
                         <i class="icon-check s16"></i>
                     </span-->
-                    <span class="ms-form-wizard-step-text">Estimation de la convention</span>
+                    <span class="ms-form-wizard-step-text">Estimation convention </span>
                 </span>
               </md-tab-label>
               
@@ -131,50 +133,119 @@
                     </thead>
                              
                     <tbody>
-                      <tr ng-repeat="estimation_convention in vm.allestimation_convention"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
                         
                         <td>
                           <span>{{estimation_convention.feffi.denomination}}</span>
                         </td>
 
                         <td>                         
-                          <span>{{estimation_convention.date_signature}}</span>
+                          <span>{{estimation_convention.convention_detail.date_signature}}</span>
                         </td>
 
                         <td>                          
-                          <span>{{estimation_convention.cout_batiment}}</span>
+                          <span>{{estimation_convention.montant_batiment}}</span>
                         </td>
 
                         <td>       
-                          <span>{{estimation_convention.cout_latrine}}</span>
+                          <span>{{estimation_convention.montant_latrine}}</span>
                         </td>
 
                         <td>                          
-                          <span>{{estimation_convention.cout_mobilier}}</span>
+                          <span>{{estimation_convention.montant_mobilier}}</span>
                         </td>
 
                         <td>                         
-                          <span>{{estimation_convention.cout_maitrise_oeuvre}}</span>
+                          <span>{{estimation_convention.montant_maitrise}}</span>
                         </td>
 
                         <td>       
-                          <span>{{estimation_convention.total_depense}}</span>
+                          <span>{{estimation_convention.montant_depense}}</span>
                         </td>
 
                         <td>                          
-                          <span>{{estimation_convention.frais_fonctionment}}</span>
+                          <span>{{estimation_convention.montant_sousprojet}}</span>
                         </td>
 
                         <td>                         
-                          <span>{{estimation_convention.montant_convention}}</span>
+                          <span>{{estimation_convention.montant_total}}</span>
                         </td>
 
                         <td>                          
-                          <span>{{estimation_convention.avenant_convention}}</span>
+                          <span>{{estimation_convention.avenant_convention.montant}}</span>
                         </td>
 
                         <td>                         
-                          <span>{{estimation_convention.montant_apre_avenant}}</span>
+                          <span>{{estimation_convention.montant_apres_avenant}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">Suivi financier feffi</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="financ in ::vm.suivi_financier_daaf_feffi_column">
+                          <div class="table-header">
+                            <span class="column-title">{{financ.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.paiement1_feffi}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{vm.affichageDate(estimation_convention.date1_feffi)}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{estimation_convention.paiement2_feffi}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{vm.affichageDate(estimation_convention.date2_feffi)}}</span>
+                        </td>
+                        
+                        <td>
+                          <span>{{estimation_convention.paiement3_feffi}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{vm.affichageDate(estimation_convention.date3_feffi)}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.cumul_feffi}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.decaissement}} %</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
                         </td>
                       </tr>
                     </tbody>
@@ -185,8 +256,1398 @@
     
     <!-----fin convention_cife_tete ------>
 
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">Suivi financier feffi prestataire</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="financ in ::vm.suivi_financier_feffi_prestataire_column">
+                          <div class="table-header">
+                            <span class="column-title">{{financ.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.paiement_prestataire_total}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.decaissement_prestataire}} %</span>
+                        </td>
+
+                        <td>
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+            
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">Suivi financier feffi fonctionnement</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="financ in ::vm.suivi_financier_feffi_prestataire_column">
+                          <div class="table-header">
+                            <span class="column-title">{{financ.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.montant_fonct_feffi}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.decaissement_fonct_feffi}} %</span>
+                        </td>
+
+                        <td>
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Passation marchés pr </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.suivi_passation_pr_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.passation_pr.date_manifestation}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.passation_pr.date_lancement_dp}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.passation_pr.date_remise}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.passation_pr.nbr_offre_recu}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.passation_pr.date_os}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.contrat_pr.nom}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.contrat_pr.montant_contrat}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.paiement_pr_total}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.decaissement_pr}} %</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.montant_avenant}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.montant_apres_avenant_pr}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Module dpp </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.module_dpp_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.module_dpp.date_debut_previ_form}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_dpp.date_fin_previ_form}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_dpp.date_previ_resti}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.module_dpp.date_debut_reel_form}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_dpp.date_fin_reel_form}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_dpp.date_reel_resti}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.module_dpp.nbr_previ_parti}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_dpp.nbr_parti}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_dpp.nbr_previ_fem_parti}} %</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_dpp.nbr_feminin}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_dpp.lieu_formation}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Module odc </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.module_odc_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.module_odc.date_debut_previ_form}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_odc.date_fin_previ_form}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_odc.date_previ_resti}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.module_odc.date_debut_reel_form}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_odc.date_fin_reel_form}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_odc.date_reel_resti}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.module_odc.nbr_previ_parti}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_odc.nbr_parti}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_odc.nbr_previ_fem_parti}} %</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_odc.nbr_feminin}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_odc.lieu_formation}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Module pmc </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.module_pmc_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.module_pmc.date_debut_previ_form}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_pmc.date_fin_previ_form}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_pmc.date_previ_resti}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.module_pmc.date_debut_reel_form}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_pmc.date_fin_reel_form}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_pmc.date_reel_resti}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.module_pmc.nbr_previ_parti}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_pmc.nbr_parti}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_pmc.nbr_previ_fem_parti}} %</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_pmc.nbr_feminin}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_pmc.lieu_formation}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Module gfpc </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.module_gfpc_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.module_gfpc.date_debut_previ_form}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_gfpc.date_fin_previ_form}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_gfpc.date_previ_resti}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.module_gfpc.date_debut_reel_form}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_gfpc.date_fin_reel_form}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_gfpc.date_reel_resti}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.module_gfpc.nbr_previ_parti}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_gfpc.nbr_parti}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_gfpc.nbr_previ_fem_parti}} %</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_gfpc.nbr_feminin}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_gfpc.lieu_formation}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Module sep </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.module_sep_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.module_sep.date_debut_previ_form}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_sep.date_fin_previ_form}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_sep.date_previ_resti}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.module_sep.date_debut_reel_form}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_sep.date_fin_reel_form}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_sep.date_reel_resti}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.module_sep.nbr_previ_parti}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_sep.nbr_parti}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_sep.nbr_previ_fem_parti}} %</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_sep.nbr_feminin}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_sep.lieu_formation}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Module emies </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.module_emies_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.module_emies.date_debut_previ_form}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_emies.date_fin_previ_form}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_emies.date_previ_resti}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.module_emies.date_debut_reel_form}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_emies.date_fin_reel_form}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_emies.date_reel_resti}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.module_emies.nbr_previ_parti}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_emies.nbr_parti}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_emies.nbr_previ_fem_parti}} %</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.module_emies.nbr_feminin}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.module_emies.lieu_formation}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Passation marchés moe </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.passation_marches_moe_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.passation_moe.date_shortlist}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.passation_moe.date_manifestation}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.passation_moe.date_lancement_dp}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.passation_moe.date_remise}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.passation_moe.nbr_offre_recu}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.passation_moe.date_rapport_evaluation}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.passation_moe.date_demande_ano_dpfi}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.passation_moe.date_ano_dpfi}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.passation_moe.notification_intention}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.passation_moe.date_notification_attribution}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.passation_moe.date_signature_contrat}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.passation_moe.date_os}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.contrat_moe.nom_consultant}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{vm.affichageStatut(estimation_convention.passation_moe.statut)}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.contrat_moe.montant_contrat}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.montant_avenant_moe}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.montant_apre_avenant_moe}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Suivi prestation moe (MT,DAO,Manuel gestion)</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.suivi_prestation_mtdaomg_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.date_liv_mt}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.date_appro_mt}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{estimation_convention.date_liv_dao}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.date_appro_dao}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{estimation_convention.date_liv_mg}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.date_expir_pa}}</span>
+                        </td>                       
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Suivi prestation moe (Rapport mensuel)</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.suivi_prestation_rapmens_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details[0].rapport_mensuel"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.date_livraison}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.date_approbation}}</span>
+                        </td>                       
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Passation marchés mpe </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.passation_marches_mpe_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.passation_mpe.date_lancement}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.passation_mpe.date_remise}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.passation_mpe.nbr_soumissionnaire}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.passation_mpe.montant_moin_chere}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.passation_mpe.date_rapport_evaluation}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.passation_mpe.date_demande_ano_dpfi}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.passation_mpe.date_ano_dpfi}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.passation_mpe.notification_intention}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.passation_mpe.date_notification_attribution}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.contrat_mpe.date_signature}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.passation_mpe.date_os}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.contrat_mpe.nom}}</span>
+                        </td> 
+
+                        <td>                         
+                          <span>{{estimation_convention.contrat_mpe.cout_batiment}}</span>
+                        </td> 
+
+                        <td>                         
+                          <span>{{estimation_convention.contrat_mpe.cout_latrine}}</span>
+                        </td> 
+
+                        <td>                         
+                          <span>{{estimation_convention.contrat_mpe.cout_mobilier}}</span>
+                        </td> 
+
+                        <td>                         
+                          <span>{{estimation_convention.montant_avenant_mpe}}</span>
+                        </td> 
+
+                        <td>                         
+                          <span>{{estimation_convention.montant_apre_avenant_mpe}}</span>
+                        </td>                        
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Suivi prestation mpe </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.suivi_execution_mpe_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.prestation_mpe.libelle}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.prestation_mpe.date_pre_debu_trav}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.prestation_mpe.date_reel_debu_trav}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.prestation_mpe.delai_execution}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.prestation_mpe.date_expiration_assurance_mpe}}</span>
+                        </td>                                             
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Reception mpe </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.reception_mpe_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.reception_mpe.date_previ_recep_tech}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.reception_mpe.date_reel_tech}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.reception_mpe.date_leve_recep_tech}}</span>
+                        </td>
+
+                        <td>       
+                          <span>{{estimation_convention.reception_mpe.date_previ_recep_prov}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.reception_mpe.date_reel_recep_prov}}</span>
+                        </td>                                             
+
+                        <td>                         
+                          <span>{{estimation_convention.reception_mpe.date_previ_leve}}</span>
+                        </td>
+                         <td>
+                          <span>{{estimation_convention.reception_mpe.date_reel_lev_ava_rd}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{estimation_convention.reception_mpe.date_previ_recep_defi}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{estimation_convention.reception_mpe.date_reel_recep_defi}}</span>
+                        </td>                                            
+
+                        <td>                         
+                          <span>{{estimation_convention.observation}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Paiement batiment mpe </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.suivi_paiement_batiment_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.paiement1_batiment_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.date_approbation1_batiment_pre}}</span>
+                        </td>
+                        <td>
+                          <span>{{estimation_convention.paiement2_batiment_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.date_approbation2_batiment_pre}}</span>
+                        </td>
+                        <td>
+                          <span>{{estimation_convention.paiement3_batiment_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.date_approbation3_batiment_pre}}</span>
+                        </td>
+                        <td>
+                          <span>{{estimation_convention.paiement4_batiment_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.date_approbation4_batiment_pre}}</span>
+                        </td>
+                        <td>
+                          <span>{{estimation_convention.paiement5_batiment_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.date_approbation5_batiment_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.cumul_batiment}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.decaissement_batiment}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Paiement latrine mpe </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.suivi_paiement_latrine_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.paiement1_latrine_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.date_approbation1_latrine_pre}}</span>
+                        </td>
+                        <td>
+                          <span>{{estimation_convention.paiement2_latrine_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.date_approbation2_latrine_pre}}</span>
+                        </td>
+                        <td>
+                          <span>{{estimation_convention.paiement3_latrine_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.date_approbation3_latrine_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.cumul_latrine}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.decaissement_latrine}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Paiement mobilier mpe </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.suivi_paiement_mobilier_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.paiement1_mobilier_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.date_approbation1_mobilier_pre}}</span>
+                        </td>
+                        <td>
+                          <span>{{estimation_convention.paiement2_mobilier_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.date_approbation2_mobilier_pre}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.cumul_mobilier}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{estimation_convention.decaissement_mobilier}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Gestion reliquat fond </span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="estim in ::vm.transfert_reliquat_column">
+                          <div class="table-header">
+                            <span class="column-title">{{estim.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="estimation_convention in vm.convention_cisco_feffi_details"  ng-class="{selected: estimation_convention.$selected}" ng-click="vm.selectionTete(estimation_convention)">           
+                        
+                        <td>
+                          <span>{{estimation_convention.transfert_reliquat.montant}}</span>
+                        </td>
+                        <td>                         
+                          <span>{{vm.afficheobjet_utilisation(estimation_convention.transfert_reliquat.objet_utilisation)}}</span>
+                        </td>
+                        <td>
+                          <span>{{vm.affichesituation_utilisation(estimation_convention.transfert_reliquat.validation)}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
     <!-----debut convention_detail ------>
-            <md-tab ng-disabled="vm.stepOne==false">
+            <!--md-tab ng-disabled="vm.stepOne==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
 
@@ -339,46 +1800,16 @@
                     <tbody>
                       <tr ng-repeat="convention_cife_detail in vm.allconvention_cife_detail" ng-click="vm.selectionDetail(convention_cife_detail)">
                                                                             
-                        <td>  
-                          <!--a ng-if="!convention_cife_detail.$edit" ng-click="vm.modifierDetail(convention_cife_detail)" title="Modifier">
-                            <span class="icon-table-edit"></span>
-                          </a-->
-
-                          <md-button type="submit" class="md-raised md-accent" aria-label="Modifier" ng-if="!convention_cife_detail.$edit" ng-click="vm.modifierDetail(convention_cife_detail)" style="width:10%;">
-                            Modifier
-                          </md-button>
-                                    
-                          <!--a ng-if="!convention_cife_detail.$edit" ng-click="vm.supprimerDetail(convention_cife_detail)" title="Supprimer">
-                            <span class="icon-delete"></span>
-                          </a-->
-                          <md-button type="submit" class="md-raised md-accent" aria-label="Supprimer" ng-if="!convention_cife_detail.$edit" ng-click="vm.supprimerDetail(convention_cife_detail)" style="width:10%;">
-                            Supprimer
-                          </md-button>
-                                    
-                          <!--a ng-if="convention_cife_detail.$edit" ng-click="vm.annulerDetail(convention_cife_detail)" title="Annuler modification">
-                            <span class="icon-cancel"></span>
-                          </a-->
-
-                          <md-button type="submit" class="md-raised md-accent" aria-label="Annuler" ng-if="convention_cife_detail.$edit" ng-click="vm.annulerDetail(convention_cife_detail)" style="width:10%;">
-                            Annuler
-                          </md-button>
-                                    
-                          <!--a ng-if="convention_cife_detail.$edit && convention_cife_detail.intitule && convention_cife_detail.id_compte_feffi && convention_cife_detail.delai && convention_cife_detail.date_signature>''" ng-click="vm.ajoutDetail(convention_cife_detail,0)" title="Sauvegarder">
-                            <span class="icon-content-save"></span>
-                          </a-->
-                          <md-button type="submit" class="md-raised md-accent" aria-label="Sauvegarder" ng-if="convention_cife_detail.$edit && convention_cife_detail.intitule && convention_cife_detail.id_compte_feffi && convention_cife_detail.delai && convention_cife_detail.date_signature>''" ng-click="vm.ajoutDetail(convention_cife_detail,0)" style="width:10%;">
-                            Sauvegarder
-                          </md-button>
-                        </td>
+                       
                       </tr>
                     </tbody>
                   </table>
                 </div> 
               </md-tab-body>
-            </md-tab>
+            </md-tab-->
 
     <!-----debut divers cout construction ********------>
-      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
+      <!--md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
 
@@ -463,11 +1894,11 @@
             </table>
           </div>
         </md-tab-body>
-      </md-tab>
+      </md-tab-->
     <!-----fin divers cout construction ********------>
 
     <!-----debut batiment construction ------>
-      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
+      <!--md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
 
@@ -535,16 +1966,6 @@
                     <span ng-if="!batiment_construction.$edit">{{batiment_construction.type_batiment.nbr_salle}}</span>
                   </td>
 
-                  <!--td>
-                    <span ng-if="batiment_construction.$edit">
-                      <md-input-container style="width:100%;display: flex !important;">
-                        <label>Nombre batiment</label>
-                        <input name="nbr_batiment" type="number" ng-model="batiment_construction.nbr_batiment"/>
-                      </md-input-container>
-                    </span>                          
-                    <span ng-if="!batiment_construction.$edit">{{batiment_construction.nbr_batiment}}</span>
-                  </td-->
-
                   <td>
                     <span ng-if="batiment_construction.$edit">
                       <md-input-container style="width:100%;display: flex !important;">
@@ -578,11 +1999,11 @@
           </div>
           
         </md-tab-body>
-      </md-tab>
+      </md-tab-->
     <!-----fin batiment construction ------>
 
     <!-----debut detail latrine ------>
-      <md-tab ng-disabled="vm.stepThree==false">
+      <!--md-tab ng-disabled="vm.stepThree==false">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
             <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">L</span>
@@ -709,47 +2130,17 @@
                        
               <tbody>
                 <tr ng-repeat="latrine_construction in vm.alllatrine_construction" ng-click="vm.selectionLatrine_construction(latrine_construction)">                                               
-                  <td>  
-                    <!--a ng-if="!latrine_construction.$edit" ng-click="vm.modifierLatrine_construction(latrine_construction)" title="Modifier">
-                      <span class="icon-table-edit"></span>
-                    </a-->
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Modifier" ng-if="!latrine_construction.$edit" ng-click="vm.modifierLatrine_construction(latrine_construction)" style="width:10%;">
-                            Modifier
-                          </md-button>
-                              
-                    <!--a ng-if="!latrine_construction.$edit" ng-click="vm.supprimerLatrine_construction(latrine_construction)" title="Supprimer">
-                      <span class="icon-delete"></span>
-                    </a-->
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Supprimer" ng-if="!latrine_construction.$edit" ng-click="vm.supprimerLatrine_construction(latrine_construction)" style="width:10%;">
-                            Supprimer
-                    </md-button>
-                              
-                    <!--a ng-if="latrine_construction.$edit" ng-click="vm.annulerLatrine_construction(latrine_construction)" title="Annuler modification">
-                      <span class="icon-cancel"></span>
-                    </a-->
-
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Annuler" ng-if="latrine_construction.$edit" ng-click="vm.annulerLatrine_construction(latrine_construction)" style="width:10%;">
-                            Annuler
-                    </md-button>
-                              
-                    <!--a ng-if="latrine_construction.$edit && latrine_construction.id_type_latrine && latrine_construction.nbr_latrine>''" ng-click="vm.ajoutLatrine_construction(latrine_construction,0)" title="Sauvegarder">
-                      <span class="icon-content-save"></span>
-                    </a-->
-
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Sauvegarder" ng-if="latrine_construction.$edit && latrine_construction.id_type_latrine && latrine_construction.nbr_latrine>''" ng-click="vm.ajoutLatrine_construction(latrine_construction,0)" style="width:10%;">
-                            Sauvegarder
-                    </md-button>
-                  </td>
+                  
                 </tr>
               </tbody>
             </table>
           </div>
         </md-tab-body>
-      </md-tab>
+      </md-tab-->
     <!-----debut detail latrine ------>
 
     <!-----debut detail mobilier ------>
-      <md-tab ng-disabled="vm.stepThree==false">
+      <!--md-tab ng-disabled="vm.stepThree==false">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
             <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">M</span>
@@ -796,16 +2187,6 @@
                     </span>
                     <span ng-if="!mobilier_construction.$edit">{{mobilier_construction.type_mobilier.libelle}}</span>
                   </td>
-
-                  <!--td>
-                    <span ng-if="mobilier_construction.$edit">
-                      <md-input-container style="width:100%;display: flex !important;">
-                        <label>Nombre mobilier</label>
-                        <input name="nbr_mobilier" type="number" ng-model="mobilier_construction.nbr_mobilier"/>
-                      </md-input-container>
-                    </span>                          
-                    <span ng-if="!mobilier_construction.$edit">{{mobilier_construction.nbr_mobilier}}</span>
-                  </td-->
 
                   <td>
                     <span ng-if="mobilier_construction.$edit">
@@ -898,45 +2279,13 @@
               <tbody>
                 <tr ng-repeat="mobilier_construction in vm.allmobilier_construction" ng-click="vm.selectionMobilier_construction(mobilier_construction)">
                                                
-                  <td>  
-                    <!--a ng-if="!mobilier_construction.$edit" ng-click="vm.modifierMobilier_construction(mobilier_construction)" title="Modifier">
-                      <span class="icon-table-edit"></span>
-                    </a-->
-
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Modifier" ng-if="!mobilier_construction.$edit" ng-click="vm.modifierMobilier_construction(mobilier_construction)" style="width:10%;">
-                            Modifier
-                    </md-button>
-                              
-                    <!--a ng-if="!mobilier_construction.$edit" ng-click="vm.supprimerMobilier_construction(mobilier_construction)" title="Supprimer">
-                      <span class="icon-delete"></span>
-                    </a-->
-
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Supprimer" ng-if="!mobilier_construction.$edit" ng-click="vm.supprimerMobilier_construction(mobilier_construction)" style="width:10%;">
-                            Supprimer
-                    </md-button>
-                              
-                    <!--a ng-if="mobilier_construction.$edit" ng-click="vm.annulerMobilier_construction(mobilier_construction)" title="Annuler modification">
-                      <span class="icon-cancel"></span>
-                    </a-->
-
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Annuler" ng-if="mobilier_construction.$edit" ng-click="vm.annulerMobilier_construction(mobilier_construction)" style="width:10%;">
-                            Annuler
-                    </md-button>
-                              
-                    <!--a ng-if="mobilier_construction.$edit && mobilier_construction.id_type_mobilier>''" ng-click="vm.ajoutMobilier_construction(mobilier_construction,0)" title="Sauvegarder">
-                      <span class="icon-content-save"></span>
-                    </a-->
-
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Sauvegarder" ng-if="mobilier_construction.$edit && mobilier_construction.id_type_mobilier>''" ng-click="vm.ajoutMobilier_construction(mobilier_construction,0)" style="width:10%;">
-                            Sauvegarder
-                    </md-button>
-                  </td>
+                  
                 </tr>
               </tbody>
             </table>
           </div>
         </md-tab-body>
-      </md-tab>
+      </md-tab-->
     <!-----debut detail mobilier ------>
     <!-----fin convention_detail ------>
 <md-tab>

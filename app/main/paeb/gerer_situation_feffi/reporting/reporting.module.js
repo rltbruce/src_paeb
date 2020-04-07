@@ -14,7 +14,7 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_feffi.reporting', {
             title : 'Reporting',
-            icon  : 'icon-data',
+            icon  : 'icon-tile-four',
             weight: 6
         });
 

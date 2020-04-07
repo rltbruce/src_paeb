@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_moe.demande_paiement_moe.demande_batiment_moe', {
-            title: 'D_Batiment MOE',
+            title: 'Batiment MOE',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_moe_demande_paiement_moe_demande_batiment_moe',
 			weight: 3,

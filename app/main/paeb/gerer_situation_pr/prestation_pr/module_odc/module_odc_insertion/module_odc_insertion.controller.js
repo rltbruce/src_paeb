@@ -455,7 +455,7 @@
                     nbr_previ_fem_parti: module_odc.nbr_previ_fem_parti,
                     date_debut_previ_form: convertionDate(new Date(module_odc.date_debut_previ_form)),
                     date_fin_previ_form: convertionDate(new Date(module_odc.date_fin_previ_form)),
-                    id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
+                    id_contrat_partenaire_relai: module_odc.contrat_partenaire_relai.id,
                     lieu_formation: module_odc.lieu_formation,
                     observation:module_odc.observation,
                     validation : 1              

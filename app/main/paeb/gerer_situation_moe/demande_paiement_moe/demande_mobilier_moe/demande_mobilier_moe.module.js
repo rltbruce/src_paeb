@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_moe.demande_paiement_moe.demande_mobilier_moe', {
-            title: 'D_mobilier MOE',
+            title: 'Mobilier MOE',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_moe_demande_paiement_moe_demande_mobilier_moe',
 			weight: 3,

@@ -17,7 +17,7 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_moe.demande_paiement_moe', {
-            title : 'D_paiement MOE',
+            title : 'Demande payement',
             icon  : 'icon-data',
             weight: 3
         });

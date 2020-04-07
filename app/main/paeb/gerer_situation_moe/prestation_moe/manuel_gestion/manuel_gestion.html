@@ -9,6 +9,8 @@
                 <span class="parent">Gerer situation MOE</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Prestation MOE</span>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
                 <span class="parent" href="javascript:;"> Manuel de gestion</span>
             </div>
 
@@ -179,11 +181,11 @@
                           <span class="column-title">Description</span>
                         </div>
                       </th>
-                      <th class="secondary-text">
+                      <!--th class="secondary-text">
                         <div class="table-header">
                           <span class="column-title">Fichier</span>
                         </div>
-                      </th>
+                      </th-->
                       <th class="secondary-text">
                         <div class="table-header">
                           <span class="column-title">Date livraison</span>
@@ -229,7 +231,7 @@
                         <span ng-if="!manuel_gestion.$edit">{{manuel_gestion.description}}</span>
                       </td>
                                 
-                      <td>
+                      <!--td>
                         <span ng-if="manuel_gestion.$edit" style="display: inline-block !important;">
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Fichier</label>
@@ -245,7 +247,7 @@
                         </span>
                                   
                         <span ng-if="!manuel_gestion.$edit">{{manuel_gestion.fichier}}</span>
-                      </td>
+                      </td-->
 
                       <td>
                         <span ng-if="manuel_gestion.$edit">
@@ -283,7 +285,7 @@
                           <span class="icon-cancel"></span>
                         </a>
                                   
-                        <a ng-if="manuel_gestion.$edit && manuel_gestion.description && manuel_gestion.fichier && manuel_gestion.date_livraison>''" ng-click="vm.ajoutManuel_gestion(manuel_gestion,0)" title="Sauvegarder">
+                        <a ng-if="manuel_gestion.$edit && manuel_gestion.description && manuel_gestion.date_livraison>''" ng-click="vm.ajoutManuel_gestion(manuel_gestion,0)" title="Sauvegarder">
                           <span class="icon-content-save"></span>
                         </a>
                       </td>

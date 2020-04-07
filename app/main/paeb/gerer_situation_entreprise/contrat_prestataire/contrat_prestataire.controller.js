@@ -651,13 +651,6 @@
                     if(suppression==0)
                     {                        
                         vm.selectedItemAvenant_prestataire.prestataire = press[0];
-
-                        vm.selectedItemAvenant_prestataire.description   = avenant_prestataire.description ;
-                        vm.selectedItemAvenant_prestataire.num_contrat   = avenant_prestataire.num_contrat ;
-                        vm.selectedItemAvenant_prestataire.cout_batiment   = avenant_prestataire.cout_batiment ;
-                        vm.selectedItemAvenant_prestataire.cout_mobilier = avenant_prestataire.cout_mobilier ;
-                        vm.selectedItemAvenant_prestataire.cout_latrine = avenant_prestataire.cout_latrine;
-                        vm.selectedItemAvenant_prestataire.date_signature = avenant_prestataire.date_signature ;
                         
                         vm.selectedItemAvenant_prestataire.$selected  = false;
                         vm.selectedItemAvenant_prestataire.$edit      = false;
@@ -674,12 +667,6 @@
                 else
                 {
                   avenant_prestataire.prestataire = press[0];
-
-                  avenant_prestataire.description   = avenant_prestataire.description ;
-                  avenant_prestataire.cout_batiment   = avenant_prestataire.cout_batiment ;
-                  avenant_prestataire.cout_latrine   = avenant_prestataire.cout_latrine ;
-                  avenant_prestataire.cout_mobilier = avenant_prestataire.cout_mobilier ;
-                  avenant_prestataire.date_signature = avenant_prestataire.date_signature; 
 
                   avenant_prestataire.id  =   String(data.response);              
                   NouvelItemAvenant_prestataire=false;

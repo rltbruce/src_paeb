@@ -452,7 +452,7 @@
                     nbr_previ_fem_parti: module_gfpc.nbr_previ_fem_parti,
                     date_debut_previ_form: convertionDate(new Date(module_gfpc.date_debut_previ_form)),
                     date_fin_previ_form: convertionDate(new Date(module_gfpc.date_fin_previ_form)),
-                    id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
+                    id_contrat_partenaire_relai: module_gfpc.contrat_partenaire_relai.id,
                     lieu_formation: module_gfpc.lieu_formation,
                     observation:module_gfpc.observation,
                     validation : 1              
