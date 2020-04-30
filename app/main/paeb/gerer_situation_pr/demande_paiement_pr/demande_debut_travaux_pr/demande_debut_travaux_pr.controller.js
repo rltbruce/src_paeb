@@ -51,7 +51,7 @@
     }])
         .controller('Demande_debut_travaux_prController', Demande_debut_travaux_prController);
     /** @ngInject */
-    function Demande_debut_travaux_prController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore)
+    function Demande_debut_travaux_prController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore,apiUrlFile)
     {
 		    var vm = this;
         vm.selectedItemContrat_partenaire_relai = {};
@@ -323,8 +323,8 @@
 
             vm.showboutonValider = true;
 
-            vm.stepTwo = true;
-            vm.stepThree = false;
+            vm.stepOne = true;
+            vm.stepTwo = false;
            }
              
         };
@@ -753,7 +753,10 @@
 
         //insertion ou mise a jours ou suppression item dans bdd Justificatif_debut_travaux_pr
         function insert_in_baseJustificatif_debut_travaux_pr(justificatif_debut_travaux_pr,suppression)
-        {
+        {   var contrat_partenaire_relai = vm.allcontrat_partenaire_relai.filter(function(obj)
+          {
+            return obj.id == vm.selectedItemDemande_debut_travaux_pr.contrat_partenaire_relai.id;
+          });
             //add
             var config =
             {
@@ -793,7 +796,7 @@
                           if(file)
                           { 
 
-                            var name_file = vm.selectedItemContrat_partenaire_relai.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                            var name_file = contrat_partenaire_relai[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                             var fd = new FormData();
                             fd.append('file', file);
@@ -902,7 +905,7 @@
                     if(file)
                     { 
 
-                      var name_file = vm.selectedItemContrat_partenaire_relai.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                      var name_file = contrat_partenaire_relai[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                       var fd = new FormData();
                       fd.append('file', file);
@@ -972,6 +975,10 @@
 
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
+        }
+        vm.download_piece = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
         }
 /**********************************fin justificatif debut_travaux****************************************/
 

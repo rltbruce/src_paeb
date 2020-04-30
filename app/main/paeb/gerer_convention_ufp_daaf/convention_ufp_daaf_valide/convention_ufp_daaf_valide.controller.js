@@ -9,6 +9,8 @@
     function Convention_ufp_daaf_valideController($mdDialog, $scope, apiFactory, $state,$cookieStore)
     {
 		    var vm = this;
+
+    //initialisation convetion ufp/daaf entete 
         vm.selectedItemConvention_ufp_daaf_entete = {} ;
         vm.allconvention_ufp_daaf_entete  = [] ;
         vm.stepOne           = false;
@@ -17,9 +19,9 @@
         
 
       //initialisation convetion ufp/daaf detail  
-      
         vm.selectedItemConvention_ufp_daaf_detail = {} ;
         vm.allconvention_ufp_daaf_detail  = [] ; 
+        vm.showbuttonNouvDetail = true;
         vm.allcompte_daaf  = [] ; 
 
     //initialisation convention
@@ -35,35 +37,69 @@
           autoWidth: false          
         };
 
-         //style
+        //style
         vm.dtOptionsperso = {
           dom: '<"top">rt<"bottom"<"left"<"length">><"right"<"info"><"pagination">>>',
           pagingType: 'simple',
           autoWidth: false          
         };
 
+        //style
+        vm.dtOptionsperso2 = {
+          dom: '<"top"><"bottom"<"left"<"length">><"right"<"info"><"pagination">>>',
+          pagingType: 'simple',
+          autoWidth: false          
+        };
+
+         var id_user = $cookieStore.get('id');
+
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+            //var roles = result.data.response.roles;
+
+            var roles = result.data.response.roles.filter(function(obj)
+            {
+                return obj == 'DAAF'
+            });
+            if (roles.length>0)
+            {
+              vm.permissionboutonValider = true;
+            }
+
+        });
 /*****************Debut StepOne convention_ufp_daaf_entete****************/
 
   //col table
         vm.convention_ufp_daaf_entete_column = [        
+        {titre:"Numero vague"},        
         {titre:"Référence convention"},
         {titre:"Objet"},        
         {titre:"Référence financement"},
         {titre:"Montant à transferer"},
         {titre:"Frais bancaire"},        
-        {titre:"Montant convention"}];
+        {titre:"Montant convention"},        
+        {titre:"Nombre bénéficiaire"}];
 
   //recuperation donnée programmation
-        apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_ufp_daaf_validation","validation",1).then(function(result)
+        apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_ufp_daaf_validation","validation",0).then(function(result)
         {
             vm.allconvention_ufp_daaf_entete = result.data.response;
         });
 
-     
+   //recuperation donnée programmation
+        apiFactory.getAll("compte_daaf/index").then(function(result)
+        {
+            vm.allcompte_daaf = result.data.response;
+            ////console.log(vm.allcompte_daaf);
+        });
+
+
         //fonction selection item region
         vm.selectionConvention_ufp_daaf_entete= function (item)
         {
             vm.selectedItemConvention_ufp_daaf_entete = item;
+            currentItemConvention_ufp_daaf_entete     = JSON.parse(JSON.stringify(vm.selectedItemConvention_ufp_daaf_entete));
+           // vm.allconvention_ufp_daaf_entete= [] ;
             
            if (vm.selectedItemConvention_ufp_daaf_entete.id!=0)
            {
@@ -100,7 +136,6 @@
             vm.selectedItemConvention_ufp_daaf_entete.$selected = true;
         });
 
- 
 
   /*****************Fin StepOne convention_ufp_daaf_entete****************/
 
@@ -110,10 +145,11 @@
         vm.convention_ufp_daaf_detail_column = [        
         {titre:"Nom banque"},
         {titre:"Adresse banque"},        
-        {titre:"RIB"},
+        {titre:"compte"},
         {titre:"Delai"},
         {titre:"Date signature"},        
-        {titre:"Observation"}];
+        {titre:"Observation"},
+        {titre:"Action"}];
 
   //recuperation donnée programmation
         apiFactory.getAll("convention_ufp_daaf_detail/index").then(function(result)
@@ -121,11 +157,17 @@
             vm.allconvention_ufp_daaf_detail = result.data.response;
         });
 
-         //fonction selection item region
+
+        //fonction selection item region
         vm.selectionConvention_ufp_daaf_detail= function (item)
         {
             vm.selectedItemConvention_ufp_daaf_detail = item;
-             
+            if (item.$selected==false)
+            {
+              currentItemConvention_ufp_daaf_detail     = JSON.parse(JSON.stringify(vm.selectedItemConvention_ufp_daaf_detail));
+           
+            }
+            
             vm.stepTwo = false;
             vm.stepThree = false;
            if (vm.selectedItemConvention_ufp_daaf_detail.id!=0)
@@ -147,6 +189,8 @@
             vm.selectedItemConvention_ufp_daaf_detail.$selected = true;
         });
 
+
+
   /*****************Fin StepOne convention_ufp_daaf_detail****************/
 
 
@@ -158,6 +202,10 @@
         },
         {titre:"Feffi"
         },
+        {titre:"Site"
+        },
+        {titre:"Type convention"
+        },
         {titre:"Reference convention"
         },
         {titre:"Objet"
@@ -167,6 +215,8 @@
         {titre:"Cout éstimé"
         },
         {titre:"Avancement"
+        },
+        {titre:"Utilisateur"
         }];
         
         
@@ -189,26 +239,12 @@
              vm.selectedItemConvention_cisco_feffi_entete.$selected = true;
 
         });
-            
+
+             
 
   /*****************Fin StepTwo convention****************/        
 
-        //Alert
-        vm.showAlert = function(titre,content)
-        {
-          $mdDialog.show(
-            $mdDialog.alert()
-            .parent(angular.element(document.querySelector('#popupContainer')))
-            .clickOutsideToClose(false)
-            .parent(angular.element(document.body))
-            .title(titre)
-            .textContent(content)
-            .ariaLabel('Alert')
-            .ok('Fermer')
-            .targetEvent()
-          );
-        }
-
+  
         //format date affichage sur datatable
         vm.formatDate = function (daty)
         {
@@ -238,6 +274,15 @@
                 var date_final= annee+"-"+mois+"-"+jour;
                 return date_final
             }      
+        }
+        vm.affichage_type_convention = function(type_convention)
+        { 
+          var affichage = 'Initial';
+          if(type_convention == 0)
+          {
+            affichage = 'Autre';
+          }
+          return affichage;
         }
     }
 

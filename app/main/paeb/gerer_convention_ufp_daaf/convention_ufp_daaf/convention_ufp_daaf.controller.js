@@ -82,13 +82,13 @@
 
   //col table
         vm.convention_ufp_daaf_entete_column = [        
+        {titre:"Numero vague"},        
         {titre:"Référence convention"},
         {titre:"Objet"},        
         {titre:"Référence financement"},
         {titre:"Montant à transferer"},
         {titre:"Frais bancaire"},        
         {titre:"Montant convention"},        
-        {titre:"Numero vague transfert"},        
         {titre:"Nombre bénéficiaire"},
         {titre:"Action"}];
 
@@ -110,31 +110,48 @@
       //Masque de saisi ajout
         vm.ajouterConvention_ufp_daaf_entete = function ()
         { 
+          var maxnum =1;
           if (NouvelItemConvention_ufp_daaf_entete == false)
           {
-            var items = {
-              $edit: true,
-              $selected: true,
-              id: '0',
-              ref_convention: '',
-              objet: '',
-              ref_financement: '',
-              montant_convention: 0,                            
-              montant_trans_comm: 0,
-              frais_bancaire: 0,
-              num_vague: 0,
-              nbr_beneficiaire: 0
-            };         
-            vm.allconvention_ufp_daaf_entete.push(items);
-            vm.allconvention_ufp_daaf_entete.forEach(function(conv)
-            {
-              if(conv.$selected==true)
-              {
-                vm.selectedItemConvention_ufp_daaf_entete = conv;
-              }
-            });
 
-            NouvelItemConvention_ufp_daaf_entete = true ;
+            apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','conventionmaxBydate','date_today',convertionDate(new Date())).then(function(result)
+              {
+                 /***************************** Debut ref_convention auto********************/
+
+                    var maxconventiontoday = result.data.response;
+                    if (maxconventiontoday.length!=0)
+                    {
+                      maxnum =parseInt(maxconventiontoday[0].ref_convention.split('/')[2])+1;                    
+                    }
+                    var ref_auto = 'CO/'+vm.getAnneeDate(new Date())+'/'+maxnum;
+
+                  /***************************** Fin ref_convention auto********************/
+                    
+                    var items = {
+                      $edit: true,
+                      $selected: true,
+                      id: '0',
+                      ref_convention: ref_auto,
+                      objet: '',
+                      ref_financement: 'Crédit IDA N° 62170',
+                      montant_convention: 0,                            
+                      montant_trans_comm: 0,
+                      frais_bancaire: 0,
+                      num_vague: '',
+                      nbr_beneficiaire: 0
+                    };         
+                    vm.allconvention_ufp_daaf_entete.push(items);
+                    
+                    vm.allconvention_ufp_daaf_entete.forEach(function(conv)
+                    {
+                      if(conv.$selected==true)
+                      {
+                        vm.selectedItemConvention_ufp_daaf_entete = conv;
+                      }
+                    });
+
+                    NouvelItemConvention_ufp_daaf_entete = true ;
+              });
           }else
           {
             vm.showAlert('Ajout convention_ufp_daaf_entete','Un formulaire d\'ajout est déjà ouvert!!!');
@@ -405,6 +422,25 @@
           }).error(function (data){vm.showAlert('Error','Erreur lors de validation de donnée');});
         }
 
+        vm.changevague = function(item)
+        {
+          var objet= 'Transfert d’argent vers les deux cent (200) communautés de la première vague';
+          if (item.num_vague==2)
+          {
+            objet= 'Transfert d’argent vers les deux cent (200) communautés de la deuxième vague';
+          }
+          item.objet= objet;
+        }
+        vm.affichevague = function(num_vague)
+        {
+          var affiche = 'Première vague';
+          if (num_vague==2)
+          {
+            affiche= 'Deuxième vague';
+          }
+          return affiche;
+        }
+
   /*****************Fin StepOne convention_ufp_daaf_entete****************/
 
   /*****************Debut StepOne convention_ufp_daaf_detail****************/
@@ -413,7 +449,7 @@
         vm.convention_ufp_daaf_detail_column = [        
         {titre:"Nom banque"},
         {titre:"Adresse banque"},        
-        {titre:"RIB"},
+        {titre:"compte"},
         {titre:"Delai"},
         {titre:"Date signature"},        
         {titre:"Observation"},
@@ -435,8 +471,8 @@
               $selected: true,
               id: '0',
               id_compte_daaf:'',
-              adresse_banque:'',
-              rib:'',
+              agence:'',
+              compte:'',
               delai:'',
               date_signature:'',
               observation:''
@@ -480,9 +516,8 @@
             item.$selected = false;
 
             item.id_compte_daaf  = currentItemConvention_ufp_daaf_detail.compte_daaf.id ;
-            item.nom_banque  = currentItemConvention_ufp_daaf_detail.compte_daaf.nom_banque ;
-            item.adresse_banque  = currentItemConvention_ufp_daaf_detail.compte_daaf.adresse_banque ;
-            item.rib  = currentItemConvention_ufp_daaf_detail.compte_daaf.rib ;
+            item.agence  = currentItemConvention_ufp_daaf_detail.compte_daaf.agence ;
+            item.compte  = currentItemConvention_ufp_daaf_detail.compte_daaf.compte ;
             item.delai = currentItemConvention_ufp_daaf_detail.delai ;
             item.observation  = currentItemConvention_ufp_daaf_detail.observation ;
             item.date_signature  = new Date(currentItemConvention_ufp_daaf_detail.date_signature) ;  
@@ -544,9 +579,8 @@
             item.$selected = true;
 
             item.id_compte_daaf  = vm.selectedItemConvention_ufp_daaf_detail.compte_daaf.id ;
-            item.nom_banque  = vm.selectedItemConvention_ufp_daaf_detail.compte_daaf.nom_banque ;
-            item.adresse_banque  = vm.selectedItemConvention_ufp_daaf_detail.compte_daaf.adresse_banque ;
-            item.rib  = vm.selectedItemConvention_ufp_daaf_detail.compte_daaf.rib ;
+            item.agence  = vm.selectedItemConvention_ufp_daaf_detail.compte_daaf.agence ;
+            item.compte  = vm.selectedItemConvention_ufp_daaf_detail.compte_daaf.compte ;
             item.delai = parseInt(vm.selectedItemConvention_ufp_daaf_detail.delai) ;
             item.observation  = vm.selectedItemConvention_ufp_daaf_detail.observation ;
             item.date_signature  = new Date(vm.selectedItemConvention_ufp_daaf_detail.date_signature) 
@@ -671,8 +705,8 @@
           {
             return obj.id == item.id_compte_daaf;
           });
-          item.adresse_banque = compte[0].adresse_banque;
-          item.rib = compte[0].rib;
+          item.agence = compte[0].agence;
+          item.compte = compte[0].compte;
         }
 
   /*****************Fin StepOne convention_ufp_daaf_detail****************/
@@ -686,6 +720,10 @@
         },
         {titre:"Feffi"
         },
+        {titre:"Site"
+        },
+        {titre:"Type convention"
+        },
         {titre:"Reference convention"
         },
         {titre:"Objet"
@@ -695,6 +733,8 @@
         {titre:"Cout éstimé"
         },
         {titre:"Avancement"
+        },
+        {titre:"Utilisateur"
         },
         {titre:"Action"
         }];
@@ -781,15 +821,18 @@
             //var validation = 1;
             var datas = $.param({
                     supprimer: suppression,
-                    id:        convention_cisco_feffi_entete.id,      
+                    id:        convention_cisco_feffi_entete.id,
                     id_cisco: convention_cisco_feffi_entete.cisco.id,
                     id_feffi: convention_cisco_feffi_entete.feffi.id,
+                    id_site: convention_cisco_feffi_entete.site.id,
+                    type_convention:    convention_cisco_feffi_entete.type_convention,
                     objet:    convention_cisco_feffi_entete.objet,
                     ref_financement:  convention_cisco_feffi_entete.ref_financement,
                     ref_convention:   convention_cisco_feffi_entete.ref_convention,
                     montant_total:    convention_cisco_feffi_entete.montant_total,
                     avancement:    convention_cisco_feffi_entete.avancement,
-                    id_convention_ufpdaaf: vm.selectedItemConvention_ufp_daaf_entete.id,
+                    id_user:    convention_cisco_feffi_entete.user.id,
+                    id_convention_ufpdaaf : vm.selectedItemConvention_ufp_daaf_entete.id,
                     validation: 2               
                 });
 
@@ -797,15 +840,18 @@
             {
                 datas = $.param({
                     supprimer: suppression,
-                    id:        convention_cisco_feffi_entete.id,      
+                    id:        convention_cisco_feffi_entete.id,
                     id_cisco: convention_cisco_feffi_entete.cisco.id,
                     id_feffi: convention_cisco_feffi_entete.feffi.id,
+                    id_site: convention_cisco_feffi_entete.site.id,
+                    type_convention:    convention_cisco_feffi_entete.type_convention,
                     objet:    convention_cisco_feffi_entete.objet,
                     ref_financement:  convention_cisco_feffi_entete.ref_financement,
                     ref_convention:   convention_cisco_feffi_entete.ref_convention,
                     montant_total:    convention_cisco_feffi_entete.montant_total,
                     avancement:    convention_cisco_feffi_entete.avancement,
-                    validation: 1               
+                    id_user:    convention_cisco_feffi_entete.user.id,
+                    validation: 1              
                 });
             }
             
@@ -848,21 +894,17 @@
                 headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
             };
             
-            var getId = 0;
-            if (NouvelItemConvention_ufp_daaf_entete==false)
-            {
-                getId = vm.selectedItemConvention_ufp_daaf_entete.id; 
-            } 
-            
             var datas = $.param({
                     supprimer: '0',
-                    id:        convention_ufp_daaf_entete.id,
+                    id:      convention_ufp_daaf_entete.id,
                     objet:   convention_ufp_daaf_entete.objet,
                     ref_convention: convention_ufp_daaf_entete.ref_convention,
-                    montant_convention: montant_conv,
+                    montant_convention: convention_ufp_daaf_entete.montant_convention,
                     ref_financement: convention_ufp_daaf_entete.ref_financement,
-                    montant_trans_comm: montant_trans,
+                    montant_trans_comm: convention_ufp_daaf_entete.montant_trans_comm,
                     frais_bancaire: convention_ufp_daaf_entete.frais_bancaire,
+                    num_vague: convention_ufp_daaf_entete.num_vague,
+                    nbr_beneficiaire: convention_ufp_daaf_entete.nbr_beneficiaire,
                     validation: 0               
                 });
                 //factory
@@ -924,7 +966,27 @@
                 return date_final
             }      
         }
+        vm.getAnneeDate = function (daty)
+        {
+          if (daty) 
+          {   
+            var date  = new Date(daty);
+              var annee = date.getFullYear();
+              return annee;
+          }            
+
+        }
+        vm.affichage_type_convention = function(type_convention)
+        { 
+          var affichage = 'Initial';
+          if(type_convention == 0)
+          {
+            affichage = 'Autre';
+          }
+          return affichage;
+        }
     }
+    
 
 
 /*****************Debut ConventionDialogue Controlleur  ****************/    
@@ -942,6 +1004,10 @@
         },
         {titre:"Feffi"
         },
+        {titre:"Site"
+        },
+        {titre:"Type convention"
+        },
         {titre:"Reference convention"
         },
         {titre:"Objet"
@@ -951,6 +1017,8 @@
         {titre:"Cout éstimé"
         },
         {titre:"Avancement"
+        },
+        {titre:"Utilisateur"
         }];
 
         //style
@@ -960,7 +1028,7 @@
           autoWidth: false          
         };
 
-        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioninvalidedaaf').then(function(result)
+        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalidedaaf').then(function(result)
         {dg.allconventionDialog = result.data.response;});
 
         dg.cancel = function()
@@ -1004,6 +1072,15 @@
               });
             dg.selectedItemConventionDialog.$selected = true;
         });
+        dg.affichage_type_convention = function(type_convention)
+        { 
+          var affichage = 'Initial';
+          if(type_convention == 0)
+          {
+            affichage = 'Autre';
+          }
+          return affichage;
+        }
 
     }
 

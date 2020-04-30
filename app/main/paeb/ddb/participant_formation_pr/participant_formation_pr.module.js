@@ -9,6 +9,7 @@
             'app.paeb.ddb.participant_formation_pr.situation_participant_emies',
             'app.paeb.ddb.participant_formation_pr.situation_participant_pmc',
             'app.paeb.ddb.participant_formation_pr.situation_participant_gfpc',
+            'app.paeb.ddb.participant_formation_pr.classification_site',
         ])
         .config(config);
 
@@ -16,8 +17,9 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.participant_formation_pr', {
-            title : 'Participant F_PR',
-            icon  : 'icon-map-marker-multiple'
+            title : 'Participant formation PR',
+            icon  : 'icon-account-network',
+            weight: 15
         });
     }
 

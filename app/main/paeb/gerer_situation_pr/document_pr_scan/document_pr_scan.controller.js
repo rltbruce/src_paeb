@@ -374,7 +374,7 @@
                     observation: document_pr_scan.observation,
                     id_contrat_partenaire_relai: document_pr_scan.id_contrat_partenaire_relai,
                     id_document_pr: document_pr_scan.id_document_pr,
-                    id_convention_entete: vm.selectedItemConvention_cisco_feffi_entete.id,
+                    //id_convention_entete: vm.selectedItemConvention_cisco_feffi_entete.id,
                     validation:0               
                 });
                 console.log(datas);
@@ -429,9 +429,9 @@
                                                       fichier: document_pr_scan.fichier,
                                                       date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
                                                       observation: document_pr_scan.observation,
-                                                      id_contrat_partenaire_relai: document_pr_scan.id_contrat_partenaire_relai,
+                                                      id_contrat_partenaire_relai: contr[0].id,
                                                       id_document_pr: document_pr_scan.id_document_pr,
-                                                      id_convention_entete: vm.selectedItemConvention_cisco_feffi_entete.id,
+                                                      //id_convention_entete: vm.selectedItemConvention_cisco_feffi_entete.id,
                                                       validation:0
                                         });
                                       apiFactory.add("document_pr_scan/index",datas, config).success(function (data)
@@ -453,9 +453,9 @@
                                         fichier: document_pr_scan.fichier,
                                         date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
                                         observation: document_pr_scan.observation,
-                                        id_contrat_partenaire_relai: document_pr_scan.id_contrat_partenaire_relai,
+                                        id_contrat_partenaire_relai: contr[0].id,
                                         id_document_pr: document_pr_scan.id_document_pr,
-                                        id_convention_entete: vm.selectedItemConvention_cisco_feffi_entete.id,
+                                        //id_convention_entete: vm.selectedItemConvention_cisco_feffi_entete.id,
                                         validation:0               
                                     });
                                   apiFactory.add("document_pr_scan/index",datas, config).success(function (data)
@@ -542,9 +542,9 @@
                                                 fichier: document_pr_scan.fichier,
                                                 date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
                                                 observation: document_pr_scan.observation,
-                                                id_contrat_partenaire_relai: document_pr_scan.id_contrat_partenaire_relai,
+                                                id_contrat_partenaire_relai: contr[0].id,
                                                 id_document_pr: document_pr_scan.id_document_pr,
-                                                id_convention_entete: vm.selectedItemConvention_cisco_feffi_entete.id,                                                
+                                                //id_convention_entete: vm.selectedItemConvention_cisco_feffi_entete.id,                                                
                                                 validation:0
                                   });
                                 apiFactory.add("document_pr_scan/index",datas, config).success(function (data)
@@ -565,9 +565,9 @@
                                   fichier: document_pr_scan.fichier,
                                   date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
                                   observation: document_pr_scan.observation,
-                                  id_contrat_partenaire_relai: document_pr_scan.id_contrat_partenaire_relai,
+                                  id_contrat_partenaire_relai: contr[0].id,
                                   id_document_pr: document_pr_scan.id_document_pr,
-                                  id_convention_entete: vm.selectedItemConvention_cisco_feffi_entete.id,
+                                 // id_convention_entete: vm.selectedItemConvention_cisco_feffi_entete.id,
                                   validation:0               
                               });
                             apiFactory.add("document_pr_scan/index",datas, config).success(function (data)
@@ -630,7 +630,7 @@
                     observation: document_pr_scan.observation,
                     id_contrat_partenaire_relai: document_pr_scan.contrat_partenaire_relai.id,
                     id_document_pr: document_pr_scan.document_pr.id,
-                    id_convention_entete: document_pr_scan.convention_entete.id,
+                    //id_convention_entete: document_pr_scan.convention_entete.id,
                     validation:1               
                 });
                 console.log(datas);

@@ -15,8 +15,8 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.prestation_mpe', {
             title : 'Prestation',
-            icon  : 'icon-data',
-            weight: 3
+            icon  : 'icon-blur-radial',
+            weight: 7
         });
 
 

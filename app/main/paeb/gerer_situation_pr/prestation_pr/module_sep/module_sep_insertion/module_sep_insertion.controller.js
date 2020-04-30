@@ -40,7 +40,7 @@
         vm.stepOne = false;
         vm.stepTwo = false;
 
-        vm.showbuttonNouvPassation=true;
+        //vm.showbuttonNouvPassation=true;
         vm.showbuttonNouvRapport =true;
         vm.date_now         = new Date();
         vm.showbuttonValidation = false;
@@ -81,10 +81,10 @@
       
       console.log(vm.allmodule_sep);
 
-      if (result.data.response.length!=0)
+     /* if (result.data.response.length!=0)
       {
-          vm.showbuttonNouvPassation=false;
-      }
+          //vm.showbuttonNouvPassation=false;
+      }*/
   });
 
 //col table
@@ -392,7 +392,7 @@
                         vm.selectedItemModule_sep.$selected  = false;
                         vm.selectedItemModule_sep.$edit      = false;
                         vm.selectedItemModule_sep ={};
-                        vm.showbuttonNouvPassation= false;
+                        //vm.showbuttonNouvPassation= false;
                     }
                     else 
                     {    
@@ -400,7 +400,7 @@
                       {
                           return obj.id !== vm.selectedItemModule_sep.id;
                       });
-                      vm.showbuttonNouvPassation= true;
+                      //vm.showbuttonNouvPassation= true;
                     }
                     
                 }
@@ -411,7 +411,7 @@
 
                   module_sep.id  =   String(data.response);              
                   NouvelItemModule_sep=false;
-                  vm.showbuttonNouvPassation= false;
+                  //vm.showbuttonNouvPassation= false;
             }
               vm.showbuttonValidation = false;
               module_sep.$selected = false;

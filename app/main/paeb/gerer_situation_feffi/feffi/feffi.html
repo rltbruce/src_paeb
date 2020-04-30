@@ -407,6 +407,110 @@
             </md-tab-body>
           </md-tab>
     <!-----FIN membre ------>
+
+     <!-----Debut membre ------>
+          <md-tab ng-disabled="vm.stepTwo==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">T</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Titulaire compte</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body>
+                <div style="widht:100%;">  
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterMembre_titulaire()" style="width:10%;">
+                      Nouveau
+                    </md-button>
+                </div>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.membre_titulaire_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="membre_titulaire in vm.allmembre_titulaire"  ng-class="{selected: membre_titulaire.$selected}" ng-click="vm.selectionMembre_titulaire(membre_titulaire)">           
+                    
+                        <td>
+                          <span ng-if="membre_titulaire.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Nom</label>
+                              <md-select ng-model="membre_titulaire.id_membre"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_membre_titulaire(membre_titulaire)">
+                                <md-option ng-repeat="membre in vm.allmembre" value="{{membre.id}}">
+                                                                    {{membre.nom}}
+                                </md-option>
+                              </md-select>
+                            </md-input-container>  
+                          </span>
+                          <span ng-if="!membre_titulaire.$edit">{{membre_titulaire.membre.nom}}</span>
+                        </td>
+                                
+                      <td>
+                        <span ng-if="membre_titulaire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;" >
+                            <label>Prenom</label>
+                            <input name="prenom" type="text" ng-model="membre_titulaire.prenom" disabled/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!membre_titulaire.$edit">{{membre_titulaire.membre.prenom}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="membre_titulaire.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Occupation</label>
+                            <md-select ng-model="membre_titulaire.occupation"style="overflow: hidden;text-overflow: ellipsis;" disabled>
+                                <md-option value="1">President
+                                </md-option>
+                                <md-option value="2">Secretaire
+                                </md-option>
+                                <md-option value="3">Simple membre_titulaire
+                                </md-option>
+                              </md-select>
+                          </md-input-container>
+                        </span>                          
+                        <span ng-if="!membre_titulaire.$edit">{{vm.affichage_occupation(membre_titulaire.membre.occupation)}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!membre_titulaire.$edit" ng-click="vm.modifierMembre_titulaire(membre_titulaire)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!membre_titulaire.$edit" ng-click="vm.supprimerMembre_titulaire(membre_titulaire)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="membre_titulaire.$edit" ng-click="vm.annulerMembre_titulaire(membre_titulaire)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="membre_titulaire.$edit && membre_titulaire.id_membre>''" ng-click="vm.ajoutMembre_titulaire(membre_titulaire,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+    <!-----FIN membre ------> 
           </md-tabs>  
         </ms-form-wizard>           
       </div>

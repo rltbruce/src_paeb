@@ -677,7 +677,8 @@
           var prevu = 0;
           var cumul = 0;
           apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','getDetailcoutByConvention','id_convention_ufp_daaf_entete',item.id_convention_ufp_daaf_entete).then(function(result)
-          {
+          {   var conventioufpdaaf = vm.allconvention_ufp_daaf_entete.filter(function(obj)
+                          {return obj.id == item.id_convention_ufp_daaf_entete;});
               vm.alldetailcout = result.data.response;
                 console.log(vm.alldetailcout);
               if (vm.allcurenttranche_deblocage_daaf[0].code =='tranche 1')
@@ -698,8 +699,8 @@
                   
               }
 
-              reste= vm.allconvention_ufp_daaf_entete[0].montant_trans_comm - cumul;
-
+              reste= conventioufpdaaf[0].montant_trans_comm - cumul;
+console.log(conventioufpdaaf);
               item.periode = vm.allcurenttranche_deblocage_daaf[0].periode;
               item.pourcentage = vm.allcurenttranche_deblocage_daaf[0].pourcentage;
 
@@ -729,7 +730,7 @@
           
          
         }
-        vm.validation_convention = function()
+        vm.valider_convention = function()
         {
             maj_in_baseDemande_deblocage_daaf_validation_daaf(vm.selectedItemDemande_deblocage_daaf,0);
         }

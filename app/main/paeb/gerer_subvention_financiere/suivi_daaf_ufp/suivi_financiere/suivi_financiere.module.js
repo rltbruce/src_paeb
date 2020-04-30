@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.suivi_daaf_ufp.suivi_financiere', {
-            title: 'Suivi financière',
+            title: 'Suivi DAAF/UFP',
             icon  : 'icon-tile-four',
             state: 'app.paeb_gerer_subvention_financiere_suivi_daaf_ufp_suivi_financiere',
 			weight: 6

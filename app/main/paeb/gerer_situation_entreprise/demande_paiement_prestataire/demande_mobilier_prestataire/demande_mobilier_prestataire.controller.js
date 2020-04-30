@@ -51,7 +51,7 @@
     }])
         .controller('Demande_mobilier_prestataireController', Demande_mobilier_prestataireController);
     /** @ngInject */
-    function Demande_mobilier_prestataireController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore)
+    function Demande_mobilier_prestataireController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore,apiUrlFile)
     {
 		    var vm = this;
 
@@ -317,8 +317,8 @@
                 console.log(vm.alljustificatif_mobilier_pre);
             });
             vm.showboutonValider = true;
-            vm.stepFive = true;
-            vm.stepSixe = false;
+            vm.stepOne = true;
+            vm.stepTwo = false;
            }
              
         };
@@ -522,7 +522,7 @@
           }
 
           reste= parseInt(contra[0].cout_mobilier) - cumul;
-
+          
           item.periode = vm.allcurenttranche_demande_mobilier_mpe[0].periode;
           item.pourcentage = vm.allcurenttranche_demande_mobilier_mpe[0].pourcentage;
 
@@ -745,7 +745,12 @@
 
         //insertion ou mise a jours ou suppression item dans bdd Justificatif_mobilier_pre
         function insert_in_baseJustificatif_mobilier_pre(justificatif_mobilier_pre,suppression)
-        {
+        {   
+
+            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratBydemande_mobilier','id_demande_mobilier_pre',vm.selectedItemDemande_mobilier_prest.id).then(function(result)
+            {
+                var contrat_presta = result.data.response;
+                console.log(contrat_presta);
             //add
             var config =
             {
@@ -782,7 +787,7 @@
                 { 
                  getIdFile = String(data.response);
                 }
-                var name_file = vm.selectedItemContrat_prestataire.num_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                var name_file = contrat_presta[0].num_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                 var fd = new FormData();
                 fd.append('file', file);
@@ -897,7 +902,12 @@
                 }
             //vm.showThParcourir = false;
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+          });
+        }
 
+        vm.download_piece = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
         }
 /**********************************fin mpe_sousmissionnaire****************************************/
 

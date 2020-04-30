@@ -142,7 +142,7 @@ console.log(item);
 
 
 /**********************************debut passation_marches_moe****************************************/
-//col table
+        //col table
         vm.passation_marches_moe_column = [
         {titre:"Date shortlist"
         },

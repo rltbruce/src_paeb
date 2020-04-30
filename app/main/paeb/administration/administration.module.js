@@ -33,7 +33,7 @@
 
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases', {
             title: 'Données de base',
-            icon  : 'icon-account-multiple'
+            icon  : 'icon-package-variant-closed' //icon-image-filter-tilt-shift
             //state: 'app.population_administration_secteur'
         });
     }
@@ -49,7 +49,7 @@
             {
                 var user = result.data.response;
                 var permission = user.roles;
-                var permissions = ["ADMIN"];
+                var permissions = ["ADMIN","BCAF","DAAF","DPFI","OBCAF","ODAAF","ODPFI","UFP"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
               

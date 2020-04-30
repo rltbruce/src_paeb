@@ -42,7 +42,7 @@
         vm.stepThree = false;
         vm.stepFor = false;
 
-        vm.showbuttonNouvPassation=true;
+        //vm.showbuttonNouvPassation=true;
         vm.showbuttonNouvRapport =true;
         vm.showbuttonValidation = false;
         vm.date_now         = new Date();
@@ -76,7 +76,7 @@
             vm.selectedItemPartenaire_relai = item;
            // vm.allconvention= [] ;
             
-            vm.showbuttonNouvPassation=true;
+            //vm.showbuttonNouvPassation=true;
             //recuperation donnée convention
             if (vm.selectedItemPartenaire_relai.id!=0)
             { 
@@ -137,7 +137,7 @@
 
                   if (result.data.response.length!=0)
                   {
-                      vm.showbuttonNouvPassation=false;
+                      //vm.showbuttonNouvPassation=false;
                   }
               });
            }
@@ -183,10 +183,10 @@
       
       console.log(vm.allmodule_dpp);
 
-      if (result.data.response.length!=0)
+      /*if (result.data.response.length!=0)
       {
-          vm.showbuttonNouvPassation=false;
-      }
+          //vm.showbuttonNouvPassation=false;
+      }*/
   });
 //col table
         vm.module_dpp_column = [
@@ -294,7 +294,6 @@
             item.date_debut_previ_form   = currentItemModule_dpp.date_debut_previ_form ;
             item.date_fin_previ_form   = currentItemModule_dpp.date_fin_previ_form ;
             item.id_contrat_partenaire_relai  = currentItemModule_dpp.id_contrat_partenaire_relai;
-            item.id_classification_site = currentItemModule_dpp.id_prestataire ;
             item.nbr_previ_parti    = currentItemModule_dpp.nbr_previ_parti ;
             item.date_reel_resti  = currentItemModule_dpp.date_reel_resti ;
             item.nbr_previ_fem_parti   = currentItemModule_dpp.nbr_previ_fem_parti;
@@ -490,7 +489,7 @@
                         vm.selectedItemModule_dpp.$selected  = false;
                         vm.selectedItemModule_dpp.$edit      = false;
                         vm.selectedItemModule_dpp ={};
-                        vm.showbuttonNouvPassation= false;
+                        //vm.showbuttonNouvPassation= false;
                     }
                     else 
                     {    
@@ -498,7 +497,7 @@
                       {
                           return obj.id !== vm.selectedItemModule_dpp.id;
                       });
-                      vm.showbuttonNouvPassation= true;
+                      //vm.showbuttonNouvPassation= true;
                     }
                     
                 }
@@ -509,7 +508,7 @@
 
                   module_dpp.id  =   String(data.response);              
                   NouvelItemModule_dpp=false;
-                  vm.showbuttonNouvPassation= false;
+                  //vm.showbuttonNouvPassation= false;
             }
               module_dpp.$selected = false;
               module_dpp.$edit = false;

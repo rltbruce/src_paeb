@@ -11,10 +11,10 @@
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
                 <span class="parent" href="javascript:;"> Demande de payement</span>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Demande Mobilier</span>
+                <span class="parent" href="javascript:;"> Demande payement Mobilier</span>
             </div>
 
-            <div class="title">Payement Mobilier</div>
+            <div class="title">Demande payement Mobilier</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -203,7 +203,7 @@
                           <span class="icon-cancel"></span>
                         </a>
                                   
-                        <a ng-if="demande_mobilier_prest.$edit && demande_mobilier_prest.objet && demande_mobilier_prest.description && demande_mobilier_prest.montant && demande_mobilier_prest.date  && demande_mobilier_prest.ref_facture && demande_mobilier_prest.id_tranche_demande_mpe && demande_mobilier_prest.cumul && demande_mobilier_prest.reste>''" ng-click="vm.ajoutDemande_mobilier_prest(demande_mobilier_prest,0)" title="Sauvegarder">
+                        <a ng-if="demande_mobilier_prest.$edit && demande_mobilier_prest.objet && demande_mobilier_prest.description && demande_mobilier_prest.montant && demande_mobilier_prest.date  && demande_mobilier_prest.ref_facture && demande_mobilier_prest.id_tranche_demande_mpe>''" ng-click="vm.ajoutDemande_mobilier_prest(demande_mobilier_prest,0)" title="Sauvegarder">
                           <span class="icon-content-save"></span>
                         </a>
                       </td>
@@ -300,6 +300,10 @@
                         <a ng-if="!justificatif_mobilier_pre.$edit" ng-click="vm.supprimerJustificatif_mobilier_pre(justificatif_mobilier_pre)" title="Supprimer">
                           <span class="icon-delete"></span>
                         </a>
+
+                        <a ng-if="!justificatif_mobilier_pre.$edit" ng-click="vm.download_piece(justificatif_mobilier_pre)" title="Telecharger">
+                          <span class="icon-box-download"></span>
+                        </a>
                                   
                         <a ng-if="justificatif_mobilier_pre.$edit" ng-click="vm.annulerJustificatif_mobilier_pre(justificatif_mobilier_pre)" title="Annuler modification">
                           <span class="icon-cancel"></span>
@@ -316,7 +320,7 @@
 
             </md-tab-body>
           </md-tab>
-          
+          <md-tab></md-tab>
     <!-----FIN justification mobilier_pre ------>    
         </md-tabs>
         </ms-form-wizard>                  

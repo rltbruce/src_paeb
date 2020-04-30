@@ -29,8 +29,9 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.phase_sous_projets', {
             title: 'Phase sous projet',
-            icon  : 'icon-clipboard-text',
-            state: 'app.paeb_ddb_phase_sous_projets'
+            icon  : 'icon-chart-line',
+            state: 'app.paeb_ddb_phase_sous_projets',
+            weight: 14
         });
     }
 

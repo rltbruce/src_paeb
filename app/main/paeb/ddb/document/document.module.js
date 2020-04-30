@@ -16,7 +16,8 @@
     {
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.document', {
             title : 'Document',
-            icon  : 'icon-map-marker-multiple'
+            icon  : 'icon-clipboard-text',
+            weight: 16
         });
     }
 

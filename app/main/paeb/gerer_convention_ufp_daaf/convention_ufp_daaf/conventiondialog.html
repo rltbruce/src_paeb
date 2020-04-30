@@ -20,33 +20,45 @@
                      
             <tbody>
               <tr ng-repeat="conventionDialog in allconventionDialog"  ng-class="{selected: conventionDialog.$selected}" ng-click="selectionConventionDialog(conventionDialog)">
-                <td>
-                  <span ng-if="!conventionDialog.$edit">{{conventionDialog.cisco.code}}</span>
-                </td>
+                        <td>
+                          <span>{{conventionDialog.cisco.code}}</span>
+                        </td>
 
-                <td>
-                  <span ng-if="!conventionDialog.$edit">{{conventionDialog.feffi.denomination}}</span>
-                </td>
+                        <td>
+                          <span>{{conventionDialog.feffi.denomination}}</span>
+                        </td>
 
-                <td>                          
-                  <span ng-if="!conventionDialog.$edit">{{conventionDialog.ref_convention}}</span>
-                </td>
+                        <td>
+                          <span>{{conventionDialog.site.denomination_epp}}</span>
+                        </td>
 
-                <td>                          
-                  <span ng-if="!conventionDialog.$edit">{{conventionDialog.objet}}</span>
-                </td>
+                        <td>
+                          <span>{{affichage_type_convention(conventionDialog.type_convention)}}</span>
+                        </td>
 
-                <td>
-                  <span ng-if="!conventionDialog.$edit">{{conventionDialog.ref_financement}}</span>
-                </td>
-                          
-                <td>                            
-                  <span ng-if="!conventionDialog.$edit">{{conventionDialog.montant_total}}</span>
-                </td>
+                        <td>                         
+                          <span>{{conventionDialog.ref_convention}}</span>
+                        </td>
 
-                <td>                            
-                  <span ng-if="!conventionDialog.$edit">{{formatDate(conventionDialog.avancement)}}</span>
-                </td>
+                        <td>                         
+                          <span>{{conventionDialog.objet}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{conventionDialog.ref_financement}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{conventionDialog.montant_total}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{conventionDialog.avancement}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{conventionDialog.user.nom}}</span>
+                        </td>
               </tr>
             </tbody>
           </table>

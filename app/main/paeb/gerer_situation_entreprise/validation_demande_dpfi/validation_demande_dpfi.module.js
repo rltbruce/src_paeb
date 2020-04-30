@@ -17,8 +17,8 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.validation_demande_dpfi', {
             title : 'D_validation (dpfi)',
-            icon  : 'icon-data',
-            weight: 3
+            icon  : 'icon-blur-radial',
+            weight: 5
         });
 
 

@@ -33,7 +33,7 @@
             title: 'Scan document',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_entreprise_document_prestataire_scan',
-			weight: 3,
+			weight: 9,
             hidden: function()
             {
                     return vs;

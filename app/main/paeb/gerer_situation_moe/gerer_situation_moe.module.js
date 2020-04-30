@@ -13,7 +13,8 @@
             'app.paeb.gerer_situation_moe.validation_demande_paiement_moe_daaf',
             'app.paeb.gerer_situation_moe.paiement_moe',
             'app.paeb.gerer_situation_moe.document_moe_scan',
-            'app.paeb.gerer_situation_moe.dossier_moe'
+            'app.paeb.gerer_situation_moe.dossier_moe',
+            'app.paeb.gerer_situation_moe.suivi_financier_moe'
             ])       
         .config(config);
         var vs ;

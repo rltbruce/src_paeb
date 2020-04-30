@@ -29,8 +29,9 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.acces_zone', {
             title: 'Acces zone',
-            icon  : 'icon-clipboard-text',
-            state: 'app.paeb_ddb_acces_zone'
+            icon  : 'icon-fullscreen-exit',
+            state: 'app.paeb_ddb_acces_zone',
+            weight: 5
         });
     }
 

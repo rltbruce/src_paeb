@@ -11,9 +11,9 @@
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
                 <span class="parent" href="javascript:;"> Demande de payement</span>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Payement batiment</span>
+                <span class="parent" href="javascript:;"> Demande payement batiment</span>
             </div>
-            <div class="title">Payement batiment</div>
+            <div class="title">Demande payement batiment</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -30,14 +30,14 @@
           <md-tab>
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">1</span>
-                    <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
                       <i class="icon-check s16"></i>
                     </span-->
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
                         <i class="icon-check s16"></i>
                     </span-->
-                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepThree==true">3
+                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepThree==true">1
                     </span>
                     <span class="ms-form-wizard-step-text">demande batiment</span>
                 </span>
@@ -320,6 +320,9 @@
                                   
                         <a ng-if="!justificatif_batiment_pre.$edit" ng-click="vm.supprimerJustificatif_batiment_pre(justificatif_batiment_pre)" title="Supprimer">
                           <span class="icon-delete"></span>
+                        </a>
+                        <a ng-if="!justificatif_batiment_pre.$edit" ng-click="vm.download_piece(justificatif_batiment_pre)" title="Telecharger">
+                          <span class="icon-box-download"></span>
                         </a>
                                   
                         <a ng-if="justificatif_batiment_pre.$edit" ng-click="vm.annulerJustificatif_batiment_pre(justificatif_batiment_pre)" title="Annuler modification">

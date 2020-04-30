@@ -14,7 +14,8 @@
             'app.paeb.gerer_situation_feffi.decaiss_fonct_feffi_valide',
             'app.paeb.gerer_situation_feffi.convention_cisco_feffi_avenant'
             ])       
-        .config(config);
+        .config(config)
+        .run(testPermission);
         var vs ;
 
     /** @ngInject */
@@ -23,7 +24,11 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_feffi', {
             title : 'Gérer situation feffi',
             icon  : 'icon-data',
-            weight: 2
+            weight: 2,
+            hidden: function()
+            {
+                    return vs;
+            }
         });
 
 
@@ -43,7 +48,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["BCAF","OBCAF","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

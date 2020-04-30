@@ -5,7 +5,7 @@
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_ufp_daaf', [			
             'app.paeb.gerer_subvention_financiere.niveau_ufp_daaf.demande_deblocage_daaf',
-            'app.paeb.gerer_subvention_financiere.niveau_ufp_daaf.demande_deblocage_daaf_validation_daaf',
+            //'app.paeb.gerer_subvention_financiere.niveau_ufp_daaf.demande_deblocage_daaf_validation_daaf',
             'app.paeb.gerer_subvention_financiere.niveau_ufp_daaf.demande_deblocage_daaf_validation_ufp',
             'app.paeb.gerer_subvention_financiere.niveau_ufp_daaf.transfert_ufp'
             ])       

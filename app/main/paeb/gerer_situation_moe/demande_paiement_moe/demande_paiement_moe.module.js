@@ -7,7 +7,7 @@
             'app.paeb.gerer_situation_moe.demande_paiement_moe.demande_debut_travaux_moe',
             'app.paeb.gerer_situation_moe.demande_paiement_moe.demande_batiment_moe',
             'app.paeb.gerer_situation_moe.demande_paiement_moe.demande_latrine_moe',
-            'app.paeb.gerer_situation_moe.demande_paiement_moe.demande_mobilier_moe',
+            //'app.paeb.gerer_situation_moe.demande_paiement_moe.demande_mobilier_moe',
             'app.paeb.gerer_situation_moe.demande_paiement_moe.demande_fin_travaux_moe',
             ])       
         .config(config);
@@ -39,7 +39,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["DDB","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

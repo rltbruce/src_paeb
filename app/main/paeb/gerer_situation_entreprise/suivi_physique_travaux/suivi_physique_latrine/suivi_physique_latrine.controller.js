@@ -249,9 +249,6 @@
           titre:"Latrine"
         },
         {
-          titre:"Nombre latrine"
-        },
-        {
           titre:"cout latrine"
         }];
 

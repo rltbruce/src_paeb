@@ -1,0 +1,250 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer situation entreprise</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Suivi physique travaux</span>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Suivi mobilier</span>
+            </div>
+
+            <div class="title">Suivi mobilier</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+    <!-----debut contrat ------>
+
+           <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">Contrat</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="ciscT in ::vm.contrat_prestataire_column">
+                          <div class="table-header">
+                            <span class="column-title">{{ciscT.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="contrat_prestataire in vm.allcontrat_prestataire"  ng-class="{selected: contrat_prestataire.$selected}" ng-click="vm.selectionContrat_prestataire(contrat_prestataire)"> 
+
+                        <td>
+                                  
+                        <span>{{contrat_prestataire.prestataire.nom}}</span>
+                      </td>
+                                
+                      <td>  
+                        <span>{{contrat_prestataire.description}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span>{{contrat_prestataire.num_contrat}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span>{{contrat_prestataire.cout_batiment}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span>{{contrat_prestataire.cout_latrine}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span>{{contrat_prestataire.cout_mobilier}}</span>
+                      </td>
+
+                      <td>                          
+                        <span>{{vm.affichageDate(contrat_prestataire.date_signature)}}</span>
+                      </td>
+
+                      <td>                          
+                        <span>{{vm.affichageDate(contrat_prestataire.date_prev_deb_trav)}}</span>
+                      </td>
+
+                      <td>                         
+                        <span>{{vm.affichageDate(contrat_prestataire.date_reel_deb_trav)}}</span>
+                      </td>
+                                
+                      <td>        
+                        <span>{{contrat_prestataire.delai_execution}}</span>
+                      </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+    <!-----FIN contrat ------>    
+
+            <!-----debut detail mobilier ------>
+            <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                    <span class="ms-form-wizard-step-text">demande mobilier entreprise</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="mem in ::vm.demande_mobilier_prestataire_column">
+                        <div class="table-header">
+                          <span class="column-title">{{mem.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="demande_mobilier_prestataire in vm.alldemande_mobilier_prestataire"  ng-class="{selected: demande_mobilier_prestataire.$selected}" ng-click="vm.selectionDemande_mobilier_prestataire(demande_mobilier_prestataire)">
+                                
+                      <td>                                  
+                        <span>{{vm.affichageDate(demande_mobilier_prestataire.date_approbation)}}</span>
+                      </td>          
+                      <td>                                  
+                        <span>{{demande_mobilier_prestataire.objet}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span>{{demande_mobilier_prestataire.description}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span>{{demande_mobilier_prestataire.ref_facture}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span>{{demande_mobilier_prestataire.tranche.libelle}}</span>
+                      </td>
+
+                       <td>                          
+                        <span>{{demande_mobilier_prestataire.montant}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span>{{demande_mobilier_prestataire.cumul}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span>{{demande_mobilier_prestataire.anterieur}}</span>
+                      </td>
+
+                       <td>                          
+                        <span>{{demande_mobilier_prestataire.tranche.periode}}</span>
+                      </td>
+
+                       <td>                          
+                        <span>{{demande_mobilier_prestataire.tranche.pourcentage}}</span>
+                      </td>
+                                
+                      <td>      
+                        <span>{{demande_mobilier_prestataire.reste}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span>{{vm.affichageDate(demande_mobilier_prestataire.date)}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span>{{vm.situationdemande(demande_mobilier_prestataire.validation)}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab>
+          <md-tab ng-disabled="vm.stepTwo==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">2</span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                      <i class="icon-check s16"></i>
+                    </span>
+                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Paiement MPE</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+               <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="pai in ::vm.paiement_mobilier_prestataire_column">
+                        <div class="table-header">
+                          <span class="column-title">{{pai.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="paiement_mobilier_prestataire in vm.allpaiement_mobilier_prestataire"  ng-class="{selected: paiement_mobilier_prestataire.$selected}" ng-click="vm.selectionPaiement_mobilier_prestataire(paiement_mobilier_prestataire)">
+                                
+                      <td>                                  
+                        <span>{{paiement_mobilier_prestataire.montant_paiement}}</span>
+                      </td>
+
+                       <td>                          
+                        <span>{{vm.affichageDate(paiement_mobilier_prestataire.date_paiement)}}</span>
+                      </td>
+                                
+                      <td>       
+                        <span>{{paiement_mobilier_prestataire.observation}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </md-tab-body>
+          </md-tab >
+          <md-tab >
+          </md-tab >
+    <!-----FIN davancement_batiment_doc------>
+          </md-tabs>
+        </ms-form-wizard>
+          
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

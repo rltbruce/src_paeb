@@ -17,7 +17,8 @@
             'app.paeb.gerer_situation_entreprise',
             'app.paeb.gerer_situation_moe',
             'app.paeb.gerer_situation_pr',
-            'app.paeb.gerer_situation_reliquat'
+            'app.paeb.gerer_situation_reliquat',
+            'app.paeb.convention_suivi'
         ] ;
 
     angular

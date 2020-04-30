@@ -27,8 +27,15 @@
         vm.selectedItemCompte_feffi = {} ;
         vm.allcompte_feffi = [] ;
 
+        vm.ajoutMembre_titulaire = ajoutMembre_titulaire ;
+        var NouvelItemMembre_titulaire=false;
+        var currentItemMembre_titulaire;
+        vm.selectedItemMembre_titulaire = {} ;
+        vm.allmembre_titulaire = [] ;
+
         vm.stepOne = false;
         vm.stepTwo = false;
+        vm.stepThree = false;
 
         //style
         vm.dtOptions = {
@@ -190,6 +197,8 @@
                   console.log(vm.allcompte_feffi);
               });
               vm.stepOne = true;
+              vm.stepTwo = false;
+
             }
             
         };
@@ -312,13 +321,6 @@
                     if(suppression==0)
                     {
                         vm.selectedItem.ecole       = eco[0];
-
-                        /*vm.selectedItem.identifiant      = feffi.identifiant ;
-                        vm.selectedItem.denomination      = feffi.denomination ;
-                        vm.selectedItem.nbr_feminin      = feffi.nbr_feminin ;
-                        vm.selectedItem.nbr_membre      = feffi.nbr_membre ;
-                        vm.selectedItem.adresse      = feffi.adresse ;
-                        vm.selectedItem.observation      = feffi.observation ;*/
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
                         vm.selectedItem ={};
@@ -333,14 +335,6 @@
                 }
                 else
                 {
-
-                  /*feffi.identifiant      = feffi.identifiant ;
-                  feffi.denomination      = feffi.denomination ;
-                  feffi.nbr_feminin      = feffi.nbr_feminin ;
-                  feffi.nbr_membre      = feffi.nbr_membre ;
-                  feffi.adresse      = feffi.adresse ;
-                  feffi.observation      = feffi.observation ;*/
-
                   feffi.ecole = eco[0];
                   feffi.id  =   String(data.response);              
                   NouvelItem=false;
@@ -422,7 +416,7 @@
             item.prenom   = currentItemMembre.prenom ;
             item.sexe      = currentItemMembre.sexe;
             item.age      = currentItemMembre.age ;
-            item.occupation   = currentItem.occupation ; 
+            item.occupation   = currentItemMembre.occupation ; 
           }else
           {
             vm.allmembre = vm.allmembre.filter(function(obj)
@@ -556,11 +550,6 @@
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItemMembre.nom        = membre.nom;
-                        vm.selectedItemMembre.prenom       = membre.prenom;
-                        vm.selectedItemMembre.sexe        = membre.sexe;
-                        vm.selectedItemMembre.age       = membre.age;
-                        vm.selectedItemMembre.occupation        = membre.occupation;
                         vm.selectedItemMembre.$selected  = false;
                         vm.selectedItemMembre.$edit      = false;
                         vm.selectedItemMembre ={};
@@ -592,11 +581,6 @@
                 }
                 else
                 {
-                  membre.nom        = membre.nom;
-                  membre.prenom       = membre.prenom;
-                  membre.sexe        = membre.sexe;
-                  membre.age       = membre.age;
-                  membre.occupation        = membre.occupation;
                   membre.id  =   String(data.response);              
                   NouvelItemMembre=false;
 
@@ -615,7 +599,7 @@
         }
 
         /**********************************debut compte****************************************/
-//col table
+        //col table
         vm.compte_feffi_column = [
         {titre:"Nom banque"},
         {titre:"Adresse banque"},
@@ -699,7 +683,16 @@
         {
             vm.selectedItemCompte_feffi = item;
             vm.nouvelItemCompte_feffi   = item;
-            currentItemCompte_feffi    = JSON.parse(JSON.stringify(vm.selectedItemCompte_feffi)); 
+            if (item.$selected == false || item.$selected == undefined)
+            {
+                currentItemCompte_feffi    = JSON.parse(JSON.stringify(vm.selectedItemCompte_feffi));
+                vm.stepTwo = true;
+                apiFactory.getAPIgeneraliserREST("membre_titulaire/index",'id_compte',vm.selectedItemCompte_feffi.id).then(function(result)
+                {
+                    vm.allmembre_titulaire = result.data.response; 
+                    console.log( vm.allmembre_titulaire);
+                });
+            } 
         };
         $scope.$watch('vm.selectedItemCompte_feffi', function()
         {
@@ -816,10 +809,6 @@
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItemCompte_feffi.nom_banque        = compte_feffi.nom_banque;
-                        vm.selectedItemCompte_feffi.adresse_banque       = compte_feffi.adresse_banque;
-                        vm.selectedItemCompte_feffi.rib        = compte_feffi.rib;
-                        vm.selectedItemCompte_feffi.numero_compte       = compte_feffi.numero_compte;
                         vm.selectedItemCompte_feffi.membre_feffi        = memb[0];
                         vm.selectedItemCompte_feffi.$selected  = false;
                         vm.selectedItemCompte_feffi.$edit      = false;
@@ -835,10 +824,6 @@
                 }
                 else
                 {
-                  compte_feffi.nom_banque        = compte_feffi.nom_banque;
-                  compte_feffi.adresse_banque       = compte_feffi.adresse_banque;
-                  compte_feffi.rib        = compte_feffi.rib;
-                  compte_feffi.numero_compte       =compte_feffi.numero_compte;
                   compte_feffi.membre_feffi        = memb[0];
                   compte_feffi.id  =   String(data.response);              
                   NouvelItemCompte_feffi=false;
@@ -885,6 +870,252 @@
           return affiche;
         };
 /**********************************fin membre****************************************/
+
+
+        /**********************************debut compte titulaire****************************************/
+        vm.membre_titulaire_column = [
+        {titre:"Nom"},
+        {titre:"Prenom"},
+        {titre:"Occupation"},
+        {titre:"Action"}]; 
+
+        //Masque de saisi ajout
+        vm.ajouterMembre_titulaire = function ()
+        { 
+          if (NouvelItemMembre_titulaire == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              nom: '',
+              prenom: '',
+              occupation:''
+            };         
+            vm.allmembre_titulaire.push(items);
+            vm.allmembre_titulaire.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemMembre_titulaire = mem;
+              }
+            });
+
+            NouvelItemMembre_titulaire = true ;
+          }else
+          {
+            vm.showAlert('Ajout membre_titulaire','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutMembre_titulaire(membre_titulaire,suppression)
+        {
+            if (NouvelItemMembre_titulaire==false)
+            {
+                test_existanceMembre_titulaire (membre_titulaire,suppression); 
+            } 
+            else
+            {
+                insert_in_baseMembre_titulaire(membre_titulaire,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation membre_titulaire
+        vm.annulerMembre_titulaire = function(item)
+        {
+          if (NouvelItemMembre_titulaire == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.nom      = currentItemMembre_titulaire.nom ;
+            item.prenom   = currentItemMembre_titulaire.prenom ;
+            item.occupation   = currentItemMembre_titulaire.occupation ; 
+          }else
+          {
+            vm.allmembre_titulaire = vm.allmembre_titulaire.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemMembre_titulaire.id;
+            });
+          }
+
+          vm.selectedItemMembre_titulaire = {} ;
+          NouvelItemMembre_titulaire      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionMembre_titulaire= function (item)
+        {
+            vm.selectedItemMembre_titulaire = item;
+            vm.nouvelItemMembre_titulaire   = item;
+            if(item.$selected==false)
+            {
+              currentItemMembre_titulaire    = JSON.parse(JSON.stringify(vm.selectedItemMembre_titulaire));
+            } 
+        };
+        $scope.$watch('vm.selectedItemMembre_titulaire', function()
+        {
+             if (!vm.allmembre_titulaire) return;
+             vm.allmembre_titulaire.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemMembre_titulaire.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierMembre_titulaire = function(item)
+        {
+            NouvelItemMembre_titulaire = false ;
+            vm.selectedItemMembre_titulaire = item;
+            currentItemMembre_titulaire = angular.copy(vm.selectedItemMembre_titulaire);
+            $scope.vm.allmembre_titulaire.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;            
+            item.id_membre      = vm.selectedItemMembre_titulaire.membre.id ;
+            item.prenom = vm.selectedItemMembre_titulaire.membre.prenom;
+            item.occupation = vm.selectedItemMembre_titulaire.membre.occupation; 
+        };
+
+        //fonction bouton suppression item membre_titulaire
+        vm.supprimerMembre_titulaire = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutMembre_titulaire(vm.selectedItemMembre_titulaire,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceMembre_titulaire (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var mem = vm.allmembre_titulaire.filter(function(obj)
+                {
+                   return obj.id == currentItemMembre_titulaire.id;
+                });
+                if(mem[0])
+                {
+                   if((mem[0].id_membre!=currentItemMembre_titulaire.id_membre))                    
+                      { 
+                         insert_in_baseMembre_titulaire(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseMembre_titulaire(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseMembre_titulaire(membre_titulaire,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemMembre_titulaire==false)
+            {
+                getId = vm.selectedItemMembre_titulaire.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    id_compte: vm.selectedItemCompte_feffi.id,
+                    id_membre: membre_titulaire.id_membre                
+                });
+                //console.log(feffi.pays_id);
+                //factory
+            apiFactory.add("membre_titulaire/index",datas, config).success(function (data)
+            {   
+                var membre = vm.allmembre.filter(function(obj)
+                {
+                    return obj.id == membre_titulaire.id_membre;
+                });
+                if (NouvelItemMembre_titulaire == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                        vm.selectedItemMembre_titulaire.membre  = membre[0];
+                        vm.selectedItemMembre_titulaire.$selected  = false;
+                        vm.selectedItemMembre_titulaire.$edit      = false;
+                        vm.selectedItemMembre_titulaire ={};
+                        
+                    }
+                    else 
+                    {    
+                      vm.allmembre_titulaire = vm.allmembre_titulaire.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemMembre_titulaire.id;
+                      });
+                    }
+                }
+                else
+                {
+                  membre_titulaire.membre  = membre[0];
+                  membre_titulaire.id  =   String(data.response);              
+                  NouvelItemMembre_titulaire=false;
+            }
+              membre_titulaire.$selected = false;
+              membre_titulaire.$edit = false;
+              vm.selectedItemMembre_titulaire = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.change_membre_titulaire = function(item)
+        { 
+          var membre_sans0 = vm.allmembre_titulaire.filter(function(obj)
+          {
+              return obj.id != 0;
+          });
+          var membre_tit = membre_sans0.filter(function(obj)
+          {
+              return obj.membre.id == item.id_membre && obj.compte.id == vm.selectedItemCompte_feffi.id;
+          });
+          if (membre_tit.length==0)
+          {
+            var tousmembre = vm.allmembre.filter(function(obj)
+            {
+                return obj.id == item.id_membre;
+            });
+            console.log(tousmembre);
+            item.prenom = tousmembre[0].prenom;
+            item.occupation = tousmembre[0].occupation;
+          }
+          else
+          {
+            vm.showAlert('Selection refuser','Le titulaire existe déjà');
+            item.id_membre = null;
+          }
+           
+        }
+          
+
+/**********************************fin membre_titulaire****************************************/
         //Alert
         vm.showAlert = function(titre,content)
         {

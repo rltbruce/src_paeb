@@ -368,6 +368,10 @@
                         <a ng-if="!justificatif_debut_travaux_moe.$edit" ng-click="vm.supprimerJustificatif_debut_travaux_moe(justificatif_debut_travaux_moe)" title="Supprimer">
                           <span class="icon-delete"></span>
                         </a>
+                        
+                        <a ng-if="!justificatif_debut_travaux_moe.$edit" ng-click="vm.download_piece(justificatif_debut_travaux_moe)" title="Telecharger">
+                          <span class="icon-box-download"></span>
+                        </a>
                                   
                         <a ng-if="justificatif_debut_travaux_moe.$edit" ng-click="vm.annulerJustificatif_debut_travaux_moe(justificatif_debut_travaux_moe)" title="Annuler modification">
                           <span class="icon-cancel"></span>
@@ -383,6 +387,8 @@
               </div>
 
             </md-tab-body>
+          </md-tab>
+          <md-tab>
           </md-tab>
     <!-----FIN demande_debut_travaux_moe ------>
 

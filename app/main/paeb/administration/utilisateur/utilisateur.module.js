@@ -72,7 +72,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["ADMIN"];
+                var permissions = ["ADMIN","BCAF","DAAF","DPFI","OBCAF","ODAAF","ODPFI","UFP"];
                 affichage =  loginService.gestionMenu(permissions,permission);  
 
                 //**************************************************

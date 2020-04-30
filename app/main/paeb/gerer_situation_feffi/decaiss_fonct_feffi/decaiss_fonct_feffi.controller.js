@@ -63,13 +63,13 @@
             }
           if (usercisco.id!=undefined)
           {
-            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideBycisco','id_cisco',usercisco.id).then(function(result)
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBycisco','id_cisco',usercisco.id).then(function(result)
             {
                 vm.allconvention_entete = result.data.response; 
                 console.log(vm.allconvention_entete);
             });
 
-            apiFactory.getAPIgeneraliserREST("decaiss_fonct_feffi/index",'menu','getdocument_invalideBycisco','id_cisco',usercisco.id).then(function(result)
+            apiFactory.getAPIgeneraliserREST("decaiss_fonct_feffi/index",'menu','getdecaiss_invalideBycisco','id_cisco',usercisco.id).then(function(result)
             {
                 vm.alldecaiss_fonct_feffi = result.data.response; 
                 console.log(vm.alldecaiss_fonct_feffi);

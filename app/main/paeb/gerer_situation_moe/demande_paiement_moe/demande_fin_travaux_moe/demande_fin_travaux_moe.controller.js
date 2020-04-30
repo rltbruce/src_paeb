@@ -51,7 +51,7 @@
     }])
         .controller('Demande_fin_travaux_moeController', Demande_fin_travaux_moeController);
     /** @ngInject */
-    function Demande_fin_travaux_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore)
+    function Demande_fin_travaux_moeController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore,apiUrlFile)
     {
 		    var vm = this;
         /*vm.selectedItemContrat_bureau_etude = {};
@@ -315,7 +315,7 @@
                           else
                           {
                               vm.showAlert('Impossible d\'ajouter la demande','Dernier demande en-cours!!!');
-                              vm.allcurenttranche_demande_batiment_moe = [];
+                              vm.allcurenttranche_d_fin_travaux_moe = [];
                           }
                       }
                       else
@@ -327,7 +327,7 @@
                   else
                   {
                     vm.showAlert('Ajout demande fin travaux',' Les demandes durant les travaux ne sont pas achevées !!!');
-                    vm.allcurenttranche_demande_batiment_moe = [];
+                    vm.allcurenttranche_d_fin_travaux_moe = [];
                   }
 
                   
@@ -910,7 +910,10 @@
 
         //insertion ou mise a jours ou suppression item dans bdd Justificatif_fin_travaux_moe
         function insert_in_baseJustificatif_fin_travaux_moe(justificatif_fin_travaux_moe,suppression)
-        {
+        {var contrat_be = vm.allcontrat_bureau_etude.filter(function(obj)
+          {
+            return obj.id == vm.selectedItemDemande_fin_travaux_moe.contrat_bureau_etude.id;
+          });
             //add
             var config =
             {
@@ -950,7 +953,7 @@
                           if(file)
                           { 
 
-                            var name_file = vm.selectedItemContrat_bureau_etude.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                            var name_file = contrat_be[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                             var fd = new FormData();
                             fd.append('file', file);
@@ -1059,7 +1062,7 @@
                     if(file)
                     { 
 
-                      var name_file = vm.selectedItemContrat_bureau_etude.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                      var name_file = contrat_be[0].ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                       var fd = new FormData();
                       fd.append('file', file);
@@ -1129,6 +1132,10 @@
 
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
+        }
+        vm.download_piece = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
         }
 /**********************************fin justificatif batiment****************************************/
 

@@ -51,7 +51,7 @@
     }])
         .controller('Demande_batiment_prestataireController', Demande_batiment_prestataireController);
     /** @ngInject */
-    function Demande_batiment_prestataireController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore)
+    function Demande_batiment_prestataireController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,$cookieStore,apiUrlFile)
     {
 		    var vm = this;
         /*vm.selectedItemContrat_prestataire = {};
@@ -597,6 +597,10 @@
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
+        vm.download_piece = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
+        }
 /**********************************fin demande_batiment_prest****************************************/
 
 
@@ -768,11 +772,11 @@
         //insertion ou mise a jours ou suppression item dans bdd Justificatif_batiment_pre
         function insert_in_baseJustificatif_batiment_pre(justificatif_batiment_pre,suppression)
         {
-            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratconvenBydemande_batiment','id_demande_batiment_pre',vm.selectedItemDemande_batiment_prest.id).then(function(result)
+            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratBydemande_batiment','id_demande_batiment_pre',vm.selectedItemDemande_batiment_prest.id).then(function(result)
             {
                 var contrat_presta = result.data.response;
                 console.log(contrat_presta);
-            });
+            
             //add
             var config =
             {
@@ -990,7 +994,7 @@
               vm.showbuttonValidation = false;
 
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
+});
         }
 /**********************************fin justificatif batiment****************************************/
 

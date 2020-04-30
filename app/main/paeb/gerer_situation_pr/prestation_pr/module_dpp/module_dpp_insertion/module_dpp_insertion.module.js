@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_pr.prestation_pr.module_dpp.module_dpp_insertion', {
-            title: 'Validation module',
+            title: 'Insertion module',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_pr_prestation_pr_module_dpp_module_dpp_insertion',
 			weight: 1,
@@ -54,7 +54,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["OBCAF"];
+                var permissions = ["OBCAF","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

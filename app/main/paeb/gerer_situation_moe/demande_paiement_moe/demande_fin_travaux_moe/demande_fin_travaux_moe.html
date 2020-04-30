@@ -305,6 +305,10 @@
                         <a ng-if="!justificatif_fin_travaux_moe.$edit" ng-click="vm.supprimerJustificatif_fin_travaux_moe(justificatif_fin_travaux_moe)" title="Supprimer">
                           <span class="icon-delete"></span>
                         </a>
+                        
+                        <a ng-if="!justificatif_fin_travaux_moe.$edit" ng-click="vm.download_piece(justificatif_latrine_moe)" title="Telecharger">
+                          <span class="icon-box-download"></span>
+                        </a>
                                   
                         <a ng-if="justificatif_fin_travaux_moe.$edit" ng-click="vm.annulerJustificatif_fin_travaux_moe(justificatif_fin_travaux_moe)" title="Annuler modification">
                           <span class="icon-cancel"></span>
@@ -320,6 +324,8 @@
               </div>
 
             </md-tab-body>
+          </md-tab>
+          <md-tab>
           </md-tab>
     <!-----FIN demande_fin_travaux_moe ------>
           </md-tabs>

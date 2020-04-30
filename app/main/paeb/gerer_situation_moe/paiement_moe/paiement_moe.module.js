@@ -7,7 +7,7 @@
             'app.paeb.gerer_situation_moe.paiement_moe.paiement_debut_travaux_moe',
             'app.paeb.gerer_situation_moe.paiement_moe.paiement_batiment_moe',
             'app.paeb.gerer_situation_moe.paiement_moe.paiement_latrine_moe',
-            'app.paeb.gerer_situation_moe.paiement_moe.paiement_mobilier_moe',
+            //'app.paeb.gerer_situation_moe.paiement_moe.paiement_mobilier_moe',
             'app.paeb.gerer_situation_moe.paiement_moe.paiement_fin_travaux_moe',
             ])       
         .config(config);

@@ -262,17 +262,17 @@ console.log(vm.ciscos);
             
               switch(value)
               {
-                  case 'USER':
+                 /* case 'USER':
                   {
                       vm.user.user = true ;
                       break ;
-                  }
+                  }*/
 
-                  case 'DDB':
+                 /* case 'DDB':
                   {
                       vm.user.ddb = true ;
                       break ;
-                  }
+                  }*/
 
                   case 'ADMIN':
                   {
@@ -316,6 +316,12 @@ console.log(vm.ciscos);
                       break;
                   }
 
+                  case 'ODPFI':
+                  {
+                      vm.user.odpfi = true ;
+                      break;
+                  }
+
                   default:
                   {
                       break ;
@@ -350,10 +356,10 @@ console.log(vm.ciscos);
           angular.forEach(user, function(value, key)
           {
         
-              if(key == 'user' && value == true)
-                  tab.push(key.toUpperCase());
-              if(key == 'ddb' && value == true)
-                tab.push(key.toUpperCase());
+              /*if(key == 'user' && value == true)
+                  tab.push(key.toUpperCase());*/
+              /*if(key == 'ddb' && value == true)
+                tab.push(key.toUpperCase());*/
               if(key == 'admin' && value == true)
                   tab.push(key.toUpperCase());
               if(key == 'odaaf' && value == true)
@@ -367,6 +373,8 @@ console.log(vm.ciscos);
               if(key == 'ufp' && value == true)
                   tab.push(key.toUpperCase());
               if(key == 'dpfi' && value == true)
+                  tab.push(key.toUpperCase());
+              if(key == 'odpfi' && value == true)
                   tab.push(key.toUpperCase());  
           });
 

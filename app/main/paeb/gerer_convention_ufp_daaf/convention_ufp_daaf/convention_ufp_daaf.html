@@ -58,6 +58,20 @@
                          
                 <tbody>
                   <tr ng-repeat="convention_ufp_daaf_entete in vm.allconvention_ufp_daaf_entete"  ng-class="{selected: convention_ufp_daaf_entete.$selected}" ng-click="vm.selectionConvention_ufp_daaf_entete(convention_ufp_daaf_entete)">
+                          
+                    <td>
+                      <span ng-if="convention_ufp_daaf_entete.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Vague</label>
+                          <md-select ng-model="convention_ufp_daaf_entete.num_vague"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changevague(convention_ufp_daaf_entete)">
+                            <md-option value="1">Première vague</md-option>
+                            <md-option value="2">Deuxième vague</md-option>
+                          </md-select>
+                        </md-input-container>   
+                      </span>
+                                
+                      <span ng-if="!convention_ufp_daaf_entete.$edit">{{vm.affichevague(convention_ufp_daaf_entete.num_vague)}}</span>
+                    </td>
 
                     <td>
                       <span ng-if="convention_ufp_daaf_entete.$edit">
@@ -127,17 +141,6 @@
                      <td>
                       <span ng-if="convention_ufp_daaf_entete.$edit">
                         <md-input-container style="width:100%;display: flex !important;">
-                          <label>Mumero vague</label>
-                          <input name="num_vague" type="number" ng-model="convention_ufp_daaf_entete.num_vague"/>
-                        </md-input-container>   
-                      </span>
-                                
-                      <span ng-if="!convention_ufp_daaf_entete.$edit">{{convention_ufp_daaf_entete.num_vague}}</span>
-                    </td>
-
-                     <td>
-                      <span ng-if="convention_ufp_daaf_entete.$edit">
-                        <md-input-container style="width:100%;display: flex !important;">
                           <label>Nombre bébéficiaire</label>
                           <input name="nbr_beneficiaire" type="number" ng-model="convention_ufp_daaf_entete.nbr_beneficiaire"/>
                         </md-input-container>   
@@ -168,172 +171,6 @@
             </md-tab-body>
           </md-tab>
 
-          <!-----debut convention_detail ------>
-
-            <!--md-tab ng-disabled="vm.stepOne==false">
-              <md-tab-label>
-                <span class="ms-form-wizard-step-label">
-
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
-                      <i class="icon-check s16"></i>
-                  </span>
-                  <span class="ms-form-wizard-step-text">Detail</span>
-                </span>
-              </md-tab-label>
-              
-              <md-tab-body>
-                <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterConvention_ufp_daaf_detail()" style="width:10%;" ng-disabled="vm.showbuttonNouvDetail==false" ng-disabled="!vm.showbuttonNouvDetail">
-                      Nouveau
-                    </md-button>
-                </div>
-
-                <div>        
-                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                    <thead>
-                      <tr-->
-                        <!--th class="secondary-text" ng-repeat="ciscT in ::vm.convention_ufp_daaf_detail_column">
-                          <div class="table-header">
-                            <span class="column-title">{{ciscT.titre}}</span>
-                          </div>
-                        </th-->
-
-                          <!--th class="secondary-text">
-                          <div class="table-header">
-                            <span class="column-title">Description</span>
-                          </div>
-                        </th>
-                        <th class="secondary-text">
-                          <div class="table-header">
-                            <span class="column-title">Description</span>
-                          </div>
-                        </th>
-                        <th class="secondary-text">
-                          <div class="table-header">
-                            <span class="column-title">Description</span>
-                          </div>
-                        </th>
-                        <th class="secondary-text">
-                          <div class="table-header">
-                            <span class="column-title">Description</span>
-                          </div>
-                        </th>
-                        <th class="secondary-text">
-                          <div class="table-header">
-                            <span class="column-title">Description</span>
-                          </div>
-                        </th>
-                        <th class="secondary-text">
-                          <div class="table-header">
-                            <span class="column-title">Description</span>
-                          </div>
-                        </th>
-                        <th class="secondary-text">
-                          <div class="table-header">
-                            <span class="column-title">Description</span>
-                          </div>
-                        </th>
-                      </tr>
-                    </thead>
-                             
-                    <tbody>
-                      <tr ng-repeat="convention_ufp_daaf_detail in vm.allconvention_ufp_daaf_detail"  ng-class="{selected: convention_ufp_daaf_detail.$selected}" ng-click="vm.selectionConvention_ufp_daaf_detail(convention_ufp_daaf_detail)">
-                       
-
-                        <td>
-                          <span ng-if="convention_ufp_daaf_detail.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Nom banque</label>
-                              <md-select ng-model="convention_ufp_daaf_detail.id_compte_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changecompte_daaf(convention_ufp_daaf_detail)">
-                                <md-option ng-repeat="compte_daaf in vm.allcompte_daaf" value="{{compte_daaf.id}}">
-                                                                    {{compte_daaf.nom_banque}}
-                                </md-option>
-                              </md-select>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.nom_banque}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="convention_ufp_daaf_detail.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Adresse banque</label>
-                              <input name="adresse_banque" type="text" ng-model="convention_ufp_daaf_detail.adresse_banque"/>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.adresse_banque}}</span>
-                        </td>
-                   
-                        <td>
-                          <span ng-if="convention_ufp_daaf_detail.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>RIB</label>
-                              <input name="rib" type="text" ng-model="convention_ufp_daaf_detail.rib"/>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.rib}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="convention_ufp_daaf_detail.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Delai</label>
-                              <input name="delai" type="text" ng-model="convention_ufp_daaf_detail.delai" md-placeholder="en mois"/>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.delai}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="convention_ufp_daaf_detail.$edit">
-                            <md-datepicker ng-model="convention_ufp_daaf_detail.date_signature" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
-                          </md-datepicker>  
-                          </span>
-                                    
-                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{vm.formatDate(convention_ufp_daaf_detail.date_signature)}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="convention_ufp_daaf_detail.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Observation</label>
-                              <input name="observation" type="text" ng-model="convention_ufp_daaf_detail.observation" md-placeholder="en mois"/>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.observation}}</span>
-                        </td>
-                                                     
-                        <td>  
-                          <a ng-if="!convention_ufp_daaf_detail.$edit" ng-click="vm.modifierConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" title="Modifier">
-                            <span class="icon-table-edit"></span>
-                          </a>
-                                    
-                          <a ng-if="!convention_ufp_daaf_detail.$edit" ng-click="vm.supprimerConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" title="Supprimer">
-                            <span class="icon-delete"></span>
-                          </a>
-                                    
-                          <a ng-if="convention_ufp_daaf_detail.$edit" ng-click="vm.annulerConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" title="Annuler modification">
-                            <span class="icon-cancel"></span>
-                          </a>
-                                    
-                          <a ng-if="convention_ufp_daaf_detail.$edit && convention_ufp_daaf_detail.id_compte_daaf && convention_ufp_daaf_detail.delai && convention_ufp_daaf_detail.date_signature>''" ng-click="vm.ajoutConvention_ufp_daaf_detail(convention_ufp_daaf_detail,0)" title="Sauvegarder">
-                            <span class="icon-content-save"></span>
-                          </a>
-                        </td>
-                 
-                      </tr>
-                    </tbody>
-                  </table>
-                </div> 
-              </md-tab-body>
-            </md-tab-->
-
             <md-tab ng-disabled="vm.stepOne==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
@@ -352,78 +189,6 @@
                       Nouveau
                     </md-button>
                 </div>
-                
-            <fieldset class="standard" >
-                <legend><code>Compte</code></legend>
-                <div>        
-                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptionsperso" ms-responsive-table>
-                    <thead>
-                      <tr>
-
-                          <th class="secondary-text">
-                          <div class="table-header">
-                            <span class="column-title">Nom banque</span>
-                          </div>
-                        </th>
-                        <th class="secondary-text">
-                          <div class="table-header">
-                            <span class="column-title">Adresse banque</span>
-                          </div>
-                        </th>
-                        <th class="secondary-text">
-                          <div class="table-header">
-                            <span class="column-title">RIB</span>
-                          </div>
-                        </th>
-                      </tr>
-                    </thead>
-                             
-                    <tbody>
-                      <tr ng-repeat="convention_ufp_daaf_detail in vm.allconvention_ufp_daaf_detail"  ng-class="{selected: convention_ufp_daaf_detail.$selected}" ng-click="vm.selectionConvention_ufp_daaf_detail(convention_ufp_daaf_detail)">
-                       
-
-                        <td>
-                          <span ng-if="convention_ufp_daaf_detail.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Nom banque</label>
-                              <md-select ng-model="convention_ufp_daaf_detail.id_compte_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changecompte_daaf(convention_ufp_daaf_detail)">
-                                <md-option ng-repeat="compte_daaf in vm.allcompte_daaf" value="{{compte_daaf.id}}">
-                                                                    {{compte_daaf.nom_banque}}
-                                </md-option>
-                              </md-select>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.nom_banque}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="convention_ufp_daaf_detail.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Adresse banque</label>
-                              <input name="adresse_banque" type="text" ng-model="convention_ufp_daaf_detail.adresse_banque" disabled/>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.adresse_banque}}</span>
-                        </td>
-                   
-                        <td>
-                          <span ng-if="convention_ufp_daaf_detail.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>RIB</label>
-                              <input name="rib" type="text" ng-model="convention_ufp_daaf_detail.rib" disabled/>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.rib}}</span>
-                        </td>
-                 
-                      </tr>
-                    </tbody>
-                  </table>
-                </div> 
-            </fieldset><br>
 
             <fieldset class="standard" >
                 <legend><code>Autre</code></legend>
@@ -459,7 +224,7 @@
                         <td>
                           <span ng-if="convention_ufp_daaf_detail.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
-                              <label>Delai</label>
+                              <label>Mois</label>
                               <input name="delai" type="text" ng-model="convention_ufp_daaf_detail.delai" md-placeholder="en mois"/>
                             </md-input-container>   
                           </span>
@@ -474,7 +239,7 @@
                           </md-datepicker>  
                           </span>
                                     
-                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{vm.formatDate(convention_ufp_daaf_detail.date_signature)}}</span>
+                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{vm.formatDate(convention_ufp_daaf_detail.date_signature)}} mois</span>
                         </td>
 
                         <td>
@@ -492,6 +257,78 @@
                     </tbody>
                   </table>
                 </div>
+            </fieldset><br>
+                
+            <fieldset class="standard" >
+                <legend><code>Compte</code></legend>
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptionsperso" ms-responsive-table>
+                    <thead>
+                      <tr>
+
+                          <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Intitule</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Agence</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Compte</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="convention_ufp_daaf_detail in vm.allconvention_ufp_daaf_detail"  ng-class="{selected: convention_ufp_daaf_detail.$selected}" ng-click="vm.selectionConvention_ufp_daaf_detail(convention_ufp_daaf_detail)">
+                       
+
+                        <td>
+                          <span ng-if="convention_ufp_daaf_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Intitule</label>
+                              <md-select ng-model="convention_ufp_daaf_detail.id_compte_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changecompte_daaf(convention_ufp_daaf_detail)">
+                                <md-option ng-repeat="compte_daaf in vm.allcompte_daaf" value="{{compte_daaf.id}}">
+                                                                    {{compte_daaf.intitule}}
+                                </md-option>
+                              </md-select>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.intitule}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="convention_ufp_daaf_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Agence</label>
+                              <input name="agence" type="text" ng-model="convention_ufp_daaf_detail.agence" disabled/>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.agence}}</span>
+                        </td>
+                   
+                        <td>
+                          <span ng-if="convention_ufp_daaf_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Compte</label>
+                              <input name="compte" type="text" ng-model="convention_ufp_daaf_detail.compte" disabled/>
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.compte_daaf.compte}}</span>
+                        </td>
+                 
+                      </tr>
+                    </tbody>
+                  </table>
+                </div> 
             </fieldset><br>
                 <div>        
                   <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptionsperso2" ms-responsive-table>
@@ -583,86 +420,46 @@
                     </thead>
                              
                     <tbody>
-                      <tr ng-repeat="convention_cisco_feffi_entete in vm.allconvention_cisco_feffi_entete"  ng-class="{selected: convention_cisco_feffi_entete.$selected}" ng-click="vm.selectionConvention_cisco_feffi_entete(convention_cisco_feffi_entete)">           
-                        
+                      <tr ng-repeat="convention_cisco_feffi_entete in vm.allconvention_cisco_feffi_entete"  ng-class="{selected: convention_cisco_feffi_entete.$selected}" ng-click="vm.selectionConvention_cisco_feffi_entete(convention_cisco_feffi_entete)">
 
                         <td>
-                          <span ng-if="convention_cisco_feffi_entete.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Cisco</label>
-                              <md-select ng-model="convention_cisco_feffi_entete.id_cisco"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_cisco(convention_cisco_feffi_entete)">
-                                <md-option ng-repeat="cisco in vm.allcisco" value="{{cisco.id}}">
-                                                                    {{cisco.code}}
-                                </md-option>
-                              </md-select>
-                            </md-input-container>  
-                          </span>
-                          <span ng-if="!convention_cisco_feffi_entete.$edit">{{convention_cisco_feffi_entete.cisco.code}}</span>
+                          <span>{{convention_cisco_feffi_entete.cisco.code}}</span>
                         </td>
 
                         <td>
-                          <span ng-if="convention_cisco_feffi_entete.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Feffi</label>
-                              <md-select ng-model="convention_cisco_feffi_entete.id_feffi"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_feffi(convention_cisco_feffi_entete)" ng-disabled="!convention_cisco_feffi_entete.id_cisco">
-                                <md-option ng-repeat="feffi in vm.allfeffi" value="{{feffi.id}}">
-                                                                    {{feffi.denomination}}
-                                </md-option>
-                              </md-select>
-                            </md-input-container>  
-                          </span>
-                          <span ng-if="!convention_cisco_feffi_entete.$edit">{{convention_cisco_feffi_entete.feffi.denomination}}</span>
+                          <span>{{convention_cisco_feffi_entete.feffi.denomination}}</span>
                         </td>
 
                         <td>
-                          <span ng-if="convention_cisco_feffi_entete.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Réference convention</label>
-                              <input name="ref_convention" type="text" ng-model="convention_cisco_feffi_entete.ref_convention"/>
-                            </md-input-container>
-                          </span>                          
-                          <span ng-if="!convention_cisco_feffi_entete.$edit">{{convention_cisco_feffi_entete.ref_convention}}</span>
+                          <span>{{convention_cisco_feffi_entete.site.denomination_epp}}</span>
                         </td>
 
                         <td>
-                          <span ng-if="convention_cisco_feffi_entete.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Objet</label>
-                              <input name="objet" type="text" ng-model="convention_cisco_feffi_entete.objet"/>
-                            </md-input-container>
-                          </span>                          
-                          <span ng-if="!convention_cisco_feffi_entete.$edit">{{convention_cisco_feffi_entete.objet}}</span>
+                          <span>{{vm.affichage_type_convention(convention_cisco_feffi_entete.type_convention)}}</span>
                         </td>
 
-                        <td>
-                          <span ng-if="convention_cisco_feffi_entete.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Réference financement</label>
-                              <input name="ref_financement" type="text" ng-model="convention_cisco_feffi_entete.ref_financement"/>
-                            </md-input-container>   
-                          </span>
-                                    
-                          <span ng-if="!convention_cisco_feffi_entete.$edit">{{convention_cisco_feffi_entete.ref_financement}}</span>
+                        <td>                         
+                          <span>{{convention_cisco_feffi_entete.ref_convention}}</span>
                         </td>
 
-                        <td>
-                          <span ng-if="convention_cisco_feffi_entete.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Montant total</label>
-                              <input name="montant_total" type="number" ng-model="convention_cisco_feffi_entete.montant_total" disabled/>
-                            </md-input-container>
-                          </span>                          
-                          <span ng-if="!convention_cisco_feffi_entete.$edit">{{convention_cisco_feffi_entete.montant_total}}</span>
+                        <td>                         
+                          <span>{{convention_cisco_feffi_entete.objet}}</span>
                         </td>
 
-                        <td>
-                          <span ng-if="convention_cisco_feffi_entete.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Avancement</label>
-                              <input name="avancement" type="number" ng-model="convention_cisco_feffi_entete.avancement" disabled/>
-                            </md-input-container>
-                          </span>                          
-                          <span ng-if="!convention_cisco_feffi_entete.$edit">{{convention_cisco_feffi_entete.avancement}}</span>
+                        <td>                                    
+                          <span>{{convention_cisco_feffi_entete.ref_financement}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{convention_cisco_feffi_entete.montant_total}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{convention_cisco_feffi_entete.avancement}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{convention_cisco_feffi_entete.user.nom}}</span>
                         </td>
                                                      
                         <td>

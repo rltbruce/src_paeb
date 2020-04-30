@@ -6,13 +6,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Gerer situation feffi</span>
+                <span class="parent">Gerer situation PR</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Feffi</span>
+                <span class="parent" href="javascript:;"> Demande de payement</span>
             </div>
 
-            <div class="title">Feffi</div>
+            <div class="title">Demande de payement</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -36,9 +36,9 @@
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
                         <i class="icon-check s16"></i>
                     </span-->
-                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepOne==true">1
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">1
                     </span>
-                    <span class="ms-form-wizard-step-text">demande à la signature</span>
+                    <span class="ms-form-wizard-step-text">demande de payement</span>
                 </span>
               </md-tab-label>
               
@@ -224,9 +224,9 @@
           <md-tab ng-disabled="vm.stepOne==false">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false"></span>
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
                     
-                    <span class="ms-form-wizard-step-number md-accent-bg md-green-800-bg" ng-if="vm.stepTwo==true">2
+                    <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">2
                     </span>
                     <span class="ms-form-wizard-step-text">Pièce jointe (convention)</span>
                 </span>
@@ -298,6 +298,10 @@
                                   
                         <a ng-if="!justificatif_debut_travaux_pr.$edit" ng-click="vm.supprimerJustificatif_debut_travaux_pr(justificatif_debut_travaux_pr)" title="Supprimer">
                           <span class="icon-delete"></span>
+                        </a>
+                        
+                        <a ng-if="!justificatif_debut_travaux_pr.$edit" ng-click="vm.download_piece(justificatif_debut_travaux_pr)" title="Telecharger">
+                          <span class="icon-box-download"></span>
                         </a>
                                   
                         <a ng-if="justificatif_debut_travaux_pr.$edit" ng-click="vm.annulerJustificatif_debut_travaux_pr(justificatif_debut_travaux_pr)" title="Annuler modification">

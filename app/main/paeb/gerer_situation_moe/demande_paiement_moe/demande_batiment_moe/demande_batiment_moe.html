@@ -410,6 +410,11 @@
                         <a ng-if="!justificatif_batiment_moe.$edit" ng-click="vm.supprimerJustificatif_batiment_moe(justificatif_batiment_moe)" title="Supprimer">
                           <span class="icon-delete"></span>
                         </a>
+                        
+                        <a ng-if="!justificatif_batiment_moe.$edit" ng-click="vm.download_piece(justificatif_batiment_moe)" title="Telecharger">
+                          <span class="icon-box-download"></span>
+                        </a>
+                        
                                   
                         <a ng-if="justificatif_batiment_moe.$edit" ng-click="vm.annulerJustificatif_batiment_moe(justificatif_batiment_moe)" title="Annuler modification">
                           <span class="icon-cancel"></span>
@@ -425,6 +430,8 @@
               </div>
 
             </md-tab-body>
+          </md-tab>
+          <md-tab>
           </md-tab>
     <!-----FIN demande_batiment_moe ------>
     <!-----FIN demande_debut_travaux_moe ------>

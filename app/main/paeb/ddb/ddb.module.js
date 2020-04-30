@@ -8,44 +8,14 @@
             'app.paeb.ddb.acces_zone',
             'app.paeb.ddb.cisco',
             'app.paeb.ddb.ecole',
-            //'app.paeb.ddb.plan_comptable',
-            'app.paeb.ddb.prestataire',
-            'app.paeb.ddb.bureau_etude',
-            'app.paeb.ddb.type_batiment',
+            'app.paeb.ddb.prestataires',
             'app.paeb.ddb.zone_subvention',
-            //'app.paeb.ddb.infrastructure',
-            'app.paeb.ddb.type_cout_divers',
-            'app.paeb.ddb.type_mobilier',
-            'app.paeb.ddb.type_latrine',
-            'app.paeb.ddb.tranche_mpe',
-            'app.paeb.ddb.tranche_deblocage_feffi',
-            //'app.paeb.ddb.tranche_demande_latrine_mpe',
-            'app.paeb.ddb.tranche_moe',
-            //'app.paeb.ddb.tranche_demande_latrine_pr',
-            //'app.paeb.ddb.tranche_demande_mobilier_mpe',
-            //'app.paeb.ddb.tranche_demande_mobilier_moe',
-            //'app.paeb.ddb.tranche_demande_mobilier_pr',
-            'app.paeb.ddb.tranche_deblocage_daaf',
-            //'app.paeb.ddb.tranche_demande_batiment_moe',
-            //'app.paeb.ddb.tranche_demande_batiment_pr',
-            //'app.paeb.ddb.tranche_d_debut_travaux_moe',
-            'app.paeb.ddb.tranche_d_debut_travaux_pr',
-            //'app.paeb.ddb.tranche_d_fin_travaux_moe',
-            //'app.paeb.ddb.tranche_d_fin_travaux_pr',
-            'app.paeb.ddb.partenaire_relai',
-            'app.paeb.ddb.classification_site',
+            'app.paeb.ddb.cout_subvention',
+            'app.paeb.ddb.tranche_demande',
             'app.paeb.ddb.participant_formation_pr',
-            /*'app.paeb.ddb.situation_participant_dpp',
-            'app.paeb.ddb.situation_participant_emies',
-            'app.paeb.ddb.situation_participant_gfpc',
-            'app.paeb.ddb.situation_participant_pmc',
-            'app.paeb.ddb.situation_participant_sep',*/
-            /*'app.paeb.ddb.document_moe',
-            'app.paeb.ddb.document_prestataire',
-            'app.paeb.ddb.document_pr',
-            'app.paeb.ddb.document_feffi',*/
             'app.paeb.ddb.document',
-            'app.paeb.ddb.phase_sous_projets'
+            'app.paeb.ddb.phase_sous_projets',
+            'app.paeb.ddb.etape_sousprojet'
 
             ] ;
 
@@ -85,7 +55,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

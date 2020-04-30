@@ -18,7 +18,8 @@
             'app.paeb.gerer_situation_entreprise.dossier_prestataire',
             'app.paeb.gerer_situation_entreprise.suivi_physique_travaux',
             'app.paeb.gerer_situation_entreprise.demande_paiement_prestataire',
-            'app.paeb.gerer_situation_entreprise.reception_mpe'
+            'app.paeb.gerer_situation_entreprise.reception_mpe',
+            'app.paeb.gerer_situation_entreprise.suivi_financier_mpe'
 
             ])      
         .config(config);

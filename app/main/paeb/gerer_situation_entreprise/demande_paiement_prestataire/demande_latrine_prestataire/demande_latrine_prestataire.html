@@ -11,10 +11,10 @@
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
                 <span class="parent" href="javascript:;"> Demande de payement</span>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Payement Latrine</span>
+                <span class="parent" href="javascript:;"> PDemande payement Latrine</span>
             </div>
 
-            <div class="title">Payement Latrine</div>
+            <div class="title">Demande payement Latrine</div>
         </div>
     </div>
     <!-- / HEADER -->
@@ -223,7 +223,7 @@
                           <span class="icon-cancel"></span>
                         </a>
                                   
-                        <a ng-if="demande_latrine_prest.$edit && demande_latrine_prest.objet && demande_latrine_prest.description && demande_latrine_prest.montant && demande_latrine_prest.date  && demande_latrine_prest.ref_facture && demande_latrine_prest.id_tranche_demande_mpe && demande_latrine_prest.cumul && demande_latrine_prest.reste>''" ng-click="vm.ajoutDemande_latrine_prest(demande_latrine_prest,0)" title="Sauvegarder">
+                        <a ng-if="demande_latrine_prest.$edit && demande_latrine_prest.objet && demande_latrine_prest.description && demande_latrine_prest.montant && demande_latrine_prest.date  && demande_latrine_prest.ref_facture && demande_latrine_prest.id_tranche_demande_mpe>''" ng-click="vm.ajoutDemande_latrine_prest(demande_latrine_prest,0)" title="Sauvegarder">
                           <span class="icon-content-save"></span>
                         </a>
                       </td>
@@ -319,6 +319,10 @@
                                   
                         <a ng-if="!justificatif_latrine_pre.$edit" ng-click="vm.supprimerJustificatif_latrine_pre(justificatif_latrine_pre)" title="Supprimer">
                           <span class="icon-delete"></span>
+                        </a>
+
+                        <a ng-if="!justificatif_latrine_pre.$edit" ng-click="vm.download_piece(justificatif_latrine_pre)" title="Telecharger">
+                          <span class="icon-box-download"></span>
                         </a>
                                   
                         <a ng-if="justificatif_latrine_pre.$edit" ng-click="vm.annulerJustificatif_latrine_pre(justificatif_latrine_pre)" title="Annuler modification">

@@ -17,8 +17,8 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.paiement_mpe', {
             title : 'Paiement mpe',
-            icon  : 'icon-data',
-            weight: 3
+            icon  : 'icon-blur-radial',
+            weight: 6
         });
 
 

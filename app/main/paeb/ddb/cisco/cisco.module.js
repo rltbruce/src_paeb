@@ -29,8 +29,9 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.cisco', {
             title: 'Cisco',
-            icon  : 'icon-tile-four',
-            state: 'app.paeb_ddb_cisco'
+            icon  : 'icon-school',
+            state: 'app.paeb_ddb_cisco',
+            weight: 2
         });
     }
 

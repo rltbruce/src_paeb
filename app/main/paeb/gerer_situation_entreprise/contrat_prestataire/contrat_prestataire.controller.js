@@ -109,7 +109,7 @@
             //recuperation donnée convention
             if (vm.selectedItemConvention_entete.id!=0)
             {
-              apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menu','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+              apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
               {
                   vm.allcontrat_prestataire = result.data.response;
 

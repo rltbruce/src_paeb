@@ -1,0 +1,277 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Subvention initial</span>
+            </div>
+
+            <div class="title">Subvention initial</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+      <div class="form-wrapper md-whiteframe-1dp" > 
+
+      <!-- subvention_initial -->     
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start" flex>
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Subvention initial</span>
+              </div>
+
+              <div>
+
+                <md-button class="md-icon-button" aria-label="add subvention_initial" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout subvention_initial</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+            <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="cisc in ::vm.subvention_initial_column">
+                  <div class="table-header">
+                    <span class="column-title">{{cisc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody >
+              <tr ng-repeat="subvention_initial in vm.allsubvention_initial"  ng-class="{selected: subvention_initial.$selected}" ng-click="vm.selection(subvention_initial)"> 
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Zone intervention</label>
+                      <md-select ng-model="subvention_initial.id_zone_subvention"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_zone_subvention(subvention_initial)">
+                        <md-option ng-repeat="zone_subvention in vm.allzone_subvention" value="{{zone_subvention.id}}">
+                                                            {{zone_subvention.libelle}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.zone_subvention.libelle}}</span>
+                </td>
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Accés zone</label>
+                      <md-select ng-model="subvention_initial.id_acces_zone"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_acces_zone(subvention_initial)">
+                        <md-option ng-repeat="acces_zone in vm.allacces_zone" value="{{acces_zone.id}}">
+                                                            {{acces_zone.libelle}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.acces_zone.libelle}}</span>
+                </td>
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Type batiment</label>
+                      <md-select ng-model="subvention_initial.id_type_batiment"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_type_batiment(subvention_initial)" ng-disabled="!subvention_initial.id_acces_zone || !subvention_initial.id_zone_subvention">
+                        <md-option ng-repeat="type_batiment in vm.alltype_batiment" value="{{type_batiment.id}}">
+                                                            {{type_batiment.code}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_batiment.code}}</span>
+                </td>
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Nombre salle</label>
+                      <input name="nbr_salle" type="text" ng-model="subvention_initial.nbr_salle"disabled/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_batiment.nbr_salle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Cout batiment</label>
+                      <input name="cout_batiment" type="text" ng-model="subvention_initial.cout_batiment " disabled/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_batiment.cout_batiment}}</span>
+                </td>                 
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Type latrine</label>
+                      <md-select ng-model="subvention_initial.id_type_latrine"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_type_latrine(subvention_initial)" ng-disabled="!subvention_initial.id_acces_zone || !subvention_initial.id_zone_subvention">
+                        <md-option ng-repeat="type_latrine in vm.alltype_latrine" value="{{type_latrine.id}}">
+                                                            {{type_latrine.code}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_latrine.code}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Nombre box</label>
+                      <input name="nbr_box" type="text" ng-model="subvention_initial.nbr_box" disabled/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_latrine.nbr_box_latrine}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Cout latrine</label>
+                      <input name="cout_latrine" type="text" ng-model="subvention_initial.cout_latrine" disabled/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_latrine.cout_latrine}}</span>
+                </td>
+                 <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Type mobilier</label>
+                      <md-select ng-model="subvention_initial.id_type_mobilier"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_type_mobilier(subvention_initial)" ng-disabled="!subvention_initial.id_acces_zone || !subvention_initial.id_zone_subvention">
+                        <md-option ng-repeat="type_mobilier in vm.alltype_mobilier" value="{{type_mobilier.id}}" >
+                                                            {{type_mobilier.code}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_mobilier.code}}</span>
+                </td>
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Nombre banc</label>
+                      <input name="nbr_banc" type="text" ng-model="subvention_initial.nbr_banc" disabled/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_mobilier.nbr_table_banc}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Cout mobilier</label>
+                      <input name="cout_mobilier" type="text" ng-model="subvention_initial.cout_mobilier" disabled/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_mobilier.cout_mobilier}}</span>
+                </td>
+                
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Type maitrise d'oeuvre</label>
+                      <md-select ng-model="subvention_initial.id_type_cout_maitrise"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_type_cout_maitrise(subvention_initial)" ng-disabled="!subvention_initial.id_acces_zone || !subvention_initial.id_zone_subvention">
+                        <md-option ng-repeat="type_cout_maitrise in vm.alltype_cout_maitrise" value="{{type_cout_maitrise.id}}">
+                                                            {{type_cout_maitrise.code}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_cout_maitrise.code}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Cout maitrise</label>
+                      <input name="cout_maitrise" type="text" ng-model="subvention_initial.cout_maitrise" disabled/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_cout_maitrise.cout_maitrise}}</span>
+                </td>
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Type sous projet</label>
+                      <md-select ng-model="subvention_initial.id_type_cout_sousprojet"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_type_cout_sousprojet(subvention_initial)" ng-disabled="!subvention_initial.id_acces_zone || !subvention_initial.id_zone_subvention">
+                        <md-option ng-repeat="type_cout_sousprojet in vm.alltype_cout_sousprojet" value="{{type_cout_sousprojet.id}}">
+                                                            {{type_cout_sousprojet.code}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_cout_sousprojet.code}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="subvention_initial.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Cout sous projet</label>
+                      <input name="cout_sousprojet" type="text" ng-model="subvention_initial.cout_sousprojet" disabled/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!subvention_initial.$edit">{{subvention_initial.type_cout_sousprojet.cout_sousprojet}}</span>
+                </td>                                           
+                <td>
+                  <a ng-if="!subvention_initial.$edit" ng-click="vm.modifier(subvention_initial)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!subvention_initial.$edit" ng-click="vm.supprimer(subvention_initial)" title="Supprimer">
+                    <span class="icon-delete"></span>
+                  </a>
+                            
+                  <a ng-if="subvention_initial.$edit" ng-click="vm.annuler(subvention_initial)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="subvention_initial.$edit && subvention_initial.id_type_batiment && subvention_initial.id_type_latrine && subvention_initial.id_type_mobilier && subvention_initial.id_type_cout_maitrise && subvention_initial.id_type_cout_sousprojet>''" ng-click="vm.ajout(subvention_initial,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>     
+          
+       </div>
+      <!-- / acces_zone -->
+    
+    </div>
+    <!-- / CONTENT -->
+  </div>
+
+  <!--ui-gmap-windows show="'showWindow'" ng-cloak>
+                <div>
+                    <p>This is an info window</p>
+                </div>
+            </ui-gmap-windows-->
+
+            <!--ui-gmap-google-map center='main.map.center' zoom='main.map.zoom' options='main.map.options'>
+     <ui-gmap-markers models="main.markers" coords="'self'" icon="'icon'" options="'options'" click="'onClick'" fit="true">
+         <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
+             <div class="mapinfowindow" data-ui-sref="display({id: id})">                                                                      
+                 <span class="itemname" data-ng-non-bindable>{{ title }}</span>
+             </div>
+         </ui-gmap-windows>
+     </ui-gmap-markers>
+ </ui-gmap-google-map-->
+
+ <!--ui-gmap-window show="polywindow.show" coords="polywindow.coords" closeclick="polywindow.closeClick()">
+        <h1> test </h1>
+      </ui-gmap-window-->

@@ -151,7 +151,10 @@
                 <div style="widht:100%;">  
                     <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPhase_sous_projet()" style="width:10%;">
                       Nouveau
-                    </md-button>
+                    </md-button>                    
+                    <md-button type="submit" ng-show="vm.showboutonValider && vm.permissionboutonValider" class="md-raised md-warn" aria-label="Valider" ng-click="vm.validationSousprojet()" style="width:10%;">
+                    Valider
+                  </md-button>
                 </div>
                <div>        
                 <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
@@ -253,7 +256,7 @@
                       <!--span class="ms-form-wizard-step-number md-accent-bg">
                         <i class="icon-check s16"></i>
                     </span-->
-                    <span class="ms-form-wizard-step-text">Phase sous projet</span>
+                    <span class="ms-form-wizard-step-text">Rubrique à verifier</span>
                 </span>
               </md-tab-label>
               
@@ -282,7 +285,7 @@
                         <span ng-if="rubrique_construction.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Designation</label>
-                              <input name="designation" type="text" ng-model="rubrique_construction.designation"/>
+                              <input name="designation" type="text" ng-model="rubrique_construction.designation" disabled/>
                           </md-input-container>   
                         </span>
                                   
@@ -293,7 +296,7 @@
                         <span ng-if="rubrique_construction.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Element àverifier</label>
-                              <input name="element_verifier" type="text" ng-model="rubrique_construction.element_verifier"/>
+                              <input name="element_verifier" type="text" ng-model="rubrique_construction.element_verifier" disabled/>
                           </md-input-container>   
                         </span>
                                   

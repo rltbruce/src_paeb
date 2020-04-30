@@ -16,8 +16,8 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.demande_paiement_prestataire', {
             title : 'Demande payement',
-            icon  : 'icon-data',
-            weight: 1
+            icon  : 'icon-blur-radial',
+            weight: 3
         });
 
 

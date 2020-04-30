@@ -52,10 +52,10 @@
       
       console.log(vm.allmodule_gfpc);
 
-      if (result.data.response.length!=0)
+      /*if (result.data.response.length!=0)
       {
           vm.showbuttonNouvPassation=false;
-      }
+      }*/
   });
 //col table
         vm.module_gfpc_column = [

@@ -39,7 +39,7 @@
           </div>
         </header>
                 
-          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
             <thead>
               <tr>
                 <th class="secondary-text" ng-repeat="cisc in ::vm.site_column">
@@ -57,7 +57,7 @@
                   <span ng-if="site.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
                       <label>Ecole</label>
-                      <md-select ng-model="site.id_ecole"style="overflow: hidden;text-overflow: ellipsis;">
+                      <md-select ng-model="site.id_ecole"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="site.statu_convention!=0">
                         <md-option ng-repeat="ecole in vm.allecole" value="{{ecole.id}}">
                                                             {{ecole.code}}
                         </md-option>
@@ -97,6 +97,19 @@
                             
                   <span ng-if="!site.$edit">{{site.denomination_epp}}</span>
                 </td>
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Classification</label>
+                      <md-select ng-model="site.id_classification_site"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="classification_site in vm.allclassification_site" value="{{classification_site.id}}">
+                                                            {{classification_site.libelle}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!site.$edit">{{site.classification_site.libelle}}</span>
+                </td>
                           
                 <td>
                   <span ng-if="site.$edit">
@@ -114,8 +127,9 @@
                     <md-input-container style="width:100%;display: flex !important;">
                       <label>statut convention</label>
                       <md-select ng-model="site.statu_convention"style="overflow: hidden;text-overflow: ellipsis;" disabled>
-                        <md-option value="0">Stand by</md-option>
-                        <md-option value="1">Signé </md-option>
+                        <md-option value="0">Preparation</md-option>
+                        <md-option value="1">En cours de traitement </md-option>
+                        <md-option value="2">Signé </md-option>
                       </md-select>
                     </md-input-container>   
                   </span>

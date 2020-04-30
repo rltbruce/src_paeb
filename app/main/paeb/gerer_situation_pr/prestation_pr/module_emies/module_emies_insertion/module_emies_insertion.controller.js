@@ -40,7 +40,7 @@
         vm.stepOne = false;
         vm.stepTwo = false;
 
-        vm.showbuttonNouvPassation=true;
+        //vm.showbuttonNouvPassation=true;
         vm.showbuttonNouvRapport =true;
         vm.date_now         = new Date();
 
@@ -75,7 +75,7 @@
             vm.selectedItemPartenaire_relai = item;
            // vm.allconvention= [] ;
             
-            vm.showbuttonNouvPassation=true;
+            //vm.showbuttonNouvPassation=true;
             //recuperation donnée convention
             if (vm.selectedItemPartenaire_relai.id!=0)
             { 
@@ -133,7 +133,7 @@
 
                   if (vm.allmodule_emies.length!=0)
                   {
-                      vm.showbuttonNouvPassation=false;
+                      //vm.showbuttonNouvPassation=false;
                   }
               });
            }
@@ -179,10 +179,10 @@
       
       console.log(vm.allmodule_emies);
 
-      if (result.data.response.length!=0)
+     /* if (result.data.response.length!=0)
       {
-          vm.showbuttonNouvPassation=false;
-      }
+          //vm.showbuttonNouvPassation=false;
+      }*/
   });
 
 //col table
@@ -491,7 +491,7 @@
                         vm.selectedItemModule_emies.$selected  = false;
                         vm.selectedItemModule_emies.$edit      = false;
                         vm.selectedItemModule_emies ={};
-                        vm.showbuttonNouvPassation= false;
+                        //vm.showbuttonNouvPassation= false;
                     }
                     else 
                     {    
@@ -499,7 +499,7 @@
                       {
                           return obj.id !== vm.selectedItemModule_emies.id;
                       });
-                      vm.showbuttonNouvPassation= true;
+                      //vm.showbuttonNouvPassation= true;
                     }
                     
                 }
@@ -510,7 +510,7 @@
 
                   module_emies.id  =   String(data.response);              
                   NouvelItemModule_emies=false;
-                  vm.showbuttonNouvPassation= false;
+                  //vm.showbuttonNouvPassation= false;
             }
               vm.showbuttonValidation = false;
               module_emies.$selected = false;

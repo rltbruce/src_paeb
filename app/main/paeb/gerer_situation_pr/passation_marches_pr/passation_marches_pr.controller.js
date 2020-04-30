@@ -107,7 +107,7 @@
            if(item.id!=0)
            {
             vm.stepTwo = true;
-            vm.stepThree = false;
+            vm.stepThree = false;console.log(vm.allpassation_marches_pr);
               apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationBycontrat_partenaire_relai','id_contrat_partenaire_relai',item.id).then(function(result)
               {
                   vm.allpassation_marches_pr = result.data.response;

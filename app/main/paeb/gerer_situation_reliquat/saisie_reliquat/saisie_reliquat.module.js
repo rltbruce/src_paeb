@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_reliquat.saisie_reliquat', {
-            title: 'Convention C/F',
+            title: 'Transfert reliquat',
             icon  : 'icon-tile-four',
             state: 'app.paeb_gerer_situation_reliquat_saisie_reliquat',
 			weight: 1

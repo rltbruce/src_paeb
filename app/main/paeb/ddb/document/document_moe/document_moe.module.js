@@ -29,7 +29,7 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.document.document_moe', {
             title: 'Bureau etude',
-            icon  : 'icon-clipboard-text',
+            icon  : 'icon-clipboard-outline',
             state: 'app.paeb_ddb_document_document_moe'
         });
     }

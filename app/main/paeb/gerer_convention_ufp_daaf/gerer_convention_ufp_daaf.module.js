@@ -8,6 +8,7 @@
             'app.paeb.gerer_convention_ufp_daaf.convention_ufp_daaf_valide',
             'app.paeb.gerer_convention_ufp_daaf.site',
             'app.paeb.gerer_convention_ufp_daaf.reporting',
+            'app.paeb.gerer_convention_ufp_daaf.compte_daaf'
             ])
         .run(testPermission)       
         .config(config);
@@ -43,7 +44,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DAAF","ODAAF"];
+                var permissions = ["DAAF","ODAAF","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

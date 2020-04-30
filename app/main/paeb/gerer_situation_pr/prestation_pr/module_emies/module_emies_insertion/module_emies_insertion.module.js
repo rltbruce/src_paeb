@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_pr.prestation_pr.module_emies.module_emies_insertion', {
-            title: 'Module emies',
+            title: 'Insertion emies',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_pr_prestation_pr_module_emies_module_emies_insertion',
 			weight: 3,

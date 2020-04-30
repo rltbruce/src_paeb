@@ -16,8 +16,8 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.suivi_physique_travaux', {
             title : 'Suivi physique',
-            icon  : 'icon-data',
-            weight: 3
+            icon  : 'icon-blur-radial',
+            weight: 11
         });
 
 

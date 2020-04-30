@@ -17,8 +17,8 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.validation_demande_daaf', {
             title : 'D_validation (daaf)',
-            icon  : 'icon-data',
-            weight: 3
+            icon  : 'icon-blur-radial',
+            weight: 4
         });
 
 

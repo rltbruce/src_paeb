@@ -14,13 +14,13 @@
         var currentItem;
         vm.selectedItem = {} ;
         vm.allsite = [] ;
+        vm.allclassification_site =[];
 
         //style
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
-          autoWidth: false,
-          responsive: true          
+          autoWidth: false         
         };
 
         //col table
@@ -32,6 +32,8 @@
         {titre:"objet sous projet"
         },
         {titre:"Denomination epp"
+        },
+        {titre:"Classification site"
         },
         {titre:"agence d'accompagnemant"
         },
@@ -46,6 +48,11 @@
         {
             vm.allsite = result.data.response;
         });
+        apiFactory.getAll("classification_site/index").then(function(result)
+        {
+            vm.allclassification_site = result.data.response;
+        });
+
 
         //recuperation donnée fokontany
         apiFactory.getAll("ecole/index").then(function(result)
@@ -71,7 +78,8 @@
               observation: '',
               agence_acc: '',
               statu_convention: 0,
-              id_ecole:''
+              id_ecole:'',
+              id_classification_site:''
             };         
             vm.allsite.push(items);
             vm.allsite.forEach(function(cis)
@@ -117,6 +125,7 @@
             item.agence_acc   = currentItem.agence_acc ;
             item.statu_convention    = currentItem.statu_convention ;
             item.id_ecole    = currentItem.id_ecole; 
+            item.id_classification_site    = currentItem.id_classification_site;
           }else
           {
             vm.allsite = vm.allsite.filter(function(obj)
@@ -167,7 +176,8 @@
             item.observation      = vm.selectedItem.observation ;
             item.agence_acc = vm.selectedItem.agence_acc;
             item.statu_convention  = vm.selectedItem.statu_convention;
-            item.id_ecole = vm.selectedItem.ecole.id ; 
+            item.id_ecole = vm.selectedItem.ecole.id ;
+            item.id_classification_site = vm.selectedItem.classification_site.id ; 
         };
 
         //fonction bouton suppression item site
@@ -205,7 +215,8 @@
                     || (cis[0].observation!=currentItem.observation)
                     || (cis[0].agence_acc!=currentItem.agence_acc)
                     || (cis[0].statu_convention!=currentItem.statu_convention)
-                    || (cis[0].id_ecole!=currentItem.id_ecole))                    
+                    || (cis[0].id_ecole!=currentItem.id_ecole)
+                    || (cis[0].id_classification_site!=currentItem.id_classification_site))                    
                       { 
                          insert_in_base(item,suppression);
                       }
@@ -243,7 +254,8 @@
                     agence_acc:   site.agence_acc,
                     statu_convention:    site.statu_convention,
                     objet_sous_projet: site.objet_sous_projet,
-                    id_ecole: site.id_ecole,                
+                    id_ecole: site.id_ecole,
+                    id_classification_site: site.id_classification_site                 
                 });
                 console.log(datas);
                 //factory
@@ -254,12 +266,17 @@
                 {
                     return obj.id == site.id_ecole;
                 });
+                var cla = vm.allclassification_site.filter(function(obj)
+                {
+                    return obj.id == site.id_classification_site;
+                });
 
                 if (NouvelItem == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
+                        vm.selectedItem.classification_site   = cla[0];
                         vm.selectedItem.ecole   = ecol[0];
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
@@ -275,6 +292,7 @@
                 }
                 else
                 {
+                  site.classification_site = cla[0];
                   site.ecole = ecol[0];
                   site.id        =   String(data.response);              
                   NouvelItem = false;
@@ -304,12 +322,27 @@
         }
         vm.affichestatuconvention = function(item)
         {
-          var affiche= 'Stand by'
-          if (item.statu_convention == 1)
+          var x = Number(item);
+          switch(x)
           {
-            affiche = 'Signé';
+              case 1:
+              {
+                  return "En cours de traitement";
+                  break;
+              }
+
+              case 2:
+              {
+                  return "Signé";
+                  break;
+              }
+
+              default:
+              {
+                  return "Preparation";
+                  break;
+              }
           }
-          return affiche;
         }
     }
 

@@ -29,7 +29,7 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_feffi.convention_cisco_feffi', {
             title: 'Convention C/F',
-            icon  : 'icon-tile-four',
+            icon  : 'icon-source-fork',
             state: 'app.paeb_gerer_situation_feffi_convention_cisco_feffi',
 			weight: 1
         });

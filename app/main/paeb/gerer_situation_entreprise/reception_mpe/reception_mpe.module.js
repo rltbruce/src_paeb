@@ -28,10 +28,10 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_situation_entreprise.reception_mpe', {
-            title: 'RECEPTION MPE',
+            title: 'Reception MPE',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_entreprise_reception_mpe',
-			weight: 14
+			weight: 8
         });
     }
 

@@ -33,7 +33,7 @@
             title: 'Dossier prestataire',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_situation_entreprise_dossier_prestataire',
-			weight: 3,
+			weight: 10,
             hidden: function()
             {
                     return vs;

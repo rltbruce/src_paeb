@@ -204,9 +204,6 @@
           titre:"Batiment"
         },
         {
-          titre:"Nombre batiment"
-        },
-        {
           titre:"Cout unitaire"
         }];
 

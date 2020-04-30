@@ -29,7 +29,7 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_convention_ufp_daaf.site', {
             title: 'Site',
-            icon  : 'icon-tile-four',
+            icon  : 'icon-nfc-variant',
             state: 'app.paeb_gerer_convention_ufp_daaf_site',
 			weight: 1
         });

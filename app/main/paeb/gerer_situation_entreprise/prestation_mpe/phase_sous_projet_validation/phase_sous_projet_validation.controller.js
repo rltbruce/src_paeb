@@ -29,6 +29,8 @@
         var currentItemRubrique_construction;
         vm.selectedItemRubrique_construction = {} ;
         vm.allrubrique_construction = [] ;
+        vm.showboutonValider = false;
+        vm.permissionboutonValider= false;
 
         vm.stepOne = false;
         vm.stepTwo = false;
@@ -236,7 +238,7 @@
             vm.selectedItemPhase_sous_projet = item;
             vm.nouvelItemPhase_sous_projet   = item;
             currentItemPhase_sous_projet    = JSON.parse(JSON.stringify(vm.selectedItemPhase_sous_projet));
-            console.log('er');
+            console.log(item.id);
            if(item.id!=0)
            {
               apiFactory.getAPIgeneraliserREST("rubrique_construction/index",'menu','getrubriqueByphase_construction','id_phase_construction',item.id).then(function(result)
@@ -246,6 +248,8 @@
               });
             vm.stepOne = true;
             vm.stepTwo = false;
+            vm.showboutonValider = true;
+
            }
              
         };
@@ -277,6 +281,7 @@
             item.id_phase_sous_projet   = vm.selectedItemPhase_sous_projet.phase_sous_projet.id ;
             item.libelle   = vm.selectedItemPhase_sous_projet.phase_sous_projet.libelle ;
             item.description  = vm.selectedItemPhase_sous_projet.phase_sous_projet.description;
+vm.showboutonValider = false;
 
            /* apiFactory.getAPIgeneraliserREST("designation_infrastructure/index",'id_phase_sous_projet',item.infrastructure.id).then(function(result)
             {
@@ -360,9 +365,9 @@
                 //factory
             apiFactory.add("phase_sous_projet_construction/index",datas, config).success(function (data)
             {  
-                var phase = vm.allphase_sous_projet.filter(function(obj)
+                var phase = vm.allphase_sous_projet_ddb.filter(function(obj)
                 {
-                    return obj.id == phase_sous_projet.id_phase_sous_projet;
+                    return obj.id== phase_sous_projet.id_phase_sous_projet;
                 });
 
                 var contra = vm.allcontrat_prestataire.filter(function(obj)
@@ -399,8 +404,9 @@
                 }
               phase_sous_projet.$selected = false;
               phase_sous_projet.$edit = false;
-              vm.selectedItemPrestation_mpe_validation = {};
-            
+              vm.selectedItemPhase_sous_projet= {};
+            vm.showboutonValider = false;
+
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
@@ -411,6 +417,42 @@
               { return obj.id == item.id_phase_sous_projet});
           item.libelle = sous_pro[0].libelle;
           item.description = sous_pro[0].description;
+        }
+
+        vm.validationSousprojet = function()
+      {
+        validationSousprojet(vm.selectedItemPhase_sous_projet,0,1);
+      }
+
+      function validationSousprojet(phase_sous_projet,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        phase_sous_projet.id,
+                    id_contrat_prestataire: phase_sous_projet.contrat_prestataire.id,
+                    id_phase_sous_projet: phase_sous_projet.phase_sous_projet.id,
+                    validation: validation,               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("phase_sous_projet_construction/index",datas, config).success(function (data)
+            {  
+                vm.allphase_sous_projet = vm.allphase_sous_projet.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemPhase_sous_projet.id;
+                      });
+              phase_sous_projet.$selected = false;
+              phase_sous_projet.$edit = false;
+              vm.selectedItemPhase_sous_projet= {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
         }
 /**********************************fin phase_sous_projet****************************************/
 

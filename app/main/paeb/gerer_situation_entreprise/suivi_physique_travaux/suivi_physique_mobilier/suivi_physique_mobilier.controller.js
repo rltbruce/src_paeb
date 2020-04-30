@@ -215,9 +215,6 @@
           titre:"Mobilier"
         },
         {
-          titre:"Nombre mobilier"
-        },
-        {
           titre:"cout mobilier"
         }];
 

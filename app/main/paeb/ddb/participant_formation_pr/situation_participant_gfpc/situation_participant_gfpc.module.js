@@ -29,7 +29,7 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.participant_formation_pr.situation_participant_gfpc', {
             title: 'GFPC',
-            icon  : 'icon-clipboard-text',
+            icon  : 'icon-ticket-account',
             state: 'app.paeb_ddb_participant_formation_pr_situation_participant_gfpc'
         });
     }
