@@ -100,12 +100,12 @@
                               <label>Site</label>
                               <md-select ng-model="convention_cife_tete.id_site"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="!convention_cife_tete.id_feffi">
                                 <md-option ng-repeat="site in vm.allsite" value="{{site.id}}">
-                                                                    {{site.denomination_epp}}
+                                                                    {{site.ecole.description}}
                                 </md-option>
                               </md-select>
                             </md-input-container>  
                           </span>
-                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.site.denomination_epp}}</span>
+                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.ecole.description}}</span>
                         </td>
 
                         <td>

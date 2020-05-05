@@ -36,7 +36,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["DDB","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

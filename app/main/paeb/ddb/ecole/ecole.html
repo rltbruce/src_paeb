@@ -141,7 +141,7 @@
                         <td>
                           <span ng-if="ecole.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
-                              <label>Zone subvention</label>
+                              <label>Type zone</label>
                               <md-select ng-model="ecole.id_zone_subvention"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_zone_subvention(ecole)">
                                 <md-option ng-repeat="zone_subvention in vm.allzone_subvention" value="{{zone_subvention.id}}">
                                                                     {{zone_subvention.libelle}}

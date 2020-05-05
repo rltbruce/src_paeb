@@ -130,23 +130,23 @@
                      <td>
                       <span ng-if="convention_ufp_daaf_entete.$edit">
                         <md-input-container style="width:100%;display: flex !important;">
-                          <label>Montant convention</label>
-                          <input name="montant_convention" type="number" ng-model="convention_ufp_daaf_entete.montant_convention" disabled />
-                        </md-input-container>   
-                      </span>
-                                
-                      <span ng-if="!convention_ufp_daaf_entete.$edit">{{convention_ufp_daaf_entete.montant_convention}}</span>
-                    </td>
-
-                     <td>
-                      <span ng-if="convention_ufp_daaf_entete.$edit">
-                        <md-input-container style="width:100%;display: flex !important;">
                           <label>Nombre bébéficiaire</label>
                           <input name="nbr_beneficiaire" type="number" ng-model="convention_ufp_daaf_entete.nbr_beneficiaire"/>
                         </md-input-container>   
                       </span>
                                 
                       <span ng-if="!convention_ufp_daaf_entete.$edit">{{convention_ufp_daaf_entete.nbr_beneficiaire}}</span>
+                    </td>
+
+                     <td>
+                      <span ng-if="convention_ufp_daaf_entete.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Montant convention</label>
+                          <input name="montant_convention" type="number" ng-model="convention_ufp_daaf_entete.montant_convention" disabled />
+                        </md-input-container>   
+                      </span>
+                                
+                      <span ng-if="!convention_ufp_daaf_entete.$edit">{{convention_ufp_daaf_entete.montant_convention}}</span>
                     </td>
                     <td>  
                       <a ng-if="!convention_ufp_daaf_entete.$edit" ng-click="vm.modifierConvention_ufp_daaf_entete(convention_ufp_daaf_entete)" title="Modifier">
@@ -411,7 +411,7 @@
                   <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                     <thead>
                       <tr>
-                        <th class="secondary-text" ng-repeat="ciscT in ::vm.convention_cisco_feffi_entete_column">
+                        <th class="secondary-text" ng-repeat="ciscT in ::vm.convention_cisco_feffi_entete_column" style="min-width: 100px !important">
                           <div class="table-header">
                             <span class="column-title">{{ciscT.titre}}</span>
                           </div>
@@ -431,12 +431,12 @@
                         </td>
 
                         <td>
-                          <span>{{convention_cisco_feffi_entete.site.denomination_epp}}</span>
+                          <span>{{convention_cisco_feffi_entete.ecole.description}}</span>
                         </td>
 
-                        <td>
+                        <!--td>
                           <span>{{vm.affichage_type_convention(convention_cisco_feffi_entete.type_convention)}}</span>
-                        </td>
+                        </td-->
 
                         <td>                         
                           <span>{{convention_cisco_feffi_entete.ref_convention}}</span>

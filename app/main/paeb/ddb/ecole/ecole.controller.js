@@ -32,7 +32,7 @@
         vm.ecole_column = [
         {titre:"Code"
         },
-        {titre:"Description"
+        {titre:"Denomination"
         },
         {titre:"Lieu"
         },
@@ -44,7 +44,7 @@
         },
         {titre:"Altitude"
         },
-        {titre:"Zone subvention"
+        {titre:"Type zone"
         },
         {titre:"Acces zone"
         },

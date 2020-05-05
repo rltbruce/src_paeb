@@ -1,0 +1,112 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Donnée de base</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Agence d'accompagnement</span>
+            </div>
+
+            <div class="title">Agence d'accompagnement</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Convention -->
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+       <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start" flex>
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Agence d'accompagnement</span>
+              </div>
+
+              <div>
+
+                <md-button class="md-icon-button" aria-label="add agence" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout Agence d'accompagnement</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+                
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="cisc in ::vm.agence_acc_column">
+                  <div class="table-header">
+                    <span class="column-title">{{cisc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody >
+              <tr ng-repeat="agence_acc in vm.allagence_acc"  ng-class="{selected: agence_acc.$selected}" ng-click="vm.selection(agence_acc)">           
+                <td>
+                  <span ng-if="agence_acc.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Nom</label>
+                      <input name="nom" type="text" ng-model="agence_acc.nom"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!agence_acc.$edit">{{agence_acc.nom}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="agence_acc.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Téléphone</label>
+                      <input name="telephone" type="number" ng-model="agence_acc.telephone"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!agence_acc.$edit">{{agence_acc.telephone}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="agence_acc.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Siège</label>
+                      <input name="siege" type="text" ng-model="agence_acc.siege"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!agence_acc.$edit">{{agence_acc.siege}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!agence_acc.$edit" ng-click="vm.modifier(agence_acc)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!agence_acc.$edit" ng-click="vm.supprimer(agence_acc)" title="Supprimer">
+                    <span class="icon-delete"></span>
+                  </a>
+                            
+                  <a ng-if="agence_acc.$edit" ng-click="vm.annuler(agence_acc)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="agence_acc.$edit && agence_acc.nom && agence_acc.telephone && agence_acc.siege>''" ng-click="vm.ajout(agence_acc,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>       
+                     
+      </div>
+      <!-- / convention -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

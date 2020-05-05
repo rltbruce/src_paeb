@@ -322,6 +322,12 @@ console.log(vm.ciscos);
                       break;
                   }
 
+                  case 'ACC':
+                  {
+                      vm.user.acc = true ;
+                      break;
+                  }
+
                   default:
                   {
                       break ;
@@ -375,6 +381,8 @@ console.log(vm.ciscos);
               if(key == 'dpfi' && value == true)
                   tab.push(key.toUpperCase());
               if(key == 'odpfi' && value == true)
+                  tab.push(key.toUpperCase());
+              if(key == 'acc' && value == true)
                   tab.push(key.toUpperCase());  
           });
 

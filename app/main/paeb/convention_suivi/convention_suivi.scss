@@ -8,36 +8,53 @@
     md-tabs-wrapper
     {
         height:48px !important;
-        //border: 1px solid red;
-
-        background-color: rgb(0,129,255) !important;
+        //background-color: rgb(0,129,255) !important        
+        background-color: rgb(45,50,62) !important;
     }
     
     md-tabs-canvas
     {
         height:48px !important;
-        //border: 1px solid green;
+        //border: 1px solid white !important;
     }
     
     md-pagination-wrapper
     {
        height:48px !important;
-       // border: 1px solid blue;
+       //border: 1px solid green !important;
     }
+    .ms-form-wizard md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item
+    {    
+       //color: rgb(230,232,236) !important;
+    }
+    md-tab-item.md-tab.ng-scope.ng-isolate-scope.md-ink-ripple.md-active {
+        
+           //color: red !important;
+           background-color: rgba(1,161,245,0.5) !important;
+
+    }
+    md-tab-item.md-tab.ng-scope.ng-isolate-scope.md-ink-ripple.md-disabled {
+        
+           opacity: 0.5 !important;
+           .notification {
+           background-color: rgb(89,89,89) !important;
+           }
+
+    }
+
  
     md-tab-item
     {
-  
-        //border: 1px solid black;
+        color: rgba(230,232,236,1) !important;
+        //border: 1px solid red !important;
         margin:auto !important;
         padding:12px 24px 12px 24px !important;
+        font-size: 12px;
+        //width: 253px !important;
     }
     
     .ms-form-wizard-step-label 
-    {
-        //position : none !important;
-        //margin-top:4px !important;    
-        //border: 1px solid black;
+    { 
         background: transparent !important;
     }
     .ms-form-wizard .ms-form-wizard-step-label .ms-form-wizard-step-number.notification {
@@ -53,18 +70,15 @@
     background: rgb(170,0,0) !important;
     //text-align: center !important;
 }
-    md-tabs .md-tab.md-active {
-    /* color: white !important; */
-    font-weight: bold;
-    background-color: rgb(1,161,245) !important;
-    .ms-form-wizard-step-label 
-    {   
-        //color: red;
-        background: transparent;
-    }
-
-   
-    }
+   /* md-tabs .md-tab.md-active
+    {
+        font-weight: bold;
+        .ms-form-wizard-step-label 
+        {   
+            color: rgb(230,232,236) !important;
+            background: transparent;
+        }   
+    }*/
     .ms-form-wizard md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item:after
     {
         content: '';
@@ -91,15 +105,11 @@
 
 
 
-    #sousmenu
+   /* #sousmenu
     {
         md-tabs-wrapper
         {
             height:48px !important;
-            //border: 1px solid red;
-            //background-color: rgb(18,176,252) !important;
-
-            background-color: rgb(1,161,245) !important;
         }
         
         md-tabs-canvas
@@ -117,27 +127,17 @@
      
         md-tab-item
         {
-      
-            //border: 1px solid black;
             margin:auto !important;
             padding:12px 24px 12px 24px !important;
-            //color:black !important;
         }
         
         .ms-form-wizard-step-label 
         {
-            //position : none !important;
-            //margin-top:4px !important;    
-            //border: 1px solid black;
             background: transparent !important;
         }
         md-tabs .md-tab.md-active {
-        /* color: white !important; */
         font-weight: bold;
-        background-color: white !important;
-       
-
-       
+        background-color: white !important;       
         }
         .ms-form-wizard md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item:after
         {
@@ -161,15 +161,13 @@
        border-bottom: 1px solid transparent !important;
         z-index: 8;
         }
-    }
+    }*/
 
-    #soussousmenu
+   /* #soussousmenu
     {
         md-tabs-wrapper
         {
             height:48px !important;
-            //border: 1px solid red;
-            //background-color: rgb(18,176,252) !important;
 
             background-color: transparent !important;
         }
@@ -177,39 +175,27 @@
         md-tabs-canvas
         {
             height:48px !important;
-            //border: 1px solid green;
         }
         
         md-pagination-wrapper
         {
            height:48px !important;
-            //border: 1px solid blue;
        
         }
      
         md-tab-item
         {
-      
-            //border: 1px solid black;
             margin:auto !important;
             padding:12px 24px 12px 24px !important;
-            //color:black !important;
         }
         
         .ms-form-wizard-step-label 
         {
-            //position : none !important;
-            //margin-top:4px !important;    
-            //border: 1px solid black;
             background: transparent !important;
         }
         md-tabs .md-tab.md-active {
-        /* color: white !important; */
         font-weight: bold;
         background-color: transparent !important;
-       
-
-       
         }
         .ms-form-wizard md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item:after
         {
@@ -233,7 +219,7 @@
        border-bottom: 1px solid transparent !important;
         z-index: 8;
     }
-    }
+    }*/
 
         .form-wrapper {
 

@@ -36,7 +36,7 @@
     }])        
         .controller('Convention_suiviController', Convention_suiviController);
     /** @ngInject */
-    function Convention_suiviController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile)
+    function Convention_suiviController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile,apiUrlexcel)
     {
 		  /*****debut initialisation*****/
 
@@ -67,6 +67,8 @@
         vm.stepparticipantgfpc=false;
         vm.stepparticipantpmc=false;
         vm.stepparticipantsep=false;
+
+        vm.stepsoumissionnaire = false;
 
         vm.session = '';
 
@@ -490,6 +492,12 @@
         vm.permissionboutonenvaliderpassation = false;
         vm.showbuttonValidationpassation = false;
 
+        vm.ajoutMpe_soumissionaire = ajoutMpe_soumissionaire ;
+        var NouvelItemMpe_soumissionaire=false;
+        var currentItemMpe_soumissionaire;
+        vm.selectedItemMpe_soumissionaire = {} ;
+        vm.allmpe_soumissionaire = [] ;
+
         vm.ajoutContrat_prestataire = ajoutContrat_prestataire ;
         var NouvelItemContrat_prestataire=false;
         var currentItemContrat_prestataire;
@@ -530,6 +538,39 @@
         vm.showbuttonNouvReception_mpe=true;
         vm.permissionboutonvaliderreception_mpe = false;
         vm.showbuttonValidationreception_mpe = false;
+
+
+        vm.ajoutAvancement_batiment = ajoutAvancement_batiment ;
+        var NouvelItemAvancement_batiment=false;
+        var currentItemAvancement_batiment;
+        vm.selectedItemAvancement_batiment = {} ;
+        vm.allavancement_batiment = [] ;
+
+        vm.showbuttonNouvAvancement_batiment=true;
+        vm.permissionboutonvalideravancement_batiment = false;
+        vm.showbuttonValidationavancement_batiment = false;
+
+
+        vm.ajoutAvancement_latrine = ajoutAvancement_latrine ;
+        var NouvelItemAvancement_latrine=false;
+        var currentItemAvancement_latrine;
+        vm.selectedItemAvancement_latrine = {} ;
+        vm.allavancement_latrine = [] ;
+
+        vm.showbuttonNouvAvancement_latrine=true;
+        vm.permissionboutonvalideravancement_latrine = false;
+        vm.showbuttonValidationavancement_latrine = false;
+
+
+        vm.ajoutAvancement_mobilier = ajoutAvancement_mobilier ;
+        var NouvelItemAvancement_mobilier=false;
+        var currentItemAvancement_mobilier;
+        vm.selectedItemAvancement_mobilier = {} ;
+        vm.allavancement_mobilier = [] ;
+
+        vm.showbuttonNouvAvancement_mobilier=true;
+        vm.permissionboutonvalideravancement_mobilier = false;
+        vm.showbuttonValidationavancement_mobilier = false;
 
         vm.ajoutDemande_batiment_mpe = ajoutDemande_batiment_mpe;
         vm.NouvelItemDemande_batiment_mpe=false;
@@ -683,6 +724,8 @@
         vm.permissionboutonvaliderindicateur = false;
         vm.showbuttonValidationindicateur = false;
 
+        vm.affiche_load= false;
+
 /********************************************Fin indicateur********************************************/ 
 
         vm.dtOptions = {
@@ -768,6 +811,297 @@
             vm.allannee.push({annee: String(vm.datenow.getFullYear())});
             console.log(vm.allannee);
           }*/
+        apiFactory.getAll("region/index").then(function success(response)
+        {
+          vm.regions = response.data.response;
+        }, function error(response){ alert('something went wrong')});
+
+        vm.filtre_change_region = function(item)
+        { 
+            vm.filtre.id_cisco = null;
+            if (item.id_region != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+                {
+                    vm.ciscos = result.data.response;
+                    console.log(vm.ciscos);
+                }, function error(result){ alert('something went wrong')});
+            }
+            else
+            {
+                vm.ciscos = [];
+            }
+          
+        }
+        vm.filtre_change_cisco = function(item)
+        { vm.filtre.id_commune = null;
+            if (item.id_cisco != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",item.id_cisco).then(function(result)
+              {
+                vm.communes = result.data.response;
+                console.log(vm.communes);
+              }, function error(result){ alert('something went wrong')});
+            }
+            else
+            {
+                vm.communes = [];
+            }
+          
+        }
+        vm.filtre_change_commune = function(item)
+        { 
+            vm.filtre.id_ecole = null;
+            if (item.id_commune != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleBycommune","id_commune",item.id_commune).then(function(result)
+              {
+                vm.ecoles = result.data.response;
+                console.log(vm.ecoles);
+              }, function error(result){ alert('something went wrong')});
+            }
+            else
+            {
+                vm.ecoles = [];
+            }
+          
+        }
+        vm.filtre_change_ecole = function(item)
+        { 
+            vm.filtre.id_convention_entete_entete = null;
+            if (item.id_ecole != '*')
+            {
+                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByecole","id_ecole",item.id_ecole).then(function(result)
+                  {
+                    vm.convention_cisco_feffi_entetes = result.data.response;
+                    console.log(vm.convention_cisco_feffi_entetes );
+                  }, function error(result){ alert('something went wrong')});
+            }
+        }
+        var id_user = $cookieStore.get('id');
+         apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+              vm.roles = result.data.response.roles;
+              switch (vm.roles[0])
+                {
+                  case 'OBCAF': 
+                            vm.usercisco = result.data.response.cisco;
+                            vm.showbuttonNeauveaudemandefeffi=true;                            
+                            vm.session = 'OBCAF';
+
+                      break;
+
+                 case 'BCAF':
+                            vm.usercisco = result.data.response.cisco; 
+                            vm.permissionboutonValidercreer = true;
+                            
+                            vm.permissionboutonvaliderdecais_fef = true;
+                            vm.permissionboutonvaliderpassation_moe = true;
+                            vm.permissionboutonvalidercontrat_moe = true;
+
+                            vm.permissionboutonenvaliderpassation = true;
+
+                            vm.permissionboutonvaliderreception_mpe = true;
+                            
+                            vm.permissionboutonvaliderMemoire_technique = true;
+                            vm.permissionboutonvaliderAppel_offre = true;
+                            vm.permissionboutonvaliderRapport_mensuel = true;
+                            vm.permissionboutonvaliderManuel_gestion = true;
+                            vm.permissionboutonvaliderPolice_assurance = true;
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_creer = true;
+                            vm.permissionboutonvaliderPaiement_debut_travaux_moe = true;
+                            vm.permissionboutonvalideravancement_batiment = true;
+                            vm.permissionboutonvalideravancement_latrine = true;
+                            vm.permissionboutonvalideravancement_mobilier = true;
+
+                            vm.permissionboutonvaliderDemande_batiment_moe_creer = true;
+                            vm.permissionboutonvaliderPaiement_batiment_moe = true;
+
+                            vm.permissionboutonvaliderDemande_latrine_moe_creer = true;
+                            vm.permissionboutonvaliderPaiement_latrine_moe = true;
+
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_creer = true;
+                            vm.permissionboutonvaliderPaiement_fin_travaux_moe = true;
+
+                            vm.permissionboutonvalidercontrat_prestataire = true;
+                            vm.permissionboutonvalidertransfert_reliquat = true;
+                            vm.permissionboutonvaliderdelai_travaux = true;
+
+                            vm.permissionboutonvaliderphase_sous_projet = true;
+
+
+
+                            vm.permissionboutonvaliderDemande_batiment_mpe_creer = true;
+                            vm.permissionboutonvaliderPaiement_batiment_mpe = true;
+
+                            vm.permissionboutonvaliderDemande_latrine_mpe_creer = true;
+                            vm.permissionboutonvaliderPaiement_latrine_mpe = true;
+
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_creer = true;
+                            vm.permissionboutonvaliderPaiement_mobilier_mpe = true;
+
+
+                            vm.permissionboutonvaliderindicateur = true;
+
+                            vm.session = 'BCAF';
+                      
+                      break;
+                  case 'ODAAF':
+                            vm.usercisco = result.data.response.cisco;
+                  
+                            vm.session = 'ODAAF';
+                      
+                      break;
+                  
+                  case 'DAAF':
+                            vm.usercisco = result.data.response.cisco; 
+                            vm.permissionboutonencourdaaf = true;
+                            vm.permissionboutonenrejedaaf = true;
+                            vm.permissionboutonvaliderdaaf = true;
+                            vm.permissionboutonvalidertrans_daaf = true;                            
+                            
+                            vm.session = 'DAAF'; 
+                      break;
+                  case 'ODPFI':
+                            vm.session = 'ODPFI';    
+                      break;
+
+                  case 'DPFI':
+                            vm.usercisco = result.data.response.cisco; 
+                            vm.permissionboutonencourdpfi = true;
+                            vm.permissionboutonenrejedpfi = true;
+                            vm.permissionboutonenvaliderdpfi = true;
+                            vm.permissionboutonenvaliderpassation_pr = true;
+                            vm.permissionboutonvalidercontrat_pr = true;
+
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_batiment_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_batiment_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_batiment_moe_validedpfi = true;
+
+                            vm.permissionboutonvaliderPaiement_latrine_moe = true;
+
+                            vm.permissionboutonvaliderDemande_latrine_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_latrine_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_latrine_moe_validedpfi = true;
+
+                            vm.permissionboutonvaliderPaiement_latrine_moe = true
+
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_validedpfi = true;
+
+
+                            vm.permissionboutonvaliderDemande_batiment_mpe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_batiment_mpe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_batiment_mpe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_latrine_mpe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_latrine_mpe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_latrine_mpe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_validedpfi = true;
+                            
+                            vm.session = 'DPFI';
+                      
+                      break;
+
+                  case 'UFP':
+                            vm.session = 'UFP';
+                       
+                      break;
+
+                  case 'ADMIN':
+                            vm.usercisco = result.data.response.cisco; 
+                            vm.permissionboutonValidercreer = true;
+                            vm.permissionboutonValiderdpfi = true; 
+                            vm.permissionboutonencourdpfi = true;
+                            vm.permissionboutonenrejedpfi = true;
+                            vm.permissionboutonencourdaaf = true;
+                            vm.permissionboutonenrejedaaf = true;
+                            vm.permissionboutonvaliderdaaf = true;
+                            vm.permissionboutonvalidertrans_daaf = true;
+                            vm.permissionboutonvaliderdecais_fef = true;
+
+                            vm.permissionboutonvaliderpassation_pr = true;
+                            vm.permissionboutonvaliderpassation_moe = true;
+                            vm.permissionboutonvaliderpassation = true;
+                            vm.permissionboutonvaliderreception_mpe = true;
+                            vm.permissionboutonvalidercontrat_pr = true;
+                            vm.permissionboutonvalidercontrat_moe = true;
+                            vm.permissionboutonvalideravancement_batiment = true;
+                            vm.permissionboutonvalideravancement_latrine = true;
+                            vm.permissionboutonvalideravancement_mobilier = true;
+                            vm.permissionboutonvaliderMemoire_technique = true;
+                            vm.permissionboutonvaliderAppel_offre = true;
+                            vm.permissionboutonvaliderRapport_mensuel = true;
+                            vm.permissionboutonvaliderManuel_gestion = true;
+                            vm.permissionboutonvaliderPolice_assurance = true;
+
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_creer = true;
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_validedpfi = true;
+                            vm.permissionboutonvaliderPaiement_debut_travaux_moe = true;
+
+
+                            vm.permissionboutonvaliderDemande_batiment_moe_creer = true;
+                            vm.permissionboutonvaliderDemande_batiment_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_batiment_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_batiment_moe_validedpfi = true;
+                            vm.permissionboutonvaliderPaiement_batiment_moe = true;
+
+
+                            vm.permissionboutonvaliderDemande_latrine_moe_creer = true;
+                            vm.permissionboutonvaliderDemande_latrine_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_latrine_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_latrine_moe_validedpfi = true;
+                            vm.permissionboutonvaliderPaiement_latrine_moe = true;
+
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_creer = true;
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_validedpfi = true;
+                            vm.permissionboutonvaliderPaiement_fin_travaux_moe = true;
+
+                            vm.permissionboutonvalidercontrat_prestataire = true;
+                            vm.permissionboutonvalidertransfert_reliquat = true;
+                            vm.permissionboutonvaliderdelai_travaux = true;
+
+                            vm.permissionboutonvaliderphase_sous_projet = true;
+
+
+                            vm.permissionboutonvaliderDemande_batiment_mpe_creer = true;
+                            vm.permissionboutonvaliderDemande_batiment_mpe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_batiment_mpe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_batiment_mpe_validedpfi = true;
+                            vm.permissionboutonvaliderPaiement_batiment_mpe = true;
+
+                            vm.permissionboutonvaliderDemande_latrine_mpe_creer = true;
+                            vm.permissionboutonvaliderDemande_latrine_mpe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_latrine_mpe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_latrine_mpe_validedpfi = true;
+                            vm.permissionboutonvaliderPaiement_latrine_mpe = true;
+
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_creer = true;
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_validedpfi = true;
+                            vm.permissionboutonvaliderPaiement_mobilier_mpe = true;
+                            vm.permissionboutonvaliderindicateur = true;
+                            vm.session = 'ADMIN';                  
+                      break;
+                  default:
+                      break;
+              
+                }                  
+
+         });
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
@@ -788,266 +1122,138 @@
         {titre:"Avancement"
         },
         {titre:"Utilisateur"
-        }];
+        }]; 
 
-        var id_user = $cookieStore.get('id');
+        vm.importerfiltre =function(filtre)
+        {   
+            var date_debut = convertionDate(filtre.date_debut);
+            var date_fin = convertionDate(filtre.date_fin);
+            vm.affiche_load = true ;
+            var repertoire = 'bdd_construction';
 
-        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
-        {
-          vm.roles = result.data.response.roles;
-          switch (vm.roles[0])
+            apiFactory.getAPIgeneraliserREST("excel_bdd_construction/index",'menu','getdonneeexporter',
+                'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
+                filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
+                filtre.id_convention_entete,"repertoire",repertoire).then(function(result)
             {
-              case 'OBCAF': 
-                        var usercisco = result.data.response.cisco;
-                        vm.showbuttonNeauveaudemandefeffi=true;
-                        if (usercisco.id!=undefined)
-                        {
-                          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpByciscowithcount','id_cisco',usercisco.id).then(function(result)
-                          {
-                              vm.allconvention_entete = result.data.response;
-                          });
-                        }
-                        vm.session = 'OBCAF';                
-                  break;
+                vm.status    = result.data.status; 
+                
+                if(vm.status)
+                {
+                    vm.nom_file = result.data.nom_file;            
+                    window.location = apiUrlexcel+"bdd_construction/"+vm.nom_file ;
+                    vm.affiche_load =false; 
 
-             case 'BCAF':
-                        var usercisco = result.data.response.cisco; 
-                        vm.permissionboutonValidercreer = true;
-                        if (usercisco.id!=undefined)
-                        {
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpByciscowithcount','id_cisco',usercisco.id).then(function(result)
+                }else{
+                    vm.message=result.data.message;
+                    vm.Alert('Export en excel',vm.message);
+                    vm.affiche_load =false; 
+                }
+                console.log(result.data.data);
+            });
+        }       
+
+        vm.recherchefiltre = function(filtre)
+        {
+            var date_debut = convertionDate(filtre.date_debut);
+            var date_fin = convertionDate(filtre.date_fin);
+              switch (vm.session)
+                { 
+                  case 'OBCAF':
+                            if (vm.usercisco.id!=undefined)
+                            {
+                              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpByciscodate',
+                                'id_cisco',vm.usercisco.id,'date_debut',date_debut,'date_fin',date_fin).then(function(result)
+                              {
+                                  vm.allconvention_entete = result.data.response;
+                              });
+                            }               
+                      break;
+
+                 case 'BCAF':
+                            if (vm.usercisco.id!=undefined)
+                            {
+                                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu',
+                                    'getconventionvalideufpByciscodate','id_cisco',vm.usercisco.id,'date_debut',
+                                    date_debut,'date_fin',date_fin).then(function(result)
+                                {
+                                    vm.allconvention_entete = result.data.response;
+                                });
+                            }
+                      
+                      break;
+                  case 'ODAAF':                  
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu',
+                                'getconventionvalideufpBydate','date_debut',date_debut,'date_fin',
+                                date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',filtre.id_cisco,
+                                'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
                             });
-                        }
-
-                        vm.permissionboutonvaliderdecais_fef = true;
-                        vm.permissionboutonvaliderpassation_moe = true;
-                        vm.permissionboutonvalidercontrat_moe = true;
-
-                        vm.permissionboutonenvaliderpassation = true;
-
-                        vm.permissionboutonvaliderreception_mpe = true;
-                        
-                        vm.permissionboutonvaliderMemoire_technique = true;
-                        vm.permissionboutonvaliderAppel_offre = true;
-                        vm.permissionboutonvaliderRapport_mensuel = true;
-                        vm.permissionboutonvaliderManuel_gestion = true;
-                        vm.permissionboutonvaliderPolice_assurance = true;
-                        vm.permissionboutonvaliderDemande_debut_travaux_moe_creer = true;
-                        vm.permissionboutonvaliderPaiement_debut_travaux_moe = true;
-
-                        vm.permissionboutonvaliderDemande_batiment_moe_creer = true;
-                        vm.permissionboutonvaliderPaiement_batiment_moe = true;
-
-                        vm.permissionboutonvaliderDemande_latrine_moe_creer = true;
-                        vm.permissionboutonvaliderPaiement_latrine_moe = true;
-
-                        vm.permissionboutonvaliderDemande_fin_travaux_moe_creer = true;
-                        vm.permissionboutonvaliderPaiement_fin_travaux_moe = true;
-
-                        vm.permissionboutonvalidercontrat_prestataire = true;
-                        vm.permissionboutonvalidertransfert_reliquat = true;
-                        vm.permissionboutonvaliderdelai_travaux = true;
-
-                        vm.permissionboutonvaliderphase_sous_projet = true;
-
-
-
-                        vm.permissionboutonvaliderDemande_batiment_mpe_creer = true;
-                        vm.permissionboutonvaliderPaiement_batiment_mpe = true;
-
-                        vm.permissionboutonvaliderDemande_latrine_mpe_creer = true;
-                        vm.permissionboutonvaliderPaiement_latrine_mpe = true;
-
-                        vm.permissionboutonvaliderDemande_mobilier_mpe_creer = true;
-                        vm.permissionboutonvaliderPaiement_mobilier_mpe = true;
-
-
-                        vm.permissionboutonvaliderindicateur = true;
-
-                        vm.session = 'BCAF';
+                      
+                      break;
                   
-                  break;
-              case 'ODAAF':
-                        var usercisco = result.data.response.cisco;
+                  case 'DAAF':
+                            
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu',
+                                'getconventionvalideufpBydate','date_debut',date_debut,'date_fin',
+                                date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,
+                                'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                            {
+                                vm.allconvention_entete = result.data.response;
+                            });
+                      break;
+                  case 'ODPFI': 
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu',
+                                'getconventionvalideufpBydate','date_debut',date_debut,'date_fin',
+                                date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,
+                                'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                            {
+                                vm.allconvention_entete = result.data.response;
+                            });   
+                      break;
+
+                  case 'DPFI':
+                                                        
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                            {
+                                vm.allconvention_entete = result.data.response;
+                            });
+                      
+                      break;
+
+                  case 'UFP':
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                            {
+                                vm.allconvention_entete = result.data.response;
+                            });
+                       
+                      break;
+
+                  case 'ADMIN':
+                           
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                            {
+                                vm.allconvention_entete = result.data.response;
+                                console.log(vm.allconvention_entete);
+                            });                 
+                      break;
+                  default:
+                      break;
               
-                        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydatenowwithcount','date_signature',vm.datenow.getFullYear()).then(function(result)
-                        {
-                            vm.allconvention_entete = result.data.response;
-                        });
-                        vm.session = 'ODAAF';
-                  
-                  break;
-              
-              case 'DAAF':
-                        var usercisco = result.data.response.cisco; 
-                        vm.permissionboutonencourdaaf = true;
-                        vm.permissionboutonenrejedaaf = true;
-                        vm.permissionboutonvaliderdaaf = true;
-                        vm.permissionboutonvalidertrans_daaf = true;
-                        
-                        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydatenowwithcount','date_signature',vm.datenow.getFullYear()).then(function(result)
-                        {
-                            vm.allconvention_entete = result.data.response;
-                        });
-                        vm.session = 'DAAF'; 
-                  break;
-              case 'ODPFI': 
-                        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydatenowwithcount','date_signature',vm.datenow.getFullYear()).then(function(result)
-                        {
-                            vm.allconvention_entete = result.data.response;
-                        });
-                        vm.session = 'ODPFI';    
-                  break;
-
-              case 'DPFI':
-                        var usercisco = result.data.response.cisco; 
-                        vm.permissionboutonencourdpfi = true;
-                        vm.permissionboutonenrejedpfi = true;
-                        vm.permissionboutonenvaliderdpfi = true;
-                        vm.permissionboutonenvaliderpassation_pr = true;
-                        vm.permissionboutonvalidercontrat_pr = true;
-
-                        vm.permissionboutonvaliderDemande_debut_travaux_moe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_debut_travaux_moe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_debut_travaux_moe_validedpfi = true;
-
-                        vm.permissionboutonvaliderDemande_batiment_moe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_batiment_moe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_batiment_moe_validedpfi = true;
-
-                        vm.permissionboutonvaliderPaiement_latrine_moe = true;
-
-                        vm.permissionboutonvaliderDemande_latrine_moe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_latrine_moe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_latrine_moe_validedpfi = true;
-
-                        vm.permissionboutonvaliderPaiement_latrine_moe = true
-
-                        vm.permissionboutonvaliderDemande_fin_travaux_moe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_fin_travaux_moe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_fin_travaux_moe_validedpfi = true;
-
-
-                        vm.permissionboutonvaliderDemande_batiment_mpe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_batiment_mpe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_batiment_mpe_validedpfi = true;
-
-                        vm.permissionboutonvaliderDemande_latrine_mpe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_latrine_mpe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_latrine_mpe_validedpfi = true;
-
-                        vm.permissionboutonvaliderDemande_mobilier_mpe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_mobilier_mpe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_mobilier_mpe_validedpfi = true;
-                        
-                        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydatenowwithcount','date_signature',vm.datenow.getFullYear()).then(function(result)
-                        {
-                            vm.allconvention_entete = result.data.response;
-                        });
-                        vm.session = 'DPFI';
-                  
-                  break;
-
-              case 'UFP':
-                        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydatenowwithcount','date_signature',vm.datenow.getFullYear()).then(function(result)
-                        {
-                            vm.allconvention_entete = result.data.response;
-                        });
-                        vm.session = 'UFP';
-                   
-                  break;
-
-              case 'ADMIN':
-                        var usercisco = result.data.response.cisco; 
-                        vm.permissionboutonValidercreer = true;
-                        vm.permissionboutonValiderdpfi = true; 
-                        vm.permissionboutonencourdpfi = true;
-                        vm.permissionboutonenrejedpfi = true;
-                        vm.permissionboutonencourdaaf = true;
-                        vm.permissionboutonenrejedaaf = true;
-                        vm.permissionboutonvaliderdaaf = true;
-                        vm.permissionboutonvalidertrans_daaf = true;
-                        vm.permissionboutonvaliderdecais_fef = true;
-
-                        vm.permissionboutonvaliderpassation_pr = true;
-                        vm.permissionboutonvaliderpassation_moe = true;
-                        vm.permissionboutonvaliderpassation = true;
-                        vm.permissionboutonvaliderreception_mpe = true;
-                        vm.permissionboutonvalidercontrat_pr = true;
-                        vm.permissionboutonvalidercontrat_moe = true;
-                        
-                        vm.permissionboutonvaliderMemoire_technique = true;
-                        vm.permissionboutonvaliderAppel_offre = true;
-                        vm.permissionboutonvaliderRapport_mensuel = true;
-                        vm.permissionboutonvaliderManuel_gestion = true;
-                        vm.permissionboutonvaliderPolice_assurance = true;
-
-                        vm.permissionboutonvaliderDemande_debut_travaux_moe_creer = true;
-                        vm.permissionboutonvaliderDemande_debut_travaux_moe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_debut_travaux_moe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_debut_travaux_moe_validedpfi = true;
-                        vm.permissionboutonvaliderPaiement_debut_travaux_moe = true;
-
-
-                        vm.permissionboutonvaliderDemande_batiment_moe_creer = true;
-                        vm.permissionboutonvaliderDemande_batiment_moe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_batiment_moe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_batiment_moe_validedpfi = true;
-                        vm.permissionboutonvaliderPaiement_batiment_moe = true;
-
-
-                        vm.permissionboutonvaliderDemande_latrine_moe_creer = true;
-                        vm.permissionboutonvaliderDemande_latrine_moe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_latrine_moe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_latrine_moe_validedpfi = true;
-                        vm.permissionboutonvaliderPaiement_latrine_moe = true;
-
-                        vm.permissionboutonvaliderDemande_fin_travaux_moe_creer = true;
-                        vm.permissionboutonvaliderDemande_fin_travaux_moe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_fin_travaux_moe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_fin_travaux_moe_validedpfi = true;
-                        vm.permissionboutonvaliderPaiement_fin_travaux_moe = true;
-
-                        vm.permissionboutonvalidercontrat_prestataire = true;
-                        vm.permissionboutonvalidertransfert_reliquat = true;
-                        vm.permissionboutonvaliderdelai_travaux = true;
-
-                        vm.permissionboutonvaliderphase_sous_projet = true;
-
-
-                        vm.permissionboutonvaliderDemande_batiment_mpe_creer = true;
-                        vm.permissionboutonvaliderDemande_batiment_mpe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_batiment_mpe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_batiment_mpe_validedpfi = true;
-                        vm.permissionboutonvaliderPaiement_batiment_mpe = true;
-
-                        vm.permissionboutonvaliderDemande_latrine_mpe_creer = true;
-                        vm.permissionboutonvaliderDemande_latrine_mpe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_latrine_mpe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_latrine_mpe_validedpfi = true;
-                        vm.permissionboutonvaliderPaiement_latrine_mpe = true;
-
-                        vm.permissionboutonvaliderDemande_mobilier_mpe_creer = true;
-                        vm.permissionboutonvaliderDemande_mobilier_mpe_encourdpfi = true;
-                        vm.permissionboutonvaliderDemande_mobilier_mpe_rejedpfi = true;              
-                        vm.permissionboutonvaliderDemande_mobilier_mpe_validedpfi = true;
-                        vm.permissionboutonvaliderPaiement_mobilier_mpe = true;
-                        
-                        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydatenowwithcount','date_signature',vm.datenow.getFullYear()).then(function(result)
-                        {
-                            vm.allconvention_entete = result.data.response;
-                            console.log(vm.allconvention_entete);
-                        });
-                        vm.session = 'ADMIN';                  
-                  break;
-              default:
-                  break;
-          
-            }                  
-
-        });
+                }
+                console.log(filtre);
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
+        
         /***************fin convention cisco/feffi************/
 
          //fonction selection item entete convention cisco/feffi
@@ -1110,6 +1316,7 @@
               vm.stepjusti_d_tra_moe = false;
               vm.stepsuiviexecution = false;
               vm.stepphase = false;
+              vm.stepsoumissionnaire = false;
               vm.nbr_decaiss_feffi = item.nbr_decaiss_feffi;
               //console.log(vm.nbr_demande_feffi);
                          
@@ -1281,7 +1488,7 @@
             });
         }
         function donnee_menu_moe(item,session)
-        {   
+        {   vm.showbuttonNouvcontrat_moe=true;
             return new Promise(function (resolve, reject) 
             {
                 switch (session)
@@ -2044,6 +2251,7 @@
         vm.selectionDemande_realimentation= function (item)
         {
             vm.selectedItemDemande_realimentation = item;
+            vm.showbuttonNouvtransfert_daaf = true;
             if (item.$selected ==false || item.$selected == undefined)
             {
                 currentItemDemande_realimentation     = JSON.parse(JSON.stringify(vm.selectedItemDemande_realimentation));
@@ -15398,6 +15606,7 @@
 
             vm.showbuttonValidationpassation = true;
             vm.validation_passation = item.validation;
+            vm.stepsoumissionnaire = true;
            }
              
         };
@@ -15609,6 +15818,240 @@
         }
 /**********************************fin passation_marches****************************************/
 
+/**********************************debut sousmissionnaire****************************************/
+    vm.mpe_soumissionaire_column = [
+        {titre:"MPE sousmissionnaire"
+        },
+        {titre:"Telephone"
+        },
+        {titre:"Siège"
+        },
+        {titre:"Action"
+        }];
+        //Masque de saisi ajout
+        vm.ajouterMpe_soumissionaire = function ()
+        { 
+          if (NouvelItemMpe_soumissionaire == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              id_prestataire: '',
+              telephone: '',
+              siege: ''
+            };         
+            vm.allmpe_soumissionaire.push(items);
+            vm.allmpe_soumissionaire.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemMpe_soumissionaire = mem;
+              }
+            });
+
+            NouvelItemMpe_soumissionaire = true ;
+          }else
+          {
+            vm.showAlert('Ajout mpe_soumissionaire','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutMpe_soumissionaire(mpe_soumissionaire,suppression)
+        {
+            if (NouvelItemMpe_soumissionaire==false)
+            {
+                test_existanceMpe_soumissionaire (mpe_soumissionaire,suppression); 
+            } 
+            else
+            {
+                insert_in_baseMpe_soumissionaire(mpe_soumissionaire,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation mpe_soumissionaire
+        vm.annulerMpe_soumissionaire = function(item)
+        {
+          if (NouvelItemMpe_soumissionaire == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.id_prestataire   = currentItemMpe_soumissionaire.id_prestataire ;
+            item.telephone   = currentItemMpe_soumissionaire.telephone ;
+            item.siege   = currentItemMpe_soumissionaire.siege ;
+          }else
+          {
+            vm.allmpe_soumissionaire = vm.allmpe_soumissionaire.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemMpe_soumissionaire.id;
+            });
+          }
+
+          vm.selectedItemMpe_soumissionaire = {} ;
+          NouvelItemMpe_soumissionaire      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionMpe_soumissionaire= function (item)
+        {
+            vm.selectedItemMpe_soumissionaire = item;
+            currentItemMpe_soumissionaire    = JSON.parse(JSON.stringify(vm.selectedItemMpe_soumissionaire)); 
+        };
+        $scope.$watch('vm.selectedItemMpe_soumissionaire', function()
+        {
+             if (!vm.allmpe_soumissionaire) return;
+             vm.allmpe_soumissionaire.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemMpe_soumissionaire.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierMpe_soumissionaire = function(item)
+        {
+            NouvelItemMpe_soumissionaire = false ;
+            vm.selectedItemMpe_soumissionaire = item;
+            currentItemMpe_soumissionaire = angular.copy(vm.selectedItemMpe_soumissionaire);
+            $scope.vm.allmpe_soumissionaire.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.id_prestataire   = vm.selectedItemMpe_soumissionaire.id_prestataire ;
+            item.telephone   = vm.selectedItemMpe_soumissionaire.telephone ;
+            item.siege   = vm.selectedItemMpe_soumissionaire.siege ;
+        };
+
+        //fonction bouton suppression item Mpe_soumissionaire
+        vm.supprimerMpe_soumissionaire = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutMpe_soumissionaire(vm.selectedItemMpe_soumissionaire,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceMpe_soumissionaire (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var pass = vm.allmpe_soumissionaire.filter(function(obj)
+                {
+                   return obj.id == currentItemMpe_soumissionaire.id;
+                });
+                if(pass[0])
+                {
+                   if((pass[0].id_prestataire   != currentItemMpe_soumissionaire.id_prestataire ))                   
+                      { 
+                         insert_in_baseMpe_soumissionaire(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseMpe_soumissionaire(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseMpe_soumissionaire(mpe_soumissionaire,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemMpe_soumissionaire==false)
+            {
+                getId = vm.selectedItemMpe_soumissionaire.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    id_prestataire: mpe_soumissionaire.id_prestataire,
+                    id_passation_marches: vm.selectedItemPassation_marches.id               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("mpe_soumissionaire/index",datas, config).success(function (data)
+            {   var nb_offre = 0;
+                var press= vm.allprestataire.filter(function(obj)
+                {
+                    return obj.id == mpe_soumissionaire.id_prestataire;
+                });
+
+                if (NouvelItemMpe_soumissionaire == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {                        
+                        vm.selectedItemMpe_soumissionaire.prestataire = press[0];
+                        
+                        vm.selectedItemMpe_soumissionaire.$selected  = false;
+                        vm.selectedItemMpe_soumissionaire.$edit      = false;
+                        vm.selectedItemMpe_soumissionaire ={};
+                    }
+                    else 
+                    {    
+                      vm.allmpe_soumissionaire = vm.allmpe_soumissionaire.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemMpe_soumissionaire.id;
+                      });
+                      nb_offre= parseInt(vm.selectedItemPassation_marches.nbr_offre_recu) - 1;
+                      //miseajourPassation_marches(vm.selectedItemPassation_marches,0,nb_offre);
+                    }
+                }
+                else
+                {
+                  mpe_soumissionaire.prestataire = press[0]; ; 
+
+                  mpe_soumissionaire.id  =   String(data.response);              
+                  NouvelItemMpe_soumissionaire=false;
+
+                  nb_offre= parseInt(vm.selectedItemPassation_marches.nbr_offre_recu) + 1;
+                  //miseajourPassation_marches(vm.selectedItemPassation_marches,0,nb_offre);
+            }
+             vm.selectedItemPassation_marches.nbr_offre_recu = nb_offre
+              mpe_soumissionaire.$selected = false;
+              mpe_soumissionaire.$edit = false;
+              vm.selectedItemMpe_soumissionaire = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.changePrestataire = function(item)
+        {
+          var pre = vm.allprestataire.filter(function(obj)
+          {
+              return obj.id == item.id_prestataire;
+          });
+         // console.log(pre[0]);
+          item.telephone=pre[0].telephone;
+          item.siege=pre[0].siege;
+        }
+/**********************************fin sousmissionnaire****************************************/
+
 /**********************************debut contrat prestataire****************************************/
         
 //col table
@@ -15721,8 +16164,24 @@
             vm.selectedItemContrat_prestataire = item;
             vm.nouvelItemContrat_prestataire   = item;
             currentItemContrat_prestataire    = JSON.parse(JSON.stringify(vm.selectedItemContrat_prestataire));
+            
+
            if(item.id!=0)
            {
+
+                apiFactory.getAPIgeneraliserREST("attachement_batiment/index",'id_contrat_prestataire',item.id).then(function(result)
+                {
+                    vm.allattachement_batiment = result.data.response;
+                });
+                apiFactory.getAPIgeneraliserREST("attachement_latrine/index",'id_contrat_prestataire',item.id).then(function(result)
+                {
+                    vm.allattachement_latrine = result.data.response;
+                });
+
+                apiFactory.getAPIgeneraliserREST("attachement_mobilier/index",'id_contrat_prestataire',item.id).then(function(result)
+                {
+                    vm.allattachement_mobilier = result.data.response;
+                });
             vm.showbuttonValidationcontrat_prestataire = true;
             vm.validation_contrat_prestataire = item.validation;
               switch (vm.session)
@@ -15752,6 +16211,38 @@
                                 {
                                   vm.showbuttonNouvReception_mpe=false;
                                 }
+                            });
+
+
+                            apiFactory.getAPIgeneraliserREST("avancement_batiment/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                            {
+                                vm.allavancement_batiment = result.data.response.filter(function(obj)
+                                {
+                                    return obj.validation == 0;
+                                });
+                                vm.showbuttonNouvAvancement_batiment=true;
+                                
+                            });
+
+
+                            apiFactory.getAPIgeneraliserREST("avancement_latrine/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                            {
+                                vm.allavancement_latrine = result.data.response.filter(function(obj)
+                                {
+                                    return obj.validation == 0;
+                                });
+                                vm.showbuttonNouvAvancement_latrine=true;
+                                
+                            });
+
+                            apiFactory.getAPIgeneraliserREST("avancement_mobilier/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                            {
+                                vm.allavancement_mobilier = result.data.response.filter(function(obj)
+                                {
+                                    return obj.validation == 0;
+                                });
+                                vm.showbuttonNouvAvancement_mobilier=true;
+                                
                             });
                             apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index","menu","getdemandeinvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
                             {
@@ -15783,6 +16274,28 @@
                           {
                               vm.allreception_mpe = result.data.response;
                               vm.showbuttonNouvReception_mpe=false;
+                              
+                          });
+
+                          apiFactory.getAPIgeneraliserREST("avancement_batiment/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                          {
+                              vm.allavancement_batiment = result.data.response;
+                              vm.showbuttonNouvAvancement_batiment=false;
+                              
+                          });
+
+                          apiFactory.getAPIgeneraliserREST("avancement_latrine/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                          {
+                              vm.allavancement_latrine = result.data.response;
+                              vm.showbuttonNouvAvancement_latrine=false;
+                              
+                          });
+
+
+                          apiFactory.getAPIgeneraliserREST("avancement_mobilier/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                          {
+                              vm.allavancement_mobilier = result.data.response;
+                              vm.showbuttonNouvAvancement_mobilier=false;
                               
                           });
                           apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index","menu","getdemandeBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
@@ -15820,6 +16333,28 @@
                                 vm.showbuttonNouvReception_mpe=false;
                                 
                             });
+                            apiFactory.getAPIgeneraliserREST("avancement_batiment/index",'menu','getavancementvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                            {
+                                vm.allavancement_batiment = result.data.response;
+                                vm.showbuttonNouvAvancement_batiment=false;
+                                
+                            });
+
+
+                            apiFactory.getAPIgeneraliserREST("avancement_latrine/index",'menu','getavancementvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                            {
+                                vm.allavancement_latrine = result.data.response;
+                                vm.showbuttonNouvAvancement_latrine=false;
+                                
+                            });
+
+
+                            apiFactory.getAPIgeneraliserREST("avancement_mobilier/index",'menu','getavancementvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                            {
+                                vm.allavancement_mobilier = result.data.response;
+                                vm.showbuttonNouvAvancement_mobilier=false;
+                                
+                            });
                             apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index","menu","getdemandevalideBycontrat",'id_contrat_prestataire',item.id).then(function(result)
                             {
                               vm.alldemande_batiment_mpe = result.data.response;
@@ -15852,6 +16387,29 @@
                             {
                                 vm.allreception_mpe = result.data.response;
                                 vm.showbuttonNouvReception_mpe=false;
+                                
+                            });
+
+                            apiFactory.getAPIgeneraliserREST("avancement_batiment/index",'menu','getavancementvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                            {
+                                vm.allavancement_batiment = result.data.response;
+                                vm.showbuttonNouvAvancement_batiment=false;
+                                
+                            });
+
+
+                            apiFactory.getAPIgeneraliserREST("avancement_latrine/index",'menu','getavancementvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                            {
+                                vm.allavancement_latrine = result.data.response;
+                                vm.showbuttonNouvAvancement_latrine=false;
+                                
+                            });
+
+
+                            apiFactory.getAPIgeneraliserREST("avancement_mobilier/index",'menu','getavancementvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                            {
+                                vm.allavancement_mobilier = result.data.response;
+                                vm.showbuttonNouvAvancement_mobilier=false;
                                 
                             });
                           apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index","menu","getdemandevalidebcafBycontrat",'id_contrat_prestataire',item.id).then(function(result)
@@ -15892,6 +16450,28 @@
                                 vm.showbuttonNouvReception_mpe=false;
                               }
                           });
+                          apiFactory.getAPIgeneraliserREST("avancement_batiment/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                          {
+                              vm.allavancement_batiment = result.data.response;
+
+                                vm.showbuttonNouvAvancement_batiment=true;
+                              
+                              console.log(vm.allavancement_batiment);
+                          });
+
+                          apiFactory.getAPIgeneraliserREST("avancement_latrine/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                          {
+                              vm.allavancement_latrine = result.data.response;
+
+                                vm.showbuttonNouvAvancement_latrine=true;;
+                          });
+
+                          apiFactory.getAPIgeneraliserREST("avancement_mobilier/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                          {
+                              vm.allavancement_mobilier = result.data.response;
+
+                                vm.showbuttonNouvAvancement_mobilier=true;
+                          });
                           apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index","menu","getdemandeBycontrat",'id_contrat_prestataire',item.id).then(function(result)
                         {
                           vm.alldemande_batiment_mpe = result.data.response;
@@ -15924,6 +16504,29 @@
                                 vm.showbuttonNouvReception_mpe=false;
                                 
                         });
+
+                        apiFactory.getAPIgeneraliserREST("avancement_batiment/index",'menu','getavancementvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                        {
+                                vm.allavancement_batiment = result.data.response;
+                                vm.showbuttonNouvAvancement_batiment=false;
+                                
+                        });
+
+
+                            apiFactory.getAPIgeneraliserREST("avancement_latrine/index",'menu','getavancementvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                            {
+                                vm.allavancement_latrine = result.data.response;
+                                vm.showbuttonNouvAvancement_latrine=false;
+                                
+                            });
+
+
+                            apiFactory.getAPIgeneraliserREST("avancement_mobilier/index",'menu','getavancementvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                            {
+                                vm.allavancement_mobilier = result.data.response;
+                                vm.showbuttonNouvAvancement_mobilier=false;
+                                
+                            });
                          apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index","menu","getdemandevalideBycontrat",'id_contrat_prestataire',item.id).then(function(result)
                         {
                           vm.alldemande_batiment_mpe = result.data.response;
@@ -17177,6 +17780,1115 @@
 
         }
 /************************************************fin reception***************************************************/
+
+/**********************************debut avancement batiment****************************************/
+//col table
+        vm.avancement_batiment_column = [
+        {titre:"Intitule"
+        },
+        {titre:"Description"
+        },
+        {titre:"Attachement"
+        },
+        //{titre:"Ponderation"
+        //},
+        {titre:"Date"
+        },
+        {titre:"Observation"
+        },
+        {titre:"Action"
+        }];
+        //Masque de saisi ajout
+        vm.ajouterAvancement_batiment = function ()
+        { 
+          if (NouvelItemAvancement_batiment == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              intitule: '',
+              description: '',
+              observation: '',
+              date: '',
+              id_attachement_batiment:'',
+              ponderation_batiment:'',
+              validation: '0',
+              attachement_batiment:{ponderation_batiment:0}
+            };         
+            vm.allavancement_batiment.push(items);
+            vm.allavancement_batiment.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemAvancement_batiment = mem;
+              }
+            });
+            
+            NouvelItemAvancement_batiment= true ;
+            //console.log(vm.allavancement_batiment);
+            if (vm.allavancement_batiment.length>1)
+            {
+              var max_ponderation_batiment = Math.max.apply(Math, vm.allavancement_batiment.map(function(o)
+            { 
+                  return o.attachement_batiment.ponderation_batiment;
+            }));
+            vm.allcurrentattachement_batiment = vm.allattachement_batiment.filter(function(obj)
+            {
+                return obj.ponderation_batiment > max_ponderation_batiment;
+            });
+            console.log(max_ponderation_batiment);
+            console.log(vm.allcurrentattachement_batiment);
+
+            }else
+            {
+              vm.allcurrentattachement_batiment = vm.allattachement_batiment;
+            }
+            
+
+          }else
+          {
+            vm.showAlert('Ajout avancement_batiment','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutAvancement_batiment(avancement_batiment,suppression)
+        {
+            if (NouvelItemAvancement_batiment==false)
+            {
+                test_existanceAvancement_batiment(avancement_batiment,suppression); 
+            } 
+            else
+            {
+                insert_in_baseAvancement_batiment(avancement_batiment,suppression);
+                //console.log(avancement_batiment);
+            }
+        }
+
+        //fonction de bouton d'annulation contrat_prestataire
+        vm.annulerAvancement_batiment= function(item)
+        {
+          if (NouvelItemAvancement_batiment == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.intitule   = currentItemAvancement_batiment.intitule ;
+            item.description   = currentItemAvancement_batiment.description ;
+            item.observation   = currentItemAvancement_batiment.observation ;
+            item.date = currentItemAvancement_batiment.date ;
+            item.id_attachement_batiment = currentItemAvancement_batiment.id_attachement_batiment;
+            item.ponderation_batiment = currentItemAvancement_batiment.ponderation_batiment ;
+           
+          }else
+          {
+            vm.allavancement_batiment = vm.allavancement_batiment.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemAvancement_batiment.id;
+            });
+          }
+
+          vm.selectedItemAvancement_batiment = {} ;
+          NouvelItemAvancement_batiment      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionAvancement_batiment= function (item)
+        {
+            vm.selectedItemAvancement_batiment = item;
+            vm.nouvelItemAvancement_batiment   = item;
+            currentItemAvancement_batiment    = JSON.parse(JSON.stringify(vm.selectedItemAvancement_batiment));
+           if(item.id!=0)
+           {
+
+            apiFactory.getAPIgeneraliserREST("avancement_batiment_doc/index",'id_avancement_batiment',vm.selectedItemAvancement_batiment.id).then(function(result)
+            {
+                vm.allavancement_batiment_doc = result.data.response;
+                console.log(vm.allavancement_batiment_doc);
+            });
+            
+              vm.showbuttonValidationavancement_batiment = true;          
+
+           }
+              vm.validation_avancement_batiment = item.validation; 
+             console.log(vm.validation_avancement_batiment); 
+             console.log(item.validation);
+        };
+        $scope.$watch('vm.selectedItemAvancement_batiment', function()
+        {
+             if (!vm.allavancement_batiment) return;
+             vm.allavancement_batiment.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemAvancement_batiment.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierAvancement_batiment = function(item)
+        {
+            NouvelItemAvancement_batiment = false ;
+            vm.selectedItemAvancement_batiment = item;
+            currentItemAvancement_batiment = angular.copy(vm.selectedItemAvancement_batiment);
+            $scope.vm.allavancement_batiment.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.intitule   = vm.selectedItemAvancement_batiment.intitule ;
+            item.description   = vm.selectedItemAvancement_batiment.description ;
+            item.observation   = vm.selectedItemAvancement_batiment.observation;
+            item.date = new Date(vm.selectedItemAvancement_batiment.date);
+            item.id_attachement_batiment = vm.selectedItemAvancement_batiment.attachement_batiment.id;
+            item.ponderation_batiment = parseInt(vm.selectedItemAvancement_batiment.attachement_batiment.ponderation_batiment);
+
+            var allattachement_batiment_autre = vm.allattachement_batiment.filter(function(obj)
+            {
+                return obj.id != vm.selectedItemAvancement_batiment.attachement_batiment.id;
+            });
+
+            var allavancement_batiment_autre = vm.allavancement_batiment.filter(function(obj)
+            {
+                return obj.id != vm.selectedItemAvancement_batiment.id;
+            });
+
+            //if (vm.allavancement_batiment.length>1)
+           // {
+              var max_ponderation_batiment = Math.max.apply(Math, allavancement_batiment_autre.map(function(o)
+              { 
+                return o.attachement_batiment.ponderation_batiment;
+              }));
+            vm.allcurrentattachement_batiment = allattachement_batiment_autre.filter(function(obj)
+            {
+                return obj.ponderation_batiment > max_ponderation_batiment;
+            });
+            vm.allcurrentattachement_batiment.push(vm.selectedItemAvancement_batiment.attachement_batiment);
+
+            vm.showbuttonValidationavancement_batiment = false;
+
+           /* }else
+            {
+              vm.allcurrentattachement_batiment = vm.allattachement_batiment;
+            }*/
+           
+        };
+
+        //fonction bouton suppression item avancement_batiment
+        vm.supprimerAvancement_batiment = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutAvancement_batiment(vm.selectedItemAvancement_batiment,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item Avancement_batimente
+        function test_existanceAvancement_batiment (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var avanc = vm.allavancement_batiment.filter(function(obj)
+                {
+                   return obj.id == currentItemAvancement_batiment.id;
+                });
+                if(avanc[0])
+                {
+                   if((avanc[0].intitule   != currentItemAvancement_batiment.intitule )
+                    || (avanc[0].description  != currentItemAvancement_batiment.description)
+                    || (avanc[0].observation   != currentItemAvancement_batiment.observation )
+                    || (avanc[0].date != currentItemAvancement_batiment.date )
+                    || (avanc[0].id_attachement_batiment != currentItemAvancement_batiment.id_attachement_batiment))                   
+                      { 
+                         insert_in_baseAvancement_batiment(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseAvancement_batiment(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseAvancement_batiment(avancement_batiment,suppression)
+        {    console.log(avancement_batiment);
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemAvancement_batiment==false)
+            {
+                getId = vm.selectedItemAvancement_batiment.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    intitule: avancement_batiment.intitule,
+                    description: avancement_batiment.description,
+                    description: avancement_batiment.description,
+                    validation: 0,
+                    date: convertionDate(new Date(avancement_batiment.date)),
+                    id_attachement_batiment:avancement_batiment.id_attachement_batiment,
+                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avancement_batiment/index",datas, config).success(function (data)
+            {   
+                var attac= vm.allattachement_batiment.filter(function(obj)
+                {
+                    return obj.id == avancement_batiment.id_attachement_batiment;
+                });
+                
+
+                if (NouvelItemAvancement_batiment == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                        vm.selectedItemAvancement_batiment.attachement_batiment = attac[0];
+                        
+                        vm.selectedItemAvancement_batiment.$selected  = false;
+                        vm.selectedItemAvancement_batiment.$edit      = false;
+                        vm.selectedItemAvancement_batiment ={};
+                        //vm.showbuttonNouvAvancement_batiment= false;
+                     
+                    }
+                    else 
+                    {    
+                      vm.allavancement_batiment = vm.allavancement_batiment.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemAvancement_batiment.id;
+                      });
+                      //vm.showbuttonNouvAvancement_batiment= true;
+
+                    }
+                    
+                }
+                else
+                {
+                  avancement_batiment.attachement_batiment = attac[0];
+                  avancement_batiment.validation = 0;
+                  avancement_batiment.id  =   String(data.response);              
+                  NouvelItemAvancement_batiment=false;
+                  //vm.showbuttonNouvAvancement_batiment= false;
+            }
+              avancement_batiment.$selected = false;
+              avancement_batiment.$edit = false;
+              vm.selectedItemAvancement_batiment = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.changeAttachement_batiment= function(item)
+        {//console.log(vm.allattachement_batiment);
+           // console.log(item);
+         /* var atta= vm.allattachement_batiment.filtre(function(obj)
+          {
+            return obj.id==item.id_attachement_batiment;
+          });*/
+          var atta = vm.allattachement_batiment.filter(function(obj)
+          {
+              return obj.id == item.id_attachement_batiment;
+          });
+          item.ponderation_batiment=parseInt(atta[0].ponderation_batiment);
+        }
+        vm.valider_avancement_batiment = function()
+        {
+          valider_avancement_batiment_in_base(vm.selectedItemAvancement_batiment,0,1);
+        }
+        function valider_avancement_batiment_in_base(avancement_batiment,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        avancement_batiment.id,
+                    intitule: avancement_batiment.intitule,
+                    description: avancement_batiment.description,
+                    observation: avancement_batiment.observation,
+                    date: convertionDate(new Date(avancement_batiment.date)),
+                    id_attachement_batiment:avancement_batiment.attachement_batiment.id,
+                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avancement_batiment/index",datas, config).success(function (data)
+            {  
+              vm.validation_avancement_batiment = validation; 
+              avancement_batiment.validation = validation;  
+              avancement_batiment.$selected = false;
+              avancement_batiment.$edit = false;
+              vm.selectedItemAvancement_batiment = {};
+              vm.showbuttonValidationavancement_batiment = false;
+            
+            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+/*********************************************fin avancement batiment************************************************/
+
+/**********************************debut avancement batiment****************************************/
+//col table
+        vm.avancement_latrine_column = [
+        {titre:"Intitule"
+        },
+        {titre:"Description"
+        },
+        {titre:"Attachement"
+        },
+        //{titre:"Ponderation"
+        //},
+        {titre:"Date"
+        },
+        {titre:"Observation"
+        },
+        {titre:"Action"
+        }];
+        //Masque de saisi ajout
+        vm.ajouterAvancement_latrine = function ()
+        { 
+          if (NouvelItemAvancement_latrine == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              intitule: '',
+              description: '',
+              observation: '',
+              date: '',
+              id_attachement_latrine:'',
+              ponderation_latrine:'',
+              validation: '0',
+              attachement_latrine:{ponderation_latrine:0}
+            };         
+            vm.allavancement_latrine.push(items);
+            vm.allavancement_latrine.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemAvancement_latrine = mem;
+              }
+            });
+            
+            NouvelItemAvancement_latrine= true ;
+            //console.log(vm.allavancement_latrine);
+            if (vm.allavancement_latrine.length>1)
+            {
+              var max_ponderation_latrine = Math.max.apply(Math, vm.allavancement_latrine.map(function(o)
+            { 
+                  return o.attachement_latrine.ponderation_latrine;
+            }));
+            vm.allcurrentattachement_latrine = vm.allattachement_latrine.filter(function(obj)
+            {
+                return obj.ponderation_latrine > max_ponderation_latrine;
+            });
+            console.log(max_ponderation_latrine);
+            console.log(vm.allcurrentattachement_latrine);
+
+            }else
+            {
+              vm.allcurrentattachement_latrine = vm.allattachement_latrine;
+            }
+            
+
+          }else
+          {
+            vm.showAlert('Ajout avancement_latrine','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutAvancement_latrine(avancement_latrine,suppression)
+        {
+            if (NouvelItemAvancement_latrine==false)
+            {
+                test_existanceAvancement_latrine(avancement_latrine,suppression); 
+            } 
+            else
+            {
+                insert_in_baseAvancement_latrine(avancement_latrine,suppression);
+                //console.log(avancement_latrine);
+            }
+        }
+
+        //fonction de bouton d'annulation contrat_prestataire
+        vm.annulerAvancement_latrine= function(item)
+        {
+          if (NouvelItemAvancement_latrine == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.intitule   = currentItemAvancement_latrine.intitule ;
+            item.description   = currentItemAvancement_latrine.description ;
+            item.observation   = currentItemAvancement_latrine.observation ;
+            item.date = currentItemAvancement_latrine.date ;
+            item.id_attachement_latrine = currentItemAvancement_latrine.id_attachement_latrine;
+            item.ponderation_latrine = currentItemAvancement_latrine.ponderation_latrine ;
+           
+          }else
+          {
+            vm.allavancement_latrine = vm.allavancement_latrine.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemAvancement_latrine.id;
+            });
+          }
+
+          vm.selectedItemAvancement_latrine = {} ;
+          NouvelItemAvancement_latrine      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionAvancement_latrine= function (item)
+        {
+            vm.selectedItemAvancement_latrine = item;
+            vm.nouvelItemAvancement_latrine   = item;
+            currentItemAvancement_latrine    = JSON.parse(JSON.stringify(vm.selectedItemAvancement_latrine));
+           if(item.id!=0)
+           {
+
+            apiFactory.getAPIgeneraliserREST("avancement_latrine_doc/index",'id_avancement_latrine',vm.selectedItemAvancement_latrine.id).then(function(result)
+            {
+                vm.allavancement_latrine_doc = result.data.response;
+                console.log(vm.allavancement_latrine_doc);
+            });
+            
+              vm.showbuttonValidationavancement_latrine = true;          
+
+           }
+              vm.validation_avancement_latrine = item.validation; 
+             console.log(vm.validation_avancement_latrine); 
+             console.log(item.validation);
+        };
+        $scope.$watch('vm.selectedItemAvancement_latrine', function()
+        {
+             if (!vm.allavancement_latrine) return;
+             vm.allavancement_latrine.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemAvancement_latrine.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierAvancement_latrine = function(item)
+        {
+            NouvelItemAvancement_latrine = false ;
+            vm.selectedItemAvancement_latrine = item;
+            currentItemAvancement_latrine = angular.copy(vm.selectedItemAvancement_latrine);
+            $scope.vm.allavancement_latrine.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.intitule   = vm.selectedItemAvancement_latrine.intitule ;
+            item.description   = vm.selectedItemAvancement_latrine.description ;
+            item.observation   = vm.selectedItemAvancement_latrine.observation;
+            item.date = new Date(vm.selectedItemAvancement_latrine.date);
+            item.id_attachement_latrine = vm.selectedItemAvancement_latrine.attachement_latrine.id;
+            item.ponderation_latrine = parseInt(vm.selectedItemAvancement_latrine.attachement_latrine.ponderation_latrine);
+
+            var allattachement_latrine_autre = vm.allattachement_latrine.filter(function(obj)
+            {
+                return obj.id != vm.selectedItemAvancement_latrine.attachement_latrine.id;
+            });
+
+            var allavancement_latrine_autre = vm.allavancement_latrine.filter(function(obj)
+            {
+                return obj.id != vm.selectedItemAvancement_latrine.id;
+            });
+
+            //if (vm.allavancement_latrine.length>1)
+           // {
+              var max_ponderation_latrine = Math.max.apply(Math, allavancement_latrine_autre.map(function(o)
+              { 
+                return o.attachement_latrine.ponderation_latrine;
+              }));
+            vm.allcurrentattachement_latrine = allattachement_latrine_autre.filter(function(obj)
+            {
+                return obj.ponderation_latrine > max_ponderation_latrine;
+            });
+            vm.allcurrentattachement_latrine.push(vm.selectedItemAvancement_latrine.attachement_latrine);
+
+            vm.showbuttonValidationavancement_latrine = false;
+
+           /* }else
+            {
+              vm.allcurrentattachement_latrine = vm.allattachement_latrine;
+            }*/
+           
+        };
+
+        //fonction bouton suppression item avancement_latrine
+        vm.supprimerAvancement_latrine = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutAvancement_latrine(vm.selectedItemAvancement_latrine,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item Avancement_latrinee
+        function test_existanceAvancement_latrine (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var avanc = vm.allavancement_latrine.filter(function(obj)
+                {
+                   return obj.id == currentItemAvancement_latrine.id;
+                });
+                if(avanc[0])
+                {
+                   if((avanc[0].intitule   != currentItemAvancement_latrine.intitule )
+                    || (avanc[0].description  != currentItemAvancement_latrine.description)
+                    || (avanc[0].observation   != currentItemAvancement_latrine.observation )
+                    || (avanc[0].date != currentItemAvancement_latrine.date )
+                    || (avanc[0].id_attachement_latrine != currentItemAvancement_latrine.id_attachement_latrine))                   
+                      { 
+                         insert_in_baseAvancement_latrine(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseAvancement_latrine(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseAvancement_latrine(avancement_latrine,suppression)
+        {    console.log(avancement_latrine);
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemAvancement_latrine==false)
+            {
+                getId = vm.selectedItemAvancement_latrine.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    intitule: avancement_latrine.intitule,
+                    description: avancement_latrine.description,
+                    description: avancement_latrine.description,
+                    validation: 0,
+                    date: convertionDate(new Date(avancement_latrine.date)),
+                    id_attachement_latrine:avancement_latrine.id_attachement_latrine,
+                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avancement_latrine/index",datas, config).success(function (data)
+            {   
+                var attac= vm.allattachement_latrine.filter(function(obj)
+                {
+                    return obj.id == avancement_latrine.id_attachement_latrine;
+                });
+                
+
+                if (NouvelItemAvancement_latrine == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                        vm.selectedItemAvancement_latrine.attachement_latrine = attac[0];
+                        
+                        vm.selectedItemAvancement_latrine.$selected  = false;
+                        vm.selectedItemAvancement_latrine.$edit      = false;
+                        vm.selectedItemAvancement_latrine ={};
+                       // vm.showbuttonNouvAvancement_latrine= false;
+                     
+                    }
+                    else 
+                    {    
+                      vm.allavancement_latrine = vm.allavancement_latrine.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemAvancement_latrine.id;
+                      });
+                      //vm.showbuttonNouvAvancement_latrine= true;
+
+                    }
+                    
+                }
+                else
+                {
+                  avancement_latrine.attachement_latrine = attac[0];
+                  avancement_latrine.validation = 0;
+                  avancement_latrine.id  =   String(data.response);              
+                  NouvelItemAvancement_latrine=false;
+                  //vm.showbuttonNouvAvancement_latrine= false;
+            }
+              avancement_latrine.$selected = false;
+              avancement_latrine.$edit = false;
+              vm.selectedItemAvancement_latrine = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.changeAttachement_latrine= function(item)
+        {//console.log(vm.allattachement_latrine);
+           // console.log(item);
+         /* var atta= vm.allattachement_latrine.filtre(function(obj)
+          {
+            return obj.id==item.id_attachement_latrine;
+          });*/
+          var atta = vm.allattachement_latrine.filter(function(obj)
+          {
+              return obj.id == item.id_attachement_latrine;
+          });
+          item.ponderation_latrine=parseInt(atta[0].ponderation_latrine);
+        }
+        vm.valider_avancement_latrine = function()
+        {
+          valider_avancement_latrine_in_base(vm.selectedItemAvancement_latrine,0,1);
+        }
+        function valider_avancement_latrine_in_base(avancement_latrine,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        avancement_latrine.id,
+                    intitule: avancement_latrine.intitule,
+                    description: avancement_latrine.description,
+                    observation: avancement_latrine.observation,
+                    date: convertionDate(new Date(avancement_latrine.date)),
+                    id_attachement_latrine:avancement_latrine.attachement_latrine.id,
+                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avancement_latrine/index",datas, config).success(function (data)
+            {  
+              vm.validation_avancement_latrine = validation; 
+              avancement_latrine.validation = validation;  
+              avancement_latrine.$selected = false;
+              avancement_latrine.$edit = false;
+              vm.selectedItemAvancement_latrine = {};
+              vm.showbuttonValidationavancement_latrine = false;
+            
+            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+/*********************************************fin avancement batiment************************************************/
+/**********************************debut avancement batiment****************************************/
+//col table
+        vm.avancement_mobilier_column = [
+        {titre:"Intitule"
+        },
+        {titre:"Description"
+        },
+        {titre:"Attachement"
+        },
+        //{titre:"Ponderation"
+        //},
+        {titre:"Date"
+        },
+        {titre:"Observation"
+        },
+        {titre:"Action"
+        }];
+        //Masque de saisi ajout
+        vm.ajouterAvancement_mobilier = function ()
+        { 
+          if (NouvelItemAvancement_mobilier == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              intitule: '',
+              description: '',
+              observation: '',
+              date: '',
+              id_attachement_mobilier:'',
+              ponderation_mobilier:'',
+              validation: '0',
+              attachement_mobilier:{ponderation_mobilier:0}
+            };         
+            vm.allavancement_mobilier.push(items);
+            vm.allavancement_mobilier.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemAvancement_mobilier = mem;
+              }
+            });
+            
+            NouvelItemAvancement_mobilier= true ;
+            //console.log(vm.allavancement_mobilier);
+            if (vm.allavancement_mobilier.length>1)
+            {
+              var max_ponderation_mobilier = Math.max.apply(Math, vm.allavancement_mobilier.map(function(o)
+            { 
+                  return o.attachement_mobilier.ponderation_mobilier;
+            }));
+            vm.allcurrentattachement_mobilier = vm.allattachement_mobilier.filter(function(obj)
+            {
+                return obj.ponderation_mobilier > max_ponderation_mobilier;
+            });
+            console.log(max_ponderation_mobilier);
+            console.log(vm.allcurrentattachement_mobilier);
+
+            }else
+            {
+              vm.allcurrentattachement_mobilier = vm.allattachement_mobilier;
+            }
+            
+
+          }else
+          {
+            vm.showAlert('Ajout avancement_mobilier','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutAvancement_mobilier(avancement_mobilier,suppression)
+        {
+            if (NouvelItemAvancement_mobilier==false)
+            {
+                test_existanceAvancement_mobilier(avancement_mobilier,suppression); 
+            } 
+            else
+            {
+                insert_in_baseAvancement_mobilier(avancement_mobilier,suppression);
+                //console.log(avancement_mobilier);
+            }
+        }
+
+        //fonction de bouton d'annulation contrat_prestataire
+        vm.annulerAvancement_mobilier= function(item)
+        {
+          if (NouvelItemAvancement_mobilier == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.intitule   = currentItemAvancement_mobilier.intitule ;
+            item.description   = currentItemAvancement_mobilier.description ;
+            item.observation   = currentItemAvancement_mobilier.observation ;
+            item.date = currentItemAvancement_mobilier.date ;
+            item.id_attachement_mobilier = currentItemAvancement_mobilier.id_attachement_mobilier;
+            item.ponderation_mobilier = currentItemAvancement_mobilier.ponderation_mobilier ;
+           
+          }else
+          {
+            vm.allavancement_mobilier = vm.allavancement_mobilier.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemAvancement_mobilier.id;
+            });
+          }
+
+          vm.selectedItemAvancement_mobilier = {} ;
+          NouvelItemAvancement_mobilier      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionAvancement_mobilier= function (item)
+        {
+            vm.selectedItemAvancement_mobilier = item;
+            vm.nouvelItemAvancement_mobilier   = item;
+            currentItemAvancement_mobilier    = JSON.parse(JSON.stringify(vm.selectedItemAvancement_mobilier));
+           if(item.id!=0)
+           {
+
+            apiFactory.getAPIgeneraliserREST("avancement_mobilier_doc/index",'id_avancement_mobilier',vm.selectedItemAvancement_mobilier.id).then(function(result)
+            {
+                vm.allavancement_mobilier_doc = result.data.response;
+                console.log(vm.allavancement_mobilier_doc);
+            });
+            
+              vm.showbuttonValidationavancement_mobilier = true;          
+
+           }
+              vm.validation_avancement_mobilier = item.validation; 
+             console.log(vm.validation_avancement_mobilier); 
+             console.log(item.validation);
+        };
+        $scope.$watch('vm.selectedItemAvancement_mobilier', function()
+        {
+             if (!vm.allavancement_mobilier) return;
+             vm.allavancement_mobilier.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemAvancement_mobilier.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierAvancement_mobilier = function(item)
+        {
+            NouvelItemAvancement_mobilier = false ;
+            vm.selectedItemAvancement_mobilier = item;
+            currentItemAvancement_mobilier = angular.copy(vm.selectedItemAvancement_mobilier);
+            $scope.vm.allavancement_mobilier.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.intitule   = vm.selectedItemAvancement_mobilier.intitule ;
+            item.description   = vm.selectedItemAvancement_mobilier.description ;
+            item.observation   = vm.selectedItemAvancement_mobilier.observation;
+            item.date = new Date(vm.selectedItemAvancement_mobilier.date);
+            item.id_attachement_mobilier = vm.selectedItemAvancement_mobilier.attachement_mobilier.id;
+            item.ponderation_mobilier = parseInt(vm.selectedItemAvancement_mobilier.attachement_mobilier.ponderation_mobilier);
+
+            var allattachement_mobilier_autre = vm.allattachement_mobilier.filter(function(obj)
+            {
+                return obj.id != vm.selectedItemAvancement_mobilier.attachement_mobilier.id;
+            });
+
+            var allavancement_mobilier_autre = vm.allavancement_mobilier.filter(function(obj)
+            {
+                return obj.id != vm.selectedItemAvancement_mobilier.id;
+            });
+
+            //if (vm.allavancement_mobilier.length>1)
+           // {
+              var max_ponderation_mobilier = Math.max.apply(Math, allavancement_mobilier_autre.map(function(o)
+              { 
+                return o.attachement_mobilier.ponderation_mobilier;
+              }));
+            vm.allcurrentattachement_mobilier = allattachement_mobilier_autre.filter(function(obj)
+            {
+                return obj.ponderation_mobilier > max_ponderation_mobilier;
+            });
+            vm.allcurrentattachement_mobilier.push(vm.selectedItemAvancement_mobilier.attachement_mobilier);
+
+            vm.showbuttonValidationavancement_mobilier = false;
+
+           /* }else
+            {
+              vm.allcurrentattachement_mobilier = vm.allattachement_mobilier;
+            }*/
+           
+        };
+
+        //fonction bouton suppression item avancement_mobilier
+        vm.supprimerAvancement_mobilier = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutAvancement_mobilier(vm.selectedItemAvancement_mobilier,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item Avancement_mobiliere
+        function test_existanceAvancement_mobilier (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var avanc = vm.allavancement_mobilier.filter(function(obj)
+                {
+                   return obj.id == currentItemAvancement_mobilier.id;
+                });
+                if(avanc[0])
+                {
+                   if((avanc[0].intitule   != currentItemAvancement_mobilier.intitule )
+                    || (avanc[0].description  != currentItemAvancement_mobilier.description)
+                    || (avanc[0].observation   != currentItemAvancement_mobilier.observation )
+                    || (avanc[0].date != currentItemAvancement_mobilier.date )
+                    || (avanc[0].id_attachement_mobilier != currentItemAvancement_mobilier.id_attachement_mobilier))                   
+                      { 
+                         insert_in_baseAvancement_mobilier(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseAvancement_mobilier(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseAvancement_mobilier(avancement_mobilier,suppression)
+        {    console.log(avancement_mobilier);
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemAvancement_mobilier==false)
+            {
+                getId = vm.selectedItemAvancement_mobilier.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    intitule: avancement_mobilier.intitule,
+                    description: avancement_mobilier.description,
+                    description: avancement_mobilier.description,
+                    validation: 0,
+                    date: convertionDate(new Date(avancement_mobilier.date)),
+                    id_attachement_mobilier:avancement_mobilier.id_attachement_mobilier,
+                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avancement_mobilier/index",datas, config).success(function (data)
+            {   
+                var attac= vm.allattachement_mobilier.filter(function(obj)
+                {
+                    return obj.id == avancement_mobilier.id_attachement_mobilier;
+                });
+                
+
+                if (NouvelItemAvancement_mobilier == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                        vm.selectedItemAvancement_mobilier.attachement_mobilier = attac[0];
+                        
+                        vm.selectedItemAvancement_mobilier.$selected  = false;
+                        vm.selectedItemAvancement_mobilier.$edit      = false;
+                        vm.selectedItemAvancement_mobilier ={};
+                        //vm.showbuttonNouvAvancement_mobilier= false;
+                     
+                    }
+                    else 
+                    {    
+                      vm.allavancement_mobilier = vm.allavancement_mobilier.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemAvancement_mobilier.id;
+                      });
+                      //vm.showbuttonNouvAvancement_mobilier= true;
+
+                    }
+                    
+                }
+                else
+                {
+                  avancement_mobilier.attachement_mobilier = attac[0];
+                  avancement_mobilier.validation = 0;
+                  avancement_mobilier.id  =   String(data.response);              
+                  NouvelItemAvancement_mobilier=false;
+                  //vm.showbuttonNouvAvancement_mobilier= false;
+            }
+              avancement_mobilier.$selected = false;
+              avancement_mobilier.$edit = false;
+              vm.selectedItemAvancement_mobilier = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.changeAttachement_mobilier= function(item)
+        {//console.log(vm.allattachement_mobilier);
+           // console.log(item);
+         /* var atta= vm.allattachement_mobilier.filtre(function(obj)
+          {
+            return obj.id==item.id_attachement_mobilier;
+          });*/
+          var atta = vm.allattachement_mobilier.filter(function(obj)
+          {
+              return obj.id == item.id_attachement_mobilier;
+          });
+          item.ponderation_mobilier=parseInt(atta[0].ponderation_mobilier);
+        }
+        vm.valider_avancement_mobilier = function()
+        {
+          valider_avancement_mobilier_in_base(vm.selectedItemAvancement_mobilier,0,1);
+        }
+        function valider_avancement_mobilier_in_base(avancement_mobilier,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        avancement_mobilier.id,
+                    intitule: avancement_mobilier.intitule,
+                    description: avancement_mobilier.description,
+                    observation: avancement_mobilier.observation,
+                    date: convertionDate(new Date(avancement_mobilier.date)),
+                    id_attachement_mobilier:avancement_mobilier.attachement_mobilier.id,
+                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avancement_mobilier/index",datas, config).success(function (data)
+            {  
+              vm.validation_avancement_mobilier = validation; 
+              avancement_mobilier.validation = validation;  
+              avancement_mobilier.$selected = false;
+              avancement_mobilier.$edit = false;
+              vm.selectedItemAvancement_mobilier = {};
+              vm.showbuttonValidationavancement_mobilier = false;
+            
+            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+/*********************************************fin avancement mobilier************************************************/
 
 /************************************************debut batiment_mpe*************************************************/
         vm.demande_batiment_mpe_column = [        
@@ -19467,7 +21179,7 @@
                     montant_paiement:    paiement_latrine_mpe.montant_paiement,
                     observation: paiement_latrine_mpe.observation,
                     date_paiement: convertionDate(new Date(paiement_latrine_mpe.date_paiement)), 
-                    id_demande_latrine_mpe: vm.selectedItemDemande_latrine_mpe.id,
+                    id_demande_latrine_pre: vm.selectedItemDemande_latrine_mpe.id,
                     validation : 0            
                 });
                 //console.log(datas);
@@ -19533,10 +21245,10 @@
                     montant_paiement:    paiement_latrine_mpe.montant_paiement,
                     observation: paiement_latrine_mpe.observation,
                     date_paiement: convertionDate(new Date(paiement_latrine_mpe.date_paiement)), 
-                    id_demande_latrine_mpe: vm.selectedItemDemande_latrine_mpe.id,
+                    id_demande_latrine_pre: vm.selectedItemDemande_latrine_mpe.id,
                     validation : 1            
                 });
-                //console.log(datas);
+                console.log(datas);
                 //factory
             apiFactory.add("paiement_latrine_prestataire/index",datas, config).success(function (data)
             { 
@@ -20651,7 +22363,7 @@
                     montant_paiement:    paiement_mobilier_mpe.montant_paiement,
                     observation: paiement_mobilier_mpe.observation,
                     date_paiement: convertionDate(new Date(paiement_mobilier_mpe.date_paiement)), 
-                    id_demande_mobilier_mpe: vm.selectedItemDemande_mobilier_mpe.id,
+                    id_demande_mobilier_pre: vm.selectedItemDemande_mobilier_mpe.id,
                     validation : 0            
                 });
                 //console.log(datas);
@@ -20717,7 +22429,7 @@
                     montant_paiement:    paiement_mobilier_mpe.montant_paiement,
                     observation: paiement_mobilier_mpe.observation,
                     date_paiement: convertionDate(new Date(paiement_mobilier_mpe.date_paiement)), 
-                    id_demande_mobilier_mpe: vm.selectedItemDemande_mobilier_mpe.id,
+                    id_demande_mobilier_pre: vm.selectedItemDemande_mobilier_mpe.id,
                     validation : 1            
                 });
                 //console.log(datas);
@@ -20748,9 +22460,13 @@
         },
         {titre:"Date transfert"
         },
+        {titre:"Situation utilisation"
+        },
         {titre:"Intitulé du compte"
         },
         {titre:"RIB SAE"
+        },
+        {titre:"Observation"
         },
         {titre:"Action"
         }];
@@ -20768,8 +22484,10 @@
               montant:'',
               date_transfert: '',
               objet_utilisation: '',
+              situation_utilisation: '',
               intitule_compte: '',
-              rib: ''
+              rib: '',
+              observation: ''
             };       
             vm.alltransfert_reliquat.push(items);
             vm.alltransfert_reliquat.forEach(function(trans)
@@ -20827,9 +22545,11 @@
               item.id_convention_entete    = currentItem.id_convention_entete ;
               item.montant  = currentItem.montant ;
               item.objet_utilisation  = currentItem.objet_utilisation ;
+              item.situation_utilisation  = currentItem.situation_utilisation ;
               item.date_transfert       = new Date(currentItem.date_transfert);              
               item.intitule_compte = currentItem.intitule_compte ;
               item.rib = currentItem.rib;
+              item.observation = currentItem.observation;
               
           }else
           {
@@ -20901,9 +22621,11 @@
             item.id_convention_entete = vm.selectedItemTransfert_reliquat.convention_entete.id ;
             item.montant  = vm.selectedItemTransfert_reliquat.montant ;
             item.objet_utilisation  = vm.selectedItemTransfert_reliquat.objet_utilisation ;
+            item.situation_utilisation  = vm.selectedItemTransfert_reliquat.situation_utilisation ;
             item.date_transfert  = new Date(vm.selectedItemTransfert_reliquat.date_transfert) ;
             item.intitule_compte = vm.selectedItemTransfert_reliquat.intitule_compte ;
             item.rib = parseInt(vm.selectedItemTransfert_reliquat.rib);
+            item.observation = parseInt(vm.selectedItemTransfert_reliquat.observation);
 
             vm.showbuttonValidationcontrat_prestataire = false;
         };
@@ -20943,8 +22665,10 @@
                 if(trans[0])
                 {
                    if((trans[0].date_transfert!=currentItemTransfert_reliquat.date_transfert)                    
+                    || (trans[0].situation_utilisation!=currentItemTransfert_reliquat.situation_utilisation)                    
                     || (trans[0].intitule_compte!=currentItemTransfert_reliquat.intitule_compte)
-                    || (trans[0].montant!=currentItemTransfert_reliquat.montant))                   
+                    || (trans[0].montant!=currentItemTransfert_reliquat.montant)
+                    || (trans[0].observation!=currentItemTransfert_reliquat.observation))                   
                                        
                       { 
                         insert_in_baseTransfert_reliquat(item,suppression);
@@ -20982,6 +22706,8 @@
                     intitule_compte:  transfert_reliquat.intitule_compte,
                     montant:   transfert_reliquat.montant,
                     objet_utilisation:   transfert_reliquat.objet_utilisation,
+                    situation_utilisation:   transfert_reliquat.situation_utilisation,
+                    observation:    transfert_reliquat.observation,
                     rib:    transfert_reliquat.rib,
                     validation: 0               
                 });
@@ -21051,6 +22777,8 @@
                     intitule_compte:  vm.selectedItemTransfert_reliquat.intitule_compte,
                     montant:   vm.selectedItemTransfert_reliquat.montant,
                     objet_utilisation:   vm.selectedItemTransfert_reliquat.objet_utilisation,
+                    situation_utilisation:   vm.selectedItemTransfert_reliquat.situation_utilisation,
+                    observation:    vm.selectedItemTransfert_reliquat.observation,
                     rib:    vm.selectedItemTransfert_reliquat.rib,
                     validation: 1               
                 });
@@ -21563,11 +23291,12 @@
         {
             vm.selectedItemIndicateur = item;
             //vm.nouvelItem   = item;
+            console.log(item);
             if (parseInt(item.id)!=0)
-            {
+            {console.log('ok');
                 currentItemIndicateur     = JSON.parse(JSON.stringify(vm.selectedItemIndicateur));
-                vm.showbuttonValidationcontrat_prestataire = true;
-                vm.validation_contrat_prestataire = item.validation;  
+                vm.showbuttonValidationindicateur = true;
+                vm.validation_indicateur = item.validation;  
             }
             
            // vm.allindicateur= [] ; 
@@ -21708,11 +23437,10 @@
                   vm.showbuttonNouvIndicateur= false;
             }   
                 vm.validation_indicateur = 0;    
-              vm.showbuttonValidationindicateur = false;
-
-              indicateur.$selected = false;
-              indicateur.$edit = false;
-              vm.selectedItemIndicateur = {};
+                vm.showbuttonValidationindicateur = false;
+                indicateur.$selected = false;
+                indicateur.$edit = false;
+                vm.selectedItemIndicateur = {};
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
@@ -21733,7 +23461,7 @@
             
             var datas = $.param({
                     supprimer: suppression,
-                    id:        getId,      
+                    id:        indicateur.id,      
                     nbr_salle_const:      indicateur.nbr_salle_const,
                     nbr_beneficiaire: indicateur.nbr_beneficiaire,
                     nbr_ecole: indicateur.nbr_ecole ,
@@ -21751,8 +23479,8 @@
             apiFactory.add("indicateur/index",datas, config).success(function (data)
             {   
                 vm.validation_indicateur = 1;    
-              vm.showbuttonValidationindicateur = false;
-
+              vm.showbuttonValidationindicateur = false;              
+              indicateur.validation = 1
               indicateur.$selected = false;
               indicateur.$edit = false;
               vm.selectedItemIndicateur = {};

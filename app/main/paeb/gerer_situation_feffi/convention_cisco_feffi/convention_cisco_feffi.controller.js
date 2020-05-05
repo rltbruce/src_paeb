@@ -121,7 +121,7 @@
             
             vm.allcisco.push(usercisco);
 
-            if(result.data.response.roles.indexOf("BCAF")!= -1)
+            if(result.data.response.roles.indexOf("BCAF")!= -1 || result.data.response.roles.indexOf("ADMIN")!= -1)
             {
                 vm.permissionboutonValider = true;
             }
@@ -212,7 +212,7 @@
                         id_site:'',
                         type_convention:'',
                         ref_convention: ref_auto,
-                        objet: 'Construction de deux salles de classe avec infrastructure annexe (latrines) et fourniture du mobilier scolaire',
+                        objet: 'MOD pour la construction de 02 salles de classe équipées',
                         ref_financement: 'Crédit IDA N° 62170',
                         montant_total:0,
                         avancement:0,

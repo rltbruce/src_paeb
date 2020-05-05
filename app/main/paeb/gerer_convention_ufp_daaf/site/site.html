@@ -59,12 +59,12 @@
                       <label>Ecole</label>
                       <md-select ng-model="site.id_ecole"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="site.statu_convention!=0">
                         <md-option ng-repeat="ecole in vm.allecole" value="{{ecole.id}}">
-                                                            {{ecole.code}}
+                                                            {{ecole.description}}
                         </md-option>
                       </md-select>
                     </md-input-container>  
                   </span>
-                  <span ng-if="!site.$edit">{{site.ecole.code}}</span>
+                  <span ng-if="!site.$edit">{{site.ecole.description}}</span>
                 </td>           
                 <td>
                   <span ng-if="site.$edit">
@@ -87,7 +87,7 @@
                   <span ng-if="!site.$edit">{{site.objet_sous_projet}}</span>
                 </td>
                           
-                <td>
+                <!--td>
                   <span ng-if="site.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
                       <label>denomination_epp</label>
@@ -96,11 +96,11 @@
                   </span>
                             
                   <span ng-if="!site.$edit">{{site.denomination_epp}}</span>
-                </td>
+                </td-->
                 <td>
                   <span ng-if="site.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
-                      <label>Classification</label>
+                      <label>Identification site</label>
                       <md-select ng-model="site.id_classification_site"style="overflow: hidden;text-overflow: ellipsis;">
                         <md-option ng-repeat="classification_site in vm.allclassification_site" value="{{classification_site.id}}">
                                                             {{classification_site.libelle}}
@@ -110,17 +110,53 @@
                   </span>
                   <span ng-if="!site.$edit">{{site.classification_site.libelle}}</span>
                 </td>
+
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Lot</label>
+                      <md-select ng-model="site.lot"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option value="1">Lot 1</md-option>
+                        <md-option value="2">Lot 2</md-option>
+                        <md-option value="3">Lot 3</md-option>
+                        <md-option value="4">Lot 4</md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!site.$edit">{{vm.affichelot(site.lot)}}</span>
+                </td>
                           
                 <td>
                   <span ng-if="site.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
-                      <label>agence d'accompagnement</label>
-                      <input name="agence_acc" type="text" ng-model="site.agence_acc"/>
-                    </md-input-container>   
+                      <label>Agence d'accompagnement</label>
+                      <md-select ng-model="site.id_agence_acc"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="agence_acc in vm.allagence_acc" value="{{agence_acc.id}}">
+                                                            {{agence_acc.nom}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
                   </span>
-                            
-                  <span ng-if="!site.$edit">{{site.agence_acc}}</span>
+                  <span ng-if="!site.$edit">{{site.agence_acc.nom}}</span>
                 </td>
+                <!--td>
+                  <span ng-if="site.$edit">
+                    <md-autocomplete required md-input-name="autocompleteField" ng-disabled="vm.isDisabled"
+                        md-no-cache="vm.noCache" md-selected-item="site.agence_acc"
+                        md-search-text-change="vm.searchTextChange(vm.searchText)" md-search-text="vm.searchText"
+                        md-selected-item-change="vm.selectedItemChange(agence)" md-items="agence in vm.querySearch(vm.searchText)"
+                        md-item-text="agence.nom" md-min-length="0" placeholder="agence" md-floating-label="Agence"
+                        md-require-match= "vm.match" md-clear-button= "vm.match" style="width:100%;display: flex !important;">
+                        <md-item-template >
+                            <span> {{agence.nom}} </span>                          
+                        </md-item-template>
+                        <md-not-found>
+                          Aucun resultat correspondant à "{{vm.searchText}}".         
+                        </md-not-found>
+                    </md-autocomplete> 
+                  </span>
+                  <span ng-if="!site.$edit">{{site.agence_acc.nom}}</span>
+                </td-->
                           
                 <td>
                   <span ng-if="site.$edit">
@@ -161,7 +197,7 @@
                     <span class="icon-cancel"></span>
                   </a>
                             
-                  <a ng-if="site.$edit && site.code_sous_projet && site.objet_sous_projet && site.agence_acc && site.denomination_epp>''" ng-click="vm.ajout(site,0)" title="Sauvegarder">
+                  <a ng-if="site.$edit && site.code_sous_projet && site.objet_sous_projet && site.id_agence_acc && site.lot>''" ng-click="vm.ajout(site,0)" title="Sauvegarder">
                     <span class="icon-content-save"></span>
                   </a>
                 </td>

@@ -68,13 +68,17 @@
         {
             //var roles = result.data.response.roles;
 
-            var roles = result.data.response.roles.filter(function(obj)
+           /* var roles = result.data.response.roles.filter(function(obj)
             {
                 return obj == 'DAAF'
             });
             if (roles.length>0)
             {
               vm.permissionboutonValider = true;
+            }*/
+            if(result.data.response.roles.indexOf("DAAF")!= -1 || result.data.response.roles.indexOf("ADMIN")!= -1)
+            {
+                vm.permissionboutonValider = true;
             }
 
         });
@@ -88,8 +92,8 @@
         {titre:"Référence financement"},
         {titre:"Montant à transferer"},
         {titre:"Frais bancaire"},        
-        {titre:"Montant convention"},        
-        {titre:"Nombre bénéficiaire"},
+        {titre:"Nombre bénéficiaire"},        
+        {titre:"Montant convention"},
         {titre:"Action"}];
 
   //recuperation donnée programmation
@@ -132,7 +136,7 @@
                       $selected: true,
                       id: '0',
                       ref_convention: ref_auto,
-                      objet: '',
+                      objet: 'transfert d’argent vers les deux cent (200) communautes',
                       ref_financement: 'Crédit IDA N° 62170',
                       montant_convention: 0,                            
                       montant_trans_comm: 0,
@@ -223,7 +227,8 @@
 
               apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'id_convention_ufpdaaf',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
               {
-                  vm.allconvention_cisco_feffi_entete = result.data.response;                 
+                  vm.allconvention_cisco_feffi_entete = result.data.response; 
+                  //console.log(vm.allconvention_cisco_feffi_entete);                
               });
 
               vm.stepOne           = true;
@@ -722,8 +727,8 @@
         },
         {titre:"Site"
         },
-        {titre:"Type convention"
-        },
+       // {titre:"Type convention"
+       // },
         {titre:"Reference convention"
         },
         {titre:"Objet"
@@ -745,8 +750,7 @@
         vm.selectionConvention_cisco_feffi_entete = function (item)
         {
             vm.selectedItemConvention_cisco_feffi_entete = item;
-            currentItemConvention_cisco_feffi_entete     = JSON.parse(JSON.stringify(vm.selectedItemConvention_cisco_feffi_entete));
-           // vm.allconvention= [] ;
+            currentItemConvention_cisco_feffi_entete     = JSON.parse(JSON.stringify(vm.selectedItemConvention_cisco_feffi_entete));           
            vm.stepOne = true;
         };
         $scope.$watch('vm.selectedItemConvention_cisco_feffi_entete', function()
@@ -793,7 +797,11 @@
               $mdDialog.show(confirm).then(function(data)
               {
                
-               insert_in_base_convention_cisco_feffi_entete(data,'0',0);
+               data.forEach(function(item)
+               {
+                  insert_in_base_convention_cisco_feffi_entete(item,'0',0);
+               });
+               
 
                //recuperation donnée convention detail
                /* apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_detail/index",'id_convention_entete',data.id).then(function(result)
@@ -998,6 +1006,7 @@
         var currentItemConventionDialog;
         var nouvelItemConventionDialog = false;
         dg.allconventionDialog = [];
+        var convention_a_anvoyer= [];
 
         dg.conventiondialog_column = [
         {titre:"Cisco"
@@ -1019,6 +1028,8 @@
         {titre:"Avancement"
         },
         {titre:"Utilisateur"
+        },
+        {titre:"Attachée"
         }];
 
         //style
@@ -1039,7 +1050,7 @@
 
         dg.dialognouveauajout = function(conven)
         {  
-            $mdDialog.hide(dg.selectedItemConventionDialog);
+            $mdDialog.hide(convention_a_anvoyer);
             dg.affichebuttonAjouter = false;
         }
 
@@ -1057,13 +1068,13 @@
         }
 
         //fonction selection item convetion
-        dg.selectionConventionDialog = function (item)
+        /*dg.selectionConventionDialog = function (item)
         {
             dg.selectedItemConventionDialog  = item;
             dg.affichebuttonAjouter = true;               
         };
         
-        $scope.$watch('selectedItemConventionDialog', function()
+       $scope.$watch('selectedItemConventionDialog', function()
         {
             if (!dg.allconventionDialog) return;
               dg.allconventionDialog.forEach(function(iteme)
@@ -1071,7 +1082,7 @@
                   iteme.$selected = false;
               });
             dg.selectedItemConventionDialog.$selected = true;
-        });
+        });*/
         dg.affichage_type_convention = function(type_convention)
         { 
           var affichage = 'Initial';
@@ -1080,6 +1091,29 @@
             affichage = 'Autre';
           }
           return affichage;
+        }
+        dg.changecheckbox = function(convention)
+        {
+          switch (convention.envoi)
+            {
+              case true:
+                   convention_a_anvoyer.push(convention);                     
+                  break;
+
+             case false:
+                  convention_a_anvoyer = convention_a_anvoyer.filter(function(obj)
+                  {
+                      return obj.id !== convention.id;
+                  });
+                   
+                  break;
+              default:
+                  break;
+            }
+
+          console.log(convention_a_anvoyer);
+          
+          //console.log(convention.envoi);
         }
 
     }

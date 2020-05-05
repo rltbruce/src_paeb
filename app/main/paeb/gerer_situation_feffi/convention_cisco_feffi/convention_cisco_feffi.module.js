@@ -21,7 +21,7 @@
             bodyClass: 'convention_cisco_feffi',
             data : {
               authorizer : true,
-              permitted : ["USER","PERSONNEL","ADMIN"],
+              permitted : ["ACC","ADMIN"],
               page: "Convention_cisco_feffi"
             }
         });

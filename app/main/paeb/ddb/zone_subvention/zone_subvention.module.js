@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.zone_subvention', {
-            title: 'Zone intervention',
+            title: 'Type zone',
             icon  : 'icon-fullscreen',
 
             state: 'app.paeb_ddb_zone_subvention',

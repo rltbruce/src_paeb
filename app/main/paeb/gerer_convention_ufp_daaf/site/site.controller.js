@@ -15,6 +15,14 @@
         vm.selectedItem = {} ;
         vm.allsite = [] ;
         vm.allclassification_site =[];
+        vm.allagence_acc =[];
+
+        vm.simulateQuery = false;
+        vm.isDisabled    = false;
+        vm.querySearch   = querySearch;
+        vm.selectedItemChange = selectedItemChange;
+        vm.searchTextChange   = searchTextChange;
+        vm.match = true;
 
         //style
         vm.dtOptions = {
@@ -25,21 +33,23 @@
 
         //col table
         vm.site_column = [
-        {titre:"Ecole"
+        {titre:"Epp"
         },
         {titre:"Code sous projet"
         },
         {titre:"objet sous projet"
         },
-        {titre:"Denomination epp"
-        },
+        //{titre:"Denomination epp"
+       // },
         {titre:"Classification site"
         },
-        {titre:"agence d'accompagnemant"
+        {titre:"Lot"
         },
-        {titre:"statut convention"
+        {titre:"Agence d'accompagnemant"
         },
-        {titre:"observation"
+        {titre:"Statut"
+        },
+        {titre:"Observation"
         },
         {titre:"Action"}];
         
@@ -60,8 +70,40 @@
           vm.allecole= result.data.response;
           console.log(vm.allecole);
         });
+        apiFactory.getAll("agence_acc/index").then(function(result)
+        {
+          vm.allagence_acc= result.data.response;
+          console.log(vm.allecole);
+        });
 
-         
+       function querySearch (query) {
+         var results = query ? vm.allagence_acc.filter( createFilterFor(query) ) : vm.allagence_acc,
+              deferred; 
+           if (vm.simulateQuery) {
+            deferred = $q.defer();
+            $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+            return deferred.promise;
+          } else {
+            return results;
+          }
+        }
+        function searchTextChange(text) {
+         // $log.info('Text changed to ' + text);
+          console.log('Text changed to ' + text);
+        }
+        function selectedItemChange(item) {
+         // $log.info('Item changed to ' + JSON.stringify(item));
+          console.log('Item changed to ' + JSON.stringify(item));
+          vm.selectedItem.agence = item;
+          console.log(item);
+        }
+        function createFilterFor(query) {
+          var lowercaseQuery = angular.lowercase(query);
+
+          return function filterFn(state) {
+            return (state.nom.toLowerCase().indexOf(lowercaseQuery) === 0);
+          };
+        }  
 
         //Masque de saisi ajout
         vm.ajouter = function ()
@@ -74,12 +116,13 @@
               id: '0',         
               code_sous_projet: '',
               objet_sous_projet: '',
-              denomination_epp: '',         
+              //denomination_epp: '',         
               observation: '',
-              agence_acc: '',
+              id_agence_acc: '',
               statu_convention: 0,
               id_ecole:'',
-              id_classification_site:''
+              id_classification_site:'',
+              lot:''
             };         
             vm.allsite.push(items);
             vm.allsite.forEach(function(cis)
@@ -120,9 +163,10 @@
             item.$selected = false;
             item.code_sous_projet      = currentItem.code_sous_projet ;
             item.objet_sous_projet = currentItem.objet_sous_projet ;
-            item.denomination_epp = currentItem.denomination_epp ;
+            //item.denomination_epp = currentItem.denomination_epp ;
+            item.lot    = currentItem.lot ;
             item.observation    = currentItem.observation ;
-            item.agence_acc   = currentItem.agence_acc ;
+            item.id_agence_acc   = currentItem.id_agence_acc ;
             item.statu_convention    = currentItem.statu_convention ;
             item.id_ecole    = currentItem.id_ecole; 
             item.id_classification_site    = currentItem.id_classification_site;
@@ -172,9 +216,10 @@
             item.$selected = true;            
             item.code_sous_projet      = vm.selectedItem.code_sous_projet ;
             item.objet_sous_projet = vm.selectedItem.objet_sous_projet;
-            item.denomination_epp = vm.selectedItem.denomination_epp;
+            //item.denomination_epp = vm.selectedItem.denomination_epp;
+            item.lot      = vm.selectedItem.lot ;
             item.observation      = vm.selectedItem.observation ;
-            item.agence_acc = vm.selectedItem.agence_acc;
+            item.id_agence_acc = vm.selectedItem.agence_acc.id;
             item.statu_convention  = vm.selectedItem.statu_convention;
             item.id_ecole = vm.selectedItem.ecole.id ;
             item.id_classification_site = vm.selectedItem.classification_site.id ; 
@@ -211,11 +256,12 @@
                 {
                    if((cis[0].objet_sous_projet!=currentItem.objet_sous_projet) 
                     || (cis[0].code_sous_projet!=currentItem.code_sous_projet)
-                    || (cis[0].denomination_epp!=currentItem.denomination_epp)
+                    //|| (cis[0].denomination_epp!=currentItem.denomination_epp)
                     || (cis[0].observation!=currentItem.observation)
-                    || (cis[0].agence_acc!=currentItem.agence_acc)
+                    || (cis[0].id_agence_acc!=currentItem.id_agence_acc)
                     || (cis[0].statu_convention!=currentItem.statu_convention)
                     || (cis[0].id_ecole!=currentItem.id_ecole)
+                    || (cis[0].lot!=currentItem.lot)
                     || (cis[0].id_classification_site!=currentItem.id_classification_site))                    
                       { 
                          insert_in_base(item,suppression);
@@ -249,9 +295,10 @@
                     supprimer: suppression,
                     id:        getId,      
                     code_sous_projet:      site.code_sous_projet,
-                    denomination_epp:      site.denomination_epp,      
+                    //denomination_epp:      site.denomination_epp,      
+                    lot:    site.lot,      
                     observation:    site.observation,
-                    agence_acc:   site.agence_acc,
+                    id_agence_acc:   site.id_agence_acc,
                     statu_convention:    site.statu_convention,
                     objet_sous_projet: site.objet_sous_projet,
                     id_ecole: site.id_ecole,
@@ -266,6 +313,10 @@
                 {
                     return obj.id == site.id_ecole;
                 });
+                var agen = vm.allagence_acc.filter(function(obj)
+                {
+                    return obj.id == site.id_agence_acc;
+                });
                 var cla = vm.allclassification_site.filter(function(obj)
                 {
                     return obj.id == site.id_classification_site;
@@ -277,6 +328,7 @@
                     if(suppression==0)
                     {
                         vm.selectedItem.classification_site   = cla[0];
+                        vm.selectedItem.agence_acc   = agen[0];
                         vm.selectedItem.ecole   = ecol[0];
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
@@ -294,6 +346,7 @@
                 {
                   site.classification_site = cla[0];
                   site.ecole = ecol[0];
+                  site.agence_acc   = agen[0];
                   site.id        =   String(data.response);              
                   NouvelItem = false;
             }
@@ -340,6 +393,36 @@
               default:
               {
                   return "Preparation";
+                  break;
+              }
+          }
+        }
+        vm.affichelot = function(item)
+        {
+          var x = Number(item);
+          switch(x)
+          {
+              case 1:
+              {
+                  return "Lot 1";
+                  break;
+              }
+
+              case 2:
+              {
+                  return "Lot 2";
+                  break;
+              }
+
+              case 3:
+              {
+                  return "Lot 3";
+                  break;
+              }
+
+              default:
+              {
+                  return "Lot 4";
                   break;
               }
           }
