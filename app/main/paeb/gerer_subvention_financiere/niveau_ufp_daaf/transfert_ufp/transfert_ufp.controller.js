@@ -32,7 +32,7 @@
           autoWidth: false          
         }; 
         
-        apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemande_deblocage_daaf_invalide","validation",3).then(function(result)
+        apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemande_deblocage_daaf_invalide","validation",2).then(function(result)
         {
             vm.alldemande_deblocage_daaf_valide_daaf = result.data.response;
             

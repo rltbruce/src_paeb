@@ -6,12 +6,13 @@
         .module('app.paeb.gerer_subvention_financiere', [			
            // 'app.paeb.gerer_subvention_financiere.validation_demande_deblocage_feffi',
             //'app.paeb.gerer_subvention_financiere.demande_deblocage_feffi',
-            'app.paeb.gerer_subvention_financiere.suivi_daaf_ufp',
+            //'app.paeb.gerer_subvention_financiere.suivi_daaf_ufp',
             //'app.paeb.gerer_subvention_financiere.validation_technique_deblocage_feffi',
             //'app.paeb.gerer_subvention_financiere.validation_financiere_deblocage_feffi',
             //'app.paeb.gerer_subvention_financiere.transfert_daaf',
             'app.paeb.gerer_subvention_financiere.niveau_ufp_daaf',
             'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi',
+            'app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire'
             ])       
         .config(config);
         var vs ;
@@ -22,7 +23,7 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere', {
             title : 'Gérer subvention financiere',
             icon  : 'icon-data',
-            weight: 6
+            weight: 2
         });
 
 

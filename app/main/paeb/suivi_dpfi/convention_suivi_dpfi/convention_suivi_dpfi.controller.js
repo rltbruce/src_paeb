@@ -1,0 +1,2955 @@
+
+(function ()
+{
+    'use strict';
+
+    angular
+        .module('app.paeb.suivi_dpfi.convention_suivi_dpfi')
+        .directive('customOnChange', function() {
+      return {
+        restrict: 'A',
+        require:'ngModel',
+        link: function (scope, element, attrs,ngModel) {
+          var onChangeHandler = scope.$eval(attrs.customOnChange);
+          element.bind('change', onChangeHandler);
+          element.on("change", function(e) {
+          var files = element[0].files;
+          ngModel.$setViewValue(files);
+        })
+        }
+      };
+    })
+    .service('fileUpload', ['$http', function ($http) {
+      this.uploadFileToUrl = function(file, uploadUrl){
+        var fd = new FormData();
+        var rep='test';
+        fd.append('file', file);
+        $http.post(uploadUrl, fd,{
+          transformRequest: angular.identity,
+          headers: {'Content-Type': undefined}
+        }).success(function(){
+           console.log('tafa');
+        }).error(function(){
+           console.log('Rivotra');
+        });
+      }
+    }])        
+        .controller('Convention_suivi_dpfiController', Convention_suivi_dpfiController);
+    /** @ngInject */
+    function Convention_suivi_dpfiController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile,apiUrlexcel)
+    {
+		  /*****debut initialisation*****/
+
+        var vm    = this;
+        vm.selectedItemConvention_entete = {} ;
+        vm.allconvention_entete = [] ;
+       
+        vm.stepMenu_reliquat=false;
+        vm.stepMenu_pr=false;
+        vm.stepMenu_mpe=false;
+        vm.stepMenu_moe=false;
+        vm.stepMenu_feffi=false;
+        vm.steppiecefeffi=false;
+        vm.steptransdaaf=false;
+        vm.stepprestaion_pr=false;
+        vm.stepprestation_moe = false;
+
+        vm.stepsuiviexecution = false;
+        vm.stepphase = false;
+
+        vm.stepjusti_d_tra_moe = false;
+
+        vm.stepjusti_trans_reliqua = false;
+
+        vm.stepparticipantdpp=false;
+        vm.stepparticipantodc=false;
+        vm.stepparticipantemies=false;
+        vm.stepparticipantgfpc=false;
+        vm.stepparticipantpmc=false;
+        vm.stepparticipantsep=false;
+
+        vm.stepsoumissionnaire = false;
+
+        vm.session = '';
+
+/*******************************Debut initialisation suivi financement feffi******************************/
+      
+        //initialisation demande_realimentation_feffi
+        vm.selectedItemDemande_realimentation = {} ;
+        vm.alldemande_realimentation  = [] ;
+        vm.alldemande_realimentation_invalide  = [] ;
+
+        vm.permissionboutonValiderdpfi = false;
+        vm.validation = 0;
+
+        vm.allcompte_feffi = [];
+        vm.roles = [];
+
+        vm.nbr_demande_feffi_emidpfi=0;
+        vm.nbr_demande_feffi_encourdpfi=0;
+
+        //initialisation piece_justificatif_feffi
+        vm.selectedItemPiece_justificatif_feffi = {} ;
+        vm.allpiece_justificatif_feffi  = [] ;
+
+        //initialisation decaissement fonctionnement feffi
+
+        vm.showbuttonValidationenrejedpfi = false;
+        vm.showbuttonValidationencourdpfi = false;        
+        vm.showbuttonValidationdpfi = false;    
+
+/*******************************Fin initialisation suivi financement feffi******************************/
+
+/*****************************************Debut partenaire relai****************************************/
+
+        vm.ajoutPassation_marches_pr = ajoutPassation_marches_pr ;
+        var NouvelItemPassation_marches_pr=false;
+        var currentItemPassation_marches_pr;
+        vm.selectedItemPassation_marches_pr = {} ;
+        vm.allpassation_marches_pr = [] ;
+        vm.permissionboutonenvaliderpassation_pr = false;
+        vm.showbuttonValidationpassation_pr = false; 
+      
+        vm.ajoutContrat_partenaire_relai = ajoutContrat_partenaire_relai ;
+        var NouvelItemContrat_partenaire_relai=false;
+        var currentItemContrat_partenaire_relai;
+        vm.selectedItemContrat_partenaire_relai = {} ;
+        vm.allcontrat_partenaire_relai = [] ; 
+        vm.showbuttonNouvcontrat_pr=true;
+        vm.permissionboutonvalidercontrat_pr = false;
+        vm.showbuttonValidationcontrat_pr = false;
+
+        vm.ajoutAvenant_partenaire = ajoutAvenant_partenaire ;
+        var NouvelItemAvenant_partenaire=false;
+        var currentItemAvenant_partenaire;
+        vm.selectedItemAvenant_partenaire = {} ;
+        vm.allavenant_partenaire = [] ;
+
+        vm.showbuttonValidation_avenant_partenaire = false;
+        vm.permissionboutonvalideravenant_partenaire = false;
+
+        
+
+/*********************************************Fin partenaire relai*************************************/
+
+/*******************************************Debut maitrise d'oeuvre*************************************/
+     
+        vm.selectedItemContrat_moe = {} ;
+        vm.allcontrat_moe = [] ;       
+
+        vm.selectedItemDemande_debut_travaux_moe = {};
+        vm.alldemande_debut_travaux_moe = [];
+
+        vm.alldemande_debut_travaux_moe = [];
+
+        vm.permissionboutonvaliderDemande_debut_travaux_moe_encourdpfi = false;
+        vm.showbuttonValidationDemande_debut_travaux_moe_encourdpfi = false;
+        vm.permissionboutonvaliderDemande_debut_travaux_moe_rejedpfi = false;
+        vm.showbuttonValidationDemande_debut_travaux_moe_rejedpfi = false;              
+        vm.permissionboutonvaliderDemande_debut_travaux_moe_validedpfi = false;
+        vm.showbuttonValidationDemande_debut_travaux_moe_validedpfi = false;
+
+        vm.selectedItemJustificatif_debut_travaux_moe = {} ;
+        vm.alljustificatif_debut_travaux_moe = [] ;
+
+        vm.selectedItemDemande_batiment_moe = {};
+        vm.alldemande_batiment_moe = [];
+
+        vm.alldemande_batiment_moe = [];
+
+        vm.permissionboutonvaliderDemande_batiment_moe_encourdpfi = false;
+        vm.showbuttonValidationDemande_batiment_moe_encourdpfi = false;
+        vm.permissionboutonvaliderDemande_batiment_moe_rejedpfi = false;
+        vm.showbuttonValidationDemande_batiment_moe_rejedpfi = false;              
+        vm.permissionboutonvaliderDemande_batiment_moe_validedpfi = false;
+ 
+        vm.selectedItemJustificatif_batiment_moe = {} ;
+        vm.alljustificatif_batiment_moe = [] ;
+       
+        vm.selectedItemDemande_latrine_moe = {};
+        vm.alldemande_latrine_moe = [];
+
+        vm.alldemande_latrine_moe = [];
+
+        vm.permissionboutonvaliderDemande_latrine_moe_encourdpfi = false;
+        vm.showbuttonValidationDemande_latrine_moe_encourdpfi = false;
+        vm.permissionboutonvaliderDemande_latrine_moe_rejedpfi = false;
+        vm.showbuttonValidationDemande_latrine_moe_rejedpfi = false;              
+        vm.permissionboutonvaliderDemande_latrine_moe_validedpfi = false;
+        vm.showbuttonValidationDemande_latrine_moe_validedpfi = false;
+        
+        vm.selectedItemJustificatif_latrine_moe = {} ;
+        vm.alljustificatif_latrine_moe = [] ;
+        
+        vm.selectedItemDemande_fin_travaux_moe = {};
+        vm.alldemande_fin_travaux_moe = [];
+
+        vm.permissionboutonvaliderDemande_fin_travaux_moe_encourdpfi = false;
+        vm.showbuttonValidationDemande_fin_travaux_moe_encourdpfi = false;
+        vm.permissionboutonvaliderDemande_fin_travaux_moe_rejedpfi = false;
+        vm.showbuttonValidationDemande_fin_travaux_moe_rejedpfi = false;              
+        vm.permissionboutonvaliderDemande_fin_travaux_moe_validedpfi = false;
+        vm.showbuttonValidationDemande_fin_travaux_moe_validedpfi = false;
+
+        vm.selectedItemJustificatif_fin_travaux_moe = {} ;
+        vm.alljustificatif_fin_travaux_moe = [] ;        
+
+/*********************************************Fin maitrise d'oeuvre*************************************/
+
+/********************************************Debut entreprise******************************************/
+       
+        vm.selectedItemContrat_prestataire = {} ;
+        vm.allcontrat_prestataire = [] ;
+       
+        vm.selectedItemDemande_batiment_mpe = {};
+        vm.alldemande_batiment_mpe = [];
+
+        vm.permissionboutonvaliderDemande_batiment_mpe_encourdpfi = false;
+        vm.showbuttonValidationDemande_batiment_mpe_encourdpfi = false;
+        vm.permissionboutonvaliderDemande_batiment_mpe_rejedpfi = false;
+        vm.showbuttonValidationDemande_batiment_mpe_rejedpfi = false;              
+        vm.permissionboutonvaliderDemande_batiment_mpe_validedpfi = false;
+        vm.showbuttonValidationDemande_batiment_mpe_validedpfi = false;
+        
+        vm.selectedItemJustificatif_batiment_mpe = {} ;
+        vm.alljustificatif_batiment_mpe = [] ;
+        
+        vm.selectedItemDemande_latrine_mpe = {};
+        vm.alldemande_latrine_mpe = [];
+
+        vm.permissionboutonvaliderDemande_latrine_mpe_encourdpfi = false;
+        vm.showbuttonValidationDemande_latrine_mpe_encourdpfi = false;
+
+        vm.permissionboutonvaliderDemande_latrine_mpe_rejedpfi = false;
+        vm.showbuttonValidationDemande_latrine_mpe_rejedpfi = false;              
+        vm.permissionboutonvaliderDemande_latrine_mpe_validedpfi = false;
+        vm.showbuttonValidationDemande_latrine_mpe_validedpfi = false;
+
+        vm.selectedItemJustificatif_latrine_mpe = {} ;
+        vm.alljustificatif_latrine_pre = [] ;
+       
+        vm.selectedItemDemande_mobilier_mpe = {};
+        vm.alldemande_mobilier_mpe = [];
+
+        vm.permissionboutonvaliderDemande_mobilier_mpe_encourdpfi = false;
+        vm.showbuttonValidationDemande_mobilier_mpe_encourdpfi = false;
+        vm.permissionboutonvaliderDemande_mobilier_mpe_rejedpfi = false;
+        vm.showbuttonValidationDemande_mobilier_mpe_rejedpfi = false;              
+        vm.permissionboutonvaliderDemande_mobilier_mpe_validedpfi = false;
+        vm.showbuttonValidationDemande_mobilier_mpe_validedpfi = false;
+
+        vm.selectedItemJustificatif_mobilier_mpe = {} ;
+        vm.alljustificatif_mobilier_pre = [] ;
+       
+/********************************************Fin entreprise********************************************/
+       
+        vm.dtOptions = {
+          dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
+          pagingType: 'simple',
+          autoWidth: false          
+        };
+
+        apiFactory.getAll("region/index").then(function success(response)
+        {
+          vm.regions = response.data.response;
+        }, function error(response){ alert('something went wrong')});
+
+        vm.filtre_change_region = function(item)
+        { 
+            vm.filtre.id_cisco = null;
+            if (item.id_region != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+                {
+                    vm.ciscos = result.data.response;
+                    console.log(vm.ciscos);
+                }, function error(result){ alert('something went wrong')});
+            }
+            else
+            {
+                vm.ciscos = [];
+            }
+          
+        }
+        vm.filtre_change_cisco = function(item)
+        { vm.filtre.id_commune = null;
+            if (item.id_cisco != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",item.id_cisco).then(function(result)
+              {
+                vm.communes = result.data.response;
+                console.log(vm.communes);
+              }, function error(result){ alert('something went wrong')});
+            }
+            else
+            {
+                vm.communes = [];
+            }
+          
+        }
+        vm.filtre_change_commune = function(item)
+        { 
+            vm.filtre.id_ecole = null;
+            if (item.id_commune != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleBycommune","id_commune",item.id_commune).then(function(result)
+              {
+                vm.ecoles = result.data.response;
+                console.log(vm.ecoles);
+              }, function error(result){ alert('something went wrong')});
+            }
+            else
+            {
+                vm.ecoles = [];
+            }
+          
+        }
+        vm.filtre_change_ecole = function(item)
+        { 
+            vm.filtre.id_convention_entete_entete = null;
+            if (item.id_ecole != '*')
+            {
+                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByecole","id_ecole",item.id_ecole).then(function(result)
+                  {
+                    vm.convention_cisco_feffi_entetes = result.data.response;
+                    console.log(vm.convention_cisco_feffi_entetes );
+                  }, function error(result){ alert('something went wrong')});
+            }
+        }
+        var id_user = $cookieStore.get('id');
+         apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+              vm.roles = result.data.response.roles;
+              switch (vm.roles[0])
+                {
+                  case 'DPFI':
+                            vm.permissionboutonencourdpfi = true;
+                            vm.permissionboutonenrejedpfi = true;
+                            vm.permissionboutonValiderdpfi = true;
+                            vm.permissionboutonvaliderpassation_pr = true;
+                            vm.permissionboutonvalidercontrat_pr = true;
+
+                            vm.permissionboutonvalideravenant_partenaire = true;
+
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_batiment_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_batiment_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_batiment_moe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_latrine_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_latrine_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_latrine_moe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_validedpfi = true;
+
+
+                            vm.permissionboutonvaliderDemande_batiment_mpe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_batiment_mpe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_batiment_mpe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_latrine_mpe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_latrine_mpe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_latrine_mpe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_validedpfi = true;
+                            
+                            vm.session = 'DPFI';
+                      
+                      break;
+
+                  case 'ADMIN':
+                            vm.permissionboutonencourdpfi = true;
+                            vm.permissionboutonenrejedpfi = true;
+                            vm.permissionboutonValiderdpfi = true;
+                            vm.permissionboutonvaliderpassation_pr = true;
+                            vm.permissionboutonvalidercontrat_pr = true;
+
+                            vm.permissionboutonvalideravenant_partenaire = true;
+
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_debut_travaux_moe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_batiment_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_batiment_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_batiment_moe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_latrine_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_latrine_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_latrine_moe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_fin_travaux_moe_validedpfi = true;
+
+
+                            vm.permissionboutonvaliderDemande_batiment_mpe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_batiment_mpe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_batiment_mpe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_latrine_mpe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_latrine_mpe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_latrine_mpe_validedpfi = true;
+
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_encourdpfi = true;
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_rejedpfi = true;              
+                            vm.permissionboutonvaliderDemande_mobilier_mpe_validedpfi = true;
+                            vm.session = 'ADMIN';                  
+                      break;
+                  default:
+                      break;
+              
+                }                  
+
+         });
+
+        /***************debut convention cisco/feffi**********/
+        vm.convention_entete_column = [
+        {titre:"Cisco"
+        },
+        {titre:"Feffi"
+        },
+        {titre:"Site"
+        },
+        {titre:"Reference convention"
+        },
+        {titre:"Objet"
+        },
+        {titre:"Reference Financement"
+        },
+        {titre:"Cout éstimé"
+        },
+        {titre:"Avancement"
+        },
+        {titre:"Utilisateur"
+        }]; 
+
+        vm.importerfiltre =function(filtre)
+        {   
+            var date_debut = convertionDate(filtre.date_debut);
+            var date_fin = convertionDate(filtre.date_fin);
+            vm.affiche_load = true ;
+            var repertoire = 'bdd_construction';
+
+            apiFactory.getAPIgeneraliserREST("excel_bdd_construction/index",'menu','getdonneeexporter',
+                'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
+                filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
+                filtre.id_convention_entete,"repertoire",repertoire).then(function(result)
+            {
+                vm.status    = result.data.status; 
+                
+                if(vm.status)
+                {
+                    vm.nom_file = result.data.nom_file;            
+                    window.location = apiUrlexcel+"bdd_construction/"+vm.nom_file ;
+                    vm.affiche_load =false; 
+
+                }else{
+                    vm.message=result.data.message;
+                    vm.Alert('Export en excel',vm.message);
+                    vm.affiche_load =false; 
+                }
+                console.log(result.data.data);
+            });
+        }       
+
+        vm.recherchefiltre = function(filtre)
+        {
+            var date_debut = convertionDate(filtre.date_debut);
+            var date_fin = convertionDate(filtre.date_fin);
+              switch (vm.session)
+                { 
+                  case 'DPFI':
+                                                        
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                            {
+                                vm.allconvention_entete = result.data.response;
+                            });
+                      
+                      break;                  
+
+                  case 'ADMIN':
+                           
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                            {
+                                vm.allconvention_entete = result.data.response;
+                                console.log(vm.allconvention_entete);
+                            });                 
+                      break;
+                  default:
+                      break;
+              
+                }
+                console.log(filtre);
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
+        
+        /***************fin convention cisco/feffi************/
+
+         //fonction selection item entete convention cisco/feffi
+        vm.selectionConvention_entete = function (item)
+        {
+            vm.selectedItemConvention_entete = item;
+           // vm.allconvention= [] ;
+            
+            vm.showbuttonNouvContrat_prestataire=true;
+           
+            donnee_menu_pr(item,vm.session).then(function (result) 
+            {
+                    // On récupère le resultat de la requête dans la varible "response"                    
+                vm.stepMenu_pr=true;
+                console.log(result);  
+            });
+            donnee_menu_moe(item,vm.session).then(function () 
+            {
+                    // On récupère le resultat de la requête dans la varible "response"                    
+                vm.stepMenu_moe=true;
+                console.log(vm.stepMenu_moe);  
+            });
+            donnee_menu_mpe(item,vm.session).then(function () 
+            {
+                    // On récupère le resultat de la requête dans la varible "response"                    
+                vm.stepMenu_mpe=true;
+                console.log(vm.stepMenu_mpe);  
+            });
+
+            donnee_sousmenu_feffi(item,vm.session).then(function () 
+            {
+                    // On récupère le resultat de la requête dans la varible "response"                    
+                vm.stepMenu_feffi=true;
+                console.log(vm.stepMenu_feffi);  
+            });
+              
+              vm.steppiecefeffi=false;
+              vm.steptransdaaf=false;
+              vm.stepprestaion_pr=false;
+              vm.stepprestation_moe = false;
+              vm.stepjusti_d_tra_moe = false;
+              vm.stepsuiviexecution = false;
+              vm.stepphase = false;
+              vm.stepsoumissionnaire = false;
+              vm.nbr_decaiss_feffi = item.nbr_decaiss_feffi;
+              //console.log(vm.nbr_demande_feffi);
+        };
+        $scope.$watch('vm.selectedItemConvention_entete', function()
+        {
+             if (!vm.allconvention_entete) return;
+             vm.allconvention_entete.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemConvention_entete.$selected = true;
+        });
+        function donnee_menu_pr(item,session)
+        {
+            return new Promise(function (resolve, reject)
+            {
+                switch (session)
+                {                  
+                  case 'DPFI': 
+                              apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationByconvention','id_convention_entete',item.id).then(function(result)
+                              {
+                                  vm.allpassation_marches_pr = result.data.response;
+                                  console.log(vm.allpassation_marches_pr);
+                                  apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
+                                  {
+                                      vm.allcontrat_partenaire_relai = result.data.response;  
+                                    return resolve('ok');
+                                  });
+                              });
+                              
+                      break;
+
+                  case 'ADMIN': 
+                              apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationByconvention','id_convention_entete',item.id).then(function(result)
+                              {
+                                  vm.allpassation_marches_pr = result.data.response;
+                                  console.log(vm.allpassation_marches_pr);
+                                  apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
+                                  {
+                                      vm.allcontrat_partenaire_relai = result.data.response;  
+                                    return resolve('ok');
+                                  });
+                              });
+                       
+                      break;
+                  default:
+                      break;
+              
+                }            
+            });
+        }
+        function donnee_menu_moe(item,session)
+        {   vm.showbuttonNouvcontrat_moe=true;
+            return new Promise(function (resolve, reject) 
+            {
+                switch (session)
+                {
+                  
+                  case 'DPFI':
+                           apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
+                            {
+                                vm.allcontrat_moe = result.data.response;
+                                vm.showbuttonNouvcontrat_moe=false;
+                                return resolve('ok');
+                            });
+                                               
+                      break;
+
+                  case 'ADMIN':
+                            
+                            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
+                            {
+                                vm.allcontrat_moe = result.data.response;
+                                vm.showbuttonNouvcontrat_moe=false;
+                                return resolve('ok');
+                            });
+                       
+                      break;
+                  default:
+                      break;
+              
+                }
+            });
+        }
+        function donnee_sousmenu_feffi(item,session)
+        {
+            return new Promise(function (resolve, reject) 
+            {
+                switch (session)
+                {
+                  case 'DPFI':
+                            apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandeemidpfiByconvention",'id_convention_cife_entete',item.id).then(function(result)
+                            {
+                                vm.alldemande_realimentation_invalide = result.data.response; 
+                                return resolve('ok');
+                            });
+                            
+                      break;
+
+                  case 'ADMIN':
+                             apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandeemidpfiByconvention",'id_convention_cife_entete',item.id).then(function(result)
+                            {
+                                vm.alldemande_realimentation_invalide = result.data.response; 
+                                return resolve('ok');
+                            });
+                      break;
+                  default:
+                      break;
+              
+                }            
+            });
+        
+        }
+        function donnee_menu_mpe(item,session)
+        {
+            return new Promise(function (resolve, reject)
+            {
+                switch (session)
+                {
+                  case 'DPFI':
+                            
+                            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
+                            {
+                                vm.allcontrat_prestataire = result.data.response;
+                                    
+                                return resolve('ok');
+                            });
+                       
+                      break;
+
+                  case 'ADMIN':
+                            
+                            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
+                            {
+                                vm.allcontrat_prestataire = result.data.response;
+                                    
+                                return resolve('ok');
+                            });                            
+                       
+                      break;
+                  default:
+                      break;
+              
+                }            
+            });
+        }   
+
+/*****************Debut StepTwo demande_realimentation_feffi****************/
+
+      vm.demande_realimentation_column = [                
+        {titre:"Tranche"},
+        {titre:"Prévu"},
+        {titre:"Cumul"},
+        {titre:"Antérieur"},
+        {titre:"Periode"},
+        {titre:"Pourcentage"},
+        {titre:"Reste à décaisser"},
+        {titre:"Nom banque"},
+        {titre:"Numero compte"},
+        {titre:"Date"},
+        {titre:"Situation"}];     
+        //fonction selection item region
+        vm.selectionDemande_realimentation= function (item)
+        {
+            vm.selectedItemDemande_realimentation = item;
+            vm.showbuttonNouvtransfert_daaf = true;
+            if (item.$selected ==false || item.$selected == undefined)
+            {
+               //recuperation donnée demande_realimentation_feffi
+                apiFactory.getAPIgeneraliserREST("piece_justificatif_feffi/index",'id_demande_rea_feffi',item.id).then(function(result)
+                {
+                    vm.allpiece_justificatif_feffi = result.data.response;
+                    
+                });
+                
+                console.log(item.validation);
+                vm.validation = item.validation;
+                vm.steppiecefeffi=true;
+                vm.steptransdaaf=true;
+                vm.showbuttonValidation = true;
+
+                vm.showbuttonValidationenrejedpfi = true;
+                vm.showbuttonValidationencourdpfi = true;        
+                vm.showbuttonValidationdpfi = true;
+            }
+        };
+        $scope.$watch('vm.selectedItemDemande_realimentation', function()
+        {
+             if (!vm.alldemande_realimentation_invalide) return;
+             vm.alldemande_realimentation_invalide.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDemande_realimentation.$selected = true;
+        });
+
+        vm.valider_demandeemidpfi = function(validation)
+        {
+            validation_in_baseDemande_realimentation(vm.selectedItemDemande_realimentation,0,validation);
+                  vm.nbr_demande_feffi_encourdpfi = parseInt(vm.nbr_demande_feffi_encourdpfi)+1;
+            vm.nbr_demande_feffi_emidpfi = parseInt(vm.nbr_demande_feffi_emidpfi)-1;
+        }
+        vm.rejeter_demandedpfi = function(validation)
+        {
+            validation_in_baseDemande_realimentation(vm.selectedItemDemande_realimentation,0,validation);
+            //vm.nbr_demande_feffi_emidpfi = parseInt(vm.nbr_demande_feffi_emidpfi)-1;
+            vm.nbr_demande_feffi_encourdpfi = parseInt(vm.nbr_demande_feffi_encourdpfi)-1;
+        }
+
+        vm.valider_demandedpfi = function(validation)
+        {
+            validation_in_baseDemande_realimentation(vm.selectedItemDemande_realimentation,0,validation);
+            vm.nbr_demande_feffi_emidaaf = parseInt(vm.nbr_demande_feffi_emidaaf)+1;
+            vm.nbr_demande_feffi_encourdpfi = parseInt(vm.nbr_demande_feffi_encourdpfi)-1;
+        }       
+
+        //insertion ou mise a jours ou suppression item dans bdd convention_cisco_feffi_entete
+        function validation_in_baseDemande_realimentation(demande_realimentation,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        demande_realimentation.id,      
+                    id_compte_feffi: demande_realimentation.compte_feffi.id ,
+                    id_tranche_deblocage_feffi: demande_realimentation.tranche.id ,
+                    prevu: demande_realimentation.prevu ,
+                    cumul: demande_realimentation.cumul ,
+                    anterieur: demande_realimentation.anterieur ,
+                    reste: demande_realimentation.reste ,
+                    date: convertionDate(new Date(demande_realimentation.date)) ,
+                    validation: validation ,
+                    id_convention_cife_entete: demande_realimentation.convention_cife_entete.id              
+                });
+
+                //factory
+            apiFactory.add("demande_realimentation_feffi/index",datas, config).success(function (data)
+            {
+                vm.selectedItemDemande_realimentation.validation = String(validation);
+                        
+                //vm.alldemande_realimentation_valide.push(vm.selectedItemDemande_realimentation);
+                
+
+                /*vm.alldemande_realimentation_invalide = vm.alldemande_realimentation_invalide.filter(function(obj)
+                {
+                    return obj.id !== vm.selectedItemDemande_realimentation.id;
+                });*/
+
+                vm.showbuttonValidation = false;
+                vm.selectedItemDemande_realimentation.$selected  = false;
+                vm.selectedItemDemande_realimentation.$edit      = false;
+                vm.selectedItemDemande_realimentation ={};
+                vm.nbr_demande_feffi = parseInt(vm.nbr_demande_feffi)-1;
+
+
+                vm.showbuttonValidation =false;
+                vm.showbuttonValidationenrejedpfi = false;
+                vm.showbuttonValidationencourdpfi = false;        
+                vm.showbuttonValidationdpfi = false;
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.situationdemande = function(validation)
+        {
+            switch (validation)
+            {
+              case '1':
+                      return 'Emise au DPFI';                  
+                  break;
+
+             case '2':
+                  
+                  return 'En cours de traitement DPFI'; 
+                  break;
+              case '3':
+                  
+                  return 'Rejeté par DPFI'; 
+                  break;
+              
+              case '4':
+                        return 'Emise AU DAAF'; 
+                  break;
+              case '5':    
+                  return 'En cours de traitement DAAF'; 
+                  break;
+
+              case '6':
+                  
+                  return 'Rejeté par DPFI'; 
+                  break;
+
+              case '7':
+                  
+                  return 'Finalisée'; 
+                  break;
+
+              case '0':
+                      return 'Creer';                  
+                  break;
+              default:
+                  break;
+          
+            }
+        }
+  
+  /*************************Fin StepTwo demande_realimentation_feffi***************************************/
+
+
+  /*********************************Fin StepThree piece_justificatif_feffi*******************************/
+
+        vm.piece_justificatif_feffi_column = [
+        {titre:"Description"},
+        {titre:"Fichier"},
+        {titre:"Date"},
+        {titre:"Action"}];
+
+        //fonction selection item Piece_justificatif_feffi
+        vm.selectionPiece_justificatif_feffi= function (item)
+        {
+            vm.selectedItemPiece_justificatif_feffi = item;
+           // vm.allconvention_cisco_feffi_entete= [] ; 
+        };
+        $scope.$watch('vm.selectedItemPiece_justificatif_feffi', function()
+        {
+             if (!vm.allpiece_justificatif_feffi) return;
+             vm.allpiece_justificatif_feffi.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemPiece_justificatif_feffi.$selected = true;
+        });
+      
+         vm.download_piece_justificatif = function(item)
+        {//console.log(item.fichier);
+            window.location = apiUrlFile+item.fichier;
+        }
+
+
+  /**********************************Fin StepThree piece_justificatif_feffi****************************/
+
+
+ 
+
+  
+  /********************************************Debut passation de marcher*********************************************/
+        //recuperation donnée partenaire_relai
+        /*apiFactory.getAll("partenaire_relai/index").then(function(result)
+        {
+            vm.allpartenaire_relai = result.data.response;
+        });*/
+        
+        //col table
+        vm.passation_marches_pr_column = [
+        {titre:"Date Appel manifestation"
+        },
+        {titre:"Date lancement DP"
+        },
+        {titre:"Date remise"
+        },
+        {titre:"Nombre plis reçu"
+        },       
+        {titre:"Date OS"
+        },
+        {titre:"Action"
+        }];
+        //fonction ajout dans bdd
+        function ajoutPassation_marches_pr(passation_marches_pr,suppression)
+        {
+            if (NouvelItemPassation_marches_pr==false)
+            {
+                test_existancePassation_marches_pr (passation_marches_pr,suppression); 
+            } 
+            else
+            {
+                insert_in_basePassation_marches_pr(passation_marches_pr,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation passation_marches_pr
+        vm.annulerPassation_marches_pr = function(item)
+        {
+          if (NouvelItemPassation_marches_pr == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.date_os   = currentItemPassation_marches_pr.date_os ;
+            item.date_remise   = currentItemPassation_marches_pr.date_remise ;
+            item.nbr_offre_recu = currentItemPassation_marches_pr.nbr_offre_recu;
+            item.date_lancement_dp = currentItemPassation_marches_pr.date_lancement_dp ;
+            item.date_manifestation   = currentItemPassation_marches_pr.date_manifestation ;
+            //item.id_partenaire_relai = currentItemPassation_marches_pr.id_partenaire_relai ;            
+          }else
+          {
+            vm.allpassation_marches_pr = vm.allpassation_marches_pr.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemPassation_marches_pr.id;
+            });
+          }
+
+          vm.selectedItemPassation_marches_pr = {} ;
+          NouvelItemPassation_marches_pr      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionPassation_marches_pr= function (item)
+        {
+            vm.selectedItemPassation_marches_pr = item;
+            if (item.$selected ==false || item.$selected == undefined)
+            {
+              currentItemPassation_marches_pr    = JSON.parse(JSON.stringify(vm.selectedItemPassation_marches_pr));
+              vm.showbuttonValidationpassation_pr = true;
+              vm.validation_passation_pr = item.validation;
+            }
+        };
+        $scope.$watch('vm.selectedItemPassation_marches_pr', function()
+        {
+             if (!vm.allpassation_marches_pr) return;
+             vm.allpassation_marches_pr.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemPassation_marches_pr.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierPassation_marches_pr = function(item)
+        {
+            NouvelItemPassation_marches_pr = false ;
+            vm.selectedItemPassation_marches_pr = item;
+            currentItemPassation_marches_pr = angular.copy(vm.selectedItemPassation_marches_pr);
+            $scope.vm.allpassation_marches_pr.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.date_os   = new Date(vm.selectedItemPassation_marches_pr.date_os)  ;
+            item.date_remise   = new Date(vm.selectedItemPassation_marches_pr.date_remise) ;
+            item.nbr_offre_recu = parseInt(vm.selectedItemPassation_marches_pr.nbr_offre_recu);
+            item.date_lancement_dp = new Date(vm.selectedItemPassation_marches_pr.date_lancement_dp) ;
+            item.date_manifestation   = new Date(vm.selectedItemPassation_marches_pr.date_manifestation) ;
+            item.partenaire_relai   = vm.selectedItemPassation_marches_pr.partenaire_relai.id;
+             vm.showbuttonValidationpassation_pr = false;
+            
+        };
+
+        //fonction bouton suppression item passation_marches_pr
+        vm.supprimerPassation_marches_pr = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutPassation_marches_pr(vm.selectedItemPassation_marches_pr,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existancePassation_marches_pr (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var pass = vm.allpassation_marches_pr.filter(function(obj)
+                {
+                   return obj.id == currentItemPassation_marches_pr.id;
+                });
+                if(pass[0])
+                {
+                   if((pass[0].date_os   != currentItemPassation_marches_pr.date_os )
+                    || (pass[0].date_remise   != currentItemPassation_marches_pr.date_remise )
+                    || (pass[0].nbr_offre_recu != currentItemPassation_marches_pr.nbr_offre_recu)
+                    || (pass[0].date_lancement_dp != currentItemPassation_marches_pr.date_lancement_dp )
+                    || (pass[0].date_manifestation   != currentItemPassation_marches_pr.date_manifestation)
+                    )                   
+                      { 
+                         insert_in_basePassation_marches_pr(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_basePassation_marches_pr(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_basePassation_marches_pr(passation_marches_pr,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemPassation_marches_pr==false)
+            {
+                getId = vm.selectedItemPassation_marches_pr.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    date_lancement_dp: convertionDate(new Date(passation_marches_pr.date_lancement_dp)),
+                    date_os: convertionDate(new Date(passation_marches_pr.date_os)),
+                    date_remise: convertionDate(new Date(passation_marches_pr.date_remise)),
+                    nbr_offre_recu: passation_marches_pr.nbr_offre_recu,                    
+                    id_partenaire_relai: passation_marches_pr.id_partenaire_relai,
+                    date_manifestation: convertionDate(new Date(passation_marches_pr.date_manifestation)),
+                    id_convention_entete: vm.selectedItemConvention_entete.id,
+                    validation:0              
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("passation_marches_pr/index",datas, config).success(function (data)
+            { 
+
+                if (NouvelItemPassation_marches_pr == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {   
+                        vm.selectedItemPassation_marches_pr.convention_entete = vm.selectedItemConvention_entete;
+                        //vm.selectedItemPassation_marches_pr.partenaire_relai = partenaire_relai[0];
+                        vm.selectedItemPassation_marches_pr.$selected  = false;
+                        vm.selectedItemPassation_marches_pr.$edit      = false;
+                        vm.selectedItemPassation_marches_pr ={};
+                        vm.showbuttonNouvPassation_pr= false;
+                    }
+                    else 
+                    {    
+                      vm.allpassation_marches_pr = vm.allpassation_marches_pr.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemPassation_marches_pr.id;
+                      });
+                      vm.showbuttonNouvPassation_pr= true;
+                    }
+                    
+                }
+                else
+                {
+                  passation_marches_pr.validation=0;
+                  //passation_marches_pr.partenaire_relai = partenaire_relai[0];
+                  passation_marches_pr.convention_entete = vm.selectedItemConvention_entete;
+                  passation_marches_pr.id  =   String(data.response);              
+                  NouvelItemPassation_marches_pr=false;
+                  vm.showbuttonNouvPassation_pr= false;
+            }
+
+              passation_marches_pr.$selected = false;
+              passation_marches_pr.$edit = false;
+              vm.selectedItemPassation_marches_pr = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.validation_passation_marche_pr=function()
+        {
+          validationPassation_marches_pr(vm.selectedItemPassation_marches_pr,0);
+        }
+        function validationPassation_marches_pr(passation_marches_pr,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        passation_marches_pr.id,
+                    date_lancement_dp: convertionDate(new Date(passation_marches_pr.date_lancement_dp)),
+                    date_os: convertionDate(new Date(passation_marches_pr.date_os)),
+                    date_remise: convertionDate(new Date(passation_marches_pr.date_remise)),
+                    nbr_offre_recu: passation_marches_pr.nbr_offre_recu,                    
+                    id_partenaire_relai: passation_marches_pr.id_partenaire_relai,
+                    date_manifestation: convertionDate(new Date(passation_marches_pr.date_manifestation)),
+                    id_convention_entete: vm.selectedItemConvention_entete.id,
+                    validation:1               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("passation_marches_pr/index",datas, config).success(function (data)
+            { vm.selectedItemPassation_marches_pr.validation = 1;
+            vm.validation_passation_pr = 1;  
+              vm.showbuttonValidationpassation_pr = false;  
+              passation_marches_pr.$selected = false;
+              vm.selectedItemPassation_marches_pr = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+  /*****************************************fin passation de marcher**************************************************/
+
+
+  /*********************************************debut contrat pr**********************************************/
+
+  
+//col table
+        vm.contrat_partenaire_relai_column = [
+        {titre:"Partenaire relai"
+        },
+        {titre:"Intitule"
+        },
+        {titre:"Réference contrat"
+        },
+        {titre:"montant contrat"
+        },
+        {titre:"Date signature"
+        },
+        {titre:"Action"
+        }];
+
+        //fonction ajout dans bdd
+        function ajoutContrat_partenaire_relai(contrat_partenaire_relai,suppression)
+        {
+            if (NouvelItemContrat_partenaire_relai==false)
+            {
+                test_existanceContrat_partenaire_relai (contrat_partenaire_relai,suppression); 
+            } 
+            else
+            {
+                insert_in_baseContrat_partenaire_relai(contrat_partenaire_relai,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation contrat_partenaire_relai
+        vm.annulerContrat_partenaire_relai = function(item)
+        {
+          if (NouvelItemContrat_partenaire_relai == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.intitule   = currentItemContrat_partenaire_relai.intitule ;
+            item.ref_contrat   = currentItemContrat_partenaire_relai.ref_contrat ;
+            item.montant_contrat   = currentItemContrat_partenaire_relai.montant_contrat ;            
+            item.date_signature = currentItemContrat_partenaire_relai.date_signature ;            
+            item.id_partenaire_relai = currentItemContrat_partenaire_relai.id_partenaire_relai ;
+          }else
+          {
+            vm.allcontrat_partenaire_relai = vm.allcontrat_partenaire_relai.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemContrat_partenaire_relai.id;
+            });
+          }
+          vm.showbuttonNouvContrat_partenaire_relai = 1;
+          vm.selectedItemContrat_partenaire_relai = {} ;
+          NouvelItemContrat_partenaire_relai      = false;
+          
+        };
+
+        //fonction selection item contrat
+        vm.selectionContrat_partenaire_relai= function (item)
+        {
+            vm.selectedItemContrat_partenaire_relai = item;
+            vm.nouvelItemContrat_partenaire_relai   = item;
+            currentItemContrat_partenaire_relai    = JSON.parse(JSON.stringify(vm.selectedItemContrat_partenaire_relai));
+
+           if(item.id!=0)
+           {            
+              vm.showbuttonValidationcontrat_pr=true;
+
+                apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+                {
+                    vm.allavenant_partenaire = result.data.response;
+                });
+              vm.validation_contrat_pr = item.validation;
+              vm.stepprestaion_pr=true;
+              
+           }
+             
+        };
+        $scope.$watch('vm.selectedItemContrat_partenaire_relai', function()
+        {
+             if (!vm.allcontrat_partenaire_relai) return;
+             vm.allcontrat_partenaire_relai.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemContrat_partenaire_relai.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierContrat_partenaire_relai = function(item)
+        {
+            NouvelItemContrat_partenaire_relai = false ;
+            vm.selectedItemContrat_partenaire_relai = item;
+            currentItemContrat_partenaire_relai = angular.copy(vm.selectedItemContrat_partenaire_relai);
+            $scope.vm.allcontrat_partenaire_relai.forEach(function(mem) {
+              mem.$edit = false;
+            });
+            vm.showbuttonNouvContrat_partenaire_relai = 0;
+            item.$edit = true;
+            item.$selected = true;
+            item.intitule   = vm.selectedItemContrat_partenaire_relai.intitule ;
+            item.ref_contrat   = vm.selectedItemContrat_partenaire_relai.ref_contrat ;
+            item.montant_contrat   = parseInt(vm.selectedItemContrat_partenaire_relai.montant_contrat);           
+            item.date_signature = new Date(vm.selectedItemContrat_partenaire_relai.date_signature) ;           
+            item.id_partenaire_relai = vm.selectedItemContrat_partenaire_relai.partenaire_relai.id ;
+            vm.showbuttonValidationcontrat_pr = false;
+        };
+
+        //fonction bouton suppression item Contrat_partenaire_relai
+        vm.supprimerContrat_partenaire_relai = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutContrat_partenaire_relai(vm.selectedItemContrat_partenaire_relai,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item Contrat_partenaire_relai
+        function test_existanceContrat_partenaire_relai (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var pass = vm.allcontrat_partenaire_relai.filter(function(obj)
+                {
+                   return obj.id == currentItemContrat_partenaire_relai.id;
+                });
+                if(pass[0])
+                {
+                   if((pass[0].intitule   != currentItemContrat_partenaire_relai.intitule )
+                    || (pass[0].ref_contrat  != currentItemContrat_partenaire_relai.ref_contrat)
+                    || (pass[0].montant_contrat   != currentItemContrat_partenaire_relai.montant_contrat )                    
+                    || (pass[0].date_signature != currentItemContrat_partenaire_relai.date_signature )                   
+                    || (pass[0].id_partenaire_relai != currentItemContrat_partenaire_relai.id_partenaire_relai ))                   
+                      { 
+                         insert_in_baseContrat_partenaire_relai(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseContrat_partenaire_relai(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseContrat_partenaire_relai(contrat_partenaire_relai,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemContrat_partenaire_relai==false)
+            {
+                getId = vm.selectedItemContrat_partenaire_relai.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    intitule: contrat_partenaire_relai.intitule,
+                    ref_contrat: contrat_partenaire_relai.ref_contrat,
+                    montant_contrat: contrat_partenaire_relai.montant_contrat,
+                    date_signature:convertionDate(new Date(contrat_partenaire_relai.date_signature)),
+                    id_partenaire_relai:contrat_partenaire_relai.id_partenaire_relai,
+                    id_convention_entete: vm.selectedItemConvention_entete.id,
+                    validation : 0               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("contrat_partenaire_relai/index",datas, config).success(function (data)
+            {   
+                var pres= vm.allpartenaire_relai.filter(function(obj)
+                {
+                    return obj.id == contrat_partenaire_relai.id_partenaire_relai;
+                });
+
+                var conv= vm.allconvention_entete.filter(function(obj)
+                {
+                    return obj.id == contrat_partenaire_relai.id_convention_entete;
+                });
+
+                if (NouvelItemContrat_partenaire_relai == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                        vm.selectedItemContrat_partenaire_relai.convention_entete= conv[0];
+                        vm.selectedItemContrat_partenaire_relai.partenaire_relai = pres[0];
+                        
+                        vm.selectedItemContrat_partenaire_relai.$selected  = false;
+                        vm.selectedItemContrat_partenaire_relai.$edit      = false;
+                        vm.selectedItemContrat_partenaire_relai ={};
+                        vm.showbuttonNouvcontrat_pr= false;
+                    }
+                    else 
+                    {    
+                      vm.allcontrat_partenaire_relai = vm.allcontrat_partenaire_relai.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemContrat_partenaire_relai.id;
+                      });
+                      vm.showbuttonNouvcontrat_pr= true;
+                    }
+                    
+                }
+                else
+                {
+                  contrat_partenaire_relai.convention_entete= conv[0];
+                  contrat_partenaire_relai.partenaire_relai = pres[0];
+
+                  contrat_partenaire_relai.id  =   String(data.response);              
+                  NouvelItemContrat_partenaire_relai=false;
+                  vm.showbuttonNouvcontrat_pr = false;
+            } 
+              vm.showbuttonValidation = false;
+              vm.showbuttonNouvContrat_partenaire_relai = 1;
+              contrat_partenaire_relai.$selected = false;
+              contrat_partenaire_relai.$edit = false;
+              vm.selectedItemContrat_partenaire_relai = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.valider_contrat = function()
+        {
+          maj_in_baseContrat_partenaire_relai(vm.selectedItemContrat_partenaire_relai,0);
+        }
+
+        function maj_in_baseContrat_partenaire_relai(contrat_partenaire_relai,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        contrat_partenaire_relai.id,
+                    intitule: contrat_partenaire_relai.intitule,
+                    ref_contrat: contrat_partenaire_relai.ref_contrat,
+                    montant_contrat: contrat_partenaire_relai.montant_contrat,
+                    date_signature:convertionDate(new Date(contrat_partenaire_relai.date_signature)),
+                    id_partenaire_relai:contrat_partenaire_relai.partenaire_relai.id,
+                    id_convention_entete: contrat_partenaire_relai.convention_entete.id,
+                    validation : 1               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("contrat_partenaire_relai/index",datas, config).success(function (data)
+            { 
+              
+              vm.selectedItemContrat_partenaire_relai.validation = 1;
+              vm.selectedItemContrat_partenaire_relai = {};
+              vm.showbuttonValidationcontrat_pr = false;
+              vm.validation_contrat_pr =1;
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+/*****************************************fin contrat_partenaire_relai********************************************/
+/*********************************************fin avenant partenaire***********************************************/
+
+//col table
+        vm.avenant_partenaire_column = [
+        {titre:"Description"
+        },
+        {titre:"Référence avenant"
+        },
+        {titre:"Montant"
+        },
+        {titre:"Date signature"
+        },
+        {titre:"Action"
+        }];
+        //Masque de saisi ajout
+       
+        //fonction ajout dans bdd
+        function ajoutAvenant_partenaire(avenant_partenaire,suppression)
+        {
+            if (NouvelItemAvenant_partenaire==false)
+            {
+                test_existanceAvenant_partenaire (avenant_partenaire,suppression); 
+            } 
+            else
+            {
+                insert_in_baseAvenant_partenaire(avenant_partenaire,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation avenant_partenaire
+        vm.annulerAvenant_partenaire = function(item)
+        {
+          if (NouvelItemAvenant_partenaire == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.description   = currentItemAvenant_partenaire.description ;
+            item.montant   = currentItemAvenant_partenaire.montant ;
+            item.ref_avenant   = currentItemAvenant_partenaire.ref_avenant ;
+            item.date_signature = currentItemAvenant_partenaire.date_signature ;
+          }else
+          {
+            vm.allavenant_partenaire = vm.allavenant_partenaire.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemAvenant_partenaire.id;
+            });
+          }
+        
+            vm.showbuttonNouvavenant_partenaire=true;
+          vm.selectedItemAvenant_partenaire = {} ;
+          NouvelItemAvenant_partenaire      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionAvenant_partenaire= function (item)
+        {
+            vm.selectedItemAvenant_partenaire = item;
+            //vm.nouvelItemAvenant_partenaire   = item;
+            if (item.id!=0)
+            {
+                currentItemAvenant_partenaire    = JSON.parse(JSON.stringify(vm.selectedItemAvenant_partenaire));
+                vm.showbuttonValidation_avenant_partenaire = true;
+                vm.validation_avenant_partenaire = item.validation;
+            }
+             
+            
+        };
+        $scope.$watch('vm.selectedItemAvenant_partenaire', function()
+        {
+             if (!vm.allavenant_partenaire) return;
+             vm.allavenant_partenaire.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemAvenant_partenaire.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierAvenant_partenaire = function(item)
+        {
+            NouvelItemAvenant_partenaire = false ;
+            vm.selectedItemAvenant_partenaire = item;
+            currentItemAvenant_partenaire = angular.copy(vm.selectedItemAvenant_partenaire);
+            $scope.vm.allavenant_partenaire.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.ref_avenant   = vm.selectedItemAvenant_partenaire.ref_avenant ;
+            item.description   = vm.selectedItemAvenant_partenaire.description ;
+            item.montant   = vm.selectedItemAvenant_partenaire.montant ;
+            item.date_signature = vm.selectedItemAvenant_partenaire.date_signature ;            
+            vm.showbuttonValidation_avenant_partenaire = false;
+        };
+
+        //fonction bouton suppression item Avenant_partenaire
+        vm.supprimerAvenant_partenaire = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutAvenant_partenaire(vm.selectedItemAvenant_partenaire,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceAvenant_partenaire (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var pass = vm.allavenant_partenaire.filter(function(obj)
+                {
+                   return obj.id == currentItemAvenant_partenaire.id;
+                });
+                if(pass[0])
+                {
+                   if((pass[0].description   != currentItemAvenant_partenaire.description )
+                    || (pass[0].montant  != currentItemAvenant_partenaire.montant)
+                    || (pass[0].date_signature != currentItemAvenant_partenaire.date_signature ))                   
+                      { 
+                         insert_in_baseAvenant_partenaire(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseAvenant_partenaire(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseAvenant_partenaire(avenant_partenaire,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemAvenant_partenaire==false)
+            {
+                getId = vm.selectedItemAvenant_partenaire.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    description: avenant_partenaire.description,
+                    montant: avenant_partenaire.montant,
+                    ref_avenant: avenant_partenaire.ref_avenant,
+                    date_signature:convertionDate(new Date(avenant_partenaire.date_signature)),
+                    id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
+                    validation:0               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avenant_partenaire_relai/index",datas, config).success(function (data)
+            {   
+                var conve= vm.allcontrat_partenaire_relai.filter(function(obj)
+                {
+                    return obj.id == avenant_partenaire.id_contrat_partenaire_relai;
+                });
+
+                if (NouvelItemAvenant_partenaire == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {                        
+                        vm.selectedItemAvenant_partenaire.contrat_partenaire_relai = conve[0];
+                        
+                        vm.selectedItemAvenant_partenaire.$selected  = false;
+                        vm.selectedItemAvenant_partenaire.$edit      = false;
+                        vm.selectedItemAvenant_partenaire ={};
+                    }
+                    else 
+                    {    
+                      vm.allavenant_partenaire = vm.allavenant_partenaire.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemAvenant_partenaire.id;
+                      });
+                    
+                    }
+                }
+                else
+                {
+                  avenant_partenaire.partenaire = conve[0];
+                  avenant_partenaire.validation =0
+                  avenant_partenaire.id  =   String(data.response);              
+                  NouvelItemAvenant_partenaire=false;
+                }
+              vm.showbuttonValidation_avenant_partenaire = false;
+              vm.validation_avenant_partenaire = 0
+              avenant_partenaire.$selected = false;
+              avenant_partenaire.$edit = false;
+              vm.selectedItemAvenant_partenaire = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.validerAvenant_partenaire = function()
+        {
+          valideravenantpartenaireinbase(vm.selectedItemAvenant_partenaire,0,1);
+        }
+        function valideravenantpartenaireinbase(avenant_partenaire,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        avenant_partenaire.id,
+                    description: avenant_partenaire.description,
+                    montant: avenant_partenaire.montant,
+                    ref_avenant: avenant_partenaire.ref_avenant,
+                    date_signature:convertionDate(new Date(avenant_partenaire.date_signature)),
+                    id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avenant_partenaire_relai/index",datas, config).success(function (data)
+            {
+                avenant_partenaire.validation = validation;
+                vm.validation_avenant_partenaire = validation;
+                avenant_partenaire.$selected = false;
+                avenant_partenaire.$edit = false;
+                vm.selectedItemAvenant_partenaire = {};
+                vm.showbuttonValidation_avenant_partenaire = false;
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+  /**********************************************Avenant partenaire***************************************************/
+
+
+  /******************************************debut maitrise d'oeuvre*****************************************************/
+
+       /**************************************fin contrat moe***************************************************/
+        
+      //col table
+        vm.contrat_moe_column = [
+        {titre:"Bureau d'etude"
+        },
+        {titre:"Intitule"
+        },
+        {titre:"Réference contrat"
+        },
+        {titre:"montant contrat"
+        },
+        {titre:"Date signature"
+        }];
+       
+        //fonction selection item contrat
+        vm.selectionContrat_moe= function (item)
+        {
+            vm.selectedItemContrat_moe = item;
+
+           if(item.id!=0)
+           {
+              if (item.$selected==false || item.$selected==undefined)
+              {
+                  vm.showbuttonValidationcontrat_pr = true;
+                  
+                  if(vm.roles.indexOf("DPFI")!= -1)
+                  {
+                      
+                     apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.alldemande_debut_travaux_moe = result.data.response;
+                    });
+                     apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.alldemande_batiment_moe = result.data.response;
+                    });
+                     apiFactory.getAPIgeneraliserREST("demande_latrine_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.alldemande_latrine_moe = result.data.response;
+                    });
+                     apiFactory.getAPIgeneraliserREST("demande_fin_travaux_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.alldemande_fin_travaux_moe = result.data.response;
+                    });
+                  }
+
+                  
+                  if(vm.roles.indexOf("ADMIN")!= -1)
+                  {
+                      apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.alldemande_debut_travaux_moe = result.data.response;
+                      console.log(vm.alldemande_debut_travaux_moe);
+                    });
+                     apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.alldemande_batiment_moe = result.data.response;
+                    });
+                     apiFactory.getAPIgeneraliserREST("demande_latrine_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.alldemande_latrine_moe = result.data.response;
+                    });
+                     apiFactory.getAPIgeneraliserREST("demande_fin_travaux_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.alldemande_fin_travaux_moe = result.data.response;
+                    });
+
+                  }
+                }
+
+
+            vm.showbuttonValidationcontrat_moe = true;
+            vm.validation_contrat_moe = item.validation;
+            vm.stepprestation_moe = true;
+            console.log(item);
+           }
+             
+        };
+        $scope.$watch('vm.selectedItemContrat_moe', function()
+        {
+             if (!vm.allcontrat_moe) return;
+             vm.allcontrat_moe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemContrat_moe.$selected = true;
+        });
+
+  
+      /*****************************************fin contrat moe******************************************************/
+
+      
+      /**********************************debut demande_debut_travaux_moe****************************************/
+//col table
+        vm.demande_debut_travaux_moe_column = [        
+        {titre:"Objet"
+        },
+        {titre:"Description"
+        },
+        {titre:"Référence facture"
+        },
+        {titre:"Tranche"
+        },
+        {titre:"Montant"
+        },
+        {titre:"Cumul"
+        },
+        {titre:"Antérieur"
+        },
+        {titre:"Periode"
+        },
+        {titre:"Pourcentage"
+        },
+        {titre:"Reste à décaisser"
+        },
+        {titre:"Date"
+        }];
+        //fonction selection item Demande_debut_travaux_moe
+        vm.selectionDemande_debut_travaux_moe= function (item)
+        {
+            vm.selectedItemDemande_debut_travaux_moe = item;
+           if(item.id!=0)
+           {
+               apiFactory.getAPIgeneraliserREST("justificatif_debut_travaux_moe/index",'id_demande_debut_travaux',vm.selectedItemDemande_debut_travaux_moe.id).then(function(result)
+                {
+                    vm.alljustificatif_debut_travaux_moe = result.data.response;
+                    console.log(vm.alljustificatif_debut_travaux_moe);
+                });                 
+
+                vm.showbuttonValidationDemande_debut_travaux_moe_encourdpfi = true;
+                vm.showbuttonValidationDemande_debut_travaux_moe_rejedpfi = true;
+                vm.showbuttonValidationDemande_debut_travaux_moe_validedpfi = true;               
+            
+            vm.validation_demande_debut_travaux_moe = item.validation;
+            vm.stepjusti_d_tra_moe = true;
+           }
+             
+        };
+        $scope.$watch('vm.selectedItemDemande_debut_travaux_moe', function()
+        {
+             if (!vm.alldemande_debut_travaux_moe) return;
+             vm.alldemande_debut_travaux_moe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDemande_debut_travaux_moe.$selected = true;
+        });
+
+        vm.validerDemande_debut_travaux_moe_encourdpfi = function()
+        {
+          maj_in_baseDemande_debut_travaux_moe(vm.selectedItemDemande_debut_travaux_moe,0,2);
+        }
+        vm.validerDemande_debut_travaux_moe_rejedpfi = function()
+        {
+          maj_in_baseDemande_debut_travaux_moe(vm.selectedItemDemande_debut_travaux_moe,0,3);
+        }
+        vm.validerDemande_debut_travaux_moe_validedpfi = function()
+        {
+          maj_in_baseDemande_debut_travaux_moe(vm.selectedItemDemande_debut_travaux_moe,0,4);
+        }
+
+        function maj_in_baseDemande_debut_travaux_moe(demande_debut_travaux_moe,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        demande_debut_travaux_moe.id,
+                    objet: demande_debut_travaux_moe.objet,
+                    description:demande_debut_travaux_moe.description,
+                    ref_facture:demande_debut_travaux_moe.ref_facture,
+                    id_tranche_d_debut_travaux_moe: demande_debut_travaux_moe.tranche.id ,
+                    montant: demande_debut_travaux_moe.montant,
+                    cumul: demande_debut_travaux_moe.cumul ,
+                    anterieur: demande_debut_travaux_moe.anterieur ,
+                    reste: demande_debut_travaux_moe.reste ,
+                    date: convertionDate(new Date(demande_debut_travaux_moe.date)),
+                    id_contrat_bureau_etude: demande_debut_travaux_moe.contrat_bureau_etude.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("demande_debut_travaux_moe/index",datas, config).success(function (data)
+            { 
+              demande_debut_travaux_moe.validation = validation; 
+              vm.validation_demande_debut_travaux_moe = validation;
+              demande_debut_travaux_moe.$selected = false;
+              demande_debut_travaux_moe.$edit = false;
+              vm.selectedItemDemande_debut_travaux_moe = {};
+              vm.showbuttonValidationDemande_debut_travaux_moe_creer = false;
+              vm.showbuttonValidationDemande_debut_travaux_moe_encourdpfi = false;
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+/******************************************fin demande_debut_travaux_moe****************************************/
+
+/**********************************fin justificatif attachement****************************************/
+
+//col table
+        vm.justificatif_debut_travaux_moe_column = [
+        {titre:"Description"
+        },
+        {titre:"Fichier"
+        },
+        {titre:"Action"
+        }];
+        
+        //fonction selection item justificatif debut_travaux
+        vm.selectionJustificatif_debut_travaux_moe= function (item)
+        {
+            vm.selectedItemJustificatif_debut_travaux_moe = item; 
+        };
+        $scope.$watch('vm.selectedItemJustificatif_debut_travaux_moe', function()
+        {
+             if (!vm.alljustificatif_debut_travaux_moe) return;
+             vm.alljustificatif_debut_travaux_moe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemJustificatif_debut_travaux_moe.$selected = true;
+        });
+     
+        vm.download_piece = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
+        }
+/***************************************fin justificatif debut_travaux**********************************************/
+
+
+/**********************************debut demande_debut_travaux_moe****************************************/
+//col table
+        vm.demande_batiment_moe_column = [        
+        {titre:"Objet"
+        },
+        {titre:"Description"
+        },
+        {titre:"Référence facture"
+        },
+        {titre:"Tranche"
+        },
+        {titre:"Montant"
+        },
+        {titre:"Cumul"
+        },
+        {titre:"Antérieur"
+        },
+        {titre:"Periode"
+        },
+        {titre:"Pourcentage"
+        },
+        {titre:"Reste à décaisser"
+        },
+        {titre:"Date"
+        }];
+     
+        //fonction selection item Demande_batiment_moe
+        vm.selectionDemande_batiment_moe= function (item)
+        {
+            vm.selectedItemDemande_batiment_moe = item;
+           if(item.id!=0)
+           {
+               apiFactory.getAPIgeneraliserREST("justificatif_batiment_moe/index",'id_demande_batiment_moe',vm.selectedItemDemande_batiment_moe.id).then(function(result)
+                {
+                    vm.alljustificatif_batiment_moe = result.data.response;
+                    console.log(vm.alljustificatif_batiment_moe);
+                }); 
+
+                vm.showbuttonValidationDemande_batiment_moe_encourdpfi = true;
+                vm.showbuttonValidationDemande_batiment_moe_rejedpfi = true;
+                vm.showbuttonValidationDemande_batiment_moe_validedpfi = true;               
+            
+            vm.validation_demande_batiment_moe = item.validation;
+            vm.stepjusti_d_tra_moe = true;
+           }
+             
+        };
+        $scope.$watch('vm.selectedItemDemande_batiment_moe', function()
+        {
+             if (!vm.alldemande_batiment_moe) return;
+             vm.alldemande_batiment_moe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDemande_batiment_moe.$selected = true;
+        });
+
+        vm.validerDemande_batiment_moe_encourdpfi = function()
+        {
+          maj_in_baseDemande_batiment_moe(vm.selectedItemDemande_batiment_moe,0,2);
+        }
+        vm.validerDemande_batiment_moe_rejedpfi = function()
+        {
+          maj_in_baseDemande_batiment_moe(vm.selectedItemDemande_batiment_moe,0,3);
+        }
+        vm.validerDemande_batiment_moe_validedpfi = function()
+        {
+          maj_in_baseDemande_batiment_moe(vm.selectedItemDemande_batiment_moe,0,4);
+        }
+
+        function maj_in_baseDemande_batiment_moe(demande_batiment_moe,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        demande_batiment_moe.id,
+                    objet: demande_batiment_moe.objet,
+                    description:demande_batiment_moe.description,
+                    ref_facture:demande_batiment_moe.ref_facture,
+                    id_tranche_demande_batiment_moe: demande_batiment_moe.tranche.id ,
+                    montant: demande_batiment_moe.montant,
+                    cumul: demande_batiment_moe.cumul ,
+                    anterieur: demande_batiment_moe.anterieur ,
+                    reste: demande_batiment_moe.reste ,
+                    date: convertionDate(new Date(demande_batiment_moe.date)),
+                    id_contrat_bureau_etude: demande_batiment_moe.contrat_bureau_etude.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("demande_batiment_moe/index",datas, config).success(function (data)
+            { 
+              demande_batiment_moe.validation = validation; 
+              vm.validation_demande_batiment_moe = validation;
+              demande_batiment_moe.$selected = false;
+              demande_batiment_moe.$edit = false;
+              vm.selectedItemDemande_batiment_moe = {};
+              vm.showbuttonValidationDemande_batiment_moe_creer = false;
+              vm.showbuttonValidationDemande_batiment_moe_encourdpfi = false;
+              vm.showbuttonValidationDemande_batiment_moe_rejedpfi = false;
+              vm.showbuttonValidationDemande_batiment_moe_validedpfi = false;
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+/******************************************fin demande_batiment_moe****************************************/
+
+/**********************************fin justificatif attachement****************************************/
+
+//col table
+        vm.justificatif_batiment_moe_column = [
+        {titre:"Description"
+        },
+        {titre:"Fichier"
+        },
+        {titre:"Action"
+        }];
+
+     
+        //fonction selection item justificatif batiment_moe
+        vm.selectionJustificatif_batiment_moe= function (item)
+        {
+            vm.selectedItemJustificatif_batiment_moe = item;
+        };
+        $scope.$watch('vm.selectedItemJustificatif_batiment_moe', function()
+        {
+             if (!vm.alljustificatif_batiment_moe) return;
+             vm.alljustificatif_batiment_moe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemJustificatif_batiment_moe.$selected = true;
+        });
+      
+        vm.download_piece = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
+        }
+/***************************************fin justificatif batiment_moe**********************************************/
+
+
+/**********************************debut demande_latrine_moe****************************************/
+//col table
+        vm.demande_latrine_moe_column = [        
+        {titre:"Objet"
+        },
+        {titre:"Description"
+        },
+        {titre:"Référence facture"
+        },
+        {titre:"Tranche"
+        },
+        {titre:"Montant"
+        },
+        {titre:"Cumul"
+        },
+        {titre:"Antérieur"
+        },
+        {titre:"Periode"
+        },
+        {titre:"Pourcentage"
+        },
+        {titre:"Reste à décaisser"
+        },
+        {titre:"Date"
+        }];
+
+
+        //fonction selection item Demande_latrine_moe
+        vm.selectionDemande_latrine_moe= function (item)
+        {
+            vm.selectedItemDemande_latrine_moe = item;
+           if(item.id!=0)
+           {
+               apiFactory.getAPIgeneraliserREST("justificatif_latrine_moe/index",'id_demande_latrine_moe',vm.selectedItemDemande_latrine_moe.id).then(function(result)
+                {
+                    vm.alljustificatif_latrine_moe = result.data.response;
+                    console.log(vm.alljustificatif_latrine_moe);
+                });
+
+                  vm.showbuttonValidationDemande_latrine_moe_encourdpfi = true;
+                  vm.showbuttonValidationDemande_latrine_moe_rejedpfi = true;
+                  vm.showbuttonValidationDemande_latrine_moe_validedpfi = true;
+                            
+            vm.validation_demande_latrine_moe = item.validation;
+            vm.stepjusti_d_tra_moe = true;
+           }
+             
+        };
+        $scope.$watch('vm.selectedItemDemande_latrine_moe', function()
+        {
+             if (!vm.alldemande_latrine_moe) return;
+             vm.alldemande_latrine_moe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDemande_latrine_moe.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+       
+        vm.validerDemande_latrine_moe_encourdpfi = function()
+        {
+          maj_in_baseDemande_latrine_moe(vm.selectedItemDemande_latrine_moe,0,2);
+        }
+        vm.validerDemande_latrine_moe_rejedpfi = function()
+        {
+          maj_in_baseDemande_latrine_moe(vm.selectedItemDemande_latrine_moe,0,3);
+        }
+        vm.validerDemande_latrine_moe_validedpfi = function()
+        {
+          maj_in_baseDemande_latrine_moe(vm.selectedItemDemande_latrine_moe,0,4);
+        }
+
+        function maj_in_baseDemande_latrine_moe(demande_latrine_moe,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        demande_latrine_moe.id,
+                    objet: demande_latrine_moe.objet,
+                    description:demande_latrine_moe.description,
+                    ref_facture:demande_latrine_moe.ref_facture,
+                    id_tranche_demande_latrine_moe: demande_latrine_moe.tranche.id ,
+                    montant: demande_latrine_moe.montant,
+                    cumul: demande_latrine_moe.cumul ,
+                    anterieur: demande_latrine_moe.anterieur ,
+                    reste: demande_latrine_moe.reste ,
+                    date: convertionDate(new Date(demande_latrine_moe.date)),
+                    id_contrat_bureau_etude: demande_latrine_moe.contrat_bureau_etude.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("demande_latrine_moe/index",datas, config).success(function (data)
+            { 
+              demande_latrine_moe.validation = validation; 
+              vm.validation_demande_latrine_moe = validation;
+              demande_latrine_moe.$selected = false;
+              demande_latrine_moe.$edit = false;
+              vm.selectedItemDemande_latrine_moe = {};
+              vm.showbuttonValidationDemande_latrine_moe_creer = false;
+              vm.showbuttonValidationDemande_latrine_moe_encourdpfi = false;
+              vm.showbuttonValidationDemande_latrine_moe_rejedpfi = false;
+              vm.showbuttonValidationDemande_latrine_moe_validedpfi = false;
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+/******************************************fin demande_latrine_moe****************************************/
+
+/**********************************fin justificatif attachement****************************************/
+
+//col table
+        vm.justificatif_latrine_moe_column = [
+        {titre:"Description"
+        },
+        {titre:"Fichier"
+        },
+        {titre:"Action"
+        }];
+
+        //fonction selection item justificatif latrine_moe
+        vm.selectionJustificatif_latrine_moe= function (item)
+        {
+            vm.selectedItemJustificatif_latrine_moe = item;
+        };
+        $scope.$watch('vm.selectedItemJustificatif_latrine_moe', function()
+        {
+             if (!vm.alljustificatif_latrine_moe) return;
+             vm.alljustificatif_latrine_moe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemJustificatif_latrine_moe.$selected = true;
+        });
+
+        vm.download_piece = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
+        }
+/***************************************fin justificatif latrine_moe**********************************************/
+
+
+      /**********************************debut demande_debut_travaux_moe****************************************/
+//col table
+        vm.demande_fin_travaux_moe_column = [        
+        {titre:"Objet"
+        },
+        {titre:"Description"
+        },
+        {titre:"Référence facture"
+        },
+        {titre:"Tranche"
+        },
+        {titre:"Montant"
+        },
+        {titre:"Cumul"
+        },
+        {titre:"Antérieur"
+        },
+        {titre:"Periode"
+        },
+        {titre:"Pourcentage"
+        },
+        {titre:"Reste à décaisser"
+        },
+        {titre:"Date"
+        }];
+
+        //fonction selection item Demande_fin_travaux_moe
+        vm.selectionDemande_fin_travaux_moe= function (item)
+        {
+            vm.selectedItemDemande_fin_travaux_moe = item;
+           if(item.id!=0)
+           {
+               apiFactory.getAPIgeneraliserREST("justificatif_fin_travaux_moe/index",'id_demande_fin_travaux',vm.selectedItemDemande_fin_travaux_moe.id).then(function(result)
+                {
+                    vm.alljustificatif_fin_travaux_moe = result.data.response;
+                    console.log(vm.alljustificatif_fin_travaux_moe);
+                });
+
+
+                  vm.showbuttonValidationDemande_fin_travaux_moe_encourdpfi = true;
+                  vm.showbuttonValidationDemande_fin_travaux_moe_rejedpfi = true;
+                  vm.showbuttonValidationDemande_fin_travaux_moe_validedpfi = true;
+                            
+            vm.validation_demande_fin_travaux_moe = item.validation;
+            vm.stepjusti_d_tra_moe = true;
+           }
+             
+        };
+        $scope.$watch('vm.selectedItemDemande_fin_travaux_moe', function()
+        {
+             if (!vm.alldemande_fin_travaux_moe) return;
+             vm.alldemande_fin_travaux_moe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDemande_fin_travaux_moe.$selected = true;
+        });
+
+      
+        vm.validerDemande_fin_travaux_moe_encourdpfi = function()
+        {
+          maj_in_baseDemande_fin_travaux_moe(vm.selectedItemDemande_fin_travaux_moe,0,2);
+        }
+        vm.validerDemande_fin_travaux_moe_rejedpfi = function()
+        {
+          maj_in_baseDemande_fin_travaux_moe(vm.selectedItemDemande_fin_travaux_moe,0,3);
+        }
+        vm.validerDemande_fin_travaux_moe_validedpfi = function()
+        {
+          maj_in_baseDemande_fin_travaux_moe(vm.selectedItemDemande_fin_travaux_moe,0,4);
+        }
+
+        function maj_in_baseDemande_fin_travaux_moe(demande_fin_travaux_moe,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        demande_fin_travaux_moe.id,
+                    objet: demande_fin_travaux_moe.objet,
+                    description:demande_fin_travaux_moe.description,
+                    ref_facture:demande_fin_travaux_moe.ref_facture,
+                    id_tranche_d_fin_travaux_moe: demande_fin_travaux_moe.tranche.id ,
+                    montant: demande_fin_travaux_moe.montant,
+                    cumul: demande_fin_travaux_moe.cumul ,
+                    anterieur: demande_fin_travaux_moe.anterieur ,
+                    reste: demande_fin_travaux_moe.reste ,
+                    date: convertionDate(new Date(demande_fin_travaux_moe.date)),
+                    id_contrat_bureau_etude: demande_fin_travaux_moe.contrat_bureau_etude.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("demande_fin_travaux_moe/index",datas, config).success(function (data)
+            { 
+              demande_fin_travaux_moe.validation = validation; 
+              vm.validation_demande_fin_travaux_moe = validation;
+              demande_fin_travaux_moe.$selected = false;
+              demande_fin_travaux_moe.$edit = false;
+              vm.selectedItemDemande_fin_travaux_moe = {};
+              vm.showbuttonValidationDemande_fin_travaux_moe_creer = false;
+              vm.showbuttonValidationDemande_fin_travaux_moe_encourdpfi = false;
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+/******************************************fin demande_fin_travaux_moe****************************************/
+
+/**********************************fin justificatif attachement****************************************/
+
+//col table
+        vm.justificatif_fin_travaux_moe_column = [
+        {titre:"Description"
+        },
+        {titre:"Fichier"
+        },
+        {titre:"Action"
+        }];
+
+        //fonction selection item justificatif fin_travaux
+        vm.selectionJustificatif_fin_travaux_moe= function (item)
+        {
+            vm.selectedItemJustificatif_fin_travaux_moe = item;
+        };
+        $scope.$watch('vm.selectedItemJustificatif_fin_travaux_moe', function()
+        {
+             if (!vm.alljustificatif_fin_travaux_moe) return;
+             vm.alljustificatif_fin_travaux_moe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemJustificatif_fin_travaux_moe.$selected = true;
+        });
+   
+        vm.download_piece = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
+        }
+/***************************************fin justificatif fin_travaux**********************************************/
+
+
+/**********************************debut contrat prestataire****************************************/
+        
+//col table
+        vm.contrat_prestataire_column = [
+        {titre:"Prestataire"
+        },
+        {titre:"Description"
+        },
+        {titre:"Numero contrat"
+        },
+        {titre:"Cout batiment"
+        },
+        {titre:"Cout latrine"
+        },
+        {titre:"Cout mobilier"
+        },
+        {titre:"Date signature"
+        }];
+        //fonction selection item contrat
+        vm.selectionContrat_prestataire= function (item)
+        {
+            vm.selectedItemContrat_prestataire = item;            
+
+           if(item.id!=0)
+           {
+
+                apiFactory.getAPIgeneraliserREST("attachement_batiment/index",'id_contrat_prestataire',item.id).then(function(result)
+                {
+                    vm.allattachement_batiment = result.data.response;
+                });
+                apiFactory.getAPIgeneraliserREST("attachement_latrine/index",'id_contrat_prestataire',item.id).then(function(result)
+                {
+                    vm.allattachement_latrine = result.data.response;
+                });
+
+                apiFactory.getAPIgeneraliserREST("attachement_mobilier/index",'id_contrat_prestataire',item.id).then(function(result)
+                {
+                    vm.allattachement_mobilier = result.data.response;
+                });
+            vm.showbuttonValidationcontrat_prestataire = true;
+            vm.validation_contrat_prestataire = item.validation;
+              switch (vm.session)
+              {
+                
+                case 'DPFI':
+                          
+                          apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index","menu","getdemandevalidebcafBycontrat",'id_contrat_prestataire',item.id).then(function(result)
+                            {
+                              vm.alldemande_batiment_mpe = result.data.response;
+                            });
+                           apiFactory.getAPIgeneraliserREST("demande_latrine_prestataire/index","menu","getdemandevalidebcafBycontrat",'id_contrat_prestataire',item.id).then(function(result)
+                            {
+                              vm.alldemande_latrine_mpe = result.data.response;
+                            });
+                            apiFactory.getAPIgeneraliserREST("demande_mobilier_prestataire/index","menu","getdemandevalidebcafBycontrat",'id_contrat_prestataire',item.id).then(function(result)
+                            {
+                              vm.alldemande_mobilier_mpe = result.data.response;
+                            });
+
+                            apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+                            {
+                              vm.allavenant_mpe = result.data.response;
+                            });
+                     
+                    break;
+
+                case 'ADMIN':
+                          apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index","menu","getdemandevalidebcafBycontrat",'id_contrat_prestataire',item.id).then(function(result)
+                            {
+                              vm.alldemande_batiment_mpe = result.data.response;
+                            });
+                           apiFactory.getAPIgeneraliserREST("demande_latrine_prestataire/index","menu","getdemandevalidebcafBycontrat",'id_contrat_prestataire',item.id).then(function(result)
+                            {
+                              vm.alldemande_latrine_mpe = result.data.response;
+                            });
+                            apiFactory.getAPIgeneraliserREST("demande_mobilier_prestataire/index","menu","getdemandevalidebcafBycontrat",'id_contrat_prestataire',item.id).then(function(result)
+                            {
+                              vm.alldemande_mobilier_mpe = result.data.response;
+                            });
+
+                            apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+                            {
+                              vm.allavenant_mpe = result.data.response;
+                            }); 
+                    
+                     
+                    break;
+                default:
+                    break;
+            
+              }
+              
+           }
+           vm.stepsuiviexecution = true;
+           vm.stepavenant_mpe = true;  
+        };
+        $scope.$watch('vm.selectedItemContrat_prestataire', function()
+        {
+             if (!vm.allcontrat_prestataire) return;
+             vm.allcontrat_prestataire.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemContrat_prestataire.$selected = true;
+        });
+ 
+/**********************************fin contrat_prestataire****************************************/    
+  
+
+/************************************************debut batiment_mpe*************************************************/
+        vm.demande_batiment_mpe_column = [        
+        {titre:"Objet"
+        },
+        {titre:"Description"
+        },
+        {titre:"Référence facture"
+        },
+        {titre:"Tranche"
+        },
+        {titre:"Montant"
+        },
+        {titre:"Cumul"
+        },
+        {titre:"Antérieur"
+        },
+        {titre:"Periode"
+        },
+        {titre:"Pourcentage"
+        },
+        {titre:"Reste à décaisser"
+        },
+        {titre:"Date"
+        }];
+
+       
+        //fonction selection item Demande_batiment_mpe
+        vm.selectionDemande_batiment_mpe= function (item)
+        {
+            vm.selectedItemDemande_batiment_mpe = item;
+           if(item.id!=0)
+           {
+            apiFactory.getAPIgeneraliserREST("justificatif_batiment_pre/index",'id_demande_pay_pre',vm.selectedItemDemande_batiment_mpe.id).then(function(result)
+            {
+                vm.alljustificatif_batiment_pre = result.data.response;
+                console.log(vm.alljustificatif_batiment_pre);
+            });
+            
+              vm.showbuttonValidationDemande_batiment_mpe_encourdpfi = true;
+              vm.showbuttonValidationDemande_batiment_mpe_rejedpfi = true;
+              vm.showbuttonValidationDemande_batiment_mpe_validedpfi = true;
+
+           }
+            vm.validation_demande_batiment_mpe = item.validation;
+            vm.stepjusti_bat_mpe = true;   
+        };
+        $scope.$watch('vm.selectedItemDemande_batiment_mpe', function()
+        {
+             if (!vm.alldemande_batiment_mpe) return;
+             vm.alldemande_batiment_mpe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDemande_batiment_mpe.$selected = true;
+        });
+
+      
+        vm.validerDemande_batiment_mpe_encourdpfi = function()
+        {
+          maj_in_baseDemande_batiment_mpe(vm.selectedItemDemande_batiment_mpe,0,2);
+        }
+        vm.validerDemande_batiment_mpe_rejedpfi = function()
+        {
+          maj_in_baseDemande_batiment_mpe(vm.selectedItemDemande_batiment_mpe,0,3);
+        }
+        vm.validerDemande_batiment_mpe_validedpfi = function()
+        {
+          maj_in_baseDemande_batiment_mpe(vm.selectedItemDemande_batiment_mpe,0,4);
+        }
+
+      function maj_in_baseDemande_batiment_mpe(demande_batiment_mpe,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        demande_batiment_mpe.id,
+                    objet: demande_batiment_mpe.objet,
+                    description:demande_batiment_mpe.description,
+                    ref_facture:demande_batiment_mpe.ref_facture,
+                    id_tranche_demande_mpe: demande_batiment_mpe.tranche.id ,
+                    montant: demande_batiment_mpe.montant,
+                    cumul: demande_batiment_mpe.cumul ,
+                    anterieur: demande_batiment_mpe.anterieur ,
+                    reste: demande_batiment_mpe.reste ,
+                    date: convertionDate(new Date(demande_batiment_mpe.date)),
+                    id_contrat_prestataire: demande_batiment_mpe.id_contrat_prestataire,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("demande_batiment_prestataire/index",datas, config).success(function (data)
+            {                               
+                demande_batiment_mpe.validation = validation; 
+              vm.validation_demande_batiment_mpe = validation;
+ 
+              demande_batiment_mpe.$selected = false;
+              demande_batiment_mpe.$edit = false;
+              vm.selectedItemDemande_batiment_mpe = {};
+
+              vm.showbuttonValidationDemande_batiment_mpe_creer = false;
+              vm.showbuttonValidationDemande_batiment_mpe_encourdpfi = false;
+              vm.showbuttonValidationDemande_batiment_mpe_rejedpfi = false;
+              vm.showbuttonValidationDemande_batiment_mpe_validedpfi = false;
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+/************************************************fin batiment_mpe***************************************************/
+/**********************************fin justificatif attachement****************************************/
+
+//col table
+        vm.justificatif_batiment_mpe_column = [
+        {titre:"Description"
+        },
+        {titre:"Fichier"
+        },
+        {titre:"Action"
+        }];
+
+ 
+        //fonction selection item justificatif batiment_mpe
+        vm.selectionJustificatif_batiment_mpe= function (item)
+        {
+            vm.selectedItemJustificatif_batiment_mpe = item;
+        };
+        $scope.$watch('vm.selectedItemJustificatif_batiment_mpe', function()
+        {
+             if (!vm.alljustificatif_batiment_mpe) return;
+             vm.alljustificatif_batiment_mpe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemJustificatif_batiment_mpe.$selected = true;
+        });
+    
+        vm.download_piece = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
+        }
+/***************************************fin justificatif batiment_mpe**********************************************/
+
+
+/************************************************debut latrine_mpe*************************************************/
+        vm.demande_latrine_mpe_column = [
+        {titre:"Objet"
+        },
+        {titre:"Description"
+        },
+        {titre:"Référence facture"
+        },
+        {titre:"Tranche"
+        },
+        {titre:"Montant"
+        },
+        {titre:"Cumul"
+        },
+        {titre:"Antérieur"
+        },
+        {titre:"Periode"
+        },
+        {titre:"Pourcentage"
+        },
+        {titre:"Reste à décaisser"
+        },
+        {titre:"Date"
+        }];
+ 
+        //fonction selection item Demande_latrine_mpe
+        vm.selectionDemande_latrine_mpe= function (item)
+        {
+            vm.selectedItemDemande_latrine_mpe = item;
+           if(item.id!=0)
+           {
+            apiFactory.getAPIgeneraliserREST("justificatif_latrine_pre/index",'id_demande_demande_pre',vm.selectedItemDemande_latrine_mpe.id).then(function(result)
+            {
+                vm.alljustificatif_latrine_pre = result.data.response;
+                console.log(vm.alljustificatif_latrine_pre);
+            });
+
+              vm.showbuttonValidationDemande_latrine_mpe_encourdpfi = true;
+              vm.showbuttonValidationDemande_latrine_mpe_rejedpfi = true;
+              vm.showbuttonValidationDemande_latrine_mpe_validedpfi = true;
+           
+           }
+            vm.validation_demande_latrine_mpe = item.validation;
+            vm.stepjusti_bat_mpe = true;   
+        };
+        $scope.$watch('vm.selectedItemDemande_latrine_mpe', function()
+        {
+             if (!vm.alldemande_latrine_mpe) return;
+             vm.alldemande_latrine_mpe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDemande_latrine_mpe.$selected = true;
+        });
+
+   
+        vm.validerDemande_latrine_mpe_encourdpfi = function()
+        {
+          maj_in_baseDemande_latrine_mpe(vm.selectedItemDemande_latrine_mpe,0,2);
+        }
+        vm.validerDemande_latrine_mpe_rejedpfi = function()
+        {
+          maj_in_baseDemande_latrine_mpe(vm.selectedItemDemande_latrine_mpe,0,3);
+        }
+        vm.validerDemande_latrine_mpe_validedpfi = function()
+        {
+          maj_in_baseDemande_latrine_mpe(vm.selectedItemDemande_latrine_mpe,0,4);
+        }
+
+      function maj_in_baseDemande_latrine_mpe(demande_latrine_mpe,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        demande_latrine_mpe.id,
+                    objet: demande_latrine_mpe.objet,
+                    description:demande_latrine_mpe.description,
+                    ref_facture:demande_latrine_mpe.ref_facture,
+                    id_tranche_demande_mpe: demande_latrine_mpe.tranche.id ,
+                    montant: demande_latrine_mpe.montant,
+                    cumul: demande_latrine_mpe.cumul ,
+                    anterieur: demande_latrine_mpe.anterieur ,
+                    reste: demande_latrine_mpe.reste ,
+                    date: convertionDate(new Date(demande_latrine_mpe.date)),
+                    id_contrat_prestataire: demande_latrine_mpe.id_contrat_prestataire,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("demande_latrine_prestataire/index",datas, config).success(function (data)
+            {                                
+               demande_latrine_mpe.validation = validation; 
+              vm.validation_demande_latrine_mpe = validation;
+ 
+              demande_latrine_mpe.$selected = false;
+              demande_latrine_mpe.$edit = false;
+              vm.selectedItemDemande_latrine_mpe = {};
+
+              vm.showbuttonValidationDemande_latrine_mpe_creer = false;
+              vm.showbuttonValidationDemande_latrine_mpe_encourdpfi = false;
+              vm.showbuttonValidationDemande_latrine_mpe_rejedpfi = false;
+              vm.showbuttonValidationDemande_latrine_mpe_validedpfi = false;
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+/************************************************fin latrine_mpe***************************************************/
+/**********************************fin justificatif attachement****************************************/
+
+//col table
+        vm.justificatif_latrine_mpe_column = [
+        {titre:"Description"
+        },
+        {titre:"Fichier"
+        },
+        {titre:"Action"
+        }];
+
+        //fonction selection item justificatif latrine_mpe
+        vm.selectionJustificatif_latrine_mpe= function (item)
+        {
+            vm.selectedItemJustificatif_latrine_mpe = item;
+        };
+        $scope.$watch('vm.selectedItemJustificatif_latrine_mpe', function()
+        {
+             if (!vm.alljustificatif_latrine_pre) return;
+             vm.alljustificatif_latrine_pre.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemJustificatif_latrine_mpe.$selected = true;
+        });
+
+        vm.download_piece = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
+        }
+/***************************************fin justificatif latrine_mpe**********************************************/
+
+
+/************************************************debut mobilier_mpe*************************************************/
+        vm.demande_mobilier_mpe_column = [
+        {titre:"Objet"
+        },
+        {titre:"Description"
+        },
+        {titre:"Référence facture"
+        },
+        {titre:"Tranche"
+        },
+        {titre:"Montant"
+        },
+        {titre:"Cumul"
+        },
+        {titre:"Antérieur"
+        },
+        {titre:"Periode"
+        },
+        {titre:"Pourcentage"
+        },
+        {titre:"Reste à décaisser"
+        },
+        {titre:"Date"
+        }];
+
+   
+        //fonction selection item Demande_mobilier_mpe
+        vm.selectionDemande_mobilier_mpe= function (item)
+        {
+            vm.selectedItemDemande_mobilier_mpe = item;
+           if(item.id!=0)
+           {
+            apiFactory.getAPIgeneraliserREST("justificatif_mobilier_pre/index",'id_demande_demande_pre',vm.selectedItemDemande_mobilier_mpe.id).then(function(result)
+            {
+                vm.alljustificatif_mobilier_pre = result.data.response;
+                console.log(vm.alljustificatif_mobilier_pre);
+            });
+
+              vm.showbuttonValidationDemande_mobilier_mpe_encourdpfi = true;
+              vm.showbuttonValidationDemande_mobilier_mpe_rejedpfi = true;
+              vm.showbuttonValidationDemande_mobilier_mpe_validedpfi = true;
+            
+           }
+            vm.validation_demande_mobilier_mpe = item.validation;
+            vm.stepjusti_bat_mpe = true;   
+        };
+        $scope.$watch('vm.selectedItemDemande_mobilier_mpe', function()
+        {
+             if (!vm.alldemande_mobilier_mpe) return;
+             vm.alldemande_mobilier_mpe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDemande_mobilier_mpe.$selected = true;
+        });
+
+        vm.validerDemande_mobilier_mpe_encourdpfi = function()
+        {
+          maj_in_baseDemande_mobilier_mpe(vm.selectedItemDemande_mobilier_mpe,0,2);
+        }
+        vm.validerDemande_mobilier_mpe_rejedpfi = function()
+        {
+          maj_in_baseDemande_mobilier_mpe(vm.selectedItemDemande_mobilier_mpe,0,3);
+        }
+        vm.validerDemande_mobilier_mpe_validedpfi = function()
+        {
+          maj_in_baseDemande_mobilier_mpe(vm.selectedItemDemande_mobilier_mpe,0,4);
+        }
+
+      function maj_in_baseDemande_mobilier_mpe(demande_mobilier_mpe,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        demande_mobilier_mpe.id,
+                    objet: demande_mobilier_mpe.objet,
+                    description:demande_mobilier_mpe.description,
+                    ref_facture:demande_mobilier_mpe.ref_facture,
+                    id_tranche_demande_mpe: demande_mobilier_mpe.tranche.id ,
+                    montant: demande_mobilier_mpe.montant,
+                    cumul: demande_mobilier_mpe.cumul ,
+                    anterieur: demande_mobilier_mpe.anterieur ,
+                    reste: demande_mobilier_mpe.reste ,
+                    date: convertionDate(new Date(demande_mobilier_mpe.date)),
+                    id_contrat_prestataire: demande_mobilier_mpe.id_contrat_prestataire,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("demande_mobilier_prestataire/index",datas, config).success(function (data)
+            {                 
+               demande_mobilier_mpe.validation = validation; 
+              vm.validation_demande_mobilier_mpe = validation;
+ 
+              demande_mobilier_mpe.$selected = false;
+              demande_mobilier_mpe.$edit = false;
+              vm.selectedItemDemande_mobilier_mpe = {};
+
+              vm.showbuttonValidationDemande_mobilier_mpe_creer = false;
+              vm.showbuttonValidationDemande_mobilier_mpe_encourdpfi = false;
+              vm.showbuttonValidationDemande_mobilier_mpe_rejedpfi = false;
+              vm.showbuttonValidationDemande_mobilier_mpe_validedpfi = false;
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+/************************************************fin mobilier_mpe***************************************************/
+/**********************************fin justificatif attachement****************************************/
+
+//col table
+        vm.justificatif_mobilier_mpe_column = [
+        {titre:"Description"
+        },
+        {titre:"Fichier"
+        },
+        {titre:"Action"
+        }];
+
+        //fonction selection item justificatif mobilier_mpe
+        vm.selectionJustificatif_mobilier_mpe= function (item)
+        {
+            vm.selectedItemJustificatif_mobilier_mpe = item;
+        };
+        $scope.$watch('vm.selectedItemJustificatif_mobilier_mpe', function()
+        {
+             if (!vm.alljustificatif_mobilier_pre) return;
+             vm.alljustificatif_mobilier_pre.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemJustificatif_mobilier_mpe.$selected = true;
+        });
+
+        vm.download_piece = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
+        }
+/***************************************fin justificatif mobilier_mpe**********************************************/
+
+  /******************************************fin maitrise d'oeuvre*******************************************************/
+        vm.showAlert = function(titre,content)
+        {
+          $mdDialog.show(
+            $mdDialog.alert()
+            .parent(angular.element(document.querySelector('#popupContainer')))
+            .clickOutsideToClose(false)
+            .parent(angular.element(document.body))
+            .title(titre)
+            .textContent(content)
+            .ariaLabel('Alert')
+            .ok('Fermer')
+            .targetEvent()
+          );
+        }
+        function convertionDate(daty)
+        {   
+          if(daty)
+            {
+                var date     = new Date(daty);
+                var jour  = date.getDate();
+                var mois  = date.getMonth()+1;
+                var annee = date.getFullYear();
+                if(mois <10)
+                {
+                    mois = '0' + mois;
+                }
+                var date_final= annee+"-"+mois+"-"+jour;
+                return date_final
+            }      
+        }
+        //format date affichage sur datatable
+        vm.formatDate = function (daty)
+        {
+          if (daty) 
+          {
+            var date  = new Date(daty);
+            var mois  = date.getMonth()+1;
+            var dates = (date.getDate()+"-"+mois+"-"+date.getFullYear());
+            return dates;
+          }            
+
+        }
+        vm.affichage_sexe= function (sexe)
+        { var affiche='';
+          switch (sexe)
+          {
+            case '1':
+                affiche= 'Masculin';
+                break;
+            case '2':
+                affiche= 'Feminin';
+                break;
+            default:
+          }
+          return affiche;
+        };
+ 
+    }
+})();

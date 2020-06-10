@@ -180,13 +180,15 @@
                       </td>
                                 
                       <td>
-                        <span ng-if="document_pr_scan.$edit" style="display: inline !important;" layout-gt-sm="row">
-                          <md-input-container style="width:100%;display: flex !important;" class="md-block">
+                        <span ng-if="document_pr_scan.$edit" style="display: inline-block !important;">
+                          <md-input-container style="width:100%;display: flex !important;">
                             <label>Fichier</label>
                             <input name="fichier" type="text" ng-model="document_pr_scan.fichier" disabled/>
                           </md-input-container>   
-                        
-                          <md-input-container style="width:100%;display: flex !important;"class="md-block">
+                        </span>
+                          
+                        <span ng-if="document_pr_scan.$edit" style="display: inline-block !important;">
+                          <md-input-container style="width:100%;display: flex !important;">
                             <label>Fichier</label>
                           <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile"  ng-model="fichier" id="fileid"/>
                           </md-input-container>   

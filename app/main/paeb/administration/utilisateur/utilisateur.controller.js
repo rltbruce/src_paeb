@@ -235,6 +235,7 @@
           vm.user.id = vm.selectedItem.id ;
           vm.user.nom = vm.selectedItem.nom ;
           vm.user.prenom = vm.selectedItem.prenom ;
+          vm.user.telephone = vm.selectedItem.telephone ;
           vm.user.email = vm.selectedItem.email ;
           vm.user.enabled = vm.selectedItem.enabled ;          
           vm.user.id_region = vm.selectedItem.region.id ;          
@@ -414,7 +415,8 @@ console.log(vm.ciscos);
                   supprimer:suppression,
                   id:vm.selectedItem.id,
                   nom: user.nom,
-                  prenom: user.prenom,                  
+                  prenom: user.prenom,
+                  telephone: user.telephone,                   
                   id_region: user.id_region,
                   id_district: user.id_district,
                   id_cisco: user.id_cisco,                           
@@ -446,6 +448,7 @@ console.log(vm.ciscos);
                   vm.selectedItem.nom = user.nom;
                   vm.selectedItem.email = user.email;
                   vm.selectedItem.prenom = user.prenom;
+                  vm.selectedItem.telephone = user.telephone;
                  // vm.selectedItem.sigle = user.sigle;
                   vm.selectedItem.enabled = user.enabled;
                  // vm.selectedItem.envoi_donnees = user.envoi_donnees;

@@ -74,6 +74,18 @@
 
 /*******************************Debut initialisation suivi financement feffi******************************/
         
+
+        vm.ajoutDocument_feffi_scan = ajoutDocument_feffi_scan;
+        var NouvelItemDocument_feffi_scan=false;
+        var currentItemDocument_feffi_scan;
+        vm.selectedItemDocument_feffi_scan = {} ;
+        vm.alldocument_feffi_scan = [] ;
+
+        vm.showbuttonNouvdocument_feffi_scan =true;
+
+        vm.showbuttonValidation_document_feffi_scan  = false;
+        vm.permissionboutonvaliderdocument_feffi_scan  = false;
+
         vm.showbuttonNeauveaudemande = false;
 
         //initialisation demande_realimentation_feffi
@@ -122,6 +134,17 @@
         vm.showbuttonValidationencourdaaf = false;        
         vm.showbuttonValidationdaaf = false;
 
+        vm.ajoutAvenant_convention = ajoutAvenant_convention ;
+        var NouvelItemAvenant_convention=false;
+        var currentItemAvenant_convention;
+        vm.selectedItemAvenant_convention = {} ;
+        vm.allavenant_convention = [] ;
+
+        vm.showbuttonNouvavenant_convention=true;
+
+        vm.showbuttonValidation_avenant_convention = false;
+        vm.permissionboutonvalideravenant_convention = false;
+
 
         var NouvelItemTransfert_daaf = false;
         var currentItemTransfert_daaf;
@@ -155,6 +178,28 @@
         vm.showbuttonNouvcontrat_pr=true;
         vm.permissionboutonvalidercontrat_pr = false;
         vm.showbuttonValidationcontrat_pr = false;
+
+        vm.ajoutDocument_pr_scan = ajoutDocument_pr_scan;
+        var NouvelItemDocument_pr_scan=false;
+        var currentItemDocument_pr_scan;
+        vm.selectedItemDocument_pr_scan = {} ;
+        vm.alldocument_pr_scan = [] ;
+
+        vm.showbuttonNouvdocument_pr_scan =true;
+
+        vm.showbuttonValidation_document_pr_scan  = false;
+        vm.permissionboutonvaliderdocument_pr_scan  = false;
+
+        vm.ajoutAvenant_partenaire = ajoutAvenant_partenaire ;
+        var NouvelItemAvenant_partenaire=false;
+        var currentItemAvenant_partenaire;
+        vm.selectedItemAvenant_partenaire = {} ;
+        vm.allavenant_partenaire = [] ;
+
+        vm.showbuttonNouvavenant_partenaire=true;
+
+        vm.showbuttonValidation_avenant_partenaire = false;
+        vm.permissionboutonvalideravenant_partenaire = false;
 
         vm.ajoutModule_dpp = ajoutModule_dpp ;
         var NouvelItemModule_dpp=false;
@@ -275,6 +320,17 @@
         vm.showbuttonNouvcontrat_moe=true;
         vm.permissionboutonvalidercontrat_moe = false;
         vm.showbuttonValidationcontrat_moe = false;
+
+        vm.ajoutAvenant_moe = ajoutAvenant_moe ;
+        var NouvelItemAvenant_moe=false;
+        var currentItemAvenant_moe;
+        vm.selectedItemAvenant_moe = {} ;
+        vm.allavenant_moe = [] ;
+
+        vm.showbuttonNouvavenant_moe=true;
+
+        vm.showbuttonValidation_avenant_moe = false;
+        vm.permissionboutonvalideravenant_moe = false;
 
         vm.ajoutMemoire_technique = ajoutMemoire_technique;
         var NouvelItemMemoire_technique=false;
@@ -507,6 +563,41 @@
         vm.showbuttonNouvcontrat_prestataire=true;
         vm.permissionboutonvalidercontrat_prestataire = false;
         vm.showbuttonValidationcontrat_prestataire = false;
+
+
+
+        vm.ajoutAvenant_mpe = ajoutAvenant_mpe ;
+        var NouvelItemAvenant_mpe=false;
+        var currentItemAvenant_mpe;
+        vm.selectedItemAvenant_mpe = {} ;
+        vm.allavenant_mpe = [] ;
+
+        vm.showbuttonNouvavenant_mpe=true;
+
+        vm.showbuttonValidation_avenant_mpe = false;
+        vm.permissionboutonvalideravenant_mpe = false;
+
+        vm.ajoutDocument_prestataire_scan = ajoutDocument_prestataire_scan;
+        var NouvelItemDocument_prestataire_scan=false;
+        var currentItemDocument_prestataire_scan;
+        vm.selectedItemDocument_prestataire_scan = {} ;
+        vm.alldocument_prestataire_scan = [] ;
+
+        vm.showbuttonNouvdocument_prestataire_scan =true;
+
+        vm.showbuttonValidation_document_prestataire_scan  = false;
+        vm.permissionboutonvaliderdocument_prestataire_scan  = false;
+
+        vm.ajoutDocument_moe_scan = ajoutDocument_moe_scan;
+        var NouvelItemDocument_moe_scan=false;
+        var currentItemDocument_moe_scan;
+        vm.selectedItemDocument_moe_scan = {} ;
+        vm.alldocument_moe_scan = [] ;
+
+        vm.showbuttonNouvdocument_moe_scan =true;
+
+        vm.showbuttonValidation_document_moe_scan  = false;
+        vm.permissionboutonvaliderdocument_moe_scan  = false;
 
         vm.ajoutDelai_travaux = ajoutDelai_travaux ;
         var NouvelItemDelai_travaux=false;
@@ -895,9 +986,20 @@
                             vm.usercisco = result.data.response.cisco; 
                             vm.permissionboutonValidercreer = true;
                             
-                            vm.permissionboutonvaliderdecais_fef = true;
+                            vm.permissionboutonvaliderdecais_fef = true;                            
+                            vm.permissionboutonvalideravenant_convention = true;
                             vm.permissionboutonvaliderpassation_moe = true;
                             vm.permissionboutonvalidercontrat_moe = true;
+                            //vm.showbuttonValidation_avenant_moe = true;
+
+                            vm.permissionboutonvalideravenant_moe = true;
+
+                            vm.permissionboutonvalideravenant_mpe = true;
+
+                            vm.permissionboutonvaliderdocument_prestataire_scan = true;
+                            vm.permissionboutonvaliderdocument_moe_scan = true;
+                            vm.permissionboutonvaliderdocument_pr_scan = true;
+                            vm.permissionboutonvaliderdocument_feffi_scan = true;
 
                             vm.permissionboutonenvaliderpassation = true;
 
@@ -974,6 +1076,8 @@
                             vm.permissionboutonenvaliderpassation_pr = true;
                             vm.permissionboutonvalidercontrat_pr = true;
 
+                            vm.permissionboutonvalideravenant_partenaire = true;
+
                             vm.permissionboutonvaliderDemande_debut_travaux_moe_encourdpfi = true;
                             vm.permissionboutonvaliderDemande_debut_travaux_moe_rejedpfi = true;              
                             vm.permissionboutonvaliderDemande_debut_travaux_moe_validedpfi = true;
@@ -1026,7 +1130,8 @@
                             vm.permissionboutonenrejedaaf = true;
                             vm.permissionboutonvaliderdaaf = true;
                             vm.permissionboutonvalidertrans_daaf = true;
-                            vm.permissionboutonvaliderdecais_fef = true;
+                            vm.permissionboutonvaliderdecais_fef = true;                            
+                            vm.permissionboutonvalideravenant_convention = true;
 
                             vm.permissionboutonvaliderpassation_pr = true;
                             vm.permissionboutonvaliderpassation_moe = true;
@@ -1034,6 +1139,10 @@
                             vm.permissionboutonvaliderreception_mpe = true;
                             vm.permissionboutonvalidercontrat_pr = true;
                             vm.permissionboutonvalidercontrat_moe = true;
+                            //vm.showbuttonValidation_avenant_moe = true;
+
+                            vm.permissionboutonvalideravenant_moe = true;
+                            vm.permissionboutonvalideravenant_partenaire = true;
                             vm.permissionboutonvalideravancement_batiment = true;
                             vm.permissionboutonvalideravancement_latrine = true;
                             vm.permissionboutonvalideravancement_mobilier = true;
@@ -1072,6 +1181,13 @@
                             vm.permissionboutonvalidercontrat_prestataire = true;
                             vm.permissionboutonvalidertransfert_reliquat = true;
                             vm.permissionboutonvaliderdelai_travaux = true;
+
+                            vm.permissionboutonvalideravenant_mpe = true;
+
+                            vm.permissionboutonvaliderdocument_prestataire_scan = true;
+                            vm.permissionboutonvaliderdocument_moe_scan = true;
+                            vm.permissionboutonvaliderdocument_pr_scan = true;
+                            vm.permissionboutonvaliderdocument_feffi_scan = true;
 
                             vm.permissionboutonvaliderphase_sous_projet = true;
 
@@ -1652,7 +1768,18 @@
                                   });
               
                               });
-                              
+
+                              apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantinvalideByconvention','id_convention_entete',item.id).then(function(result)
+                              {
+                                    vm.allavenant_convention = result.data.response;
+                                    vm.showbuttonNouvavenant_convention=true;
+                                   
+                              });                              
+
+                            apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentinvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                            {
+                                vm.alldocument_feffi_scan = result.data.response;                                        
+                            });
 
                               vm.modif_suppre = true;
                               //vm.nbr_demande_feffi = item.nbr_demande_feffi_creer
@@ -1670,6 +1797,19 @@
 
                                     return resolve('ok');  
                                 });  
+                            });
+
+                            apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantByconvention','id_convention_entete',item.id).then(function(result)
+                            {
+                                vm.allavenant_convention = result.data.response;
+                                vm.showbuttonNouvavenant_convention=false;
+                                   
+                            });
+
+
+                            apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                            {
+                                vm.alldocument_feffi_scan = result.data.response;                                        
                             });
                             
                             vm.nbr_demande_feffi_creer = item.nbr_demande_feffi_creer;
@@ -1697,6 +1837,17 @@
                               vm.nbr_demande_feffi_emidaaf = item.nbr_demande_feffi_emidaaf;
                               vm.nbr_demande_feffi_encourdaaf = item.nbr_demande_feffi_encourdaaf;
                               
+                              apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantvalideByconvention','id_convention_entete',item.id).then(function(result)
+                              {
+                                    vm.allavenant_convention = result.data.response;
+                                    vm.showbuttonNouvavenant_convention=false;
+                                   
+                              });
+
+                                apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                                {
+                                    vm.alldocument_feffi_scan = result.data.response;                                        
+                                });
 
 
 
@@ -1721,6 +1872,18 @@
                             vm.nbr_demande_feffi_emidpfi = item.nbr_demande_feffi_emidpfi;
                             vm.nbr_demande_feffi_encourdpfi = item.nbr_demande_feffi_encourdpfi;
                             
+                            apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantByconvention','id_convention_entete',item.id).then(function(result)
+                            {
+                                vm.allavenant_convention = result.data.response;
+                                vm.showbuttonNouvavenant_convention=false;
+                                   
+                            });
+
+
+                            apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                            {
+                                vm.alldocument_feffi_scan = result.data.response;                                        
+                            });
                             
                       break;
 
@@ -1741,7 +1904,17 @@
                             vm.nbr_demande_feffi_emidpfi = item.nbr_demande_feffi_emidpfi;
                             vm.nbr_demande_feffi_encourdpfi = item.nbr_demande_feffi_encourdpfi;
                             
+                            apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantByconvention','id_convention_entete',item.id).then(function(result)
+                            {
+                                vm.allavenant_convention = result.data.response;
+                                vm.showbuttonNouvavenant_convention=true;
+                                   
+                             });
 
+                            apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                            {
+                                vm.alldocument_feffi_scan = result.data.response;                                        
+                            });
                            
                             
                        
@@ -1757,7 +1930,17 @@
                                     vm.alldecaiss_fonct_feffi = result.data.response;
                                     return resolve('ok');  
                               });  
-                          });                                               
+                          }); 
+                        apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantvalideByconvention','id_convention_entete',item.id).then(function(result)
+                        {
+                                    vm.allavenant_convention = result.data.response;
+                                    vm.showbuttonNouvavenant_convention=false;                                   
+                        });                                                      
+
+                        apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentinvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                        {
+                            vm.alldocument_feffi_scan = result.data.response;                                        
+                        });                                              
                                                 
                                            
                       break;
@@ -1811,13 +1994,13 @@
                             {
                                 vm.allpassation_marches = result.data.response;
                                 vm.showbuttonNouvPassation=false;
-                            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allcontrat_prestataire = result.data.response;
-                                vm.showbuttonNouvcontrat_prestataire=false;
-                                
-                            return resolve('ok');
-                            });
+                                apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
+                                {
+                                    vm.allcontrat_prestataire = result.data.response;
+                                    vm.showbuttonNouvcontrat_prestataire=false;
+                                    
+                                return resolve('ok');
+                                });
                                 
                             });
                        
@@ -1832,12 +2015,12 @@
                               {
                                   vm.allpassation_marches = result.data.response;
                                   vm.showbuttonNouvPassation=false;
-                              apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                              {
-                                  vm.allcontrat_prestataire = result.data.response;
-                                  vm.showbuttonNouvcontrat_prestataire=false;
-                                  return resolve('ok');
-                              });
+                                  apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
+                                  {
+                                      vm.allcontrat_prestataire = result.data.response;
+                                      vm.showbuttonNouvcontrat_prestataire=false;
+                                      return resolve('ok');
+                                  });
                                   
                               });
                               
@@ -1852,13 +2035,13 @@
                             {
                                 vm.allpassation_marches = result.data.response;
                                 vm.showbuttonNouvPassation=false;
-                            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allcontrat_prestataire = result.data.response;
-                                vm.showbuttonNouvcontrat_prestataire=false;
-                                
-                            return resolve('ok');
-                            });
+                                apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
+                                {
+                                    vm.allcontrat_prestataire = result.data.response;
+                                    vm.showbuttonNouvcontrat_prestataire=false;
+                                    
+                                return resolve('ok');
+                                });
                                 
                             });
                        
@@ -3698,6 +3881,730 @@
 
   /**************************************fin decaissement fonctionnement feffi****************************************/
 
+  /**********************************************Debut Dossier entreprise***************************************************/
+    //vm.myFile = [];
+     $scope.uploadFile_doc_feffi = function(event)
+       {
+          console.dir(event);
+          var files = event.target.files;
+          vm.myFile = files;
+          vm.selectedItemDocument_feffi_scan.fichier = vm.myFile[0].name;
+          //console.log(vm.selectedItemDocument_feffi_scan.fichier);
+        } 
+
+        //fonction ajout dans bdd
+        function ajoutDocument_feffi_scan(document_feffi_scan,suppression)
+        {
+            if (NouvelItemDocument_feffi_scan==false)
+            {
+                test_existanceDocument_feffi_scan (document_feffi_scan,suppression); 
+            } 
+            else
+            {
+                insert_in_baseDocument_feffi_scan(document_feffi_scan,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation document_feffi_scan
+        vm.annulerDocument_feffi_scan = function(item)
+        {
+          if (NouvelItemDocument_feffi_scan == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.fichier   = currentItemDocument_feffi_scan.fichier ;
+            item.date_elaboration   = currentItemDocument_feffi_scan.date_elaboration ;
+            item.observation   = currentItemDocument_feffi_scan.observation ;
+          }else
+          {
+            vm.alldocument_feffi_scan = vm.alldocument_feffi_scan.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemDocument_feffi_scan.id;
+            });
+          }
+
+          vm.selectedItemDocument_feffi_scan = {} ;
+          NouvelItemDocument_feffi_scan      = false;
+          
+        };
+
+        //fonction selection item justificatif batiment
+        vm.selectionDocument_feffi_scan= function (item)
+        {
+            vm.selectedItemDocument_feffi_scan = item;
+            vm.nouvelItemDocument_feffi_scan   = item;
+            if (item.id_document_feffi_scan!=0)
+            {
+                vm.showbuttonValidation_document_feffi_scan = true;
+            }
+            vm.validation_document_feffi_scan = item.validation;
+            currentItemDocument_feffi_scan    = JSON.parse(JSON.stringify(vm.selectedItemDocument_feffi_scan));
+            
+        };
+        $scope.$watch('vm.selectedItemDocument_feffi_scan', function()
+        {
+             if (!vm.alldocument_feffi_scan) return;
+             vm.alldocument_feffi_scan.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDocument_feffi_scan.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierDocument_feffi_scan = function(item)
+        {
+            
+            vm.selectedItemDocument_feffi_scan = item;
+            currentItemDocument_feffi_scan = angular.copy(vm.selectedItemDocument_feffi_scan);
+            $scope.vm.alldocument_feffi_scan.forEach(function(jus) {
+              jus.$edit = false;
+            });
+            item.$edit = true;
+            item.$selected = true;
+            if (item.id_document_feffi_scan==null)
+            {   
+                NouvelItemDocument_feffi_scan=true;
+                console.log('atonull');
+                item.fichier   = vm.selectedItemDocument_feffi_scan.fichier ;
+                item.date_elaboration   = vm.datenow ;
+                item.observation   = vm.selectedItemDocument_feffi_scan.observation ;
+                item.id_document_feffi_scan   = '0' ;
+                item.id_convention_entete   = vm.selectedItemConvention_entete.id ;
+
+            }
+            else
+            {NouvelItemDocument_feffi_scan = false ;
+                console.log('tsnull');
+                item.fichier   = vm.selectedItemDocument_feffi_scan.fichier ;
+                item.date_elaboration   = new Date(vm.selectedItemDocument_feffi_scan.date_elaboration) ;
+                item.observation   = vm.selectedItemDocument_feffi_scan.observation ;
+            }
+            vm.showbuttonValidation_document_feffi_scan = false;
+            
+            
+            //console.log(item);
+            //vm.showThParcourir = true;
+        };
+
+        //fonction bouton suppression item document_feffi_scan
+        vm.supprimerDocument_feffi_scan = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutDocument_feffi_scan(vm.selectedItemDocument_feffi_scan,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceDocument_feffi_scan (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var mem = vm.alldocument_feffi_scan.filter(function(obj)
+                {
+                   return obj.id == currentItemDocument_feffi_scan.id;
+                });
+                if(mem[0])
+                {
+                   if((mem[0].fichier   != currentItemDocument_feffi_scan.fichier )
+                    ||(mem[0].date_elaboration   != currentItemDocument_feffi_scan.date_elaboration )
+                    ||(mem[0].observation   != currentItemDocument_feffi_scan.observation ))                   
+                      { 
+                         insert_in_baseDocument_feffi_scan(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseDocument_feffi_scan(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd document_feffi_scan
+        function insert_in_baseDocument_feffi_scan(document_feffi_scan,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemDocument_feffi_scan==false)
+            {
+                getId = vm.selectedItemDocument_feffi_scan.id_document_feffi_scan; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    fichier: document_feffi_scan.fichier,
+                    date_elaboration: convertionDate(new Date(document_feffi_scan.date_elaboration)),
+                    observation: document_feffi_scan.observation,
+                    id_convention_entete: vm.selectedItemConvention_entete.id,
+                    id_document_feffi: document_feffi_scan.id,
+                    validation:0               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("document_feffi_scan/index",datas, config).success(function (data)
+            {
+
+              if (NouvelItemDocument_feffi_scan == false)
+              {
+                    // Update_paiement or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                         //;
+                    
+                          var repertoire = 'document_feffi_scan/';
+                          var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
+                          var getIdFile = vm.selectedItemDocument_feffi_scan.id_document_feffi_scan;
+                                              
+                          if(vm.myFile.length>0)
+                          { 
+                            var file= vm.myFile[0]
+                            var name_file = vm.selectedItemConvention_entete.ref_convention+'_'+getIdFile+'_'+vm.myFile[0].name ;
+
+                            var fd = new FormData();
+                            fd.append('file', file);
+                            fd.append('repertoire',repertoire);
+                            fd.append('name_fichier',name_file);
+
+                            var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
+                            headers: {'Content-Type': undefined}, repertoire: repertoire
+                            }).success(function(data)
+                            {
+                                if(data['erreur'])
+                                {
+                                  var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
+                                 
+                                  var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
+                                  $mdDialog.show( alert ).finally(function()
+                                  { 
+                                    document_feffi_scan.fichier='';                                    
+                                  var datas = $.param({
+                                                      supprimer: suppression,
+                                                      id:        getIdFile,
+                                                      fichier: document_feffi_scan.fichier,
+                                                      date_elaboration: convertionDate(new Date(document_feffi_scan.date_elaboration)),
+                                                      observation: document_feffi_scan.observation,
+                                                      id_convention_entete: document_feffi_scan.id_convention_entete,
+                                                      id_document_feffi: document_feffi_scan.id,
+                                                      validation:0
+                                        });
+                                      apiFactory.add("document_feffi_scan/index",datas, config).success(function (data)
+                                      {                                           
+                                            
+                                          document_feffi_scan.$selected = false;
+                                          document_feffi_scan.$edit = false;
+                                          vm.selectedItemDocument_feffi_scan = {};
+                                      console.log('b');
+                                      }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                                  });
+                                }
+                                else
+                                {
+                                  document_feffi_scan.fichier=repertoire+data['nomFile'];
+                                  var datas = $.param({
+                                        supprimer: suppression,
+                                        id:        getIdFile,
+                                        fichier: document_feffi_scan.fichier,
+                                        date_elaboration: convertionDate(new Date(document_feffi_scan.date_elaboration)),
+                                        observation: document_feffi_scan.observation,
+                                        id_convention_entete: document_feffi_scan.id_convention_entete,
+                                        id_document_feffi: document_feffi_scan.id,
+                                        validation:0               
+                                    });
+                                  console.log(document_feffi_scan);
+                                  apiFactory.add("document_feffi_scan/index",datas, config).success(function (data)
+                                  {
+                                       
+                                      document_feffi_scan.$selected = false;
+                                      document_feffi_scan.$edit = false;
+                                      vm.selectedItemDocument_feffi_scan = {};
+                                      console.log('e');
+                                  }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                                }
+                            }).error(function()
+                            {
+                              vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                            });
+                          }
+                        //vm.selectedItemDocument_feffi_scan.document_feffi = doc[0];
+                        vm.selectedItemDocument_feffi_scan.contrat_feffi = vm.selectedItemContrat_feffi ;
+                        vm.selectedItemDocument_feffi_scan.$selected  = false;
+                        vm.selectedItemDocument_feffi_scan.$edit      = false;
+                        vm.selectedItemDocument_feffi_scan ={};
+                        vm.showbuttonValidation = false;
+                    }
+                    else 
+                    {    
+                     /* vm.alldocument_feffi_scan = vm.alldocument_feffi_scan.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemDocument_feffi_scan.id;
+                      });*/
+                      vm.selectedItemDocument_feffi_scan.existance = true;
+                      var chemin= vm.selectedItemDocument_feffi_scan.fichier;
+                      var fd = new FormData();
+                          fd.append('chemin',chemin);
+                     
+                      var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
+
+                      var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
+                      headers: {'Content-Type': undefined}, chemin: chemin
+                      }).success(function(data)
+                      {                         
+                          vm.selectedItemDocument_feffi_scan.fichier = '';
+                          vm.selectedItemDocument_feffi_scan.date_elaboration = '';
+                          vm.selectedItemDocument_feffi_scan.observation = '';
+                          vm.selectedItemDocument_feffi_scan.existance = false;
+                      }).error(function()
+                      {
+                          showDialog(event,chemin);
+                      });;
+                    }
+              }
+              else
+              {
+                  document_feffi_scan.id_document_feffi_scan  =   String(data.response);              
+                  NouvelItemDocument_feffi_scan = false;
+
+                    
+                    
+                    var repertoire = 'document_feffi_scan/';
+                    var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
+                    var getIdFile = String(data.response);
+                                        
+                    if(vm.myFile.length>0)
+                    { 
+                        var file= vm.myFile[0];
+                      var name_file = vm.selectedItemConvention_entete.ref_convention+'_'+getIdFile+'_'+vm.myFile[0].name ;
+
+                      var fd = new FormData();
+                      fd.append('file', file);
+                      fd.append('repertoire',repertoire);
+                      fd.append('name_fichier',name_file);
+
+                      var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
+                      headers: {'Content-Type': undefined}, repertoire: repertoire
+                      }).success(function(data)
+                      {
+                          if(data['erreur'])
+                          {
+                            var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
+                           
+                            var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
+                            $mdDialog.show( alert ).finally(function()
+                            { 
+                              document_feffi_scan.fichier='';
+                            var datas = $.param({
+                                                supprimer: 1,
+                                                id:        getIdFile,
+                                                fichier: document_feffi_scan.fichier,
+                                                date_elaboration: convertionDate(new Date(document_feffi_scan.date_elaboration)),
+                                                observation: document_feffi_scan.observation,
+                                                id_convention_entete: document_feffi_scan.id_convention_entete,
+                                                id_document_feffi: document_feffi_scan.id,
+                                                validation:0
+                                  });
+                                apiFactory.add("document_feffi_scan/index",datas, config).success(function (data)
+                                {   document_feffi_scan.validation = 0;
+                                    document_feffi_scan.$selected = false;
+                                    document_feffi_scan.$edit = false;
+                                    vm.selectedItemDocument_feffi_scan = {};
+                                console.log('b');
+                                }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                            });
+                          }
+                          else
+                          {
+                            document_feffi_scan.fichier=repertoire+data['nomFile'];
+                            var datas = $.param({
+                                  supprimer: suppression,
+                                  id:        getIdFile,
+                                  fichier: document_feffi_scan.fichier,
+                                  date_elaboration: convertionDate(new Date(document_feffi_scan.date_elaboration)),
+                                  observation: document_feffi_scan.observation,
+                                  id_convention_entete: document_feffi_scan.id_convention_entete,
+                                  id_document_feffi: document_feffi_scan.id,
+                                  validation:0               
+                              });
+
+                            apiFactory.add("document_feffi_scan/index",datas, config).success(function (data)
+                            {   
+                                vm.validation_document_feffi_scan = 0;
+                                document_feffi_scan.validation = 0;
+                                document_feffi_scan.existance =true;  
+                                document_feffi_scan.$selected = false;
+                                document_feffi_scan.$edit = false;
+                                vm.selectedItemDocument_feffi_scan = {};
+                                console.log('e');
+                            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                          }
+                      }).error(function()
+                      {
+                        vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                      });
+                    }
+              }
+              //document_feffi_scan.document_feffi = doc[0];
+              document_feffi_scan.convention_entete = vm.selectedItemConvention_entete ;
+              document_feffi_scan.$selected = false;
+              document_feffi_scan.$edit = false;
+              //vm.selectedItemDocument_feffi_scan = {};
+             
+              vm.showbuttonValidation_document_feffi_scan = false;
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.validerDocument_feffi_scan = function()
+        {
+          maj_in_baseDocument_feffi_scan(vm.selectedItemDocument_feffi_scan,0);
+        }
+
+        vm.selectionDocument_feffi_scan_valide= function (item)
+        {
+            vm.selectedItemDocument_feffi_scan_valide = item;
+        };
+        $scope.$watch('vm.selectedItemDocument_feffi_scan_valide', function()
+        {
+             if (!vm.alldocument_feffi_scan_valide) return;
+             vm.alldocument_feffi_scan_valide.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDocument_feffi_scan_valide.$selected = true;
+        });
+                //insertion ou mise a jours ou suppression item dans bdd document_feffi_scan
+        function maj_in_baseDocument_feffi_scan(document_feffi_scan,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        document_feffi_scan.id_document_feffi_scan,
+                    fichier: document_feffi_scan.fichier,
+                    date_elaboration: convertionDate(new Date(document_feffi_scan.date_elaboration)),
+                    observation: document_feffi_scan.observation,
+                    id_convention_entete: vm.selectedItemConvention_entete.id,
+                    id_document_feffi: document_feffi_scan.id,
+                    validation:1               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("document_feffi_scan/index",datas, config).success(function (data)
+            {   
+
+              vm.validation_document_feffi_scan = 1;
+              document_feffi_scan.validation=1;
+              //vm.alldocument_feffi_scan_valide.push(document_feffi_scan);
+              vm.selectedItemDocument_feffi_scan = {};
+              vm.showbuttonValidation = false;
+
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.download_document_feffi_scan = function(item)
+        {
+            window.location = apiUrlFile+item.fichier;
+        }
+
+
+    /******************************************debut dossier entreprise***********************************************/
+
+    /*********************************************fin avenant convention***********************************************/
+
+//col table
+        vm.avenant_convention_column = [
+        {titre:"Description"
+        },
+        {titre:"Montant"
+        },
+        {titre:"Date signature"
+        },
+        {titre:"Action"
+        }];
+        //Masque de saisi ajout
+        vm.ajouterAvenant_convention = function ()
+        { 
+          if (NouvelItemAvenant_convention == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              description: '',
+              montant: 0,
+              date_signature:'',
+            };         
+            vm.allavenant_convention.push(items);
+            vm.allavenant_convention.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemAvenant_convention = mem;
+              }
+            });
+
+            NouvelItemAvenant_convention = true ;
+          }else
+          {
+            vm.showAlert('Ajout avenant_convention','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutAvenant_convention(avenant_convention,suppression)
+        {
+            if (NouvelItemAvenant_convention==false)
+            {
+                test_existanceAvenant_convention (avenant_convention,suppression); 
+            } 
+            else
+            {
+                insert_in_baseAvenant_convention(avenant_convention,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation avenant_convention
+        vm.annulerAvenant_convention = function(item)
+        {
+          if (NouvelItemAvenant_convention == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.description   = currentItemAvenant_convention.description ;
+            item.montant   = currentItemAvenant_convention.montant ;
+            item.date_signature = currentItemAvenant_convention.date_signature ;
+          }else
+          {
+            vm.allavenant_convention = vm.allavenant_convention.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemAvenant_convention.id;
+            });
+          }
+        
+            vm.showbuttonNouvavenant_convention=true;
+
+          vm.selectedItemAvenant_convention = {} ;
+          NouvelItemAvenant_convention      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionAvenant_convention= function (item)
+        {
+            vm.selectedItemAvenant_convention = item;
+            //vm.nouvelItemAvenant_convention   = item;
+            if (item.id!=0)
+            {
+                currentItemAvenant_convention    = JSON.parse(JSON.stringify(vm.selectedItemAvenant_convention));
+                vm.showbuttonValidation_avenant_convention = true;
+                vm.validation_avenant_convention = item.validation;
+            }
+             
+            
+        };
+        $scope.$watch('vm.selectedItemAvenant_convention', function()
+        {
+             if (!vm.allavenant_convention) return;
+             vm.allavenant_convention.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemAvenant_convention.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierAvenant_convention = function(item)
+        {
+            NouvelItemAvenant_convention = false ;
+            vm.selectedItemAvenant_convention = item;
+            currentItemAvenant_convention = angular.copy(vm.selectedItemAvenant_convention);
+            $scope.vm.allavenant_convention.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.description   = vm.selectedItemAvenant_convention.description ;
+            item.montant   = vm.selectedItemAvenant_convention.montant ;
+            item.date_signature = vm.selectedItemAvenant_convention.date_signature ;            
+            vm.showbuttonValidation_avenant_convention = false;
+        };
+
+        //fonction bouton suppression item Avenant_convention
+        vm.supprimerAvenant_convention = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutAvenant_convention(vm.selectedItemAvenant_convention,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceAvenant_convention (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var pass = vm.allavenant_convention.filter(function(obj)
+                {
+                   return obj.id == currentItemAvenant_convention.id;
+                });
+                if(pass[0])
+                {
+                   if((pass[0].description   != currentItemAvenant_convention.description )
+                    || (pass[0].montant  != currentItemAvenant_convention.montant)
+                    || (pass[0].date_signature != currentItemAvenant_convention.date_signature ))                   
+                      { 
+                         insert_in_baseAvenant_convention(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseAvenant_convention(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseAvenant_convention(avenant_convention,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemAvenant_convention==false)
+            {
+                getId = vm.selectedItemAvenant_convention.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    description: avenant_convention.description,
+                    montant: avenant_convention.montant,
+                    date_signature:convertionDate(new Date(avenant_convention.date_signature)),
+                    id_convention_entete: vm.selectedItemConvention_entete.id,
+                    validation:0               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avenant_convention/index",datas, config).success(function (data)
+            {   
+                var conve= vm.allconvention_cisco_feffi_entete.filter(function(obj)
+                {
+                    return obj.id == avenant_convention.id_convention;
+                });
+
+                if (NouvelItemAvenant_convention == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {                        
+                        vm.selectedItemAvenant_convention.convention = conve[0];
+                        
+                        vm.selectedItemAvenant_convention.$selected  = false;
+                        vm.selectedItemAvenant_convention.$edit      = false;
+                        vm.selectedItemAvenant_convention ={};
+                    }
+                    else 
+                    {    
+                      vm.allavenant_convention = vm.allavenant_convention.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemAvenant_convention.id;
+                      });
+                    
+                    }
+                }
+                else
+                {
+                  avenant_convention.convention = conve[0];
+                  avenant_convention.validation =0
+                  avenant_convention.id  =   String(data.response);              
+                  NouvelItemAvenant_convention=false;
+                }
+              vm.showbuttonValidation_avenant_convention = false;
+              vm.validation_avenant_convention = 0
+              avenant_convention.$selected = false;
+              avenant_convention.$edit = false;
+              vm.selectedItemAvenant_convention = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.validerAvenant_convention = function()
+        {
+          valideravenantinbase(vm.selectedItemAvenant_convention,0,1);
+        }
+        function valideravenantinbase(avenant_convention,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        avenant_convention.id,
+                    description: avenant_convention.description,
+                    montant: avenant_convention.montant,
+                    date_signature:convertionDate(new Date(avenant_convention.date_signature)),
+                    date_signature:convertionDate(new Date(avenant_convention.date_signature)),
+                    id_convention_entete: vm.selectedItemConvention_entete.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avenant_convention/index",datas, config).success(function (data)
+            {
+                avenant_convention.validation = validation;
+                vm.validation_avenant_convention = validation;
+                avenant_convention.$selected = false;
+                avenant_convention.$edit = false;
+                vm.selectedItemAvenant_convention = {};
+                vm.showbuttonValidation_avenant_convention = false;
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+  /**********************************************Avenant convention***************************************************/
+
   /********************************************Debut passation de marcher*********************************************/
         //recuperation donnée partenaire_relai
         /*apiFactory.getAll("partenaire_relai/index").then(function(result)
@@ -4088,12 +4995,7 @@
             currentItemContrat_partenaire_relai    = JSON.parse(JSON.stringify(vm.selectedItemContrat_partenaire_relai));
 
            if(item.id!=0)
-           {
-            
-              apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-              {
-                  vm.allavenant_partenaire_relai = result.data.response;
-              });
+           {            
               if (item.$selected==false || item.$selected==undefined)
               {
                   vm.showbuttonValidationcontrat_pr = true;
@@ -4176,7 +5078,12 @@
                           {
                               vm.showbuttonNouvformsep=false;
                           }
-                      }); 
+                      });
+
+                    apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentinvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+                    {
+                        vm.alldocument_pr_scan = result.data.response;                                        
+                    }); 
                   }
 
                   if(vm.roles.indexOf("BCAF")!= -1)
@@ -4218,6 +5125,17 @@
                           vm.showbuttonNouvformsep=false;
                       });
                       vm.permissionboutonvaliderformdpp = true;
+
+                      apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+                      {
+                          vm.allavenant_partenaire_relai = result.data.response;
+                          vm.showbuttonNouvavenant_partenaire = false;
+                      });
+
+                    apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+                    {
+                        vm.alldocument_pr_scan = result.data.response;                                        
+                    });
                   }
 
                   if(vm.roles.indexOf("DPFI")!= -1)
@@ -4258,6 +5176,17 @@
                           console.log(vm.allmodule_sep);
                           vm.showbuttonNouvformsep=false;
                       });
+
+                      apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+                      {
+                          vm.allavenant_partenaire_relai = result.data.response;
+                          vm.showbuttonNouvavenant_partenaire = false;
+                      });
+
+                    apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+                    {
+                        vm.alldocument_pr_scan = result.data.response;                                        
+                    });
                   }
 
                   if(vm.roles.indexOf("DAAF")!= -1)
@@ -4299,6 +5228,17 @@
                           vm.showbuttonNouvformsep=false;
                       });
 
+                      apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+                      {
+                          vm.allavenant_partenaire_relai = result.data.response;
+                          vm.showbuttonNouvavenant_partenaire = false;
+                      });                      
+
+                    apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+                    {
+                        vm.alldocument_pr_scan = result.data.response;                                        
+                    });
+
                   }
                   if(vm.roles.indexOf("UFP")!= -1)
                   {
@@ -4338,6 +5278,18 @@
                           console.log(vm.allmodule_sep);
                           vm.showbuttonNouvformsep=false;
                       });
+
+                      apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+                      {
+                          vm.allavenant_partenaire_relai = result.data.response;
+                          vm.showbuttonNouvavenant_partenaire = false;
+                      });
+
+
+                    apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+                    {
+                        vm.alldocument_pr_scan = result.data.response;                                        
+                    });
 
                   }
                 /*if(vm.roles.indexOf("ODAAF")!= -1)
@@ -4442,6 +5394,18 @@
                               vm.showbuttonNouvformsep=false;
                           }
                       });
+
+                      apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+                      {
+                          vm.allavenant_partenaire_relai = result.data.response;
+                          vm.showbuttonNouvavenant_partenaire = true;
+                      });
+
+
+                    apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+                    {
+                        vm.alldocument_pr_scan = result.data.response;                                        
+                    });
 
                   }
               }
@@ -4658,6 +5622,736 @@
 
         }
 /*****************************************fin contrat_partenaire_relai********************************************/
+
+/**********************************************Debut Dossier entreprise***************************************************/
+    //vm.myFile = [];
+     $scope.uploadFile_doc_pr = function(event)
+       {
+          console.dir(event);
+          var files = event.target.files;
+          vm.myFile = files;
+          vm.selectedItemDocument_pr_scan.fichier = vm.myFile[0].name;
+          //console.log(vm.selectedItemDocument_pr_scan.fichier);
+        } 
+
+        //fonction ajout dans bdd
+        function ajoutDocument_pr_scan(document_pr_scan,suppression)
+        {
+            if (NouvelItemDocument_pr_scan==false)
+            {
+                test_existanceDocument_pr_scan (document_pr_scan,suppression); 
+            } 
+            else
+            {
+                insert_in_baseDocument_pr_scan(document_pr_scan,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation document_pr_scan
+        vm.annulerDocument_pr_scan = function(item)
+        {
+          if (NouvelItemDocument_pr_scan == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.fichier   = currentItemDocument_pr_scan.fichier ;
+            item.date_elaboration   = currentItemDocument_pr_scan.date_elaboration ;
+            item.observation   = currentItemDocument_pr_scan.observation ;
+          }else
+          {
+            vm.alldocument_pr_scan = vm.alldocument_pr_scan.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemDocument_pr_scan.id;
+            });
+          }
+
+          vm.selectedItemDocument_pr_scan = {} ;
+          NouvelItemDocument_pr_scan      = false;
+          
+        };
+
+        //fonction selection item justificatif batiment
+        vm.selectionDocument_pr_scan= function (item)
+        {
+            vm.selectedItemDocument_pr_scan = item;
+            vm.nouvelItemDocument_pr_scan   = item;
+            if (item.id_document_pr_scan!=0)
+            {
+                vm.showbuttonValidation_document_pr_scan = true;
+            }
+            vm.validation_document_pr_scan = item.validation;
+            currentItemDocument_pr_scan    = JSON.parse(JSON.stringify(vm.selectedItemDocument_pr_scan));
+            
+        };
+        $scope.$watch('vm.selectedItemDocument_pr_scan', function()
+        {
+             if (!vm.alldocument_pr_scan) return;
+             vm.alldocument_pr_scan.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDocument_pr_scan.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierDocument_pr_scan = function(item)
+        {
+            
+            vm.selectedItemDocument_pr_scan = item;
+            currentItemDocument_pr_scan = angular.copy(vm.selectedItemDocument_pr_scan);
+            $scope.vm.alldocument_pr_scan.forEach(function(jus) {
+              jus.$edit = false;
+            });
+            item.$edit = true;
+            item.$selected = true;
+            if (item.id_document_pr_scan==null)
+            {   
+                NouvelItemDocument_pr_scan=true;
+                console.log('atonull');
+                item.fichier   = vm.selectedItemDocument_pr_scan.fichier ;
+                item.date_elaboration   = vm.datenow ;
+                item.observation   = vm.selectedItemDocument_pr_scan.observation ;
+                item.id_document_pr_scan   = '0' ;
+                item.id_contrat_partenaire_relai   = vm.selectedItemContrat_partenaire_relai.id ;
+
+            }
+            else
+            {NouvelItemDocument_pr_scan = false ;
+                console.log('tsnull');
+                item.fichier   = vm.selectedItemDocument_pr_scan.fichier ;
+                item.date_elaboration   = new Date(vm.selectedItemDocument_pr_scan.date_elaboration) ;
+                item.observation   = vm.selectedItemDocument_pr_scan.observation ;
+            }
+            vm.showbuttonValidation_document_pr_scan = false;
+            
+            
+            //console.log(item);
+            //vm.showThParcourir = true;
+        };
+
+        //fonction bouton suppression item document_pr_scan
+        vm.supprimerDocument_pr_scan = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutDocument_pr_scan(vm.selectedItemDocument_pr_scan,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceDocument_pr_scan (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var mem = vm.alldocument_pr_scan.filter(function(obj)
+                {
+                   return obj.id == currentItemDocument_pr_scan.id;
+                });
+                if(mem[0])
+                {
+                   if((mem[0].fichier   != currentItemDocument_pr_scan.fichier )
+                    ||(mem[0].date_elaboration   != currentItemDocument_pr_scan.date_elaboration )
+                    ||(mem[0].observation   != currentItemDocument_pr_scan.observation ))                   
+                      { 
+                         insert_in_baseDocument_pr_scan(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseDocument_pr_scan(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd document_pr_scan
+        function insert_in_baseDocument_pr_scan(document_pr_scan,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemDocument_pr_scan==false)
+            {
+                getId = vm.selectedItemDocument_pr_scan.id_document_pr_scan; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    fichier: document_pr_scan.fichier,
+                    date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
+                    observation: document_pr_scan.observation,
+                    id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
+                    id_document_pr: document_pr_scan.id,
+                    validation:0               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("document_pr_scan/index",datas, config).success(function (data)
+            {
+
+              if (NouvelItemDocument_pr_scan == false)
+              {
+                    // Update_paiement or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                         //;
+                    
+                          var repertoire = 'document_pr_scan/';
+                          var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
+                          var getIdFile = vm.selectedItemDocument_pr_scan.id_document_pr_scan;
+                                              
+                          if(vm.myFile.length>0)
+                          { 
+                            var file= vm.myFile[0]
+                            var name_file = vm.selectedItemContrat_partenaire_relai.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+
+                            var fd = new FormData();
+                            fd.append('file', file);
+                            fd.append('repertoire',repertoire);
+                            fd.append('name_fichier',name_file);
+
+                            var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
+                            headers: {'Content-Type': undefined}, repertoire: repertoire
+                            }).success(function(data)
+                            {
+                                if(data['erreur'])
+                                {
+                                  var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
+                                 
+                                  var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
+                                  $mdDialog.show( alert ).finally(function()
+                                  { 
+                                    document_pr_scan.fichier='';                                    
+                                  var datas = $.param({
+                                                      supprimer: suppression,
+                                                      id:        getIdFile,
+                                                      fichier: document_pr_scan.fichier,
+                                                      date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
+                                                      observation: document_pr_scan.observation,
+                                                      id_contrat_partenaire_relai: document_pr_scan.id_contrat_partenaire_relai,
+                                                      id_document_pr: document_pr_scan.id,
+                                                      validation:0
+                                        });
+                                      apiFactory.add("document_pr_scan/index",datas, config).success(function (data)
+                                      {                                           
+                                            
+                                          document_pr_scan.$selected = false;
+                                          document_pr_scan.$edit = false;
+                                          vm.selectedItemDocument_pr_scan = {};
+                                      console.log('b');
+                                      }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                                  });
+                                }
+                                else
+                                {
+                                  document_pr_scan.fichier=repertoire+data['nomFile'];
+                                  var datas = $.param({
+                                        supprimer: suppression,
+                                        id:        getIdFile,
+                                        fichier: document_pr_scan.fichier,
+                                        date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
+                                        observation: document_pr_scan.observation,
+                                        id_contrat_partenaire_relai: document_pr_scan.id_contrat_partenaire_relai,
+                                        id_document_pr: document_pr_scan.id,
+                                        validation:0               
+                                    });
+                                  console.log(document_pr_scan);
+                                  apiFactory.add("document_pr_scan/index",datas, config).success(function (data)
+                                  {
+                                       
+                                      document_pr_scan.$selected = false;
+                                      document_pr_scan.$edit = false;
+                                      vm.selectedItemDocument_pr_scan = {};
+                                      console.log('e');
+                                  }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                                }
+                            }).error(function()
+                            {
+                              vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                            });
+                          }
+                        //vm.selectedItemDocument_pr_scan.document_pr = doc[0];
+                        vm.selectedItemDocument_pr_scan.contrat_pr = vm.selectedItemContrat_pr ;
+                        vm.selectedItemDocument_pr_scan.$selected  = false;
+                        vm.selectedItemDocument_pr_scan.$edit      = false;
+                        vm.selectedItemDocument_pr_scan ={};
+                        vm.showbuttonValidation = false;
+                    }
+                    else 
+                    {    
+                     /* vm.alldocument_pr_scan = vm.alldocument_pr_scan.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemDocument_pr_scan.id;
+                      });*/
+                      vm.selectedItemDocument_pr_scan.existance = true;
+                      var chemin= vm.selectedItemDocument_pr_scan.fichier;
+                      var fd = new FormData();
+                          fd.append('chemin',chemin);
+                     
+                      var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
+
+                      var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
+                      headers: {'Content-Type': undefined}, chemin: chemin
+                      }).success(function(data)
+                      {                         
+                          vm.selectedItemDocument_pr_scan.fichier = '';
+                          vm.selectedItemDocument_pr_scan.date_elaboration = '';
+                          vm.selectedItemDocument_pr_scan.observation = '';
+                          vm.selectedItemDocument_pr_scan.existance = false;
+                      }).error(function()
+                      {
+                          showDialog(event,chemin);
+                      });;
+                    }
+              }
+              else
+              {
+                  document_pr_scan.id_document_pr_scan  =   String(data.response);              
+                  NouvelItemDocument_pr_scan = false;
+
+                    
+                    
+                    var repertoire = 'document_pr_scan/';
+                    var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
+                    var getIdFile = String(data.response);
+                                        
+                    if(vm.myFile.length>0)
+                    { 
+                        var file= vm.myFile[0];
+                      var name_file = vm.selectedItemContrat_partenaire_relai.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+
+                      var fd = new FormData();
+                      fd.append('file', file);
+                      fd.append('repertoire',repertoire);
+                      fd.append('name_fichier',name_file);
+
+                      var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
+                      headers: {'Content-Type': undefined}, repertoire: repertoire
+                      }).success(function(data)
+                      {
+                          if(data['erreur'])
+                          {
+                            var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
+                           
+                            var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
+                            $mdDialog.show( alert ).finally(function()
+                            { 
+                              document_pr_scan.fichier='';
+                            var datas = $.param({
+                                                supprimer: 1,
+                                                id:        getIdFile,
+                                                fichier: document_pr_scan.fichier,
+                                                date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
+                                                observation: document_pr_scan.observation,
+                                                id_contrat_partenaire_relai: document_pr_scan.id_contrat_partenaire_relai,
+                                                id_document_pr: document_pr_scan.id,
+                                                validation:0
+                                  });
+                                apiFactory.add("document_pr_scan/index",datas, config).success(function (data)
+                                {   document_pr_scan.validation = 0;
+                                    document_pr_scan.$selected = false;
+                                    document_pr_scan.$edit = false;
+                                    vm.selectedItemDocument_pr_scan = {};
+                                console.log('b');
+                                }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                            });
+                          }
+                          else
+                          {
+                            document_pr_scan.fichier=repertoire+data['nomFile'];
+                            var datas = $.param({
+                                  supprimer: suppression,
+                                  id:        getIdFile,
+                                  fichier: document_pr_scan.fichier,
+                                  date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
+                                  observation: document_pr_scan.observation,
+                                  id_contrat_partenaire_relai: document_pr_scan.id_contrat_partenaire_relai,
+                                  id_document_pr: document_pr_scan.id,
+                                  validation:0               
+                              });
+
+                            apiFactory.add("document_pr_scan/index",datas, config).success(function (data)
+                            {   
+                                vm.validation_document_pr_scan = 0;
+                                document_pr_scan.validation = 0;
+                                document_pr_scan.existance =true;  
+                                document_pr_scan.$selected = false;
+                                document_pr_scan.$edit = false;
+                                vm.selectedItemDocument_pr_scan = {};
+                                console.log('e');
+                            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                          }
+                      }).error(function()
+                      {
+                        vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                      });
+                    }
+              }
+              //document_pr_scan.document_pr = doc[0];
+              document_pr_scan.contrat_pr = vm.selectedItemContrat_pr ;
+              document_pr_scan.$selected = false;
+              document_pr_scan.$edit = false;
+              //vm.selectedItemDocument_pr_scan = {};
+             
+              vm.showbuttonValidation_document_pr_scan = false;
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.validerDocument_pr_scan = function()
+        {
+          maj_in_baseDocument_pr_scan(vm.selectedItemDocument_pr_scan,0);
+        }
+
+        vm.selectionDocument_pr_scan_valide= function (item)
+        {
+            vm.selectedItemDocument_pr_scan_valide = item;
+        };
+        $scope.$watch('vm.selectedItemDocument_pr_scan_valide', function()
+        {
+             if (!vm.alldocument_pr_scan_valide) return;
+             vm.alldocument_pr_scan_valide.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDocument_pr_scan_valide.$selected = true;
+        });
+                //insertion ou mise a jours ou suppression item dans bdd document_pr_scan
+        function maj_in_baseDocument_pr_scan(document_pr_scan,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        document_pr_scan.id_document_pr_scan,
+                    fichier: document_pr_scan.fichier,
+                    date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
+                    observation: document_pr_scan.observation,
+                    id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
+                    id_document_pr: document_pr_scan.id,
+                    validation:1               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("document_pr_scan/index",datas, config).success(function (data)
+            {   
+
+              vm.validation_document_pr_scan = 1;
+              document_pr_scan.validation=1;
+              //vm.alldocument_pr_scan_valide.push(document_pr_scan);
+              vm.selectedItemDocument_pr_scan = {};
+              vm.showbuttonValidation = false;
+
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.download_document_pr_scan = function(item)
+        {
+            window.location = apiUrlFile+item.fichier;
+        }
+
+
+    /******************************************debut dossier entreprise***********************************************/
+
+/*********************************************fin avenant partenaire***********************************************/
+
+//col table
+        vm.avenant_partenaire_column = [
+        {titre:"Description"
+        },
+        {titre:"Référence avenant"
+        },
+        {titre:"Montant"
+        },
+        {titre:"Date signature"
+        },
+        {titre:"Action"
+        }];
+        //Masque de saisi ajout
+        vm.ajouterAvenant_partenaire = function ()
+        { 
+          if (NouvelItemAvenant_partenaire == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              description: '',         
+              ref_avenant: '',
+              montant: 0,
+              date_signature:'',
+            };         
+            vm.allavenant_partenaire.push(items);
+            vm.allavenant_partenaire.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemAvenant_partenaire = mem;
+              }
+            });
+
+            NouvelItemAvenant_partenaire = true ;
+          }else
+          {
+            vm.showAlert('Ajout avenant_partenaire','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutAvenant_partenaire(avenant_partenaire,suppression)
+        {
+            if (NouvelItemAvenant_partenaire==false)
+            {
+                test_existanceAvenant_partenaire (avenant_partenaire,suppression); 
+            } 
+            else
+            {
+                insert_in_baseAvenant_partenaire(avenant_partenaire,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation avenant_partenaire
+        vm.annulerAvenant_partenaire = function(item)
+        {
+          if (NouvelItemAvenant_partenaire == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.description   = currentItemAvenant_partenaire.description ;
+            item.montant   = currentItemAvenant_partenaire.montant ;
+            item.ref_avenant   = currentItemAvenant_partenaire.ref_avenant ;
+            item.date_signature = currentItemAvenant_partenaire.date_signature ;
+          }else
+          {
+            vm.allavenant_partenaire = vm.allavenant_partenaire.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemAvenant_partenaire.id;
+            });
+          }
+        
+            vm.showbuttonNouvavenant_partenaire=true;
+
+          vm.selectedItemAvenant_partenaire = {} ;
+          NouvelItemAvenant_partenaire      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionAvenant_partenaire= function (item)
+        {
+            vm.selectedItemAvenant_partenaire = item;
+            //vm.nouvelItemAvenant_partenaire   = item;
+            if (item.id!=0)
+            {
+                currentItemAvenant_partenaire    = JSON.parse(JSON.stringify(vm.selectedItemAvenant_partenaire));
+                vm.showbuttonValidation_avenant_partenaire = true;
+                vm.validation_avenant_partenaire = item.validation;
+            }
+             
+            
+        };
+        $scope.$watch('vm.selectedItemAvenant_partenaire', function()
+        {
+             if (!vm.allavenant_partenaire) return;
+             vm.allavenant_partenaire.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemAvenant_partenaire.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierAvenant_partenaire = function(item)
+        {
+            NouvelItemAvenant_partenaire = false ;
+            vm.selectedItemAvenant_partenaire = item;
+            currentItemAvenant_partenaire = angular.copy(vm.selectedItemAvenant_partenaire);
+            $scope.vm.allavenant_partenaire.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.ref_avenant   = vm.selectedItemAvenant_partenaire.ref_avenant ;
+            item.description   = vm.selectedItemAvenant_partenaire.description ;
+            item.montant   = vm.selectedItemAvenant_partenaire.montant ;
+            item.date_signature = vm.selectedItemAvenant_partenaire.date_signature ;            
+            vm.showbuttonValidation_avenant_partenaire = false;
+        };
+
+        //fonction bouton suppression item Avenant_partenaire
+        vm.supprimerAvenant_partenaire = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutAvenant_partenaire(vm.selectedItemAvenant_partenaire,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceAvenant_partenaire (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var pass = vm.allavenant_partenaire.filter(function(obj)
+                {
+                   return obj.id == currentItemAvenant_partenaire.id;
+                });
+                if(pass[0])
+                {
+                   if((pass[0].description   != currentItemAvenant_partenaire.description )
+                    || (pass[0].montant  != currentItemAvenant_partenaire.montant)
+                    || (pass[0].date_signature != currentItemAvenant_partenaire.date_signature ))                   
+                      { 
+                         insert_in_baseAvenant_partenaire(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseAvenant_partenaire(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseAvenant_partenaire(avenant_partenaire,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemAvenant_partenaire==false)
+            {
+                getId = vm.selectedItemAvenant_partenaire.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    description: avenant_partenaire.description,
+                    montant: avenant_partenaire.montant,
+                    ref_avenant: avenant_partenaire.ref_avenant,
+                    date_signature:convertionDate(new Date(avenant_partenaire.date_signature)),
+                    id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
+                    validation:0               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avenant_partenaire_relai/index",datas, config).success(function (data)
+            {   
+                var conve= vm.allcontrat_partenaire_relai.filter(function(obj)
+                {
+                    return obj.id == avenant_partenaire.id_contrat_partenaire_relai;
+                });
+
+                if (NouvelItemAvenant_partenaire == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {                        
+                        vm.selectedItemAvenant_partenaire.contrat_partenaire_relai = conve[0];
+                        
+                        vm.selectedItemAvenant_partenaire.$selected  = false;
+                        vm.selectedItemAvenant_partenaire.$edit      = false;
+                        vm.selectedItemAvenant_partenaire ={};
+                    }
+                    else 
+                    {    
+                      vm.allavenant_partenaire = vm.allavenant_partenaire.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemAvenant_partenaire.id;
+                      });
+                    
+                    }
+                }
+                else
+                {
+                  avenant_partenaire.partenaire = conve[0];
+                  avenant_partenaire.validation =0
+                  avenant_partenaire.id  =   String(data.response);              
+                  NouvelItemAvenant_partenaire=false;
+                }
+              vm.showbuttonValidation_avenant_partenaire = false;
+              vm.validation_avenant_partenaire = 0
+              avenant_partenaire.$selected = false;
+              avenant_partenaire.$edit = false;
+              vm.selectedItemAvenant_partenaire = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.validerAvenant_partenaire = function()
+        {
+          valideravenantpartenaireinbase(vm.selectedItemAvenant_partenaire,0,1);
+        }
+        function valideravenantpartenaireinbase(avenant_partenaire,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        avenant_partenaire.id,
+                    description: avenant_partenaire.description,
+                    montant: avenant_partenaire.montant,
+                    ref_avenant: avenant_partenaire.ref_avenant,
+                    date_signature:convertionDate(new Date(avenant_partenaire.date_signature)),
+                    id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avenant_partenaire_relai/index",datas, config).success(function (data)
+            {
+                avenant_partenaire.validation = validation;
+                vm.validation_avenant_partenaire = validation;
+                avenant_partenaire.$selected = false;
+                avenant_partenaire.$edit = false;
+                vm.selectedItemAvenant_partenaire = {};
+                vm.showbuttonValidation_avenant_partenaire = false;
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+  /**********************************************Avenant partenaire***************************************************/
 
 /*******************************************debut formation dpp**************************************************/
 //col table
@@ -8882,6 +10576,18 @@
                       vm.showbuttonNouvDemande_fin_travaux_moe_creer = true;
                       console.log(vm.alldemande_fin_travaux_moe);
                     }); 
+
+                     apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantinvalideBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.allavenant_moe = result.data.response;
+                      vm.showbuttonNouvavenant_moe = true;
+                      console.log(vm.allavenant_moe);
+                    });
+                     apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentinvalideBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                        vm.alldocument_moe_scan = result.data.response;
+                                        
+                    });
                   }
 
                   if(vm.roles.indexOf("BCAF")!= -1)
@@ -8935,6 +10641,18 @@
                     {
                       vm.alldemande_fin_travaux_moe = result.data.response;
                       vm.showbuttonNouvDemande_fin_travaux_moe_creer = false;
+                    });
+
+                     apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.allavenant_moe = result.data.response;
+                      vm.showbuttonNouvavenant_moe =false;
+                      console.log(vm.allavenant_moe);
+                    });
+                     apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                        vm.alldocument_moe_scan = result.data.response;
+                                        
                     });
                   }
 
@@ -8990,6 +10708,19 @@
                       vm.alldemande_fin_travaux_moe = result.data.response;
                       vm.showbuttonNouvDemande_fin_travaux_moe_creer = false;
                     });
+
+
+                     apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantvalideBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.allavenant_moe = result.data.response;
+                      vm.showbuttonNouvavenant_moe = false;
+                      console.log(vm.allavenant_moe);
+                    });
+                     apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentvalideBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                        vm.alldocument_moe_scan = result.data.response;
+                                        
+                    });
                   }
 
                   if(vm.roles.indexOf("DAAF")!= -1)
@@ -9044,6 +10775,25 @@
                     {
                       vm.alldemande_fin_travaux_moe = result.data.response;
                       vm.showbuttonNouvDemande_fin_travaux_moe_creer = false;
+                    });                     
+
+                     apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantvalideBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.allavenant_moe = result.data.response;
+                      vm.showbuttonNouvavenant_moe = false;
+                      console.log(vm.allavenant_moe);
+                    });
+
+                     apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantvalideBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.allavenant_moe = result.data.response;
+                      vm.showbuttonNouvavenant_moe = true;
+                      console.log(vm.allavenant_moe);
+                    });
+                     apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentvalideBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                        vm.alldocument_moe_scan = result.data.response;
+                                        
                     });
 
                   }
@@ -9098,6 +10848,18 @@
                     {
                       vm.alldemande_fin_travaux_moe = result.data.response;
                       vm.showbuttonNouvDemande_fin_travaux_moe_creer = false;
+                    });
+
+                     apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantvalideBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.allavenant_moe = result.data.response;
+                      vm.showbuttonNouvavenant_moe = false;
+                      console.log(vm.allavenant_moe);
+                    });
+                     apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentvalideBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                        vm.alldocument_moe_scan = result.data.response;
+                                        
                     });
 
                   }
@@ -9167,6 +10929,18 @@
                     {
                       vm.alldemande_fin_travaux_moe = result.data.response;
                       vm.showbuttonNouvDemande_fin_travaux_moe_creer = true;
+                    });                     
+
+                     apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                      vm.allavenant_moe = result.data.response;
+                      vm.showbuttonNouvavenant_moe = true;
+                      console.log(vm.allavenant_moe);
+                    });
+                     apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+                    {
+                        vm.alldocument_moe_scan = result.data.response;
+                                        
                     });
 
                   }
@@ -9368,7 +11142,737 @@
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
-      /**************************************fin contrat moe***************************************************/
+      /*****************************************fin contrat moe******************************************************/
+
+       /**********************************************Debut Dossier entreprise***************************************************/
+    //vm.myFile = [];
+     $scope.uploadFile_doc_moe = function(event)
+       {
+          console.dir(event);
+          var files = event.target.files;
+          vm.myFile = files;
+          vm.selectedItemDocument_moe_scan.fichier = vm.myFile[0].name;
+          //console.log(vm.selectedItemDocument_moe_scan.fichier);
+        } 
+
+        //fonction ajout dans bdd
+        function ajoutDocument_moe_scan(document_moe_scan,suppression)
+        {
+            if (NouvelItemDocument_moe_scan==false)
+            {
+                test_existanceDocument_moe_scan (document_moe_scan,suppression); 
+            } 
+            else
+            {
+                insert_in_baseDocument_moe_scan(document_moe_scan,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation document_moe_scan
+        vm.annulerDocument_moe_scan = function(item)
+        {
+          if (NouvelItemDocument_moe_scan == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.fichier   = currentItemDocument_moe_scan.fichier ;
+            item.date_elaboration   = currentItemDocument_moe_scan.date_elaboration ;
+            item.observation   = currentItemDocument_moe_scan.observation ;
+          }else
+          {
+            vm.alldocument_moe_scan = vm.alldocument_moe_scan.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemDocument_moe_scan.id;
+            });
+          }
+
+          vm.selectedItemDocument_moe_scan = {} ;
+          NouvelItemDocument_moe_scan      = false;
+          
+        };
+
+        //fonction selection item justificatif batiment
+        vm.selectionDocument_moe_scan= function (item)
+        {
+            vm.selectedItemDocument_moe_scan = item;
+            vm.nouvelItemDocument_moe_scan   = item;
+            if (item.id_document_moe_scan!=0)
+            {
+                vm.showbuttonValidation_document_moe_scan = true;
+            }
+            vm.validation_document_moe_scan = item.validation;
+            currentItemDocument_moe_scan    = JSON.parse(JSON.stringify(vm.selectedItemDocument_moe_scan));
+            
+        };
+        $scope.$watch('vm.selectedItemDocument_moe_scan', function()
+        {
+             if (!vm.alldocument_moe_scan) return;
+             vm.alldocument_moe_scan.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDocument_moe_scan.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierDocument_moe_scan = function(item)
+        {
+            
+            vm.selectedItemDocument_moe_scan = item;
+            currentItemDocument_moe_scan = angular.copy(vm.selectedItemDocument_moe_scan);
+            $scope.vm.alldocument_moe_scan.forEach(function(jus) {
+              jus.$edit = false;
+            });
+            item.$edit = true;
+            item.$selected = true;
+            if (item.id_document_moe_scan==null)
+            {   
+                NouvelItemDocument_moe_scan=true;
+                console.log('atonull');
+                item.fichier   = vm.selectedItemDocument_moe_scan.fichier ;
+                item.date_elaboration   = vm.datenow ;
+                item.observation   = vm.selectedItemDocument_moe_scan.observation ;
+                item.id_document_moe_scan   = '0' ;
+                item.id_contrat_bureau_etude   = vm.selectedItemContrat_moe.id ;
+
+            }
+            else
+            {NouvelItemDocument_moe_scan = false ;
+                console.log('tsnull');
+                item.fichier   = vm.selectedItemDocument_moe_scan.fichier ;
+                item.date_elaboration   = new Date(vm.selectedItemDocument_moe_scan.date_elaboration) ;
+                item.observation   = vm.selectedItemDocument_moe_scan.observation ;
+            }
+            vm.showbuttonValidation_document_moe_scan = false;
+            
+            
+            //console.log(item);
+            //vm.showThParcourir = true;
+        };
+
+        //fonction bouton suppression item document_moe_scan
+        vm.supprimerDocument_moe_scan = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutDocument_moe_scan(vm.selectedItemDocument_moe_scan,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceDocument_moe_scan (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var mem = vm.alldocument_moe_scan.filter(function(obj)
+                {
+                   return obj.id == currentItemDocument_moe_scan.id;
+                });
+                if(mem[0])
+                {
+                   if((mem[0].fichier   != currentItemDocument_moe_scan.fichier )
+                    ||(mem[0].date_elaboration   != currentItemDocument_moe_scan.date_elaboration )
+                    ||(mem[0].observation   != currentItemDocument_moe_scan.observation ))                   
+                      { 
+                         insert_in_baseDocument_moe_scan(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseDocument_moe_scan(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd document_moe_scan
+        function insert_in_baseDocument_moe_scan(document_moe_scan,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemDocument_moe_scan==false)
+            {
+                getId = vm.selectedItemDocument_moe_scan.id_document_moe_scan; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    fichier: document_moe_scan.fichier,
+                    date_elaboration: convertionDate(new Date(document_moe_scan.date_elaboration)),
+                    observation: document_moe_scan.observation,
+                    id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
+                    id_document_moe: document_moe_scan.id,
+                    validation:0               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("document_moe_scan/index",datas, config).success(function (data)
+            {
+
+              if (NouvelItemDocument_moe_scan == false)
+              {
+                    // Update_paiement or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                         //;
+                    
+                          var repertoire = 'document_moe_scan/';
+                          var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
+                          var getIdFile = vm.selectedItemDocument_moe_scan.id_document_moe_scan;
+                                              
+                          if(vm.myFile.length>0)
+                          { 
+                            var file= vm.myFile[0]
+                            var name_file = vm.selectedItemContrat_moe.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+
+                            var fd = new FormData();
+                            fd.append('file', file);
+                            fd.append('repertoire',repertoire);
+                            fd.append('name_fichier',name_file);
+
+                            var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
+                            headers: {'Content-Type': undefined}, repertoire: repertoire
+                            }).success(function(data)
+                            {
+                                if(data['erreur'])
+                                {
+                                  var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
+                                 
+                                  var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
+                                  $mdDialog.show( alert ).finally(function()
+                                  { 
+                                    document_moe_scan.fichier='';                                    
+                                  var datas = $.param({
+                                                      supprimer: suppression,
+                                                      id:        getIdFile,
+                                                      fichier: document_moe_scan.fichier,
+                                                      date_elaboration: convertionDate(new Date(document_moe_scan.date_elaboration)),
+                                                      observation: document_moe_scan.observation,
+                                                      id_contrat_bureau_etude: document_moe_scan.id_contrat_bureau_etude,
+                                                      id_document_moe: document_moe_scan.id,
+                                                      validation:0
+                                        });
+                                      apiFactory.add("document_moe_scan/index",datas, config).success(function (data)
+                                      {                                           
+                                            
+                                          document_moe_scan.$selected = false;
+                                          document_moe_scan.$edit = false;
+                                          vm.selectedItemDocument_moe_scan = {};
+                                      console.log('b');
+                                      }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                                  });
+                                }
+                                else
+                                {
+                                  document_moe_scan.fichier=repertoire+data['nomFile'];
+                                  var datas = $.param({
+                                        supprimer: suppression,
+                                        id:        getIdFile,
+                                        fichier: document_moe_scan.fichier,
+                                        date_elaboration: convertionDate(new Date(document_moe_scan.date_elaboration)),
+                                        observation: document_moe_scan.observation,
+                                        id_contrat_bureau_etude: document_moe_scan.id_contrat_bureau_etude,
+                                        id_document_moe: document_moe_scan.id,
+                                        validation:0               
+                                    });
+                                  console.log(document_moe_scan);
+                                  apiFactory.add("document_moe_scan/index",datas, config).success(function (data)
+                                  {
+                                       
+                                      document_moe_scan.$selected = false;
+                                      document_moe_scan.$edit = false;
+                                      vm.selectedItemDocument_moe_scan = {};
+                                      console.log('e');
+                                  }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                                }
+                            }).error(function()
+                            {
+                              vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                            });
+                          }
+                        //vm.selectedItemDocument_moe_scan.document_moe = doc[0];
+                        vm.selectedItemDocument_moe_scan.contrat_moe = vm.selectedItemContrat_moe ;
+                        vm.selectedItemDocument_moe_scan.$selected  = false;
+                        vm.selectedItemDocument_moe_scan.$edit      = false;
+                        vm.selectedItemDocument_moe_scan ={};
+                        vm.showbuttonValidation = false;
+                    }
+                    else 
+                    {    
+                     /* vm.alldocument_moe_scan = vm.alldocument_moe_scan.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemDocument_moe_scan.id;
+                      });*/
+                      vm.selectedItemDocument_moe_scan.existance = true;
+                      var chemin= vm.selectedItemDocument_moe_scan.fichier;
+                      var fd = new FormData();
+                          fd.append('chemin',chemin);
+                     
+                      var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
+
+                      var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
+                      headers: {'Content-Type': undefined}, chemin: chemin
+                      }).success(function(data)
+                      {                         
+                          vm.selectedItemDocument_moe_scan.fichier = '';
+                          vm.selectedItemDocument_moe_scan.date_elaboration = '';
+                          vm.selectedItemDocument_moe_scan.observation = '';
+                          vm.selectedItemDocument_moe_scan.existance = false;
+                      }).error(function()
+                      {
+                          showDialog(event,chemin);
+                      });;
+                    }
+              }
+              else
+              {
+                  document_moe_scan.id_document_moe_scan  =   String(data.response);              
+                  NouvelItemDocument_moe_scan = false;
+
+                    
+                    
+                    var repertoire = 'document_moe_scan/';
+                    var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
+                    var getIdFile = String(data.response);
+                                        
+                    if(vm.myFile.length>0)
+                    { 
+                        var file= vm.myFile[0];
+                      var name_file = vm.selectedItemContrat_moe.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+
+                      var fd = new FormData();
+                      fd.append('file', file);
+                      fd.append('repertoire',repertoire);
+                      fd.append('name_fichier',name_file);
+
+                      var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
+                      headers: {'Content-Type': undefined}, repertoire: repertoire
+                      }).success(function(data)
+                      {
+                          if(data['erreur'])
+                          {
+                            var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
+                           
+                            var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
+                            $mdDialog.show( alert ).finally(function()
+                            { 
+                              document_moe_scan.fichier='';
+                            var datas = $.param({
+                                                supprimer: 1,
+                                                id:        getIdFile,
+                                                fichier: document_moe_scan.fichier,
+                                                date_elaboration: convertionDate(new Date(document_moe_scan.date_elaboration)),
+                                                observation: document_moe_scan.observation,
+                                                id_contrat_bureau_etude: document_moe_scan.id_contrat_bureau_etude,
+                                                id_document_moe: document_moe_scan.id,
+                                                validation:0
+                                  });
+                                apiFactory.add("document_moe_scan/index",datas, config).success(function (data)
+                                {   document_moe_scan.validation = 0;
+                                    document_moe_scan.$selected = false;
+                                    document_moe_scan.$edit = false;
+                                    vm.selectedItemDocument_moe_scan = {};
+                                console.log('b');
+                                }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                            });
+                          }
+                          else
+                          {
+                            document_moe_scan.fichier=repertoire+data['nomFile'];
+                            var datas = $.param({
+                                  supprimer: suppression,
+                                  id:        getIdFile,
+                                  fichier: document_moe_scan.fichier,
+                                  date_elaboration: convertionDate(new Date(document_moe_scan.date_elaboration)),
+                                  observation: document_moe_scan.observation,
+                                  id_contrat_bureau_etude: document_moe_scan.id_contrat_bureau_etude,
+                                  id_document_moe: document_moe_scan.id,
+                                  validation:0               
+                              });
+
+                            apiFactory.add("document_moe_scan/index",datas, config).success(function (data)
+                            {   
+                                vm.validation_document_moe_scan = 0;
+                                document_moe_scan.validation = 0;
+                                document_moe_scan.existance =true;  
+                                document_moe_scan.$selected = false;
+                                document_moe_scan.$edit = false;
+                                vm.selectedItemDocument_moe_scan = {};
+                                console.log('e');
+                            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                          }
+                      }).error(function()
+                      {
+                        vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                      });
+                    }
+              }
+              //document_moe_scan.document_moe = doc[0];
+              document_moe_scan.contrat_moe = vm.selectedItemContrat_moe ;
+              document_moe_scan.$selected = false;
+              document_moe_scan.$edit = false;
+              //vm.selectedItemDocument_moe_scan = {};
+             
+              vm.showbuttonValidation_document_moe_scan = false;
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.validerDocument_moe_scan = function()
+        {
+          maj_in_baseDocument_moe_scan(vm.selectedItemDocument_moe_scan,0);
+        }
+
+        vm.selectionDocument_moe_scan_valide= function (item)
+        {
+            vm.selectedItemDocument_moe_scan_valide = item;
+        };
+        $scope.$watch('vm.selectedItemDocument_moe_scan_valide', function()
+        {
+             if (!vm.alldocument_moe_scan_valide) return;
+             vm.alldocument_moe_scan_valide.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDocument_moe_scan_valide.$selected = true;
+        });
+                //insertion ou mise a jours ou suppression item dans bdd document_moe_scan
+        function maj_in_baseDocument_moe_scan(document_moe_scan,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        document_moe_scan.id_document_moe_scan,
+                    fichier: document_moe_scan.fichier,
+                    date_elaboration: convertionDate(new Date(document_moe_scan.date_elaboration)),
+                    observation: document_moe_scan.observation,
+                    id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
+                    id_document_moe: document_moe_scan.id,
+                    validation:1               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("document_moe_scan/index",datas, config).success(function (data)
+            {   
+
+              vm.validation_document_moe_scan = 1;
+              document_moe_scan.validation=1;
+              //vm.alldocument_moe_scan_valide.push(document_moe_scan);
+              vm.selectedItemDocument_moe_scan = {};
+              vm.showbuttonValidation = false;
+
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.download_document_moe_scan = function(item)
+        {
+            window.location = apiUrlFile+item.fichier;
+        }
+
+
+    /******************************************debut dossier entreprise***********************************************/
+
+    /*********************************************fin avenant moe***********************************************/
+
+//col table
+        vm.avenant_moe_column = [
+        {titre:"Description"
+        },
+        {titre:"Référence avenant"
+        },
+        {titre:"Montant"
+        },
+        {titre:"Date signature"
+        },
+        {titre:"Action"
+        }];
+        //Masque de saisi ajout
+        vm.ajouterAvenant_moe = function ()
+        { 
+          if (NouvelItemAvenant_moe == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              description: '',         
+              ref_avenant: '',
+              montant: 0,
+              date_signature:'',
+            };         
+            vm.allavenant_moe.push(items);
+            vm.allavenant_moe.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemAvenant_moe = mem;
+              }
+            });
+
+            NouvelItemAvenant_moe = true ;
+          }else
+          {
+            vm.showAlert('Ajout avenant_moe','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutAvenant_moe(avenant_moe,suppression)
+        {
+            if (NouvelItemAvenant_moe==false)
+            {
+                test_existanceAvenant_moe (avenant_moe,suppression); 
+            } 
+            else
+            {
+                insert_in_baseAvenant_moe(avenant_moe,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation avenant_moe
+        vm.annulerAvenant_moe = function(item)
+        {
+          if (NouvelItemAvenant_moe == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.description   = currentItemAvenant_moe.description ;
+            item.montant   = currentItemAvenant_moe.montant ;
+            item.ref_avenant   = currentItemAvenant_moe.ref_avenant ;
+            item.date_signature = currentItemAvenant_moe.date_signature ;
+          }else
+          {
+            vm.allavenant_moe = vm.allavenant_moe.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemAvenant_moe.id;
+            });
+          }
+        
+            vm.showbuttonNouvavenant_moe=true;
+
+          vm.selectedItemAvenant_moe = {} ;
+          NouvelItemAvenant_moe      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionAvenant_moe= function (item)
+        {
+            vm.selectedItemAvenant_moe = item;
+            //vm.nouvelItemAvenant_moe   = item;
+            if (item.id!=0)
+            {
+                currentItemAvenant_moe    = JSON.parse(JSON.stringify(vm.selectedItemAvenant_moe));
+                vm.showbuttonValidation_avenant_moe = true;
+                vm.validation_avenant_moe = item.validation;
+            }
+             
+            
+        };
+        $scope.$watch('vm.selectedItemAvenant_moe', function()
+        {
+             if (!vm.allavenant_moe) return;
+             vm.allavenant_moe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemAvenant_moe.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierAvenant_moe = function(item)
+        {
+            NouvelItemAvenant_moe = false ;
+            vm.selectedItemAvenant_moe = item;
+            currentItemAvenant_moe = angular.copy(vm.selectedItemAvenant_moe);
+            $scope.vm.allavenant_moe.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.ref_avenant   = vm.selectedItemAvenant_moe.ref_avenant ;
+            item.description   = vm.selectedItemAvenant_moe.description ;
+            item.montant   = vm.selectedItemAvenant_moe.montant ;
+            item.date_signature = vm.selectedItemAvenant_moe.date_signature ;            
+            vm.showbuttonValidation_avenant_moe = false;
+        };
+
+        //fonction bouton suppression item Avenant_moe
+        vm.supprimerAvenant_moe = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutAvenant_moe(vm.selectedItemAvenant_moe,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceAvenant_moe (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var pass = vm.allavenant_moe.filter(function(obj)
+                {
+                   return obj.id == currentItemAvenant_moe.id;
+                });
+                if(pass[0])
+                {
+                   if((pass[0].description   != currentItemAvenant_moe.description )
+                    || (pass[0].montant  != currentItemAvenant_moe.montant)
+                    || (pass[0].date_signature != currentItemAvenant_moe.date_signature ))                   
+                      { 
+                         insert_in_baseAvenant_moe(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseAvenant_moe(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseAvenant_moe(avenant_moe,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemAvenant_moe==false)
+            {
+                getId = vm.selectedItemAvenant_moe.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    description: avenant_moe.description,
+                    montant: avenant_moe.montant,
+                    ref_avenant: avenant_moe.ref_avenant,
+                    date_signature:convertionDate(new Date(avenant_moe.date_signature)),
+                    id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
+                    validation:0               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avenant_be/index",datas, config).success(function (data)
+            {   
+                var conve= vm.allcontrat_moe.filter(function(obj)
+                {
+                    return obj.id == avenant_moe.id_contrat_bureau_etude;
+                });
+
+                if (NouvelItemAvenant_moe == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {                        
+                        vm.selectedItemAvenant_moe.contrat_be = conve[0];
+                        
+                        vm.selectedItemAvenant_moe.$selected  = false;
+                        vm.selectedItemAvenant_moe.$edit      = false;
+                        vm.selectedItemAvenant_moe ={};
+                    }
+                    else 
+                    {    
+                      vm.allavenant_moe = vm.allavenant_moe.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemAvenant_moe.id;
+                      });
+                    
+                    }
+                }
+                else
+                {
+                  avenant_moe.contrat_be = conve[0];
+                  avenant_moe.validation =0
+                  avenant_moe.id  =   String(data.response);              
+                  NouvelItemAvenant_moe=false;
+                }
+              vm.showbuttonValidation_avenant_moe = false;
+              vm.validation_avenant_moe = 0
+              avenant_moe.$selected = false;
+              avenant_moe.$edit = false;
+              vm.selectedItemAvenant_moe = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.validerAvenant_moe = function()
+        {
+          valideravenantmoeinbase(vm.selectedItemAvenant_moe,0,1);
+        }
+        function valideravenantmoeinbase(avenant_moe,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        avenant_moe.id,
+                    description: avenant_moe.description,
+                    montant: avenant_moe.montant,
+                    ref_avenant: avenant_moe.ref_avenant,
+                    date_signature:convertionDate(new Date(avenant_moe.date_signature)),
+                    id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avenant_be/index",datas, config).success(function (data)
+            {
+                avenant_moe.validation = validation;
+                vm.validation_avenant_moe = validation;
+                avenant_moe.$selected = false;
+                avenant_moe.$edit = false;
+                vm.selectedItemAvenant_moe = {};
+                vm.showbuttonValidation_avenant_moe = false;
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+  /**********************************************Avenant moe***************************************************/
 
       /**************************************fin memoire technique***************************************************/
       vm.ajouterMemoire_technique = function ()
@@ -16260,7 +18764,18 @@
                             {
                               vm.alldemande_mobilier_mpe = result.data.response;
                               vm.showbuttonNouvDemande_mobilier_mpe_creer = true;
-                            });                                                      
+                            });
+
+                            apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantinvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+                            {
+                              vm.allavenant_mpe = result.data.response;
+                              vm.showbuttonNouvavenant_mpe = true;
+                            });
+                            apiFactory.getAPIgeneraliserREST("dossier_prestataire/index",'menu','getdocumentinvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                           {
+                                vm.alldocument_prestataire_scan = result.data.response;
+                                        
+                           });                                                      
                     break;
 
                case 'BCAF':
@@ -16314,6 +18829,19 @@
                               vm.alldemande_mobilier_mpe = result.data.response;
                               vm.showbuttonNouvDemande_mobilier_mpe_creer = false;
                             });
+
+
+                            apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+                            {
+                              vm.allavenant_mpe = result.data.response;
+                              vm.showbuttonNouvavenant_mpe = false;
+                            });
+
+                            apiFactory.getAPIgeneraliserREST("dossier_prestataire/index",'menu','getdocumentBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                           {
+                                vm.alldocument_prestataire_scan = result.data.response;
+                                        
+                           }); 
                      
                     break;
                 case 'ODAAF':
@@ -16371,6 +18899,18 @@
                               vm.alldemande_mobilier_mpe = result.data.response;
                               vm.showbuttonNouvDemande_mobilier_mpe_creer = false;
                             });
+
+
+                            apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+                            {
+                              vm.allavenant_mpe = result.data.response;
+                              vm.showbuttonNouvavenant_mpe = false;
+                            });
+
+                            apiFactory.getAPIgeneraliserREST("dossier_prestataire/index",'menu','getdocumentvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                           {
+                                vm.alldocument_prestataire_scan = result.data.response;         
+                           }); 
                     break;
                 case 'ODPFI':    
                     
@@ -16427,6 +18967,18 @@
                               vm.alldemande_mobilier_mpe = result.data.response;
                               vm.showbuttonNouvDemande_mobilier_mpe_creer = false;
                             });
+
+
+                            apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+                            {
+                              vm.allavenant_mpe = result.data.response;
+                              vm.showbuttonNouvavenant_mpe = false;
+                            });
+                            apiFactory.getAPIgeneraliserREST("dossier_prestataire/index",'menu','getdocumentvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                           {
+                                vm.alldocument_prestataire_scan = result.data.response;
+                                console.log(vm.alldocument_prestataire_scan);         
+                           }); 
 
                      
                     break;
@@ -16487,6 +19039,18 @@
                           vm.alldemande_mobilier_mpe = result.data.response;
                           vm.showbuttonNouvDemande_mobilier_mpe_creer = true;
                         });
+
+                        apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+                        {
+                            vm.allavenant_mpe = result.data.response;
+                            vm.showbuttonNouvavenant_mpe = true;
+                        });
+
+                        apiFactory.getAPIgeneraliserREST("dossier_prestataire/index",'menu','getdocumentBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                        {
+                            vm.alldocument_prestataire_scan = result.data.response;
+                            console.log(vm.alldocument_prestataire_scan);         
+                        }); 
                     
                      
                     break;
@@ -16542,6 +19106,17 @@
                           vm.alldemande_mobilier_mpe = result.data.response;
                           vm.showbuttonNouvDemande_mobilier_mpe_creer = false;
                         });
+
+                        apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+                        {
+                            vm.allavenant_mpe = result.data.response;
+                            vm.showbuttonNouvavenant_mpe = false;
+                        });
+
+                        apiFactory.getAPIgeneraliserREST("dossier_prestataire/index",'menu','getdocumentvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                        {
+                            vm.alldocument_prestataire_scan = result.data.response;         
+                        }); 
                                           
                     break;
                 default:
@@ -16550,7 +19125,8 @@
               }
               
            }
-           vm.stepsuiviexecution = true;  
+           vm.stepsuiviexecution = true;
+           vm.stepavenant_mpe = true;  
         };
         $scope.$watch('vm.selectedItemContrat_prestataire', function()
         {
@@ -16763,7 +19339,787 @@
         }
 /**********************************fin contrat_prestataire****************************************/
 
-/**********************************debut contrat prestataire****************************************/
+ /*********************************************fin avenant mpe***********************************************/
+
+//col table
+        vm.avenant_mpe_column = [
+        {titre:"Description"
+        },
+        {titre:"Référence avenant"
+        },
+        {titre:"Cout batiment"
+        },
+        {titre:"Cout latrine"
+        },
+        {titre:"Cout mobilier"
+        },
+        {titre:"Date signature"
+        },
+        {titre:"Action"
+        }];
+        //Masque de saisi ajout
+        vm.ajouterAvenant_mpe = function ()
+        { 
+          if (NouvelItemAvenant_mpe == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',         
+              description: '',         
+              ref_avenant: '',
+              cout_batiment: 0,
+              cout_latrine: 0,
+              cout_mobilier: 0,
+              date_signature:'',
+            };         
+            vm.allavenant_mpe.push(items);
+            vm.allavenant_mpe.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemAvenant_mpe = mem;
+              }
+            });
+
+            NouvelItemAvenant_mpe = true ;
+          }else
+          {
+            vm.showAlert('Ajout avenant_mpe','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };
+
+        //fonction ajout dans bdd
+        function ajoutAvenant_mpe(avenant_mpe,suppression)
+        {
+            if (NouvelItemAvenant_mpe==false)
+            {
+                test_existanceAvenant_mpe (avenant_mpe,suppression); 
+            } 
+            else
+            {
+                insert_in_baseAvenant_mpe(avenant_mpe,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation avenant_mpe
+        vm.annulerAvenant_mpe = function(item)
+        {
+          if (NouvelItemAvenant_mpe == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.description   = currentItemAvenant_mpe.description ;
+            item.cout_batiment   = currentItemAvenant_mpe.cout_batiment ;
+            item.cout_latrine   = currentItemAvenant_mpe.cout_latrine ;
+            item.cout_mobilier   = currentItemAvenant_mpe.cout_mobilier ;
+            item.ref_avenant   = currentItemAvenant_mpe.ref_avenant ;
+            item.date_signature = currentItemAvenant_mpe.date_signature ;
+          }else
+          {
+            vm.allavenant_mpe = vm.allavenant_mpe.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemAvenant_mpe.id;
+            });
+          }
+        
+            vm.showbuttonNouvavenant_mpe=true;
+
+          vm.selectedItemAvenant_mpe = {} ;
+          NouvelItemAvenant_mpe      = false;
+          
+        };
+
+        //fonction selection item region
+        vm.selectionAvenant_mpe= function (item)
+        {
+            vm.selectedItemAvenant_mpe = item;
+            //vm.nouvelItemAvenant_mpe   = item;
+            if (item.id!=0)
+            {
+                currentItemAvenant_mpe    = JSON.parse(JSON.stringify(vm.selectedItemAvenant_mpe));
+                vm.showbuttonValidation_avenant_mpe = true;
+                vm.validation_avenant_mpe = item.validation;
+            }
+             
+            
+        };
+        $scope.$watch('vm.selectedItemAvenant_mpe', function()
+        {
+             if (!vm.allavenant_mpe) return;
+             vm.allavenant_mpe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemAvenant_mpe.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierAvenant_mpe = function(item)
+        {
+            NouvelItemAvenant_mpe = false ;
+            vm.selectedItemAvenant_mpe = item;
+            currentItemAvenant_mpe = angular.copy(vm.selectedItemAvenant_mpe);
+            $scope.vm.allavenant_mpe.forEach(function(mem) {
+              mem.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.ref_avenant   = vm.selectedItemAvenant_mpe.ref_avenant ;
+            item.description   = vm.selectedItemAvenant_mpe.description ;
+            item.cout_batiment   = vm.selectedItemAvenant_mpe.cout_batiment ;
+            item.cout_latrine   = vm.selectedItemAvenant_mpe.cout_latrine ;
+            item.cout_mobilier   = vm.selectedItemAvenant_mpe.cout_mobilier ;
+            item.date_signature = vm.selectedItemAvenant_mpe.date_signature ;            
+            vm.showbuttonValidation_avenant_mpe = false;
+        };
+
+        //fonction bouton suppression item Avenant_mpe
+        vm.supprimerAvenant_mpe = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutAvenant_mpe(vm.selectedItemAvenant_mpe,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceAvenant_mpe (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var pass = vm.allavenant_mpe.filter(function(obj)
+                {
+                   return obj.id == currentItemAvenant_mpe.id;
+                });
+                if(pass[0])
+                {
+                   if((pass[0].description   != currentItemAvenant_mpe.description )
+                    || (pass[0].cout_batiment  != currentItemAvenant_mpe.cout_batiment)
+                    || (pass[0].cout_latrine  != currentItemAvenant_mpe.cout_latrine)
+                    || (pass[0].cout_mobilier  != currentItemAvenant_mpe.cout_mobilier)
+                    || (pass[0].ref_avenant  != currentItemAvenant_mpe.ref_avenant)
+                    || (pass[0].date_signature != currentItemAvenant_mpe.date_signature ))                   
+                      { 
+                         insert_in_baseAvenant_mpe(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseAvenant_mpe(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd feffi
+        function insert_in_baseAvenant_mpe(avenant_mpe,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemAvenant_mpe==false)
+            {
+                getId = vm.selectedItemAvenant_mpe.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    description: avenant_mpe.description,
+                    cout_batiment: avenant_mpe.cout_batiment,
+                    cout_latrine: avenant_mpe.cout_latrine,
+                    cout_mobilier: avenant_mpe.cout_mobilier,
+                    ref_avenant: avenant_mpe.ref_avenant,
+                    date_signature:convertionDate(new Date(avenant_mpe.date_signature)),
+                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
+                    validation:0               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avenant_prestataire/index",datas, config).success(function (data)
+            {   
+                var conve= vm.allcontrat_prestataire.filter(function(obj)
+                {
+                    return obj.id == avenant_mpe.id_contrat_prestataire;
+                });
+
+                if (NouvelItemAvenant_mpe == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {                        
+                        vm.selectedItemAvenant_mpe.contrat_prestataire = conve[0];
+                        
+                        vm.selectedItemAvenant_mpe.$selected  = false;
+                        vm.selectedItemAvenant_mpe.$edit      = false;
+                        vm.selectedItemAvenant_mpe ={};
+                    }
+                    else 
+                    {    
+                      vm.allavenant_mpe = vm.allavenant_mpe.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemAvenant_mpe.id;
+                      });
+                    
+                    }
+                }
+                else
+                {
+                  avenant_mpe.contrat_prestataire = conve[0];
+                  avenant_mpe.validation =0
+                  avenant_mpe.id  =   String(data.response);              
+                  NouvelItemAvenant_mpe=false;
+                }
+              vm.showbuttonValidation_avenant_mpe = false;
+              vm.validation_avenant_mpe = 0
+              avenant_mpe.$selected = false;
+              avenant_mpe.$edit = false;
+              vm.selectedItemAvenant_mpe = {};
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.validerAvenant_mpe = function()
+        {
+          valideravenantmpeinbase(vm.selectedItemAvenant_mpe,0,1);
+        }
+        function valideravenantmpeinbase(avenant_mpe,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        avenant_mpe.id,
+                    description: avenant_mpe.description,
+                    cout_batiment: avenant_mpe.cout_batiment,
+                    cout_latrine: avenant_mpe.cout_latrine,
+                    cout_mobilier: avenant_mpe.cout_mobilier,
+                    ref_avenant: avenant_mpe.ref_avenant,
+                    date_signature:convertionDate(new Date(avenant_mpe.date_signature)),
+                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
+                    validation: validation               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("avenant_prestataire/index",datas, config).success(function (data)
+            {
+                avenant_mpe.validation = validation;
+                vm.validation_avenant_mpe = validation;
+                avenant_mpe.$selected = false;
+                avenant_mpe.$edit = false;
+                vm.selectedItemAvenant_mpe = {};
+                vm.showbuttonValidation_avenant_mpe = false;
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+    /**********************************************Fin Avenant mpe***************************************************/
+    
+    /**********************************************Debut Dossier entreprise***************************************************/
+    vm.myFile = [];
+     $scope.uploadFile_doc_pre = function(event)
+       {
+          console.dir(event);
+          var files = event.target.files;
+          vm.myFile = files;
+          vm.selectedItemDocument_prestataire_scan.fichier = vm.myFile[0].name;
+          //console.log(vm.selectedItemDocument_prestataire_scan.fichier);
+        } 
+
+        //Masque de saisi ajout
+       /* vm.ajouterDocument_prestataire_scan= function ()
+        { 
+          
+          if (NouvelItemDocument_prestataire_scan == false)
+          {
+            var items = {
+              $edit: true,
+              $selected: true,
+              id: '0',
+              fichier: '',
+              date_elaboration: '',
+              observation: '',
+              id_document_prestataire: ''
+            };
+        
+            vm.alldocument_prestataire_scan.push(items);
+            vm.alldocument_prestataire_scan.forEach(function(mem)
+            {
+              if(mem.$selected==true)
+              {
+                vm.selectedItemDocument_prestataire_scan = mem;
+              }
+            });
+
+            NouvelItemDocument_prestataire_scan = true ;
+            //vm.showThParcourir = true;
+          }else
+          {
+            vm.showAlert('Ajout document_prestataire_scan','Un formulaire d\'ajout est déjà ouvert!!!');
+          }                
+                      
+        };*/
+
+        //fonction ajout dans bdd
+        function ajoutDocument_prestataire_scan(document_prestataire_scan,suppression)
+        {
+            if (NouvelItemDocument_prestataire_scan==false)
+            {
+                test_existanceDocument_prestataire_scan (document_prestataire_scan,suppression); 
+            } 
+            else
+            {
+                insert_in_baseDocument_prestataire_scan(document_prestataire_scan,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation document_prestataire_scan
+        vm.annulerDocument_prestataire_scan = function(item)
+        {
+          if (NouvelItemDocument_prestataire_scan == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.fichier   = currentItemDocument_prestataire_scan.fichier ;
+            item.date_elaboration   = currentItemDocument_prestataire_scan.date_elaboration ;
+            item.observation   = currentItemDocument_prestataire_scan.observation ;
+          }else
+          {
+            vm.alldocument_prestataire_scan = vm.alldocument_prestataire_scan.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemDocument_prestataire_scan.id;
+            });
+          }
+
+          vm.selectedItemDocument_prestataire_scan = {} ;
+          NouvelItemDocument_prestataire_scan      = false;
+          
+        };
+
+        //fonction selection item justificatif batiment
+        vm.selectionDocument_prestataire_scan= function (item)
+        {
+            vm.selectedItemDocument_prestataire_scan = item;
+            vm.nouvelItemDocument_prestataire_scan   = item;
+            if (item.id_document_prestataire_scan!=0)
+            {
+                vm.showbuttonValidation_document_prestataire_scan = true;
+            }
+            vm.validation_document_prestataire_scan = item.validation;
+            currentItemDocument_prestataire_scan    = JSON.parse(JSON.stringify(vm.selectedItemDocument_prestataire_scan));
+            
+        };
+        $scope.$watch('vm.selectedItemDocument_prestataire_scan', function()
+        {
+             if (!vm.alldocument_prestataire_scan) return;
+             vm.alldocument_prestataire_scan.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDocument_prestataire_scan.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierDocument_prestataire_scan = function(item)
+        {
+            
+            vm.selectedItemDocument_prestataire_scan = item;
+            currentItemDocument_prestataire_scan = angular.copy(vm.selectedItemDocument_prestataire_scan);
+            $scope.vm.alldocument_prestataire_scan.forEach(function(jus) {
+              jus.$edit = false;
+            });
+            item.$edit = true;
+            item.$selected = true;
+            if (item.id_document_prestataire_scan==null)
+            {   
+                NouvelItemDocument_prestataire_scan=true;
+                console.log('atonull');
+                item.fichier   = vm.selectedItemDocument_prestataire_scan.fichier ;
+                item.date_elaboration   = vm.datenow ;
+                item.observation   = vm.selectedItemDocument_prestataire_scan.observation ;
+                item.id_document_prestataire_scan   = '0' ;
+                item.id_contrat_prestataire   = vm.selectedItemContrat_prestataire.id ;
+
+            }
+            else
+            {NouvelItemDocument_prestataire_scan = false ;
+                console.log('tsnull');
+                item.fichier   = vm.selectedItemDocument_prestataire_scan.fichier ;
+                item.date_elaboration   = new Date(vm.selectedItemDocument_prestataire_scan.date_elaboration) ;
+                item.observation   = vm.selectedItemDocument_prestataire_scan.observation ;
+            }
+            vm.showbuttonValidation_document_prestataire_scan = false;
+            
+            
+            //console.log(item);
+            //vm.showThParcourir = true;
+        };
+
+        //fonction bouton suppression item document_prestataire_scan
+        vm.supprimerDocument_prestataire_scan = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutDocument_prestataire_scan(vm.selectedItemDocument_prestataire_scan,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceDocument_prestataire_scan (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var mem = vm.alldocument_prestataire_scan.filter(function(obj)
+                {
+                   return obj.id == currentItemDocument_prestataire_scan.id;
+                });
+                if(mem[0])
+                {
+                   if((mem[0].fichier   != currentItemDocument_prestataire_scan.fichier )
+                    ||(mem[0].date_elaboration   != currentItemDocument_prestataire_scan.date_elaboration )
+                    ||(mem[0].observation   != currentItemDocument_prestataire_scan.observation ))                   
+                      { 
+                         insert_in_baseDocument_prestataire_scan(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseDocument_prestataire_scan(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd document_prestataire_scan
+        function insert_in_baseDocument_prestataire_scan(document_prestataire_scan,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemDocument_prestataire_scan==false)
+            {
+                getId = vm.selectedItemDocument_prestataire_scan.id_document_prestataire_scan; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    fichier: document_prestataire_scan.fichier,
+                    date_elaboration: convertionDate(new Date(document_prestataire_scan.date_elaboration)),
+                    observation: document_prestataire_scan.observation,
+                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
+                    id_document_prestataire: document_prestataire_scan.id,
+                    validation:0               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("document_prestataire_scan/index",datas, config).success(function (data)
+            {
+
+              if (NouvelItemDocument_prestataire_scan == false)
+              {
+                    // Update_paiement or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                         //;
+                    
+                          var repertoire = 'document_prestataire_scan/';
+                          var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
+                          var getIdFile = vm.selectedItemDocument_prestataire_scan.id_document_prestataire_scan;
+                                              
+                          if(vm.myFile.length>0)
+                          { 
+                            var file= vm.myFile[0]
+                            var name_file = vm.selectedItemContrat_prestataire.num_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+
+                            var fd = new FormData();
+                            fd.append('file', file);
+                            fd.append('repertoire',repertoire);
+                            fd.append('name_fichier',name_file);
+
+                            var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
+                            headers: {'Content-Type': undefined}, repertoire: repertoire
+                            }).success(function(data)
+                            {
+                                if(data['erreur'])
+                                {
+                                  var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
+                                 
+                                  var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
+                                  $mdDialog.show( alert ).finally(function()
+                                  { 
+                                    document_prestataire_scan.fichier='';                                    
+                                  var datas = $.param({
+                                                      supprimer: suppression,
+                                                      id:        getIdFile,
+                                                      fichier: document_prestataire_scan.fichier,
+                                                      date_elaboration: convertionDate(new Date(document_prestataire_scan.date_elaboration)),
+                                                      observation: document_prestataire_scan.observation,
+                                                      id_contrat_prestataire: document_prestataire_scan.id_contrat_prestataire,
+                                                      id_document_prestataire: document_prestataire_scan.id,
+                                                      validation:0
+                                        });
+                                      apiFactory.add("document_prestataire_scan/index",datas, config).success(function (data)
+                                      {                                           
+                                            
+                                          document_prestataire_scan.$selected = false;
+                                          document_prestataire_scan.$edit = false;
+                                          vm.selectedItemDocument_prestataire_scan = {};
+                                      console.log('b');
+                                      }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                                  });
+                                }
+                                else
+                                {
+                                  document_prestataire_scan.fichier=repertoire+data['nomFile'];
+                                  var datas = $.param({
+                                        supprimer: suppression,
+                                        id:        getIdFile,
+                                        fichier: document_prestataire_scan.fichier,
+                                        date_elaboration: convertionDate(new Date(document_prestataire_scan.date_elaboration)),
+                                        observation: document_prestataire_scan.observation,
+                                        id_contrat_prestataire: document_prestataire_scan.id_contrat_prestataire,
+                                        id_document_prestataire: document_prestataire_scan.id,
+                                        validation:0               
+                                    });
+                                  apiFactory.add("document_prestataire_scan/index",datas, config).success(function (data)
+                                  {
+                                       
+                                      document_prestataire_scan.$selected = false;
+                                      document_prestataire_scan.$edit = false;
+                                      vm.selectedItemDocument_prestataire_scan = {};
+                                      console.log('e');
+                                  }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                                }
+                            }).error(function()
+                            {
+                              vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                            });
+                          }
+                        //vm.selectedItemDocument_prestataire_scan.document_prestataire = doc[0];
+                        vm.selectedItemDocument_prestataire_scan.contrat_prestataire = vm.selectedItemContrat_prestataire ;
+                        vm.selectedItemDocument_prestataire_scan.$selected  = false;
+                        vm.selectedItemDocument_prestataire_scan.$edit      = false;
+                        vm.selectedItemDocument_prestataire_scan ={};
+                        vm.showbuttonValidation = false;
+                    }
+                    else 
+                    {    
+                     /* vm.alldocument_prestataire_scan = vm.alldocument_prestataire_scan.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemDocument_prestataire_scan.id;
+                      });*/
+                      vm.selectedItemDocument_prestataire_scan.existance = true;
+                      var chemin= vm.selectedItemDocument_prestataire_scan.fichier;
+                      var fd = new FormData();
+                          fd.append('chemin',chemin);
+                     
+                      var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
+
+                      var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
+                      headers: {'Content-Type': undefined}, chemin: chemin
+                      }).success(function(data)
+                      {                         
+                          vm.selectedItemDocument_prestataire_scan.fichier = '';
+                          vm.selectedItemDocument_prestataire_scan.date_elaboration = '';
+                          vm.selectedItemDocument_prestataire_scan.observation = '';
+                          vm.selectedItemDocument_prestataire_scan.existance = false;
+                      }).error(function()
+                      {
+                          showDialog(event,chemin);
+                      });;
+                    }
+              }
+              else
+              {
+                  document_prestataire_scan.id_document_prestataire_scan  =   String(data.response);              
+                  NouvelItemDocument_prestataire_scan = false;
+
+                    
+                    
+                    var repertoire = 'document_prestataire_scan/';
+                    var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
+                    var getIdFile = String(data.response);
+                                        
+                    if(vm.myFile.length>0)
+                    { 
+                        var file= vm.myFile[0];
+                      var name_file = vm.selectedItemContrat_prestataire.num_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+
+                      var fd = new FormData();
+                      fd.append('file', file);
+                      fd.append('repertoire',repertoire);
+                      fd.append('name_fichier',name_file);
+
+                      var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
+                      headers: {'Content-Type': undefined}, repertoire: repertoire
+                      }).success(function(data)
+                      {
+                          if(data['erreur'])
+                          {
+                            var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
+                           
+                            var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
+                            $mdDialog.show( alert ).finally(function()
+                            { 
+                              document_prestataire_scan.fichier='';
+                            var datas = $.param({
+                                                supprimer: 1,
+                                                id:        getIdFile,
+                                                fichier: document_prestataire_scan.fichier,
+                                                date_elaboration: convertionDate(new Date(document_prestataire_scan.date_elaboration)),
+                                                observation: document_prestataire_scan.observation,
+                                                id_contrat_prestataire: document_prestataire_scan.id_contrat_prestataire,
+                                                id_document_prestataire: document_prestataire_scan.id,
+                                                validation:0
+                                  });
+                                apiFactory.add("document_prestataire_scan/index",datas, config).success(function (data)
+                                {   document_prestataire_scan.validation = 0;
+                                    document_prestataire_scan.$selected = false;
+                                    document_prestataire_scan.$edit = false;
+                                    vm.selectedItemDocument_prestataire_scan = {};
+                                console.log('b');
+                                }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                            });
+                          }
+                          else
+                          {
+                            document_prestataire_scan.fichier=repertoire+data['nomFile'];
+                            var datas = $.param({
+                                  supprimer: suppression,
+                                  id:        getIdFile,
+                                  fichier: document_prestataire_scan.fichier,
+                                  date_elaboration: convertionDate(new Date(document_prestataire_scan.date_elaboration)),
+                                  observation: document_prestataire_scan.observation,
+                                  id_contrat_prestataire: document_prestataire_scan.id_contrat_prestataire,
+                                  id_document_prestataire: document_prestataire_scan.id,
+                                  validation:0               
+                              });
+
+                            apiFactory.add("document_prestataire_scan/index",datas, config).success(function (data)
+                            {   
+                                vm.validation_document_prestataire_scan = 0;
+                                document_prestataire_scan.validation = 0;
+                                document_prestataire_scan.existance =true;  
+                                document_prestataire_scan.$selected = false;
+                                document_prestataire_scan.$edit = false;
+                                vm.selectedItemDocument_prestataire_scan = {};
+                                console.log('e');
+                            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                          }
+                      }).error(function()
+                      {
+                        vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                      });
+                    }
+              }
+              //document_prestataire_scan.document_prestataire = doc[0];
+              document_prestataire_scan.contrat_prestataire = vm.selectedItemContrat_prestataire ;
+              document_prestataire_scan.$selected = false;
+              document_prestataire_scan.$edit = false;
+              //vm.selectedItemDocument_prestataire_scan = {};
+             
+              vm.showbuttonValidation_document_prestataire_scan = false;
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.validerDocument_prestataire_scan = function()
+        {
+          maj_in_baseDocument_prestataire_scan(vm.selectedItemDocument_prestataire_scan,0);
+        }
+
+        vm.selectionDocument_prestataire_scan_valide= function (item)
+        {
+            vm.selectedItemDocument_prestataire_scan_valide = item;
+        };
+        $scope.$watch('vm.selectedItemDocument_prestataire_scan_valide', function()
+        {
+             if (!vm.alldocument_prestataire_scan_valide) return;
+             vm.alldocument_prestataire_scan_valide.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDocument_prestataire_scan_valide.$selected = true;
+        });
+                //insertion ou mise a jours ou suppression item dans bdd document_prestataire_scan
+        function maj_in_baseDocument_prestataire_scan(document_prestataire_scan,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        document_prestataire_scan.id_document_prestataire_scan,
+                    fichier: document_prestataire_scan.fichier,
+                    date_elaboration: convertionDate(new Date(document_prestataire_scan.date_elaboration)),
+                    observation: document_prestataire_scan.observation,
+                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
+                    id_document_prestataire: document_prestataire_scan.id,
+                    validation:1               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("document_prestataire_scan/index",datas, config).success(function (data)
+            {   
+
+              vm.validation_document_prestataire_scan = 1;
+              document_prestataire_scan.validation=1;
+              //vm.alldocument_prestataire_scan_valide.push(document_prestataire_scan);
+              vm.selectedItemDocument_prestataire_scan = {};
+              vm.showbuttonValidation = false;
+
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.download_document_prestataire_scan = function(item)
+        {
+            window.location = apiUrlFile+item.fichier;
+        }
+
+
+    /******************************************debut dossier entreprise***********************************************/
+
+    /******************************************debut delai travaux***********************************************/
 
     //col table
         vm.delai_travaux_column = [

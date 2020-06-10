@@ -86,8 +86,7 @@
         //style
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
-          pagingType: 'simple',
-          autoWidth: false          
+          pagingType: 'simple'          
         };
 
      /*   apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalide').then(function(result)

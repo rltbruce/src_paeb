@@ -73,6 +73,7 @@
           nom: utilisateur.firstname,
           prenom: utilisateur.lastname,
           email: utilisateur.email,
+          telephone: utilisateur.telephone,
           password: utilisateur.password,
           id_region: utilisateur.id_region,
           id_district: utilisateur.id_district,

@@ -1,0 +1,85 @@
+
+
+  <md-dialog ng-cloak aria-label="dialog_type_effort">
+      <md-subheader style="background-color: rgb(245,245,245)">
+          <h2 mat-dialog-title  style="margin:0px">Ajout convention dans la programmation annuelle</h2>
+      </md-subheader>
+
+      <md-dialog-content layout="row" style="padding:0px">      
+          <div style=" margin:auto;">
+            <table class="dataTable row-border hover"  datatable="ng" dt-options="tOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="conve in ::conventiondialog_column">
+                  <div class="table-header">
+                    <span class="column-title">{{conve.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="conventionDialog in allconventionDialog"  ng-class="{selected: conventionDialog.$selected}" ng-click="selectionConventionDialog(conventionDialog)">
+                        <td>
+                          <span>{{conventionDialog.cisco.code}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{conventionDialog.feffi.denomination}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{conventionDialog.site.denomination_epp}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{affichage_type_convention(conventionDialog.type_convention)}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{conventionDialog.ref_convention}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{conventionDialog.objet}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{conventionDialog.ref_financement}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{conventionDialog.montant_total}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{conventionDialog.avancement}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{conventionDialog.user.nom}}</span>
+                        </td>
+
+                        <td>                          
+                          <md-checkbox ng-model="conventionDialog.envoi" aria-label="Checkbox envoi" ng-change="changecheckbox(conventionDialog)">
+                        </md-checkbox>
+                        </td>
+              </tr>
+            </tbody>
+          </table>
+
+          </div>
+      </md-dialog-content>
+
+      <md-dialog-actions layout="row" style="background-color: rgb(245,245,245)">
+          <span>
+            <md-button type="submit" class="md-raised md-accent" ng-click="dialognouveauajout()">Ajouter
+            </md-button>
+
+            <md-button type="submit" class="md-raised md-primary" ng-click="cancel()">Annuler</md-button>
+          </span>    
+      </md-dialog-actions>
+   
+  </md-dialog>
+
+

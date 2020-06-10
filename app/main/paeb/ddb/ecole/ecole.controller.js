@@ -16,6 +16,9 @@
         vm.allecole = [] ;
 
         vm.allfokontany = [] ;
+        vm.allcisco = [] ;
+        vm.allcommune = [] ;        
+        vm.allzap = [] ;
 
         vm.vuemap = false;
         vm.liste = [] ;
@@ -24,8 +27,7 @@
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
-          autoWidth: false,
-          responsive: true          
+          autoWidth: false          
         };
 
         //col table
@@ -34,9 +36,15 @@
         },
         {titre:"Denomination"
         },
-        {titre:"Lieu"
+        {titre:"Cisco"
+        },
+        {titre:"Commune"
+        },
+        {titre:"Zap"
         },
         {titre:"Fokontany"
+        },
+        {titre:"Village"
         },
         {titre:"Latitude"
         },
@@ -111,11 +119,35 @@
        */
 
         //recuperation donnée fokontany
-        apiFactory.getAll("fokontany/index").then(function(result)
+        apiFactory.getAll("cisco/index").then(function(result)
         {
-          vm.allfokontany= result.data.response;
-          console.log(vm.allfokontany);
+          vm.allcisco= result.data.response;
+          console.log(vm.allcisco);
         });
+
+        vm.change_cisco = function(item)
+        {
+          apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",item.id_cisco).then(function(result)
+          {
+                    vm.allcommune = result.data.response;
+                    console.log(vm.allcommune );
+          });
+
+        }
+
+        vm.change_commune = function(item)
+        {
+          apiFactory.getAPIgeneraliserREST("zap/index","cle_etrangere",item.id_commune).then(function(result)
+          {
+                    vm.allzap = result.data.response;
+                    console.log(vm.allzap);
+          });
+          apiFactory.getAPIgeneraliserREST("fokontany/index","cle_etrangere",item.id_commune).then(function(result)
+          {
+                    vm.allfokontany = result.data.response;
+                    console.log(vm.allfokontany);
+          });
+        }
 
          
 
@@ -131,6 +163,9 @@
               code: '',
               description: '',
               lieu: '',
+              id_cisco: '',
+              id_commune: '',
+              id_zap: '',
               id_fokontany: '',         
               latitude: '',
               longitude: '',
@@ -178,6 +213,9 @@
             item.code      = currentItem.code ;
             item.description = currentItem.description ;
             item.lieu = currentItem.lieu ;
+            item.id_cisco  = currentItem.id_cisco ;
+            item.id_commune  = currentItem.id_commune ;
+            item.id_zap  = currentItem.id_zap ;
             item.id_fokontany  = currentItem.id_fokontany ;
             item.latitude    = currentItem.latitude ;
             item.longitude   = currentItem.longitude ;
@@ -231,12 +269,32 @@
             item.code      = vm.selectedItem.code ;
             item.description = vm.selectedItem.description;
             item.lieu = vm.selectedItem.lieu;
+            item.id_cisco  = vm.selectedItem.cisco.id;
+            item.id_commune  = vm.selectedItem.commune.id;
+            item.id_zap  = vm.selectedItem.zap.id;
             item.id_fokontany  = vm.selectedItem.fokontany.id;
             item.latitude      = vm.selectedItem.latitude ;
             item.longitude = vm.selectedItem.longitude;
             item.altitude  = vm.selectedItem.altitude;
             item.id_zone_subvention = vm.selectedItem.zone_subvention.id ;
-            item.id_acces_zone = vm.selectedItem.acces_zone.id ; 
+            item.id_acces_zone = vm.selectedItem.acces_zone.id ;
+
+            apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",item.cisco.id).then(function(result)
+            {
+                      vm.allcommune = result.data.response;
+                      console.log(vm.allcommune );
+            });
+            apiFactory.getAPIgeneraliserREST("zap/index","cle_etrangere",item.commune.id).then(function(result)
+            {
+                      vm.allzap = result.data.response;
+                      console.log(vm.allzap);
+            });
+            apiFactory.getAPIgeneraliserREST("fokontany/index","cle_etrangere",item.commune.id).then(function(result)
+            {
+                      vm.allfokontany = result.data.response;
+                      console.log(vm.allfokontany);
+            });
+         
         };
 
         //fonction bouton suppression item ecole
@@ -271,6 +329,9 @@
                    if((cis[0].description!=currentItem.description) 
                     || (cis[0].code!=currentItem.code)
                     || (cis[0].lieu!=currentItem.lieu)
+                    || (cis[0].id_zap!=currentItem.id_zap)
+                    || (cis[0].id_commune!=currentItem.id_commune)
+                    || (cis[0].id_cisco!=currentItem.id_cisco)
                     || (cis[0].id_fokontany!=currentItem.id_fokontany)
                     || (cis[0].latitude!=currentItem.latitude)
                     || (cis[0].longitude!=currentItem.longitude)
@@ -313,6 +374,9 @@
                     latitude:    ecole.latitude,
                     longitude:   ecole.longitude,
                     altitude:    ecole.altitude,
+                    id_zap:  ecole.id_zap,
+                    id_commune:  ecole.id_commune,
+                    id_cisco:  ecole.id_cisco,
                     id_fokontany:  ecole.id_fokontany,
                     description: ecole.description,
                     id_zone_subvention: ecole.id_zone_subvention,
@@ -323,9 +387,21 @@
             apiFactory.add("ecole/index",datas, config).success(function (data)
             {
                 
-                var com = vm.allfokontany.filter(function(obj)
+                var foko = vm.allfokontany.filter(function(obj)
                 {
                     return obj.id == ecole.id_fokontany;
+                });
+                var cisc = vm.allcisco.filter(function(obj)
+                {
+                    return obj.id == ecole.id_cisco;
+                });
+                var com = vm.allcommune.filter(function(obj)
+                {
+                    return obj.id == ecole.id_commune;
+                });
+                var zap = vm.allzap.filter(function(obj)
+                {
+                    return obj.id == ecole.id_zap;
                 });
 
                 var zosub = vm.allzone_subvention.filter(function(obj)
@@ -343,15 +419,12 @@
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItem.description = ecole.description;
-                        vm.selectedItem.code       = ecole.code;
-                        vm.selectedItem.lieu       = ecole.lieu;
-                        vm.selectedItem.latitude   = ecole.latitude;
-                        vm.selectedItem.longitude  = ecole.longitude;
-                        vm.selectedItem.altitude   = ecole.altitude;
+                        vm.selectedItem.zap   = zap[0];
+                        vm.selectedItem.com  = com[0];
+                        vm.selectedItem.cisco   = cisc[0];
                         vm.selectedItem.zone_subvention   = zosub[0];
                         vm.selectedItem.acces_zone   = azone[0];
-                        vm.selectedItem.fokontany       = com[0];
+                        vm.selectedItem.fokontany       = foko[0];
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
                         vm.selectedItem ={};
@@ -366,15 +439,12 @@
                 }
                 else
                 {
-                  ecole.description =  ecole.description;
-                  ecole.code      =  ecole.code;
-                  ecole.lieu      =  ecole.lieu;
-                  ecole.latitude  =  ecole.latitude;
-                  ecole.longitude =  ecole.longitude;
-                  ecole.altitude  =  ecole.altitude;
+                  ecole.zap   = zap[0];
+                  ecole.com  = com[0];
+                  ecole.cisco   = cisc[0];
                   ecole.zone_subvention = zosub[0];
                   ecole.acces_zone = azone[0];
-                  ecole.fokontany   = com[0];
+                  ecole.fokontany   = foko[0];
                   ecole.id        =   String(data.response);              
                   NouvelItem = false;
             }
@@ -406,6 +476,7 @@
             .targetEvent()
           );
         }
+
 
        
 vm.ecolevueMap = {

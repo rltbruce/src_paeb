@@ -82,7 +82,7 @@
                 return "";
             }
         }
-        vm.staredItem = function(item)
+       /* vm.staredItem = function(item)
         {  
           var stared = false;
           if(parseInt(item.countAvenant.nbr)>0)
@@ -92,7 +92,7 @@
 
           return stared;
 
-        }
+        }*/
       /*****************debut convention entete***************/
 
         //col table

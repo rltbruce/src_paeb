@@ -62,6 +62,17 @@
                                   </div>
                                 </div>
                             </md-input-container>
+                            <md-input-container flex="100" flex-gt-xs="33">
+                              <input type="text" name="telephone" ng-model="vm.user.telephone"
+                                placeholder="telephone" ng-init="vm.user.telephone=''"
+                                required>
+                                <div ng-messages="userForm.telephone.$error"
+                                  role="alert">
+                                  <div ng-message="required">
+                                    <span>telephone obligatoire.</span>
+                                  </div>
+                                </div>
+                            </md-input-container>
 
                           
                             

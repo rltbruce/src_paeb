@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.convention_suivi', {
-            title: 'Convention suivi',
+            title: 'Suivi convention',
             icon  : 'icon-tile-four',
             state: 'app.paeb_convention_suivi',
 			weight: 1

@@ -4,11 +4,9 @@
 
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_daaf_feffi', [			
-            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.demande_deblocage_feffi',
-            //'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.validation_demande_deblocage_feffi',
-            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.validation_technique_deblocage_feffi',
-            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.validation_financiere_deblocage_feffi',
-            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.transfert_daaf'
+            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_bcaf',          
+            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_dpfi',          
+            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_daaf'
             ])       
         .config(config);
         var vs ;

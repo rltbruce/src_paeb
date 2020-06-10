@@ -1,4 +1,3 @@
-Validation
    <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
 
     <!-- HEADER -->
@@ -26,12 +25,108 @@ Validation
 
         <ms-form-wizard flex>
           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
-
-          <md-tab>
+            <md-tab>
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
                 <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">1</span>
-                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                      <i class="icon-check s16"></i>
+                  </span>
+                  <span class="ms-form-wizard-step-text">Convention validé</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body>
+              <div style="widht:100%;">
+                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.showformfiltre()" ng-show="vm.showbuttonfiltre">
+                        Filtre
+                  </md-button>
+                </div>
+              <div ng-show="vm.showfiltre">
+                  <form name="filtreform" class="md-inline-form" novalidate >
+                        <br>
+                      <div layout="column" layout-gt-xs="row">
+                          <md-input-container>
+                            <span>Date du</span>
+                          </md-input-container>
+
+                          <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required>                     
+                          </md-datepicker>
+
+                          <md-input-container>
+                            <span>&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
+                          </md-input-container>
+
+                          <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
+                          </md-datepicker>
+                        </div>
+                        <div>
+                         <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                      ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
+                                      Recherche
+                        </md-button>
+                        <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
+                                  Annuler
+                        </md-button>
+                        </div>
+                  </form>
+                  <md-divider></md-divider><br>
+                </div>
+              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                <thead>
+                  <tr>
+                    <th class="secondary-text" ng-repeat="prog in ::vm.convention_ufp_daaf_entete_column">
+                      <div class="table-header">
+                        <span class="column-title">{{prog.titre}}</span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                         
+                <tbody>
+                  <tr ng-repeat="convention_ufp_daaf_entete in vm.allconvention_ufp_daaf_entete"  ng-class="{selected: convention_ufp_daaf_entete.$selected}" ng-click="vm.selectionConvention_ufp_daaf_entete(convention_ufp_daaf_entete)">
+                    
+                    <td>
+                      <span>{{convention_ufp_daaf_entete.ref_convention}}</span>
+                    </td>
+                    
+                    <td>
+                      <span>{{convention_ufp_daaf_entete.daaf.objet}}</span>
+                    </td>
+
+                    <td>                          
+                      <span>{{convention_ufp_daaf_entete.ref_financement}}</span>
+                    </td>
+
+                    <td>                          
+                      <span >{{convention_ufp_daaf_entete.montant_trans_comm}}</span>
+                    </td>
+
+                    <td>         
+                      <span>{{convention_ufp_daaf_entete.frais_bancaire}}</span>
+                    </td>                
+
+                    <td>                                    
+                      <span>{{convention_ufp_daaf_entete.montant_convention}}</span>
+                    </td>                
+
+                    <td>                                    
+                      <span>{{convention_ufp_daaf_entete.num_vague}}</span>
+                    </td>                
+
+                    <td>                                    
+                      <span>{{convention_ufp_daaf_entete.nbr_bebeficiaire}}</span>
+                    </td> 
+                  </tr>
+                </tbody>
+              </table>
+            </md-tab-body>
+          </md-tab>
+          <md-tab ng-disabled="vm.stepOne==false">
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
                       <i class="icon-check s16"></i>
                 </span>
                 <span class="ms-form-wizard-step-text">Demande déblocage de fond</span>
@@ -39,19 +134,19 @@ Validation
             </md-tab-label>
             
             <md-tab-body>
-               <!--div style="widht:100%;">  
-                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.boutonEncourTraitement()" style="width:15%;" ng-disabled="vm.situation>1" ng-show="vm.showbutton">
+               <div style="widht:100%;">  
+                  <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_mettreencours()" style="width:15%;" ng-disabled="vm.situation>1" ng-show="vm.showbutton && vm.validation_item==1">
                     Mettre en-cours
                   </md-button>
 
-                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.buttonfinaliser()" style="width:10%;" ng-disabled="vm.situation>2" ng-show="vm.showbutton">
+                  <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_finaliser()" style="width:10%;" ng-disabled="vm.situation>2" ng-show="vm.showbutton && vm.validation_item==2">
                     Finalisée
                   </md-button>
 
-                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.buttonrejeter()" style="width:10%;" ng-disabled="vm.situation>3" ng-show="vm.showbutton">
+                  <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_rejeter()" style="width:10%;" ng-disabled="vm.situation>3" ng-show="vm.showbutton && vm.validation_item==2">
                     Rejeter
                   </md-button>
-              </div--> <br>
+              </div> <br>
 
               <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                 <thead>
@@ -66,9 +161,6 @@ Validation
                 <tbody>
                   <tr ng-repeat="demande_deblocage_daaf_validation_ufp in vm.alldemande_deblocage_daaf_valide_daaf"  ng-class="{selected: demande_deblocage_daaf_validation_ufp.$selected}" ng-click="vm.selectionDemande_deblocage_daaf_validation_ufp(demande_deblocage_daaf_validation_ufp)">
 
-                    <td>
-                      <span >{{demande_deblocage_daaf_validation_ufp.convention_ufp_daaf_entete.ref_convention}}</span>
-                    </td>
                     <td>
                       <span >{{demande_deblocage_daaf_validation_ufp.ref_demande}}</span>
                     </td>
@@ -113,14 +205,8 @@ Validation
                       <span >{{vm.formatDate(demande_deblocage_daaf_validation_ufp.date)}}</span>
                     </td>
 
-                    <!--td>
+                    <td>
                       <span >{{vm.situationdemande(demande_deblocage_daaf_validation_ufp.validation)}}</span>
-                    </td-->
-                                                 
-                    <td>  
-                      <a ng-if="!demande_deblocage_daaf_validation_ufp.$edit" ng-click="vm.demande_deblocage_daaf_mettreencours(demande_deblocage_daaf_validation_ufp)" title="Mettre en cours de traitement">
-                        <span class="icon-check-circle"></span>
-                      </a>
                     </td>
                   </tr>
                 </tbody>
@@ -129,23 +215,18 @@ Validation
             </md-tab-body>
           </md-tab>                   
 
-          <md-tab ng-disabled="vm.stepOne==false">
+          <md-tab ng-disabled="vm.stepTwo==false">
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
-                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
-                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
                       <i class="icon-check s16"></i>
                   </span>
                 <span class="ms-form-wizard-step-text">Pièce justificatif</span>
               </span>
             </md-tab-label>
             
-            <md-tab-body>
-               <div style="widht:100%;">  
-                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_daaf()" style="width:10%;">
-                    Nouveau
-                  </md-button>
-              </div> <br>
+            <md-tab-body> <br>
 
               <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
             <thead>
@@ -180,97 +261,114 @@ Validation
             </md-tab-body>
           </md-tab>
 
-          <md-tab>
+          <md-tab ng-disabled="vm.stepTwo==false || vm.validation_item!=3">
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
-                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">T</span>
-                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
                       <i class="icon-check s16"></i>
-                </span>
-                <span class="ms-form-wizard-step-text">Demande déblocage en cours de traitement</span>
+                  </span>
+                <span class="ms-form-wizard-step-text">Transfert</span>
               </span>
             </md-tab-label>
             
-            <md-tab-body> <br>
+            <md-tab-body>
+               <div style="widht:100%;">  
+                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterTransfert_ufp()" style="width:10%;" ng-show="vm.showbuttonNouvtransfert">
+                    Nouveau
+                  </md-button>
+              </div> <br>
+              <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                  <thead>
+                    <tr>
+                      <th class="secondary-text" ng-repeat="pai in ::vm.transfert_ufp_column">
+                        <div class="table-header">
+                          <span class="column-title">{{pai.titre}}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                           
+                  <tbody>
+                    <tr ng-repeat="transfert_ufp in vm.alltransfert_ufp"  ng-class="{selected: transfert_ufp.$selected}" ng-click="vm.selectionTransfert_ufp(transfert_ufp)">
+                                
+                      <td>
+                        <span ng-if="transfert_ufp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Montant transfert</label>
+                            <input name="montant_transfert" type="number" ng-model="transfert_ufp.montant_transfert" disabled/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!transfert_ufp.$edit">{{transfert_ufp.montant_transfert}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="transfert_ufp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Frais bancaire</label>
+                            <input name="frais_bancaire" type="text" ng-model="transfert_ufp.frais_bancaire" ng-change="vm.changeFraibancaire(transfert_ufp)"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!transfert_ufp.$edit">{{transfert_ufp.frais_bancaire}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="transfert_ufp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Montant total</label>
+                            <input name="montant_total" type="text" ng-model="transfert_ufp.montant_total" disabled/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!transfert_ufp.$edit">{{transfert_ufp.montant_total}}</span>
+                      </td>
 
-              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                <thead>
-                  <tr>
-                    <th class="secondary-text" ng-repeat="encour in ::vm.demande_deblocage_daaf_validation_ufp_column">
-                      <div class="table-header">
-                        <span class="column-title">{{encour.titre}}</span>
-                      </div>
-                    </th>
-                  </tr>
-                </thead>                     
-                <tbody>
-                  <tr ng-repeat="demande_deblocage_daaf_encours in vm.alldemande_deblocage_daaf_encours"  ng-class="{selected: demande_deblocage_daaf_encours.$selected}" ng-click="vm.selectionDemande_deblocage_daaf_encours(demande_deblocage_daaf_encours)">
-
-                    <td>
-                      <span >{{demande_deblocage_daaf_encours.convention_ufp_daaf_entete.ref_convention}}</span>
-                    </td>
-                    <td>
-                      <span >{{demande_deblocage_daaf_encours.ref_demande}}</span>
-                    </td>
-
-                    <td>
-                      <span >{{demande_deblocage_daaf_encours.objet}}</span>
-                    </td>
-
-                    <td>
-                      <span >{{demande_deblocage_daaf_encours.tranche.libelle}}</span>
-                    </td>
-
-                    <td>
-                      <span >{{demande_deblocage_daaf_encours.prevu}}</span>
-                    </td>
-
-                    <td>
-                      <span >{{demande_deblocage_daaf_encours.cumul}}</span>
-                    </td>
-
-                    <td>
-                      <span >{{demande_deblocage_daaf_encours.anterieur}}</span>
-                    </td>
-
-                    <td>
-                      <span >{{demande_deblocage_daaf_encours.tranche.periode}}</span>
-                    </td>
-
-                    <td>
-                      <span >{{demande_deblocage_daaf_encours.tranche.pourcentage}}</span>
-                    </td>
-
-                    <td>
-                      <span >{{demande_deblocage_daaf_encours.reste}}</span>
-                    </td>
-
-                    <td>
-                      <span >{{demande_deblocage_daaf_encours.convention_ufp_daaf_detail.numero_compte}}</span>
-                    </td>
-
-                    <td>
-                      <span >{{vm.formatDate(demande_deblocage_daaf_encours.date)}}</span>
-                    </td>
-
-                    <!--td>
-                      <span >{{vm.situationdemande(demande_deblocage_daaf_encours.validation)}}</span>
-                    </td-->
-                                                 
-                    <td>  
-                      <a ng-click="vm.demande_deblocage_daaf_finaliser(demande_deblocage_daaf_encours)" title="Finaliser">
-                        <span class="icon-check-circle"></span>
-                      </a>
-                      <a ng-click="vm.demande_deblocage_daaf_rejeter(demande_deblocage_daaf_encours)" title="Rejeter">
-                        <span class="icon-check-circle"></span>
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                       <td>
+                        <span ng-if="transfert_ufp.$edit">
+                          <md-datepicker ng-model="transfert_ufp.date" md-placeholder="Date" md-max-date="vm.date_now" required>                       
+                          </md-datepicker>
+                        </span>                          
+                        <span ng-if="!transfert_ufp.$edit">{{vm.formatDate(transfert_ufp.date)}}</span>
+                      </td>
+                                
+                      <td>
+                        <span ng-if="transfert_ufp.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Observation</label>
+                            <input name="observation" type="text" ng-model="transfert_ufp.observation"/>
+                          </md-input-container>   
+                        </span>
+                                  
+                        <span ng-if="!transfert_ufp.$edit">{{transfert_ufp.observation}}</span>
+                      </td>
+                                                   
+                      <td>
+                        <a ng-if="!transfert_ufp.$edit" ng-click="vm.modifierTransfert_ufp(transfert_ufp)" title="Modifier">
+                          <span class="icon-table-edit"></span>
+                        </a>
+                                  
+                        <a ng-if="!transfert_ufp.$edit" ng-click="vm.supprimerTransfert_ufp(transfert_ufp)" title="Supprimer">
+                          <span class="icon-delete"></span>
+                        </a>
+                                  
+                        <a ng-if="transfert_ufp.$edit" ng-click="vm.annulerTransfert_ufp(transfert_ufp)" title="Annuler modification">
+                          <span class="icon-cancel"></span>
+                        </a>
+                                  
+                        <a ng-if="transfert_ufp.$edit && transfert_ufp.montant_transfert && transfert_ufp.date && transfert_ufp.frais_bancaire && transfert_ufp.montant_total >''" ng-click="vm.ajoutTransfert_ufp(transfert_ufp,0)" title="Sauvegarder">
+                          <span class="icon-content-save"></span>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
              
             </md-tab-body>
-          </md-tab>
+          </md-tab>          
 <md-tab></md-tab>
           </md-tabs>
           </ms-form-wizard>       

@@ -46,7 +46,7 @@
           </div>
         </header>
                 
-          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
             <thead>
               <tr>
                 <th class="secondary-text" ng-repeat="cisc in ::vm.ecole_column">
@@ -79,16 +79,47 @@
                             
                   <span ng-if="!ecole.$edit">{{ecole.description}}</span>
                 </td>
-                          
+
                 <td>
                   <span ng-if="ecole.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
-                      <label>Lieu</label>
-                      <input name="Lieu" type="text" ng-model="ecole.lieu"/>
-                    </md-input-container>   
+                      <label>Cisco</label>
+                      <md-select ng-model="ecole.id_cisco"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_cisco(ecole)">
+                        <md-option ng-repeat="cisco in vm.allcisco" value="{{cisco.id}}">
+                                                            {{cisco.description}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
                   </span>
-                            
-                  <span ng-if="!ecole.$edit">{{ecole.lieu}}</span>
+                  <span ng-if="!ecole.$edit">{{ecole.cisco.description}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="ecole.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Commune</label>
+                      <md-select ng-model="ecole.id_commune"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_commune(ecole)">
+                        <md-option ng-repeat="commune in vm.allcommune" value="{{commune.id}}">
+                                                            {{commune.nom}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!ecole.$edit">{{ecole.commune.nom}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="ecole.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Zap</label>
+                      <md-select ng-model="ecole.id_zap"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="zap in vm.allzap" value="{{zap.id}}">
+                                                            {{zap.nom}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!ecole.$edit">{{ecole.zap.nom}}</span>
                 </td>
 
                 <td>
@@ -103,6 +134,17 @@
                     </md-input-container>  
                   </span>
                   <span ng-if="!ecole.$edit">{{ecole.fokontany.nom}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="ecole.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Lieu</label>
+                      <input name="Lieu" type="text" ng-model="ecole.lieu"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!ecole.$edit">{{ecole.lieu}}</span>
                 </td>
                           
                 <td>

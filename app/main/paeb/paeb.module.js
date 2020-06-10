@@ -12,13 +12,15 @@
             'app.paeb.administration',
             'app.paeb.ddb',
             'app.paeb.gerer_subvention_financiere',
+            'app.paeb.gerer_subvention_operation',
             'app.paeb.gerer_situation_feffi',
-            'app.paeb.gerer_convention_ufp_daaf',
-            'app.paeb.gerer_situation_entreprise',
-            'app.paeb.gerer_situation_moe',
-            'app.paeb.gerer_situation_pr',
-            'app.paeb.gerer_situation_reliquat',
-            'app.paeb.convention_suivi'
+            //'app.paeb.gerer_convention_ufp_daaf',
+            'app.paeb.convention_suivi',           
+            //'app.paeb.convention_suivi_acc',
+            'app.paeb.note_agence_acc',
+            //'app.paeb.suivi_bcaf',
+            //'app.paeb.suivi_daaf',
+            //'app.paeb.suivi_dpfi'
         ] ;
 
     angular

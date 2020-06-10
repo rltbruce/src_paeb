@@ -352,7 +352,7 @@ vm.mainGridOptions = {
             pageSize: 5,
           },
           toolbar: [{               
-               template: "<label id='table_titre'>ATTACHEMENT</label>"
+               template: "<label id='table_titre'>AVANCEMENT</label>"
           },{
                name: "create",
                text:"",
@@ -411,7 +411,7 @@ vm.mainGridOptions = {
         };
       };
 
-      vm.allattachement_latrine = function(id_annexe_latrine) {
+      vm.alldivers_attachement_batiment = function(id_type_batiment) {
         return {
           dataSource:
           {
@@ -419,7 +419,7 @@ vm.mainGridOptions = {
             transport: {
               read: function (e)
               {
-                apiFactory.getAPIgeneraliserREST("attachement_latrine/index","id_annexe_latrine",id_annexe_latrine).then(function(result)
+                apiFactory.getAPIgeneraliserREST("divers_attachement_batiment/index","menu","getattachementBytype_batiment","id_type_batiment",id_type_batiment).then(function(result)
                 {
                     e.success(result.data.response)
                 }, function error(result)
@@ -436,11 +436,10 @@ vm.mainGridOptions = {
                           id:        e.data.models[0].id,      
                           libelle:   e.data.models[0].libelle,
                           description: e.data.models[0].description,
-                          ponderation_latrine: e.data.models[0].ponderation_latrine,
-                          id_annexe_latrine: e.data.models[0].annexe_latrine.id               
+                          id_type_batiment: e.data.models[0].annexe_latrine.id               
                       });
                   
-                  apiFactory.add("attachement_latrine/index",datas, config).success(function (data)
+                  apiFactory.add("divers_attachement_batiment/index",datas, config).success(function (data)
                   {                
                     e.success(e.data.models); 
                   }).error(function (data)
@@ -454,7 +453,7 @@ vm.mainGridOptions = {
                  
                   var datas = $.param({supprimer: 1,id: e.data.models[0].id});
                   
-                  apiFactory.add("attachement_latrine/index",datas, config).success(function (data)
+                  apiFactory.add("divers_attachement_batiment/index",datas, config).success(function (data)
                   {                
                     e.success(e.data.models); 
                   }).error(function (data)
@@ -471,14 +470,14 @@ vm.mainGridOptions = {
                           id:        0,      
                           libelle:      e.data.models[0].libelle,
                           description:  e.data.models[0].description,
-                          ponderation_latrine:  e.data.models[0].ponderation_latrine,
-                          id_annexe_latrine:   id_annexe_latrine               
+                          id_type_batiment:   id_type_batiment               
                       });
                   
-                  apiFactory.add("attachement_latrine/index",datas, config).success(function (data)
+                  apiFactory.add("divers_attachement_batiment/index",datas, config).success(function (data)
                   { 
                     e.data.models[0].id = String(data.response);
-                    e.data.models[0].annexe_latrine={id:id_annexe_latrine};              
+                    e.data.models[0].annexe_latrine={id:id_type_batiment}
+                    ;              
                     e.success(e.data.models); 
                   }).error(function (data)
                     {
@@ -495,160 +494,7 @@ vm.mainGridOptions = {
                     fields:
                     {
                         libelle: {type: "string",validation: {required: true}},
-                        description: {type: "string", validation: {required: true}},
-                        ponderation_latrine: {type: "number", validation: {required: true}}
-                    }
-                }
-            },     
-            serverFiltering: true,
-            pageSize: 5,
-          },
-          toolbar: [{               
-               template: "<label id='table_titre'>ATTACHEMENT</label>"
-          },{
-               name: "create",
-               text:"",
-               iconClass: "k-icon k-i-table-light-dialog"
-               
-          }],
-          editable: {
-            mode:"inline"
-          },
-          selectable:"row",
-          scrollable: false,
-          sortable: true,
-          pageable:{refresh: true,
-                    pageSizes: true, 
-                    buttonCount: 3,
-                    messages: {
-                      empty: "Pas de donnée",
-                      display: "{0}-{1} pour {2} items",
-                      itemsPerPage: "items par page",
-                      next: "Page suivant",
-                      previous: "Page précédant",
-                      refresh: "Actualiser",
-                      first: "Première page",
-                      last: "Dernière page"
-                    }
-                  },
-          //dataBound: function() {
-                   // this.expandRow(this.tbody.find("tr.k-master-row").first());
-               // },
-          columns: [
-            {
-              field: "libelle",
-              title: "Libelle",
-              width: "Auto"
-            },
-            {
-              field: "description",
-              title: "Description",
-              width: "Auto"
-            },
-            {
-              field: "ponderation_latrine",
-              title: "Ponderation latrine",
-              width: "Auto"
-            },
-            { 
-              title: "Action",
-              width: "Auto",
-              command:[{
-                      name: "edit",
-                      text: {edit: "",update: "",cancel: ""},
-                      //iconClass: {edit: "k-icon k-i-edit",update: "k-icon k-i-update",cancel: "k-icon k-i-cancel"
-                       // },
-                  },{name: "destroy", text: ""}]
-            }]
-        };
-      };
-
-      vm.allattachement_mobilier = function(id_annexe_mobilier) {
-        return {
-          dataSource:
-          {
-            type: "json",
-            transport: {
-              read: function (e)
-              {
-                apiFactory.getAPIgeneraliserREST("attachement_mobilier/index","id_annexe_mobilier",id_annexe_mobilier).then(function(result)
-                {
-                    e.success(result.data.response)
-                }, function error(result)
-                  {
-                      alert('something went wrong')
-                  })
-              },
-              update : function (e)
-              {
-                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
-                  
-                  var datas = $.param({
-                          supprimer: 0,
-                          id:        e.data.models[0].id,      
-                          libelle:   e.data.models[0].libelle,
-                          description: e.data.models[0].description,
-                          ponderation_mobilier: e.data.models[0].ponderation_mobilier,
-                          id_annexe_mobilier: e.data.models[0].annexe_mobilier.id               
-                      });
-                  
-                  apiFactory.add("attachement_mobilier/index",datas, config).success(function (data)
-                  {                
-                    e.success(e.data.models); 
-                  }).error(function (data)
-                    {
-                      vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
-                    });      
-              },
-              destroy : function (e)
-              {
-                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
-                 
-                  var datas = $.param({supprimer: 1,id: e.data.models[0].id});
-                  
-                  apiFactory.add("attachement_mobilier/index",datas, config).success(function (data)
-                  {                
-                    e.success(e.data.models); 
-                  }).error(function (data)
-                    {
-                      vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
-                    });      
-              },
-              create : function (e)
-              {
-                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
-                  
-                  var datas = $.param({
-                          supprimer: 0,
-                          id:        0,      
-                          libelle:      e.data.models[0].libelle,
-                          description:  e.data.models[0].description,
-                          ponderation_mobilier:  e.data.models[0].ponderation_mobilier,
-                          id_annexe_mobilier:   id_annexe_mobilier               
-                      });
-                  
-                  apiFactory.add("attachement_mobilier/index",datas, config).success(function (data)
-                  { 
-                    e.data.models[0].id = String(data.response);
-                    e.data.models[0].annexe_mobilier={id:id_annexe_mobilier};              
-                    e.success(e.data.models); 
-                  }).error(function (data)
-                    {
-                      vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
-                    });      
-              }
-            },
-            batch: true,
-            schema:
-            {
-                model:
-                {
-                    id: "id",
-                    fields:
-                    {
-                        libelle: {type: "string",validation: {required: true}},
-                        description: {type: "string", validation: {required: true}},
-                        ponderation_mobilier: {type: "number", validation: {required: true}}
+                        description: {type: "string", validation: {required: true}}
                     }
                 }
             },     
@@ -695,11 +541,6 @@ vm.mainGridOptions = {
             {
               field: "description",
               title: "Description",
-              width: "Auto"
-            },
-            {
-              field: "ponderation_mobilier",
-              title: "Ponderation mobilier",
               width: "Auto"
             },
             { 

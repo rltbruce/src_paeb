@@ -1,0 +1,415 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column" >
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between" >
+        <div layout="column" layout-align="space-between" style="height: 10px !important;">
+            <div class="breadcrumb" layout="row" layout-align="start center" >
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Suivi convention CISCO/FEFFI</span>
+                
+                <!--md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Convention CISCO/FEFFI</span-->
+            </div>
+
+            <!--div class="title">Convention CISCO/FEFFI</div-->
+                                       
+            
+        </div>
+        
+    </div>    
+    
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+      <div class="form-wrapper md-whiteframe-1dp" >
+        <div style="clear:both;"></div>            
+            <div style="float: top !important">
+              <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+              <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                      Chargement,veuillez patienter s'il vous plait ...
+              </div>
+            </div>
+<!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
+         <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="">
+
+    <!------------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
+                    <md-tab>
+                      <md-tab-label >
+                        <span class="ms-form-wizard-step-label">
+                            
+                            <!--span class="ms-form-wizard-step-number md-accent-bg">
+                                <i class="icon-basket-fill s16"></i>
+                            </span-->
+                            <span class="ms-form-wizard-step-text">Estimation convention</span>
+                            <!--span class="ms-form-wizard-step-number md-accent-bg notification" >{{+vm.nbr_demande_feffi_creer + +vm.nbr_decaiss_feffi}}</span-->
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body>
+                        <div>
+                          <form name="filtreform" class="md-inline-form" novalidate >
+                                <br>
+                              <div layout="column" layout-gt-xs="row">
+                                  <md-input-container>
+                                    <span>Date du</span>
+                                  </md-input-container>
+
+                                  <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required>                     
+                                  </md-datepicker>
+
+                                  <md-input-container>
+                                    <span>&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
+                                  </md-input-container>
+
+                                  <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
+                                  </md-datepicker>
+
+                                  <!--md-datepicker ng-model="vm.filtre.date_fin" md-placeholder="Enter date de fin"
+                                md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow"  md-date-locale="monthFormat" md-open-on-focus="true" ng-disabled="!vm.filtre.date_debut" required md-mode="'month'">                        
+                                  </md-datepicker-->
+                                </div>
+                                <div layout="column" layout-gt-xs="row" ng-show="vm.session=='ADMIN' || vm.session=='ODAAF' || vm.session=='DAAF' || vm.session=='ODPFI' || vm.session=='DPFI' || vm.session=='UFP'">
+
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Lot</label>
+                                    <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                                      <md-option value="1">Lot 1</md-option>
+                                      <md-option value="2">Lot 2</md-option>
+                                      <md-option value="3">Lot 3</md-option>
+                                      <md-option value="4">Lot 4</md-option>
+                                    </md-select>
+                                    <div ng-messages="filtreform.lot.$error" role="alert">
+                                      <div ng-message="required"><span>Lot</span></div>
+                                    </div>
+                                  </md-input-container>
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Région</label>
+                                    <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
+                                    </md-select>
+                                    <div ng-messages="filtreform.region.$error" role="alert">
+                                      <div ng-message="required"><span>Région</span></div>
+                                    </div>
+                                  </md-input-container>
+                                  
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Cisco</label>
+                                    <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                                                  
+                                     </md-select>
+                                     <div ng-messages="filtreform.cisco.$error" role="alert">
+                                      <div ng-message="required"><span>Cisco</span></div>
+                                    </div>
+                                  </md-input-container>
+                                  
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Commune</label>
+                                    <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
+                                    </md-select>
+                                    <div ng-messages="filtreform.commune.$error" role="alert">
+                                      <div ng-message="required"><span>Commune</span></div>
+                                    </div>
+                                  </md-input-container>
+                                  
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Ecole</label>
+                                    <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.code}}
+                                      </md-option>
+                                    </md-select>
+                                    <div ng-messages="filtreform.ecole.$error" role="alert">
+                                      <div ng-message="required"><span>Ecole</span></div>
+                                    </div>
+                                  </md-input-container>
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Convention</label>
+                                    <md-select ng-model="vm.filtre.id_convention_entete" name="convention" ng-disabled="!vm.filtre.id_ecole">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="eco in vm.convention_cisco_feffi_entetes" value="{{eco.id}}"> {{eco.ref_convention}}
+                                      </md-option>
+                                    </md-select>  
+                                    <div ng-messages="filtreform.convention_entete.$error" role="alert">
+                                      <div ng-message="required"><span>Convention</span></div>
+                                    </div>
+                                  </md-input-container>
+                                </div>
+
+                                <div>
+                                 <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                      ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
+                                      Recherche
+                                </md-button>
+                                <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
+                                  Annuler
+                                </md-button>
+                                </div>
+                          </form>
+                          <md-divider></md-divider><br>
+                        </div>
+
+                        <div>        
+                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                              <thead>
+                                <tr>
+                                  <th class="secondary-text" ng-repeat="conv_ente in ::vm.convention_entete_column">
+                                    <div class="table-header">
+                                        <span class="column-title">{{conv_ente.titre}}</span>
+                                    </div>
+                                  </th>
+                                </tr>
+                              </thead>
+                                             
+                              <tbody>
+                                <tr ng-repeat="convention_entete in vm.allconvention_entete"  ng-class="{selected: convention_entete.$selected}" ng-click="vm.selectionConvention_entete(convention_entete)">           
+                                  <td>
+                                    <span>{{convention_entete.cisco.code}}</span>
+                                  </td>
+
+                                  <td>
+                                          <span>{{convention_entete.feffi.denomination}}</span>
+                                  </td>
+
+                                  <td>
+                                    <span>{{convention_entete.site.denomination_epp}}</span>
+                                  </td>
+
+                                  <td>                         
+                                    <span>{{convention_entete.ref_convention}}</span>
+                                  </td>
+
+                                  <td>                         
+                                    <span>{{convention_entete.objet}}</span>
+                                  </td>
+
+                                  <td>                                    
+                                    <span>{{convention_entete.ref_financement}}</span>
+                                  </td>
+
+                                  <td>                          
+                                    <span>{{convention_entete.montant_total}}</span>
+                                  </td>
+
+                                  <td>                          
+                                    <span>{{convention_entete.avancement}}</span>
+                                  </td>
+
+                                  <td>                          
+                                    <span>{{convention_entete.user.nom}}</span>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </md-tab-body>
+                    </md-tab>
+
+                  <!----------------------------DEBUT ESTIMATION CONVENTION-convention cisco/feffi---------------->
+
+                  <!----------------------------DEBUT SUIVI FINANCIER FEFFI---------------------------------------->
+                  <md-tab ng-disabled="vm.stepMenu_feffi==false">
+                    <md-tab-label >
+                      <span class="ms-form-wizard-step-label">
+                          
+                          <!--span class="ms-form-wizard-step-number md-accent-bg" style="">
+                            <i class="icon-currency-eur s20"></i>
+                          </span-->
+                          <span class="ms-form-wizard-step-text">Suivi financier FEFFI</span>
+                          <span class="ms-form-wizard-step-number md-accent-bg notification" ng-show="vm.nbr_demande_feffi_creer>0">{{+vm.nbr_demande_feffi_creer+ +vm.nbr_decaiss_feffi}}</span>
+                          <span class="ms-form-wizard-step-number md-accent-bg notification" ng-show="vm.nbr_demande_feffi_emidaaf+vm.nbr_demande_feffi_encourdaaf>0">{{+vm.nbr_demande_feffi_emidaaf+ +vm.nbr_demande_feffi_encourdaaf+ +vm.nbr_decaiss_feffi}}</span>
+                          <span class="ms-form-wizard-step-number md-accent-bg notification" ng-show="(vm.nbr_demande_feffi_emidpfi+vm.nbr_demande_feffi_encourdpfi)>0">{{+vm.nbr_demande_feffi_emidpfi+ +vm.nbr_demande_feffi_encourdpfi}}</span>
+                      </span>
+                     
+                    </md-tab-label>
+                            
+                            <md-tab-body><br>
+
+                              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                <thead>
+                                  <tr>
+                                    <th class="secondary-text" ng-repeat="cisc in ::vm.demande_realimentation_column">
+                                      <div class="table-header">
+                                        <span class="column-title">{{cisc.titre}}</span>
+                                      </div>
+                                    </th>
+                                  </tr>
+                                </thead>                     
+                                <tbody>
+                                 <tr ng-repeat="demande_realimentation in vm.alldemande_realimentation_invalide"  ng-class="{selected: demande_realimentation.$selected}" ng-click="vm.selectionDemande_realimentation(demande_realimentation)">                             
+
+                                    <td>
+                                      <span>{{demande_realimentation.tranche.libelle}}</span>
+                                    </td>
+
+                                    <td>
+                                      <span>{{demande_realimentation.prevu}}</span>
+                                    </td>
+
+                                    <td>
+                                      <span>{{demande_realimentation.cumul}}</span>
+                                    </td>
+
+                                    <td>
+                                      <span>{{demande_realimentation.anterieur}}</span>
+                                    </td>
+
+                                    <td>
+                                      <span>{{demande_realimentation.tranche.periode}}</span>
+                                    </td>
+
+                                    <td>
+                                      <span>{{demande_realimentation.tranche.pourcentage}}</span>
+                                    </td>
+
+                                    <td>
+                                      <span>{{demande_realimentation.reste}}</span>
+                                    </td>
+                                    <td>
+                                      <span>{{demande_realimentation.compte_feffi.numero_compte}}</span>
+                                    </td>
+                                    <td>
+                                      <span>{{demande_realimentation.compte_feffi.numero_compte}}</span>
+                                    </td>
+
+                                    <td>
+                                      <span>{{vm.formatDate(demande_realimentation.date)}}</span>
+                                    </td>
+                                    <td>
+                                      <span >{{vm.situationdemande(demande_realimentation.validation)}}</span>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                             
+                            </md-tab-body>
+                          </md-tab>
+                    <!---------------------------------FIN DEMANDE PAYEMENT----------------------------------------------->
+
+                   <!---------------------------------------DEBUT Transfert daaf----------------------------------------->
+
+                        <md-tab ng-disabled="vm.steptransdaaf==false || vm.validation!=7" ng-if="vm.session!='ODPFI' || vm.session!='OBCAF' ">
+                          <md-tab-label>
+                            <span class="ms-form-wizard-step-label">
+                                <!--span class="ms-form-wizard-step-number md-accent-bg">
+                                    <i class="icon-currency-eur s16"></i>
+                                </span-->
+                              <span class="ms-form-wizard-step-text">Transfert</span>
+                            </span>
+                          </md-tab-label>
+                          
+                          <md-tab-body>
+                             <div style="widht:100%;">  
+                                <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterTransfert_daaf()" style="width:10%;" ng-if="vm.showbuttonNouvtransfert_daaf">
+                                  Nouveau
+                                </md-button>
+                            </div> <br>
+
+                            <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                          <thead>
+                            <tr>
+                              <th class="secondary-text" ng-repeat="cisc in ::vm.transfert_daaf_column">
+                                <div class="table-header">
+                                  <span class="column-title">{{cisc.titre}}</span>
+                                </div>
+                              </th>
+                            </tr>
+                          </thead>                     
+                          <tbody>
+                            <tr ng-repeat="transfert_daaf in vm.alltransfert_daaf"  ng-class="{selected: transfert_daaf.$selected}" ng-click="vm.selectionTransfert_daaf(transfert_daaf)">
+                                              
+                                    <td>
+                                      <span ng-if="transfert_daaf.$edit">
+                                        <md-input-container style="width:100%;display: flex !important;">
+                                          <label>Montant transfert</label>
+                                          <input name="montant_transfert" type="number" ng-model="transfert_daaf.montant_transfert" disabled/>
+                                        </md-input-container>   
+                                      </span>
+                                                
+                                      <span ng-if="!transfert_daaf.$edit">{{transfert_daaf.montant_transfert}}</span>
+                                    </td>
+                                              
+                                    <td>
+                                      <span ng-if="transfert_daaf.$edit">
+                                        <md-input-container style="width:100%;display: flex !important;">
+                                          <label>Frais bancaire</label>
+                                          <input name="frais_bancaire" type="text" ng-model="transfert_daaf.frais_bancaire" ng-change="vm.changeFraibancaire(transfert_daaf)"/>
+                                        </md-input-container>   
+                                      </span>
+                                                
+                                      <span ng-if="!transfert_daaf.$edit">{{transfert_daaf.frais_bancaire}}</span>
+                                    </td>
+                                              
+                                    <td>
+                                      <span ng-if="transfert_daaf.$edit">
+                                        <md-input-container style="width:100%;display: flex !important;">
+                                          <label>Montant total</label>
+                                          <input name="montant_total" type="text" ng-model="transfert_daaf.montant_total" disabled/>
+                                        </md-input-container>   
+                                      </span>
+                                                
+                                      <span ng-if="!transfert_daaf.$edit">{{transfert_daaf.montant_total}}</span>
+                                    </td>
+
+                                     <td>
+                                      <span ng-if="transfert_daaf.$edit">
+                                        <md-datepicker ng-model="transfert_daaf.date" md-placeholder="Date" md-max-date="vm.datenow" required>                       
+                                        </md-datepicker>
+                                      </span>                          
+                                      <span ng-if="!transfert_daaf.$edit">{{vm.formatDate(transfert_daaf.date)}}</span>
+                                    </td>
+                                    <td>                                                
+                                      <span>{{vm.affichage_trans(transfert_daaf.validation)}}</span>
+                                    </td>
+                                              
+                                    <td>
+                                      <span ng-if="transfert_daaf.$edit">
+                                        <md-input-container style="width:100%;display: flex !important;">
+                                          <label>Observation</label>
+                                          <input name="observation" type="text" ng-model="transfert_daaf.observation"/>
+                                        </md-input-container>   
+                                      </span>
+                                                
+                                      <span ng-if="!transfert_daaf.$edit">{{transfert_daaf.observation}}</span>
+                                    </td>
+                                                                 
+                                    <td>
+                                      <a ng-if="!transfert_daaf.$edit && transfert_daaf.validation==0" ng-click="vm.modifierTransfert_daaf(transfert_daaf)" title="Modifier">
+                                        <span class="icon-table-edit"></span>
+                                      </a>
+                                                
+                                      <a ng-if="!transfert_daaf.$edit && transfert_daaf.validation==0" ng-click="vm.supprimerTransfert_daaf(transfert_daaf)" title="Supprimer">
+                                        <span class="icon-delete"></span>
+                                      </a>
+                                      <span ng-if=" transfert_daaf.validation==1">Aucune action disponible</span>        
+                                      <a ng-if="transfert_daaf.$edit" ng-click="vm.annulerTransfert_daaf(transfert_daaf)" title="Annuler modification">
+                                        <span class="icon-cancel"></span>
+                                      </a>
+                                                
+                                      <a ng-if="transfert_daaf.$edit && transfert_daaf.montant_transfert && transfert_daaf.date && transfert_daaf.frais_bancaire && transfert_daaf.montant_total >''" ng-click="vm.ajoutTransfert_daaf(transfert_daaf,0)" title="Sauvegarder">
+                                        <span class="icon-content-save"></span>
+                                      </a>
+                                    </td>
+                                  </tr>
+                          </tbody>
+                        </table>
+                          </md-tab-body>
+                        </md-tab>
+                    <!--------------------------------------Fin Transfert daaf-------------------------------------------->
+            
+          </md-tabs>
+        </ms-form-wizard> 
+<!------------------------------------FIN TABS MERE--------------------------------------------------->    
+       </div>
+      
+    </div>
+    <!-- / CONTENT -->
+  </div>

@@ -4,22 +4,19 @@
 
     angular
         .module('app.paeb.gerer_situation_entreprise', [
-            'app.paeb.gerer_situation_entreprise.passation_marches',
-            'app.paeb.gerer_situation_entreprise.contrat_prestataire',
-            //'app.paeb.gerer_situation_entreprise.demande_batiment_prestataire',
-            //'app.paeb.gerer_situation_entreprise.suivi_execution_travaux',
-            'app.paeb.gerer_situation_entreprise.prestation_mpe',
-            'app.paeb.gerer_situation_entreprise.demande_payement_prestataire_valide',
-            //'app.paeb.gerer_situation_entreprise.validation_demande_bcaf',
-            'app.paeb.gerer_situation_entreprise.validation_demande_dpfi',
-            'app.paeb.gerer_situation_entreprise.validation_demande_daaf',
-            'app.paeb.gerer_situation_entreprise.paiement_mpe',
+            //'app.paeb.gerer_situation_entreprise.passation_marches',
+            //'app.paeb.gerer_situation_entreprise.contrat_prestataire',
+            //'app.paeb.gerer_situation_entreprise.prestation_mpe',
+            //'app.paeb.gerer_situation_entreprise.demande_payement_prestataire_valide',
+            //'app.paeb.gerer_situation_entreprise.validation_demande_dpfi',
+            //'app.paeb.gerer_situation_entreprise.validation_demande_daaf',
+            //'app.paeb.gerer_situation_entreprise.paiement_mpe',
             'app.paeb.gerer_situation_entreprise.document_prestataire_scan',
             'app.paeb.gerer_situation_entreprise.dossier_prestataire',
-            'app.paeb.gerer_situation_entreprise.suivi_physique_travaux',
-            'app.paeb.gerer_situation_entreprise.demande_paiement_prestataire',
-            'app.paeb.gerer_situation_entreprise.reception_mpe',
-            'app.paeb.gerer_situation_entreprise.suivi_financier_mpe'
+            //'app.paeb.gerer_situation_entreprise.suivi_physique_travaux',
+            //'app.paeb.gerer_situation_entreprise.demande_paiement_prestataire',
+            //'app.paeb.gerer_situation_entreprise.reception_mpe',
+            //'app.paeb.gerer_situation_entreprise.suivi_financier_mpe'
 
             ])      
         .config(config);

@@ -427,6 +427,150 @@ vm.mainGridOptions = {
             }]
         };
       };
+      
+      vm.alldivers_attachement_mobilier = function(id_type_mobilier) {
+        return {
+          dataSource:
+          {
+            type: "json",
+            transport: {
+              read: function (e)
+              {
+                apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier/index","menu","getattachementBytype_mobilier","id_type_mobilier",id_type_mobilier).then(function(result)
+                {
+                    e.success(result.data.response)
+                }, function error(result)
+                  {
+                      alert('something went wrong')
+                  })
+              },
+              update : function (e)
+              {
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        e.data.models[0].id,      
+                          libelle:   e.data.models[0].libelle,
+                          description: e.data.models[0].description,
+                          id_type_mobilier: e.data.models[0].type_mobilier.id               
+                      });
+                  
+                  apiFactory.add("divers_attachement_mobilier/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              },
+              destroy : function (e)
+              {
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                 
+                  var datas = $.param({supprimer: 1,id: e.data.models[0].id});
+                  
+                  apiFactory.add("divers_attachement_mobilier/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              },
+              create : function (e)
+              {
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        0,      
+                          libelle:      e.data.models[0].libelle,
+                          description:  e.data.models[0].description,
+                          id_type_mobilier:   id_type_mobilier               
+                      });
+                  
+                  apiFactory.add("divers_attachement_mobilier/index",datas, config).success(function (data)
+                  { 
+                    e.data.models[0].id = String(data.response);
+                    e.data.models[0].type_mobilier={id:id_type_mobilier};              
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              }
+            },
+            batch: true,
+            schema:
+            {
+                model:
+                {
+                    id: "id",
+                    fields:
+                    {
+                        libelle: {type: "string",validation: {required: true}},
+                        description: {type: "string", validation: {required: true}}
+                    }
+                }
+            },     
+            serverFiltering: true,
+            pageSize: 5,
+          },
+          toolbar: [{               
+               template: "<label id='table_titre'></label>"
+          },{
+               name: "create",
+               text:"",
+               iconClass: "k-icon k-i-table-light-dialog"
+               
+          }],
+          editable: {
+            mode:"inline"
+          },
+          selectable:"row",
+          scrollable: false,
+          sortable: true,
+          pageable:{refresh: true,
+                    pageSizes: true, 
+                    buttonCount: 3,
+                    messages: {
+                      empty: "Pas de donnée",
+                      display: "{0}-{1} pour {2} items",
+                      itemsPerPage: "items par page",
+                      next: "Page suivant",
+                      previous: "Page précédant",
+                      refresh: "Actualiser",
+                      first: "Première page",
+                      last: "Dernière page"
+                    }
+                  },
+          //dataBound: function() {
+                   // this.expandRow(this.tbody.find("tr.k-master-row").first());
+               // },
+          columns: [
+            {
+              field: "libelle",
+              title: "Libelle",
+              width: "Auto"
+            },
+            {
+              field: "description",
+              title: "Description",
+              width: "Auto"
+            },
+            { 
+              title: "Action",
+              width: "Auto",
+              command:[{
+                      name: "edit",
+                      text: {edit: "",update: "",cancel: ""},
+                      //iconClass: {edit: "k-icon k-i-edit",update: "k-icon k-i-update",cancel: "k-icon k-i-cancel"
+                       // },
+                  },{name: "destroy", text: ""}]
+            }]
+        };
+      };
 
 /* ***************FIN TYPE OUVRAGE**********************/
         

@@ -34,7 +34,6 @@
             icon  : 'icon-tile-four',
             state: 'app.paeb_gerer_subvention_financiere_niveau_ufp_daaf_demande_deblocage_daaf_validation_daaf',
             weight: 1,
-            badge:vs,
             hidden:function()
             {
                     return affichage;
@@ -66,7 +65,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DAAF"];
+                var permissions = ["DAAF","ADMIN"];
                 affichage =  loginService.gestionMenu(permissions,permission);  
 
                 //**************************************************

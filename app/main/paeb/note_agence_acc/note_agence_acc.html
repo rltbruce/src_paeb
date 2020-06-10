@@ -1,0 +1,167 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Note agence d'accompagnement</span>                
+            </div>
+
+            <div class="title">Note agence d'accompagnement</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Convention -->
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+       <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start" flex>
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Note</span>
+              </div>
+
+              <div>
+
+                <md-button class="md-icon-button" aria-label="add note_agence_acc" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout note</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+        
+            <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-click="vm.afficherfiltre()">
+                             Filtre
+            </md-button>
+          <div ng-show="vm.showfiltre">
+              <form name="filtreform" class="md-inline-form" novalidate >
+                                
+                <div layout="column" layout-gt-xs="row">
+                    <md-input-container flex="100" flex-gt-xs="90">
+                        <label>Année</label>
+                        <md-select ng-model="vm.filtre.annee" name="annee" required>
+                            <md-option ng-repeat="annee in vm.allannee" value="{{annee}}" > {{annee}}</md-option>
+                        </md-select>
+                        <div ng-messages="filtreform.annee.$error" role="alert">
+                            <div ng-message="required"><span>Année</span></div>
+                        </div>
+                    </md-input-container>
+                                  
+                    <md-input-container flex="100" flex-gt-xs="90">
+                        <label>Agence d'accompagnement</label>
+                        <md-select ng-model="vm.filtre.id_agence_acc" name="agence_acc">
+                            <md-option  value="*">*</md-option>
+                            <md-option ng-repeat="agen in vm.allagence_acc" value="{{agen.id}}"> {{agen.nom}}</md-option>
+                        </md-select>
+                        <div ng-messages="filtreform.agence_acc.$error" role="alert">
+                            <div ng-message="required"><span>agence d'accompagnement</span></div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div>
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
+                             Recherche
+                    </md-button>
+                    <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
+                                  Annuler
+                    </md-button>
+                </div>
+                </form>
+                <md-divider></md-divider><br>
+              </div>
+      
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="cisc in ::vm.note_agence_acc_column">
+                  <div class="table-header">
+                    <span class="column-title">{{cisc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody >
+              <tr ng-repeat="note_agence_acc in vm.allnote_agence_acc"  ng-class="{selected: note_agence_acc.$selected}" ng-click="vm.selection(note_agence_acc)">
+
+                <td>
+                  <span ng-if="note_agence_acc.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Année</label>
+                      <md-select ng-model="note_agence_acc.annee"style="overflow: hidden;text-overflow: ellipsis;" >
+                        <md-option ng-repeat="annee in vm.allannee" value="{{annee}}">
+                                                            {{annee}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!note_agence_acc.$edit">{{note_agence_acc.annee}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="note_agence_acc.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Agence d'accompagnement</label>
+                      <md-select ng-model="note_agence_acc.id_agence_acc"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="agence_acc in vm.allagence_acc" value="{{agence_acc.id}}">
+                                                            {{agence_acc.nom}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!note_agence_acc.$edit">{{note_agence_acc.agence_acc.nom}}</span>
+                </td>          
+                <td>
+                  <span ng-if="note_agence_acc.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Note</label>
+                      <input name="note" type="text" ng-model="note_agence_acc.note"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!note_agence_acc.$edit">{{note_agence_acc.note}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="note_agence_acc.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>observation</label>
+                      <input name="observation" type="text" ng-model="note_agence_acc.observation"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!note_agence_acc.$edit">{{note_agence_acc.observation}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!note_agence_acc.$edit && note_agence_acc.validation==0" ng-click="vm.modifier(note_agence_acc)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!note_agence_acc.$edit && note_agence_acc.validation==0" ng-click="vm.supprimer(note_agence_acc)" title="Supprimer">
+                    <span class="icon-delete"></span>
+                  </a>
+                   <span ng-if="!note_agence_acc.$edit && note_agence_acc.validation==1"></span>         
+                  <a ng-if="note_agence_acc.$edit" ng-click="vm.annuler(note_agence_acc)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="note_agence_acc.$edit && note_agence_acc.annee && note_agence_acc.id_agence_acc>''" ng-click="vm.ajout(note_agence_acc,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>       
+                     
+      </div>
+      <!-- / convention -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

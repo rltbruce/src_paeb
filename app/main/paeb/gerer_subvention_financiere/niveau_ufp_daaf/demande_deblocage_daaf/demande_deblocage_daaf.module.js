@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_ufp_daaf.demande_deblocage_daaf', {
-            title: 'Saisie Demande daaf',
+            title: 'Saisie demande',
             icon  : 'icon-tile-four',
             state: 'app.paeb_gerer_subvention_financiere_niveau_ufp_daaf_demande_deblocage_daaf',
             weight: 1,
@@ -54,7 +54,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DAAF","ODAAF"];
+                var permissions = ["ODAAF","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

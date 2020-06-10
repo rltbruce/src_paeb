@@ -34,6 +34,17 @@
                     </div>
                 </md-input-container>
 
+                <md-input-container class="md-block" >
+                    <input type="text" name="telephone" ng-model="vm.registerForm.telephone" placeholder="Téléphone" required>
+                    <div ng-messages="registerForm.telephone.$error"
+                         role="alert">                        
+                      <div ng-message="required">
+                        <span>Numéro téléphone obligatoire.</span>
+                      </div>
+
+                    </div>
+                </md-input-container>
+
 
                 <md-input-container class="md-block" >
                     <input type="email" name="email" ng-model="vm.registerForm.email"

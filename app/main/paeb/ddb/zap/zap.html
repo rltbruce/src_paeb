@@ -1,0 +1,98 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Zap</span>
+            </div>
+
+            <div class="title">Zap</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- zap -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Zap</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add zap" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout zap</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="zp in ::vm.zap_column">
+                  <div class="table-header">
+                    <span class="column-title">{{zp.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="zap in vm.allzap"  ng-class="{selected: zap.$selected}" ng-click="vm.selection(zap)">           
+                <td>
+                  <span ng-if="zap.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Code</label>
+                      <input name="code" type="text" ng-model="zap.code"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!zap.$edit">{{zap.code}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="zap.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Nom</label>
+                      <input name="nom" type="text" ng-model="zap.nom"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!zap.$edit">{{zap.nom}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!zap.$edit" ng-click="vm.modifier(zap)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!zap.$edit" ng-click="vm.supprimer(zap)" title="Supprimer">
+                    <span class="icon-delete"></span>
+                  </a>
+                            
+                  <a ng-if="zap.$edit" ng-click="vm.annuler(zap)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="zap.$edit && zap.code && zap.nom>''" ng-click="vm.ajout(zap,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>                   
+      </div>
+      <!-- / zap -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

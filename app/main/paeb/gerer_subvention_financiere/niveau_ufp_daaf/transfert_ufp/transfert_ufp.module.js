@@ -55,7 +55,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["UFP"];
+                var permissions = ["UFP","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

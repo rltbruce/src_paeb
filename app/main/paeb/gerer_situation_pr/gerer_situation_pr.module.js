@@ -4,17 +4,15 @@
 
     angular
         .module('app.paeb.gerer_situation_pr', [
-            'app.paeb.gerer_situation_pr.passation_marches_pr',
-            'app.paeb.gerer_situation_pr.contrat_partenaire_relai',
-            'app.paeb.gerer_situation_pr.prestation_pr',
-            'app.paeb.gerer_situation_pr.demande_paiement_pr',
-            //'app.paeb.gerer_situation_pr.validation_demande_paiement_pr_bcaf',
-            'app.paeb.gerer_situation_pr.validation_demande_paiement_pr_dpfi',
-            //'app.paeb.gerer_situation_pr.validation_demande_paiement_pr_daaf',
-            'app.paeb.gerer_situation_pr.paiement_pr',
+            //'app.paeb.gerer_situation_pr.passation_marches_pr',
+            //'app.paeb.gerer_situation_pr.contrat_partenaire_relai',
+            //'app.paeb.gerer_situation_pr.prestation_pr',
+            //'app.paeb.gerer_situation_pr.demande_paiement_pr',
+            //'app.paeb.gerer_situation_pr.validation_demande_paiement_pr_dpfi',
+            //'app.paeb.gerer_situation_pr.paiement_pr',
             'app.paeb.gerer_situation_pr.document_pr_scan',
             'app.paeb.gerer_situation_pr.dossier_pr',
-            'app.paeb.gerer_situation_pr.suivi_financier_pr'
+            //'app.paeb.gerer_situation_pr.suivi_financier_pr'
 
             ])       
         .config(config);

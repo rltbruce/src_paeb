@@ -1,0 +1,118 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Cadre bordereau</span>
+            </div>
+
+            <div class="title">Travaux préparatoire</div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Categorie ouvrage -->
+      <div class="form-wrapper md-whiteframe-1dp" >       
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;">Travaux préparatoire</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add type ouvrage" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout travaux preparatoire</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+         <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="acce in ::vm.travaux_preparatoire_column">
+                  <div class="table-header">
+                    <span class="column-title">{{acce.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody>
+              <tr ng-repeat="travaux_preparatoire in vm.alltravaux_preparatoire"  ng-class="{selected: travaux_preparatoire.$selected}" ng-click="vm.selection(travaux_preparatoire)">
+              <td>
+                  <span ng-if="travaux_preparatoire.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Numero</label>
+                      <input name="numero" type="text" ng-model="travaux_preparatoire.numero"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!travaux_preparatoire.$edit">{{travaux_preparatoire.numero}}</span>
+                </td>           
+                <td>
+                  <span ng-if="travaux_preparatoire.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Désignation</label>
+                      <input name="designation" type="text" ng-model="travaux_preparatoire.designation"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!travaux_preparatoire.$edit">{{travaux_preparatoire.designation}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="travaux_preparatoire.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Unite</label>
+                      <input name="unite" type="text" ng-model="travaux_preparatoire.unite"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!travaux_preparatoire.$edit">{{travaux_preparatoire.unite}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="travaux_preparatoire.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Quantité prévue</label>
+                      <input name="qt_prevu" type="number" ng-model="travaux_preparatoire.qt_prevu"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!travaux_preparatoire.$edit">{{travaux_preparatoire.qt_prevu}}</span>
+                </td>
+                                             
+                <td>
+                  <a ng-if="!travaux_preparatoire.$edit" ng-click="vm.modifier(travaux_preparatoire)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!travaux_preparatoire.$edit" ng-click="vm.supprimer(travaux_preparatoire)" title="Supprimer">
+                    <span class="icon-delete" ></span>
+                  </a>
+                            
+                  <a ng-if="travaux_preparatoire.$edit" ng-click="vm.annuler(travaux_preparatoire)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="travaux_preparatoire.$edit && travaux_preparatoire.designation && travaux_preparatoire.unite && travaux_preparatoire.qt_prevu>''" ng-click="vm.ajout(travaux_preparatoire,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>                   
+      </div>
+      <!-- / travaux_preparatoire -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

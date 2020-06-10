@@ -11,7 +11,11 @@
         var vm = this;
         var NouvelItem=false;
 
-        
+        apiFactory.getAll("zap/index").then(function(result)
+        {
+          vm.allzap= result.data.response;
+          console.log(vm.allzap);
+        });
 
 /* ***************DEBUT GEOGRAPHIQUE**********************/
 
@@ -511,7 +515,7 @@ function clicke()
       };
 
 
-            vm.allfokontany = function(id_commune) {
+      vm.allfokontany = function(id_commune) {
         return {
           dataSource:
           {
@@ -519,7 +523,7 @@ function clicke()
             transport: {
               read: function (e)
               {
-                apiFactory.getAPIgeneraliserREST("fokontany/index","id_commune",id_commune).then(function(result)
+                apiFactory.getAPIgeneraliserREST("fokontany/index","cle_etrangere",id_commune).then(function(result)
                 {
                     e.success(result.data.response)
                 }, function error(result)
@@ -612,7 +616,7 @@ function clicke()
             pageSize: 5,
           },
           toolbar: [{               
-               template: "<label id='table_titre'>FOKONTANY </label>"
+               template: "<label id='table_titre'></label>"
           },{
                name: "create",
                text:"",
@@ -665,6 +669,179 @@ function clicke()
             }]
         };
       };
+
+      vm.allzap_commune = function(id_commune) {
+        return {
+          dataSource:
+          {
+            type: "json",
+            transport: {
+              read: function (e)
+              {
+                apiFactory.getAPIgeneraliserREST("zap_commune/index","menu",'getzap_communeBycommune','id_commune',id_commune).then(function(result)
+                {
+                    e.success(result.data.response)
+                }, function error(result)
+                  {
+                      alert('something went wrong')
+                  })
+              },
+              update : function (e)
+              {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        e.data.models[0].id,
+                          id_zap: e.data.models[0].zap.id               
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("zap_commune/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              },
+              destroy : function (e)
+              {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 1,
+                          id:        e.data.models[0].id               
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("zap_commune/index",datas, config).success(function (data)
+                  {                
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              },
+              create : function (e)
+              {
+                  console.log("update");
+                  var config ={headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}};
+                  console.log(e.data.models);
+                  var datas = $.param({
+                          supprimer: 0,
+                          id:        0,
+                          id_commune:   id_commune,
+                          id_zap: e.data.models[0].zap              
+                      });
+                  console.log(e.data.models);
+                  console.log(datas);
+                  apiFactory.add("zap_commune/index",datas, config).success(function (data)
+                  { 
+                    var itemsZap =
+                    {
+                        id: e.data.models[0].acces_zone,
+                        nom: vm.nom_zap
+                    };
+
+                    e.data.models[0].id = String(data.response);
+                    e.data.models[0].zap=itemsZap;              
+                    e.success(e.data.models); 
+                  }).error(function (data)
+                    {
+                      //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
+                    });      
+              }
+            },
+            batch: true,
+            schema:
+            {
+                model:
+                {
+                    id: "id",
+                    fields:
+                    {                        
+                        zap: { validation: {required: true}}
+                    }
+                }
+            },
+            //serverPaging: true,
+            //serverSorting: true,
+            serverFiltering: true,
+            pageSize: 5,
+          },
+          toolbar: [{               
+               template: "<label id='table_titre'></label>"
+          },{
+               name: "create",
+               text:"",
+               iconClass: "k-icon k-i-table-light-dialog"
+               
+          }],
+          editable: {
+            mode:"inline"
+          },
+          selectable:"row",
+          scrollable: false,
+          sortable: true,
+          pageable:{refresh: true,
+                    pageSizes: true, 
+                    buttonCount: 3,
+                    messages: {
+                      empty: "Pas de donnée",
+                      display: "{0}-{1} pour {2} items",
+                      itemsPerPage: "items par page",
+                      next: "Page suivant",
+                      previous: "Page précédant",
+                      refresh: "Actualiser",
+                      first: "Première page",
+                      last: "Dernière page"
+                    }
+                  },
+          //dataBound: function() {
+                   // this.expandRow(this.tbody.find("tr.k-master-row").first());
+               // },
+          columns: [
+            {
+              field: "zap",
+              title: "Zap",
+              template: "{{dataItem.zap.nom}}",
+              editor: zapDropDownEditor,
+              width: "Auto"
+            },
+            { 
+              title: "Action",
+              width: "Auto",
+              command:[{
+                      name: "edit",
+                      text: {edit: "",update: "",cancel: ""},
+                      //iconClass: {edit: "k-icon k-i-edit",update: "k-icon k-i-update",cancel: "k-icon k-i-cancel"
+                       // },
+                  },{name: "destroy", text: ""}]
+            }]
+        };
+      };
+
+      function zapDropDownEditor(container, options)
+          {
+          
+            $('<input id="zapDropDownList" required data-text-field="nom" data-value-field="id" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataTextField: "nom",
+                    dataValueField: "id_zap",
+                    dataSource: vm.allzap           
+                });
+
+            var zapContener = container.find("#zapDropDownList").data("kendoDropDownList");
+          
+            zapContener.bind("change", function() {
+            vm.nom_zap = zapContener.text();
+            console.log(vm.nom_zap);
+            });
+          }
 
 /* ***************FIN GEOGRAPHIQUE**********************/
         
