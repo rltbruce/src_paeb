@@ -16,7 +16,7 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_feffi_prestataire.suivi_bcaf', {
             title : 'BCAF',
-            icon  : 'icon-data',
+            icon  : 'icon-blur-radial',
             weight: 1,
             hidden: function()
             {

@@ -32,7 +32,7 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.accueil', {
             title : 'Acceuil',
-            icon  : 'icon-alarm-check',
+            icon  : 'icon-palette-advanced',
             state : 'app.population_accueil',
             translate: 'accueil.menu.titre',
             weight: 1,

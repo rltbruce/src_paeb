@@ -287,7 +287,7 @@
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">                         
                                       
-                                      <span class="ms-form-wizard-step-text">Preparation travaux</span>
+                                      <span class="ms-form-wizard-step-text">Facture à la signature</span>
                                   </span>
                                  
                                 </md-tab-label>
@@ -338,7 +338,7 @@
                                           <td>
                                             <span ng-if="demande_debut_travaux_moe.$edit">
                                               <md-input-container style="width:100%;display: flex !important;">
-                                                <label>Référence latrine_bur</label>
+                                                <label>Référence facture</label>
                                                 <input name="ref_facture" type="text" ng-model="demande_debut_travaux_moe.ref_facture"/>
                                               </md-input-container>   
                                             </span>
@@ -518,7 +518,7 @@
                                               <span ng-if="justificatif_debut_travaux_moe.$edit" style="display: inline-block !important;">
                                                 <md-input-container style="width:100%;display: flex !important;">
                                                   <label>Fichier</label>
-                                                <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile_debu_travau_moe"  ng-model="fichier" id="fileid"/>
+                                                <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile_debut_travaux_moe"  ng-model="fichier" id="fileid"/>
                                                 </md-input-container>   
                                               </span>
                                                         
@@ -643,7 +643,7 @@
                               <md-tab ng-click="vm.click_step_batiment_moe()">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
-                                      <span class="ms-form-wizard-step-text">Batiment</span>
+                                      <span class="ms-form-wizard-step-text">Facture travaux (batiment)</span>
                                   </span>
                                  
                                 </md-tab-label>
@@ -694,7 +694,7 @@
                                           <td>
                                             <span ng-if="demande_batiment_moe.$edit">
                                               <md-input-container style="width:100%;display: flex !important;">
-                                                <label>Référence latrine_bur</label>
+                                                <label>Référence facture</label>
                                                 <input name="ref_facture" type="text" ng-model="demande_batiment_moe.ref_facture"/>
                                               </md-input-container>   
                                             </span>
@@ -1000,7 +1000,7 @@
                               <md-tab ng-click="vm.click_step_latrine_moe()">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
-                                      <span class="ms-form-wizard-step-text">Latrine</span>
+                                      <span class="ms-form-wizard-step-text">Facture travaux (Latrine)</span>
                                   </span>
                                  
                                 </md-tab-label>
@@ -1051,7 +1051,7 @@
                                           <td>
                                             <span ng-if="demande_latrine_moe.$edit">
                                               <md-input-container style="width:100%;display: flex !important;">
-                                                <label>Référence latrine_bur</label>
+                                                <label>Référence facture</label>
                                                 <input name="ref_facture" type="text" ng-model="demande_latrine_moe.ref_facture"/>
                                               </md-input-container>   
                                             </span>
@@ -1357,7 +1357,7 @@
                               <md-tab ng-click="vm.click_step_fin_travaux_moe()">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
-                                      <span class="ms-form-wizard-step-text">A la fin travaux</span>
+                                      <span class="ms-form-wizard-step-text">Facture a la fin travaux</span>
                                   </span>
                                  
                                 </md-tab-label>
@@ -1408,7 +1408,7 @@
                                           <td>
                                             <span ng-if="demande_fin_travaux_moe.$edit">
                                               <md-input-container style="width:100%;display: flex !important;">
-                                                <label>Référence latrine_bur</label>
+                                                <label>Référence facture</label>
                                                 <input name="ref_facture" type="text" ng-model="demande_fin_travaux_moe.ref_facture"/>
                                               </md-input-container>   
                                             </span>
@@ -2062,6 +2062,17 @@
                                             </span>
                                                       
                                             <span ng-if="!facture_mpe.$edit">{{facture_mpe.retenue_garantie}}</span>
+                                          </td>
+                                                    
+                                          <td>
+                                            <span ng-if="facture_mpe.$edit">
+                                              <md-input-container style="width:100%;display: flex !important;">
+                                                <label>Remboursement plaque</label>
+                                                <input name="remboursement_plaque" type="number" ng-model="facture_mpe.remboursement_plaque" ng-change="vm.change_remboursement_plaque_mpe(facture_mpe)"/>
+                                              </md-input-container>   
+                                            </span>
+                                                      
+                                            <span ng-if="!facture_mpe.$edit">{{facture_mpe.remboursement_plaque}}</span>
                                           </td>
 
                                         <td>
@@ -3156,6 +3167,250 @@
               </md-tab-body> 
             </md-tab>
           <!-------------------------------------------FIN ENTREPRISE-----------------------------------------------------> 
+
+          <!----------------------------------------------DEBUT RELIQUAT-------------------------------------------------->
+            <md-tab ng-disabled="vm.stepMenu_reliquat==false" ng-click="vm.step_menu_reliquat()">
+              <md-tab-label >
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-text">Reliquat</span>
+                </span>
+               
+              </md-tab-label>
+              
+              <md-tab-body>
+               <ms-form-wizard flex id="sousmenu"> 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                    <md-tab>
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Reliquat</span>
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body>
+                          <div style="widht:100%;">  
+                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterTransfert_reliquat()" style="width:10%;" ng-show="vm.showbuttonNouvTransfert_reliquat">
+                                Nouveau
+                              </md-button>
+                          </div><br>
+
+                          <div>        
+                            <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                              <thead>
+                                <tr>
+                                  <th class="secondary-text" ng-repeat="ciscT in ::vm.transfert_reliquat_column">
+                                    <div class="table-header">
+                                      <span class="column-title">{{ciscT.titre}}</span>
+                                    </div>
+                                  </th>
+                                </tr>
+                              </thead>
+                                       
+                              <tbody>
+                                <tr ng-repeat="transfert_reliquat in vm.alltransfert_reliquat"  ng-class="{selected: transfert_reliquat.$selected}" ng-click="vm.selectionTransfert_reliquat(transfert_reliquat)">           
+                                  
+                                  <td>
+                                    <span ng-if="transfert_reliquat.$edit">
+                                      <md-input-container style="width:100%;display: flex !important;">
+                                        <label>Montant</label>
+                                        <input name="montant" type="text" ng-model="transfert_reliquat.montant" ng-change="vm.change_montant(transfert_reliquat)"/>
+                                      </md-input-container>
+                                    </span>                          
+                                    <span ng-if="!transfert_reliquat.$edit">{{transfert_reliquat.montant}}</span>
+                                  </td>
+                                  <td>
+                                    <span ng-if="transfert_reliquat.$edit">
+                                      <md-input-container style="width:100%;display: flex !important;">
+                                        <label>Objet utilisation</label>
+                                        <md-select ng-model="transfert_reliquat.objet_utilisation"style="overflow: hidden;text-overflow: ellipsis;" disabled>
+                                          <md-option  value="0">
+                                            Amelioration infrastructure
+                                          </md-option>
+                                          <md-option  value="1">
+                                            Nouvelle construction
+                                          </md-option>
+                                        </md-select>
+                                      </md-input-container>
+                                    </span>                          
+                                    <span ng-if="!transfert_reliquat.$edit">{{vm.afficheobjet_utilisation(transfert_reliquat.objet_utilisation)}}</span>
+                                  </td>
+
+                                  <td>
+                                  <span ng-if="transfert_reliquat.$edit">
+                                    <md-datepicker ng-model="transfert_reliquat.date_transfert" md-placeholder="Date de transfert" md-max-date="vm.datenow" required>                       
+                                    </md-datepicker>
+                                  </span>                          
+                                  <span ng-if="!transfert_reliquat.$edit">{{vm.formatDate(transfert_reliquat.date_transfert)}}</span>
+                                </td>
+
+                                  <td>
+                                    <span ng-if="transfert_reliquat.$edit">
+                                      <md-input-container style="width:100%;display: flex !important;">
+                                        <label>Situation utilisation</label>
+                                        <input name="situation_utilisation" type="text" ng-model="transfert_reliquat.situation_utilisation"/>
+                                      </md-input-container>
+                                    </span>                          
+                                    <span ng-if="!transfert_reliquat.$edit">{{transfert_reliquat.situation_utilisation}}</span>
+                                  </td>
+
+                                  <td>
+                                    <span ng-if="transfert_reliquat.$edit">
+                                      <md-input-container style="width:100%;display: flex !important;">
+                                        <label>Intitule compte</label>
+                                        <input name="intitule_compte" type="text" ng-model="transfert_reliquat.intitule_compte"/>
+                                      </md-input-container>
+                                    </span>                          
+                                    <span ng-if="!transfert_reliquat.$edit">{{transfert_reliquat.intitule_compte}}</span>
+                                  </td>
+
+                                  <td>
+                                    <span ng-if="transfert_reliquat.$edit">
+                                      <md-input-container style="width:100%;display: flex !important;">
+                                        <label>RIB SAE</label>
+                                        <input name="rib" type="number" ng-model="transfert_reliquat.rib"/>
+                                      </md-input-container>   
+                                    </span>
+                                              
+                                    <span ng-if="!transfert_reliquat.$edit">{{transfert_reliquat.rib}}</span>
+                                  </td> 
+
+                                  <td>
+                                    <span ng-if="transfert_reliquat.$edit">
+                                      <md-input-container style="width:100%;display: flex !important;">
+                                        <label>Observation</label>
+                                        <input name="observation" type="text" ng-model="transfert_reliquat.observation"/>
+                                      </md-input-container>   
+                                    </span>
+                                              
+                                    <span ng-if="!transfert_reliquat.$edit">{{transfert_reliquat.observation}}</span>
+                                  </td>                       
+                                                               
+                                  <td>  
+                                    <a ng-if="!transfert_reliquat.$edit && transfert_reliquat.validation==0" ng-click="vm.modifierTransfert_reliquat(transfert_reliquat)" title="Modifier">
+                                      <span class="icon-table-edit"></span>
+                                    </a>
+                                              
+                                    <a ng-if="!transfert_reliquat.$edit && transfert_reliquat.validation==0" ng-click="vm.supprimerTransfert_reliquat(transfert_reliquat)" title="Supprimer">
+                                      <span class="icon-delete"></span>
+                                    </a>
+                                     <span ng-if="!transfert_reliquat.$edit && transfert_reliquat.validation==1">Aucune action disponible</span>         
+                                    <a ng-if="transfert_reliquat.$edit" ng-click="vm.AnnulerTransfert_reliquat(transfert_reliquat)" title="AnnulerTransfert_reliquat modification">
+                                      <span class="icon-cancel"></span>
+                                    </a>
+                                              
+                                    <a ng-if="transfert_reliquat.$edit && transfert_reliquat.montant && transfert_reliquat.intitule_compte && transfert_reliquat.rib && transfert_reliquat.date_transfert>''" ng-click="vm.ajoutTransfert_reliquat(transfert_reliquat,0)" title="Sauvegarder">
+                                      <span class="icon-content-save"></span>
+                                    </a>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+
+                      </md-tab-body>
+                    </md-tab>
+                    <md-tab ng-disabled="!vm.stepjusti_trans_reliqua">
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Justification</span>
+                        </span>
+                       
+                      </md-tab-label>                       
+                      
+                      <md-tab-body>
+                        <div style="widht:100%;">  
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_transfert_reliquat()" style="width:10%;" ng-show="vm.validation_transfert_reliquat ==0 && (vm.session=='OBCAF' || vm.session=='BCAF' || vm.session=='ADMIN')">
+                            Nouveau
+                          </md-button>
+                        </div>
+                       <div>        
+                        <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                          <thead>
+                            <tr>
+                              <th class="secondary-text">
+                                <div class="table-header">
+                                  <span class="column-title">Description</span>
+                                </div>
+                              </th>
+                              <th class="secondary-text">
+                                <div class="table-header">
+                                  <span class="column-title">Fichier</span>
+                                </div>
+                              </th>
+                              <th class="secondary-text">
+                                <div class="table-header">
+                                  <span class="column-title">Action</span>
+                                </div>
+                              </th>
+                            </tr>
+                          </thead>
+                                   
+                          <tbody>
+                            <tr ng-repeat="justificatif_transfert_reliquat in vm.alljustificatif_transfert_reliquat"  ng-class="{selected: justificatif_transfert_reliquat.$selected}" ng-click="vm.selectionJustificatif_transfert_reliquat(justificatif_transfert_reliquat)">
+                                       
+                              <td>
+                                <span ng-if="justificatif_transfert_reliquat.$edit">
+                                  <md-input-container style="width:100%;display: flex !important;">
+                                    <label>Description</label>
+                                    <input name="description" type="text" ng-model="justificatif_transfert_reliquat.description"/>
+                                  </md-input-container>   
+                                </span>
+                                          
+                                <span ng-if="!justificatif_transfert_reliquat.$edit">{{justificatif_transfert_reliquat.description}}</span>
+                              </td>
+                                        
+                              <td>
+                                <span ng-if="justificatif_transfert_reliquat.$edit" style="display: inline-block !important;">
+                                  <md-input-container style="width:100%;display: flex !important;">
+                                    <label>Fichier</label>
+                                    <input name="fichier" type="text" ng-model="justificatif_transfert_reliquat.fichier" disabled/>
+                                  </md-input-container>   
+                                </span>
+
+                                <span ng-if="justificatif_transfert_reliquat.$edit" style="display: inline-block !important;">
+                                  <md-input-container style="width:100%;display: flex !important;">
+                                    <label>Fichier</label>
+                                  <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFiletransfert_reliquat"  ng-model="fichier" id="fileid"/>
+                                  </md-input-container>   
+                                </span>
+                                          
+                                <span ng-if="!justificatif_transfert_reliquat.$edit">{{justificatif_transfert_reliquat.fichier}}</span>
+                              </td>                       
+                              <td>
+                                <a ng-if="!justificatif_transfert_reliquat.$edit && vm.validation_transfert_reliquat==0" ng-click="vm.modifierJustificatif_transfert_reliquat(justificatif_transfert_reliquat)" title="Modifier">
+                                  <span class="icon-table-edit"></span>
+                                </a>
+                                          
+                                <a ng-if="!justificatif_transfert_reliquat.$edit && vm.validation_transfert_reliquat==0" ng-click="vm.supprimerJustificatif_transfert_reliquat(justificatif_transfert_reliquat)" title="Supprimer">
+                                  <span class="icon-delete"></span>
+                                </a>
+                                <a ng-if="!justificatif_transfert_reliquat.$edit" ng-click="vm.download_transfert_reliquat(justificatif_transfert_reliquat)" title="Telecharger">
+                                    <span class="icon-box-download"></span>
+                                </a>          
+                                <a ng-if="justificatif_transfert_reliquat.$edit" ng-click="vm.annulerJustificatif_transfert_reliquat(justificatif_transfert_reliquat)" title="Annuler modification">
+                                  <span class="icon-cancel"></span>
+                                </a>
+                                          
+                                <a ng-if="justificatif_transfert_reliquat.$edit && justificatif_transfert_reliquat.description && justificatif_transfert_reliquat.fichier>''" ng-click="vm.ajoutJustificatif_transfert_reliquat(justificatif_transfert_reliquat,0)" title="Sauvegarder">
+                                  <span class="icon-content-save"></span>
+                                </a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      </md-tab-body>
+                    </md-tab>
+                                       
+                    <md-tab>
+                    </md-tab>            
+                  </md-tabs> 
+                </ms-form-wizard>               
+              </md-tab-body>
+            </md-tab>
+            <!------------------------------------------------FIN RELIQUAT------------------------------------------------->
+
                         
           </md-tabs>
         </ms-form-wizard> 

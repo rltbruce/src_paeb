@@ -22,7 +22,7 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere', {
             title : 'Gérer subvention financiere',
-            icon  : 'icon-data',
+            icon  : 'icon-credit-card-multiple',
             weight: 2
         });
 

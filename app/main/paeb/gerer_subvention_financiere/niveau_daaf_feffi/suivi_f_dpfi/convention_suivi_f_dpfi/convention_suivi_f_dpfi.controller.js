@@ -173,6 +173,12 @@
         {titre:"Utilisateur"
         }]; 
 
+        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionNeeddemandefeffivalidationpdfi').then(function(result)
+        {
+                vm.allconvention_entete = result.data.response;
+                console.log(vm.allconvention_entete);
+        });
+
         vm.importerfiltre =function(filtre)
         {   
             var date_debut = convertionDate(filtre.date_debut);
@@ -206,31 +212,12 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
-              switch (vm.session)
-                { 
-                  case 'DPFI':
-                                                        
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
-                            {
-                                vm.allconvention_entete = result.data.response;
-                            });
-                      
-                      break;                  
-
-                  case 'ADMIN':
-                           
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
-                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
-                            {
-                                vm.allconvention_entete = result.data.response;
-                                console.log(vm.allconvention_entete);
-                            });                 
-                      break;
-                  default:
-                      break;
-              
-                }
+            {
+                vm.allconvention_entete = result.data.response;
+                console.log(vm.allconvention_entete);
+            });
                 console.log(filtre);
         }
         vm.annulerfiltre = function()
@@ -273,28 +260,11 @@
         {
             return new Promise(function (resolve, reject) 
             {
-                switch (session)
+                apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandeemidpfiByconvention",'id_convention_cife_entete',item.id).then(function(result)
                 {
-                  case 'DPFI':
-                            apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandeemidpfiByconvention",'id_convention_cife_entete',item.id).then(function(result)
-                            {
-                                vm.alldemande_realimentation_invalide = result.data.response; 
-                                return resolve('ok');
-                            });
-                            
-                      break;
-
-                  case 'ADMIN':
-                             apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandeemidpfiByconvention",'id_convention_cife_entete',item.id).then(function(result)
-                            {
-                                vm.alldemande_realimentation_invalide = result.data.response; 
-                                return resolve('ok');
-                            });
-                      break;
-                  default:
-                      break;
-              
-                }            
+                    vm.alldemande_realimentation_invalide = result.data.response; 
+                    return resolve('ok');
+                });           
             });
         
         }

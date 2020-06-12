@@ -1,0 +1,2727 @@
+  <div id="formsbcaf" class="page-layout simple fullwidth doc-page" layout="column" >
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between" >
+        <div layout="column" layout-align="space-between" style="height: 10px !important;">
+            <div class="breadcrumb" layout="row" layout-align="start center" >
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Suivi convention CISCO/FEFFI</span>
+                
+                <!--md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Convention CISCO/FEFFI</span-->
+            </div>
+
+            <!--div class="title">Convention CISCO/FEFFI</div-->
+                                       
+            
+        </div>
+        
+    </div>    
+    
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+      <div class="form-wrapper md-whiteframe-1dp" >
+        <div style="clear:both;"></div>            
+            <div style="float: top !important">
+              <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+              <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                      Chargement,veuillez patienter s'il vous plait ...
+              </div>
+            </div>
+<!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
+         <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="">
+
+    <!------------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
+            
+            <md-tab>
+              <md-tab-label >
+                <span class="ms-form-wizard-step-label">
+                    <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-basket-fill s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Convention</span>
+                </span>
+               
+              </md-tab-label>
+              
+              <md-tab-body>
+               <ms-form-wizard flex id="sousmenu"> 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+                  <!------------------------------DEBUT ESTIMATION CONVENTION---------------------------------------------> 
+                    <md-tab>
+                      <md-tab-label >
+                        <span class="ms-form-wizard-step-label">
+                            
+                            <!--span class="ms-form-wizard-step-number md-accent-bg">
+                                <i class="icon-basket-fill s16"></i>
+                            </span-->
+                            <span class="ms-form-wizard-step-text">Estimation convention</span>
+                            <!--span class="ms-form-wizard-step-number md-accent-bg notification" >{{+vm.nbr_demande_feffi_creer + +vm.nbr_decaiss_feffi}}</span-->
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body>
+                        <div>
+                          <form name="filtreform" class="md-inline-form" novalidate >
+                                <br>
+                              <div layout="column" layout-gt-xs="row">
+                                  <md-input-container>
+                                    <span>Date du</span>
+                                  </md-input-container>
+
+                                  <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required>                     
+                                  </md-datepicker>
+
+                                  <md-input-container>
+                                    <span>&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
+                                  </md-input-container>
+
+                                  <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
+                                  </md-datepicker>
+
+                                  <!--md-datepicker ng-model="vm.filtre.date_fin" md-placeholder="Enter date de fin"
+                                md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow"  md-date-locale="monthFormat" md-open-on-focus="true" ng-disabled="!vm.filtre.date_debut" required md-mode="'month'">                        
+                                  </md-datepicker-->
+                                </div>
+                                <div layout="column" layout-gt-xs="row" ng-show="vm.session=='ADMIN' || vm.session=='ODAAF' || vm.session=='DAAF' || vm.session=='ODPFI' || vm.session=='DPFI' || vm.session=='UFP'">
+
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Lot</label>
+                                    <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                                      <md-option value="1">Lot 1</md-option>
+                                      <md-option value="2">Lot 2</md-option>
+                                      <md-option value="3">Lot 3</md-option>
+                                      <md-option value="4">Lot 4</md-option>
+                                    </md-select>
+                                    <div ng-messages="filtreform.lot.$error" role="alert">
+                                      <div ng-message="required"><span>Lot</span></div>
+                                    </div>
+                                  </md-input-container>
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Région</label>
+                                    <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
+                                    </md-select>
+                                    <div ng-messages="filtreform.region.$error" role="alert">
+                                      <div ng-message="required"><span>Région</span></div>
+                                    </div>
+                                  </md-input-container>
+                                  
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Cisco</label>
+                                    <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                                                  
+                                     </md-select>
+                                     <div ng-messages="filtreform.cisco.$error" role="alert">
+                                      <div ng-message="required"><span>Cisco</span></div>
+                                    </div>
+                                  </md-input-container>
+                                  
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Commune</label>
+                                    <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
+                                    </md-select>
+                                    <div ng-messages="filtreform.commune.$error" role="alert">
+                                      <div ng-message="required"><span>Commune</span></div>
+                                    </div>
+                                  </md-input-container>
+                                  
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Ecole</label>
+                                    <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.code}}
+                                      </md-option>
+                                    </md-select>
+                                    <div ng-messages="filtreform.ecole.$error" role="alert">
+                                      <div ng-message="required"><span>Ecole</span></div>
+                                    </div>
+                                  </md-input-container>
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Convention</label>
+                                    <md-select ng-model="vm.filtre.id_convention_entete" name="convention" ng-disabled="!vm.filtre.id_ecole">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="eco in vm.convention_cisco_feffi_entetes" value="{{eco.id}}"> {{eco.ref_convention}}
+                                      </md-option>
+                                    </md-select>  
+                                    <div ng-messages="filtreform.convention_entete.$error" role="alert">
+                                      <div ng-message="required"><span>Convention</span></div>
+                                    </div>
+                                  </md-input-container>
+                                </div>
+
+                                <div>
+                                 <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                      ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
+                                      Recherche
+                                </md-button>
+                                 <!--md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                      ng-disabled="filtreform.$invalid" ng-click="vm.importerfiltre(vm.filtre)" ng-show="vm.session=='ADMIN' || vm.session=='DAAF' || vm.session=='DPFI' || vm.session=='UFP'">
+                                      Exporter
+                                </md-button-->
+                                <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
+                                  Annuler
+                                </md-button>
+                                </div>
+                          </form>
+                          <md-divider></md-divider><br>
+                        </div>
+
+                        <div>        
+                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                              <thead>
+                                <tr>
+                                  <th class="secondary-text" ng-repeat="conv_ente in ::vm.convention_entete_column">
+                                    <div class="table-header">
+                                        <span class="column-title">{{conv_ente.titre}}</span>
+                                    </div>
+                                  </th>
+                                </tr>
+                              </thead>
+                                             
+                              <tbody>
+                                <tr ng-repeat="convention_entete in vm.allconvention_entete"  ng-class="{selected: convention_entete.$selected}" ng-click="vm.selectionConvention_entete(convention_entete)">           
+                                  <td>
+                                    <span>{{convention_entete.cisco.code}}</span>
+                                  </td>
+
+                                  <td>
+                                          <span>{{convention_entete.feffi.denomination}}</span>
+                                  </td>
+
+                                  <td>
+                                    <span>{{convention_entete.site.denomination_epp}}</span>
+                                  </td>
+
+                                  <td>                         
+                                    <span>{{convention_entete.ref_convention}}</span>
+                                  </td>
+
+                                  <td>                         
+                                    <span>{{convention_entete.objet}}</span>
+                                  </td>
+
+                                  <td>                                    
+                                    <span>{{convention_entete.ref_financement}}</span>
+                                  </td>
+
+                                  <td>                          
+                                    <span>{{convention_entete.montant_total}}</span>
+                                  </td>
+
+                                  <td>                          
+                                    <span>{{convention_entete.avancement}}</span>
+                                  </td>
+
+                                  <td>                          
+                                    <span>{{convention_entete.user.nom}}</span>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </md-tab-body>
+                    </md-tab>
+
+                  <!----------------------------DEBUT ESTIMATION CONVENTION-convention cisco/feffi---------------->
+
+                  <md-tab ng-disabled="!vm.stepMenu_feffi">                    
+                      <md-tab-label >
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Avenant</span>
+                        </span>
+                       
+                      </md-tab-label>
+
+                      <md-tab-body><br>
+                               <div>        
+                                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                  <thead>
+                                    <tr>
+                                      <th class="secondary-text" ng-repeat="mem in ::vm.avenant_convention_column">
+                                        <div class="table-header">
+                                          <span class="column-title">{{mem.titre}}</span>
+                                        </div>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                           
+                                  <tbody>
+                                    <tr ng-repeat="avenant_convention in vm.allavenant_convention"  ng-class="{selected: avenant_convention.$selected}" ng-click="vm.selectionAvenant_convention(avenant_convention)">
+                                                
+                                      <td>                                                  
+                                        <span>{{avenant_convention.ref_avenant}}</span>
+                                      </td>          
+                                      <td>                                                  
+                                        <span>{{avenant_convention.description}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{avenant_convention.montant}}</span>
+                                      </td>
+
+                                      <td>                         
+                                        <span>{{vm.formatDate(avenant_convention.date_signature)}}</span>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>                        
+                      </md-tab-body>
+                  </md-tab>
+          <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
+                          
+           <!----------------------------------------Debut document feffi --------------------------------------------------->
+                    <md-tab >
+                        <md-tab-label>
+                          <span class="ms-form-wizard-step-label">
+                              <span class="ms-form-wizard-step-text">Importer document</span>
+                          </span>
+                        </md-tab-label>
+                        
+                        <md-tab-body><br>
+                         <div>        
+                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                            <thead>
+                              <tr>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Code</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Intitule</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Existance</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Fichier</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Date Elaboration</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Observation</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Action</span>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                                     
+                            <tbody>
+                              <tr ng-repeat="document_feffi_scan in vm.alldocument_feffi_scan"  ng-class="{selected: document_feffi_scan.$selected}" ng-click="vm.selectionDocument_feffi_scan(document_feffi_scan)">
+
+                                <td>                                            
+                                  <span>{{document_feffi_scan.code}}</span>
+                                </td>
+
+                                <td>                                            
+                                  <span>{{document_feffi_scan.intitule}}</span>
+                                </td>
+                                
+                                <td>                                 
+                                   <md-checkbox ng-model="document_feffi_scan.existance" aria-label="Checkbox 1" disabled>
+                                  </md-checkbox>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span >{{document_feffi_scan.fichier}}</span>
+                                </td>
+
+                                <td>                          
+                                  <span >{{vm.formatDate(document_feffi_scan.date_elaboration)}}</span>
+                                </td>
+
+                                <td>                                            
+                                  <span >{{document_feffi_scan.observation}}</span>
+                                </td>
+
+                                <td>                       
+                                            
+                                  <a ng-if="document_feffi_scan.existance" ng-click="vm.download_document_feffi_scan(document_feffi_scan)" title="Telecharger fichier">
+                                    <span class="icon-box-download"></span>
+                                  </a>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </md-tab-body>
+                    </md-tab>
+                    <!--------------------------------------FIN document moe --------------------------------------------> 
+                  </md-tabs> 
+                </ms-form-wizard>
+              </md-tab-body>
+            </md-tab>
+    <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
+
+    
+            <md-tab ng-disabled="vm.stepMenu_pr==false || vm.session=='ODAAF'">
+              <md-tab-label >
+                <span class="ms-form-wizard-step-label">
+                    <!--span class="ms-form-wizard-step-number md-accent-bg">
+                      <i class="icon-arrange-send-to-back s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">PARTENAIRES RELAIS</span>
+                    <!--span class="ms-form-wizard-step-number md-accent-bg notification" >3</span-->
+                </span>
+               
+              </md-tab-label>
+              
+              <md-tab-body>
+               <ms-form-wizard flex id="sousmenu"> 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+                    <!-------------------convention cisco/feffi----------------->                    
+                    <md-tab>
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Contrat</span>
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body>
+                        <div style="widht:100%;"><br>
+                        </div>
+                       <div>        
+                        <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                          <thead>
+                            <tr>
+                              <th class="secondary-text" ng-repeat="mem in ::vm.contrat_partenaire_relai_column">
+                                <div class="table-header">
+                                  <span class="column-title">{{mem.titre}}</span>
+                                </div>
+                              </th>
+                            </tr>
+                          </thead>
+                                   
+                          <tbody>
+                            <tr ng-repeat="contrat_partenaire_relai in vm.allcontrat_partenaire_relai"  ng-class="{selected: contrat_partenaire_relai.$selected}" ng-click="vm.selectionContrat_partenaire_relai(contrat_partenaire_relai)">                            
+
+                              <td>                                          
+                                <span>{{contrat_partenaire_relai.partenaire_relai.nom}}</span>
+                              </td>
+                                        
+                              <td>                                          
+                                <span>{{contrat_partenaire_relai.intitule}}</span>
+                              </td>
+                                        
+                              <td>                                          
+                                <span>{{contrat_partenaire_relai.ref_contrat}}</span>
+                              </td>
+                                        
+                              <td>                                          
+                                <span>{{contrat_partenaire_relai.montant_contrat}}</span>
+                              </td>
+
+                              <td>                        
+                                <span>{{vm.formatDate(contrat_partenaire_relai.date_signature)}}</span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                    </md-tab-body>
+                    </md-tab>
+                    <md-tab ng-disabled="!vm.stepprestaion_pr || vm.validation_contrat_pr==0">
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Prestation</span>
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body>
+
+               <!---------------------------------FILS PRESTATION----------------------------------------------->       
+                         <ms-form-wizard flex id="soussousmenu"> 
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+                        <!-----------------------------DEBUT FORMATION DPP--------------------------------------> 
+                              <md-tab>
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                         
+                                      
+                                      <span class="ms-form-wizard-step-text">Formation dpp</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.module_dpp_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="module_dpp in vm.allmodule_dpp"  ng-class="{selected: module_dpp.$selected}" ng-click="vm.selectionModule_dpp(module_dpp)">
+                                        <td>                          
+                                            <span>{{vm.formatDate(module_dpp.date_debut_previ_form)}}</span>
+                                          </td>
+
+                                          <td>                          
+                                            <span>{{vm.formatDate(module_dpp.date_fin_previ_form)}}</span>
+                                          </td>
+
+                                          <td>                         
+                                            <span>{{vm.formatDate(module_dpp.date_previ_resti)}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{vm.formatDate(module_dpp.date_debut_reel_form)}}</span>
+                                          </td>
+                                          <td>                         
+                                            <span>{{vm.formatDate(module_dpp.date_fin_reel_form)}}</span>
+                                          </td>
+                                          <td>                         
+                                            <span>{{vm.formatDate(module_dpp.date_reel_resti)}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{module_dpp.nbr_previ_parti}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{module_dpp.nbr_parti}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{module_dpp.nbr_previ_fem_parti}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{module_dpp.nbr_reel_fem_parti}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{module_dpp.lieu_formation}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{module_dpp.observation}}</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------------FIN FORMATION DPP----------------------------------------------->
+
+                        <!----------------------------------Debut participant_dpp ----------------------------------------->
+                              <md-tab ng-disabled="!vm.stepparticipantdpp">
+                                  <md-tab-label>
+                                    <span class="ms-form-wizard-step-label">
+                                        <span class="ms-form-wizard-step-text">Participant ddp</span>
+                                    </span>
+                                  </md-tab-label>
+                                  
+                                  <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.participant_dpp_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="participant_dpp in vm.allparticipant_dpp"  ng-class="{selected: participant_dpp.$selected}" ng-click="vm.selectionParticipant_dpp(participant_dpp)">           
+                                          <td>
+                                            <span>{{participant_dpp.nom}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{participant_dpp.prenom}}</span>
+                                          </td>
+
+                                          <td>                          
+                                            <span>{{vm.affichage_sexe(participant_dpp.sexe)}}</span>
+                                          </td> 
+
+                                          <td>                                                      
+                                            <span>{{participant_dpp.situation_participant_dpp.libelle}}</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------------FIN participant_dpp ------------------------------------------>
+
+
+                        <!---------------------------------DEBUT FORMATION ODC------------------------------------------->
+                              <md-tab >
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Formation ODC</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                               <md-tab-body><br>
+                                 <div>        
+                                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                    <thead>
+                                      <tr>
+                                        <th class="secondary-text" ng-repeat="mem in ::vm.module_odc_column">
+                                          <div class="table-header">
+                                            <span class="column-title">{{mem.titre}}</span>
+                                          </div>
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                             
+                                    <tbody>
+                                      <tr ng-repeat="module_odc in vm.allmodule_odc"  ng-class="{selected: module_odc.$selected}" ng-click="vm.selectionModule_odc(module_odc)">
+                                        <td>                         
+                                          <span>{{vm.formatDate(module_odc.date_debut_previ_form)}}</span>
+                                        </td>
+
+                                        <td>                          
+                                          <span>{{vm.formatDate(module_odc.date_fin_previ_form)}}</span>
+                                        </td>
+
+                                        <td>                         
+                                          <span>{{vm.formatDate(module_odc.date_previ_resti)}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{vm.formatDate(module_odc.date_debut_reel_form)}}</span>
+                                        </td>
+                                        <td>                         
+                                          <span>{{vm.formatDate(module_odc.date_fin_reel_form)}}</span>
+                                        </td>
+                                        <td>                         
+                                          <span>{{vm.formatDate(module_odc.date_reel_resti)}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{module_odc.nbr_previ_parti}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{module_odc.nbr_parti}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{module_odc.nbr_previ_fem_parti}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{module_odc.nbr_reel_fem_parti}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{module_odc.lieu_formation}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{module_odc.observation}}</span>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                              </md-tab-body>
+                              </md-tab>
+
+                       <!---------------------------------FIN FORMATION ODC------------------------------------------->
+
+                       <!---------------------------------FIN participant ODC------------------------------------------->
+                              <md-tab ng-disabled="!vm.stepparticipantodc">
+                                  <md-tab-label>
+                                    <span class="ms-form-wizard-step-label">
+                                        <span class="ms-form-wizard-step-text">Participant odc</span>
+                                    </span>
+                                  </md-tab-label>
+                                  
+                                  <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.participant_odc_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="participant_odc in vm.allparticipant_odc"  ng-class="{selected: participant_odc.$selected}" ng-click="vm.selectionParticipant_odc(participant_odc)">           
+                                          <td>                          
+                                            <span>{{participant_odc.nom}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{participant_odc.prenom}}</span>
+                                          </td>
+
+                                          <td>                         
+                                            <span>{{vm.affichage_sexe(participant_odc.sexe)}}</span>
+                                          </td> 
+
+                                          <td>                                                      
+                                            <span>{{participant_odc.situation_participant_odc.libelle}}</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                       <!--------------------------------DEBUT participant emies----------------------------------------->
+
+                       <!--------------------------------DEBUT Formation emies----------------------------------------->
+
+                            <md-tab >
+                              <md-tab-label>
+                                <span class="ms-form-wizard-step-label">
+                                  <span class="ms-form-wizard-step-text">Formation emies</span>
+                                </span>
+                              </md-tab-label>
+                              
+                              <md-tab-body><br>
+                               <div>        
+                                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                  <thead>
+                                    <tr>
+                                      <th class="secondary-text" ng-repeat="mem in ::vm.module_emies_column">
+                                        <div class="table-header">
+                                          <span class="column-title">{{mem.titre}}</span>
+                                        </div>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                           
+                                  <tbody>
+                                    <tr ng-repeat="module_emies in vm.allmodule_emies"  ng-class="{selected: module_emies.$selected}" ng-click="vm.selectionModule_emies(module_emies)">
+                                      <td>                          
+                                        <span>{{vm.formatDate(module_emies.date_debut_previ_form)}}</span>
+                                      </td>
+
+                                      <td>                         
+                                        <span>{{vm.formatDate(module_emies.date_fin_previ_form)}}</span>
+                                      </td>
+
+                                      <td>                         
+                                        <span>{{vm.formatDate(module_emies.date_previ_resti)}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{vm.formatDate(module_emies.date_debut_reel_form)}}</span>
+                                      </td>
+                                      <td>                         
+                                        <span>{{vm.formatDate(module_emies.date_fin_reel_form)}}</span>
+                                      </td>
+                                      <td>                          
+                                        <span>{{vm.formatDate(module_emies.date_reel_resti)}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_emies.nbr_previ_parti}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_emies.nbr_parti}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_emies.nbr_previ_fem_parti}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_emies.nbr_reel_fem_parti}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_emies.lieu_formation}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_emies.observation}}</span>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+
+                            </md-tab-body>
+                            </md-tab>
+                        <!---------------------------------Fin Formation emies------------------------------------------>
+
+                        <!---------------------------------Debut participant_emies ------------------------------------->
+                            <md-tab ng-disabled="!vm.stepparticipantemies">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Participant emies</span>
+                                  </span>
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                 <div>        
+                                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                                    <thead>
+                                      <tr>
+                                        <th class="secondary-text" ng-repeat="mem in ::vm.participant_emies_column">
+                                          <div class="table-header">
+                                            <span class="column-title">{{mem.titre}}</span>
+                                          </div>
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                             
+                                    <tbody>
+                                      <tr ng-repeat="participant_emies in vm.allparticipant_emies"  ng-class="{selected: participant_emies.$selected}" ng-click="vm.selectionParticipant_emies(participant_emies)">           
+                                        <td>                         
+                                          <span>{{participant_emies.nom}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{participant_emies.prenom}}</span>
+                                        </td>
+
+                                        <td>                         
+                                          <span>{{vm.affichage_sexe(participant_emies.sexe)}}</span>
+                                        </td> 
+
+                                        <td>                                                    
+                                          <span>{{participant_emies.situation_participant_emies.libelle}}</span>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                              </md-tab-body>
+                            </md-tab>
+                      <!---------------------------------------FIN participant_emies ----------------------------------->
+
+
+                       <!---------------------------------------DEBUT Formation gfpc--------------------------------------->
+
+                            <md-tab >
+                              <md-tab-label>
+                                <span class="ms-form-wizard-step-label">
+                                  <span class="ms-form-wizard-step-text">Formation gfpc</span>
+                                </span>
+                              </md-tab-label>
+                              
+                             <md-tab-body><br>
+                                 <div>        
+                                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                    <thead>
+                                      <tr>
+                                        <th class="secondary-text" ng-repeat="mem in ::vm.module_gfpc_column">
+                                          <div class="table-header">
+                                            <span class="column-title">{{mem.titre}}</span>
+                                          </div>
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                             
+                                    <tbody>
+                                      <tr ng-repeat="module_gfpc in vm.allmodule_gfpc"  ng-class="{selected: module_gfpc.$selected}" ng-click="vm.selectionModule_gfpc(module_gfpc)">
+                                        <td>                         
+                                          <span>{{vm.formatDate(module_gfpc.date_debut_previ_form)}}</span>
+                                        </td>
+
+                                        <td>                         
+                                          <span>{{vm.formatDate(module_gfpc.date_fin_previ_form)}}</span>
+                                        </td>
+
+                                        <td>                          
+                                          <span>{{vm.formatDate(module_gfpc.date_previ_resti)}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{vm.formatDate(module_gfpc.date_debut_reel_form)}}</span>
+                                        </td>
+                                        <td>                          
+                                          <span>{{vm.formatDate(module_gfpc.date_fin_reel_form)}}</span>
+                                        </td>
+                                        <td>                         
+                                          <span>{{vm.formatDate(module_gfpc.date_reel_resti)}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{module_gfpc.nbr_previ_parti}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{module_gfpc.nbr_parti}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{module_gfpc.nbr_previ_fem_parti}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{module_gfpc.nbr_reel_fem_parti}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{module_gfpc.lieu_formation}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{module_gfpc.observation}}</span>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                              </md-tab-body>
+                            </md-tab>
+                        <!---------------------------------Fin Formation gfpc------------------------------------------>
+
+                        <!---------------------------------Debut participant_gfpc -------------------------------------->
+                            <md-tab ng-disabled="!vm.stepparticipantgfpc">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Participant gfpc</span>
+                                  </span>
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                 <div>        
+                                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                                    <thead>
+                                      <tr>
+                                        <th class="secondary-text" ng-repeat="mem in ::vm.participant_gfpc_column">
+                                          <div class="table-header">
+                                            <span class="column-title">{{mem.titre}}</span>
+                                          </div>
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                             
+                                    <tbody>
+                                      <tr ng-repeat="participant_gfpc in vm.allparticipant_gfpc"  ng-class="{selected: participant_gfpc.$selected}" ng-click="vm.selectionParticipant_gfpc(participant_gfpc)">           
+                                        <td>                          
+                                          <span>{{participant_gfpc.nom}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{participant_gfpc.prenom}}</span>
+                                        </td>
+
+                                        <td>                          
+                                          <span>{{vm.affichage_sexe(participant_gfpc.sexe)}}</span>
+                                        </td> 
+
+                                        <td>                                                    
+                                          <span>{{participant_gfpc.situation_participant_gfpc.libelle}}</span>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                              </md-tab-body>
+                            </md-tab>
+                      <!-----------------------------------FIN participant_gfpc --------------------------------------->
+
+                        <!---------------------------------DEBUT Formation pmc----------------------------------------->
+
+                            <md-tab >
+                              <md-tab-label>
+                                <span class="ms-form-wizard-step-label">
+                                  <span class="ms-form-wizard-step-text">Formation pmc</span>
+                                </span>
+                              </md-tab-label>
+                              
+                              <md-tab-body><br>
+                               <div>        
+                                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                  <thead>
+                                    <tr>
+                                      <th class="secondary-text" ng-repeat="mem in ::vm.module_pmc_column">
+                                        <div class="table-header">
+                                          <span class="column-title">{{mem.titre}}</span>
+                                        </div>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                           
+                                  <tbody>
+                                    <tr ng-repeat="module_pmc in vm.allmodule_pmc"  ng-class="{selected: module_pmc.$selected}" ng-click="vm.selectionModule_pmc(module_pmc)">
+                                      <td>                         
+                                        <span>{{vm.formatDate(module_pmc.date_debut_previ_form)}}</span>
+                                      </td>
+
+                                      <td>                         
+                                        <span>{{vm.formatDate(module_pmc.date_fin_previ_form)}}</span>
+                                      </td>
+
+                                      <td>                         
+                                        <span>{{vm.formatDate(module_pmc.date_previ_resti)}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{vm.formatDate(module_pmc.date_debut_reel_form)}}</span>
+                                      </td>
+                                      <td>                          
+                                        <span>{{vm.formatDate(module_pmc.date_fin_reel_form)}}</span>
+                                      </td>
+                                      <td>                          
+                                        <span>{{vm.formatDate(module_pmc.date_reel_resti)}}</span>
+                                      </td>
+                                                
+                                      <td> 
+                                        <span>{{module_pmc.nbr_previ_parti}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_pmc.nbr_parti}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_pmc.nbr_previ_fem_parti}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_pmc.nbr_reel_fem_parti}}</span>
+                                      </td>
+                                                
+                                      <td> 
+                                        <span>{{module_pmc.lieu_formation}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_pmc.observation}}</span>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+
+                            </md-tab-body>
+                            </md-tab>
+                        <!---------------------------------Fin Formation pmc------------------------------------------>
+
+                         <!-------------------------------Debut participant_pmc --------------------------------------->
+                            <md-tab ng-disabled="!vm.stepparticipantpmc">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Participant pmc</span>
+                                  </span>
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                 <div>        
+                                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                                    <thead>
+                                      <tr>
+                                        <th class="secondary-text" ng-repeat="mem in ::vm.participant_pmc_column">
+                                          <div class="table-header">
+                                            <span class="column-title">{{mem.titre}}</span>
+                                          </div>
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                             
+                                    <tbody>
+                                      <tr ng-repeat="participant_pmc in vm.allparticipant_pmc"  ng-class="{selected: participant_pmc.$selected}" ng-click="vm.selectionParticipant_pmc(participant_pmc)">           
+                                        <td>                         
+                                          <span>{{participant_pmc.nom}}</span>
+                                        </td>
+                                                  
+                                        <td>                                                    
+                                          <span>{{participant_pmc.prenom}}</span>
+                                        </td>
+
+                                        <td>                        
+                                          <span>{{vm.affichage_sexe(participant_pmc.sexe)}}</span>
+                                        </td> 
+
+                                        <td>                                                    
+                                          <span>{{participant_pmc.situation_participant_pmc.libelle}}</span>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                              </md-tab-body>
+                            </md-tab>
+                        <!-----------------------------------------FIN participant_pmc ---------------------------------->
+                        <!---------------------------------------DEBUT Formation sep------------------------------------->
+
+                            <md-tab >
+                              <md-tab-label>
+                                <span class="ms-form-wizard-step-label">
+                                  <span class="ms-form-wizard-step-text">Formation sep</span>
+                                </span>
+                              </md-tab-label>
+                              
+                              <md-tab-body><br>
+                               <div>        
+                                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                  <thead>
+                                    <tr>
+                                      <th class="secondary-text" ng-repeat="mem in ::vm.module_sep_column">
+                                        <div class="table-header">
+                                          <span class="column-title">{{mem.titre}}</span>
+                                        </div>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                           
+                                  <tbody>
+                                    <tr ng-repeat="module_sep in vm.allmodule_sep"  ng-class="{selected: module_sep.$selected}" ng-click="vm.selectionModule_sep(module_sep)">
+                                      <td>                         
+                                        <span>{{vm.formatDate(module_sep.date_debut_previ_form)}}</span>
+                                      </td>
+
+                                      <td>                          
+                                        <span>{{vm.formatDate(module_sep.date_fin_previ_form)}}</span>
+                                      </td>
+
+                                      <td>
+                                        <span>{{vm.formatDate(module_sep.date_previ_resti)}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{vm.formatDate(module_sep.date_debut_reel_form)}}</span>
+                                      </td>
+                                      <td>                         
+                                        <span>{{vm.formatDate(module_sep.date_fin_reel_form)}}</span>
+                                      </td>
+                                      <td>                         
+                                        <span>{{vm.formatDate(module_sep.date_reel_resti)}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_sep.nbr_previ_parti}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_sep.nbr_parti}}</span>
+                                      </td>
+                                                
+                                      <td> 
+                                        <span>{{module_sep.nbr_previ_fem_parti}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_sep.nbr_reel_fem_parti}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_sep.lieu_formation}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{module_sep.observation}}</span>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+
+                            </md-tab-body>
+                            </md-tab>
+                        <!---------------------------------Fin Formation sep------------------------------------------>
+
+                         <!--------------------------------Debut participant_sep -------------------------------------->
+                              <md-tab ng-disabled="!vm.stepparticipantsep">
+                                  <md-tab-label>
+                                    <span class="ms-form-wizard-step-label">
+                                        <span class="ms-form-wizard-step-text">Participant sep</span>
+                                    </span>
+                                  </md-tab-label>
+                                  
+                                  <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.participant_sep_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="participant_sep in vm.allparticipant_sep"  ng-class="{selected: participant_sep.$selected}" ng-click="vm.selectionParticipant_sep(participant_sep)">           
+                                          <td>                          
+                                            <span>{{participant_sep.nom}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{participant_sep.prenom}}</span>
+                                          </td>
+
+                                          <td>                          
+                                            <span>{{vm.affichage_sexe(participant_sep.sexe)}}</span>
+                                          </td> 
+
+                                          <td>                                                      
+                                            <span>{{participant_sep.situation_participant_sep.libelle}}</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!--------------------------------------FIN participant_sep ------------------------------------->         
+                              <md-tab>
+                              </md-tab>
+                      <!---------------------convention cisco/feffi---------------->
+                      
+                            </md-tabs> 
+                          </ms-form-wizard>
+                    <!---------------------------------FILS PRESTATION-----------------------------------------------> 
+
+                        </md-tab-body>
+                    </md-tab>                    
+                    
+                    <!-------------------------------Debut document moe -------------------------------------------->
+                    <md-tab >
+                        <md-tab-label>
+                          <span class="ms-form-wizard-step-label">
+                              <span class="ms-form-wizard-step-text">Importer document</span>
+                          </span>
+                        </md-tab-label>
+                        
+                        <md-tab-body><br>
+                         <div>        
+                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                            <thead>
+                              <tr>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Code</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Intitule</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Existance</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Fichier</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Date Elaboration</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Observation</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Action</span>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                                     
+                            <tbody>
+                              <tr ng-repeat="document_pr_scan in vm.alldocument_pr_scan"  ng-class="{selected: document_pr_scan.$selected}" ng-click="vm.selectionDocument_pr_scan(document_pr_scan)">
+
+                                <td>                                            
+                                  <span>{{document_pr_scan.code}}</span>
+                                </td>
+
+                                <td>                                            
+                                  <span>{{document_pr_scan.intitule}}</span>
+                                </td>
+                                
+                                <td>                                 
+                                   <md-checkbox ng-model="document_pr_scan.existance" aria-label="Checkbox 1" disabled>
+                                  </md-checkbox>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{document_pr_scan.fichier}}</span>
+                                </td>
+
+                                <td>                          
+                                  <span>{{vm.formatDate(document_pr_scan.date_elaboration)}}</span>
+                                </td>
+
+                                <td>                                            
+                                  <span>{{document_pr_scan.observation}}</span>
+                                </td>
+
+                                <td>                       
+                                            
+                                  <a ng-if="document_pr_scan.existance" ng-click="vm.download_document_pr_scan(document_pr_scan)" title="Telecharger fichier">
+                                    <span class="icon-box-download"></span>
+                                  </a>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </md-tab-body>
+                    </md-tab>
+                    <!--------------------------------------FIN document moe --------------------------------------------> 
+            
+                  </md-tabs> 
+                </ms-form-wizard>               
+              </md-tab-body>
+            </md-tab>
+
+            <!-----------------------DEBUT MAITRISE DOEUVRE------------------------------------>
+            <md-tab ng-disabled="vm.stepMenu_moe==false">
+              <md-tab-label >
+                <span class="ms-form-wizard-step-label">
+                    <!--span class="ms-form-wizard-step-number md-accent-bg">
+                      <i class="icon-drawing-box s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">MAITRISE D'ŒUVRE</span>
+                    <!--span class="ms-form-wizard-step-number md-accent-bg notification" >4</span-->
+                </span>
+               
+              </md-tab-label>
+              
+              <md-tab-body>
+               <ms-form-wizard flex id="sousmenu"> 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+                    <!-------------------convention cisco/feffi----------------->
+                    <md-tab>
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Passation des marchés</span>
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body><br>
+                         <div>       
+                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                            <thead>
+                              <tr>
+                                <th class="secondary-text" ng-repeat="mem in ::vm.passation_marches_moe_column">
+                                  <div class="table-header">
+                                    <span class="column-title">{{mem.titre}}</span>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                                     
+                            <tbody>
+                              <tr ng-repeat="passation_marches_moe in vm.allpassation_marches_moe"  ng-class="{selected: passation_marches_moe.$selected}" ng-click="vm.selectionPassation_marches_moe(passation_marches_moe)">
+
+                                <td>                         
+                                  <span>{{vm.formatDate(passation_marches_moe.date_shortlist)}}</span>
+                                </td>
+
+                                <td>                          
+                                  <span>{{vm.formatDate(passation_marches_moe.date_manifestation)}}</span>
+                                </td>
+
+                                <td>                          
+                                  <span>{{vm.formatDate(passation_marches_moe.date_lancement_dp)}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{vm.formatDate(passation_marches_moe.date_remise)}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{passation_marches_moe.nbr_offre_recu}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(passation_marches_moe.date_rapport_evaluation)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(passation_marches_moe.date_demande_ano_dpfi)}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{vm.formatDate(passation_marches_moe.date_ano_dpfi)}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{vm.formatDate(passation_marches_moe.notification_intention)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(passation_marches_moe.date_notification_attribution)}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{vm.formatDate(passation_marches_moe.date_signature_contrat)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(passation_marches_moe.date_os)}}</span>
+                                </td>
+
+                                <td>                                            
+                                  <span>{{vm.affichageStatut(passation_marches_moe.statut)}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{passation_marches_moe.observation}}</span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </md-tab-body>
+                    </md-tab>
+                    <md-tab>
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
+                            <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                              <i class="icon-check s16"></i>
+                            </span-->
+                            <span class="ms-form-wizard-step-text">Contrat</span>
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body><br>
+                         <div>        
+                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                            <thead>
+                              <tr>
+                                <th class="secondary-text" ng-repeat="mem in ::vm.contrat_moe_column">
+                                  <div class="table-header">
+                                    <span class="column-title">{{mem.titre}}</span>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                                     
+                            <tbody>
+                              <tr ng-repeat="contrat_moe in vm.allcontrat_moe"  ng-class="{selected: contrat_moe.$selected}" ng-click="vm.selectionContrat_moe(contrat_moe)">
+                                          
+                                <td>                                            
+                                  <span>{{contrat_moe.bureau_etude.nom}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{contrat_moe.intitule}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{contrat_moe.ref_contrat}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{contrat_moe.montant_contrat}}</span>
+                                </td>
+
+                                <td>                          
+                                  <span>{{vm.formatDate(contrat_moe.date_signature)}}</span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </md-tab-body>
+                    </md-tab>
+                    <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0">
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Prestation</span>
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body>
+                       <!---------------------------------FILS PRESTATION----------------------------------------------->       
+                         <ms-form-wizard flex id="soussousmenu"> 
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+                        <!-----------------------------DEBUT FORMATION DPP--------------------------------------> 
+                              <md-tab>
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                                        <i class="icon-basket-fill s16"></i>
+                                      </span-->                          
+                                      
+                                      <span class="ms-form-wizard-step-text">Memoire technique</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                 <div>        
+                                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                    <thead>
+                                      <tr>
+                                        <th class="secondary-text">
+                                          <div class="table-header">
+                                            <span class="column-title">Description</span>
+                                          </div>
+                                        </th>
+                                        <th class="secondary-text">
+                                          <div class="table-header">
+                                            <span class="column-title">Date livraison</span>
+                                          </div>
+                                        </th>
+                                        <th class="secondary-text">
+                                          <div class="table-header">
+                                            <span class="column-title">Date Approbation</span>
+                                          </div>
+                                        </th>
+                                        <th class="secondary-text">
+                                          <div class="table-header">
+                                            <span class="column-title">Observation</span>
+                                          </div>
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                             
+                                    <tbody>
+                                      <tr ng-repeat="memoire_technique in vm.allmemoire_technique"  ng-class="{selected: memoire_technique.$selected}" ng-click="vm.selectionMemoire_technique(memoire_technique)">
+                                                 
+                                        <td>                                                    
+                                          <span>{{memoire_technique.description}}</span>
+                                        </td>
+
+                                        <td>                         
+                                          <span>{{vm.formatDate(memoire_technique.date_livraison)}}</span>
+                                        </td>
+
+                                        <td>                        
+                                          <span>{{vm.formatDate(memoire_technique.date_approbation)}}</span>
+                                        </td>
+
+                                        <td>                                                    
+                                          <span>{{memoire_technique.observation}}</span>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                              </md-tab-body>
+                              </md-tab>
+                        <!---------------------------------FIN FORMATION DPP----------------------------------------------->
+
+                        <!----------------------------------Debut participant_dpp ----------------------------------------->
+                              <md-tab>
+                                  <md-tab-label>
+                                    <span class="ms-form-wizard-step-label">
+                                        <span class="ms-form-wizard-step-text">Appel d'offre</span>
+                                    </span>
+                                  </md-tab-label>
+                                  
+                                   <md-tab-body><br>
+                                     <div>        
+                                      <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                        <thead>
+                                          <tr>
+                                            <th class="secondary-text">
+                                              <div class="table-header">
+                                                <span class="column-title">Description</span>
+                                              </div>
+                                            </th>
+                                            <th class="secondary-text">
+                                              <div class="table-header">
+                                                <span class="column-title">Date livraison</span>
+                                              </div>
+                                            </th>
+                                            <th class="secondary-text">
+                                              <div class="table-header">
+                                                <span class="column-title">Date Approbation</span>
+                                              </div>
+                                            </th>
+                                            <th class="secondary-text">
+                                              <div class="table-header">
+                                                <span class="column-title">Observation</span>
+                                              </div>
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                                 
+                                        <tbody>
+                                          <tr ng-repeat="appel_offre in vm.allappel_offre"  ng-class="{selected: appel_offre.$selected}" ng-click="vm.selectionAppel_offre(appel_offre)">
+                                                     
+                                            <td>                                                        
+                                              <span>{{appel_offre.description}}</span>
+                                            </td>
+
+                                            <td>                         
+                                              <span>{{vm.formatDate(appel_offre.date_livraison)}}</span>
+                                            </td>
+
+                                            <td>                          
+                                              <span>{{vm.formatDate(appel_offre.date_approbation)}}</span>
+                                            </td>
+
+                                            <td>                                                        
+                                              <span>{{appel_offre.observation}}</span>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+
+                                  </md-tab-body>
+                              </md-tab>
+                        <!---------------------------------FIN participant_dpp ------------------------------------------>
+
+
+                        <!---------------------------------DEBUT FORMATION ODC------------------------------------------->
+                              <md-tab >
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <!--span class="ms-form-wizard-step-number md-accent-bg">
+                                        <i class="icon-attachment s16"></i>
+                                      </span-->
+                                      <span class="ms-form-wizard-step-text">Rapport mensuel</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Numero rapport</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Description</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Date livraison</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Observation</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="rapport_mensuel in vm.allrapport_mensuel"  ng-class="{selected: rapport_mensuel.$selected}" ng-click="vm.selectionRapport_mensuel(rapport_mensuel)">
+                                          <td>                                                      
+                                            <span>{{vm.affichage_numero(rapport_mensuel.numero)}}</span>
+                                          </td>        
+                                          <td>                                                      
+                                            <span>{{rapport_mensuel.description}}</span>
+                                          </td>
+                                          <td>                         
+                                            <span>{{vm.formatDate(rapport_mensuel.date_livraison)}}</span>
+                                          </td>
+
+                                          <td>                                                      
+                                            <span>{{rapport_mensuel.observation}}</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+
+                       <!---------------------------------FIN FORMATION ODC------------------------------------------->
+
+                       <!---------------------------------FIN participant ODC------------------------------------------->
+                              <md-tab>
+                                  <md-tab-label>
+                                    <span class="ms-form-wizard-step-label">
+                                        <span class="ms-form-wizard-step-text">Manuel de gestion</span>
+                                    </span>
+                                  </md-tab-label>
+                                  
+                                  <md-tab-body><br>
+                                     <div>        
+                                      <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                        <thead>
+                                          <tr>
+                                            <th class="secondary-text">
+                                              <div class="table-header">
+                                                <span class="column-title">Description</span>
+                                              </div>
+                                            </th>
+                                            <th class="secondary-text">
+                                              <div class="table-header">
+                                                <span class="column-title">Date livraison</span>
+                                              </div>
+                                            </th>
+                                            <th class="secondary-text">
+                                              <div class="table-header">
+                                                <span class="column-title">Observation</span>
+                                              </div>
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                                 
+                                        <tbody>
+                                          <tr ng-repeat="manuel_gestion in vm.allmanuel_gestion"  ng-class="{selected: manuel_gestion.$selected}" ng-click="vm.selectionManuel_gestion(manuel_gestion)">
+                                                     
+                                            <td>                                                        
+                                              <span>{{manuel_gestion.description}}</span>
+                                            </td>
+
+                                            <td>                          
+                                              <span>{{vm.formatDate(manuel_gestion.date_livraison)}}</span>
+                                            </td>
+
+                                            <td>                                                        
+                                              <span>{{manuel_gestion.observation}}</span>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+
+                                  </md-tab-body>
+                              </md-tab>
+                       <!--------------------------------DEBUT participant emies----------------------------------------->
+
+                       <!--------------------------------DEBUT Formation emies----------------------------------------->
+
+                            <md-tab >
+                              <md-tab-label>
+                                <span class="ms-form-wizard-step-label">
+                                    <!--span class="ms-form-wizard-step-number md-accent-bg">
+                                        <i class="icon-currency-eur s16"></i>
+                                    </span-->
+                                  <span class="ms-form-wizard-step-text">Police d'assurance</span>
+                                </span>
+                              </md-tab-label>
+                              
+                              <md-tab-body><br>
+                               <div>        
+                                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                  <thead>
+                                    <tr>
+                                      <th class="secondary-text">
+                                        <div class="table-header">
+                                          <span class="column-title">Description</span>
+                                        </div>
+                                      </th>
+                                      <th class="secondary-text">
+                                        <div class="table-header">
+                                          <span class="column-title">Date expiration</span>
+                                        </div>
+                                      </th>
+                                      <th class="secondary-text">
+                                        <div class="table-header">
+                                          <span class="column-title">Observation</span>
+                                        </div>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                           
+                                  <tbody>
+                                    <tr ng-repeat="police_assurance in vm.allpolice_assurance"  ng-class="{selected: police_assurance.$selected}" ng-click="vm.selectionPolice_assurance(police_assurance)">
+                                                
+                                      <td>                                                  
+                                        <span>{{police_assurance.description}}</span>
+                                      </td>
+
+                                      <td>                         
+                                        <span>{{vm.formatDate(police_assurance.date_expiration)}}</span>
+                                      </td>
+
+                                      <td>                                                  
+                                        <span>{{police_assurance.observation}}</span>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+
+                            </md-tab-body>
+                            </md-tab>
+                        <!---------------------------------Fin Formation emies------------------------------------------>
+                                
+                              <md-tab>
+                              </md-tab>
+                      <!---------------------convention cisco/feffi---------------->
+                      
+                            </md-tabs> 
+                          </ms-form-wizard>
+                    <!---------------------------------FILS PRESTATION-----------------------------------------------> 
+
+                      </md-tab-body>
+                    </md-tab>
+                    
+                    <!---------------------------------Avenant MOE-----------------------------------------------> 
+                    <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0">                    
+                      <md-tab-label >
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Avenant</span>
+                        </span>
+                       
+                      </md-tab-label>
+
+                      <md-tab-body><br>
+                               <div>        
+                                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                  <thead>
+                                    <tr>
+                                      <th class="secondary-text" ng-repeat="mem in ::vm.avenant_moe_column">
+                                        <div class="table-header">
+                                          <span class="column-title">{{mem.titre}}</span>
+                                        </div>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                           
+                                  <tbody>
+                                    <tr ng-repeat="avenant_moe in vm.allavenant_moe"  ng-class="{selected: avenant_moe.$selected}" ng-click="vm.selectionAvenant_moe(avenant_moe)">
+                                                
+                                      <td>                                                  
+                                        <span>{{avenant_moe.description}}</span>
+                                      </td>
+
+                                      <td>                                                  
+                                        <span>{{avenant_moe.ref_avenant}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{avenant_moe.montant}}</span>
+                                      </td>
+
+                                      <td>                         
+                                        <span>{{vm.formatDate(avenant_moe.date_signature)}}</span>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                      </md-tab-body>
+                    </md-tab>
+                    <!---------------------------------Avenant MOE-----------------------------------------------> 
+                    <!-------------------------------Debut document moe -------------------------------------------->
+                    <md-tab ng-disabled="vm.validation_contrat_moe==0">
+                        <md-tab-label>
+                          <span class="ms-form-wizard-step-label">
+                              <span class="ms-form-wizard-step-text">Importer document</span>
+                          </span>
+                        </md-tab-label>
+                        
+                        <md-tab-body><br>
+                         <div>        
+                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                            <thead>
+                              <tr>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Code</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Intitule</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Existance</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Fichier</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Date Elaboration</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Observation</span>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                                     
+                            <tbody>
+                              <tr ng-repeat="document_moe_scan in vm.alldocument_moe_scan"  ng-class="{selected: document_moe_scan.$selected}" ng-click="vm.selectionDocument_moe_scan(document_moe_scan)">
+
+                                <td>                                            
+                                  <span>{{document_moe_scan.code}}</span>
+                                </td>
+
+                                <td>                                            
+                                  <span>{{document_moe_scan.intitule}}</span>
+                                </td>
+                                
+                                <td>                                 
+                                   <md-checkbox ng-model="document_moe_scan.existance" aria-label="Checkbox 1" disabled>
+                                  </md-checkbox>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{document_moe_scan.fichier}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(document_moe_scan.date_elaboration)}}</span>
+                                </td>
+
+                                <td>                                            
+                                  <span>{{document_moe_scan.observation}}</span>
+                                </td>
+
+                                <td>                       
+                                            
+                                  <a ng-if="document_moe_scan.existance" ng-click="vm.download_document_moe_scan(document_moe_scan)" title="Telecharger fichier">
+                                    <span class="icon-box-download"></span>
+                                  </a>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </md-tab-body>
+                    </md-tab>
+                    <!--------------------------------------FIN document moe -------------------------------------------->            
+                  </md-tabs> 
+                </ms-form-wizard>               
+              </md-tab-body>
+            </md-tab> 
+
+            <!-----------------------FIN MAITRISE DOEUVRE--------------------------------------------->
+
+
+             <!-----------------------DEBUT ENTREPRISE------------------------------------>
+            <md-tab ng-disabled="vm.stepMenu_mpe==false">
+              <md-tab-label >
+                <span class="ms-form-wizard-step-label">
+                    <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepMenu==true">
+                      <i class="icon-worker s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">ENTREPRISE</span>
+                    <!--span class="ms-form-wizard-step-number md-accent-bg notification" >4</span-->
+                </span>
+               
+              </md-tab-label>
+              
+              <md-tab-body>
+               <ms-form-wizard flex id="sousmenu"> 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                    <md-tab>
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">DF</span>
+                            <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                              <i class="icon-check s16"></i>
+                            </span-->
+                            <span class="ms-form-wizard-step-text">Passation des marchés</span>
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body><br>
+                         <div>        
+                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                            <thead>
+                              <tr>
+                                <th class="secondary-text" ng-repeat="mem in ::vm.passation_marches_column">
+                                  <div class="table-header">
+                                    <span class="column-title">{{mem.titre}}</span>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                                     
+                            <tbody>
+                              <tr ng-repeat="passation_marches in vm.allpassation_marches"  ng-class="{selected: passation_marches.$selected}" ng-click="vm.selectionPassation_marches(passation_marches)">           
+                                <td>                          
+                                  <span>{{vm.formatDate(passation_marches.date_lancement)}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{vm.formatDate(passation_marches.date_remise)}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{passation_marches.nbr_offre_recu}}</span>
+                                </td>
+                                          
+                                <td>                                           
+                                  <span>{{passation_marches.montant_moin_chere}}</span>
+                                </td>
+
+                                <td>                          
+                                  <span>{{vm.formatDate(passation_marches.date_rapport_evaluation)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(passation_marches.date_demande_ano_dpfi)}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{vm.formatDate(passation_marches.date_ano_dpfi)}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{vm.formatDate(passation_marches.notification_intention)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(passation_marches.date_notification_attribution)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(passation_marches.date_os)}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{passation_marches.observation}}</span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </md-tab-body>
+                    </md-tab>                    
+                    <!------------------------------------------------Fin Passation marches-------------------------------------------->
+
+                    <!------------------------------------------------MPE sousmissionnaire-------------------------------------------->
+                       <md-tab ng-disabled="!vm.stepsoumissionnaire">
+                          <md-tab-label>
+                            <span class="ms-form-wizard-step-label">
+                                <span class="ms-form-wizard-step-text">mpe soumissionaire</span>
+                            </span>
+                          </md-tab-label>
+                          
+                          <md-tab-body>
+                            <br>
+                           <div>        
+                            <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                              <thead>
+                                <tr>
+                                  <th class="secondary-text" ng-repeat="mem in ::vm.mpe_soumissionaire_column">
+                                    <div class="table-header">
+                                      <span class="column-title">{{mem.titre}}</span>
+                                    </div>
+                                  </th>
+                                </tr>
+                              </thead>
+                                       
+                              <tbody>
+                                <tr ng-repeat="mpe_soumissionaire in vm.allmpe_soumissionaire"  ng-class="{selected: mpe_soumissionaire.$selected}" ng-click="vm.selectionMpe_soumissionaire(mpe_soumissionaire)">
+                                            
+                                  <td> 
+                                    <span>{{mpe_soumissionaire.prestataire.nom}}</span>
+                                  </td>          
+                                  <td>                                              
+                                    <span>{{mpe_soumissionaire.prestataire.telephone}}</span>
+                                  </td>
+                                            
+                                  <td>                                              
+                                    <span>{{mpe_soumissionaire.prestataire.siege}}</span>
+                                  </td> 
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+
+                        </md-tab-body>
+                      </md-tab>
+                    <!------------------------------------------------MPE sousmissionnaire-------------------------------------------->
+
+                    <!------------------------------------------------Debut contrat mpe----------------------------------------->
+                    <md-tab>
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
+                            <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                              <i class="icon-check s16"></i>
+                            </span-->
+                            <span class="ms-form-wizard-step-text">Contrat</span>
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body><br>
+                         <div>        
+                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                            <thead>
+                              <tr>
+                                <th class="secondary-text" ng-repeat="mem in ::vm.contrat_prestataire_column">
+                                  <div class="table-header">
+                                    <span class="column-title">{{mem.titre}}</span>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                                     
+                            <tbody>
+                              <tr ng-repeat="contrat_prestataire in vm.allcontrat_prestataire"  ng-class="{selected: contrat_prestataire.$selected}" ng-click="vm.selectionContrat_prestataire(contrat_prestataire)">
+                                          
+                                <td>                                            
+                                  <span>{{contrat_prestataire.prestataire.nom}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{contrat_prestataire.description}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{contrat_prestataire.num_contrat}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{contrat_prestataire.cout_batiment}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{contrat_prestataire.cout_latrine}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{contrat_prestataire.cout_mobilier}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(contrat_prestataire.date_signature)}}</span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </md-tab-body>
+                    </md-tab>
+                    <md-tab ng-disabled = "!vm.stepsuiviexecution || vm.validation_contrat_prestataire==0">
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
+                            <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                              <i class="icon-check s16"></i>
+                            </span-->
+                            <span class="ms-form-wizard-step-text">Suivi des travaux</span>
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body>
+                       <ms-form-wizard flex id="sousmenu"> 
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">                    
+                              <md-tab>
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Delai d'execution</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.delai_travaux_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="delai_travaux in vm.alldelai_travaux"  ng-class="{selected: delai_travaux.$selected}" ng-click="vm.selectionDelai_travaux(delai_travaux)">      
+                                          <td>                          
+                                            <span>{{vm.formatDate(delai_travaux.date_prev_debu_travau)}}</span>
+                                          </td>
+
+                                          <td>                          
+                                            <span>{{vm.formatDate(delai_travaux.date_reel_debu_travau)}}</span>
+                                          </td>
+                                                    
+                                          <td>                          
+                                            <span>{{vm.formatDate(delai_travaux.date_expiration_police)}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{delai_travaux.delai_execution}}</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>          
+                              <md-tab ng-disabled = "!vm.stepphase">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">DF</span>
+                                      <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
+                                        <i class="icon-check s16"></i>
+                                      </span-->
+                                      <span class="ms-form-wizard-step-text">Phase sous projet</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.phase_sous_projet_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="phase_sous_projet in vm.allphase_sous_projet"  ng-class="{selected: phase_sous_projet.$selected}" ng-click="vm.selectionPhase_sous_projet(phase_sous_projet)">           
+                                          <td>                                                      
+                                            <span>{{phase_sous_projet.etape_sousprojet.libelle}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{phase_sous_projet.etape_sousprojet.description}}</span>
+                                          </td>
+
+                                          <td>                          
+                                            <span>{{vm.formatDate(phase_sous_projet.date_travaux)}}</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                              <md-tab>
+                                  <md-tab-label>
+                                    <span class="ms-form-wizard-step-label">
+                                        <span class="ms-form-wizard-step-text">reception_mpe</span>
+                                    </span>
+                                  </md-tab-label>
+                                  
+                                  <md-tab-body><br>
+                                      <div>        
+                                      <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                        <thead>
+                                          <tr>
+                                            <th class="secondary-text" ng-repeat="mem in ::vm.reception_mpe_column">
+                                              <div class="table-header">
+                                                <span class="column-title">{{mem.titre}}</span>
+                                              </div>
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                                 
+                                        <tbody>
+                                          <tr ng-repeat="reception_mpe in vm.allreception_mpe"  ng-class="{selected: reception_mpe.$selected}" ng-click="vm.selectionReception_mpe(reception_mpe)">  
+                                           
+                                            <td>                         
+                                              <span>{{vm.formatDate(reception_mpe.date_previ_recep_tech)}}</span>
+                                            </td>
+                                                      
+                                            <td>                                                        
+                                              <span>{{vm.formatDate(reception_mpe.date_reel_tech)}}</span>
+                                            </td>
+
+                                            <td>                                                        
+                                              <span>{{vm.formatDate(reception_mpe.date_leve_recep_tech)}}</span>
+                                            </td>
+                                            <td>                         
+                                            <span>{{vm.formatDate(reception_mpe.date_previ_recep_prov)}}</span>
+                                          </td>
+
+                                          <td>                         
+                                            <span>{{vm.formatDate(reception_mpe.date_reel_recep_prov)}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{vm.formatDate(reception_mpe.date_previ_leve)}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{vm.formatDate(reception_mpe.date_reel_lev_ava_rd)}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{vm.formatDate(reception_mpe.date_previ_recep_defi)}}</span>
+                                          </td>
+                                          <td>                         
+                                            <span>{{vm.formatDate(reception_mpe.date_reel_recep_defi)}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{reception_mpe.observation}}</span>
+                                          </td>                      
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                </md-tab-body>
+                              </md-tab>
+                  <!---------------------------------------------Debut avancement_batiment -------------------------------------------->
+                              <md-tab>
+                                  <md-tab-label>
+                                    <span class="ms-form-wizard-step-label">
+                                          <!--span class="ms-form-wizard-step-number md-accent-bg">
+                                            <i class="icon-check s16"></i>
+                                        </span-->
+                                        <span class="ms-form-wizard-step-text">Avancement batiment</span>
+                                    </span>
+                                  </md-tab-label>
+                                  
+                                  <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.avancement_batiment_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="avancement_batiment in vm.allavancement_batiment"  ng-class="{selected: avancement_batiment.$selected}" ng-click="vm.selectionAvancement_batiment(avancement_batiment)">
+                                                                           
+                                          <td>                                                      
+                                            <span>{{avancement_batiment.intitule}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{avancement_batiment.description}}</span>
+                                          </td>
+
+                                          <td>                                                      
+                                            <span>{{avancement_batiment.attachement_batiment.ponderation_batiment}}% {{avancement_batiment.attachement_batiment.libelle}}</span>
+                                          </td>
+
+                                          <td>                        
+                                            <span>{{vm.formatDate(avancement_batiment.date)}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{avancement_batiment.observation}}</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                  <!------------------------------------------FIN avancement_batiment ------------------------------------------------->
+                  <!---------------------------------------------Debut avancement_batiment -------------------------------------------->
+                              <md-tab>
+                                  <md-tab-label>
+                                    <span class="ms-form-wizard-step-label">
+                                          <!--span class="ms-form-wizard-step-number md-accent-bg">
+                                            <i class="icon-check s16"></i>
+                                        </span-->
+                                        <span class="ms-form-wizard-step-text">Avancement latrine</span>
+                                    </span>
+                                  </md-tab-label>
+                                  
+                                  <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.avancement_latrine_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="avancement_latrine in vm.allavancement_latrine"  ng-class="{selected: avancement_latrine.$selected}" ng-click="vm.selectionAvancement_latrine(avancement_latrine)">
+                                                                           
+                                          <td>                                                      
+                                            <span>{{avancement_latrine.intitule}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{avancement_latrine.description}}</span>
+                                          </td>
+
+                                          <td>                                                      
+                                            <span>{{avancement_latrine.attachement_latrine.ponderation_latrine}}% {{avancement_latrine.attachement_latrine.libelle}}</span>
+                                          </td>
+
+                                          <td>                          
+                                            <span>{{vm.formatDate(avancement_latrine.date)}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{avancement_latrine.observation}}</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                  <!----------------------------------FIN avancement_latrine ------------------------------------------------->
+                  <!----------------------------------Debut avancement_mobilier -------------------------------------------->
+                              <md-tab ng-disabled="vm.stepTwo==false">
+                                  <md-tab-label>
+                                    <span class="ms-form-wizard-step-label">
+                                          <!--span class="ms-form-wizard-step-number md-accent-bg">
+                                            <i class="icon-check s16"></i>
+                                        </span-->
+                                        <span class="ms-form-wizard-step-text">Avancement mobilier</span>
+                                    </span>
+                                  </md-tab-label>
+                                  
+                                  <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.avancement_mobilier_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="avancement_mobilier in vm.allavancement_mobilier"  ng-class="{selected: avancement_mobilier.$selected}" ng-click="vm.selectionAvancement_mobilier(avancement_mobilier)">
+                                                                           
+                                          <td>                                                      
+                                            <span>{{avancement_mobilier.intitule}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{avancement_mobilier.description}}</span>
+                                          </td>
+
+                                          <td>                                                      
+                                            <span>{{avancement_mobilier.attachement_mobilier.ponderation_mobilier}}% {{avancement_mobilier.attachement_mobilier.libelle}}</span>
+                                          </td>
+
+                                          <td>                          
+                                            <span>{{vm.formatDate(avancement_mobilier.date)}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{avancement_mobilier.observation}}</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                  <!------------------------------------------FIN avancement_mobilier ------------------------------------------------->            
+                            </md-tabs> 
+                          </ms-form-wizard>               
+                        </md-tab-body>
+                    </md-tab>
+                    
+                  <!--------------------------------------------------Avenant MOE----------------------------------------------------> 
+                    <md-tab ng-disabled="!vm.stepavenant_mpe">                    
+                      <md-tab-label >
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Avenant</span>
+                        </span>
+                       
+                      </md-tab-label>
+
+                      <md-tab-body><br>
+                               <div>        
+                                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                  <thead>
+                                    <tr>
+                                      <th class="secondary-text" ng-repeat="mem in ::vm.avenant_mpe_column">
+                                        <div class="table-header">
+                                          <span class="column-title">{{mem.titre}}</span>
+                                        </div>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                           
+                                  <tbody>
+                                    <tr ng-repeat="avenant_mpe in vm.allavenant_mpe"  ng-class="{selected: avenant_mpe.$selected}" ng-click="vm.selectionAvenant_mpe(avenant_mpe)">
+                                                
+                                      <td>                                                  
+                                        <span>{{avenant_mpe.description}}</span>
+                                      </td>
+
+                                      <td>                                                  
+                                        <span>{{avenant_mpe.ref_avenant}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{avenant_mpe.cout_batiment}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{avenant_mpe.cout_latrine}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{avenant_mpe.cout_mobilier}}</span>
+                                      </td>
+
+                                      <td>                         
+                                        <span>{{vm.formatDate(avenant_mpe.date_signature)}}</span>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                      </md-tab-body>
+                    </md-tab>
+                    <!--------------------------------------Fin Avenant mpe---------------------------------------------------> 
+                    <!-------------------------------Debut document prestataire -------------------------------------------->
+                    <md-tab >
+                        <md-tab-label>
+                          <span class="ms-form-wizard-step-label">
+                              <span class="ms-form-wizard-step-text">Scan document</span>
+                          </span>
+                        </md-tab-label>
+                        
+                        <md-tab-body><br>
+                         <div>        
+                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                            <thead>
+                              <tr>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Code</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Intitule</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Existance</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Fichier</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Date Elaboration</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Observation</span>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                                     
+                            <tbody>
+                              <tr ng-repeat="document_prestataire_scan in vm.alldocument_prestataire_scan"  ng-class="{selected: document_prestataire_scan.$selected}" ng-click="vm.selectionDocument_prestataire_scan(document_prestataire_scan)">
+
+                                <td>                                            
+                                  <span>{{document_prestataire_scan.code}}</span>
+                                </td>
+
+                                <td>                                            
+                                  <span>{{document_prestataire_scan.intitule}}</span>
+                                </td>
+                                
+                                <td>                                 
+                                   <md-checkbox ng-model="document_prestataire_scan.existance" aria-label="Checkbox 1" disabled>
+                                  </md-checkbox>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{document_prestataire_scan.fichier}}</span>
+                                </td>
+
+                                <td>                          
+                                  <span>{{vm.formatDate(document_prestataire_scan.date_elaboration)}}</span>
+                                </td>
+
+                                <td>                                            
+                                  <span>{{document_prestataire_scan.observation}}</span>
+                                </td>
+
+                                <td>                     
+                                            
+                                  <a ng-if="document_prestataire_scan.existance" ng-click="vm.download_document_prestataire_scan(document_prestataire_scan)" title="Telecharger fichier">
+                                    <span class="icon-box-download"></span>
+                                  </a>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </md-tab-body>
+                    </md-tab>
+                    <!--------------------------------------FIN document prestataire -------------------------------------------->            
+                  </md-tabs> 
+                </ms-form-wizard>               
+              </md-tab-body>
+            </md-tab>
+
+            <!-----------------------DEBUT RELIQUAT------------------------------------>
+            <md-tab ng-disabled="vm.stepMenu_mpe==false">
+              <md-tab-label >
+                <span class="ms-form-wizard-step-label">
+                    <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepMenu==true">
+                      <i class="icon-worker s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Indicateur</span>
+                    <!--span class="ms-form-wizard-step-number md-accent-bg notification" >4</span-->
+                </span>
+               
+              </md-tab-label>
+              
+              <md-tab-body><br>
+
+                          <div>        
+                            <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                              <thead>
+                                <tr>
+                                  <th class="secondary-text" ng-repeat="ciscT in ::vm.indicateur_column">
+                                    <div class="table-header">
+                                      <span class="column-title">{{ciscT.titre}}</span>
+                                    </div>
+                                  </th>
+                                </tr>
+                              </thead>
+                                       
+                              <tbody>
+                                <tr ng-repeat="indicateur in vm.allindicateur"  ng-class="{selected: indicateur.$selected}" ng-click="vm.selectionIndicateur(indicateur)">           
+                                  
+
+                                  <td>                          
+                                    <span>{{indicateur.nbr_salle_const}}</span>
+                                  </td>
+                                  <td>                          
+                                    <span>{{indicateur.nbr_beneficiaire}}</span>
+                                  </td>
+                                  <td>                          
+                                    <span>{{indicateur.nbr_ecole}}</span>
+                                  </td>
+                                  <td>                          
+                                    <span>{{indicateur.nbr_box}}</span>
+                                  </td>
+                                  <td>                          
+                                    <span>{{indicateur.nbr_point_eau}}</span>
+                                  </td>
+                                  <td>                          
+                                    <span>{{indicateur.nbr_banc}}</span>
+                                  </td>
+                                  <td>                         
+                                    <span>{{indicateur.nbr_table_maitre}}</span>
+                                  </td>
+                                  <td>                         
+                                    <span>{{indicateur.nbr_chaise}}</span>
+                                  </td>
+                                  <td>                          
+                                    <span>{{indicateur.observation}}</span>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+              </md-tab-body>
+            </md-tab>
+            <md-tab>
+            </md-tab>
+            <!-----------------------FIN RELIQUAT--------------------------------------------->
+            
+          </md-tabs>
+        </ms-form-wizard> 
+<!------------------------------------FIN TABS MERE--------------------------------------------------->    
+       </div>
+      
+    </div>
+    <!-- / CONTENT -->
+  </div>

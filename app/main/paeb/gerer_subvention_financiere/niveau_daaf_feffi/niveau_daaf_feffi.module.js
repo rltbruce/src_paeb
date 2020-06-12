@@ -16,7 +16,7 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_daaf_feffi', {
             title : 'Niveau DAAF/FEFFI',
-            icon  : 'icon-data',
+            icon  : 'icon-flattr',
             weight: 1
         });
 

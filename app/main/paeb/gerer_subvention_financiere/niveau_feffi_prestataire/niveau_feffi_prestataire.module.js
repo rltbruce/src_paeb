@@ -15,7 +15,7 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_feffi_prestataire', {
             title : 'Niveau FEFFI/PRESTATAIRE',
-            icon  : 'icon-data',
+            icon  : 'icon-flattr',
             weight: 6
         });
 

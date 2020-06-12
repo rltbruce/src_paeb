@@ -29,7 +29,7 @@ var vs;
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_cisco_feffi.convention_cisco_feffi', {
             title: 'Saisie convention',
-            icon  : 'icon-source-fork',
+            icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_subvention_operation_niveau_cisco_feffi_convention_cisco_feffi',
 			weight: 2,
             hidden: function()

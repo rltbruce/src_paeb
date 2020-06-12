@@ -726,33 +726,12 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
-              switch (vm.session)
-                { 
-                  case 'OBCAF':
-                            if (vm.usercisco.id!=undefined)
-                            {
-                              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpByciscodate',
-                                'id_cisco',vm.usercisco.id,'date_debut',date_debut,'date_fin',date_fin).then(function(result)
-                              {
-                                  vm.allconvention_entete = result.data.response;
-                              });
-                            }               
-                      break;
-
-                  case 'ADMIN':
-                           
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
-                            {
-                                vm.allconvention_entete = result.data.response;
-                                console.log(vm.allconvention_entete);
-                            });                 
-                      break;
-                  default:
-                      break;
-              
-                }
-                console.log(filtre);
+            {
+                vm.allconvention_entete = result.data.response;
+                console.log(vm.allconvention_entete);
+            });
         }
         vm.annulerfiltre = function()
         {
@@ -769,37 +748,12 @@
             
             vm.showbuttonNouvContrat_prestataire=true;
            
-            donnee_menu_pr(item,vm.session).then(function (result) 
-            {
-                    // On récupère le resultat de la requête dans la varible "response"                    
-                vm.stepMenu_pr=true;
-                console.log(result);  
-            });
-            donnee_menu_moe(item,vm.session).then(function () 
-            {
-                    // On récupère le resultat de la requête dans la varible "response"                    
-                vm.stepMenu_moe=true;
-                console.log(vm.stepMenu_moe);  
-            });
-            donnee_menu_mpe(item,vm.session).then(function () 
-            {
-                    // On récupère le resultat de la requête dans la varible "response"                    
-                vm.stepMenu_mpe=true;
-                console.log(vm.stepMenu_mpe);  
-            });
+            vm.stepMenu_pr=true;                  
+            vm.stepMenu_moe=true;                  
+            vm.stepMenu_mpe=true;                    
+            vm.stepMenu_feffi=true;                   
+            vm.stepMenu_indicateur=true;
 
-            donnee_sousmenu_feffi(item,vm.session).then(function () 
-            {
-                    // On récupère le resultat de la requête dans la varible "response"                    
-                vm.stepMenu_feffi=true;
-                console.log(vm.stepMenu_feffi);  
-            });
-            donnee_menu_indicateur(item,vm.session).then(function () 
-            {
-                    // On récupère le resultat de la requête dans la varible "response"                    
-                vm.stepMenu_indicateur=true;
-                console.log(vm.stepMenu_indicateur);  
-            });
              apiFactory.getAPIgeneraliserREST("latrine_construction/index",'id_convention_entete',item.id).then(function(result)
               {
                   vm.latrine_constructions= result.data.response;
@@ -839,270 +793,134 @@
              });
              vm.selectedItemConvention_entete.$selected = true;
         });
-        function donnee_menu_pr(item,session)
-        {
+        vm.step_menu_pr =function ()
+        {   vm.tabpartenaire = true;
             return new Promise(function (resolve, reject)
-            {   vm.tabpartenaire = false;
-                switch (session)
+            {
+                apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
-                  case 'OBCAF':
-                              
-                              apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                              {
-                                  vm.allcontrat_partenaire_relai = result.data.response;
-                                  return resolve(vm.allcontrat_partenaire_relai);
-                              });
-                            
-                                               
-                      break;
-
-                  case 'ADMIN':
-                            
-                            apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                              {
-                                  vm.allcontrat_partenaire_relai = result.data.response;
-                                  return resolve(vm.allcontrat_partenaire_relai);
-                              });
-                       
-                      break;
-                  default:
-                      break;
-              
-                }            
+                        vm.allcontrat_partenaire_relai = result.data.response;
+                        console.log(vm.allcontrat_partenaire_relai);
+                        return resolve('ok');
+                });           
             });
         }
-        function donnee_menu_moe(item,session)
+        vm.step_menu_moe = function ()
+        {   vm.tabmaitrise = true;
+            return new Promise(function (resolve, reject) 
+            {
+                apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.allpassation_marches_moe = result.data.response.filter(function(obj)
+                    {
+                           return obj.validation == 0;
+                    });
+                    if (result.data.response.length!=0)
+                    {
+                        vm.showbuttonNouvPassation_moe=false;
+                    }
+                    
+                        return resolve('ok');
+                                
+                });
+                               
+            });
+        }
+
+        vm.step_contrat_moe = function ()
         {   vm.showbuttonNouvcontrat_moe=true;
             return new Promise(function (resolve, reject) 
             {
-                switch (session)
+                
+                apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
-                  case 'OBCAF':
-                              apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allpassation_marches_moe = result.data.response.filter(function(obj)
-                                {
-                                    return obj.validation == 0;
-                                });
-                                if (result.data.response.length!=0)
-                                {
-                                    vm.showbuttonNouvPassation_moe=false;
-                                }
-                                apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
-                                {
-                                    vm.allcontrat_moe = result.data.response;
+                        vm.allcontrat_moe = result.data.response;
 
-                                    if (result.data.response.length!=0)
-                                    {
-                                      vm.showbuttonNouvcontrat_moe=false;
-                                    }
-                                    return resolve('ok');
-                                });
-                                
-                            });
-
-                                                
-                      break;
-
-                  case 'ADMIN':
-                            
-                            apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allpassation_marches_moe = result.data.response.filter(function(obj)
-                                {
-                                    return obj.validation == 0;
-                                });
-                                if (result.data.response.length!=0)
-                                {
-                                    vm.showbuttonNouvPassation_moe=false;
-                                }
-                                apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
-                                {
-                                    vm.allcontrat_moe = result.data.response;
-
-                                    if (result.data.response.length!=0)
-                                    {
-                                      vm.showbuttonNouvcontrat_moe=false;
-                                    }
-                                    return resolve('ok');
-                                });
-                                
-                            });
-                                                    
-                            
-                       
-                      break;
-                  default:
-                      break;
-              
-                }
+                    if (result.data.response.length!=0)
+                    {
+                        vm.showbuttonNouvcontrat_moe=false;
+                    }
+                    return resolve('ok');
+                });
+                               
             });
         }
-        function donnee_sousmenu_feffi(item,session)
+        vm.step_avenant_feffi= function ()
         {
             return new Promise(function (resolve, reject) 
             {
-                switch (session)
+                apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantinvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
-                  case 'OBCAF':
-
-                              apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantinvalideByconvention','id_convention_entete',item.id).then(function(result)
-                              {
-                                    vm.allavenant_convention = result.data.response;
-                                    vm.showbuttonNouvavenant_convention=true;
-                                    apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentinvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
-                                    {
-                                        vm.alldocument_feffi_scan = result.data.response; 
-                                        return resolve('ok');                                       
-                                    });
-                                   
-                              });                              
-
-
-
-                              vm.modif_suppre = true;
-                              //vm.nbr_demande_feffi = item.nbr_demande_feffi_creer
-                            
-                      break;
-
-                  case 'ADMIN':
-                              apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantinvalideByconvention','id_convention_entete',item.id).then(function(result)
-                              {
-                                    vm.allavenant_convention = result.data.response;
-                                    vm.showbuttonNouvavenant_convention=true;
-                                    apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentinvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
-                                    {
-                                        vm.alldocument_feffi_scan = result.data.response;
-                                        return resolve('ok');                                         
-                                    });
-                                   
-                              });                              
-
-
-                            
-                       
-                      break;
-                  default:
-                      break;
-              
-                }            
+                    vm.allavenant_convention = result.data.response;
+                     vm.showbuttonNouvavenant_convention=true;
+                     return resolve('ok');                                    
+                });             
             });
         
         }
-        function donnee_menu_mpe(item,session)
+        vm.step_importerdocument_feffi= function ()
         {
+            return new Promise(function (resolve, reject) 
+            {
+                apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentinvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.alldocument_feffi_scan = result.data.response;
+                return resolve('ok');                                         
+                });          
+            });
+        
+        }
+        vm.step_menu_mpe = function ()
+        {   vm.tabentreprise = true;
             return new Promise(function (resolve, reject)
             {
-                switch (session)
+                apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
-                  case 'OBCAF':
-                              
-                              apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',item.id).then(function(result)
-                              {
-                                  vm.allpassation_marches = result.data.response.filter(function(obj)
-                                  {
-                                      return obj.validation == 0;
-                                  });
-                                  console.log(vm.allpassation_marches);
-
-                                  if (result.data.response.length!=0)
-                                  {
-                                      vm.showbuttonNouvPassation=false;
-                                  }
-
-                                  apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
-                                  {
-                                      vm.allcontrat_prestataire = result.data.response.filter(function(obj)
-                                      {
-                                          return obj.validation == 0;
-                                      });
-
-                                      if (result.data.response.length!=0)
-                                      {
-                                        vm.showbuttonNouvContrat_prestataire=false;
-                                      }
-                                  return resolve('ok'); 
-                                  }); 
-                              });                
-                      break;
-
-                  case 'ADMIN':
-                            
-                            apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allpassation_marches = result.data.response;
-                                if (vm.allpassation_marches.length!=0)
-                                {
-                                    vm.showbuttonNouvPassation=false;
-                                }
-                                console.log(vm.allpassation_marches);
-                                apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
-                                {
-                                    vm.allcontrat_prestataire = result.data.response;
-
-                                    if (result.data.response.length!=0)
-                                    {
-                                      vm.showbuttonNouvContrat_prestataire=false;
-                                    }
-                                    return resolve('ok');
-                                });
-                            });
-
-                            
-                       
-                      break;
-                  default:
-                      break;
-              
-                }            
+                    vm.allpassation_marches = result.data.response;
+                    if (vm.allpassation_marches.length!=0)
+                    {
+                       vm.showbuttonNouvPassation=false;
+                    }
+                    console.log(vm.allpassation_marches);
+                    return resolve('ok');
+                });
+            
             });
         }
 
-        function donnee_menu_indicateur(item,session)
+       vm.step_contrat_mpe = function ()
         {
             return new Promise(function (resolve, reject)
             {
-                switch (session)
+                 apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
-                  case 'OBCAF':
-
-                              apiFactory.getAPIgeneraliserREST("indicateur/index",'menu','getindicateurByconvention','id_convention_entete',item.id).then(function(result)
-                              {
-                                  vm.allindicateur = result.data.response.filter(function(obj)
-                                  {
-                                      return obj.validation == 0;
-                                  });
-
-                                  if (result.data.response.length!=0)
-                                  {
-                                    vm.showbuttonNouvIndicateur=false;
-                                  }
-                                  return resolve('ok');
-                              });
-                                                
-                      break;
-
-                  case 'ADMIN':
-                            
-                            apiFactory.getAPIgeneraliserREST("indicateur/index",'menu','getindicateurByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allindicateur = result.data.response.filter(function(obj)
-                                  {
-                                      return obj.validation == 0;
-                                  });
-
-                                if (result.data.response.length!=0)
-                                {
-                                  vm.showbuttonNouvIndicateur=false;
-                                }
-                                return resolve('ok');
-                            });                            
+                    vm.allcontrat_prestataire = result.data.response;
+                    if (result.data.response.length!=0)
+                    {
+                        vm.showbuttonNouvContrat_prestataire=false;
+                    }
+                    return resolve('ok');
+                });
                        
-                      break;
-                  default:
-                      break;
-              
-                }            
+            });
+        }
+
+        vm.step_menu_indicateur= function ()
+        {
+            return new Promise(function (resolve, reject)
+            {
+                apiFactory.getAPIgeneraliserREST("indicateur/index",'menu','getindicateurByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.allindicateur = result.data.response.filter(function(obj)
+                      {
+                          return obj.validation == 0;
+                        });
+                    if (result.data.response.length!=0)
+                    {
+                      vm.showbuttonNouvIndicateur=false;
+                    }
+                    return resolve('ok');
+                });             
             });
         }
 
@@ -1830,10 +1648,10 @@
         {titre:"Date signature"
         }];
 
-        vm.showtabpartenaire = function()
+       /* vm.showtabpartenaire = function()
         {
             vm.tabpartenaire = true;
-        }
+        }*/
        
         //fonction selection item contrat
         vm.selectionContrat_partenaire_relai= function (item)
@@ -1841,148 +1659,7 @@
             vm.selectedItemContrat_partenaire_relai = item;
 
            if(item.id!=0)
-           {            
-              if (item.$selected==false || item.$selected==undefined)
-              {
-                  vm.showbuttonValidationcontrat_pr = true;
-                  if(vm.roles.indexOf("OBCAF")!= -1)
-                  {
-                      apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                          vm.allmodule_dpp = result.data.response;                           
-                          console.log(vm.allmodule_dpp);
-
-                          if (result.data.response.length!=0)
-                          {
-                              vm.showbuttonNouvformdpp=false;
-                          }
-                      });
-                      apiFactory.getAPIgeneraliserREST("module_odc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                          vm.allmodule_odc = result.data.response;                           
-                          console.log(vm.allmodule_odc);
-
-                          if (result.data.response.length!=0)
-                          {
-                              vm.showbuttonNouvformodc=false;
-                          }
-                      });
-                      apiFactory.getAPIgeneraliserREST("module_emies/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                          vm.allmodule_emies = result.data.response;                           
-                          console.log(vm.allmodule_emies);
-
-                          if (result.data.response.length!=0)
-                          {
-                              vm.showbuttonNouvformemies=false;
-                          }
-                      });
-                      apiFactory.getAPIgeneraliserREST("module_gfpc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                          vm.allmodule_gfpc = result.data.response;                           
-                          console.log(vm.allmodule_gfpc);
-
-                          if (result.data.response.length!=0)
-                          {
-                              vm.showbuttonNouvformgfpc=false;
-                          }
-                      });
-                      apiFactory.getAPIgeneraliserREST("module_pmc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                          vm.allmodule_pmc = result.data.response;                          
-                          console.log(vm.allmodule_pmc);
-
-                          if (result.data.response.length!=0)
-                          {
-                              vm.showbuttonNouvformpmc=false;
-                          }
-                      });
-                      apiFactory.getAPIgeneraliserREST("module_sep/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                          vm.allmodule_sep = result.data.response;                           
-                          console.log(vm.allmodule_sep);
-
-                          if (result.data.response.length!=0)
-                          {
-                              vm.showbuttonNouvformsep=false;
-                          }
-                      });
-
-                    apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentinvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                    {
-                        vm.alldocument_pr_scan = result.data.response;                                        
-                    }); 
-                  }
-                  if(vm.roles.indexOf("ADMIN")!= -1)
-                  {
-                      apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                          vm.allmodule_dpp = result.data.response;                           
-                          console.log(vm.allmodule_dpp);
-
-                          if (result.data.response.length!=0)
-                          {
-                              vm.showbuttonNouvformdpp=false;
-                          }
-                      });
-                      apiFactory.getAPIgeneraliserREST("module_odc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                          vm.allmodule_odc = result.data.response;                           
-                          console.log(vm.allmodule_odc);
-
-                          if (result.data.response.length!=0)
-                          {
-                              vm.showbuttonNouvformodc=false;
-                          }
-                      });
-                      apiFactory.getAPIgeneraliserREST("module_emies/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                          vm.allmodule_emies = result.data.response;                           
-                          console.log(vm.allmodule_emies);
-
-                          if (result.data.response.length!=0)
-                          {
-                              vm.showbuttonNouvformemies=false;
-                          }
-                      });
-                      apiFactory.getAPIgeneraliserREST("module_gfpc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                          vm.allmodule_gfpc = result.data.response;                           
-                          console.log(vm.allmodule_gfpc);
-
-                          if (result.data.response.length!=0)
-                          {
-                              vm.showbuttonNouvformgfpc=false;
-                          }
-                      });
-                      apiFactory.getAPIgeneraliserREST("module_pmc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                          vm.allmodule_pmc = result.data.response;                          
-                          console.log(vm.allmodule_pmc);
-
-                          if (result.data.response.length!=0)
-                          {
-                              vm.showbuttonNouvformpmc=false;
-                          }
-                      });
-                      apiFactory.getAPIgeneraliserREST("module_sep/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                          vm.allmodule_sep = result.data.response;                           
-                          console.log(vm.allmodule_sep);
-
-                          if (result.data.response.length!=0)
-                          {
-                              vm.showbuttonNouvformsep=false;
-                          }
-                      });
-
-                    apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentinvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                    {
-                        vm.alldocument_pr_scan = result.data.response;                                        
-                    });
-
-                  }
-              }
+           {
               vm.validation_contrat_pr = item.validation;
               vm.stepprestaion_pr=true;
               apiFactory.getAPIgeneraliserREST("situation_participant_odc/index",'id_classification_site',vm.selectedItemConvention_entete.site.id_classification_site).then(function(result)
@@ -2002,6 +1679,105 @@
              });
              vm.selectedItemContrat_partenaire_relai.$selected = true;
         });
+
+        vm.step_importer_doc_pr = function()
+        {
+             apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentinvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+             {
+                vm.alldocument_pr_scan = result.data.response;                                        
+            });
+        }
+
+        vm.step_prestation_pr = function()
+        {
+
+            apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            {
+                vm.allmodule_dpp = result.data.response;                          
+                console.log(vm.allmodule_dpp);
+                if (result.data.response.length!=0)
+                {
+                    vm.showbuttonNouvformdpp=false;
+                }
+            });
+        }
+        vm.step_module_dpp = function()
+        {
+           apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            {
+                vm.allmodule_dpp = result.data.response;                          
+                console.log(vm.allmodule_dpp);
+                if (result.data.response.length!=0)
+                {
+                    vm.showbuttonNouvformdpp=false;
+                }
+            }); 
+        }
+        vm.step_module_odc = function()
+        {
+            apiFactory.getAPIgeneraliserREST("module_odc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            {
+                 vm.allmodule_odc = result.data.response;                          
+                console.log(vm.allmodule_odc);
+                if (result.data.response.length!=0)
+                {
+                    vm.showbuttonNouvformodc=false;
+                }
+            });
+        }
+
+        vm.step_module_emies = function()
+        {
+            
+            apiFactory.getAPIgeneraliserREST("module_emies/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            {
+                vm.allmodule_emies = result.data.response;                          
+                console.log(vm.allmodule_emies);
+                if (result.data.response.length!=0)
+                {
+                    vm.showbuttonNouvformemies=false;
+                }
+            });
+        }
+
+        vm.step_module_gfpc = function()
+        {
+            apiFactory.getAPIgeneraliserREST("module_gfpc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            {
+                vm.allmodule_gfpc = result.data.response;                          
+                console.log(vm.allmodule_gfpc);
+                if (result.data.response.length!=0)
+                {
+                    vm.showbuttonNouvformgfpc=false;
+                }
+            });
+        }
+
+        vm.step_module_pmc = function()
+        {
+             apiFactory.getAPIgeneraliserREST("module_pmc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            {
+                vm.allmodule_pmc = result.data.response;                          
+                console.log(vm.allmodule_pmc);
+                if (result.data.response.length!=0)
+                {
+                    vm.showbuttonNouvformpmc=false;
+                }
+            });
+        }
+
+        vm.step_module_sep = function()
+        {
+            apiFactory.getAPIgeneraliserREST("module_sep/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            {
+                vm.allmodule_sep = result.data.response;                          
+                console.log(vm.allmodule_sep);
+                if (result.data.response.length!=0)
+                {
+                    vm.showbuttonNouvformsep=false;
+                }
+            });
+        }
 
         
 /*****************************************fin contrat_partenaire_relai********************************************/
@@ -6791,11 +6567,11 @@
         },
         {titre:"Action"
         }];
-         vm.showtabmaitrise = function()
+         /*vm.showtabmaitrise = function()
         {
             vm.tabmaitrise = true;
             console.log(vm.tabmaitrise);
-        }
+        }*/
         //Masque de saisi ajout
         vm.ajouterPassation_marches_moe = function ()
         { 
@@ -7271,201 +7047,8 @@
 
            if(item.id!=0)
            {
-              if (item.$selected==false || item.$selected==undefined)
-              {
-                  vm.showbuttonValidationcontrat_pr = true;
-                  if(vm.roles.indexOf("OBCAF")!= -1)
-                  {
-                     apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',item.id,'validation',0).then(function(result)
-                      {
-                            vm.allmemoire_technique = result.data.response;
-                            if (result.data.response.length>0)
-                            {
-                              vm.showbuttonNouvMemoire_technique = false;
-                            }                            
-                      }); 
-                     apiFactory.getAPIgeneraliserREST("appel_offre/index",'menu','getappelBycontrat','id_contrat_bureau_etude',item.id,'validation',0).then(function(result)
-                      {
-                            vm.allappel_offre = result.data.response;
-                            if (result.data.response.length>0)
-                            {
-                              vm.showbuttonNouvAppel_offre = false;
-                            }
-                            
-                      });
-                     apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportBycontrat','id_contrat_bureau_etude',item.id,'validation',0).then(function(result)
-                      {
-                            vm.allrapport_mensuel = result.data.response;
-                            if (result.data.response.length==4)
-                            {
-                              vm.showbuttonNouvRapport_mensuel = false;
-                            }
-                            
-                      });
-
-                     apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelBycontrat','id_contrat_bureau_etude',item.id,'validation',0).then(function(result)
-                      {
-                            vm.allmanuel_gestion = result.data.response;
-                            if (result.data.response.length>0)
-                            {
-                              vm.showbuttonNouvManuel_gestion = false;
-                            }
-                            
-                      });
-                     apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpoliceBycontrat','id_contrat_bureau_etude',item.id,'validation',0).then(function(result)
-                    {
-                          vm.allpolice_assurance = result.data.response;
-                          if (result.data.response.length>0)
-                          {
-                            vm.showbuttonNouvPolice_assurance = false;
-                          }
-                          
-                    });
-                     
-                     apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantinvalideBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                      vm.allavenant_moe = result.data.response;
-                      vm.showbuttonNouvavenant_moe = true;
-                      console.log(vm.allavenant_moe);
-                    });
-                     apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentinvalideBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                        vm.alldocument_moe_scan = result.data.response;
-                                        
-                    });
-                  }
-
-                  
-                  if(vm.roles.indexOf("ADMIN")!= -1)
-                  {
-                      apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',item.id,'validation',0).then(function(result)
-                      {
-                            vm.allmemoire_technique = result.data.response.filter(function(obj)
-                            {
-                                return obj.validation == 0;
-                            });
-                            if (result.data.response.length>0)
-                            {
-                              vm.showbuttonNouvMemoire_technique = false;
-                            }                            
-                      }); 
-                     apiFactory.getAPIgeneraliserREST("appel_offre/index",'menu','getappelBycontrat','id_contrat_bureau_etude',item.id,'validation',0).then(function(result)
-                      {
-                            vm.allappel_offre = result.data.response.filter(function(obj)
-                            {
-                                return obj.validation == 0;
-                            });
-                            if (result.data.response.length>0)
-                            {
-                              vm.showbuttonNouvAppel_offre = false;
-                            }
-                            
-                      });
-                     apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportBycontrat','id_contrat_bureau_etude',item.id,'validation',0).then(function(result)
-                      {
-                            vm.allrapport_mensuel = result.data.response.filter(function(obj)
-                            {
-                                return obj.validation == 0;
-                            });
-                            if (result.data.response.length==4)
-                            {
-                              vm.showbuttonNouvRapport_mensuel = false;
-                            }
-                            
-                      });
-
-                     apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelBycontrat','id_contrat_bureau_etude',item.id,'validation',0).then(function(result)
-                      {
-                            vm.allmanuel_gestion = result.data.response.filter(function(obj)
-                            {
-                                return obj.validation == 0;
-                            });
-                            if (result.data.response.length>0)
-                            {
-                              vm.showbuttonNouvManuel_gestion = false;
-                            }
-                            
-                      });
-                     apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpoliceBycontrat','id_contrat_bureau_etude',item.id,'validation',0).then(function(result)
-                    {
-                          vm.allpolice_assurance = result.data.response.filter(function(obj)
-                            {
-                                return obj.validation == 0;
-                            });
-                          if (result.data.response.length>0)
-                          {
-                            vm.showbuttonNouvPolice_assurance = false;
-                          }
-                          
-                    });
-                     apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpoliceBycontrat','id_contrat_bureau_etude',item.id,'validation',0).then(function(result)
-                    {
-                          vm.allpolice_assurance = result.data.response.filter(function(obj)
-                            {
-                                return obj.validation == 0;
-                            });
-                          if (result.data.response.length>0)
-                          {
-                            vm.showbuttonNouvPolice_assurance = false;
-                          }
-                          
-                    });
-                     apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index","menu","getdemandeBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                        vm.alldemande_debut_travaux_moe = result.data.response.filter(function(obj)
-                        {
-                                return obj.validation == 0 || obj.validation == 4;
-                        });
-
-                      vm.showbuttonNouvDemande_debut_travaux_moe_creer = true;
-                      console.log(vm.alldemande_debut_travaux_moe);
-                    });
-
-                     apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index","menu","getdemandeBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                        vm.alldemande_batiment_moe = result.data.response.filter(function(obj)
-                        {
-                                return obj.validation == 0 || obj.validation == 4;
-                        });
-                      vm.showbuttonNouvDemande_batiment_moe_creer = true;
-                      console.log(vm.alldemande_batiment_moe);
-                    });
-                    apiFactory.getAPIgeneraliserREST("demande_latrine_moe/index","menu","getdemandeBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                      vm.alldemande_latrine_moe = result.data.response.filter(function(obj)
-                        {
-                                return obj.validation == 0 || obj.validation == 4;
-                        });
-                      vm.showbuttonNouvDemande_latrine_moe_creer = true;
-                      console.log(vm.alldemande_latrine_moe);
-                    });
-
-                     apiFactory.getAPIgeneraliserREST("demande_fin_travaux_moe/index","menu","getdemandeBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                      vm.alldemande_fin_travaux_moe = result.data.response.filter(function(obj)
-                        {
-                                return obj.validation == 0 || obj.validation == 4;
-                        });
-                      vm.showbuttonNouvDemande_fin_travaux_moe_creer = true;
-                      console.log(vm.alldemande_fin_travaux_moe);
-                    }); 
-
-                     apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantinvalideBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                      vm.allavenant_moe = result.data.response;
-                      vm.showbuttonNouvavenant_moe = true;
-                      console.log(vm.allavenant_moe);
-                    });
-                     apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentinvalideBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                        vm.alldocument_moe_scan = result.data.response;
-                                        
-                    });
-
-                  }
-                }
-
             vm.stepprestation_moe = true;
+            vm.validation_contrat_moe = item.validation;
             console.log(item);
            }
              
@@ -7479,6 +7062,116 @@
              });
              vm.selectedItemContrat_moe.$selected = true;
         });
+
+         vm.step_prestation_moe = function()
+        {
+            apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            {
+                vm.allmemoire_technique = result.data.response.filter(function(obj)
+                {
+                       return obj.validation == 0;
+                });
+                if (result.data.response.length>0)
+                {
+                    vm.showbuttonNouvMemoire_technique = false;
+                }                           
+            });
+        }
+
+        vm.step_memoire_technique = function()
+        {
+            apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            {
+                vm.allmemoire_technique = result.data.response.filter(function(obj)
+                {
+                       return obj.validation == 0;
+                });
+                if (result.data.response.length>0)
+                {
+                    vm.showbuttonNouvMemoire_technique = false;
+                }                           
+            });
+        }
+
+        vm.step_appel_offre = function()
+        {
+            apiFactory.getAPIgeneraliserREST("appel_offre/index",'menu','getappelBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            {
+                vm.allappel_offre = result.data.response.filter(function(obj)
+                {
+                    return obj.validation == 0;
+                });
+                if (result.data.response.length>0)
+                {
+                     vm.showbuttonNouvAppel_offre = false;
+                }                          
+            });
+        }
+
+        vm.step_rapport_mensuel = function()
+        {
+            apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            {
+                vm.allrapport_mensuel = result.data.response.filter(function(obj)
+                {
+                       return obj.validation == 0;
+                });
+                if (result.data.response.length==4)
+                {
+                    vm.showbuttonNouvRapport_mensuel = false;
+                }                           
+            });
+        }
+
+        vm.step_manuel_gestion = function()
+        {
+            apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            {
+                vm.allmanuel_gestion = result.data.response.filter(function(obj)
+                {
+                    return obj.validation == 0;
+                });
+                if (result.data.response.length>0)
+                {
+                     vm.showbuttonNouvManuel_gestion = false;
+                }                          
+            });
+        }
+
+        vm.step_police_assurance = function()
+        {
+             apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpoliceBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            {
+                vm.allpolice_assurance = result.data.response.filter(function(obj)
+                {
+                       return obj.validation == 0;
+                });
+                if (result.data.response.length>0)
+                {
+                 vm.showbuttonNouvPolice_assurance = false;
+                }                                                   
+            });
+        }
+
+        vm.step_avenant_moe = function()
+        {
+            apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantinvalideBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+            {
+                 vm.allavenant_moe = result.data.response;
+                 vm.showbuttonNouvavenant_moe = true;
+                 console.log(vm.allavenant_moe);
+            });
+        }
+
+        vm.step_importerdocument_moe = function()
+        {
+            apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentinvalideBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+            {
+                vm.alldocument_moe_scan = result.data.response;
+                                        
+            });
+        }
+
 
         //fonction masque de saisie modification item feffi
         vm.modifierContrat_moe = function(item)
@@ -9981,11 +9674,11 @@
         {titre:"Action"
         }];
 
-        vm.showtabentreprise = function()
+       /* vm.showtabentreprise = function()
         {
             vm.tabentreprise = true;
             console.log(vm.tabentreprise);
-        }
+        }*/
         //Masque de saisi ajout
         vm.ajouterPassation_marches = function ()
         { 
@@ -10758,145 +10451,7 @@
                 });
                 vm.stepattachement = true;
                 vm.showbuttonValidationcontrat_prestataire = true;
-                vm.validation_contrat_prestataire = item.validation;
-              switch (vm.session)
-              {
-                case 'OBCAF':
-                            apiFactory.getAPIgeneraliserREST("delai_travaux/index",'menu','getdelai_travauxBycontrat','id_contrat_prestataire',item.id).then(function(result)
-                            {
-                                vm.alldelai_travaux = result.data.response;
-
-                                if (result.data.response.length!=0)
-                                {
-                                  vm.showbuttonNouvDelai_travaux=false;
-                                }
-                            });
-
-                            apiFactory.getAPIgeneraliserREST("reception_mpe/index",'menu','getreception_mpeBycontrat','id_contrat_prestataire',item.id).then(function(result)
-                            {
-                                vm.allreception_mpe = result.data.response
-
-                                if (result.data.response.length!=0)
-                                {
-                                  vm.showbuttonNouvReception_mpe=false;
-                                }
-                            });
-
-
-                            apiFactory.getAPIgeneraliserREST("avancement_batiment/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
-                            {
-                                vm.allavancement_batiment = result.data.response;
-                                vm.showbuttonNouvAvancement_batiment=true;
-                                
-                            });
-
-
-                            apiFactory.getAPIgeneraliserREST("avancement_latrine/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
-                            {
-                                vm.allavancement_latrine = result.data.response;
-                                vm.showbuttonNouvAvancement_latrine=true;
-                                
-                            });
-
-                            apiFactory.getAPIgeneraliserREST("avancement_mobilier/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
-                            {
-                                vm.allavancement_mobilier = result.data.response;
-                                vm.showbuttonNouvAvancement_mobilier=true;
-                                
-                            });
-
-                            apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantinvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
-                            {
-                              vm.allavenant_mpe = result.data.response;
-                              vm.showbuttonNouvavenant_mpe = true;
-                            });
-                            apiFactory.getAPIgeneraliserREST("dossier_prestataire/index",'menu','getdocumentinvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
-                           {
-                                vm.alldocument_prestataire_scan = result.data.response;
-                                        
-                           }); 
-                            apiFactory.getAPIgeneraliserREST("divers_attachement_batiment/index",'menu','getdivers_attachement_batiment_prevu','id_contrat_prestataire',item.id,'id_type_batiment',vm.batiment_constructions[0].type_batiment.id).then(function(result)
-                           {
-                                vm.alldivers_attachement_batiment_prevu = result.data.response;       
-                           }); 
-                            apiFactory.getAPIgeneraliserREST("divers_attachement_latrine/index",'menu','getdivers_attachement_latrine_prevu','id_contrat_prestataire',item.id,'id_type_latrine',vm.latrine_constructions[0].type_latrine.id).then(function(result)
-                           {
-                                vm.alldivers_attachement_latrine_prevu = result.data.response;        
-                           });                                                       
-                    break;
-               
-                case 'ADMIN':
-                            apiFactory.getAPIgeneraliserREST("delai_travaux/index",'menu','getdelai_travauxBycontrat','id_contrat_prestataire',item.id).then(function(result)
-                            {
-                                vm.alldelai_travaux = result.data.response;
-
-                                if (result.data.response.length!=0)
-                                {
-                                  vm.showbuttonNouvDelai_travaux=false;
-                                }
-                            });
-
-                            apiFactory.getAPIgeneraliserREST("reception_mpe/index",'menu','getreception_mpeBycontrat','id_contrat_prestataire',item.id).then(function(result)
-                            {
-                                vm.allreception_mpe = result.data.response;
-
-                                if (result.data.response.length!=0)
-                                {
-                                  vm.showbuttonNouvReception_mpe=false;
-                                }
-                            });
-
-
-                            apiFactory.getAPIgeneraliserREST("avancement_batiment/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
-                            {
-                                vm.allavancement_batiment = result.data.response;
-                                vm.showbuttonNouvAvancement_batiment=true;
-                                
-                            });
-
-
-                            apiFactory.getAPIgeneraliserREST("avancement_latrine/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
-                            {
-                                vm.allavancement_latrine = result.data.response;
-                                vm.showbuttonNouvAvancement_latrine=true;
-                                
-                            });
-
-                            apiFactory.getAPIgeneraliserREST("avancement_mobilier/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
-                            {
-                                vm.allavancement_mobilier = result.data.response;
-                                vm.showbuttonNouvAvancement_mobilier=true;
-                                
-                            });
-
-                            apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantinvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
-                            {
-                              vm.allavenant_mpe = result.data.response;
-                              vm.showbuttonNouvavenant_mpe = true;
-                            });
-                            apiFactory.getAPIgeneraliserREST("dossier_prestataire/index",'menu','getdocumentinvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
-                           {
-                                vm.alldocument_prestataire_scan = result.data.response;
-                                        
-                           }); 
-                            apiFactory.getAPIgeneraliserREST("divers_attachement_batiment/index",'menu','getdivers_attachement_batiment_prevu','id_contrat_prestataire',item.id,'id_type_batiment',vm.batiment_constructions[0].type_batiment.id).then(function(result)
-                           {
-                                vm.alldivers_attachement_batiment_prevu = result.data.response;       
-                           }); 
-                            apiFactory.getAPIgeneraliserREST("divers_attachement_latrine/index",'menu','getdivers_attachement_latrine_prevu','id_contrat_prestataire',item.id,'id_type_latrine',vm.latrine_constructions[0].type_latrine.id).then(function(result)
-                           {
-                                vm.alldivers_attachement_latrine_prevu = result.data.response;        
-                           }); 
-                            apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier/index",'menu','getdivers_attachement_mobilier_prevu','id_contrat_prestataire',item.id,'id_type_mobilier',vm.mobilier_constructions[0].type_mobilier.id).then(function(result)
-                           {
-                                vm.alldivers_attachement_mobilier_prevu = result.data.response;        
-                           });                   
-                     
-                    break;
-                default:
-                    break;
-            
-              }
+                vm.validation_contrat_prestataire = item.validation;                            
               
            }
            vm.stepsuiviexecution = true;
@@ -10911,6 +10466,117 @@
              });
              vm.selectedItemContrat_prestataire.$selected = true;
         });
+
+        vm.step_attachement_prevu = function()
+        {
+
+            apiFactory.getAPIgeneraliserREST("divers_attachement_batiment/index",'menu','getdivers_attachement_batiment_prevu','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id,'id_type_batiment',vm.batiment_constructions[0].type_batiment.id).then(function(result)
+            {
+                vm.alldivers_attachement_batiment_prevu = result.data.response;       
+            });
+        }
+        vm.step_attachement_batiment_prevu = function()
+        {
+            apiFactory.getAPIgeneraliserREST("divers_attachement_batiment/index",'menu','getdivers_attachement_batiment_prevu','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id,'id_type_batiment',vm.batiment_constructions[0].type_batiment.id).then(function(result)
+            {
+                vm.alldivers_attachement_batiment_prevu = result.data.response;       
+            });
+        }
+        vm.step_attachement_latrine_prevu = function()
+        {
+            apiFactory.getAPIgeneraliserREST("divers_attachement_latrine/index",'menu','getdivers_attachement_latrine_prevu','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id,'id_type_latrine',vm.latrine_constructions[0].type_latrine.id).then(function(result)
+            {
+                vm.alldivers_attachement_latrine_prevu = result.data.response;        
+            });
+        }
+        vm.step_attachement_mobilier_prevu = function()
+        {
+            apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier/index",'menu','getdivers_attachement_mobilier_prevu','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id,'id_type_mobilier',vm.mobilier_constructions[0].type_mobilier.id).then(function(result)
+            {
+                 vm.alldivers_attachement_mobilier_prevu = result.data.response;        
+            });
+        }
+
+        vm.step_suivitravaux = function()
+        {
+            apiFactory.getAPIgeneraliserREST("delai_travaux/index",'menu','getdelai_travauxBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                 vm.alldelai_travaux = result.data.response;
+
+                if (result.data.response.length!=0)
+                {
+                  vm.showbuttonNouvDelai_travaux=false;
+                }
+             });
+        }
+        vm.step_delai_execution = function()
+        {
+            apiFactory.getAPIgeneraliserREST("delai_travaux/index",'menu','getdelai_travauxBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                 vm.alldelai_travaux = result.data.response;
+
+                if (result.data.response.length!=0)
+                {
+                  vm.showbuttonNouvDelai_travaux=false;
+                }
+             });
+        }
+        vm.step_reception_mpe = function()
+        {
+             apiFactory.getAPIgeneraliserREST("reception_mpe/index",'menu','getreception_mpeBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.allreception_mpe = result.data.response;
+
+                if (result.data.response.length!=0)
+                {
+                  vm.showbuttonNouvReception_mpe=false;
+                }
+            });
+        }
+        vm.step_avancement_batiment = function()
+        {
+            apiFactory.getAPIgeneraliserREST("avancement_batiment/index",'menu','getavancementBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.allavancement_batiment = result.data.response;
+                vm.showbuttonNouvAvancement_batiment=true;
+                                
+            });
+        }
+        vm.step_avancement_latrine = function()
+        {
+            
+            apiFactory.getAPIgeneraliserREST("avancement_latrine/index",'menu','getavancementBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.allavancement_latrine = result.data.response;
+                vm.showbuttonNouvAvancement_latrine=true;
+                                
+            });
+        }
+        vm.step_avancement_mobilier= function()
+        {
+            apiFactory.getAPIgeneraliserREST("avancement_mobilier/index",'menu','getavancementBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.allavancement_mobilier = result.data.response;
+                vm.showbuttonNouvAvancement_mobilier=true;
+                                
+            });
+        }
+        vm.step_avenant_mpe = function()
+        {
+           apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantinvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.allavenant_mpe = result.data.response;
+                vm.showbuttonNouvavenant_mpe = true;
+            });
+        }
+        vm.step_importerdocument_mpe = function()
+        {
+            apiFactory.getAPIgeneraliserREST("dossier_prestataire/index",'menu','getdocumentinvalideBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.alldocument_prestataire_scan = result.data.response;
+                                        
+            });
+        }
 
         //fonction masque de saisie modification item feffi
         vm.modifierContrat_prestataire = function(item)

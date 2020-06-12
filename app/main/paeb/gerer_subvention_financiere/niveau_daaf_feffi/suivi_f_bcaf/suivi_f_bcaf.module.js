@@ -15,7 +15,7 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_bcaf', {
             title : 'Niveau BCAF',
-            icon  : 'icon-data',
+            icon  : 'icon-link',
             weight: 1
         });
 

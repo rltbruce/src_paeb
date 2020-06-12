@@ -236,7 +236,7 @@
 
                   <!----------------------------DEBUT ESTIMATION CONVENTION-convention cisco/feffi---------------->
 
-                  <md-tab ng-disabled="!vm.stepMenu_feffi">                    
+                  <md-tab ng-disabled="!vm.stepMenu_feffi"  ng-click="vm.step_avenant_feffi()">                    
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Avenant</span>
@@ -330,7 +330,7 @@
           <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
                           
            <!----------------------------------------Debut document feffi --------------------------------------------------->
-                    <md-tab >
+                    <md-tab ng-click="vm.step_importerdocument_feffi()">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
                               <span class="ms-form-wizard-step-text">Importer document</span>
@@ -474,7 +474,7 @@
     <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
 
     
-            <md-tab ng-disabled="vm.stepMenu_pr==false || vm.session=='ODAAF'">
+            <md-tab ng-disabled="vm.stepMenu_pr==false || vm.session=='ODAAF'" ng-click="vm.step_menu_pr()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -543,7 +543,7 @@
 
                     </md-tab-body>
                     </md-tab>
-                    <md-tab ng-disabled="!vm.stepprestaion_pr || vm.validation_contrat_pr==0">
+                    <md-tab ng-disabled="!vm.stepprestaion_pr || vm.validation_contrat_pr==0" ng-click="vm.step_prestation_pr()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Prestation</span>
@@ -558,7 +558,7 @@
                           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
                         <!-----------------------------DEBUT FORMATION DPP--------------------------------------> 
-                              <md-tab>
+                              <md-tab ng-click="vm.step_module_dpp()">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">                         
                                       
@@ -828,7 +828,7 @@
 
 
                         <!---------------------------------DEBUT FORMATION ODC------------------------------------------->
-                              <md-tab >
+                              <md-tab ng-click="vm.step_module_odc()">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
                                       <span class="ms-form-wizard-step-text">Formation ODC</span>
@@ -1100,7 +1100,7 @@
 
                        <!--------------------------------DEBUT Formation emies----------------------------------------->
 
-                            <md-tab >
+                            <md-tab ng-click="vm.step_module_emies()">
                               <md-tab-label>
                                 <span class="ms-form-wizard-step-label">
                                   <span class="ms-form-wizard-step-text">Formation emies</span>
@@ -1371,7 +1371,7 @@
 
                        <!---------------------------------------DEBUT Formation gfpc--------------------------------------->
 
-                            <md-tab >
+                            <md-tab ng-click="vm.step_module_gfpc()">
                               <md-tab-label>
                                 <span class="ms-form-wizard-step-label">
                                   <span class="ms-form-wizard-step-text">Formation gfpc</span>
@@ -1641,7 +1641,7 @@
 
                         <!---------------------------------DEBUT Formation pmc----------------------------------------->
 
-                            <md-tab >
+                            <md-tab ng-click="vm.step_module_pmc()">
                               <md-tab-label>
                                 <span class="ms-form-wizard-step-label">
                                   <span class="ms-form-wizard-step-text">Formation pmc</span>
@@ -1910,7 +1910,7 @@
                         <!-----------------------------------------FIN participant_pmc ---------------------------------->
                         <!---------------------------------------DEBUT Formation sep------------------------------------->
 
-                            <md-tab >
+                            <md-tab ng-click="vm.step_module_sep()">
                               <md-tab-label>
                                 <span class="ms-form-wizard-step-label">
                                   <span class="ms-form-wizard-step-text">Formation sep</span>
@@ -2189,7 +2189,7 @@
                     </md-tab>                    
                     
                     <!-------------------------------Debut document moe -------------------------------------------->
-                    <md-tab >
+                    <md-tab ng-click="vm.step_importer_doc_pr()">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
                               <span class="ms-form-wizard-step-text">Importer document</span>
@@ -2333,7 +2333,7 @@
             </md-tab>
 
             <!-----------------------DEBUT MAITRISE DOEUVRE------------------------------------>
-            <md-tab ng-disabled="vm.stepMenu_moe==false">
+            <md-tab ng-disabled="vm.stepMenu_moe==false"  ng-click="vm.step_menu_moe()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -2649,7 +2649,7 @@
 
                       </md-tab-body>
                     </md-tab>
-                    <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0">
+                    <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0" ng-click="vm.step_prestation_moe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Prestation</span>
@@ -2663,7 +2663,7 @@
                           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
                         <!-----------------------------DEBUT FORMATION DPP--------------------------------------> 
-                              <md-tab>
+                              <md-tab ng-click="vm.step_memoire_technique()" ng-disabled="vm.validation_contrat_moe==0">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
                                       <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -2782,7 +2782,7 @@
                         <!---------------------------------FIN FORMATION DPP----------------------------------------------->
 
                         <!----------------------------------Debut participant_dpp ----------------------------------------->
-                              <md-tab>
+                              <md-tab ng-click="vm.step_appel_offre()" ng-disabled="vm.validation_contrat_moe==0">
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
                                         <span class="ms-form-wizard-step-text">Appel d'offre</span>
@@ -2898,7 +2898,7 @@
 
 
                         <!---------------------------------DEBUT FORMATION ODC------------------------------------------->
-                              <md-tab >
+                              <md-tab ng-click="vm.step_rapport_mensuel()" ng-disabled="vm.validation_contrat_moe==0">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
                                       <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -3023,7 +3023,7 @@
                        <!---------------------------------FIN FORMATION ODC------------------------------------------->
 
                        <!---------------------------------FIN participant ODC------------------------------------------->
-                              <md-tab>
+                              <md-tab ng-click="vm.step_manuel_gestion()" ng-disabled="vm.validation_contrat_moe==0">
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
                                         <span class="ms-form-wizard-step-text">Manuel de gestion</span>
@@ -3126,7 +3126,7 @@
 
                        <!--------------------------------DEBUT Formation emies----------------------------------------->
 
-                            <md-tab >
+                            <md-tab ng-click="vm.step_police_assurance()" ng-disabled="vm.validation_contrat_moe==0">
                               <md-tab-label>
                                 <span class="ms-form-wizard-step-label">
                                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -3240,7 +3240,7 @@
                     </md-tab>
                     
                     <!---------------------------------Avenant MOE-----------------------------------------------> 
-                    <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0">                    
+                    <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0" ng-click="vm.step_avenant_moe()">                    
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Avenant</span>
@@ -3334,7 +3334,7 @@
                     </md-tab>
                     <!---------------------------------Avenant MOE-----------------------------------------------> 
                     <!-------------------------------Debut document moe -------------------------------------------->
-                    <md-tab ng-disabled="vm.validation_contrat_moe==0">
+                    <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0" ng-click="vm.step_importerdocument_moe()">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
                               <span class="ms-form-wizard-step-text">Importer document</span>
@@ -3480,7 +3480,7 @@
 
 
              <!-----------------------DEBUT ENTREPRISE------------------------------------>
-            <md-tab ng-disabled="vm.stepMenu_mpe==false">
+            <md-tab ng-disabled="vm.stepMenu_mpe==false" ng-click="vm.step_menu_mpe()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepMenu==true">
@@ -3741,7 +3741,7 @@
                     <!------------------------------------------------MPE sousmissionnaire-------------------------------------------->
 
                     <!------------------------------------------------Debut contrat mpe----------------------------------------->
-                    <md-tab>
+                    <md-tab ng-click="vm.step_contrat_mpe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
@@ -3875,7 +3875,240 @@
 
                       </md-tab-body>
                     </md-tab>
-                    <md-tab ng-disabled = "!vm.stepsuiviexecution || vm.validation_contrat_prestataire==0">
+                    <!-------------------------------Debut attachement -------------------------------------------->
+                    <md-tab ng-disabled="!vm.stepattachement" ng-click="vm.step_attachement_prevu()">
+                        <md-tab-label>
+                          <span class="ms-form-wizard-step-label">
+                              <span class="ms-form-wizard-step-text">Attachement prévu</span>
+                          </span>
+                        </md-tab-label>
+                        
+                        <md-tab-body>
+                          <ms-form-wizard flex id="sousmenu"> 
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">                    
+                              <md-tab ng-click="vm.step_attachement_batiment_prevu()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Batiment</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Libelle</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant</span>
+                                            </div>
+                                          </th>                                          
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Action</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="divers_attachement_batiment_prevu in vm.alldivers_attachement_batiment_prevu"  ng-class="{selected: divers_attachement_batiment_prevu.$selected}" ng-click="vm.selectionDivers_attachement_batiment_prevu(divers_attachement_batiment_prevu)">
+
+                                          <td>                                            
+                                            <span>{{divers_attachement_batiment_prevu.libelle}}</span>
+                                          </td>
+
+                                          <td>
+                                            <span ng-if="divers_attachement_batiment_prevu.$edit">
+                                              <md-input-container style="width:100%;display: flex !important;">
+                                                <label>Montant</label>
+                                                <input name="montant_prevu" type="text" ng-model="divers_attachement_batiment_prevu.montant_prevu"/>
+                                              </md-input-container>   
+                                            </span>
+                                                      
+                                            <span ng-if="!divers_attachement_batiment_prevu.$edit">{{divers_attachement_batiment_prevu.montant_prevu}}</span>
+                                          </td>
+
+                                          <td>
+                                            <a ng-if="!divers_attachement_batiment_prevu.$edit && vm.validation_contrat_prestataire==0" ng-click="vm.modifierDivers_attachement_batiment_prevu(divers_attachement_batiment_prevu)" title="Modifier">
+                                              <span class="icon-table-edit"></span>
+                                            </a>
+                                                      
+                                            <a ng-if="!divers_attachement_batiment_prevu.$edit && vm.validation_contrat_prestataire==0" ng-click="vm.supprimerDivers_attachement_batiment_prevu(divers_attachement_batiment_prevu)" title="Supprimer">
+                                              <span class="icon-delete"></span>
+                                            </a> 
+                                             <span ng-if="!divers_attachement_mobilier_prevu.$edit && vm.validation_contrat_prestataire!=0">Aucune action disponible</span>         
+                                            <a ng-if="divers_attachement_batiment_prevu.$edit" ng-click="vm.annulerDivers_attachement_batiment_prevu(divers_attachement_batiment_prevu)" title="Annuler modification">
+                                              <span class="icon-cancel"></span>
+                                            </a>
+                                                      
+                                            <a ng-if="divers_attachement_batiment_prevu.$edit && divers_attachement_batiment_prevu.montant_prevu >''" ng-click="vm.ajoutDivers_attachement_batiment_prevu(divers_attachement_batiment_prevu,0)" title="Sauvegarder">
+                                              <span class="icon-content-save"></span>
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  </md-tab-body>
+                                </md-tab>                 
+                              <md-tab ng-click="vm.step_attachement_latrine_prevu()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Latrine</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Libelle</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant</span>
+                                            </div>
+                                          </th>                                          
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Action</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="divers_attachement_latrine_prevu in vm.alldivers_attachement_latrine_prevu"  ng-class="{selected: divers_attachement_latrine_prevu.$selected}" ng-click="vm.selectionDivers_attachement_latrine_prevu(divers_attachement_latrine_prevu)">
+
+                                          <td>                                            
+                                            <span>{{divers_attachement_latrine_prevu.libelle}}</span>
+                                          </td>
+
+                                          <td>
+                                            <span ng-if="divers_attachement_latrine_prevu.$edit">
+                                              <md-input-container style="width:100%;display: flex !important;">
+                                                <label>Montant</label>
+                                                <input name="montant_prevu" type="text" ng-model="divers_attachement_latrine_prevu.montant_prevu"/>
+                                              </md-input-container>   
+                                            </span>
+                                                      
+                                            <span ng-if="!divers_attachement_latrine_prevu.$edit">{{divers_attachement_latrine_prevu.montant_prevu}}</span>
+                                          </td>
+
+                                          <td>
+                                            <a ng-if="!divers_attachement_latrine_prevu.$edit && vm.validation_contrat_prestataire==0" ng-click="vm.modifierDivers_attachement_latrine_prevu(divers_attachement_latrine_prevu)" title="Modifier">
+                                              <span class="icon-table-edit"></span>
+                                            </a>
+                                                      
+                                            <a ng-if="!divers_attachement_latrine_prevu.$edit && vm.validation_contrat_prestataire==0" ng-click="vm.supprimerDivers_attachement_latrine_prevu(divers_attachement_latrine_prevu)" title="Supprimer">
+                                              <span class="icon-delete"></span>
+                                            </a> 
+                                             <span ng-if="!divers_attachement_latrine_prevu.$edit && vm.validation_contrat_prestataire!=0">Aucune action disponible</span>          
+                                            <a ng-if="divers_attachement_latrine_prevu.$edit" ng-click="vm.annulerDivers_attachement_latrine_prevu(divers_attachement_latrine_prevu)" title="Annuler modification">
+                                              <span class="icon-cancel"></span>
+                                            </a>
+                                                      
+                                            <a ng-if="divers_attachement_latrine_prevu.$edit && divers_attachement_latrine_prevu.montant_prevu >''" ng-click="vm.ajoutDivers_attachement_latrine_prevu(divers_attachement_latrine_prevu,0)" title="Sauvegarder">
+                                              <span class="icon-content-save"></span>
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  </md-tab-body>
+                                </md-tab>
+
+                              <md-tab ng-click="vm.step_attachement_mobilier_prevu()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Mobilier</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Libelle</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant</span>
+                                            </div>
+                                          </th>                                          
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Action</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="divers_attachement_mobilier_prevu in vm.alldivers_attachement_mobilier_prevu"  ng-class="{selected: divers_attachement_mobilier_prevu.$selected}" ng-click="vm.selectionDivers_attachement_mobilier_prevu(divers_attachement_mobilier_prevu)">
+
+                                          <td>                                            
+                                            <span>{{divers_attachement_mobilier_prevu.libelle}}</span>
+                                          </td>
+
+                                          <td>
+                                            <span ng-if="divers_attachement_mobilier_prevu.$edit">
+                                              <md-input-container style="width:100%;display: flex !important;">
+                                                <label>Montant</label>
+                                                <input name="montant_prevu" type="text" ng-model="divers_attachement_mobilier_prevu.montant_prevu"/>
+                                              </md-input-container>   
+                                            </span>
+                                                      
+                                            <span ng-if="!divers_attachement_mobilier_prevu.$edit">{{divers_attachement_mobilier_prevu.montant_prevu}}</span>
+                                          </td>
+
+                                          <td>
+                                            <a ng-if="!divers_attachement_mobilier_prevu.$edit && vm.validation_contrat_prestataire==0" ng-click="vm.modifierDivers_attachement_mobilier_prevu(divers_attachement_mobilier_prevu)" title="Modifier">
+                                              <span class="icon-table-edit"></span>
+                                            </a>
+                                                      
+                                            <a ng-if="!divers_attachement_mobilier_prevu.$edit && vm.validation_contrat_prestataire==0" ng-click="vm.supprimerDivers_attachement_mobilier_prevu(divers_attachement_mobilier_prevu)" title="Supprimer">
+                                              <span class="icon-delete"></span>
+                                            </a> 
+                                              <span ng-if="!divers_attachement_mobilier_prevu.$edit && vm.validation_contrat_prestataire!=0">Aucune action disponible</span>        
+                                            <a ng-if="divers_attachement_mobilier_prevu.$edit" ng-click="vm.annulerDivers_attachement_mobilier_prevu(divers_attachement_mobilier_prevu)" title="Annuler modification">
+                                              <span class="icon-cancel"></span>
+                                            </a>
+                                                      
+                                            <a ng-if="divers_attachement_mobilier_prevu.$edit && divers_attachement_mobilier_prevu.montant_prevu >''" ng-click="vm.ajoutDivers_attachement_mobilier_prevu(divers_attachement_mobilier_prevu,0)" title="Sauvegarder">
+                                              <span class="icon-content-save"></span>
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  </md-tab-body>
+                                </md-tab>  
+                            </md-tabs> 
+                          </ms-form-wizard>
+                      </md-tab-body>
+                    </md-tab>
+                    <!--------------------------------------FIN document moe -------------------------------------------->
+                    <md-tab ng-disabled = "!vm.stepsuiviexecution || vm.validation_contrat_prestataire==0" ng-click="vm.step_suivitravaux()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
@@ -3890,7 +4123,7 @@
                       <md-tab-body>
                        <ms-form-wizard flex id="sousmenu"> 
                           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">                    
-                              <md-tab>
+                              <md-tab  ng-click="vm.step_delai_execution()">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
                                       <span class="ms-form-wizard-step-text">Delai d'execution</span>
@@ -4063,7 +4296,7 @@
 
                                 </md-tab-body>
                               </md-tab>
-                              <md-tab>
+                              <md-tab ng-click="vm.step_reception_mpe()">
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
                                         <span class="ms-form-wizard-step-text">reception_mpe</span>
@@ -4200,7 +4433,7 @@
                                 </md-tab-body>
                               </md-tab>
                   <!---------------------------------------------Debut avancement_batiment -------------------------------------------->
-                              <md-tab>
+                              <md-tab ng-click="vm.step_avancement_batiment()">
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
                                           <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -4314,7 +4547,7 @@
                               </md-tab>
                   <!------------------------------------------FIN avancement_batiment ------------------------------------------------->
                   <!---------------------------------------------Debut avancement_batiment -------------------------------------------->
-                              <md-tab>
+                              <md-tab ng-click="vm.step_avancement_latrine()">
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
                                           <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -4428,7 +4661,7 @@
                               </md-tab>
                   <!----------------------------------FIN avancement_latrine ------------------------------------------------->
                   <!----------------------------------Debut avancement_mobilier -------------------------------------------->
-                              <md-tab ng-disabled="vm.stepTwo==false">
+                              <md-tab ng-disabled="vm.stepTwo==false" ng-click="vm.step_avancement_mobilier()">
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
                                           <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -4547,7 +4780,7 @@
                     </md-tab>
                     
                   <!--------------------------------------------------Avenant MOE----------------------------------------------------> 
-                    <md-tab ng-disabled="!vm.stepavenant_mpe">                    
+                    <md-tab ng-disabled="!vm.stepavenant_mpe" ng-click="vm.step_avenant_mpe()">                    
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Avenant</span>
@@ -4663,7 +4896,7 @@
                     </md-tab>
                     <!--------------------------------------Fin Avenant mpe---------------------------------------------------> 
                     <!-------------------------------Debut document prestataire -------------------------------------------->
-                    <md-tab >
+                    <md-tab ng-click="vm.step_importerdocument_mpe()">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
                               <span class="ms-form-wizard-step-text">Scan document</span>
@@ -4806,7 +5039,7 @@
             </md-tab>
 
             <!-----------------------DEBUT RELIQUAT------------------------------------>
-            <md-tab ng-disabled="vm.stepMenu_mpe==false">
+            <md-tab ng-disabled="vm.stepMenu_mpe==false" ng-click="vm.step_menu_indicateur()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepMenu==true">

@@ -16,7 +16,7 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_cisco_feffi', {
             title : 'Niveau CISCO/FEFFI',
-            icon  : 'icon-data',
+            icon  : 'icon-black-mesa',
             weight: 1
         });
 

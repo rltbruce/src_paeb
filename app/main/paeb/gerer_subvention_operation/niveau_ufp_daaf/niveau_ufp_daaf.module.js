@@ -18,7 +18,7 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_ufp_daaf', {
             title : 'Niveau UFP/DAAF',
-            icon  : 'icon-data',
+            icon  : 'icon-black-mesa',
             weight: 1,
             hidden: function()
             {

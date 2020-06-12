@@ -4,9 +4,10 @@
 
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_dpfi.convention_suivi_f_dpfi', [])
-        .run(testPermission)
+        .run(notification)
         .config(config);
-        var vs ;
+        var vs = {};
+        var affichage;
     /** @ngInject */
     function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
     {
@@ -33,20 +34,31 @@
             icon  : 'icon-rotate-3d',
             state: 'app.paeb_gerer_subvention_financiere_niveau_daaf_feffi_suivi_f_dpfi_convention_suivi_f_dpfi',
             weight: 1,
-            hidden: function()
+            badge:vs,
+            hidden:function()
             {
-                    return vs;
+                    return affichage;
             }
         });
     }
 
-    function testPermission(loginService,$cookieStore,apiFactory)
+    function notification($cookieStore,apiFactory,$interval,loginService)
     {
         var id_user = $cookieStore.get('id');
-       
-        var permission = [];
+
         if (id_user > 0) 
         {
+            var permission = [];
+            
+            apiFactory.getDemande_realimentationByInvalide("count_demande_feffi",Number(2)).then(function(result) 
+            {
+                var x = result.data.response;
+                vs.content = x[0].nombre ;
+                vs.color = '#F44336' ;
+              console.log(x);
+
+            });
+
             apiFactory.getOne("utilisateurs/index", id_user).then(function(result) 
             {
                 var user = result.data.response;
@@ -54,8 +66,27 @@
 
                 var permission = user.roles;
                 var permissions = ["DPFI","ADMIN"];
-                var x =  loginService.gestionMenu(permissions,permission);        
-                vs = x ;
+                affichage =  loginService.gestionMenu(permissions,permission);  
+
+                //**************************************************
+                if (id_user && !affichage) 
+                {
+                    $interval(function(){apiFactory.getDemande_realimentationByInvalide("count_demande_feffi",Number(2)).then(function(result) 
+                    {
+                        var resultat = result.data.response;
+
+                        if (vs.content != resultat[0].nombre) 
+                        {
+                            vs.content = resultat[0].nombre ;
+                        };
+                        
+                    
+
+                    });},15000) ;
+                }
+                //**************************************************
+                      
+                
 
             });
         }

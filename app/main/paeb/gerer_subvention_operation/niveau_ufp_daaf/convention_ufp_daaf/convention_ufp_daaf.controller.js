@@ -927,9 +927,9 @@
                     id:      convention_ufp_daaf_entete.id,
                     objet:   convention_ufp_daaf_entete.objet,
                     ref_convention: convention_ufp_daaf_entete.ref_convention,
-                    montant_convention: convention_ufp_daaf_entete.montant_convention,
+                    montant_convention: montant_conv,
                     ref_financement: convention_ufp_daaf_entete.ref_financement,
-                    montant_trans_comm: convention_ufp_daaf_entete.montant_trans_comm,
+                    montant_trans_comm: montant_trans,
                     frais_bancaire: convention_ufp_daaf_entete.frais_bancaire,
                     num_vague: convention_ufp_daaf_entete.num_vague,
                     nbr_beneficiaire: convention_ufp_daaf_entete.nbr_beneficiaire,
@@ -1060,7 +1060,9 @@
         };
 
         apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalidedaaf').then(function(result)
-        {dg.allconventionDialog = result.data.response;});
+        {dg.allconventionDialog = result.data.response;
+console.log(dg.allconventionDialog);
+        });
 
         dg.cancel = function()
         {

@@ -284,7 +284,7 @@
                         <span ng-if="!feffi.$edit">{{feffi.adresse}}</span>
                       </td>
 
-                      <td>
+                      <!--td>
                         <span ng-if="feffi.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Ecole</label>
@@ -296,7 +296,7 @@
                           </md-input-container>  
                         </span>
                         <span ng-if="!feffi.$edit">{{feffi.ecole.code}}</span>
-                      </td>
+                      </td-->
                                 
                       <td>
                         <span ng-if="feffi.$edit">
@@ -322,7 +322,7 @@
                           <span class="icon-cancel"></span>
                         </a>
                                   
-                        <a ng-if="feffi.$edit && feffi.denomination && feffi.identifiant && feffi.adresse && feffi.id_ecole>''" ng-click="vm.ajout(feffi,0)" title="Sauvegarder">
+                        <a ng-if="feffi.$edit && feffi.denomination && feffi.identifiant && feffi.adresse>''" ng-click="vm.ajout(feffi,0)" title="Sauvegarder">
                           <span class="icon-content-save"></span>
                         </a>
                       </td>

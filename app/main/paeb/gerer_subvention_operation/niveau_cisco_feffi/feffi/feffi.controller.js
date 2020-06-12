@@ -88,7 +88,7 @@
           {titre:"Nombre feminin"},
           {titre:"Nombre membre"},
           {titre:"Adresse"},
-          {titre:"Ecole"},
+          //{titre:"Ecole"},
           {titre:"Observation"},
           {titre:"Action"}];
         
@@ -495,7 +495,7 @@
                     observation:      feffi.observation,
                     id_ecole: vm.selectedItemecole.id                
                 });
-                //console.log(feffi.pays_id);
+                console.log(datas);
                 //factory
             apiFactory.add("feffi/index",datas, config).success(function (data)
             {
@@ -534,7 +534,7 @@
               feffi.$selected = false;
               feffi.$edit = false;
               vm.selectedItem = {};
-              vm.stepOne = false;
+              //vm.stepOne = false;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 

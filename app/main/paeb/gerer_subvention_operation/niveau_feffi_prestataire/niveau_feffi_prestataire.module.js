@@ -15,7 +15,7 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_feffi_prestataire', {
             title : 'Niveau FEFFI/PRESTATAIRE',
-            icon  : 'icon-data',
+            icon  : 'icon-black-mesa',
             weight: 3,
             hidden: function()
             {

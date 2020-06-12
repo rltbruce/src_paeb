@@ -31,7 +31,7 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_ufp_daaf.demande_deblocage_daaf_validation_ufp', {
             title: 'V_demande par ufp',
-            icon  : 'icon-tile-four',
+            icon  : 'icon-link',
             state: 'app.paeb_gerer_subvention_financiere_niveau_ufp_daaf_demande_deblocage_daaf_validation_ufp',
             weight: 1,
             badge:vs,

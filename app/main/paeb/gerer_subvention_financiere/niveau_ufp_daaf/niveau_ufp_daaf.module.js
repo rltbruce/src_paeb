@@ -17,7 +17,7 @@
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_ufp_daaf', {
             title : 'Niveau UFP/DAAF',
-            icon  : 'icon-data',
+            icon  : 'icon-flattr',
             weight: 1
         });
 

@@ -177,7 +177,8 @@
             {
                 vm.allconvention_ufp_daaf_detail = result.data.response;                
                 vm.allcompte_daaf.push(vm.allconvention_ufp_daaf_detail[0].compte_daaf);
-                
+                console.log(vm.allconvention_ufp_daaf_detail);
+                console.log(vm.allcompte_daaf);
             });
            
         };
@@ -240,7 +241,7 @@
                 };         
                 
 
-                apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","id_convention_ufp_daaf_entete",vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
+                apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemande_deblocage_daaf","id_convention_ufp_daaf_entete",vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
                 { 
                   vm.alldemande_deblocage_daaf_conv = result.data.response;
                   console.log(vm.alldemande_deblocage_daaf_conv);
@@ -290,6 +291,9 @@
                   {
                       vm.allcurenttranche_deblocage_daaf = vm.alltranche_deblocage_daaf.filter(function(obj)
                       {return obj.code == 'tranche 1';});
+                      vm.alldemande_deblocage_daaf.push(items);                                  
+                      vm.selectedItemDemande_deblocage_daaf = items;
+                      NouvelItemDemande_deblocage_daaf = true ;
                        vm.dernierdemande = [];
                        
                   }
@@ -497,7 +501,7 @@
                     ref_demande: demande_deblocage_daaf.ref_demande ,
                     date: convertionDate(new Date(demande_deblocage_daaf.date)) ,
                     validation: 0,
-                    id_convention_ufp_daaf_entete: demande_deblocage_daaf.id_convention_ufp_daaf_entete              
+                    id_convention_ufp_daaf_entete: vm.selectedItemConvention_ufp_daaf_entete.id             
                 });
                 console.log(datas);
                 //factory
@@ -514,7 +518,7 @@
                 });
                 var conv= vm.allconvention_ufp_daaf_entete.filter(function(obj)
                 {
-                    return obj.id == demande_deblocage_daaf.id_convention_ufp_daaf_entete;
+                    return obj.id == vm.selectedItemConvention_ufp_daaf_entete.id;
                 });
 
                 if (NouvelItemDemande_deblocage_daaf == false)
@@ -567,9 +571,9 @@
           var anterieur = 0;
           var prevu = 0;
           var cumul = 0;
-          apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','getDetailcoutByConvention','id_convention_ufp_daaf_entete',item.id_convention_ufp_daaf_entete).then(function(result)
+          apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','getDetailcoutByConvention','id_convention_ufp_daaf_entete',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
           {   var conventioufpdaaf = vm.allconvention_ufp_daaf_entete.filter(function(obj)
-                          {return obj.id == item.id_convention_ufp_daaf_entete;});
+                          {return obj.id == vm.selectedItemConvention_ufp_daaf_entete.id;});
               vm.alldetailcout = result.data.response;
                 console.log(vm.alldetailcout);
               if (vm.allcurenttranche_deblocage_daaf[0].code =='tranche 1')
@@ -875,7 +879,7 @@ console.log('ato');
                           if(file)
                           { 
 
-                            var name_file = vm.selectedItemDemande_deblocage_daaf.convention_ufp_daaf_entete.ref_convention+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                            var name_file = vm.selectedItemConvention_ufp_daaf_entete.ref_convention+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                             var fd = new FormData();
                             fd.append('file', file);
@@ -984,7 +988,7 @@ console.log('ato');
                     if(file)
                     { 
 
-                      var name_file = vm.selectedItemDemande_deblocage_daaf.convention_ufp_daaf_entete.ref_convention+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                      var name_file = vm.selectedItemConvention_ufp_daaf_entete.ref_convention+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                       var fd = new FormData();
                       fd.append('file', file);

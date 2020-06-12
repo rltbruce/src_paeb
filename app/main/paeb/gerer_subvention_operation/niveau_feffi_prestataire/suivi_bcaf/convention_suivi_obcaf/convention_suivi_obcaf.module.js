@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_feffi_prestataire.suivi_bcaf.convention_suivi_obcaf', {
-            title: 'Suivi convention (O-BCAF)',
+            title: 'Suivi convention (ACC)',
             icon  : 'icon-keyboard-variant',
             state: 'app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_suivi_bcaf_convention_suivi_obcaf',
             weight: 1,

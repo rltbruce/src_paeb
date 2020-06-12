@@ -1374,6 +1374,8 @@
         },
         {titre:"Retenue de garantie"
         },
+        {titre:"Remboursement plaque"
+        },
         {titre:"Net à payer"
         },
         {titre:"Date signature"
@@ -1435,6 +1437,7 @@
                     remboursement_acompte: facture_mpe.remboursement_acompte ,
                     penalite_retard: facture_mpe.penalite_retard,
                     retenue_garantie: facture_mpe.retenue_garantie,
+                    remboursement_plaque: facture_mpe.remboursement_plaque ,
                     net_payer: facture_mpe.net_payer,
                     date_signature:convertionDate(new Date(facture_mpe.date_signature)) ,
                     id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,

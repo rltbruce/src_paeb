@@ -19,6 +19,22 @@
         }
       };
     })
+        .directive('fileModel', ['$parse', function ($parse) {
+      return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+          var model = $parse(attrs.fileModel);
+          var modelSetter = model.assign;        
+          element.bind('change', function(){
+            scope.$apply(function(){
+              //modelSetter(scope, element[0].files[0]);
+               //console.log(element[0].files[0]);
+
+            });
+          });
+        }
+      };
+    }])
     .service('fileUpload', ['$http', function ($http) {
       this.uploadFileToUrl = function(file, uploadUrl){
         var fd = new FormData();
@@ -49,6 +65,7 @@
         vm.stepsuivi_paiement_moe = false;
         vm.stepsuivi_paiement_mpe = false;
         vm.stepprestation_moe = false;
+        vm.stepMenu_reliquat =false; 
 
         vm.stepjusti_d_tra_moe = false;
         vm.stepjusti_batiment_moe = false;
@@ -183,6 +200,12 @@
 
         vm.selectedItemContrat_prestataire = {} ;
         vm.allcontrat_prestataire = [] ;
+
+        vm.ajoutAttachement_travaux = ajoutAttachement_travaux;
+        vm.NouvelItemAttachement_travaux=false;
+        var currentItemAttachement_travaux;
+        vm.selectedItemAttachement_travaux = {};
+        vm.allattachement_travaux = [];
 
         //vm.ajoutAvance_demarrage = ajoutAvance_demarrage;
         vm.NouvelItemAvance_demarrage=false;
@@ -486,7 +509,8 @@
            // vm.allconvention= [] ;
             
             vm.showbuttonNouvContrat_prestataire=true;
-                      
+             
+            vm.stepMenu_reliquat =true;          
             donnee_menu_moe(item,vm.session).then(function () 
             {
                     // On récupère le resultat de la requête dans la varible "response"                    
@@ -582,6 +606,19 @@
                       break;
               
                 }            
+            });
+        }
+
+
+        vm.step_menu_reliquat=function()
+        {
+            return new Promise(function (resolve, reject)
+            {
+                apiFactory.getAPIgeneraliserREST("transfert_reliquat/index",'menu','gettransfertByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.alltransfert_reliquat = result.data.response;
+                    return resolve('ok');
+                });            
             });
         }
        
@@ -771,7 +808,7 @@
             currentItemDemande_debut_travaux_moe    = JSON.parse(JSON.stringify(vm.selectedItemDemande_debut_travaux_moe));
            if(item.id!=0)
            {
-               apiFactory.getAPIgeneraliserREST("justificatif_debut_travaux_moe/index",'id_demande_debut_travaux',vm.selectedItemDemande_debut_travaux_moe.id).then(function(result)
+               apiFactory.getAPIgeneraliserREST("justificatif_debut_travaux_moe/index",'id_demande_debut_travaux_moe',vm.selectedItemDemande_debut_travaux_moe.id).then(function(result)
                 {
                     vm.alljustificatif_debut_travaux_moe = result.data.response;
                     console.log(vm.alljustificatif_debut_travaux_moe);
@@ -1074,7 +1111,7 @@
         }];
 
         $scope.uploadFile_debu_travau_moe = function(event)
-       {
+       {console.log('ok');
           console.dir(event);
           var files = event.target.files;
           vm.myFile = files;
@@ -5010,6 +5047,8 @@
         },
         {titre:"Retenue de garantie"
         },
+        {titre:"Remboursement plaque"
+        },
         {titre:"Net à payer"
         },
         {titre:"Date signature"
@@ -5030,22 +5069,27 @@
 
             vm.selectedItemFacture_mpe.montant_ttc = montant_ht + montant_tva;
             vm.selectedItemFacture_mpe.net_payer = montant_ht + montant_tva - (facture_mpe.remboursement_acompte + 
-                facture_mpe.retenue_garantie + facture_mpe.penalite_retard);
+                facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque);
         }
         vm.change_penalite_retard_mpe = function(facture_mpe)
         {    
             vm.selectedItemFacture_mpe.net_payer = facture_mpe.montant_ht + facture_mpe.montant_tva - 
-            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard);
+            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque);
         }
         vm.change_retenue_garantie_mpe = function(facture_mpe)
         {    
             vm.selectedItemFacture_mpe.net_payer = facture_mpe.montant_ht + facture_mpe.montant_tva - 
-            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard);
+            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque);
         }
         vm.change_remboursement_acompte_mpe = function(facture_mpe)
         {    
             vm.selectedItemFacture_mpe.net_payer = facture_mpe.montant_ht + facture_mpe.montant_tva - 
-            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard);
+            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque);
+        }
+        vm.change_remboursement_plaque_mpe = function(facture_mpe)
+        {    
+            vm.selectedItemFacture_mpe.net_payer = facture_mpe.montant_ht + facture_mpe.montant_tva - 
+            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque);
         }
         //fonction ajout dans bdd
         function ajoutFacture_mpe(facture_mpe,suppression)
@@ -5078,6 +5122,7 @@
             item.remboursement_acompte = currentItemFacture_mpe.remboursement_acompte;
             item.penalite_retard   = currentItemFacture_mpe.penalite_retard ;
             item.retenue_garantie   = currentItemFacture_mpe.retenue_garantie ;
+            item.remboursement_plaque = currentItemFacture_mpe.remboursement_plaque;
             item.net_payer   = currentItemFacture_mpe.net_payer ;
             item.date_signature   = currentItemFacture_mpe.date_signature ;
           }
@@ -5143,6 +5188,7 @@
             item.remboursement_acompte = parseInt(vm.selectedItemFacture_mpe.remboursement_acompte) ;
             item.penalite_retard = parseInt(vm.selectedItemFacture_mpe.penalite_retard) ;
             item.retenue_garantie = parseInt(vm.selectedItemFacture_mpe.retenue_garantie) ;
+            item.remboursement_plaque = parseInt(vm.selectedItemFacture_mpe.remboursement_plaque) ;
             item.net_payer = parseInt(vm.selectedItemFacture_mpe.net_payer) ;
 
             vm.showbuttonValidationFacture_mpe_creer = false;
@@ -5186,6 +5232,7 @@
                     || (pass[0].remboursement_acompte   != currentItemFacture_mpe.remboursement_acompte )
                     || (pass[0].penalite_retard != currentItemFacture_mpe.penalite_retard )
                     || (pass[0].retenue_garantie != currentItemFacture_mpe.retenue_garantie ) 
+                    || (pass[0].remboursement_plaque   != currentItemFacture_mpe.remboursement_plaque )
                     || (pass[0].net_payer   != currentItemFacture_mpe.net_payer )
                     || (pass[0].date_signature   != currentItemFacture_mpe.date_signature ))                   
                       { 
@@ -5229,6 +5276,7 @@
                     remboursement_acompte: facture_mpe.remboursement_acompte ,
                     penalite_retard: facture_mpe.penalite_retard,
                     retenue_garantie: facture_mpe.retenue_garantie,
+                    remboursement_plaque: facture_mpe.remboursement_plaque ,
                     net_payer: facture_mpe.net_payer,
                     date_signature:convertionDate(new Date(facture_mpe.date_signature)) ,
                     id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
@@ -5298,6 +5346,7 @@
                     remboursement_acompte: facture_mpe.remboursement_acompte ,
                     penalite_retard: facture_mpe.penalite_retard,
                     retenue_garantie: facture_mpe.retenue_garantie,
+                    remboursement_plaque: facture_mpe.remboursement_plaque ,
                     net_payer: facture_mpe.net_payer,
                     date_signature:convertionDate(new Date(facture_mpe.date_signature)) ,
                     id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
@@ -5324,10 +5373,6 @@
             apiFactory.getAPIgeneraliserREST("attachement_travaux/index","menu","getattachement_travauxByfacture",'id_facture_mpe',vm.selectedItemFacture_mpe.id).then(function(result)
             {
                 vm.allattachement_travaux = result.data.response;
-                if (result.data.response.length>0)
-                {
-                    vm.showbuttonNouvAttachement_travaux = false;
-                }
             });
             console.log('okok');
         }
@@ -6025,7 +6070,7 @@
 
                     vm.selectedItemFacture_mpe.montant_ttc = montant_ht + montant_tva;
                     vm.selectedItemFacture_mpe.net_payer = montant_ht + montant_tva - (vm.selectedItemFacture_mpe.remboursement_acompte + 
-                    vm.selectedItemFacture_mpe.retenue_garantie + vm.selectedItemFacture_mpe.penalite_retard);
+                    vm.selectedItemFacture_mpe.retenue_garantie + vm.selectedItemFacture_mpe.penalite_retard + vm.selectedItemFacture_mpe.remboursement_plaque);
                     majatfacture_mpe(vm.selectedItemFacture_mpe,0);
             }
               //vm.showboutonValider = false;
@@ -6090,6 +6135,7 @@
                     remboursement_acompte: facture_mpe.remboursement_acompte ,
                     penalite_retard: facture_mpe.penalite_retard,
                     retenue_garantie: facture_mpe.retenue_garantie,
+                    remboursement_plaque: facture_mpe.remboursement_plaque ,
                     net_payer: facture_mpe.net_payer,
                     date_signature:convertionDate(new Date(facture_mpe.date_signature)) ,
                     id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
@@ -6798,7 +6844,7 @@
 
                     vm.selectedItemFacture_mpe.montant_ttc = montant_ht + montant_tva;
                     vm.selectedItemFacture_mpe.net_payer = montant_ht + montant_tva - (vm.selectedItemFacture_mpe.remboursement_acompte + 
-                    vm.selectedItemFacture_mpe.retenue_garantie + vm.selectedItemFacture_mpe.penalite_retard);
+                    vm.selectedItemFacture_mpe.retenue_garantie + vm.selectedItemFacture_mpe.penalite_retard + vm.selectedItemFacture_mpe.remboursement_plaque);
                     majatfacture_mpe(vm.selectedItemFacture_mpe,0);
             }
               //vm.showboutonValider = false;
@@ -6863,6 +6909,7 @@
                     remboursement_acompte: facture_mpe.remboursement_acompte ,
                     penalite_retard: facture_mpe.penalite_retard,
                     retenue_garantie: facture_mpe.retenue_garantie,
+                    remboursement_plaque: facture_mpe.remboursement_plaque ,
                     net_payer: facture_mpe.net_payer,
                     date_signature:convertionDate(new Date(facture_mpe.date_signature)) ,
                     id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
@@ -7573,7 +7620,7 @@
 
                     vm.selectedItemFacture_mpe.montant_ttc = montant_ht + montant_tva;
                     vm.selectedItemFacture_mpe.net_payer = montant_ht + montant_tva - (vm.selectedItemFacture_mpe.remboursement_acompte + 
-                    vm.selectedItemFacture_mpe.retenue_garantie + vm.selectedItemFacture_mpe.penalite_retard);
+                    vm.selectedItemFacture_mpe.retenue_garantie + vm.selectedItemFacture_mpe.penalite_retard + vm.selectedItemFacture_mpe.remboursement_plaque);
                     majatfacture_mpe(vm.selectedItemFacture_mpe,0);
             }
               //vm.showboutonValider = false;
@@ -7638,6 +7685,7 @@
                     remboursement_acompte: facture_mpe.remboursement_acompte ,
                     penalite_retard: facture_mpe.penalite_retard,
                     retenue_garantie: facture_mpe.retenue_garantie,
+                    remboursement_plaque: facture_mpe.remboursement_plaque ,
                     net_payer: facture_mpe.net_payer,
                     date_signature:convertionDate(new Date(facture_mpe.date_signature)) ,
                     id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
@@ -7975,6 +8023,673 @@
 
 
     /******************************************fin attachement mobilier travaux***********************************************/
+
+        /**************************************Debut transfert reliquat*********************************************/
+         vm.transfert_reliquat_column = [        
+        {titre:"Montant"
+        },
+        {titre:"Objet utilisation"
+        },
+        {titre:"Date transfert"
+        },
+        {titre:"Situation utilisation"
+        },
+        {titre:"Intitulé du compte"
+        },
+        {titre:"RIB SAE"
+        },
+        {titre:"Observation"
+        },
+        {titre:"Action"
+        }];
+
+        vm.afficheobjet_utilisation = function(objet)
+        { 
+          var affiche = "Se procurer fourniture";
+          if (objet ==0 )
+          {
+            affiche = "Amelioration infrastructure";
+          }
+          return affiche;
+        }
+        vm.change_montant = function(item)
+        { item.objet_utilisation=1;
+          if (parseInt(item.montant)<=1000000)
+          {
+            item.objet_utilisation=0;
+          }
+        }
+
+        //fonction ajout dans bdd
+        function ajoutTransfert_reliquat(transfert_reliquat,suppression)
+        {
+            if (NouvelItemTransfert_reliquat==false)
+            {
+                test_existanceTransfert_reliquat (transfert_reliquat,suppression); 
+            } 
+            else
+            {
+                insert_in_baseTransfert_reliquat(transfert_reliquat,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation transfert_reliquat
+        vm.annulerTransfert_reliquat = function(item)
+        {
+          if (NouvelItemTransfert_reliquat == false)
+          {
+              item.$edit = false;
+              item.$selected = false;
+              item.id_convention_entete    = currentItem.id_convention_entete ;
+              item.montant  = currentItem.montant ;
+              item.objet_utilisation  = currentItem.objet_utilisation ;
+              item.situation_utilisation  = currentItem.situation_utilisation ;
+              item.date_transfert       = new Date(currentItem.date_transfert);              
+              item.intitule_compte = currentItem.intitule_compte ;
+              item.rib = currentItem.rib;
+              item.observation = currentItem.observation;
+              
+          }else
+          {
+            vm.alltransfert_reliquat = vm.alltransfert_reliquat.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItem.id;
+            });
+          }
+
+          vm.selectedItemTransfert_reliquat = {} ;
+          NouvelItemTransfert_reliquat     = false;
+          vm.showbuttonSauvegarde = true;
+          vm.afficherboutonValider = false;
+          
+        };
+
+        //fonction selection item entete convention cisco/feffi
+        vm.selectionTransfert_reliquat = function (item)
+        {
+            vm.selectedItemTransfert_reliquat = item;
+            if(item.$selected==false)
+            {
+              currentItemTransfert_reliquat     = JSON.parse(JSON.stringify(vm.selectedItemTransfert_reliquat));
+            }
+            
+            //recuperation donnée convention
+           if (vm.selectedItemTransfert_reliquat.id!=0)
+            {   
+                vm.showbuttonValidationtransfert_reliquat = true;
+                vm.validation_transfert_reliquat = item.validation;
+                if (item.$edit == true)
+                {
+                  vm.showbuttonValidationtransfert_reliquat = false;
+                } 
+                apiFactory.getAPIgeneraliserREST("justificatif_transfert_reliquat/index",'id_transfert_reliquat',item.id).then(function(result)
+                {
+                    vm.alljustificatif_transfert_reliquat = result.data.response; 
+                    console.log(vm.alljustificatif_transfert_reliquat);
+                });
+              //Fin Récupération cout divers par convention
+              
+                vm.stepjusti_trans_reliqua = true;
+            };           
+
+        };
+        $scope.$watch('vm.selectedItemTransfert_reliquat', function()
+        {
+             if (!vm.alltransfert_reliquat) return;
+             vm.alltransfert_reliquat.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemTransfert_reliquat.$selected = true;
+        });
+
+        //fonction masque de saisie modification item convention
+        vm.modifierTransfert_reliquat = function(item)
+        { 
+            NouvelItemTransfert_reliquat = false ;
+            vm.selectedItemTransfert_reliquat = item;
+            currentItemTransfert_reliquat = angular.copy(vm.selectedItemTransfert_reliquat);
+            $scope.vm.alltransfert_reliquat.forEach(function(cis) {
+              cis.$edit = false;
+            });            
+
+            item.$edit = true;
+            item.$selected = true;
+
+            item.id_convention_entete = vm.selectedItemTransfert_reliquat.convention_entete.id ;
+            item.montant  = vm.selectedItemTransfert_reliquat.montant ;
+            item.objet_utilisation  = vm.selectedItemTransfert_reliquat.objet_utilisation ;
+            item.situation_utilisation  = vm.selectedItemTransfert_reliquat.situation_utilisation ;
+            item.date_transfert  = new Date(vm.selectedItemTransfert_reliquat.date_transfert) ;
+            item.intitule_compte = vm.selectedItemTransfert_reliquat.intitule_compte ;
+            item.rib = parseInt(vm.selectedItemTransfert_reliquat.rib);
+            item.observation = parseInt(vm.selectedItemTransfert_reliquat.observation);
+
+            vm.showbuttonValidationcontrat_prestataire = false;
+        };
+
+        //fonction bouton suppression item entente convention cisco feffi
+        vm.supprimerTransfert_reliquat = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enregistrement?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajout(vm.selectedItemTransfert_reliquat,1);
+                vm.showbuttonSauvegarde = true;
+                vm.afficherboutonValider = false;
+              }, function() {
+                //alert('rien');
+              });
+
+              vm.stepOne = false;
+              vm.stepTwo = false;
+        };
+
+        //function teste s'il existe une modification item entente convention cisco feffi
+        function test_existanceTransfert_reliquat (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var trans = vm.alltransfert_reliquat.filter(function(obj)
+                {
+                   return obj.id == currentItemTransfert_reliquat.id;
+                });
+                if(trans[0])
+                {
+                   if((trans[0].date_transfert!=currentItemTransfert_reliquat.date_transfert)                    
+                    || (trans[0].situation_utilisation!=currentItemTransfert_reliquat.situation_utilisation)                    
+                    || (trans[0].intitule_compte!=currentItemTransfert_reliquat.intitule_compte)
+                    || (trans[0].montant!=currentItemTransfert_reliquat.montant)
+                    || (trans[0].observation!=currentItemTransfert_reliquat.observation))                   
+                                       
+                      { 
+                        insert_in_baseTransfert_reliquat(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseTransfert_reliquat(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd convention
+        function insert_in_baseTransfert_reliquat(transfert_reliquat,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemTransfert_reliquat ==false)
+            {
+                getId = vm.selectedItemTransfert_reliquat.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    id_convention_entete: vm.selectedItemConvention_entete.id,
+                    date_transfert:    convertionDate(new Date(transfert_reliquat.date_transfert)),
+                    intitule_compte:  transfert_reliquat.intitule_compte,
+                    montant:   transfert_reliquat.montant,
+                    objet_utilisation:   transfert_reliquat.objet_utilisation,
+                    situation_utilisation:   transfert_reliquat.situation_utilisation,
+                    observation:    transfert_reliquat.observation,
+                    rib:    transfert_reliquat.rib,
+                    validation: 0               
+                });
+                //console.log(convention.pays_id);
+                console.log(datas);
+                //factory
+            apiFactory.add("transfert_reliquat/index",datas, config).success(function (data)
+            {
+                
+                var conv = vm.allconvention_entete.filter(function(obj)
+                {
+                    return obj.id == transfert_reliquat.id_convention_entete;
+                });
+
+                if (NouvelItemTransfert_reliquat == false)
+                {
+                    // Update or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                        vm.selectedItemTransfert_reliquat.convention_entete   = conv[0];
+                        vm.selectedItemTransfert_reliquat.$selected  = false;
+                        vm.selectedItemTransfert_reliquat.$edit      = false;
+                        vm.selectedItemTransfert_reliquat ={};
+                        vm.showbuttonNouvTransfert_reliquat = false;
+
+
+                    }
+                    else 
+                    {    
+                      vm.alltransfert_reliquat = vm.alltransfert_reliquat.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemTransfert_reliquat.id;
+                      });
+                      vm.showbuttonNouvTransfert_reliquat= true;
+                    }
+                }
+                else
+                {
+                  
+                  transfert_reliquat.convention_entete = conv[0];
+                  transfert_reliquat.id  =   String(data.response);
+                  NouvelItemTransfert_reliquat = false;
+                  vm.showbuttonNouvTransfert_reliquat= false;
+            }
+              vm.validation_transfert_reliquat = 0;    
+              vm.showbuttonValidationtransfert_reliquat = false;
+              transfert_reliquat.$selected = false;
+              transfert_reliquat.$edit = false;
+              vm.selectedItemTransfert_reliquat = {};
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+
+        vm.validerTransfert_reliquat = function()
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: 0,
+                    id:        vm.selectedItemTransfert_reliquat.id,
+                    id_convention_entete: vm.selectedItemConvention_entete.id,
+                    date_transfert:    vm.selectedItemTransfert_reliquat.date_transfert,
+                    intitule_compte:  vm.selectedItemTransfert_reliquat.intitule_compte,
+                    montant:   vm.selectedItemTransfert_reliquat.montant,
+                    objet_utilisation:   vm.selectedItemTransfert_reliquat.objet_utilisation,
+                    situation_utilisation:   vm.selectedItemTransfert_reliquat.situation_utilisation,
+                    observation:    vm.selectedItemTransfert_reliquat.observation,
+                    rib:    vm.selectedItemTransfert_reliquat.rib,
+                    validation: 1               
+                });
+
+            //console.log(datas);
+                //factory
+            apiFactory.add("transfert_reliquat/index",datas, config).success(function (data)
+            { 
+                vm.selectedItemTransfert_reliquat.validation = 1;
+                vm.validation_transfert_reliquat = 1;    
+                vm.showbuttonValidationtransfert_reliquat = false;
+                   
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+           
+        }
+    /*********************************************Fin transfert reliquat************************************************/
+
+    /*********************************************Fin justificatif reliquat************************************************/
+
+    vm.justificatif_transfert_reliquat_column = [
+        {titre:"Description"
+        },
+        {titre:"Fichier"
+        },
+        {titre:"Action"
+        }];
+
+        $scope.uploadFiletransfert_reliquat = function(event)
+       {
+          console.dir(event);
+          var files = event.target.files;
+          vm.myFile = files;
+          vm.selectedItemJustificatif_transfert_reliquat.fichier = vm.myFile[0].name;
+          console.log(vm.selectedItemJustificatif_transfert_reliquat.fichier);
+        } 
+
+        //fonction ajout dans bdd
+        function ajoutJustificatif_transfert_reliquat(justificatif_transfert_reliquat,suppression)
+        {
+            if (NouvelItemJustificatif_transfert_reliquat==false)
+            {
+                test_existanceJustificatif_transfert_reliquat (justificatif_transfert_reliquat,suppression); 
+            } 
+            else
+            {
+                insert_in_baseJustificatif_transfert_reliquat(justificatif_transfert_reliquat,suppression);
+            }
+        }
+
+        //fonction de bouton d'annulation Justificatif_transfert_reliquat
+        vm.annulerJustificatif_transfert_reliquat = function(item)
+        {
+          if (NouvelItemJustificatif_transfert_reliquat == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            item.description   = currentItemJustificatif_transfert_reliquat.description ;
+            item.fichier   = currentItemJustificatif_transfert_reliquat.fichier ;
+          }else
+          {
+            vm.alljustificatif_transfert_reliquat = vm.alljustificatif_transfert_reliquat.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemJustificatif_transfert_reliquat.id;
+            });
+          }
+
+          vm.selectedItemJustificatif_transfert_reliquat = {} ;
+          NouvelItemJustificatif_transfert_reliquat      = false;
+          
+        };
+
+        //fonction selection item justificatif transfert_reliquat
+        vm.selectionJustificatif_transfert_reliquat= function (item)
+        {
+            vm.selectedItemJustificatif_transfert_reliquat = item;
+            vm.nouvelItemJustificatif_transfert_reliquat   = item;
+            currentItemJustificatif_transfert_reliquat    = JSON.parse(JSON.stringify(vm.selectedItemJustificatif_transfert_reliquat)); 
+        };
+        $scope.$watch('vm.selectedItemJustificatif_transfert_reliquat', function()
+        {
+             if (!vm.alljustificatif_transfert_reliquat) return;
+             vm.alljustificatif_transfert_reliquat.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemJustificatif_transfert_reliquat.$selected = true;
+        });
+
+        //fonction masque de saisie modification item feffi
+        vm.modifierJustificatif_transfert_reliquat = function(item)
+        {
+            NouvelItemJustificatif_transfert_reliquat = false ;
+            vm.selectedItemJustificatif_transfert_reliquat = item;
+            currentItemJustificatif_transfert_reliquat = angular.copy(vm.selectedItemJustificatif_transfert_reliquat);
+            $scope.vm.alljustificatif_transfert_reliquat.forEach(function(jus) {
+              jus.$edit = false;
+            });
+
+            item.$edit = true;
+            item.$selected = true;
+            item.description   = vm.selectedItemJustificatif_transfert_reliquat.description ;
+            item.fichier   = vm.selectedItemJustificatif_transfert_reliquat.fichier ;
+            //vm.showThParcourir = true;
+        };
+
+        //fonction bouton suppression item Justificatif_transfert_reliquat
+        vm.supprimerJustificatif_transfert_reliquat = function()
+        {
+            var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() {
+                vm.ajoutJustificatif_transfert_reliquat(vm.selectedItemJustificatif_transfert_reliquat,1);
+              }, function() {
+                //alert('rien');
+              });
+        };
+
+        //function teste s'il existe une modification item feffi
+        function test_existanceJustificatif_transfert_reliquat (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var just = vm.alljustificatif_transfert_reliquat.filter(function(obj)
+                {
+                   return obj.id == currentItemJustificatif_transfert_reliquat.id;
+                });
+                if(just[0])
+                {
+                   if((just[0].description   != currentItemJustificatif_transfert_reliquat.description )
+                    ||(just[0].fichier   != currentItemJustificatif_transfert_reliquat.fichier ))                   
+                      { 
+                         insert_in_baseJustificatif_transfert_reliquat(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_baseJustificatif_transfert_reliquat(item,suppression);
+        }
+
+        //insertion ou mise a jours ou suppression item dans bdd Justificatif_transfert_reliquat
+        function insert_in_baseJustificatif_transfert_reliquat(justificatif_transfert_reliquat,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemJustificatif_transfert_reliquat==false)
+            {
+                getId = vm.selectedItemJustificatif_transfert_reliquat.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    description: justificatif_transfert_reliquat.description,
+                    fichier: justificatif_transfert_reliquat.fichier,
+                    id_transfert_reliquat: vm.selectedItemTransfert_reliquat.id,
+                    validation:0               
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("justificatif_transfert_reliquat/index",datas, config).success(function (data)
+            {   
+
+              if (NouvelItemJustificatif_transfert_reliquat == false)
+              {
+                    // Update_paiement or delete: id exclu                 
+                    if(suppression==0)
+                    {
+                         var file= vm.myFile[0];
+                    
+                          var repertoire = 'justificatif_transfert_reliquat/';
+                          var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
+                          var getIdFile = vm.selectedItemJustificatif_transfert_reliquat.id
+                                              
+                          if(file)
+                          { 
+
+                            var name_file = vm.selectedItemContrat_prestataire.num_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+
+                            var fd = new FormData();
+                            fd.append('file', file);
+                            fd.append('repertoire',repertoire);
+                            fd.append('name_fichier',name_file);
+
+                            var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
+                            headers: {'Content-Type': undefined}, repertoire: repertoire
+                            }).success(function(data)
+                            {
+                                if(data['erreur'])
+                                {
+                                  var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
+                                 
+                                  var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
+                                  $mdDialog.show( alert ).finally(function()
+                                  { 
+                                    justificatif_transfert_reliquat.fichier='';
+                                  var datas = $.param({
+                                                      supprimer: suppression,
+                                                      id:        getIdFile,
+                                                      description: justificatif_transfert_reliquat.description,
+                                                      fichier: justificatif_transfert_reliquat.fichier,
+                                                      id_transfert_reliquat: vm.selectedItemTransfert_reliquat.id,
+                                                      validation:0
+                                        });
+                                      apiFactory.add("justificatif_transfert_reliquat/index",datas, config).success(function (data)
+                                      {  
+                                          vm.showbuttonNouvManuel = true;
+                                          justificatif_transfert_reliquat.$selected = false;
+                                          justificatif_transfert_reliquat.$edit = false;
+                                          vm.selectedItemJustificatif_transfert_reliquat = {};
+                                      console.log('b');
+                                      }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                                  });
+                                }
+                                else
+                                {
+                                  justificatif_transfert_reliquat.fichier=repertoire+data['nomFile'];
+                                  var datas = $.param({
+                                        supprimer: suppression,
+                                        id:        getIdFile,
+                                        description: justificatif_transfert_reliquat.description,
+                                        fichier: justificatif_transfert_reliquat.fichier,
+                                        id_transfert_reliquat: vm.selectedItemTransfert_reliquat.id,
+                                        validation:0               
+                                    });
+                                  apiFactory.add("justificatif_transfert_reliquat/index",datas, config).success(function (data)
+                                  {
+                                        
+                                      justificatif_transfert_reliquat.$selected = false;
+                                      justificatif_transfert_reliquat.$edit = false;
+                                      vm.selectedItemJustificatif_transfert_reliquat = {};
+                                      console.log('e');
+                                  }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                                }
+                            }).error(function()
+                            {
+                              vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                            });
+                          }
+
+
+                        vm.selectedItemJustificatif_transfert_reliquat.$selected  = false;
+                        vm.selectedItemJustificatif_transfert_reliquat.$edit      = false;
+                        vm.selectedItemJustificatif_transfert_reliquat ={};
+                    }
+                    else 
+                    {    
+                      vm.alljustificatif_transfert_reliquat = vm.alljustificatif_transfert_reliquat.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemJustificatif_transfert_reliquat.id;
+                      });
+                      vm.showbuttonNouvManuel = true;
+                      var chemin= vm.selectedItemJustificatif_transfert_reliquat.fichier;
+                      var fd = new FormData();
+                          fd.append('chemin',chemin);
+                     
+                      var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
+
+                      var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
+                      headers: {'Content-Type': undefined}, chemin: chemin
+                      }).success(function(data)
+                      {
+                         console.log('ok');
+                      }).error(function()
+                      {
+                          showDialog(event,chemin);
+                      });
+                    }
+              }
+              else
+              {
+                  justificatif_transfert_reliquat.id  =   String(data.response);              
+                  NouvelItemJustificatif_transfert_reliquat = false;
+
+                  vm.showbuttonNouvManuel = false;
+                    var file= vm.myFile[0];
+                    
+                    var repertoire = 'justificatif_transfert_reliquat/';
+                    var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
+                    var getIdFile = String(data.response);
+                                        
+                    if(file)
+                    { 
+
+                      var name_file = vm.selectedItemContrat_prestataire.num_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
+
+                      var fd = new FormData();
+                      fd.append('file', file);
+                      fd.append('repertoire',repertoire);
+                      fd.append('name_fichier',name_file);
+
+                      var upl= $http.post(uploadUrl, fd,{transformRequest: angular.identity,
+                      headers: {'Content-Type': undefined}, repertoire: repertoire
+                      }).success(function(data)
+                      {
+                          if(data['erreur'])
+                          {
+                            var msg = data['erreur'].error.replace(/<[^>]*>/g, '');
+                           
+                            var alert = $mdDialog.alert({title: 'Notification',textContent: msg,ok: 'Fermé'});                  
+                            $mdDialog.show( alert ).finally(function()
+                            { 
+                              justificatif_transfert_reliquat.fichier='';
+                            var datas = $.param({
+                                                supprimer: suppression,
+                                                id:        getIdFile,
+                                                description: justificatif_transfert_reliquat.description,
+                                                fichier: justificatif_transfert_reliquat.fichier,
+                                                id_transfert_reliquat: vm.selectedItemTransfert_reliquat.id,
+                                                
+                                  });
+                                apiFactory.add("justificatif_transfert_reliquat/index",datas, config).success(function (data)
+                                { 
+                                    justificatif_transfert_reliquat.$selected = false;
+                                    justificatif_transfert_reliquat.$edit = false;
+                                    vm.selectedItemJustificatif_transfert_reliquat = {};
+                               
+                                }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                            });
+                          }
+                          else
+                          {
+                            justificatif_transfert_reliquat.fichier=repertoire+data['nomFile'];
+                            var datas = $.param({
+                                  supprimer: suppression,
+                                  id:        getIdFile,
+                                  description: justificatif_transfert_reliquat.description,
+                                  fichier: justificatif_transfert_reliquat.fichier,
+                                  id_transfert_reliquat: vm.selectedItemTransfert_reliquat.id,
+                                               
+                              });
+                            apiFactory.add("justificatif_transfert_reliquat/index",datas, config).success(function (data)
+                            {
+                                  
+                                justificatif_transfert_reliquat.$selected = false;
+                                justificatif_transfert_reliquat.$edit = false;
+                                vm.selectedItemJustificatif_transfert_reliquat = {};
+                                
+                            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                          }
+                      }).error(function()
+                      {
+                        vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                      });
+                    }
+              }
+              justificatif_transfert_reliquat.$selected = false;
+              justificatif_transfert_reliquat.$edit = false;
+              vm.selectedItemJustificatif_transfert_reliquat = {};
+
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }
+        vm.download_transfert_reliquat = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
+        }
+
+    /*********************************************Fin justificatif reliquat************************************************/
 
 
   /******************************************fin maitrise d'oeuvre*******************************************************/

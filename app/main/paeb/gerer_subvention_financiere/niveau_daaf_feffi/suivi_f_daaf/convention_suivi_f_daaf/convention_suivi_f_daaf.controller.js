@@ -165,6 +165,14 @@
          });
 
         /***************debut convention cisco/feffi**********/
+
+
+        apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionNeeddemandefeffivalidationdaaf').then(function(result)
+        {
+                vm.allconvention_entete = result.data.response;
+                console.log(vm.allconvention_entete);
+        });
+
         vm.convention_entete_column = [
         {titre:"Cisco"
         },

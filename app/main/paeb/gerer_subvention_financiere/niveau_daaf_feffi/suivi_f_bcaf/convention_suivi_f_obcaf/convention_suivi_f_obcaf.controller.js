@@ -403,10 +403,13 @@
                                   {
                                       return obj.validation == 0;
                                   });
-
+                                  console.log(result.data.response);
+                                  console.log(vm.showbuttonNouvTransfert_reliquat);
                                   if (result.data.response.length!=0)
                                   {
                                     vm.showbuttonNouvTransfert_reliquat=false;
+                                    
+                                  console.log(vm.showbuttonNouvTransfert_reliquat);
                                   }
                                   return resolve('ok');
                               });

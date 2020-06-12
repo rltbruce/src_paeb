@@ -117,7 +117,7 @@
                     </td>                
 
                     <td>                                    
-                      <span>{{convention_ufp_daaf_entete.nbr_bebeficiaire}}</span>
+                      <span>{{convention_ufp_daaf_entete.nbr_beneficiaire}}</span>
                     </td> 
                   </tr>
                 </tbody>
@@ -179,7 +179,8 @@
                       <span ng-if="demande_deblocage_daaf.$edit">
                         <md-input-container style="width:100%;display: flex !important;">
                           <label>Tranche</label>
-                          <md-select ng-model="demande_deblocage_daaf.id_tranche_deblocage_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(demande_deblocage_daaf)" ng-disabled="demande_deblocage_daaf.validation!=0 || vm.modificationdemande || !demande_deblocage_daaf.id_convention_ufp_daaf_entete">
+                          <!--md-select ng-model="demande_deblocage_daaf.id_tranche_deblocage_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(demande_deblocage_daaf)" ng-disabled="demande_deblocage_daaf.validation!=0 || vm.modificationdemande || !demande_deblocage_daaf.id_convention_ufp_daaf_entete"-->
+                          <md-select ng-model="demande_deblocage_daaf.id_tranche_deblocage_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(demande_deblocage_daaf)">
                             <md-option ng-repeat="tranche in vm.allcurenttranche_deblocage_daaf" value="{{tranche.id}}">
                                                                         {{tranche.libelle}}
                             </md-option>
@@ -285,7 +286,7 @@
                         <span class="icon-cancel"></span>
                       </a>
                                 
-                      <a ng-if="demande_deblocage_daaf.$edit && demande_deblocage_daaf.date && demande_deblocage_daaf.id_tranche_deblocage_daaf && demande_deblocage_daaf.id_convention_ufp_daaf_entete && demande_deblocage_daaf.ref_demande && demande_deblocage_daaf.objet>''" ng-click="vm.ajoutDemande_deblocage_daaf(demande_deblocage_daaf,0)" title="Sauvegarder">
+                      <a ng-if="demande_deblocage_daaf.$edit && demande_deblocage_daaf.date && demande_deblocage_daaf.id_tranche_deblocage_daaf && demande_deblocage_daaf.ref_demande && demande_deblocage_daaf.objet>''" ng-click="vm.ajoutDemande_deblocage_daaf(demande_deblocage_daaf,0)" title="Sauvegarder">
                         <span class="icon-content-save"></span>
                       </a>
                     </td>

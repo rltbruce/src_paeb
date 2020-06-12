@@ -569,7 +569,7 @@ console.log(conventioufpdaaf);
                     date: convertionDate(new Date(demande_deblocage_daaf_validation_daaf.date)) ,
                     validation: 1,
                     situation: 1,
-                    id_convention_ufp_daaf_entete: demande_deblocage_daaf_validation_daaf.convention_ufp_daaf_entete.id              
+                    id_convention_ufp_daaf_entete: demande_deblocage_daaf_validation_daaf.id_convention_ufp_daaf_entete             
                 });
                 console.log(datas);
                 //factory

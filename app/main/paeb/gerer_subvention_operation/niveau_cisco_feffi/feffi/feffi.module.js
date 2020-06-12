@@ -29,7 +29,7 @@ var vs;
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_cisco_feffi.feffi', {
             title: 'Renseignement FEFFI',
-            icon  : 'icon-quadcopter',
+            icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_subvention_operation_niveau_cisco_feffi_feffi',
             weight: 1,
             hidden: function()
