@@ -79,6 +79,7 @@
                                   <md-input-container flex="100" flex-gt-xs="90">
                                     <label>Lot</label>
                                     <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                                      <md-option value="*">*</md-option>
                                       <md-option value="1">Lot 1</md-option>
                                       <md-option value="2">Lot 2</md-option>
                                       <md-option value="3">Lot 3</md-option>
@@ -126,7 +127,7 @@
                                     <label>Ecole</label>
                                     <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
                                       <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.code}}
+                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
                                       </md-option>
                                     </md-select>
                                     <div ng-messages="filtreform.ecole.$error" role="alert">
@@ -467,7 +468,7 @@
                                   </md-input-container>   
                                 </span>
                                           
-                                <span ng-if="!contrat_partenaire_relai.$edit">{{contrat_partenaire_relai.montant_contrat}}</span>
+                                <span ng-if="!contrat_partenaire_relai.$edit">{{contrat_partenaire_relai.montant_contrat}} Ar</span>
                               </td>
 
                               <td>
@@ -566,7 +567,7 @@
                                           </md-input-container>   
                                         </span>
                                                   
-                                        <span ng-if="!avenant_partenaire.$edit">{{avenant_partenaire.montant}}</span>
+                                        <span ng-if="!avenant_partenaire.$edit">{{avenant_partenaire.montant}} Ar</span>
                                       </td>
 
                                       <td>

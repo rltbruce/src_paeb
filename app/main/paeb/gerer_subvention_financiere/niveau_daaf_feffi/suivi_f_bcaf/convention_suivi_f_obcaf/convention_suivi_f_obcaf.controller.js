@@ -214,9 +214,9 @@
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
-        {titre:"Feffi"
+        {titre:"FEFFI"
         },
         {titre:"Site"
         },
@@ -268,15 +268,15 @@
             var date_fin = convertionDate(filtre.date_fin);
               switch (vm.session)
                 { 
-                  case 'OBCAF':
-                            if (vm.usercisco.id!=undefined)
-                            {
-                              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpByciscodate',
-                                'id_cisco',vm.usercisco.id,'date_debut',date_debut,'date_fin',date_fin).then(function(result)
+                  case 'OBCAF':console.log(vm.usercisco.id);
+                            
+                              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpByfiltrecisco','id_cisco_user',vm.usercisco.id,'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
                               {
                                   vm.allconvention_entete = result.data.response;
                               });
-                            }               
+                         
+                console.log(filtre);                
                       break;
 
                   case 'ADMIN':
@@ -292,7 +292,6 @@
                       break;
               
                 }
-                console.log(filtre);
         }
         vm.annulerfiltre = function()
         {
@@ -545,11 +544,11 @@
         {
             if (vm.NouvelItemDemande_realimentation==false)
             {
-                test_existanceDemande_realimentation (demande_realimentation,suppression); 
+                test_existanceDemande_realimentation (demande_realimentation,suppression); console.log('at00');
             } 
             else
             {
-                insert_in_baseDemande_realimentation(demande_realimentation,suppression);
+                insert_in_baseDemande_realimentation(demande_realimentation,suppression);console.log('at000')
             }
         }
 
@@ -593,7 +592,7 @@
         {
             vm.selectedItemDemande_realimentation = item;
             vm.showbuttonNouvtransfert_daaf = true;
-            if (item.$selected ==false || item.$selected == undefined)
+            if (item.$edit ==false || item.$edit == undefined)
             {
                 currentItemDemande_realimentation     = JSON.parse(JSON.stringify(vm.selectedItemDemande_realimentation));
                //recuperation donnée demande_realimentation_feffi
@@ -603,7 +602,8 @@
                     
                 });
                 
-                console.log(item.validation);
+                console.log(item);
+                console.log(currentItemDemande_realimentation);
                 vm.validation = item.validation;
                 vm.steppiecefeffi=true;
             }
@@ -624,7 +624,7 @@
             vm.NouvelItemDemande_realimentation = false ;
             vm.selectedItemDemande_realimentation = item;
             currentItemDemande_realimentation = angular.copy(vm.selectedItemDemande_realimentation);
-            $scope.vm.alldemande_realimentation.forEach(function(dema) {
+            $scope.vm.alldemande_realimentation_invalide.forEach(function(dema) {
               dema.$edit = false;
             });
 
@@ -667,13 +667,14 @@
 
         //function teste s'il existe une modification item convention_cisco_feffi_entete
         function test_existanceDemande_realimentation (item,suppression)
-        {          
+        {       console.log(suppression);   
             if (suppression!=1)
-            {
-               var dema = vm.alldemande_realimentation.filter(function(obj)
+            {console.log('att');
+               var dema = vm.alldemande_realimentation_invalide.filter(function(obj)
                 {
                    return obj.id == currentItemDemande_realimentation.id;
                 });
+               console.log(dema);
                 if(dema[0])
                 {
                    if((dema[0].id_compte_feffi != currentItemDemande_realimentation.id_compte_feffi )
@@ -683,19 +684,19 @@
                     || (dema[0].periode != currentItemDemande_realimentation.periode )
                     || (dema[0].pourcentage != currentItemDemande_realimentation.pourcentage )
                     || (dema[0].reste != currentItemDemande_realimentation.reste )
-                    || (dema[0].date != currentItemDemande_realimentation.date )
-                    || (dema[0].id_convention_cife_entete != currentItemDemande_realimentation.id_convention_cife_entete ))                    
+                    || (dema[0].date != currentItemDemande_realimentation.date ))                    
                       { 
-                        insert_in_baseDemande_realimentation(item,suppression);
+                        insert_in_baseDemande_realimentation(item,suppression);console.log('at0');
                       }
                       else
                       {  
                         item.$selected = true;
-                        item.$edit = false;
+                        item.$edit = false;console.log('at1');
                       }
                 }
             } else
-                  insert_in_baseDemande_realimentation(item,suppression);
+              insert_in_baseDemande_realimentation(item,suppression);console.log('at3');
+                  
         }
 
         //insertion ou mise a jours ou suppression item dans bdd convention_cisco_feffi_entete
@@ -1440,7 +1441,7 @@
                   decaiss_fonct_feffi.convention_entete = conv[0];
                   decaiss_fonct_feffi.id  =   String(data.response);              
                   NouvelItemDecaiss_fonct_feffi = false;
-
+                  decaiss_fonct_feffi.validation = 0;
               vm.nbr_decaiss_feffi = parseInt(vm.nbr_decaiss_feffi)+1;
                                         
                }
@@ -1642,7 +1643,7 @@
                     .ok('ok')
                     .cancel('annuler');
               $mdDialog.show(confirm).then(function() {
-                vm.ajout(vm.selectedItemTransfert_reliquat,1);
+                vm.ajoutTransfert_reliquat(vm.selectedItemTransfert_reliquat,1);
                 vm.showbuttonSauvegarde = true;
                 vm.afficherboutonValider = false;
               }, function() {

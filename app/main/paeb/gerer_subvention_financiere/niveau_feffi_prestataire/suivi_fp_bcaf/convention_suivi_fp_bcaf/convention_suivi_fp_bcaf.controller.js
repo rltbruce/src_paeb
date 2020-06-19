@@ -413,9 +413,9 @@
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
-        {titre:"Feffi"
+        {titre:"FEFFI"
         },
         {titre:"Site"
         },
@@ -6056,21 +6056,18 @@
                   console.log(vm.selectedItemAttachement_travaux);
                   majattachement_travaux(vm.selectedItemAttachement_travaux,0) ; 
 
-                  vm.selectedItemAttachement_travaux.total_cumul =parseInt(vm.selectedItemAttachement_travaux.total_cumul) + parseInt(demande_batiment_mpe.cumul);
-                  vm.selectedItemAttachement_travaux.total_anterieur =parseInt(vm.selectedItemAttachement_travaux.total_anterieur) + parseInt(demande_batiment_mpe.anterieur);                  
-                  vm.selectedItemAttachement_travaux.total_periode =parseInt(vm.selectedItemAttachement_travaux.total_periode) + parseInt(demande_batiment_mpe.montant);
-
                   var montant_trav = parseInt(vm.selectedItemFacture_mpe.montant_travaux) + parseInt(demande_batiment_mpe.montant);
                   var montant_rabais = (montant_trav * vm.selectedItemFacture_mpe.pourcentage_rabais)/100;
-                    var montant_ht = montant_rabais + parseInt(montant_trav);
+                    var montant_ht = parseInt(montant_rabais) + parseInt(montant_trav);
                     var montant_tva = (montant_ht *20)/100;
+                    vm.selectedItemFacture_mpe.montant_travaux = montant_trav;
                     vm.selectedItemFacture_mpe.montant_rabais = montant_rabais;
                     vm.selectedItemFacture_mpe.montant_ht = montant_ht;
                     vm.selectedItemFacture_mpe.montant_tva = montant_tva;
 
                     vm.selectedItemFacture_mpe.montant_ttc = montant_ht + montant_tva;
-                    vm.selectedItemFacture_mpe.net_payer = montant_ht + montant_tva - (vm.selectedItemFacture_mpe.remboursement_acompte + 
-                    vm.selectedItemFacture_mpe.retenue_garantie + vm.selectedItemFacture_mpe.penalite_retard + vm.selectedItemFacture_mpe.remboursement_plaque);
+                    vm.selectedItemFacture_mpe.net_payer = parseInt(montant_ht) + parseInt(montant_tva) - (parseInt(vm.selectedItemFacture_mpe.remboursement_acompte) + 
+                    parseInt(vm.selectedItemFacture_mpe.retenue_garantie) + parseInt(vm.selectedItemFacture_mpe.penalite_retard) + parseInt(vm.selectedItemFacture_mpe.remboursement_plaque));
                     majatfacture_mpe(vm.selectedItemFacture_mpe,0);
             }
               //vm.showboutonValider = false;
@@ -6830,22 +6827,20 @@
                   console.log(vm.selectedItemAttachement_travaux);
                   majattachement_travaux(vm.selectedItemAttachement_travaux,0) ; 
 
-                  vm.selectedItemAttachement_travaux.total_cumul =parseInt(vm.selectedItemAttachement_travaux.total_cumul) + parseInt(demande_latrine_mpe.cumul);
-                  vm.selectedItemAttachement_travaux.total_anterieur =parseInt(vm.selectedItemAttachement_travaux.total_anterieur) + parseInt(demande_latrine_mpe.anterieur);                  
-                  vm.selectedItemAttachement_travaux.total_periode =parseInt(vm.selectedItemAttachement_travaux.total_periode) + parseInt(demande_latrine_mpe.montant);
-
                   var montant_trav = parseInt(vm.selectedItemFacture_mpe.montant_travaux) + parseInt(demande_latrine_mpe.montant);
                   var montant_rabais = (montant_trav * vm.selectedItemFacture_mpe.pourcentage_rabais)/100;
-                    var montant_ht = montant_rabais + parseInt(montant_trav);
+                    var montant_ht =parseInt( montant_rabais) + parseInt(montant_trav);
                     var montant_tva = (montant_ht *20)/100;
+                    vm.selectedItemFacture_mpe.montant_travaux = montant_trav;
                     vm.selectedItemFacture_mpe.montant_rabais = montant_rabais;
                     vm.selectedItemFacture_mpe.montant_ht = montant_ht;
                     vm.selectedItemFacture_mpe.montant_tva = montant_tva;
 
                     vm.selectedItemFacture_mpe.montant_ttc = montant_ht + montant_tva;
-                    vm.selectedItemFacture_mpe.net_payer = montant_ht + montant_tva - (vm.selectedItemFacture_mpe.remboursement_acompte + 
-                    vm.selectedItemFacture_mpe.retenue_garantie + vm.selectedItemFacture_mpe.penalite_retard + vm.selectedItemFacture_mpe.remboursement_plaque);
+                    vm.selectedItemFacture_mpe.net_payer = parseInt(montant_ht) + parseInt(montant_tva) - (parseInt(vm.selectedItemFacture_mpe.remboursement_acompte) + 
+                    parseInt(vm.selectedItemFacture_mpe.retenue_garantie) + parseInt(vm.selectedItemFacture_mpe.penalite_retard) + parseInt(vm.selectedItemFacture_mpe.remboursement_plaque));
                     majatfacture_mpe(vm.selectedItemFacture_mpe,0);
+                    console.log(vm.selectedItemAttachement_travaux);
             }
               //vm.showboutonValider = false;
 
@@ -6859,71 +6854,6 @@
 
         }
 
-         //insertion ou mise a jours ou suppression item dans bdd Attachement_travaux
-        function majattachement_travaux(attachement_travaux,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        attachement_travaux.id,
-                    numero: attachement_travaux.numero,
-                    date_debut:convertionDate(new Date(attachement_travaux.date_debut)),
-                    total_prevu:attachement_travaux.total_prevu,
-                    date_fin: convertionDate(new Date(attachement_travaux.date_fin)),
-                    total_cumul: attachement_travaux.total_cumul ,
-                    total_anterieur: attachement_travaux.total_anterieur ,
-                    total_periode: attachement_travaux.total_periode ,
-                    id_facture_mpe: vm.selectedItemFacture_mpe.id,
-                    validation: 0               
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("attachement_travaux/index",datas, config).success(function (data)
-            {   console.log('vita attachement') ;           
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
-        function majatfacture_mpe(facture_mpe,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        facture_mpe.id,
-                    numero: facture_mpe.numero,
-                    montant_travaux:facture_mpe.montant_travaux,
-                    pourcentage_rabais: facture_mpe.pourcentage_rabais ,
-                    montant_rabais: facture_mpe.montant_rabais,
-                    montant_ht: facture_mpe.montant_ht,
-                    montant_tva: facture_mpe.montant_tva,
-                    montant_ttc:facture_mpe.montant_ttc,
-                    remboursement_acompte: facture_mpe.remboursement_acompte ,
-                    penalite_retard: facture_mpe.penalite_retard,
-                    retenue_garantie: facture_mpe.retenue_garantie,
-                    remboursement_plaque: facture_mpe.remboursement_plaque ,
-                    net_payer: facture_mpe.net_payer,
-                    date_signature:convertionDate(new Date(facture_mpe.date_signature)) ,
-                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
-                    validation: 0               
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("facture_mpe/index",datas, config).success(function (data)
-            {
-                console.log('vita facture');
-            
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
 
         vm.tranchechange_latrine_mpe = function(item)
         { 
@@ -7606,21 +7536,18 @@
                   console.log(vm.selectedItemAttachement_travaux);
                   majattachement_travaux(vm.selectedItemAttachement_travaux,0) ; 
 
-                  vm.selectedItemAttachement_travaux.total_cumul =parseInt(vm.selectedItemAttachement_travaux.total_cumul) + parseInt(demande_mobilier_mpe.cumul);
-                  vm.selectedItemAttachement_travaux.total_anterieur =parseInt(vm.selectedItemAttachement_travaux.total_anterieur) + parseInt(demande_mobilier_mpe.anterieur);                  
-                  vm.selectedItemAttachement_travaux.total_periode =parseInt(vm.selectedItemAttachement_travaux.total_periode) + parseInt(demande_mobilier_mpe.montant);
-
                   var montant_trav = parseInt(vm.selectedItemFacture_mpe.montant_travaux) + parseInt(demande_mobilier_mpe.montant);
                   var montant_rabais = (montant_trav * vm.selectedItemFacture_mpe.pourcentage_rabais)/100;
-                    var montant_ht = montant_rabais + parseInt(montant_trav);
+                    var montant_ht = parseInt(montant_rabais) + parseInt(montant_trav);
                     var montant_tva = (montant_ht *20)/100;
+                    vm.selectedItemFacture_mpe.montant_travaux = montant_trav;
                     vm.selectedItemFacture_mpe.montant_rabais = montant_rabais;
                     vm.selectedItemFacture_mpe.montant_ht = montant_ht;
                     vm.selectedItemFacture_mpe.montant_tva = montant_tva;
 
                     vm.selectedItemFacture_mpe.montant_ttc = montant_ht + montant_tva;
-                    vm.selectedItemFacture_mpe.net_payer = montant_ht + montant_tva - (vm.selectedItemFacture_mpe.remboursement_acompte + 
-                    vm.selectedItemFacture_mpe.retenue_garantie + vm.selectedItemFacture_mpe.penalite_retard + vm.selectedItemFacture_mpe.remboursement_plaque);
+                    vm.selectedItemFacture_mpe.net_payer = parseInt(montant_ht) + parseInt(montant_tva) - (parseInt(vm.selectedItemFacture_mpe.remboursement_acompte) + 
+                    parseInt(vm.selectedItemFacture_mpe.retenue_garantie) + parseInt(vm.selectedItemFacture_mpe.penalite_retard) + parseInt(vm.selectedItemFacture_mpe.remboursement_plaque));
                     majatfacture_mpe(vm.selectedItemFacture_mpe,0);
             }
               //vm.showboutonValider = false;
@@ -7630,72 +7557,6 @@
               vm.selectedItemDemande_mobilier_mpe = {};
               //vm.showbuttonNouvDemande_mobilier_mpe_creer = false;
             vm.showbuttonValidationDemande_mobilier_mpe_creer = false;
-            
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
-
-         //insertion ou mise a jours ou suppression item dans bdd Attachement_travaux
-        function majattachement_travaux(attachement_travaux,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        attachement_travaux.id,
-                    numero: attachement_travaux.numero,
-                    date_debut:convertionDate(new Date(attachement_travaux.date_debut)),
-                    total_prevu:attachement_travaux.total_prevu,
-                    date_fin: convertionDate(new Date(attachement_travaux.date_fin)),
-                    total_cumul: attachement_travaux.total_cumul ,
-                    total_anterieur: attachement_travaux.total_anterieur ,
-                    total_periode: attachement_travaux.total_periode ,
-                    id_facture_mpe: vm.selectedItemFacture_mpe.id,
-                    validation: 0               
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("attachement_travaux/index",datas, config).success(function (data)
-            {   console.log('vita attachement') ;           
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
-        function majatfacture_mpe(facture_mpe,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        facture_mpe.id,
-                    numero: facture_mpe.numero,
-                    montant_travaux:facture_mpe.montant_travaux,
-                    pourcentage_rabais: facture_mpe.pourcentage_rabais ,
-                    montant_rabais: facture_mpe.montant_rabais,
-                    montant_ht: facture_mpe.montant_ht,
-                    montant_tva: facture_mpe.montant_tva,
-                    montant_ttc:facture_mpe.montant_ttc,
-                    remboursement_acompte: facture_mpe.remboursement_acompte ,
-                    penalite_retard: facture_mpe.penalite_retard,
-                    retenue_garantie: facture_mpe.retenue_garantie,
-                    remboursement_plaque: facture_mpe.remboursement_plaque ,
-                    net_payer: facture_mpe.net_payer,
-                    date_signature:convertionDate(new Date(facture_mpe.date_signature)) ,
-                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
-                    validation: 0               
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("facture_mpe/index",datas, config).success(function (data)
-            {
-                console.log('vita facture');
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
@@ -8023,6 +7884,7 @@
 
 
     /******************************************fin attachement mobilier travaux***********************************************/
+
 
         /**************************************Debut transfert reliquat*********************************************/
          vm.transfert_reliquat_column = [        

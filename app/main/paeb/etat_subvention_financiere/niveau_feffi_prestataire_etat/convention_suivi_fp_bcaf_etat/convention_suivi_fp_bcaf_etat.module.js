@@ -29,7 +29,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.etat_subvention_financiere.niveau_feffi_prestataire_etat.convention_suivi_fp_bcaf_etat', {
-            title: 'Suivi convention (BCAF)',
+            title: 'Etat financier',
             icon  : 'icon-rotate-3d',
             state: 'app.paeb_etat_subvention_financiere_niveau_feffi_prestataire_etat_convention_suivi_fp_bcaf_etat',
             weight: 1

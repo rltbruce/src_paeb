@@ -23,6 +23,7 @@
             //'app.paeb.suivi_bcaf',
             //'app.paeb.suivi_daaf',
             //'app.paeb.suivi_dpfi'
+            'app.paeb.autre_information'
         ] ;
 
     angular

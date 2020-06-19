@@ -654,10 +654,10 @@
               vm.roles = result.data.response.roles;
               switch (vm.roles[0])
                 {
-                  case 'OBCAF': 
-                            vm.usercisco = result.data.response.cisco;
+                  case 'ACC': 
+                            //vm.usercisco = result.data.response.cisco;
                             vm.showbuttonNeauveaudemandefeffi=true;                            
-                            vm.session = 'OBCAF';
+                            vm.session = 'ACC';
 
                       break;
 
@@ -726,12 +726,31 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
-            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+            
+            switch (vm.session)
+                {
+                  case 'ACC': 
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydateutilisateur','id_utilisateur',id_user,'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
-            {
-                vm.allconvention_entete = result.data.response;
-                console.log(vm.allconvention_entete);
-            });
+                            {
+                                vm.allconvention_entete = result.data.response;
+                                console.log(vm.allconvention_entete);
+                            });
+
+                      break;
+
+                  case 'ADMIN':                            
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                            {
+                                vm.allconvention_entete = result.data.response;
+                                console.log(vm.allconvention_entete);
+                            });                 
+                      break;
+                  default:
+                      break;
+              
+                } 
         }
         vm.annulerfiltre = function()
         {
@@ -876,8 +895,11 @@
             {
                 apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
-                    vm.allpassation_marches = result.data.response;
-                    if (vm.allpassation_marches.length!=0)
+                    vm.allpassation_marches = result.data.response.filter(function(obj)
+                    {
+                           return obj.validation == 0;
+                    });
+                    if (result.data.response.length!=0)
                     {
                        vm.showbuttonNouvPassation=false;
                     }
@@ -960,10 +982,18 @@
             item.observation   = currentItemDocument_feffi_scan.observation ;
           }else
           {
-            vm.alldocument_feffi_scan = vm.alldocument_feffi_scan.filter(function(obj)
+            /*vm.alldocument_feffi_scan = vm.alldocument_feffi_scan.filter(function(obj)
             {
-                return obj.id !== vm.selectedItemDocument_feffi_scan.id;
-            });
+                return obj.id != vm.selectedItemDocument_feffi_scan.id;
+            });*/
+
+            item.fichier   = '';
+            item.date_elaboration   = '' ;
+            item.observation   = '' ;
+            item.$edit = false;
+            item.$selected = false;
+
+            item.id_document_feffi_scan = null;
           }
 
           vm.selectedItemDocument_feffi_scan = {} ;
@@ -1210,6 +1240,8 @@
                           vm.selectedItemDocument_feffi_scan.date_elaboration = '';
                           vm.selectedItemDocument_feffi_scan.observation = '';
                           vm.selectedItemDocument_feffi_scan.existance = false;
+
+                          vm.selectedItemDocument_pr_scan.id_document_feffi_scan = null;
                       }).error(function()
                       {
                           showDialog(event,chemin);
@@ -1818,10 +1850,13 @@
             item.observation   = currentItemDocument_pr_scan.observation ;
           }else
           {
-            vm.alldocument_pr_scan = vm.alldocument_pr_scan.filter(function(obj)
-            {
-                return obj.id !== vm.selectedItemDocument_pr_scan.id;
-            });
+            item.fichier   = '';
+            item.date_elaboration   = '' ;
+            item.observation   = '' ;
+            item.$edit = false;
+            item.$selected = false;
+
+            item.id_document_pr_scan = null;
           }
 
           vm.selectedItemDocument_pr_scan = {} ;
@@ -2072,6 +2107,8 @@
                           vm.selectedItemDocument_pr_scan.date_elaboration = '';
                           vm.selectedItemDocument_pr_scan.observation = '';
                           vm.selectedItemDocument_pr_scan.existance = false;
+
+                          vm.selectedItemDocument_pr_scan.id_document_pr_scan = null;
                       }).error(function()
                       {
                           showDialog(event,chemin);
@@ -7350,10 +7387,16 @@
             item.observation   = currentItemDocument_moe_scan.observation ;
           }else
           {
-            vm.alldocument_moe_scan = vm.alldocument_moe_scan.filter(function(obj)
+            /*vm.alldocument_moe_scan = vm.alldocument_moe_scan.filter(function(obj)
             {
                 return obj.id !== vm.selectedItemDocument_moe_scan.id;
-            });
+            });*/
+            item.fichier   = '';
+            item.date_elaboration   = null ;
+            item.observation   = '' ;
+            item.$edit = false;
+            item.$selected = false;
+            item.id_document_moe_scan = null;
           }
 
           vm.selectedItemDocument_moe_scan = {} ;
@@ -7604,6 +7647,8 @@
                           vm.selectedItemDocument_moe_scan.date_elaboration = '';
                           vm.selectedItemDocument_moe_scan.observation = '';
                           vm.selectedItemDocument_moe_scan.existance = false;
+
+                          vm.selectedItemDocument_pr_scan.id_document_moe_scan = null;
                       }).error(function()
                       {
                           showDialog(event,chemin);
@@ -11027,10 +11072,17 @@
             item.observation   = currentItemDocument_prestataire_scan.observation ;
           }else
           {
-            vm.alldocument_prestataire_scan = vm.alldocument_prestataire_scan.filter(function(obj)
+            /*vm.alldocument_prestataire_scan = vm.alldocument_prestataire_scan.filter(function(obj)
             {
                 return obj.id !== vm.selectedItemDocument_prestataire_scan.id;
-            });
+            });*/
+            item.fichier   = '';
+            item.date_elaboration   = '' ;
+            item.observation   = '' ;
+            item.$edit = false;
+            item.$selected = false;
+
+            item.id_document_prestataire_scan = null;
           }
 
           vm.selectedItemDocument_prestataire_scan = {} ;
@@ -11280,6 +11332,8 @@
                           vm.selectedItemDocument_prestataire_scan.date_elaboration = '';
                           vm.selectedItemDocument_prestataire_scan.observation = '';
                           vm.selectedItemDocument_prestataire_scan.existance = false;
+
+                          vm.selectedItemDocument_pr_scan.id_document_prestataire_scan = null;
                       }).error(function()
                       {
                           showDialog(event,chemin);
@@ -12762,7 +12816,7 @@
         },
         {titre:"Description"
         },
-        {titre:"Attachement"
+        {titre:"Avancement"
         },
         {titre:"Date"
         },
@@ -13068,7 +13122,7 @@
         },
         {titre:"Description"
         },
-        {titre:"Attachement"
+        {titre:"Avancement"
         },
         //{titre:"Ponderation"
         //},
@@ -13396,7 +13450,7 @@
         },
         {titre:"Description"
         },
-        {titre:"Attachement"
+        {titre:"Avancement"
         },
         {titre:"Date"
         },

@@ -100,12 +100,12 @@
         }; 
         
         //recuperation donnée tranche deblocage feffi
-       /* apiFactory.getAll("tranche_deblocage_daaf/index").then(function(result)
+        apiFactory.getAll("tranche_deblocage_daaf/index").then(function(result)
         {
           vm.alltranche_deblocage_daaf= result.data.response;
           vm.allcurenttranche_deblocage_daaf = result.data.response;
           console.log(vm.allcurenttranche_deblocage_daaf);
-        });*/
+        });
        
        vm.showformfiltre = function()
         {
@@ -300,11 +300,11 @@
               dema.$edit = false;
             });console.log(vm.selectedItemDemande_deblocage_daaf);
 
-            apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_detail/index",'id_convention_ufp_daaf_entete',item.convention_ufp_daaf_entete.id).then(function(result)
+            apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_detail/index",'id_convention_ufp_daaf_entete',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
             {
                 //vm.allconvention_ufp_daaf_detail = result.data.response;
                 console.log(item) ;                
-                vm.allcompte_daaf.push(result.data.response[0].compte_daaf);
+               // vm.allcompte_daaf.push(result.data.response[0].compte_daaf);
 
                 item.$edit = true;
                 item.$selected = true;
@@ -318,11 +318,11 @@
                 item.reste = vm.selectedItemDemande_deblocage_daaf.reste ;
                 item.date = new Date(vm.selectedItemDemande_deblocage_daaf.date);
                 item.validation = vm.selectedItemDemande_deblocage_daaf.validation;
-                item.id_convention_ufp_daaf_entete = vm.selectedItemDemande_deblocage_daaf.convention_ufp_daaf_entete.id;
+                ///item.id_convention_ufp_daaf_entete = vm.selectedItemDemande_deblocage_daaf.convention_ufp_daaf_entete.id;
                 vm.modificationdemande = true;
                 vm.showbuttonValidation =false;
             });
-            vm.allcurenttranche_deblocage_daaf.filter(function(obj)
+            vm.allcurenttranche_deblocage_daaf=vm.allcurenttranche_deblocage_daaf.filter(function(obj)
             {
               return obj.id == vm.selectedItemDemande_deblocage_daaf.tranche.id;
             });
@@ -569,17 +569,19 @@ console.log(conventioufpdaaf);
                     date: convertionDate(new Date(demande_deblocage_daaf_validation_daaf.date)) ,
                     validation: 1,
                     situation: 1,
-                    id_convention_ufp_daaf_entete: demande_deblocage_daaf_validation_daaf.id_convention_ufp_daaf_entete             
+                    id_convention_ufp_daaf_entete: vm.selectedItemConvention_ufp_daaf_entete.id             
                 });
                 console.log(datas);
                 //factory
             apiFactory.add("demande_deblocage_daaf/index",datas, config).success(function (data)
             {
 
-              vm.alldemande_deblocage_daaf = vm.alldemande_deblocage_daaf.filter(function(obj)
+              /*vm.alldemande_deblocage_daaf = vm.alldemande_deblocage_daaf.filter(function(obj)
               {
                   return obj.id !== demande_deblocage_daaf_validation_daaf.id;
-              });
+              });*/
+              vm.validation_item=1;
+              demande_deblocage_daaf_validation_daaf.validation=1;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 

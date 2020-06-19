@@ -77,6 +77,7 @@
                                   <md-input-container flex="100" flex-gt-xs="90">
                                     <label>Lot</label>
                                     <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                                      <md-option value="*">*</md-option>
                                       <md-option value="1">Lot 1</md-option>
                                       <md-option value="2">Lot 2</md-option>
                                       <md-option value="3">Lot 3</md-option>
@@ -149,10 +150,10 @@
                                       ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
                                       Recherche
                                 </md-button>
-                                 <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                 <!--md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
                                       ng-disabled="filtreform.$invalid" ng-click="vm.importerfiltre(vm.filtre)" ng-show="vm.session=='ADMIN' || vm.session=='DAAF' || vm.session=='DPFI' || vm.session=='UFP'">
                                       Exporter
-                                </md-button>
+                                </md-button-->
                                 <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
                                   Annuler
                                 </md-button>
@@ -238,15 +239,15 @@
                             <md-tab-body>
                               <div style="widht:100%;">                                    
 
-                                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.valider_demandeemidaaf(5)" style="width:12%;" ng-if="vm.showbuttonValidationencourdaaf && vm.permissionboutonvaliderdaaf && vm.validation==4">
+                                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.valider_demandeemidaaf(5)" style="width:12%;" ng-if="vm.showbuttonValidationencourdaaf && vm.permissionboutonvaliderdaaf && vm.validation==4">
                                      Mettre en-cours
                                     </md-button>
 
-                                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.rejeter_demandedaaf(6)" style="width:10%;" ng-if="vm.showbuttonValidationenrejedaaf && vm.permissionboutonvaliderdaaf && vm.validation==5">
+                                    <md-button type="submit" class="md-raised md-primary" aria-label="Nouveau" ng-click="vm.rejeter_demandedaaf(6)" style="width:10%;" ng-if="vm.showbuttonValidationenrejedaaf && vm.permissionboutonvaliderdaaf && vm.validation==5">
                                      Rejeter
                                     </md-button>
 
-                                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.valider_demande_final(7)" style="width:10%;" ng-if="vm.showbuttonValidationdaaf && vm.permissionboutonvaliderdaaf && vm.validation==5">
+                                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.valider_demande_final(7)" style="width:10%;" ng-if="vm.showbuttonValidationdaaf && vm.permissionboutonvaliderdaaf && vm.validation==5">
                                      Valider
                                     </md-button>
                               </div> <br>

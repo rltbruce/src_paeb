@@ -99,7 +99,7 @@
                       </div>
                     </md-input-container>
                                   
-                    <md-input-container flex="100" flex-gt-xs="90">
+                    <!--md-input-container flex="100" flex-gt-xs="90">
                       <label>Ecole</label>
                       <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_zap">
                         <md-option  value="*">*</md-option>
@@ -109,7 +109,7 @@
                       <div ng-messages="filtreform.ecole.$error" role="alert">
                         <div ng-message="required"><span>Ecole</span></div>
                       </div>
-                    </md-input-container>
+                    </md-input-container-->
                   </div>
 
                   <div>
@@ -536,7 +536,7 @@
                                   
                         <span ng-if="!compte_feffi.$edit">{{compte_feffi.numero_compte}}</span>
                       </td> 
-                        <td>
+                        <!--td>
                           <span ng-if="compte_feffi.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
                               <label>Titulaire</label>
@@ -548,7 +548,7 @@
                           </span>
                                     
                           <span ng-if="!compte_feffi.$edit">{{compte_feffi.membre_feffi.nom}}</span>
-                        </td>
+                        </td-->
                                                    
                       <td>
                         <a ng-if="!compte_feffi.$edit" ng-click="vm.modifierCompte_feffi(compte_feffi)" title="Modifier">
@@ -563,7 +563,7 @@
                           <span class="icon-cancel"></span>
                         </a>
                                   
-                        <a ng-if="compte_feffi.$edit && compte_feffi.nom_banque && compte_feffi.adresse_banque && compte_feffi.rib && compte_feffi.numero_compte && compte_feffi.id_membre_feffi>''" ng-click="vm.ajoutCompte_feffi(compte_feffi,0)" title="Sauvegarder">
+                        <a ng-if="compte_feffi.$edit && compte_feffi.nom_banque && compte_feffi.adresse_banque && compte_feffi.rib && compte_feffi.numero_compte>''" ng-click="vm.ajoutCompte_feffi(compte_feffi,0)" title="Sauvegarder">
                           <span class="icon-content-save"></span>
                         </a>
                       </td>

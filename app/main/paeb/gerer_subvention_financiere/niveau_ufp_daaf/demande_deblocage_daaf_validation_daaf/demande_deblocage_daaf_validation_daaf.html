@@ -179,7 +179,7 @@
                       <span ng-if="demande_deblocage_daaf.$edit">
                         <md-input-container style="width:100%;display: flex !important;">
                           <label>Tranche</label>
-                          <md-select ng-model="demande_deblocage_daaf.id_tranche_deblocage_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(demande_deblocage_daaf)" ng-disabled="demande_deblocage_daaf.validation!=0 || vm.modificationdemande || !demande_deblocage_daaf.id_convention_ufp_daaf_entete">
+                          <md-select ng-model="demande_deblocage_daaf.id_tranche_deblocage_daaf"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.tranchechange(demande_deblocage_daaf)">
                             <md-option ng-repeat="tranche in vm.allcurenttranche_deblocage_daaf" value="{{tranche.id}}">
                                                                         {{tranche.libelle}}
                             </md-option>
@@ -309,7 +309,7 @@
             
             <md-tab-body>
                <div style="widht:100%;">  
-                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_daaf()" style="width:10%;">
+                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_daaf()" style="width:10%;" ng-show="vm.validation_item==0">
                     Nouveau
                   </md-button>
               </div> <br>

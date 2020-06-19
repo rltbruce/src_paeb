@@ -31,7 +31,7 @@
             title: 'note agence',
             icon  : 'icon-nfc-variant',
             state: 'app.paeb_note_agence_acc',
-			weight: 9
+			weight: 5
         });
     }
 

@@ -69,7 +69,7 @@
         
         //recuperation donnée site
         apiFactory.getAPIgeneraliserREST("site/index",'menu',
-         'getsiteByenpreparation').then(function(result)
+         'getsiteByenpreparationinvalide').then(function(result)
         {
           vm.allsite = result.data.response;
         });

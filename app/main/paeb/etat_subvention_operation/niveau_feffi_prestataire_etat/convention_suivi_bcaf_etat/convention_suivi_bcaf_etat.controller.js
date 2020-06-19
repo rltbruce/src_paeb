@@ -362,7 +362,8 @@
                 filtre.id_convention_entete,"repertoire",repertoire).then(function(result)
             {
                 vm.status    = result.data.status; 
-                
+                console.log(result.data.response);
+
                 if(vm.status)
                 {
                     vm.nom_file = result.data.nom_file;            

@@ -166,10 +166,11 @@
                                       ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
                                       Recherche
                                 </md-button>
-                                 <!--md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
-                                      ng-disabled="filtreform.$invalid" ng-click="vm.importerfiltre(vm.filtre)" ng-show="vm.session=='ADMIN' || vm.session=='DAAF' || vm.session=='DPFI' || vm.session=='UFP'">
-                                      Exporter
-                                </md-button-->
+                                 
+                               <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                                  ng-disabled="filtreform.$invalid" ng-click="vm.importerfiltre(vm.filtre)">
+                                                  Exporter
+                               </md-button>
                                 <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
                                   Annuler
                                 </md-button>

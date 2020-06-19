@@ -12,7 +12,7 @@
                 <span class="parent" href="javascript:;"> Convention</span>
             </div>
 
-            <div class="title">Convention</div>
+            <!--div class="title">Convention</div-->
         </div>
     </div>
     <!-- / HEADER -->
@@ -37,6 +37,12 @@
             </md-tab-label>
             
             <md-tab-body>
+              <div style="float: top !important">
+                <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                      Récuperation,veuillez patienter s'il vous plait ...
+                </div>
+              </div>
               <div style="widht:100%;"> 
                   <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.showformfiltre()" ng-show="vm.showbuttonfiltre">
                         Filtre
@@ -260,7 +266,7 @@
                             </md-input-container>   
                           </span>
                                     
-                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.delai}}</span>
+                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{convention_ufp_daaf_detail.delai}} mois</span>
                         </td>
                         
 
@@ -270,7 +276,7 @@
                           </md-datepicker>  
                           </span>
                                     
-                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{vm.formatDate(convention_ufp_daaf_detail.date_signature)}} mois</span>
+                          <span ng-if="!convention_ufp_daaf_detail.$edit">{{vm.formatDate(convention_ufp_daaf_detail.date_signature)}}</span>
                         </td>
 
                         <td>
@@ -380,14 +386,14 @@
                           <!--a ng-if="!convention_ufp_daaf_detail.$edit" ng-click="vm.modifierConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" title="Modifier">
                             <span class="icon-table-edit"></span>
                           </a-->
-                          <md-button type="submit" class="md-raised md-accent" aria-label="Modifier" ng-if="!convention_ufp_daaf_detail.$edit" ng-click="vm.modifierConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" style="width:10%;">
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Modifier" ng-if="!convention_ufp_daaf_detail.$edit" ng-click="vm.modifierConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" style="width:10%;" ng-disabled="vm.validation_item!=0">
                             Modifier
                           </md-button>
                                     
                           <!--a ng-if="!convention_ufp_daaf_detail.$edit" ng-click="vm.supprimerConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" title="Supprimer">
                             <span class="icon-delete"></span>
                           </a-->
-                          <md-button type="submit" class="md-raised md-accent" aria-label="Supprimer" ng-if="!convention_ufp_daaf_detail.$edit" ng-click="vm.supprimerConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" style="width:10%;">
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Supprimer" ng-if="!convention_ufp_daaf_detail.$edit" ng-click="vm.supprimerConvention_ufp_daaf_detail(convention_ufp_daaf_detail)" style="width:10%;" ng-disabled="vm.validation_item!=0">
                             Supprimer
                           </md-button>
                                     
@@ -495,9 +501,11 @@
                                                      
                         <td>
                                     
-                          <a ng-if="!convention_cisco_feffi_entete.$edit" ng-click="vm.supprimerConvention_cisco_feffi_entete(convention_cisco_feffi_entete)" title="Supprimer">
+                          <a ng-if="!convention_cisco_feffi_entete.$edit && vm.validation_item==0" ng-click="vm.supprimerConvention_cisco_feffi_entete(convention_cisco_feffi_entete)" title="Supprimer">
                             <span class="icon-delete"></span>
                           </a>
+
+                     <span ng-if="!convention_cisco_feffi_entete.$edit && vm.validation_item!=0"> Aucune action disponible</span>
                         </td>
                       </tr>
                     </tbody>

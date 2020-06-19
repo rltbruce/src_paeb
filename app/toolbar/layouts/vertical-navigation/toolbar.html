@@ -1,5 +1,5 @@
 <div layout="row" layout-align="start center">
-    <div layout="row" layout-align="start center" flex>
+    <div layout="row" layout-align="start center" flex >
         <md-button id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')"
                    hide-gt-sm aria-label="Toggle navigation" translate
                    translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
@@ -18,7 +18,13 @@
         <md-progress-circular id="toolbar-progress" ng-if="$root.loadingProgress" class="md-accent"
                               md-mode="indeterminate" md-diameter="64">
         </md-progress-circular>
+        <div layout="row" layout-align="start center"  style="border:1px solid red; padding: 0px">
+        <h1 class="title is-1" style="font-family:monoton; font-size: 20px">E-tantana</h1>
     </div>
+    </div>
+    <!--div layout="row" layout-align="start center"  style="border:1px solid red; padding: 0px">
+        <h1 class="title is-1" style="font-family:monoton; font-size: 30px">E-tantana</h1>
+    </div-->
 
     <div layout="row" layout-align="start center">
         <md-menu-bar id="user-menu">

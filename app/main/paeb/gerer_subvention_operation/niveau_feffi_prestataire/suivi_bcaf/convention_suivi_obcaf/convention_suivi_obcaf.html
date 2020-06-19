@@ -90,6 +90,7 @@
                                   <md-input-container flex="100" flex-gt-xs="90">
                                     <label>Lot</label>
                                     <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                                      <md-option value="*">*</md-option>
                                       <md-option value="1">Lot 1</md-option>
                                       <md-option value="2">Lot 2</md-option>
                                       <md-option value="3">Lot 3</md-option>
@@ -137,7 +138,7 @@
                                     <label>Ecole</label>
                                     <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
                                       <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.code}}
+                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
                                       </md-option>
                                     </md-select>
                                     <div ng-messages="filtreform.ecole.$error" role="alert">
@@ -316,7 +317,7 @@
                                           </md-input-container>   
                                         </span>
                                                   
-                                        <span ng-if="!avenant_convention.$edit">{{avenant_convention.montant}}</span>
+                                        <span ng-if="!avenant_convention.$edit">{{avenant_convention.montant}} Ar</span>
                                       </td>
 
                                       <td>
@@ -544,7 +545,7 @@
                               </td>
                                         
                               <td>       
-                                <span >{{contrat_partenaire_relai.montant_contrat}}</span>
+                                <span >{{contrat_partenaire_relai.montant_contrat}} Ar</span>
                               </td>
 
                               <td>                         
@@ -3081,7 +3082,7 @@
                                     </md-input-container>   
                                   </span>
                                             
-                                  <span ng-if="!contrat_moe.$edit">{{contrat_moe.montant_contrat}}</span>
+                                  <span ng-if="!contrat_moe.$edit">{{contrat_moe.montant_contrat}} Ar</span>
                                 </td>
 
                                 <td>
@@ -3912,7 +3913,7 @@
                                           </md-input-container>   
                                         </span>
                                                   
-                                        <span ng-if="!avenant_moe.$edit">{{avenant_moe.montant}}</span>
+                                        <span ng-if="!avenant_moe.$edit">{{avenant_moe.montant}} Ar</span>
                                       </td>
 
                                       <td>
@@ -4033,7 +4034,7 @@
 
                                 <td>
                                   <span ng-if="document_moe_scan.$edit">
-                                    <md-datepicker ng-model="document_moe_scan.date_elaboration" md-placeholder="Date de elaboration" md-max-date="vm.date_now" required>                       
+                                    <md-datepicker ng-model="document_moe_scan.date_elaboration" md-placeholder="Date de elaboration" md-max-date="vm.date_now" ng-init="vm.date_now" required>                       
                                     </md-datepicker>
                                   </span>                          
                                   <span ng-if="!document_moe_scan.$edit">{{vm.formatDate(document_moe_scan.date_elaboration)}}</span>
@@ -4199,7 +4200,7 @@
                                     </md-input-container>   
                                   </span>
                                             
-                                  <span ng-if="!passation_marches.$edit">{{passation_marches.montant_moin_chere}}</span>
+                                  <span ng-if="!passation_marches.$edit">{{passation_marches.montant_moin_chere}} Ar</span>
                                 </td>
 
                                 <td>
@@ -4513,7 +4514,7 @@
                                     </md-input-container>   
                                   </span>
                                             
-                                  <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.cout_batiment}}</span>
+                                  <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.cout_batiment}} Ar</span>
                                 </td>
                                           
                                 <td>
@@ -4524,7 +4525,7 @@
                                     </md-input-container>   
                                   </span>
                                             
-                                  <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.cout_latrine}}</span>
+                                  <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.cout_latrine}} Ar</span>
                                 </td>
                                           
                                 <td>
@@ -4535,7 +4536,7 @@
                                     </md-input-container>   
                                   </span>
                                             
-                                  <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.cout_mobilier}}</span>
+                                  <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.cout_mobilier}} Ar</span>
                                 </td>
 
                                 <td>
@@ -4627,7 +4628,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!divers_attachement_batiment_prevu.$edit">{{divers_attachement_batiment_prevu.montant_prevu}}</span>
+                                            <span ng-if="!divers_attachement_batiment_prevu.$edit">{{divers_attachement_batiment_prevu.montant_prevu}} Ar</span>
                                           </td>
 
                                           <td>
@@ -4699,7 +4700,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!divers_attachement_latrine_prevu.$edit">{{divers_attachement_latrine_prevu.montant_prevu}}</span>
+                                            <span ng-if="!divers_attachement_latrine_prevu.$edit">{{divers_attachement_latrine_prevu.montant_prevu}} Ar</span>
                                           </td>
 
                                           <td>
@@ -4772,7 +4773,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!divers_attachement_mobilier_prevu.$edit">{{divers_attachement_mobilier_prevu.montant_prevu}}</span>
+                                            <span ng-if="!divers_attachement_mobilier_prevu.$edit">{{divers_attachement_mobilier_prevu.montant_prevu}} Ar</span>
                                           </td>
 
                                           <td>
@@ -5121,7 +5122,7 @@
                                               <span class="icon-cancel"></span>
                                             </a>
                                                       
-                                            <a ng-if="reception_mpe.$edit && reception_mpe.date_previ_recep_tech && reception_mpe.date_reel_tech && reception_mpe.date_leve_recep_tech && reception_mpe.date_previ_recep_prov && reception_mpe.date_reel_recep_prov && reception_mpe.date_previ_leve && reception_mpe.date_reel_lev_ava_rd && reception_mpe.date_previ_recep_defi && reception_mpe.date_reel_recep_defi && reception_mpe.observation >''" type="submit" class="md-raised md-accent>''" ng-click="vm.ajoutReception_mpe(reception_mpe,0)" title="Sauvegarder">
+                                            <a ng-if="reception_mpe.$edit && reception_mpe.date_previ_recep_tech && reception_mpe.date_reel_tech && reception_mpe.date_leve_recep_tech && reception_mpe.date_previ_recep_prov && reception_mpe.date_reel_recep_prov && reception_mpe.date_previ_leve && reception_mpe.date_reel_lev_ava_rd && reception_mpe.date_previ_recep_defi && reception_mpe.date_reel_recep_defi >''" type="submit" class="md-raised md-accent>''" ng-click="vm.ajoutReception_mpe(reception_mpe,0)" title="Sauvegarder">
                                               <span class="icon-content-save"></span>
                                             </a>
                                           </td>                       
@@ -5212,7 +5213,7 @@
                                             <span ng-if="avancement_batiment.$edit">
                                               <md-input-container style="width:100%;display: flex !important;">
                                                 <label>Observation</label>
-                                                <input name="cout_batiment" type="text" ng-model="avancement_batiment.observation"/>
+                                                <input name="observation" type="text" ng-model="avancement_batiment.observation"/>
                                               </md-input-container>   
                                             </span>
                                                       
@@ -5539,7 +5540,7 @@
                                           </md-input-container>   
                                         </span>
                                                   
-                                        <span ng-if="!avenant_mpe.$edit">{{avenant_mpe.cout_batiment}}</span>
+                                        <span ng-if="!avenant_mpe.$edit">{{avenant_mpe.cout_batiment}} Ar</span>
                                       </td>
                                                 
                                       <td>
@@ -5550,7 +5551,7 @@
                                           </md-input-container>   
                                         </span>
                                                   
-                                        <span ng-if="!avenant_mpe.$edit">{{avenant_mpe.cout_latrine}}</span>
+                                        <span ng-if="!avenant_mpe.$edit">{{avenant_mpe.cout_latrine}} Ar</span>
                                       </td>
                                                 
                                       <td>
@@ -5561,7 +5562,7 @@
                                           </md-input-container>   
                                         </span>
                                                   
-                                        <span ng-if="!avenant_mpe.$edit">{{avenant_mpe.cout_mobilier}}</span>
+                                        <span ng-if="!avenant_mpe.$edit">{{avenant_mpe.cout_mobilier}} Ar</span>
                                       </td>
 
                                       <td>

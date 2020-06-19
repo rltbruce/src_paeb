@@ -3,9 +3,8 @@
     'use strict';
 
     angular
-        .module('app.paeb.etat_subvention_operation', [
-            'app.paeb.etat_subvention_operation.niveau_feffi_prestataire_etat',
-            'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat'
+        .module('app.paeb.autre_information', [
+            'app.paeb.autre_information.site_disponible'
             ])       
         .config(config);
         var vs ;
@@ -13,10 +12,10 @@
     /** @ngInject */
     function config(msNavigationServiceProvider)
     {
-        msNavigationServiceProvider.saveItem('paeb.etat_subvention_operation', {
-            title : 'Etat operation subvention ',
+        msNavigationServiceProvider.saveItem('paeb.autre_information', {
+            title : 'Autre information ',
             icon  : 'icon-data',
-            weight: 3
+            weight: 6
         });
 
 

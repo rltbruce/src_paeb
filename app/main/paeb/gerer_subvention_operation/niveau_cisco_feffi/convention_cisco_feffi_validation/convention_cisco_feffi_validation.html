@@ -44,10 +44,7 @@
                 <div style="widht:100%;">
                   <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.showformfiltre()" ng-show="vm.showbuttonfiltre">
                         Filtre
-                  </md-button>   
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterTete()" style="width:10%;">
-                      Nouveau
-                    </md-button>
+                  </md-button>
                   <md-button type="submit" ng-show="vm.afficherboutonValider && vm.validation_item==0" class="md-raised md-warn" aria-label="Valider" ng-click="vm.validerConvention()" style="width:10%;">
                     Valider
                   </md-button>
@@ -342,12 +339,7 @@
                 </span>
               </md-tab-label>
               
-              <md-tab-body>
-                <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDetail()" style="width:10%;" ng-disabled="vm.showbuttonNouvDetail==false">
-                      Nouveau
-                    </md-button>
-                </div>
+              <md-tab-body><br>
               <fieldset class="standard" >
                 <legend><code>Detail</code></legend>
                 <div>        
@@ -468,7 +460,7 @@
                           <span ng-if="convention_cife_detail.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
                               <label>Adresse banque</label>
-                              <input name="adresse_banque" type="text" ng-model="convention_cife_detail.adresse_banque"/>
+                              <input name="adresse_banque" type="text" ng-model="convention_cife_detail.adresse_banque" disabled />
                             </md-input-container>   
                           </span>
                                     
@@ -479,7 +471,7 @@
                           <span ng-if="convention_cife_detail.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
                               <label>RIB</label>
-                              <input name="rib" type="text" ng-model="convention_cife_detail.rib"/>
+                              <input name="rib" type="text" ng-model="convention_cife_detail.rib" disabled/>
                             </md-input-container>   
                           </span>
                                     
@@ -510,14 +502,14 @@
                             <span class="icon-table-edit"></span>
                           </a-->
 
-                          <md-button type="submit" class="md-raised md-accent" aria-label="Modifier" ng-if="!convention_cife_detail.$edit" ng-click="vm.modifierDetail(convention_cife_detail)" style="width:10%;">
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Modifier" ng-if="!convention_cife_detail.$edit" ng-click="vm.modifierDetail(convention_cife_detail)" style="width:10%;" ng-disabled="vm.validation_item!=0">
                             Modifier
                           </md-button>
                                     
                           <!--a ng-if="!convention_cife_detail.$edit" ng-click="vm.supprimerDetail(convention_cife_detail)" title="Supprimer">
                             <span class="icon-delete"></span>
                           </a-->
-                          <md-button type="submit" class="md-raised md-accent" aria-label="Supprimer" ng-if="!convention_cife_detail.$edit" ng-click="vm.supprimerDetail(convention_cife_detail)" style="width:10%;">
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Supprimer" ng-if="!convention_cife_detail.$edit" ng-click="vm.supprimerDetail(convention_cife_detail)" style="width:10%;"ng-disabled="vm.validation_item!=0">
                             Supprimer
                           </md-button>
                                     
@@ -558,12 +550,7 @@
 
 
 
-        <md-tab-body>
-          <div style="widht:100%;">  
-              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajoutercout_maitrise_construction()" style="width:10%;" ng-disabled="!vm.showbuttonNouvMaitrise">
-                Nouveau
-              </md-button>
-          </div>
+        <md-tab-body><br>
 
           <div>
             <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
@@ -606,13 +593,15 @@
                   </td>
                                                
                   <td>  
-                    <a ng-if="!cout_maitrise_construction.$edit" ng-click="vm.modifiercout_maitrise_construction(cout_maitrise_construction)" title="Modifier">
+                    <a ng-if="!cout_maitrise_construction.$edit && vm.validation_item==0" ng-click="vm.modifiercout_maitrise_construction(cout_maitrise_construction)" title="Modifier">
                       <span class="icon-table-edit"></span>
                     </a>
                               
-                    <a ng-if="!cout_maitrise_construction.$edit" ng-click="vm.supprimercout_maitrise_construction(cout_maitrise_construction)" title="Supprimer">
+                    <a ng-if="!cout_maitrise_construction.$edit && vm.validation_item==0" ng-click="vm.supprimercout_maitrise_construction(cout_maitrise_construction)" title="Supprimer">
                       <span class="icon-delete"></span>
                     </a>
+
+                     <span ng-if="!cout_maitrise_construction.$edit && vm.validation_item!=0"> Aucune action disponible</span>
                               
                     <a ng-if="cout_maitrise_construction.$edit" ng-click="vm.annulercout_maitrise_construction(cout_maitrise_construction)" title="Annuler modification">
                       <span class="icon-cancel"></span>
@@ -643,12 +632,7 @@
           </span>
         </md-tab-label>
         
-        <md-tab-body>
-          <div style="widht:100%;">  
-              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterBatiment_construction()" style="width:10%;" ng-disabled="!vm.showbuttonNouvBatiment">
-                Nouveau
-              </md-button>
-          </div>
+        <md-tab-body><br>
 
           <div>
             <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
@@ -700,13 +684,15 @@
                   </td>
                                                
                   <td>  
-                    <a ng-if="!batiment_construction.$edit" ng-click="vm.modifierBatiment_construction(batiment_construction)" title="Modifier">
+                    <a ng-if="!batiment_construction.$edit && vm.validation_item==0" ng-click="vm.modifierBatiment_construction(batiment_construction)" title="Modifier">
                       <span class="icon-table-edit"></span>
                     </a>
                               
-                    <a ng-if="!batiment_construction.$edit" ng-click="vm.supprimerBatiment_construction(batiment_construction)" title="Supprimer">
+                    <a ng-if="!batiment_construction.$edit && vm.validation_item==0" ng-click="vm.supprimerBatiment_construction(batiment_construction)" title="Supprimer">
                       <span class="icon-delete"></span>
                     </a>
+
+                     <span ng-if="!batiment_construction.$edit && vm.validation_item!=0"> Aucune action disponible</span>
                               
                     <a ng-if="batiment_construction.$edit" ng-click="vm.annulerBatiment_construction(batiment_construction)" title="Annuler modification">
                       <span class="icon-cancel"></span>
@@ -737,12 +723,7 @@
           </span>
         </md-tab-label>
         
-        <md-tab-body>
-          <div style="widht:100%;">  
-              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterLatrine_construction()" style="width:10%;" ng-disabled="!vm.showbuttonNouvLatrine">
-                Nouveau
-              </md-button>
-          </div>
+        <md-tab-body><br>
           <div>
             <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
               <thead>
@@ -801,13 +782,14 @@
                     <span ng-if="!latrine_construction.$edit">{{latrine_construction.cout_unitaire}}</span>
                   </td>                                              
                   <td>  
-                    <a ng-if="!latrine_construction.$edit" ng-click="vm.modifierLatrine_construction(latrine_construction)" title="Modifier">
+                    <a ng-if="!latrine_construction.$edit && vm.validation_item==0" ng-click="vm.modifierLatrine_construction(latrine_construction)" title="Modifier" >
                       <span class="icon-table-edit"></span>
                     </a>
                               
-                    <a ng-if="!latrine_construction.$edit" ng-click="vm.supprimerLatrine_construction(latrine_construction)" title="Supprimer">
+                    <a ng-if="!latrine_construction.$edit && vm.validation_item==0" ng-click="vm.supprimerLatrine_construction(latrine_construction)" title="Supprimer">
                       <span class="icon-delete"></span>
                     </a>
+                     <span ng-if="!latrine_construction.$edit && vm.validation_item!=0"> Aucune action disponible</span>
                               
                     <a ng-if="latrine_construction.$edit" ng-click="vm.annulerLatrine_construction(latrine_construction)" title="Annuler modification">
                       <span class="icon-cancel"></span>
@@ -837,12 +819,7 @@
           </span>
         </md-tab-label>
         
-        <md-tab-body>
-          <div style="widht:100%;">  
-              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterMobilier_construction()" style="width:10%;" ng-disabled="!vm.showbuttonNouvMobilier">
-                Nouveau
-              </md-button>
-          </div>
+        <md-tab-body><br>
           <div>
             <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
               <thead>
@@ -913,14 +890,15 @@
                   </td>
                                                
                   <td>  
-                    <a ng-if="!mobilier_construction.$edit" ng-click="vm.modifierMobilier_construction(mobilier_construction)" title="Modifier">
+                    <a ng-if="!mobilier_construction.$edit  && vm.validation_item==0" ng-click="vm.modifierMobilier_construction(mobilier_construction)" title="Modifier">
                       <span class="icon-table-edit"></span>
                     </a>
                               
-                    <a ng-if="!mobilier_construction.$edit" ng-click="vm.supprimerMobilier_construction(mobilier_construction)" title="Supprimer">
+                    <a ng-if="!mobilier_construction.$edit  && vm.validation_item==0" ng-click="vm.supprimerMobilier_construction(mobilier_construction)" title="Supprimer">
                       <span class="icon-delete"></span>
                     </a>
-                              
+                    
+                     <span ng-if="!mobilier_construction.$edit && vm.validation_item!=0"> Aucune action disponible</span>          
                     <a ng-if="mobilier_construction.$edit" ng-click="vm.annulerMobilier_construction(mobilier_construction)" title="Annuler modification">
                       <span class="icon-cancel"></span>
                     </a>
@@ -952,12 +930,7 @@
 
 
 
-        <md-tab-body>
-          <div style="widht:100%;">  
-              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajoutercout_sousprojet_construction()" style="width:10%;" ng-disabled="!vm.showbuttonNouvSousprojet">
-                Nouveau
-              </md-button>
-          </div>
+        <md-tab-body><br>
 
           <div>
             <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
@@ -1000,14 +973,14 @@
                   </td>
                                                
                   <td>  
-                    <a ng-if="!cout_sousprojet_construction.$edit" ng-click="vm.modifiercout_sousprojet_construction(cout_sousprojet_construction)" title="Modifier">
+                    <a ng-if="!cout_sousprojet_construction.$edit && vm.validation_item==0" ng-click="vm.modifiercout_sousprojet_construction(cout_sousprojet_construction)" title="Modifier">
                       <span class="icon-table-edit"></span>
                     </a>
                               
-                    <a ng-if="!cout_sousprojet_construction.$edit" ng-click="vm.supprimercout_sousprojet_construction(cout_sousprojet_construction)" title="Supprimer">
+                    <a ng-if="!cout_sousprojet_construction.$edit && vm.validation_item==0" ng-click="vm.supprimercout_sousprojet_construction(cout_sousprojet_construction)" title="Supprimer" >
                       <span class="icon-delete"></span>
                     </a>
-                              
+                     <span ng-if="!cout_sousprojet_construction.$edit && vm.validation_item!=0"> Aucune action disponible</span>         
                     <a ng-if="cout_sousprojet_construction.$edit" ng-click="vm.annulercout_sousprojet_construction(cout_sousprojet_construction)" title="Annuler modification">
                       <span class="icon-cancel"></span>
                     </a>

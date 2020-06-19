@@ -72,6 +72,7 @@
                      <md-input-container flex="100" flex-gt-xs="90">
                        <label>Lot</label>
                       <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option value="*">*</md-option>
                          <md-option value="1">Lot 1</md-option>
                          <md-option value="2">Lot 2</md-option>
                         <md-option value="3">Lot 3</md-option>
@@ -225,15 +226,15 @@
                     <md-tab-body>
                       <div style="widht:100%;"> 
 
-                                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.valider_demandeemidpfi(2)" style="width:12%;" ng-if="vm.showbuttonValidationencourdpfi && vm.validation==1">
+                                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.valider_demandeemidpfi(2)" style="width:12%;" ng-if="vm.showbuttonValidationencourdpfi && vm.validation==1">
                                      Mettre en-cours
                                     </md-button>
 
-                                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.rejeter_demandedpfi(3)" style="width:10%;" ng-if="vm.showbuttonValidationenrejedpfi && vm.validation==2">
+                                    <md-button type="submit" class="md-raised md-primary" aria-label="Nouveau" ng-click="vm.rejeter_demandedpfi(3)" style="width:10%;" ng-if="vm.showbuttonValidationenrejedpfi && vm.validation==2">
                                      Rejeter
                                     </md-button>
 
-                                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.valider_demandedpfi(4)" style="width:10%;" ng-if="vm.showbuttonValidationdpfi && vm.validation==2">
+                                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.valider_demandedpfi(4)" style="width:10%;" ng-if="vm.showbuttonValidationdpfi && vm.validation==2">
                                      Valider
                                     </md-button>
                               </div> <br>

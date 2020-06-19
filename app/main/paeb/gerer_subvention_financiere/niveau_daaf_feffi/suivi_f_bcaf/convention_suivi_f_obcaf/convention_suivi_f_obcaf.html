@@ -72,6 +72,7 @@
                      <md-input-container flex="100" flex-gt-xs="90">
                        <label>Lot</label>
                       <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option value="*">*</md-option>
                          <md-option value="1">Lot 1</md-option>
                          <md-option value="2">Lot 2</md-option>
                         <md-option value="3">Lot 3</md-option>
@@ -237,7 +238,7 @@
                                     <i class="icon-basket-fill s16"></i>
                                   </span-->                          
                                   
-                                  <span class="ms-form-wizard-step-text">Demande réalimentation FEFFI</span>
+                                  <span class="ms-form-wizard-step-text">Demande déblocage</span>
                                   <span class="ms-form-wizard-step-number md-accent-bg notification" ng-if="vm.nbr_demande_feffi_creer>0">{{vm.nbr_demande_feffi_creer}}</span>
                                   <span class="ms-form-wizard-step-number md-accent-bg notification" ng-if="vm.nbr_demande_feffi_emidaaf+vm.nbr_demande_feffi_encourdaaf>0">{{+vm.nbr_demande_feffi_emidaaf+ +vm.nbr_demande_feffi_encourdaaf}}</span>
                                   <span class="ms-form-wizard-step-number md-accent-bg notification" ng-if="vm.nbr_demande_feffi_emidpfi+vm.nbr_demande_feffi_encourdpfi>0">{{+vm.nbr_demande_feffi_emidpfi+ +vm.nbr_demande_feffi_encourdpfi}}</span>
@@ -472,11 +473,11 @@
                                 </td>
                                                              
                                 <td>  
-                                  <a ng-if="!piece_justificatif_feffi.$edit && vm.validation==0 && (vm.session=='OBCAF' || vm.session=='BCAF' || vm.session=='ADMIN')" ng-click="vm.modifierPiece_justificatif_feffi(piece_justificatif_feffi)" title="Modifier">
+                                  <a ng-if="!piece_justificatif_feffi.$edit && vm.validation==0 " ng-click="vm.modifierPiece_justificatif_feffi(piece_justificatif_feffi)" title="Modifier">
                                     <span class="icon-table-edit"></span>
                                   </a>
                                             
-                                  <a ng-if="!piece_justificatif_feffi.$edit && vm.validation==0 && (vm.session=='OBCAF' || vm.session=='BCAF' || vm.session=='ADMIN')" ng-click="vm.supprimerPiece_justificatif_feffi(piece_justificatif_feffi)" title="Supprimer">
+                                  <a ng-if="!piece_justificatif_feffi.$edit && vm.validation==0" ng-click="vm.supprimerPiece_justificatif_feffi(piece_justificatif_feffi)" title="Supprimer">
                                     <span class="icon-delete"></span>
                                   </a>
                                                   

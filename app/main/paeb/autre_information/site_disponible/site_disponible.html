@@ -6,19 +6,12 @@
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Gerer subvention operation</span>
-                
-                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Niveau UFP/DAAF</span>
-                
-                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Niveau DAAF</span>
+                <span class="parent">Autre information</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
                 <span class="parent" href="javascript:;"> Site</span>
             </div>
 
-            <!--div class="title">Site</div-->
         </div>
     </div>
     <!-- / HEADER -->
@@ -53,20 +46,6 @@
               <form name="filtreform" class="md-inline-form" novalidate >
                                 <br>
                   <div layout="column" layout-gt-xs="row" >
-
-                    <md-input-container flex="100" flex-gt-xs="90">
-                      <label>Lot</label>
-                      <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
-                        <md-option value="*">*</md-option>
-                        <md-option value="1">Lot 1</md-option>
-                        <md-option value="2">Lot 2</md-option>
-                        <md-option value="3">Lot 3</md-option>
-                        <md-option value="4">Lot 4</md-option>
-                      </md-select>
-                      <div ng-messages="filtreform.lot.$error" role="alert">
-                          <div ng-message="required"><span>Lot</span></div>
-                      </div>
-                    </md-input-container>
                     <md-input-container flex="100" flex-gt-xs="90">
                       <label>Région</label>
                       <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)" required>

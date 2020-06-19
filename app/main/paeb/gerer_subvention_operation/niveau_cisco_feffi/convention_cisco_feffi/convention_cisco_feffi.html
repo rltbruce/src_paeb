@@ -12,7 +12,7 @@
                 <span class="parent" href="javascript:;"> Convention CISCO/FEFFI</span>
             </div>
 
-            <div class="title">Convention CISCO/FEFFI</div>
+            <!--div class="title">Convention CISCO/FEFFI</div-->
         </div>
     </div>
     <!-- / HEADER -->
@@ -491,7 +491,7 @@
                           <span ng-if="convention_cife_detail.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
                               <label>Adresse banque</label>
-                              <input name="adresse_banque" type="text" ng-model="convention_cife_detail.adresse_banque"/>
+                              <input name="adresse_banque" type="text" ng-model="convention_cife_detail.adresse_banque" disabled />
                             </md-input-container>   
                           </span>
                                     
@@ -502,7 +502,7 @@
                           <span ng-if="convention_cife_detail.$edit">
                             <md-input-container style="width:100%;display: flex !important;">
                               <label>RIB</label>
-                              <input name="rib" type="text" ng-model="convention_cife_detail.rib"/>
+                              <input name="rib" type="text" ng-model="convention_cife_detail.rib" disabled/>
                             </md-input-container>   
                           </span>
                                     
@@ -622,7 +622,7 @@
                     <span ng-if="cout_maitrise_construction.$edit">
                       <md-input-container style="width:100%;display: flex !important;">
                         <label>Coût</label>
-                        <input name="cout_unitaire" type="number" ng-model="cout_maitrise_construction.cout" />
+                        <input name="cout_unitaire" type="number" ng-model="cout_maitrise_construction.cout" disabled/>
                       </md-input-container>
                     </span>                          
                     <span ng-if="!cout_maitrise_construction.$edit">{{vm.formatMillier(cout_maitrise_construction.cout)}} Ar</span>
@@ -899,7 +899,7 @@
                     <span ng-if="mobilier_construction.$edit">
                       <md-input-container style="width:100%;display: flex !important;">
                         <label>Nombre table banc</label>
-                        <input name="nbr_table_banc" type="number" ng-model="mobilier_construction.nbr_table_banc"/>
+                        <input name="nbr_table_banc" type="number" ng-model="mobilier_construction.nbr_table_banc" disabled/>
                       </md-input-container>
                     </span>                          
                     <span ng-if="!mobilier_construction.$edit">{{mobilier_construction.type_mobilier.nbr_table_banc}}</span>
@@ -909,7 +909,7 @@
                     <span ng-if="mobilier_construction.$edit">
                       <md-input-container style="width:100%;display: flex !important;">
                         <label>Nombre table maitre</label>
-                        <input name="nbr_table_maitre" type="number" ng-model="mobilier_construction.nbr_table_maitre"/>
+                        <input name="nbr_table_maitre" type="number" ng-model="mobilier_construction.nbr_table_maitre" disabled/>
                       </md-input-container>
                     </span>                          
                     <span ng-if="!mobilier_construction.$edit">{{mobilier_construction.type_mobilier.nbr_table_maitre}}</span>
@@ -919,7 +919,7 @@
                     <span ng-if="mobilier_construction.$edit">
                       <md-input-container style="width:100%;display: flex !important;">
                         <label>Nombre chaise maitre</label>
-                        <input name="nbr_chaise_maitre" type="number" ng-model="mobilier_construction.nbr_chaise_maitre"/>
+                        <input name="nbr_chaise_maitre" type="number" ng-model="mobilier_construction.nbr_chaise_maitre" disabled/>
                       </md-input-container>
                     </span>                          
                     <span ng-if="!mobilier_construction.$edit">{{mobilier_construction.type_mobilier.nbr_chaise_maitre}}</span>

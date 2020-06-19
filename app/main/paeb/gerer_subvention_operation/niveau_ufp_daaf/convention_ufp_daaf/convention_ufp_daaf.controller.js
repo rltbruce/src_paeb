@@ -7,10 +7,10 @@
         .controller('Convention_ufp_daafController', Convention_ufp_daafController)
         .controller('ConventionDialogController', ConventionDialogController);
     /** @ngInject */
-    function Convention_ufp_daafController($mdDialog, $scope, apiFactory, $state,$cookieStore,loginService)
+    function Convention_ufp_daafController($mdDialog, $scope, apiFactory, $state,$cookieStore,loginService,$timeout)
     {
 		    var vm = this;
-
+        vm.affiche_load = false;
     //initialisation convetion ufp/daaf entete 
         vm.ajoutConvention_ufp_daaf_entete = ajoutConvention_ufp_daaf_entete ;
         var NouvelItemConvention_ufp_daaf_entete = false;
@@ -108,7 +108,8 @@
         });
 
         vm.recherchefiltre = function(filtre)
-        {
+        {   
+            vm.affiche_load = true;
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
 
@@ -116,6 +117,7 @@
                                     date_debut,'date_fin',date_fin).then(function(result)
             {
                 vm.allconvention_ufp_daaf_entete = result.data.response;
+                vm.affiche_load = false;
             });
         }
         vm.annulerfiltre = function()
@@ -150,7 +152,7 @@
                     {
                       maxnum =parseInt(maxconventiontoday[0].ref_convention.split('/')[2])+1;                    
                     }
-                    var ref_auto = 'CO/'+vm.getAnneeDate(new Date())+'/'+maxnum;
+                    var ref_auto = 'CO/'+vm.formatDate(new Date())+'/'+maxnum;
 
                   /***************************** Fin ref_convention auto********************/
                     
@@ -168,6 +170,7 @@
                       nbr_beneficiaire: 0
                     };         
                     vm.allconvention_ufp_daaf_entete.push(items);
+                    //$setTimeout(function() {console.log('ok')}, 5000);
                     
                     vm.allconvention_ufp_daaf_entete.forEach(function(conv)
                     {
@@ -253,7 +256,7 @@
                   vm.allconvention_cisco_feffi_entete = result.data.response; 
                   //console.log(vm.allconvention_cisco_feffi_entete);                
               });
-
+              vm.validation_item = item.validation; 
               vm.stepOne           = true;
               vm.stepTwo           = false;
               vm.stepThree         = false;
@@ -401,6 +404,7 @@
                   NouvelItemConvention_ufp_daaf_entete = false;
 
             }
+            vm.validation_item = validation;
               convention_ufp_daaf_entete.$selected = false;
               convention_ufp_daaf_entete.$edit = false;
               vm.selectedItemConvention_ufp_daaf_entete = {};
@@ -443,6 +447,7 @@
                   return obj.id !== vm.selectedItemConvention_ufp_daaf_entete.id;
               });
               vm.afficherboutonValider = false;
+              vm.validation_item = 1;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de validation de donnée');});
         }
@@ -815,11 +820,25 @@
           })
 
               $mdDialog.show(confirm).then(function(data)
-              {
-               
-               data.forEach(function(item)
+              { var nbr= data.length;
+                var iterator = 0;
+                var sum_montant=0;
+                console.log(nbr);
+               data.forEach(function(item,index)
                {
                   insert_in_base_convention_cisco_feffi_entete(item,'0',0);
+                  vm.allconvention_cisco_feffi_entete.push(item);
+                  sum_montant += item.montant_total;
+                  if (index== nbr-1)
+                  {
+                    var montant_trans = parseInt(vm.selectedItemConvention_ufp_daaf_entete.montant_trans_comm) + parseInt(sum_montant);
+                    var montant_conv = montant_trans + parseInt(vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire);
+                    console.log(sum_montant);
+                    miseajourconvention_ufp_daaf_entete(vm.selectedItemConvention_ufp_daaf_entete,montant_trans,montant_conv);
+                  }
+                  
+                 //console.log(sum_montant);
+                 
                });
                
 
@@ -898,15 +917,16 @@
                   var montant_conv = montant_trans + parseInt(vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire)
                   miseajourconvention_ufp_daaf_entete(vm.selectedItemConvention_ufp_daaf_entete,montant_trans,montant_conv);
                   
-                }else
+                }
+                /*else
                 {
-                  vm.allconvention_cisco_feffi_entete.push(convention_cisco_feffi_entete);
+                  //vm.allconvention_cisco_feffi_entete.push.apply(convention_cisco_feffi_entete);
                   NouvelItemConvention_cisco_feffi_entete= false;
                   var montant_trans = parseInt(vm.selectedItemConvention_ufp_daaf_entete.montant_trans_comm) + parseInt(convention_cisco_feffi_entete.montant_total);
                   var montant_conv = montant_trans + parseInt(vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire)
                   miseajourconvention_ufp_daaf_entete(vm.selectedItemConvention_ufp_daaf_entete,montant_trans,montant_conv);
                     
-                }
+                }*/
                 
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});

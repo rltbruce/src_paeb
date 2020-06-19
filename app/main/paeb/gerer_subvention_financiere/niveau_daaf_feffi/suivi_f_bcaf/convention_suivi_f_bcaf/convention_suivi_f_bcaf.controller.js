@@ -62,6 +62,7 @@
         vm.alldemande_realimentation  = [] ;
         vm.alldemande_realimentation_invalide  = [] ;
 
+        vm.ajoutDemande_realimentation  = ajoutDemande_realimentation ;
         vm.showbuttonNeauveaudemande = false;
         vm.permissionboutonValidercreer = false;
         vm.validation = 0;
@@ -72,12 +73,14 @@
         vm.nbr_demande_feffi_creer=0;
 
         //initialisation piece_justificatif_feffi
+        vm.ajoutPiece_justificatif_feffi  = ajoutPiece_justificatif_feffi ;
         var NouvelItemPiece_justificatif_feffi    = false;     
         var currentItemPiece_justificatif_feffi;
         vm.selectedItemPiece_justificatif_feffi = {} ;
         vm.allpiece_justificatif_feffi  = [] ;
 
         //initialisation decaissement fonctionnement feffi
+        vm.ajoutDecaiss_fonct_feffi = ajoutDecaiss_fonct_feffi;
         var NouvelItemDecaiss_fonct_feffi=false;
         var currentItemDecaiss_fonct_feffi;
         vm.selectedItemDecaiss_fonct_feffi = {} ;
@@ -86,6 +89,15 @@
         vm.showbuttonValidation = false;  
 
         vm.nbr_decaiss_feffi=0;     
+
+        vm.allcurenttranche_deblocage_feffi = [];
+        vm.alltranche_deblocage_feffi = [];
+
+        apiFactory.getAll("tranche_deblocage_feffi/index").then(function(result)
+        {
+          vm.alltranche_deblocage_feffi= result.data.response;
+          vm.allcurenttranche_deblocage_feffi = result.data.response;
+        });
 
 /*******************************Fin initialisation suivi financement feffi******************************/
 
@@ -185,7 +197,7 @@
         var id_user = $cookieStore.get('id');
          apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
-              vm.roles = result.data.response.roles;
+              vm.roles = result.data.response.roles;vm.usercisco = result.data.response.cisco;
               switch (vm.roles[0])
                 {
                  case 'BCAF':                           
@@ -206,9 +218,9 @@
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
-        {titre:"Feffi"
+        {titre:"FEFFI"
         },
         {titre:"Site"
         },
@@ -261,15 +273,11 @@
               switch (vm.session)
                 {
                  case 'BCAF':
-                            if (vm.usercisco.id!=undefined)
-                            {
-                                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu',
-                                    'getconventionvalideufpByciscodate','id_cisco',vm.usercisco.id,'date_debut',
-                                    date_debut,'date_fin',date_fin).then(function(result)
-                                {
-                                    vm.allconvention_entete = result.data.response;
-                                });
-                            }
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpByfiltrecisco','id_cisco_user',vm.usercisco.id,'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                              {
+                                  vm.allconvention_entete = result.data.response;
+                              });
                       
                       break;
 
@@ -444,14 +452,14 @@
         
         //fonction ajout dans bdd
         function ajoutDemande_realimentation(demande_realimentation,suppression)
-        {
+        {console.log('at0');
             if (vm.NouvelItemDemande_realimentation==false)
-            {
+            {console.log('at1');
                 test_existanceDemande_realimentation (demande_realimentation,suppression); 
             } 
             else
             {
-                insert_in_baseDemande_realimentation(demande_realimentation,suppression);
+                insert_in_baseDemande_realimentation(demande_realimentation,suppression);console.log('at11');
             }
         }
 
@@ -495,7 +503,7 @@
         {
             vm.selectedItemDemande_realimentation = item;
             vm.showbuttonNouvtransfert_daaf = true;
-            if (item.$selected ==false || item.$selected == undefined)
+            if (item.$edit ==false || item.$edit == undefined)
             {
                 currentItemDemande_realimentation     = JSON.parse(JSON.stringify(vm.selectedItemDemande_realimentation));
                //recuperation donnée demande_realimentation_feffi
@@ -569,13 +577,15 @@
 
         //function teste s'il existe une modification item convention_cisco_feffi_entete
         function test_existanceDemande_realimentation (item,suppression)
-        {          
+        {          console.log('at2');
+        console.log(suppression);
             if (suppression!=1)
-            {
-               var dema = vm.alldemande_realimentation.filter(function(obj)
+            {console.log('at3');
+               var dema = vm.alldemande_realimentation_invalide.filter(function(obj)
                 {
                    return obj.id == currentItemDemande_realimentation.id;
                 });
+               console.log(dema);
                 if(dema[0])
                 {
                    if((dema[0].id_compte_feffi != currentItemDemande_realimentation.id_compte_feffi )
@@ -585,8 +595,7 @@
                     || (dema[0].periode != currentItemDemande_realimentation.periode )
                     || (dema[0].pourcentage != currentItemDemande_realimentation.pourcentage )
                     || (dema[0].reste != currentItemDemande_realimentation.reste )
-                    || (dema[0].date != currentItemDemande_realimentation.date )
-                    || (dema[0].id_convention_cife_entete != currentItemDemande_realimentation.id_convention_cife_entete ))                    
+                    || (dema[0].date != currentItemDemande_realimentation.date ))                    
                       { 
                         insert_in_baseDemande_realimentation(item,suppression);
                       }
@@ -640,7 +649,7 @@
 
                 var tran= vm.alltranche_deblocage_feffi.filter(function(obj)
                 {
-                    return obj.id == demande_realimentation.id_tranche_deblocage_feffi;
+                    return obj.id == demande_realimentation.tranche.id;
                 });
                 var conv= vm.allconvention_entete.filter(function(obj)
                 {
@@ -709,7 +718,7 @@
             }
 
           cumul = prevu;
- console.log( vm.alldemande_realimentation_) ;
+ console.log( vm.alldemande_realimentation) ;
           if (vm.alldemande_realimentation.length>0)
           {                 
               anterieur = vm.dataLastedemande[0].prevu; console.log( anterieur) ;         

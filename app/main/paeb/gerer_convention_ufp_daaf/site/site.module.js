@@ -31,7 +31,7 @@
             title: 'Site',
             icon  : 'icon-nfc-variant',
             state: 'app.paeb_gerer_convention_ufp_daaf_site',
-			weight: 1
+            weight: 1
         });
     }
 

@@ -228,33 +228,12 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
-              switch (vm.session)
-                { 
-                  
-                  case 'ODPFI': 
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu',
-                                'getconventionvalideufpBydate','date_debut',date_debut,'date_fin',
-                                date_fin,'lot',filtre.lot,'id_region',filtre.id_region
-                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,
+             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',
+                    date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,
                                 'id_convention_entete',filtre.id_convention_entete).then(function(result)
-                            {
-                                vm.allconvention_entete = result.data.response;
-                            });   
-                      break;
-
-                  case 'ADMIN':
-                           
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
-                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
-                            {
-                                vm.allconvention_entete = result.data.response;
-                                console.log(vm.allconvention_entete);
-                            });                 
-                      break;
-                  default:
-                      break;
-              
-                }
+            {
+                vm.allconvention_entete = result.data.response;
+            }); 
                 console.log(filtre);
         }
         vm.annulerfiltre = function()
@@ -293,58 +272,29 @@
         function donnee_menu_pr(item,session)
         {
             return new Promise(function (resolve, reject)
-            {
-                switch (session)
+            { 
+                apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationByconvention','id_convention_entete',item.id).then(function(result)
                 {
-                  
-                  case 'ODPFI': 
-                              apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationByconvention','id_convention_entete',item.id).then(function(result)
-                              {
-                                  vm.allpassation_marches_pr = result.data.response;
-                                  if (result.data.response.length!=0)
-                                  {
-                                      vm.showbuttonNouvPassation_pr=false;
-                                  }
-                                  apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
-                                  {
-                                      vm.allcontrat_partenaire_relai = result.data.response;
+                    vm.allpassation_marches_pr = result.data.response.filter(function(obj)
+                    {
+                        return obj.validation == 0;
+                    });
+                    if (result.data.response.length!=0)
+                    {
+                         vm.showbuttonNouvPassation_pr=false;
+                     }
+                    apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
+                    {
+                        vm.allcontrat_partenaire_relai = result.data.response;
 
-                                      if (result.data.response.length!=0)
-                                      {
-                                        vm.showbuttonNouvcontrat_pr=false;
-                                      }   
-                                    return resolve('ok');
-                                  });
-                              });
-                              
-                      break;
-
-                  case 'ADMIN':
-                            
-                            apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationByconvention','id_convention_entete',item.id).then(function(result)
-                              {
-                                  vm.allpassation_marches_pr = result.data.response;
-                                  if (result.data.response.length!=0)
-                                  {
-                                      vm.showbuttonNouvPassation_pr=false;
-                                  }
-                                  apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
-                                  {
-                                      vm.allcontrat_partenaire_relai = result.data.response;
-
-                                      if (result.data.response.length!=0)
-                                      {
-                                        vm.showbuttonNouvcontrat_pr=false;
-                                      }   
-                                    return resolve('ok');
-                                  });
-                              }); 
-                       
-                      break;
-                  default:
-                      break;
-              
-                }            
+                        if (result.data.response.length!=0)
+                        {
+                          vm.showbuttonNouvcontrat_pr=false;
+                        }   
+                      return resolve('ok');
+                    });
+                });
+                               
             });
         } 
 
@@ -552,7 +502,7 @@
             item.nbr_offre_recu = parseInt(vm.selectedItemPassation_marches_pr.nbr_offre_recu);
             item.date_lancement_dp = new Date(vm.selectedItemPassation_marches_pr.date_lancement_dp) ;
             item.date_manifestation   = new Date(vm.selectedItemPassation_marches_pr.date_manifestation) ;
-            item.partenaire_relai   = vm.selectedItemPassation_marches_pr.partenaire_relai.id;
+            //item.partenaire_relai   = vm.selectedItemPassation_marches_pr.partenaire_relai.id;
              vm.showbuttonValidationpassation_pr = false;
             
         };
@@ -855,12 +805,12 @@
               {
                   vm.showbuttonValidationcontrat_pr = true;
 
-                  if(vm.roles.indexOf("ODPFI")!= -1)
-                  {
-
                       apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
                       {
-                        vm.allavenant_partenaire = result.data.response;
+                        vm.allavenant_partenaire = result.data.response.filter(function(obj)
+                        {
+                          return obj.validation == 0;
+                        });
                         if (result.data.response.length!=0)
                           {
                             
@@ -868,22 +818,8 @@
                           }                        
                         vm.stepprestaion_pr=true;
                       });
-                  }
+
                   
-                  if(vm.roles.indexOf("ADMIN")!= -1)
-                  {
-                      apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                      {
-                        vm.allavenant_partenaire = result.data.response;
-                        if (result.data.response.length!=0)
-                          {
-                            
-                        vm.showbuttonNouvavenant_partenaire = false;  
-                          }                        
-                        vm.stepprestaion_pr=true;
-                      });
-
-                  }
               }
               vm.validation_contrat_pr = item.validation;
               

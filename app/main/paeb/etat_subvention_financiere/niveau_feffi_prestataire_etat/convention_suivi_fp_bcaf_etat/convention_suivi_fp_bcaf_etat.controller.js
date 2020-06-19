@@ -66,6 +66,7 @@
         vm.stepattachement_batiment_travaux = false;
         vm.stepattachement_latrine_travaux = false;
         vm.stepattachement_mobilier_travaux = false;
+        vm.stepdecompte_mpe = false;
 
         vm.session = '';
 
@@ -141,6 +142,7 @@
 
         vm.selectedItemDivers_attachement_mobilier_travaux = {} ;
         vm.alldivers_attachement_mobilier_travaux = [] ;
+        vm.decompte_mpes ={};
 
 /********************************************Fin entreprise********************************************/
 
@@ -150,6 +152,12 @@
           autoWidth: false          
         };
 
+        vm.dtOptions_perso = {
+          dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
+          pagingType: 'simple',
+          order: []
+
+        };
 
         vm.datenow = new Date();
 
@@ -241,6 +249,36 @@
                 }                  
 
          });
+
+         
+        vm.importerfiltre =function(filtre)
+        {   
+            var date_debut = convertionDate(filtre.date_debut);
+            var date_fin = convertionDate(filtre.date_fin);
+            vm.affiche_load = true ;
+            var repertoire = 'bdd_construction';
+
+            apiFactory.getAPIgeneraliserREST("excel_bdd_construction/index",'menu','getdonneeexporter',
+                'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
+                filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
+                filtre.id_convention_entete,"repertoire",repertoire).then(function(result)
+            {
+                vm.status    = result.data.status; 
+                
+                if(vm.status)
+                {
+                    vm.nom_file = result.data.nom_file;            
+                    window.location = apiUrlexcel+"bdd_construction/"+vm.nom_file ;
+                    vm.affiche_load =false; 
+
+                }else{
+                    vm.message=result.data.message;
+                    vm.Alert('Export en excel',vm.message);
+                    vm.affiche_load =false; 
+                }
+                console.log(result.data.data);
+            });
+        } 
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
@@ -1182,6 +1220,9 @@
         {
             vm.selectedItemFacture_mpe = item;
             vm.validation_facture_mpe = item.validation;
+
+            vm.stepdecompte_mpe = true;
+            vm.stepattachement_mpe = true; 
               
         };
         $scope.$watch('vm.selectedItemFacture_mpe', function()
@@ -1557,6 +1598,27 @@
         
     /******************************************fin attachement mobilier travaux***********************************************/
 
+    
+        /************************************************debut Decompte*************************************************/
+        vm.click_tab_decompte_mpe = function()
+        {
+            apiFactory.getAPIgeneraliserREST("facture_mpe/index","menu","getdecompte_mpeBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id,'id_facture_mpe',vm.selectedItemFacture_mpe.id).then(function(result)
+            {
+                vm.decompte_mpes = result.data.response[0];
+                console.log(vm.decompte_mpes);
+            });
+        }
+        vm.decompte_mpe_column = [        
+        {titre:"Nature de depenses"
+        },
+        {titre:"Montant cumule"
+        },
+        {titre:"Montant antérieur"
+        },
+        {titre:"Montant de la période"
+        }];
+
+    /**************************************Debut Decompte mpe*********************************************/
         /**************************************Debut transfert reliquat*********************************************/
          vm.transfert_reliquat_column = [        
         {titre:"Montant"

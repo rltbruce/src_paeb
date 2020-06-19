@@ -144,6 +144,10 @@
                                       ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
                                       Recherche
                    </md-button>
+                   <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                      ng-disabled="filtreform.$invalid" ng-click="vm.importerfiltre(vm.filtre)">
+                                      Exporter
+                   </md-button>
                    <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
                                   Annuler
                    </md-button>
@@ -1852,6 +1856,132 @@
                             </md-tab-body> 
                           </md-tab>
                         <!-------------------------------------FIN ATTACHEMENT-------------------------------------------->
+
+                        <!-----------------------------------DEBUT DECOMPTE MPE------------------------------------------->
+                          <md-tab ng-click="vm.click_tab_decompte_mpe()" ng-disabled="vm.stepattachement_mpe || vm.validation_facture_mpe<4">
+                            <md-tab-label>
+                              <span class="ms-form-wizard-step-label">
+                                  <span class="ms-form-wizard-step-text">DECOMPTE</span>
+                              </span>                             
+                            </md-tab-label>
+                            
+                            <md-tab-body> <br>
+                              <div style="margin: 2px">        
+                              <table class="dataTable row-border cell-border hover" datatable="ng" dt-options="vm.dtOptions_perso" ms-responsive-table>
+                                <thead>
+                                  <tr>
+                                    <th class="secondary-text" ng-repeat="ciscT in ::vm.decompte_mpe_column">
+                                      <div class="table-header">
+                                        <span class="column-title">{{ciscT.titre}}</span>
+                                      </div>
+                                    </th>
+                                  </tr>
+                                </thead>
+                                         
+                                <tbody>
+                                  <tr ng-repeat="decomptes in vm.alldecompte" >
+
+                                      <td><span>{{decomptes}}</span></td>
+                                      <td><span>{{decomptes}}</span></td>
+                                      <td><span>{{decomptes}}</span></td>
+                                      <td><span>{{decomptes}}</span></td>
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>Montant travaux</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_travaux_to}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_travaux_ante}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_travaux_pe}}</span></td>                      
+                                    
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>Montant après rabais</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_rabais_to}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_rabais_ante}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_rabais_pe}}</span></td>                      
+                                    
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>Montant HT</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_ht_to}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_ht_ante}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_ht_pe}}</span></td>                      
+                                    
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>TVA</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_tva_to}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_tva_ante}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_tva_pe}}</span></td>                      
+                                    
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>Montant ttc</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_ttc_to}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_ttc_ante}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.montant_ttc_pe}}</span></td>                      
+                                    
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>Acompte sur approvisionnement</span></td>
+                                    <td><span>{{vm.decompte_mpes.net_payer_avanc_to}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.net_payer_avanc_ante}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.net_payer_avanc_pe}}</span></td>                      
+                                    
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>Remboursement Acompte sur appro</span></td>
+                                    <td><span>{{vm.decompte_mpes.remboursement_acompte_to}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.remboursement_acompte_ante}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.remboursement_acompte_pe}}</span></td>                      
+                                    
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>Pénalité de retard</span></td>
+                                    <td><span>{{vm.decompte_mpes.penalite_retard_to}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.penalite_retard_ante}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.penalite_retard_pe}}</span></td>                      
+                                    
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>Retenue de garantie (5%)</span></td>
+                                    <td><span>{{vm.decompte_mpes.retenue_garantie_to}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.retenue_garantie_ante}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.retenue_garantie_pe}}</span></td>                      
+                                    
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>Remboursement plaque en marbre</span></td>
+                                    <td><span>{{vm.decompte_mpes.remboursement_plaque_to}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.remboursement_plaque_ante}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.remboursement_plaque_pe}}</span></td>                      
+                                    
+                                  </tr>
+                                </tbody>
+                                <tfoot >                                  
+                                  <tr>          
+                                    
+                                    <td><span>NET A PAYER</span></td>
+                                    <td><span>{{vm.decompte_mpes.net_payer_to}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.net_payer_ante}}</span></td>
+                                    <td><span>{{vm.decompte_mpes.net_payer_pe}}</span></td>                      
+                                    
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div> 
+                            </md-tab-body> 
+                          </md-tab>
+                        <!-------------------------------------FIN DECOMPTE MPE------------------------------------------->
 
                           
                         </md-tabs> 

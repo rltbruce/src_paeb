@@ -546,9 +546,11 @@
 
                 var za = vm.zaps.filter(function(obj)
                 {
-                    return obj.id == site.id_zap;
+                    return obj.zap.id == site.id_zap;
                 });
-
+                console.log(vm.zaps);
+                console.log(site);
+                console.log(za[0].zap);
                 var ecol = vm.allecole.filter(function(obj)
                 {
                     return obj.id == site.id_ecole;
@@ -572,7 +574,7 @@
                         vm.selectedItem.region   = reg[0];
                         vm.selectedItem.cisco   = cis[0];
                         vm.selectedItem.commune   = com[0];
-                        vm.selectedItem.zap   = za[0];
+                        vm.selectedItem.zap   = za[0].zap;
                         vm.selectedItem.ecole   = ecol[0];
                         vm.selectedItem.$selected  = false;
                         vm.selectedItem.$edit      = false;
@@ -593,7 +595,7 @@
                   site.region   = reg[0];
                   site.cisco   = cis[0];
                   site.commune   = com[0];
-                  site.zap   = za[0];
+                  site.zap   = za[0].zap;
                   site.agence_acc   = agen[0];
                   site.id        =   String(data.response);              
                   NouvelItem = false;

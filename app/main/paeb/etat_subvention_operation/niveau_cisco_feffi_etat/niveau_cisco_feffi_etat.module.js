@@ -3,9 +3,9 @@
     'use strict';
 
     angular
-        .module('app.paeb.etat_subvention_operation', [
-            'app.paeb.etat_subvention_operation.niveau_feffi_prestataire_etat',
-            'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat'
+        .module('app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat', [
+            'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.convention_cisco_feffi_etat',
+            'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.feffi_etat'
             ])       
         .config(config);
         var vs ;
@@ -13,10 +13,10 @@
     /** @ngInject */
     function config(msNavigationServiceProvider)
     {
-        msNavigationServiceProvider.saveItem('paeb.etat_subvention_operation', {
-            title : 'Etat operation subvention ',
-            icon  : 'icon-data',
-            weight: 3
+        msNavigationServiceProvider.saveItem('paeb.etat_subvention_operation.niveau_cisco_feffi_etat', {
+            title : 'Niveau CISCO/FEFFI',
+            icon  : 'icon-black-mesa',
+            weight: 1
         });
 
 
