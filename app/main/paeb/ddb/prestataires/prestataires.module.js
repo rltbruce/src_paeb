@@ -16,7 +16,7 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.prestataires', {
             title : 'Prestataire',
             icon  : 'icon-worker',
-            weight: 7
+            weight: 8
         });
     }
 

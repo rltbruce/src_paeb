@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.document.document_pr', {
-            title: 'Partenaire relai',
+            title: 'PR',
             icon  : 'icon-clipboard-outline',
             state: 'app.paeb_ddb_document_document_pr'
         });

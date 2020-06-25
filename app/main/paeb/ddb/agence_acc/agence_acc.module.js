@@ -31,7 +31,7 @@
             title: 'agence accompagnement',
             icon  : 'icon-nfc-variant',
             state: 'app.paeb_ddb_agence_acc',
-			weight: 1
+			weight: 9
         });
     }
 

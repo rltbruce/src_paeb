@@ -19,7 +19,7 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.participant_formation_pr', {
             title : 'Participant formation PR',
             icon  : 'icon-account-network',
-            weight: 15
+            weight: 13
         });
     }
 

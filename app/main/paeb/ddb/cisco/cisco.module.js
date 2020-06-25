@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.cisco', {
-            title: 'Cisco',
+            title: 'CISCO',
             icon  : 'icon-school',
             state: 'app.paeb_ddb_cisco',
             weight: 2

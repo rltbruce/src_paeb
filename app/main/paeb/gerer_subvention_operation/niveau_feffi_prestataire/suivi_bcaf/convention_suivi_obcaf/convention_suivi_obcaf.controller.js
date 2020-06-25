@@ -51,7 +51,9 @@
         vm.steppiecefeffi=false;
         vm.steptransdaaf=false;
         vm.stepprestaion_pr=false;
+        vm.stepdoc_pr=false;
         vm.stepprestation_moe = false;
+        vm.stepdoc_moe=false;
         vm.tabpartenaire = false;
         vm.tabmaitrise = false;
         vm.tabentreprise = false;
@@ -795,8 +797,10 @@
               vm.steppiecefeffi=false;
               vm.steptransdaaf=false;
               vm.stepprestaion_pr=false;
+                vm.stepdoc_pr=false;
               vm.stepprestation_moe = false;
               vm.stepjusti_d_tra_moe = false;
+                vm.stepdoc_moe=false;
               vm.stepsuiviexecution = false;
               vm.stepphase = false;
               vm.stepsoumissionnaire = false; 
@@ -830,10 +834,11 @@
             {
                 apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
-                    vm.allpassation_marches_moe = result.data.response.filter(function(obj)
+                    /*vm.allpassation_marches_moe = result.data.response.filter(function(obj)
                     {
                            return obj.validation == 0;
-                    });
+                    });*/
+                    vm.allpassation_marches_moe = result.data.response;
                     if (result.data.response.length!=0)
                     {
                         vm.showbuttonNouvPassation_moe=false;
@@ -1620,9 +1625,9 @@
                 //factory
             apiFactory.add("avenant_convention/index",datas, config).success(function (data)
             {   
-                var conve= vm.allconvention_cisco_feffi_entete.filter(function(obj)
+                var conve= vm.allconvention_entete.filter(function(obj)
                 {
-                    return obj.id == avenant_convention.id_convention;
+                    return obj.id == vm.selectedItemConvention_entete.id;
                 });
 
                 if (NouvelItemAvenant_convention == false)
@@ -1694,6 +1699,8 @@
            {
               vm.validation_contrat_pr = item.validation;
               vm.stepprestaion_pr=true;
+
+            vm.stepdoc_pr=true;
               apiFactory.getAPIgeneraliserREST("situation_participant_odc/index",'id_classification_site',vm.selectedItemConvention_entete.site.id_classification_site).then(function(result)
               {
                   vm.allsituation_participant_odc = result.data.response;
@@ -7085,6 +7092,8 @@
            if(item.id!=0)
            {
             vm.stepprestation_moe = true;
+
+            vm.stepdoc_moe=true;
             vm.validation_contrat_moe = item.validation;
             console.log(item);
            }

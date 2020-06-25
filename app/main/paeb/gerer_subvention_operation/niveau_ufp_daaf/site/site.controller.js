@@ -207,7 +207,7 @@
         vm.recherchefiltre = function(filtre)
         {
             apiFactory.getAPIgeneraliserREST("site/index",'menu',
-              'getsiteByfiltre_invalide','lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
+              'getsiteByenpreparationinvalide','lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
               filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
               {
                   vm.allsite = result.data.response;

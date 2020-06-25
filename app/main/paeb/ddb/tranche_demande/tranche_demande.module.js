@@ -18,7 +18,7 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.tranche_demande', {
             title : 'Tranche demande',
             icon  : 'icon-format-list-numbers',
-            weight: 8
+            weight: 10
         });
     }
 

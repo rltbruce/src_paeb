@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.document.document_feffi', {
-            title: 'Feffi',
+            title: 'FEFFI',
             icon  : 'icon-clipboard-outline',
             state: 'app.paeb_ddb_document_document_feffi'
         });

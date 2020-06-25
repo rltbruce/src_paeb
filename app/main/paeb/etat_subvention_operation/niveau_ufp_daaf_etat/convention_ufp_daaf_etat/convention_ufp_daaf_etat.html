@@ -1,0 +1,327 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gerer convention UFP/DAAF</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Convention</span>
+            </div>
+
+            <!--div class="title">Convention</div-->
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Convention -->
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+          <md-tab>
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                  <span class="ms-form-wizard-step-number md-accent-bg">
+                    <i class="icon-check s16"></i>
+                </span>
+                  <span class="ms-form-wizard-step-text">Convention Daff/ufp</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body>
+             <div style="widht:100%;"> 
+                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.showformfiltre()" ng-show="vm.showbuttonfiltre">
+                        Filtre
+                  </md-button> 
+              </div> <br>
+              <div ng-show="vm.showfiltre">
+                  <form name="filtreform" class="md-inline-form" novalidate >
+                        <br>
+                      <div layout="column" layout-gt-xs="row">
+                          <md-input-container>
+                                    <span>Date du</span>
+                          </md-input-container>
+
+                           <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required>                     
+                          </md-datepicker>
+
+                          <md-input-container>
+                                    <span>&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
+                          </md-input-container>
+
+                          <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
+                          </md-datepicker>
+                        </div>
+
+                        <div>
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                      ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
+                                      Recherche
+                        </md-button>
+                        <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
+                                  Annuler
+                        </md-button>
+                        </div>
+                  </form>
+                  <md-divider></md-divider><br>
+              </div>
+              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                <thead>
+                  <tr>
+                    <th class="secondary-text" ng-repeat="conv in ::vm.convention_ufp_daaf_entete_column">
+                      <div class="table-header">
+                        <span class="column-title">{{conv.titre}}</span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                         
+                <tbody>
+                  <tr ng-repeat="convention_ufp_daaf_entete in vm.allconvention_ufp_daaf_entete"  ng-class="{selected: convention_ufp_daaf_entete.$selected}" ng-click="vm.selectionConvention_ufp_daaf_entete(convention_ufp_daaf_entete)">
+                          
+                    <td>                                
+                      <span>{{vm.affichevague(convention_ufp_daaf_entete.num_vague)}}</span>
+                    </td>
+
+                    <td>                                
+                      <span>{{convention_ufp_daaf_entete.ref_convention}}</span>
+                    </td>
+                    
+                    <td>                         
+                      <span>{{convention_ufp_daaf_entete.objet}}</span>
+                    </td>
+
+                              
+                    <td>                                
+                      <span>{{convention_ufp_daaf_entete.ref_financement}}</span>
+                    </td>
+                    
+                    <td>                         
+                      <span>{{convention_ufp_daaf_entete.montant_trans_comm}}</span>
+                    </td>
+                              
+                    <td>
+                      <span>{{convention_ufp_daaf_entete.frais_bancaire}}</span>
+                    </td>
+
+                     <td>
+                      <span>{{convention_ufp_daaf_entete.nbr_beneficiaire}}</span>
+                    </td>
+
+                     <td>
+                                
+                      <span>{{convention_ufp_daaf_entete.montant_convention}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </md-tab-body>
+          </md-tab>
+
+            <md-tab ng-disabled="vm.stepOne==false">
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==true">
+                      <i class="icon-check s16"></i>
+                  </span>
+                  <span class="ms-form-wizard-step-text">Detail</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body><br>
+
+            <fieldset class="standard" >
+                <legend><code>Autre</code></legend>
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptionsperso" ms-responsive-table>
+                    <thead>
+                      <tr>
+
+                          
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Delai</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Date signature</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Observation</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="convention_ufp_daaf_detail in vm.allconvention_ufp_daaf_detail"  ng-class="{selected: convention_ufp_daaf_detail.$selected}" ng-click="vm.selectionConvention_ufp_daaf_detail(convention_ufp_daaf_detail)">
+                       
+
+
+                        <td>                                    
+                          <span>{{convention_ufp_daaf_detail.delai}}</span>
+                        </td>
+                        
+
+                        <td>                                    
+                          <span>{{vm.formatDate(convention_ufp_daaf_detail.date_signature)}} mois</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{convention_ufp_daaf_detail.observation}}</span>
+                        </td>
+                 
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </fieldset><br>
+                
+            <fieldset class="standard" >
+                <legend><code>Compte</code></legend>
+                <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptionsperso" ms-responsive-table>
+                    <thead>
+                      <tr>
+
+                          <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Intitule</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Agence</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
+                            <span class="column-title">Compte</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="convention_ufp_daaf_detail in vm.allconvention_ufp_daaf_detail"  ng-class="{selected: convention_ufp_daaf_detail.$selected}" ng-click="vm.selectionConvention_ufp_daaf_detail(convention_ufp_daaf_detail)">
+                       
+
+                        <td>                                    
+                          <span>{{convention_ufp_daaf_detail.compte_daaf.intitule}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{convention_ufp_daaf_detail.compte_daaf.agence}}</span>
+                        </td>
+                   
+                        <td>                                    
+                          <span>{{convention_ufp_daaf_detail.compte_daaf.compte}}</span>
+                        </td>
+                 
+                      </tr>
+                    </tbody>
+                  </table>
+                </div> 
+            </fieldset><br>
+              </md-tab-body>
+            </md-tab>
+
+    <!-----debut convention_detail ------>
+
+          <md-tab ng-disabled="vm.stepOne==false">
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">c</span>
+                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
+                    <i class="icon-check s16"></i>
+                  </span>
+                  <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">
+                  <i class="icon-check s16"></i>
+                </span-->
+                  <span class="ms-form-wizard-step-text">Convention</span>
+              </span>
+            </md-tab-label>
+
+            <md-tab-body ms-form-wizard-form><br>
+
+              <div>        
+                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="ciscT in ::vm.convention_cisco_feffi_entete_column" style="min-width: 100px !important">
+                          <div class="table-header">
+                            <span class="column-title">{{ciscT.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                             
+                    <tbody>
+                      <tr ng-repeat="convention_cisco_feffi_entete in vm.allconvention_cisco_feffi_entete"  ng-class="{selected: convention_cisco_feffi_entete.$selected}" ng-click="vm.selectionConvention_cisco_feffi_entete(convention_cisco_feffi_entete)">
+
+                        <td>
+                          <span>{{convention_cisco_feffi_entete.cisco.code}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{convention_cisco_feffi_entete.feffi.denomination}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{convention_cisco_feffi_entete.ecole.description}}</span>
+                        </td>
+
+                        <!--td>
+                          <span>{{vm.affichage_type_convention(convention_cisco_feffi_entete.type_convention)}}</span>
+                        </td-->
+
+                        <td>                         
+                          <span>{{convention_cisco_feffi_entete.ref_convention}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{convention_cisco_feffi_entete.objet}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{convention_cisco_feffi_entete.ref_financement}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{convention_cisco_feffi_entete.montant_total}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{convention_cisco_feffi_entete.avancement}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{convention_cisco_feffi_entete.user.nom}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </md-tab-body>
+          </md-tab>
+          </md-tabs>
+        </ms-form-wizard>       
+                     
+      </div>
+      <!-- / convention -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

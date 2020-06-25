@@ -14,11 +14,11 @@
             'app.paeb.ddb.tranche_demande',
             'app.paeb.ddb.participant_formation_pr',
             'app.paeb.ddb.document',
-            'app.paeb.ddb.phase_sous_projets',
+            //'app.paeb.ddb.phase_sous_projets',
             'app.paeb.ddb.etape_sousprojet',
             'app.paeb.ddb.agence_acc',
             'app.paeb.ddb.zap',
-            'app.paeb.ddb.cadre_bordereau'
+            //'app.paeb.ddb.cadre_bordereau'
 
             ] ;
 

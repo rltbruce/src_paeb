@@ -331,7 +331,7 @@
           <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
                           
            <!----------------------------------------Debut document feffi --------------------------------------------------->
-                    <md-tab ng-click="vm.step_importerdocument_feffi()">
+                    <md-tab ng-click="vm.step_importerdocument_feffi()" ng-disabled="!vm.stepMenu_feffi">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
                               <span class="ms-form-wizard-step-text">Importer document</span>
@@ -2178,8 +2178,7 @@
                                 </md-tab-body>
                               </md-tab>
                         <!--------------------------------------FIN participant_sep ------------------------------------->         
-                              <md-tab>
-                              </md-tab>
+                              
                       <!---------------------convention cisco/feffi---------------->
                       
                             </md-tabs> 
@@ -2190,7 +2189,7 @@
                     </md-tab>                    
                     
                     <!-------------------------------Debut document moe -------------------------------------------->
-                    <md-tab ng-click="vm.step_importer_doc_pr()">
+                    <md-tab ng-click="vm.step_importer_doc_pr()" ng-disabled="!vm.stepdoc_pr">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
                               <span class="ms-form-wizard-step-text">Importer document</span>
@@ -3335,7 +3334,7 @@
                     </md-tab>
                     <!---------------------------------Avenant MOE-----------------------------------------------> 
                     <!-------------------------------Debut document moe -------------------------------------------->
-                    <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0" ng-click="vm.step_importerdocument_moe()">
+                    <md-tab ng-disabled="!vm.stepdoc_moe || vm.validation_contrat_moe==0" ng-click="vm.step_importerdocument_moe()">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
                               <span class="ms-form-wizard-step-text">Importer document</span>

@@ -30,7 +30,8 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.etape_sousprojet', {
             title: 'Etape sous projet',
             icon  : 'icon-clipboard-text',
-            state: 'app.paeb_ddb_etape_sousprojet'
+            state: 'app.paeb_ddb_etape_sousprojet',
+            weight: 12
 
         });
     }

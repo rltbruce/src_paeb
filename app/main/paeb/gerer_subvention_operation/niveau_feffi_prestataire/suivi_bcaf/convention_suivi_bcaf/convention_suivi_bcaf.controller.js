@@ -45,8 +45,10 @@
         vm.allconvention_entete = [] ;
        
         vm.stepMenu_pr=false;
+        vm.stepdoc_pr=false;
         vm.stepMenu_mpe=false;
         vm.stepMenu_moe=false;
+        vm.stepdoc_moe=false;
         vm.stepMenu_feffi=false;
         vm.steppiecefeffi=false;
         vm.steptransdaaf=false;
@@ -768,6 +770,8 @@
               vm.steppiecefeffi=false;
               vm.steptransdaaf=false;
               vm.stepprestaion_pr=false;
+            vm.stepdoc_pr=false;
+                vm.stepdoc_moe=false;
               vm.stepprestation_moe = false;
               vm.stepjusti_d_tra_moe = false;
               vm.stepsuiviexecution = false;
@@ -1616,6 +1620,7 @@
               }
               vm.validation_contrat_pr = item.validation;
               vm.stepprestaion_pr=true;
+              vm.stepdoc_pr=true;
               vm.permissionboutonvaliderformdpp = true;
               vm.permissionboutonvaliderformodc = true;
               vm.permissionboutonvaliderformgfpc = true;
@@ -5817,6 +5822,7 @@
                 {
                   vm.showbuttonValidationcontrat_pr = true;    
                 }
+            vm.stepdoc_moe=true;
             vm.showbuttonValidationcontrat_moe = true;
             vm.validation_contrat_moe = item.validation;
             vm.stepprestation_moe = true;

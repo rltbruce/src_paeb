@@ -30,7 +30,8 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.type_cout_divers', {
             title: 'Type coût divers',
             icon  : 'icon-tile-four',
-            state: 'app.paeb_ddb_type_cout_divers'
+            state: 'app.paeb_ddb_type_cout_divers',
+            weight: 11
         });
     }
 

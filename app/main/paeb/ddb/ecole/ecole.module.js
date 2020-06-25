@@ -31,7 +31,7 @@
             title: 'Ecole',
             icon  : 'icon-home-variant',
             state: 'app.paeb_ddb_ecole',
-            weight: 3
+            weight: 4
 
         });
     }

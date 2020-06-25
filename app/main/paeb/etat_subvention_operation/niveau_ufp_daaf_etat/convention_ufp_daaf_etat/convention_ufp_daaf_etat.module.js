@@ -3,40 +3,42 @@
     'use strict';
 
     angular
-        .module('app.paeb.gerer_subvention_operation.niveau_feffi_prestataire.suivi_bcaf.convention_suivi_obcaf', [])
+        .module('app.paeb.etat_subvention_operation.niveau_ufp_daaf_etat.convention_ufp_daaf_etat', [])
         .config(config);
-    var vs ;
+var vs;
     /** @ngInject */
     function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
     {
         // State
-        $stateProvider.state('app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_suivi_bcaf_convention_suivi_obcaf', {
-            url      : '/donnees-de-base/convention_suivi_obcaf',
+        $stateProvider.state('app.paeb_etat_subvention_operation_niveau_ufp_daaf_etat_convention_ufp_daaf_etat', {
+            url      : '/donnees-de-base/convention_ufp_daaf_etat',
             views    : {
                 'content@app': {
-                    templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_feffi_prestataire/suivi_bcaf/convention_suivi_obcaf/convention_suivi_obcaf.html',
-                    controller : 'Convention_suivi_obcafController as vm'
+                    templateUrl: 'app/main/paeb/etat_subvention_operation/niveau_ufp_daaf_etat/convention_ufp_daaf_etat/convention_ufp_daaf_etat.html',
+                    controller : 'Convention_ufp_daaf_etatController as vm'
                 }
             },
-            bodyClass: 'convention_suivi_obcaf',
+            bodyClass: 'convention_ufp_daaf_etat',
             data : {
               authorizer : true,
               permitted : ["USER","PERSONNEL","ADMIN"],
-              page: "convention_suivi_obcaf"
+              page: "convention_ufp_daaf_etat"
             }
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_feffi_prestataire.suivi_bcaf.convention_suivi_obcaf', {
-            title: 'Suivi convention (AAC)',
-            icon  : 'icon-keyboard-variant',
-            state: 'app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_suivi_bcaf_convention_suivi_obcaf',
-            weight: 1,
+        msNavigationServiceProvider.saveItem('paeb.etat_subvention_operation.niveau_ufp_daaf_etat.convention_ufp_daaf_etat', {
+            title: 'Validation convention',
+            icon  : 'icon-source-pull',
+            state: 'app.paeb_etat_subvention_operation_niveau_ufp_daaf_etat_convention_ufp_daaf_etat',
+            weight: 4,
             hidden: function()
             {
                     return vs;
             }
         });
+
+
 
     }
 
@@ -53,7 +55,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["ACC","ADMIN"];
+                var permissions = ["DAAF","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

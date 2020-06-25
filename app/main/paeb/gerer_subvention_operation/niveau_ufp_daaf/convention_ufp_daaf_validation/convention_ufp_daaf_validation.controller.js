@@ -435,10 +435,10 @@
         {titre:"Action"}];
 
   //recuperation donnée programmation
-        apiFactory.getAll("convention_ufp_daaf_detail/index").then(function(result)
+       /* apiFactory.getAll("convention_ufp_daaf_detail/index").then(function(result)
         {
             vm.allconvention_ufp_daaf_detail = result.data.response;
-        });
+        });*/
 
       //Masque de saisi ajout
         vm.ajouterConvention_ufp_daaf_detail = function ()

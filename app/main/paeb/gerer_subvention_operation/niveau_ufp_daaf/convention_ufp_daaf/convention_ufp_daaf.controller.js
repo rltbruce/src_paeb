@@ -802,7 +802,8 @@
                     .cancel('annuler');
               $mdDialog.show(confirm).then(function() {
                 insert_in_base_convention_cisco_feffi_entete(vm.selectedItemConvention_cisco_feffi_entete,0,1);
-     
+                
+        var NouvelItemConvention_cisco_feffi_entete = false;
               }, function() {
                 //alert('rien');
               });
@@ -916,7 +917,7 @@
                   var montant_trans = parseInt(vm.selectedItemConvention_ufp_daaf_entete.montant_trans_comm) - parseInt(convention_cisco_feffi_entete.montant_total);
                   var montant_conv = montant_trans + parseInt(vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire)
                   miseajourconvention_ufp_daaf_entete(vm.selectedItemConvention_ufp_daaf_entete,montant_trans,montant_conv);
-                  
+                  console.log(vm.allconvention_cisco_feffi_entete);
                 }
                 /*else
                 {

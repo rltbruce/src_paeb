@@ -71,6 +71,8 @@
         vm.stepattachement_latrine_travaux = false;
         vm.stepattachement_mobilier_travaux = false;
 
+        vm.stepjusti_trans_reliqua = false;
+
         vm.session = '';
 
 /*******************************************Debut maitrise d'oeuvre*************************************/

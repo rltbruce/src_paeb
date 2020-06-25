@@ -19,7 +19,7 @@
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.cout_subvention', {
             title : 'Cout subvention',
             icon  : 'icon-currency-usd',
-            weight: 9
+            weight: 11
         });
     }
 

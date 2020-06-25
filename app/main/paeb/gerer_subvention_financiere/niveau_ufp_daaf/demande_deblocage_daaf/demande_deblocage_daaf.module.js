@@ -66,7 +66,7 @@
     function insertiondemande_ufp_daaf_syst($cookieStore,apiFactory,$interval,loginService)
     {
                    
-          /*  apiFactory.getAll("count_avancement_travaux/index").then(function(result)
+            apiFactory.getAll("count_avancement_travaux/index").then(function(result)
             {
                 var allavan= result.data.response;
                 console.log(allavan);
@@ -79,7 +79,7 @@
                     {
                         var allavan= result.data.response;
                         console.log(allavan);
-                    });},15000) ;*/
+                    });},15000) ;
               
                 //**************************************************
 

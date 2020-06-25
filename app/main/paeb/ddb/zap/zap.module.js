@@ -28,10 +28,10 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.zap', {
-            title: 'zap',
+            title: 'ZAP',
             icon  : 'icon-school',
             state: 'app.paeb_ddb_zap',
-            weight: 2
+            weight: 3
         });
     }
 

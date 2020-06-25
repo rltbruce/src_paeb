@@ -260,9 +260,9 @@
                               <div ng-message="required"><span>Fichier</span></div>
                             </div>
                           </md-input-container>
-                        <!--/div>
+                        </div>
 
-                        <div-->
+                        <div>
                          <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_avenant_conv.$invalid" ng-click="vm.importer_avenant_conv()" style="width:10%;">
                                       Importer
                         </md-button>
@@ -493,7 +493,7 @@
     <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
 
     
-            <md-tab ng-disabled="vm.stepMenu_pr==false || vm.session=='ODAAF'" ng-click="vm.step_menu_pr()">
+            <md-tab ng-disabled="!vm.stepMenu_pr" ng-click="vm.step_menu_pr()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -587,7 +587,7 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_dpp()" style="width:10%;" ng-show="vm.showbuttonNouvformdpp">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_dpp()" style="width:10%;" ng-disabled="!vm.showbuttonNouvformdpp">
                                           Nouveau
                                         </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_module_dpp()" style="width:10%;" ng-show="vm.showbuttonimporter_module_dpp">
@@ -605,9 +605,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_module_dpp.$invalid" ng-click="vm.importer_module_dpp()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -788,7 +788,7 @@
                                   
                                   <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_dpp()" style="width:10%;" ng-show="vm.validation_formationdpp==0">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_dpp()" style="width:10%;" ng-disabled="vm.validation_formationdpp!=0">
                                           Nouveau
                                         </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_participant_dpp()" style="width:10%;" ng-show="vm.showbuttonimporter_participant_dpp">
@@ -806,9 +806,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_participant_dpp.$invalid" ng-click="vm.importer_participant_dpp()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -929,7 +929,7 @@
                                 
                                <md-tab-body>
                                   <div style="widht:100%;"> 
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_odc()" style="width:10%;" ng-show="vm.showbuttonNouvformodc">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_odc()" style="width:10%;" ng-disabled="!vm.showbuttonNouvformodc">
                                           Nouveau
                                         </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_module_odc()" style="width:10%;" ng-show="vm.showbuttonimporter_module_odc">
@@ -947,9 +947,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_module_odc.$invalid" ng-click="vm.importer_module_odc()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -1129,7 +1129,7 @@
                                   
                                   <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_odc()" style="width:10%;" ng-show="vm.validation_formationodc==0">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_odc()" style="width:10%;" ng-disabled="vm.validation_formationodc!=0">
                                           Nouveau
                                         </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_participant_odc()" style="width:10%;" ng-show="vm.showbuttonimporter_participant_odc">
@@ -1147,9 +1147,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_participant_odc.$invalid" ng-click="vm.importer_participant_odc()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -1266,7 +1266,7 @@
                               
                               <md-tab-body>
                                 <div style="widht:100%;">
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_emies()" style="width:10%;" ng-show="vm.showbuttonNouvformemies">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_emies()" style="width:10%;" ng-disabled="!vm.showbuttonNouvformemies">
                                           Nouveau
                                         </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_module_emies()" style="width:10%;" ng-show="vm.showbuttonimporter_module_emies">
@@ -1284,9 +1284,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_module_emies.$invalid" ng-click="vm.importer_module_emies()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -1465,7 +1465,7 @@
                                 
                                 <md-tab-body>
                                   <div style="widht:100%;">  
-                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_emies()" style="width:10%;" ng-show="vm.validation_formationemies==0">
+                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_emies()" style="width:10%;" ng-disabled="vm.validation_formationemies!=0">
                                         Nouveau
                                       </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_participant_emies()" style="width:10%;" ng-show="vm.showbuttonimporter_participant_emies">
@@ -1483,9 +1483,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_participant_emies.$invalid" ng-click="vm.importer_participant_emies()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -1603,7 +1603,7 @@
                               
                              <md-tab-body>
                                   <div style="widht:100%;">
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_gfpc()" style="width:10%;" ng-show="vm.showbuttonNouvformgfpc">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_gfpc()" style="width:10%;" ng-disabled="!vm.showbuttonNouvformgfpc">
                                           Nouveau
                                         </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_module_gfpc()" style="width:10%;" ng-show="vm.showbuttonimporter_module_gfpc">
@@ -1621,9 +1621,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_module_gfpc.$invalid" ng-click="vm.importer_module_gfpc()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -1802,7 +1802,7 @@
                                 
                                 <md-tab-body>
                                   <div style="widht:100%;">  
-                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_gfpc()" style="width:10%;"ng-show="vm.validation_formationgfpc==0">
+                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_gfpc()" style="width:10%;" ng-disabled="vm.validation_formationgfpc!=0">
                                         Nouveau
                                       </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_participant_gfpc()" style="width:10%;" ng-show="vm.showbuttonimporter_participant_gfpc">
@@ -1820,9 +1820,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_participant_gfpc.$invalid" ng-click="vm.importer_participant_gfpc()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -1939,7 +1939,7 @@
                               
                               <md-tab-body>
                                 <div style="widht:100%;">
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_pmc()" style="width:10%;" ng-show="vm.showbuttonNouvformpmc">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_pmc()" style="width:10%;" ng-disabled="!vm.showbuttonNouvformpmc">
                                           Nouveau
                                         </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_module_pmc()" style="width:10%;" ng-show="vm.showbuttonimporter_module_pmc">
@@ -1957,9 +1957,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_module_pmc.$invalid" ng-click="vm.importer_module_pmc()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -2138,7 +2138,7 @@
                                 
                                 <md-tab-body>
                                   <div style="widht:100%;">  
-                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_pmc()" style="width:10%;"ng-show="vm.validation_formationpmc==0">
+                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_pmc()" style="width:10%;" ng-disabled="vm.validation_formationpmc!=0">
                                         Nouveau
                                       </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_participant_pmc()" style="width:10%;" ng-show="vm.showbuttonimporter_participant_pmc">
@@ -2156,9 +2156,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_participant_pmc.$invalid" ng-click="vm.importer_participant_pmc()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -2274,7 +2274,7 @@
                               
                               <md-tab-body>
                                 <div style="widht:100%;">
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_sep()" style="width:10%;" ng-show="vm.showbuttonNouvformsep">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterModule_sep()" style="width:10%;" ng-disabled="!vm.showbuttonNouvformsep">
                                           Nouveau
                                         </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_module_sep()" style="width:10%;" ng-show="vm.showbuttonimporter_module_sep">
@@ -2292,9 +2292,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_module_sep.$invalid" ng-click="vm.importer_module_sep()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -2473,7 +2473,7 @@
                                   
                                   <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_sep()" style="width:10%;"ng-show="vm.validation_formationsep==0">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterParticipant_sep()" style="width:10%;" ng-disabled="vm.validation_formationsep!=0">
                                           Nouveau
                                         </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_participant_sep()" style="width:10%;" ng-show="vm.showbuttonimporter_participant_sep">
@@ -2491,9 +2491,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_participant_sep.$invalid" ng-click="vm.importer_participant_sep()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -2607,7 +2607,7 @@
                     </md-tab>                     
                     
                     <!-------------------------------Debut document moe -------------------------------------------->
-                    <md-tab ng-click="vm.step_importer_doc_pr()">
+                    <md-tab ng-click="vm.step_importer_doc_pr()" ng-disabled="!vm.stepdoc_pr">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
                               <span class="ms-form-wizard-step-text">Importer document</span>
@@ -2746,7 +2746,7 @@
             </md-tab>
 
             <!-----------------------DEBUT MAITRISE DOEUVRE------------------------------------>
-            <md-tab ng-disabled="vm.stepMenu_moe==false" ng-click="vm.step_menu_moe()">
+            <md-tab ng-disabled="!vm.stepMenu_moe" ng-click="vm.step_menu_moe()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -2777,7 +2777,7 @@
                       
                       <md-tab-body>
                           <div style="widht:100%;">  
-                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches_moe()" style="width:10%;" ng-show="vm.showbuttonNouvPassation_moe">
+                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches_moe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPassation_moe">
                                 Nouveau
                               </md-button>
                               <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_passation_moe()" style="width:10%;" ng-show="vm.showbuttonimporter_passation_moe">
@@ -2795,9 +2795,9 @@
                                         <div ng-message="required"><span>Fichier</span></div>
                                       </div>
                                     </md-input-container>
-                                  <!--/div>
+                                  </div>
 
-                                  <div-->
+                                  <div>
                                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_passation_moe.$invalid" ng-click="vm.importer_passation_moe()" style="width:10%;">
                                                 Importer
                                   </md-button>
@@ -2991,7 +2991,7 @@
                       
                       <md-tab-body>
                           <div style="widht:100%;">  
-                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterContrat_moe()" style="width:10%;"  ng-show="vm.showbuttonNouvcontrat_moe">
+                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterContrat_moe()" style="width:10%;"  ng-disabled="!vm.showbuttonNouvcontrat_moe">
                                 Nouveau
                               </md-button>
                               <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_moe()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_moe">
@@ -3009,9 +3009,9 @@
                                         <div ng-message="required"><span>Fichier</span></div>
                                       </div>
                                     </md-input-container>
-                                  <!--/div>
+                                  </div>
 
-                                  <div-->
+                                  <div>
                                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_contrat_moe.$invalid" ng-click="vm.importer_contrat_moe()" style="width:10%;">
                                                 Importer
                                   </md-button>
@@ -3152,7 +3152,7 @@
                                 
                                 <md-tab-body>
                                   <div style="widht:100%;">  
-                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterMemoire_technique()" style="width:10%;" ng-show="vm.showbuttonNouvMemoire_technique">
+                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterMemoire_technique()" style="width:10%;" ng-disabled="!vm.showbuttonNouvMemoire_technique">
                                         Nouveau
                                       </md-button>
                               <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_memoire_technique()" style="width:10%;" ng-show="vm.showbuttonimporter_memoire_technique">
@@ -3170,9 +3170,9 @@
                                         <div ng-message="required"><span>Fichier</span></div>
                                       </div>
                                     </md-input-container>
-                                  <!--/div>
+                                  </div>
 
-                                  <div-->
+                                  <div>
                                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_memoire_technique.$invalid" ng-click="vm.importer_memoire_technique()" style="width:10%;">
                                                 Importer
                                   </md-button>
@@ -3293,7 +3293,7 @@
                                   
                                    <md-tab-body>
                                       <div style="widht:100%;">  
-                                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAppel_offre()" style="width:10%;" ng-show="vm.showbuttonNouvAppel_offre">
+                                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAppel_offre()" style="width:10%;" ng-disabled="!vm.showbuttonNouvAppel_offre">
                                             Nouveau
                                           </md-button>
                                           <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_appel_offre()" style="width:10%;" ng-show="vm.showbuttonimporter_appel_offre">
@@ -3311,9 +3311,9 @@
                                                     <div ng-message="required"><span>Fichier</span></div>
                                                   </div>
                                                 </md-input-container>
-                                              <!--/div>
+                                              </div>
 
-                                              <div-->
+                                              <div>
                                                <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_appel_offre.$invalid" ng-click="vm.importer_appel_offre()" style="width:10%;">
                                                             Importer
                                               </md-button>
@@ -3440,7 +3440,7 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterRapport_mensuel()" style="width:10%;" ng-show="vm.showbuttonNouvRapport_mensuel">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterRapport_mensuel()" style="width:10%;" ng-disabled="!vm.showbuttonNouvRapport_mensuel">
                                           Nouveau
                                         </md-button>
                                           <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_rapport_mensuel()" style="width:10%;" ng-show="vm.showbuttonimporter_rapport_mensuel">
@@ -3458,9 +3458,9 @@
                                                     <div ng-message="required"><span>Fichier</span></div>
                                                   </div>
                                                 </md-input-container>
-                                              <!--/div>
+                                              </div>
 
-                                              <div-->
+                                              <div>
                                                <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_rapport_mensuel.$invalid" ng-click="vm.importer_rapport_mensuel()" style="width:10%;">
                                                             Importer
                                               </md-button>
@@ -3592,7 +3592,7 @@
                                   
                                   <md-tab-body>
                                       <div style="widht:100%;">  
-                                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterManuel_gestion()" style="width:10%;" ng-show="vm.showbuttonNouvManuel_gestion">
+                                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterManuel_gestion()" style="width:10%;" ng-disabled="!vm.showbuttonNouvManuel_gestion">
                                             Nouveau
                                           </md-button>
                                           <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_manuel_gestion()" style="width:10%;" ng-show="vm.showbuttonimporter_manuel_gestion">
@@ -3610,9 +3610,9 @@
                                                     <div ng-message="required"><span>Fichier</span></div>
                                                   </div>
                                                 </md-input-container>
-                                              <!--/div>
+                                              </div>
 
-                                              <div-->
+                                              <div>
                                                <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_manuel_gestion.$invalid" ng-click="vm.importer_manuel_gestion()" style="width:10%;">
                                                             Importer
                                               </md-button>
@@ -3725,7 +3725,7 @@
                               
                               <md-tab-body>
                                 <div style="widht:100%;">  
-                                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.ajouterPolice_assurance()" style="width:10%;" ng-show="vm.showbuttonNouvPolice_assurance">
+                                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.ajouterPolice_assurance()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPolice_assurance">
                                       Nouveau
                                     </md-button>
                                           <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_police_assurance()" style="width:10%;" ng-show="vm.showbuttonimporter_police_assurance">
@@ -3743,9 +3743,9 @@
                                                     <div ng-message="required"><span>Fichier</span></div>
                                                   </div>
                                                 </md-input-container>
-                                              <!--/div>
+                                              </div>
 
-                                              <div-->
+                                              <div>
                                                <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_police_assurance.$invalid" ng-click="vm.importer_police_assurance()" style="width:10%;">
                                                             Importer
                                               </md-button>
@@ -3948,7 +3948,7 @@
                     </md-tab>
                     <!---------------------------------Avenant MOE-----------------------------------------------> 
                     <!-------------------------------Debut document moe -------------------------------------------->
-                    <md-tab ng-click="vm.step_importerdocument_moe()" ng-disabled="vm.validation_contrat_moe==0">
+                    <md-tab ng-click="vm.step_importerdocument_moe()" ng-disabled="vm.validation_contrat_moe==0 || !vm.stepdoc_moe">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
                               <span class="ms-form-wizard-step-text">Importer document</span>
@@ -4119,7 +4119,7 @@
                       
                       <md-tab-body>
                           <div style="widht:100%;">  
-                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches()" style="width:10%;" ng-show="vm.showbuttonNouvPassation">
+                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPassation">
                                 Nouveau
                               </md-button>
                               <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_passation_mpe()" style="width:10%;" ng-show="vm.showbuttonimporter_passation_mpe">
@@ -4137,9 +4137,9 @@
                                         <div ng-message="required"><span>Fichier</span></div>
                                       </div>
                                     </md-input-container>
-                                  <!--/div>
+                                  </div>
 
-                                  <div-->
+                                  <div>
                                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_passation_mpe.$invalid" ng-click="vm.importer_passation_mpe()" style="width:10%;">
                                                 Importer
                                   </md-button>
@@ -4290,9 +4290,9 @@
 
                       </md-tab-body>
                     </md-tab>                    
-                    <!------------------------------------------------Fin Passation marches-------------------------------------------->
+                    <!-----------------------------------Fin Passation marches-------------------------------------------->
 
-                    <!------------------------------------------------MPE sousmissionnaire-------------------------------------------->
+                    <!-----------------------------------MPE sousmissionnaire-------------------------------------------->
                        <md-tab ng-disabled="!vm.stepsoumissionnaire">
                           <md-tab-label>
                             <span class="ms-form-wizard-step-label">
@@ -4302,7 +4302,7 @@
                           
                           <md-tab-body>
                             <div style="widht:100%;">  
-                                <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterMpe_soumissionaire()" style="width:10%;" ng-if="vm.validation_passation==0 && (vm.session=='OBCAF' || vm.session=='BCAF' || vm.session=='ADMIN')">
+                                <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterMpe_soumissionaire()" style="width:10%;" ng-disabled="vm.validation_passation!=0">
                                   Nouveau
                                 </md-button>
                                         <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_mpe_soumissionaire()" style="width:10%;" ng-show="vm.showbuttonimporter_mpe_soumissionaire">
@@ -4320,9 +4320,9 @@
                                                   <div ng-message="required"><span>Fichier</span></div>
                                                 </div>
                                               </md-input-container>
-                                            <!--/div>
+                                            </div>
 
-                                            <div-->
+                                            <div>
                                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_mpe_soumissionaire.$invalid" ng-click="vm.importer_mpe_soumissionaire()" style="width:10%;">
                                                           Importer
                                             </md-button>
@@ -4423,7 +4423,7 @@
                       
                       <md-tab-body>
                           <div style="widht:100%;">  
-                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterContrat_prestataire()" style="width:10%;" ng-show="vm.showbuttonNouvContrat_prestataire">
+                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterContrat_prestataire()" style="width:10%;" ng-disabled="!vm.showbuttonNouvContrat_prestataire">
                                 Nouveau
                               </md-button>
                               <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_mpe()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_mpe">
@@ -4441,9 +4441,9 @@
                                         <div ng-message="required"><span>Fichier</span></div>
                                       </div>
                                     </md-input-container>
-                                  <!--/div>
+                                  </div>
 
-                                  <div-->
+                                  <div>
                                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_contrat_mpe.$invalid" ng-click="vm.importer_contrat_mpe()" style="width:10%;">
                                                 Importer
                                   </md-button>
@@ -4829,7 +4829,7 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDelai_travaux()" style="width:10%;" ng-show="vm.showbuttonNouvDelai_travaux">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDelai_travaux()" style="width:10%;" ng-disabled="!vm.showbuttonNouvDelai_travaux">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -4920,7 +4920,7 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPhase_sous_projet()" style="width:10%;" ng-show="vm.showbuttonNouvPhase_sous_projet">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPhase_sous_projet()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPhase_sous_projet">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -4999,13 +4999,13 @@
                                         <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
                                           <i class="icon-check s16"></i>
                                         </span-->
-                                        <span class="ms-form-wizard-step-text">reception_mpe</span>
+                                        <span class="ms-form-wizard-step-text">reception mpe</span>
                                     </span>
                                   </md-tab-label>
                                   
                                   <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterReception_mpe()" style="width:10%;" ng-show="vm.showbuttonNouvReception_mpe">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterReception_mpe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvReception_mpe">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -5132,7 +5132,7 @@
                                     </div>
                                 </md-tab-body>
                               </md-tab>
-                  <!---------------------------------------------Debut avancement_batiment -------------------------------------------->
+                  <!---------------------------------Debut avancement_batiment -------------------------------------------->
                               <md-tab ng-click="vm.step_avancement_batiment()">
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
@@ -5145,7 +5145,7 @@
                                   
                                   <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvancement_batiment()" style="width:10%;" ng-show="vm.showbuttonNouvAvancement_batiment">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvancement_batiment()" style="width:10%;" ng-disabled="!vm.showbuttonNouvAvancement_batiment">
                                           Nouveau
                                         </md-button> <br>
                                     </div>
@@ -5245,8 +5245,8 @@
 
                                 </md-tab-body>
                               </md-tab>
-                  <!------------------------------------------FIN avancement_batiment ------------------------------------------------->
-                  <!---------------------------------------------Debut avancement_batiment -------------------------------------------->
+                  <!------------------------------FIN avancement_batiment ------------------------------------------------->
+                  <!----------------------------Debut avancement_batiment -------------------------------------------->
                               <md-tab ng-click="vm.step_avancement_latrine()">
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
@@ -5259,7 +5259,7 @@
                                   
                                   <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvancement_latrine()" style="width:10%;" ng-show="vm.showbuttonNouvAvancement_latrine">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvancement_latrine()" style="width:10%;" ng-disabled="!vm.showbuttonNouvAvancement_latrine">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -5359,8 +5359,8 @@
 
                                 </md-tab-body>
                               </md-tab>
-                  <!------------------------------------------FIN avancement_latrine ------------------------------------------------->
-                  <!---------------------------------------------Debut avancement_mobilier -------------------------------------------->
+                  <!------------------------------FIN avancement_latrine ------------------------------------------------->
+                  <!-------------------------------Debut avancement_mobilier -------------------------------------------->
                               <md-tab ng-disabled="vm.stepTwo==false" ng-click="vm.step_avancement_mobilier()">
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
@@ -5373,7 +5373,7 @@
                                   
                                   <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvancement_mobilier()" style="width:10%;" ng-show="vm.showbuttonNouvAvancement_mobilier">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvancement_mobilier()" style="width:10%;" ng-disabled="!vm.showbuttonNouvAvancement_mobilier">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -5473,7 +5473,7 @@
 
                                 </md-tab-body>
                               </md-tab>
-                  <!------------------------------------------FIN avancement_mobilier ------------------------------------------------->            
+                  <!--------------------------------FIN avancement_mobilier ---------------------------------------------->            
                             </md-tabs> 
                           </ms-form-wizard>               
                         </md-tab-body>
@@ -5491,7 +5491,7 @@
 
                       <md-tab-body>
                         <div style="widht:100%;">  
-                                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvenant_mpe()" style="width:10%;" ng-show="vm.showbuttonNouvavenant_mpe">
+                                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvenant_mpe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvavenant_mpe">
                                       Nouveau
                                     </md-button><br>
                                 </div>
@@ -5600,16 +5600,11 @@
                     <md-tab ng-disabled="vm.validation_contrat_prestataire==0" ng-click="vm.step_importerdocument_mpe()">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
-                              <span class="ms-form-wizard-step-text">Scan document</span>
+                              <span class="ms-form-wizard-step-text">Importer document</span>
                           </span>
                         </md-tab-label>
                         
-                        <md-tab-body>
-                          <div style="widht:100%;">  
-                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDocument_prestataire_scan()" style="width:10%;">
-                                Nouveau
-                              </md-button><br>
-                          </div><br>
+                        <md-tab-body><br>
                          <div>        
                           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                             <thead>
@@ -5754,7 +5749,7 @@
               
               <md-tab-body>
                 <div style="widht:100%;">  
-                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterIndicateur()" style="width:10%;" ng-show="vm.showbuttonNouvIndicateur">
+                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterIndicateur()" style="width:10%;" ng-disabled="!vm.showbuttonNouvIndicateur">
                                 Nouveau
                               </md-button><br>
                           </div>

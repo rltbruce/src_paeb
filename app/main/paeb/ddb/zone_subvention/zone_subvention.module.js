@@ -32,7 +32,7 @@
             icon  : 'icon-fullscreen',
 
             state: 'app.paeb_ddb_zone_subvention',
-            weight: 4
+            weight: 7
 
         });
     }
