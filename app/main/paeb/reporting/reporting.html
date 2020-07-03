@@ -1,0 +1,1395 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Reporting</span>                
+            </div>
+
+            <!--div class="title">Note agence d'accompagnement</div-->
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Convention -->
+      <div class="form-wrapper md-whiteframe-1dp" >
+        <div style="clear:both;"></div>            
+            <div style="float: top !important">
+              <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+              <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                      Chargement,veuillez patienter s'il vous plait ...
+              </div>
+            </div>
+
+       <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start" flex>
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Reporting</span>
+              </div>
+
+              <div>
+
+                <md-button class="md-icon-button" aria-label="add reporting" >
+                  <!--md-icon md-font-icon="icon-plus"></md-icon-->
+                  <!--md-tooltip><span>Ajout note</span></md-tooltip-->
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+        
+            <md-button type="submit" class="md-raised md-primary" aria-label="Enregistrer" ng-click="vm.afficherfiltre()" ng-show="vm.showboutonfiltre">
+                             Filtre
+            </md-button>
+          <div ng-show="vm.formfiltre">
+             <form name="filtreform" class="md-inline-form" novalidate >
+                  <br>
+                 <div layout="column" layout-gt-xs="row">
+                     <md-input-container>
+                      <span>Date du</span>
+                     </md-input-container>
+
+                     <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required>                     
+                     </md-datepicker>
+
+                     <md-input-container>
+                       <span>&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
+                    </md-input-container>
+
+                    <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
+                    </md-datepicker>
+                   </div>
+                   <div layout="column" layout-gt-xs="row">
+
+                     <md-input-container flex="100" flex-gt-xs="90">
+                       <label>Lot</label>
+                      <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                         <md-option value="1">Lot 1</md-option>
+                         <md-option value="2">Lot 2</md-option>
+                        <md-option value="3">Lot 3</md-option>
+                         <md-option value="4">Lot 4</md-option>
+                      </md-select>
+                       <div ng-messages="filtreform.lot.$error" role="alert">
+                        <div ng-message="required"><span>Lot</span></div>
+                      </div>
+                     </md-input-container>
+                    <md-input-container flex="100" flex-gt-xs="90">
+                       <label>Région</label>
+                      <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)">
+                        <md-option  value="*">*</md-option>
+                         <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
+                      </md-select>
+                       <div ng-messages="filtreform.region.$error" role="alert">
+                         <div ng-message="required"><span>Région</span></div>
+                       </div>
+                    </md-input-container>
+                                  
+                    <md-input-container flex="100" flex-gt-xs="90">
+                      <label>Cisco</label>
+                       <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
+                         <md-option  value="*">*</md-option>
+                         <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                                                  
+                        </md-select>
+                       <div ng-messages="filtreform.cisco.$error" role="alert">
+                         <div ng-message="required"><span>Cisco</span></div>
+                      </div>
+                    </md-input-container>
+                                  
+                     <md-input-container flex="100" flex-gt-xs="90">
+                      <label>Commune</label>
+                      <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
+                        <md-option  value="*">*</md-option>
+                         <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
+                      </md-select>
+                       <div ng-messages="filtreform.commune.$error" role="alert">
+                         <div ng-message="required"><span>Commune</span></div>
+                       </div>
+                     </md-input-container>
+                                  
+                     <md-input-container flex="100" flex-gt-xs="90">
+                       <label>Ecole</label>
+                      <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
+                         <md-option  value="*">*</md-option>
+                        <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.code}}
+                         </md-option>
+                       </md-select>
+                       <div ng-messages="filtreform.ecole.$error" role="alert">
+                         <div ng-message="required"><span>Ecole</span></div>
+                      </div>
+                    </md-input-container>
+                     <md-input-container flex="100" flex-gt-xs="90">
+                      <label>Convention</label>
+                       <md-select ng-model="vm.filtre.id_convention_entete" name="convention" ng-disabled="!vm.filtre.id_ecole">
+                         <md-option  value="*">*</md-option>
+                         <md-option ng-repeat="eco in vm.convention_cisco_feffi_entetes" value="{{eco.id}}"> {{eco.ref_convention}}
+                        </md-option>
+                      </md-select>  
+                      <div ng-messages="filtreform.convention_entete.$error" role="alert">
+                        <div ng-message="required"><span>Convention</span></div>
+                      </div>
+                    </md-input-container>
+                  </div>
+
+                  <div>
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                      ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
+                                      Recherche
+                   </md-button>
+                   <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                      ng-disabled="filtreform.$invalid" ng-click="vm.importerfiltre(vm.filtre)">
+                                      Exporter
+                   </md-button>
+                   <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
+                                  Annuler
+                   </md-button>
+                   </div>
+             </form>
+             <md-divider></md-divider><br>
+          </div>
+      <div class="simple-table-container md-whiteframe-4dp">
+
+          <table class="dataTable row-border hover cell-border text-center" dt-options="vm.dtOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="cisc in ::vm.reporting_column">
+                  <div class="table-header">
+                    <span class="column-title">{{cisc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody >
+
+              <tr>
+
+                <td rowSpan="2" colspan="6" style="background: rgb(190, 212, 237);">
+                  <span>DONNEES GLOBALES</span>
+                </td>
+                          
+                <td colspan="30" style="background: rgb(158, 173, 149);">
+                  <span>CONVENTION FEFFI</span>
+                </td>
+                          
+                <td colspan="83" style="background: rgb(128, 150, 189);">
+                  <span>PARTENAIRE RELAIS</span>
+                </td>       
+                <td  rowSpan="2" colspan="31" style="background: rgb(237, 124, 49);">
+                  <span>MAITRISE D'OEUVRE</span>
+                </td>       
+                <td colspan="60" style="background: rgb(79, 129, 189);">
+                  <span>ENTREPRISE</span>
+                </td>
+
+                <td colspan="4" style="background: rgb(146, 102, 227);">
+                  <span>GESTION RELIQUATS DE FONDS</span>
+                </td> 
+
+                <td colspan="17" style="background: rgb(245, 228, 191);">
+                  <span>INDICATEUR</span>
+                </td>
+
+              </tr>
+              <tr>
+
+                <!--td colspan="5">
+                  <span>DONNEES GLOBALES</span>
+                </td-->
+                          
+                <td colspan="11" style="background: rgb(191, 207, 182);">
+                  <span>ESTIMATION DE LA CONVENTION</span>
+                </td>          
+                <td colspan="11" style="background: rgb(191, 207, 182);">                         
+                  <span>SUIVI FINANCIER DAAF FEFFI</span>
+                </td>
+                          
+                <td colspan="3" style="background: rgb(191, 207, 182);">                            
+                  <span>SUIVI FINANCIER FEFFI -PRESTATAIRE</span>
+                </td>
+                          
+                <td colspan="3" style="background: rgb(191, 207, 182);">                            
+                  <span>SUIVI FINANCIER FEFFI FONCTIONNEMENT</span>
+                </td>
+                          
+                <td style="background: rgb(191, 207, 182);">                            
+                  <span>TOTAL CONVENTION DECAISSEE</span>
+                </td>
+
+                          
+                <td style="background: rgb(191, 207, 182);">                            
+                  <span>Reliquat des fonds</span>
+                </td>
+
+                <td colspan="9" style="background: rgb(153, 171, 204);">                            
+                  <span>Suivi Passation des marchés PR</span>
+                </td>
+                <td colspan="2" style="background: rgb(153, 171, 204);">                            
+                  <span></span>
+                </td>                
+                <td colspan="72" style="background: rgb(153, 171, 204);">                            
+                  <span>Suivi Prestation par PR</span>
+                </td> 
+
+                <td colspan="20" style="background: rgb(94, 153, 189);">                            
+                  <span> Passation des marchés</span>
+                </td>                
+                <td colspan="16" style="background: rgb(94, 153, 189);">                            
+                  <span>Suivi de l'exécution de chaque contrat des travaux</span>
+                </td>                
+                <td colspan="24" style="background: rgb(94, 153, 189);">                            
+                  <span>Suivi de paiement de chaque contrat des travaux</span>
+                </td>
+
+
+                <td rowSpan="3" style="background: rgb(176, 141, 242);">                            
+                  <span>Montant du reliquat de fonds</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(176, 141, 242);">                            
+                  <span>Objet de l'utilisation du reliquat</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(176, 141, 242);">                            
+                  <span>Situation de l'utilisation du reliquat</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(176, 141, 242);">                            
+                  <span>OBSERVATIONS</span>
+                </td>
+
+                                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>Prevision nombre de salles de classe construites</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>Nombre de salles de classe construites</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>Prevision Bénéficiaires directs du programme deconstruction (nombre)</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>Bénéficiaires directs du programme de construction (nombre)</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>Prevision Nombre d'Ecoles construites</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>Nombre d'Ecoles construites</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>Prévision nombre de box de latrine</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>Réalisation box de latrine</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>Prevision Nombre de systèmes de point d'Eau installé</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>Nombre de système de point d'eau  installé</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>PREVISION NOMBRE TABLES BANC </span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>REALISATION NOMBRE TABLES BANC </span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>PREVISION NOMBRE TABLES DU MAITRE </span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>REALISATION NOMBRE TABLES DU MAITRE</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>PREVISION NOMBRE CHAISE DU MAITRE</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>REALISATION NOMBRE CHAISE DU MAITRE</span>
+                </td>                
+                <td rowSpan="3" style="background: rgb(255, 242, 204);">                            
+                  <span>OBSERVATIONS SUR LES INDICATEURS</span>
+                </td>
+
+              </tr>
+
+              <tr>
+          <!--------------------- DONNEES GLOBALES ----------------->             
+                <td rowSpan="2" style="background: rgb(220, 230, 241);"><span>AGENCE</span></td>          
+                <td rowSpan="2" style="background: rgb(220, 230, 241);"><span>ECOLE</span></td>          
+                <td rowSpan="2" style="background: rgb(220, 230, 241);"><span>COMMUNE</span></td>
+                <td rowSpan="2" style="background: rgb(220, 230, 241);"><span>CISCO</span></td>
+                <td rowSpan="2" style="background: rgb(220, 230, 241);"><span>REGION</span></td>
+                <td rowSpan="2" style="background: rgb(220, 230, 241);"><span>TYPE CONVENTION</span></td>
+          <!--------------------- DONNEES GLOBALES ----------------->
+          
+          <!--------------------- CONVENTION FEFFI ----------------->                
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>NOM FEFFI</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Date de signature</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Bâtiment</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Latrine</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Mobilier scolaire</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Maitrise d'œuvre</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Sous total Dépenses TAVAUX</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Frais de fonctionnement FEFF</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Montant convention</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>AVENANT A LA CONVENTION</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>MONTANT CONVENTION APRES AVENANT</span></td> 
+
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Montant 1ère tranche</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Date d'approbation 1ère tranche</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Montant 2ème tranche</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Date d'approbation 2ème tranche</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Montant 3ème tranche</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Date d'approbation 3ème tranche</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Montant 4ème tranche</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Date d'approbation 4ème tranche</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Total</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>% décaissement</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>OBSERVATIONS</span></td>
+
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Montant décaissé</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>% décaissement</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>OBSERVATIONS</span></td>
+
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>Montant décaissé</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>% décaissement</span></td>                         
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>OBSERVATIONS</span></td>
+
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>MONTANT</span></td>                          
+                <td rowSpan="2" style="background: rgb(226, 239, 218);"><span>MONTANT</span></td>
+          <!--------------------- CONVENTION FEFFI ----------------->
+
+
+          <!--------------------- PARTENAIRE RELAIS ----------------->                          
+                <td rowSpan="2" style="background: rgb(180, 198, 231);"><span>Appel manifestation</span></td>                          
+                <td rowSpan="2" style="background: rgb(180, 198, 231);"><span>Lancement D.P.</span></td>                          
+                <td rowSpan="2" style="background: rgb(180, 198, 231);"><span>Remise proposition</span></td>                          
+                <td rowSpan="2" style="background: rgb(180, 198, 231);"><span>Nbre plis reçu</span></td>                          
+                <td rowSpan="2" style="background: rgb(180, 198, 231);"><span>Date O.S. commencement</span></td>                          
+                <td rowSpan="2" style="background: rgb(180, 198, 231);"><span>Nom du Consultant</span></td>                          
+                <td rowSpan="2" style="background: rgb(180, 198, 231);"><span>Montant contrat</span></td>                          
+                <td rowSpan="2" style="background: rgb(180, 198, 231);"><span>Cumul paiement</span></td>                          
+                <td rowSpan="2" style="background: rgb(180, 198, 231);"><span>% paiement</span></td>
+
+                <td rowSpan="2" style="background: rgb(180, 198, 231);"><span>Avenant contrat PR</span></td>                          
+                <td rowSpan="2" style="background: rgb(180, 198, 231);"><span>Montant contrat après avenant</span></td>
+
+                <td colspan="12" style="background: rgb(180, 198, 231);"><span>MODULE DPP</span></td>                          
+                <td colspan="12" style="background: rgb(180, 198, 231);"><span>MODULE ODC</span></td>                          
+                <td colspan="12" style="background: rgb(180, 198, 231);"><span>MODULE PMC</span></td>                          
+                <td colspan="12" style="background: rgb(180, 198, 231);"><span>MODULE GFPC</span></td>                          
+                <td colspan="12" style="background: rgb(180, 198, 231);"><span>MODULE SEP</span></td>                          
+                <td colspan="12" style="background: rgb(180, 198, 231);"><span>MODULE EMIES</span></td> 
+          <!--------------------- PARTENAIRE RELAIS ----------------->
+
+
+          <!--------------------- MAITRISE D'OEUVRE ----------------->                          
+                <td colspan="18" style="background: rgb(250, 143, 72);"><span>Passation des marchés BE</span></td>                         
+                <td colspan="10" style="background: rgb(250, 143, 72);"><span>Suivi préstation BE</span></td>                          
+                <td colspan="2" style="background: rgb(250, 143, 72);"><span>Suivi paiement</span></td>                          
+                <td rowSpan="2" style="background: rgb(250, 143, 72);"><span>DATE D'EXPIRATION POLICE D'ASSURANCE BE</span></td>    
+          <!--------------------- MAITRISE D'OEUVRE ----------------->
+          <!--------------------- ENTREPRISE ----------------->                         
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>Date lancement de l'Appel d'Offres de travaux</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>Date remise des Offres</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>Nombre offres recues</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>MPE soumissionaires (liste)</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>Montant TTC offre moins chere</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>Datte rapport d'évaluation</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>Demande ANO DPFI</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>ANO DPFI</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>Notification d'intention</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>Date notification d'attribution</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>Date signature contrat de travaux</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>Date OS</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>Titulaire des travaux</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>OBSERVATIONS</span></td> 
+
+
+                <td colspan="6" style="background: rgb(151, 200, 230);"><span>Montant contrat</span></td>
+                <td colspan="4" style="background: rgb(151, 200, 230);"><span></span></td>
+                <td colspan="11" style="background: rgb(151, 200, 230);"><span>Réception</span></td>                           
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>SUIVI DATE D'EXPIRATION POLICE D'ASSURANCE MPE</span></td> 
+
+                <td colspan="2" style="background: rgb(151, 200, 230);"><span>Premier paiement</span></td>
+                <td colspan="2" style="background: rgb(151, 200, 230);"><span>Deuxième paiement</span></td>
+                <td colspan="2" style="background: rgb(151, 200, 230);"><span>Troisième paiement</span></td>
+                <td colspan="2" style="background: rgb(151, 200, 230);"><span>Quatrième paiement</span></td>
+                <td colspan="2" style="background: rgb(151, 200, 230);"><span>Cinquième paiement</span></td>
+                <td colspan="2" style="background: rgb(151, 200, 230);"><span>Sixième paiement</span></td>
+                <td colspan="2" style="background: rgb(151, 200, 230);"><span>Septième paiement</span></td>
+                <td colspan="2" style="background: rgb(151, 200, 230);"><span>Huitème paiement</span></td>
+                <td colspan="2" style="background: rgb(151, 200, 230);"><span>Neuvième paiement</span></td>
+                <td colspan="2" style="background: rgb(151, 200, 230);"><span>Dixième paiement</span></td>
+
+
+                <td colspan="3" style="background: rgb(151, 200, 230);"><span>Taux d'avancement financier (%)</span></td>
+
+                <td rowSpan="2" style="background: rgb(151, 200, 230);"><span>Observation</span></td>  
+
+          <!--------------------- ENTREPRISE ----------------->
+              </tr>
+              <tr>
+                <td style="background: rgb(180, 198, 231);"><span>Date début prévisionnelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date fin prévisionnelle formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date prévisionnelle de la restitution</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date début réelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date fin réelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date réelle de restitution</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre prévisionnel participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre de participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre prévisionnel de femme participant</span></td>                           
+                <td style="background: rgb(180, 198, 231);"><span>Nombre réel de femme  participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Lieu de formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>observations</span></td> 
+
+                <td style="background: rgb(180, 198, 231);"><span>Date début prévisionnelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date fin prévisionnelle formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date prévisionnelle de la restitution</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date début réelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date fin réelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date réelle de restitution</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre prévisionnel participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre de participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre prévisionnel de femme participant</span></td>                           
+                <td style="background: rgb(180, 198, 231);"><span>Nombre réel de femme  participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Lieu de formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>observations</span></td> 
+                                         
+                <td style="background: rgb(180, 198, 231);"><span>Date début prévisionnelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date fin prévisionnelle formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date prévisionnelle de la restitution</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date début réelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date fin réelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date réelle de restitution</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre prévisionnel participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre de participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre prévisionnel de femme participant</span></td>                           
+                <td style="background: rgb(180, 198, 231);"><span>Nombre réel de femme  participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Lieu de formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>observations</span></td>  
+                                         
+                <td style="background: rgb(180, 198, 231);"><span>Date début prévisionnelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date fin prévisionnelle formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date prévisionnelle de la restitution</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date début réelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date fin réelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date réelle de restitution</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre prévisionnel participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre de participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre prévisionnel de femme participant</span></td>                           
+                <td style="background: rgb(180, 198, 231);"><span>Nombre réel de femme  participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Lieu de formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>observations</span></td>  
+                                         
+                <td style="background: rgb(180, 198, 231);"><span>Date début prévisionnelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date fin prévisionnelle formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date prévisionnelle de la restitution</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date début réelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date fin réelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date réelle de restitution</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre prévisionnel participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre de participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre prévisionnel de femme participant</span></td>                           
+                <td style="background: rgb(180, 198, 231);"><span>Nombre réel de femme  participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Lieu de formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>observations</span></td>  
+                                         
+                <td style="background: rgb(180, 198, 231);"><span>Date début prévisionnelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date fin prévisionnelle formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date prévisionnelle de la restitution</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date début réelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date fin réelle de la formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Date réelle de restitution</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre prévisionnel participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre de participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Nombre prévisionnel de femme participant</span></td>                           
+                <td style="background: rgb(180, 198, 231);"><span>Nombre réel de femme  participant</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>Lieu de formation</span></td>                          
+                <td style="background: rgb(180, 198, 231);"><span>observations</span></td>  
+          <!--------------------- PARTENAIRE RELAIS ----------------->
+
+
+          <!--------------------- MAITRISE D'OEUVRE ----------------->
+                <td style="background: rgb(250, 167, 112);"><span>Date établissement shortlist</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Appel à manifestation d'interêt</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Lancement D.P.</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Remise proposition</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Nbre plis reçu</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Date du rapport d'évaluation</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Date demande ANO DPFI</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>DANO DPFI</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Notification d'intention</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Notification d'attribution</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Date signature de contrat</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Date O.S. commencement</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Raison sociale ou nom Consultant</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Statut (BE/CI)</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Montant contrat </span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Avenant</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Montant après avenant</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Observations</span></td>
+
+                <td style="background: rgb(250, 167, 112);"><span>Livraison Mémoire technique (MT)</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Date d'approbation MT par FEFFI</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Date livraison DAO</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Date d'approbation DAO par FEFFI</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Livraison Rapport mensuel 01</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Livraison Rapport mensuel 02</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Livraison Rapport mensuel 03</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Livraison Rapport mensuel 04</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>Livraison manuel de gestion et d'entretien</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>observations</span></td>
+
+                <td style="background: rgb(250, 167, 112);"><span>Cumul Paiement effectué</span></td>
+                <td style="background: rgb(250, 167, 112);"><span>% paiement</span></td> 
+          <!--------------------- MAITRISE D'OEUVRE ----------------->
+
+
+          <!--------------------- ENTREPRISE ----------------->
+                <td style="background: rgb(151, 200, 230);"><span>bloc  de 2 sdc</span></td>
+                <td style="background: rgb(151, 200, 230);"><span> latrines</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Mobiliers</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Montant total</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Avenant</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Montant après avenant</span></td>
+
+                <td style="background: rgb(151, 200, 230);"><span>Phase du sous-projet</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Date prévisionnelle début travaux</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Date réelle début travaux</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Délai d'exécution (jours)</span></td>
+
+                <td style="background: rgb(151, 200, 230);"><span>Date prévisionnelle réception technique</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Date réeelle  réception technique</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Date levée des réserves de la réception technique</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Date ptévisionnelle reception provisoire</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Date réelle reception provisoire</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Date prévisionnelle de levee des reserves avant RD</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Date réelle de levee des reserves avant RD</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Dateprévisionnelle  reception définitive</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Date réelle  reception définitive</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Avancement physique</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Observations</span></td>
+
+                <td style="background: rgb(151, 200, 230);"><span>Date d'approbation</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>montant en Ar</span></td>
+
+                <td style="background: rgb(151, 200, 230);"><span>Date d'approbation</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>montant en Ar</span></td>
+                
+                <td style="background: rgb(151, 200, 230);"><span>Date d'approbation</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>montant en Ar</span></td>
+                
+                <td style="background: rgb(151, 200, 230);"><span>Date d'approbation</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>montant en Ar</span></td>
+                
+                <td style="background: rgb(151, 200, 230);"><span>Date d'approbation</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>montant en Ar</span></td>
+                
+                <td style="background: rgb(151, 200, 230);"><span>Date d'approbation</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>montant en Ar</span></td>
+                
+                <td style="background: rgb(151, 200, 230);"><span>Date d'approbation</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>montant en Ar</span></td>
+                
+                <td style="background: rgb(151, 200, 230);"><span>Date d'approbation</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>montant en Ar</span></td>
+                
+                <td style="background: rgb(151, 200, 230);"><span>Date d'approbation</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>montant en Ar</span></td>
+                
+                <td style="background: rgb(151, 200, 230);"><span>Date d'approbation</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>montant en Ar</span></td>
+
+                <td style="background: rgb(151, 200, 230);"><span>Anterieur</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Période</span></td>
+                <td style="background: rgb(151, 200, 230);"><span>Cumulé</span></td>
+
+          <!--------------------- ENTREPRISE ----------------->
+              </tr>
+              <tr ng-if="!vm.datafound">
+                <td colspan="6">No data available in table
+                  
+                </td>
+                <td colspan="30">No data available in table
+                  
+                </td>
+
+                <td colspan="83">No data available in table
+                  
+                </td>
+                <td colspan="31">No data available in table
+                  
+                </td>
+                <td colspan="60">No data available in table
+                  
+                </td>
+                <td colspan="4">No data available in table
+                  
+                </td>
+                <td colspan="17">No data available in table
+                  
+                </td>
+              </tr>
+              <tr ng-repeat="reporting in vm.allreporting" ng-if="vm.datafound">
+
+                <td>
+                  <span>{{reporting.nom_agence}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nom_ecole}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nom_commune}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nom_cisco}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nom_region}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.type_convention}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.nom_feffi}}</span>
+                </td>                
+                <td>
+                  <span>{{reporting.date_signature_convention}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.cout_batiment}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.cout_latrine}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.cout_mobilier}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.cout_maitrise}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.soustotaldepense}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.cout_sousprojet}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.montant_convention}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.cout_avenant}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.montant_apres_avenant}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.transfert_tranche1}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_approbation1}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.transfert_tranche2}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_approbation2}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.transfert_tranche3}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_approbation3}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.transfert_tranche4}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_approbation4}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.total_transfert}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.decaissement_transfert}}</span>
+                </td>
+                <td>
+                  <span>{{}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.montant_decaiss_feffi_pre}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.pourcentage_decaiss_feffi_pre}}</span>
+                </td>
+                <td>
+                  <span>{{}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.montant_decaiss_fonct_feffi}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.pourcentage_decaiss_fonct_feffi}}</span>
+                </td>
+                <td>
+                  <span>{{}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.total_convention_decaiss}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.reliqua_fond}}</span>
+                </td>
+
+
+
+                <td>
+                  <span>{{reporting.date_manifestation_pr}}</span>
+                </td>
+
+
+                <td>
+                  <span>{{reporting.date_lancement_dp_pr}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.date_remise_pr}}</span>
+                </td>
+                           <td>
+                  <span>{{reporting.nbr_offre_recu_pr}}</span>
+                </td>
+                              <td>
+                  <span>{{reporting.date_os_pr }}</span>
+                </td>
+                       <td>
+                  <span>{{reporting.nom_pr}}</span>
+                </td>
+                   <td>
+                  <span>{{reporting.montant_contrat_pr}}</span>
+                </td>
+                <td>
+                  <span>{{}}</span>
+                </td>
+                <td>
+                  <span>{{}}</span>
+                </td>
+                <td>
+                  <span>{{}}</span>
+                </td>
+                <td>
+                  <span>{{}}</span>
+                </td>
+
+
+                <td>
+                  <span>{{reporting.date_debut_previ_form_dpp_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_fin_previ_form_dpp_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_previ_resti_dpp_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_debut_reel_form_dpp_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_fin_reel_form_dpp_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_reel_resti_dpp_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_previ_parti_dpp_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_parti_dpp_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_previ_fem_parti_dpp_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_reel_fem_parti_dpp_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.lieu_formation_dpp_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.observation_dpp_pr}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.date_debut_previ_form_odc_pr}}</span>
+                </td>
+                 <td>
+                  <span>{{reporting.date_fin_previ_form_odc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_previ_resti_odc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_debut_reel_form_odc_pr}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.date_fin_reel_form_odc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_reel_resti_odc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_previ_parti_odc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_parti_odc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_previ_fem_parti_odc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_reel_fem_parti_odc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.lieu_formation_odc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.observation_odc_pr}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.date_debut_previ_form_pmc_pr}}</span>
+                </td>
+                 <td>
+                  <span>{{reporting.date_fin_previ_form_pmc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_previ_resti_pmc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_debut_reel_form_pmc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_fin_reel_form_pmc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_reel_resti_pmc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_previ_parti_pmc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_parti_pmc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_previ_fem_parti_pmc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_reel_fem_parti_pmc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.lieu_formation_pmc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.observation_pmc_pr}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.date_debut_previ_form_gfpc_pr}}</span>
+                </td>
+                 <td>
+                  <span>{{reporting.date_fin_previ_form_gfpc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_previ_resti_gfpc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_debut_reel_form_gfpc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_fin_reel_form_gfpc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_reel_resti_gfpc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_previ_parti_gfpc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_parti_gfpc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_previ_fem_parti_gfpc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_reel_fem_parti_gfpc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.lieu_formation_gfpc_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.observation_gfpc_pr}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.date_debut_previ_form_sep_pr}}</span>
+                </td>
+                 <td>
+                  <span>{{reporting.date_fin_previ_form_sep_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_previ_resti_sep_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_debut_reel_form_sep_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_fin_reel_form_sep_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_reel_resti_sep_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_previ_parti_sep_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_parti_sep_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_previ_fem_parti_sep_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_reel_fem_parti_sep_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.lieu_formation_sep_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.observation_sep_pr}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.date_debut_previ_form_emies_pr}}</span>
+                </td>
+                 <td>
+                  <span>{{reporting.date_fin_previ_form_emies_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_previ_resti_emies_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_debut_reel_form_emies_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_fin_reel_form_emies_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_reel_resti_emies_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_previ_parti_emies_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_parti_emies_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_previ_fem_parti_emies_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_reel_fem_parti_emies_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.lieu_formation_emies_pr}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.observation_emies_pr}}</span>
+                </td>
+
+
+                 <td>
+                  <span>{{reporting.date_shortlist_moe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_manifestation_moe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_lancement_dp_moe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_remise_moe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_offre_recu_moe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_rapport_evaluation_moe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_demande_ano_dpfi_moe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_ano_dpfi_moe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.notification_intention_moe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_notification_attribution_moe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_signature_contrat_moe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_os_moe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nom_bureau_etude_moe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.statut_moe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.montant_contrat_moe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.montant_avenant_moe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.montant_apres_avenant_moe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.observation_moe}}</span>
+                </td>
+
+
+                <td>
+                  <span>{{reporting.date_livraison_mt}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_approbation_mt}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_livraison_dao}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_approbation_dao}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_livraison_rp1}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_livraison_rp2}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_livraison_rp3}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_livraison_rp4}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_livraison_mg}}</span>
+                </td>                
+                <td>
+                  <span>{{}}</span>
+                </td>
+
+
+                <td>
+                  <span>{{reporting.cumule_paiement_be}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.pourcentage_paiement_be}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_expiration_poli_moe}}</span>
+                </td>
+
+                <td>
+                  <span>{{reporting.date_lancement_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.date_remise_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.nbr_mpe_soumissionaire_pme}}</span>
+                </td> 
+                
+                <td>
+                  <span>{{reporting.nbr_mpe_soumissionaire_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.montant_moin_chere_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.date_rapport_evaluation_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.date_demande_ano_dpfi_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.date_ano_dpfi_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.notification_intention_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.date_notification_attribution_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.date_signature_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.date_os_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.nom_prestataire}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.observation_passation_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.cout_batiment_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.cout_latrine_pme}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.cout_mobilier_pme}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.montant_total_mpe}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.avenant_mpe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.montant_apres_avenant}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.phase_sousprojet_mpe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_prev_debu_travau_mpe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_reel_debu_travau_mpe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.delai_execution_mpe}}</span>
+                </td>
+
+
+                <td>
+                  <span>{{reporting.date_previ_recep_tech_mpe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_reel_tech_mpe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_leve_recep_tech_mpe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_previ_recep_prov_mpe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_reel_recep_prov_mpe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_previ_leve_mpe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_reel_lev_ava_rd_mpe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_previ_recep_defi_mpe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_reel_recep_defi_mpe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.avancement_physique}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.observation_recep_mpe}}</span>
+                </td>
+
+
+                <td>
+                  <span>{{reporting.date_expiration_police_mpe}}</span>
+                </td> 
+
+
+                <td>
+                  <span>{{reporting.date_approbation_mpe1}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.montant_paiement_mpe1}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_approbation_mpe2}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.montant_paiement_mpe2}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_approbation_mpe3}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.montant_paiement_mpe3}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_approbation_mpe4}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.montant_paiement_mpe4}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_approbation_mpe5}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.montant_paiement_mpe5}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_approbation_mpe6}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.montant_paiement_mpe6}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_approbation_mpe7}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.montant_paiement_mpe7}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_approbation_mpe8}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.montant_paiement_mpe8}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.date_approbation_mpe9}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.montant_paiement_mpe9}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.date_approbation_mpe10}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.montant_paiement_mpe10}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.anterieur_mpe}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.periode_mpe}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.cumul_mpe}}</span>
+                </td>                               
+                <td>
+                  <span>{{}}</span>
+                </td> 
+
+                <td>
+                  <span>{{reporting.montant_transfert_reliquat}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.objet_utilisation_reliquat}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.situation_utilisation_reliquat}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.observation_reliquat}}</span>
+                </td>
+
+
+                <td>
+                  <span>{{reporting.prev_nbr_salle}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_salle_const_indicateur}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.prev_beneficiaire}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.nbr_beneficiaire_indicateur}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.prev_nbr_ecole}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.nbr_ecole_indicateur}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.prev_nbr_box_latrine}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_box_indicateur}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.prev_nbr_point_eau}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.nbr_point_eau_indicateur}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.prev_nbr_table_banc}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.nbr_banc_indicateur}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.prev_nbr_table_maitre}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nbr_table_maitre_indicateur}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.prev_nbr_chaise_maitre}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.nbr_chaise_indicateur}}</span>
+                </td> 
+                <td>
+                  <span>{{reporting.observation_indicateur}}</span>
+                </td>   
+
+              </tr>
+            </tbody>
+          </table>       
+         </div>            
+      </div>
+      <!-- / convention -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

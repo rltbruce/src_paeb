@@ -51,10 +51,12 @@
         vm.steppiecefeffi=false;
         vm.steptransdaaf=false;
         vm.stepprestaion_pr=false;
+        vm.stepimporte_pr = false;
         vm.stepprestation_moe = false;
 
         vm.stepsuiviexecution = false;
         vm.stepphase = false;
+        vm.step_importer_doc_mpe = false;
 
         vm.stepjusti_d_tra_moe = false;
 
@@ -76,7 +78,7 @@
         
 
         var NouvelItemDocument_feffi_scan=false;
-        var currentItemDocument_feffi_scan;
+        
         vm.selectedItemDocument_feffi_scan = {} ;
         vm.alldocument_feffi_scan = [] ;
 
@@ -142,7 +144,7 @@
 /*********************************************Fin partenaire relai*************************************/
 
 /*******************************************Debut maitrise d'oeuvre*************************************/
-
+        vm.step_importer_doc_moe = false;
         vm.selectedItemPassation_marches_moe = {} ;
         vm.allpassation_marches_moe = [] ;
 
@@ -406,8 +408,11 @@
            // vm.allconvention= [] ;
             
             vm.showbuttonNouvContrat_prestataire=true;
+            vm.stepMenu_pr=true;
+            vm.stepMenu_moe=true;
+            vm.stepMenu_mpe=true;
            
-            donnee_menu_pr(item,vm.session).then(function (result) 
+            /*donnee_menu_pr(item,vm.session).then(function (result) 
             {
                     // On récupère le resultat de la requête dans la varible "response"                    
                 vm.stepMenu_pr=true;
@@ -424,7 +429,7 @@
                     // On récupère le resultat de la requête dans la varible "response"                    
                 vm.stepMenu_mpe=true;
                 console.log(vm.stepMenu_mpe);  
-            });
+            });*/
 
             donnee_sousmenu_feffi(item,vm.session).then(function () 
             {
@@ -449,6 +454,7 @@
               vm.steppiecefeffi=false;
               vm.steptransdaaf=false;
               vm.stepprestaion_pr=false;
+              vm.stepimporte_pr = false;
               vm.stepprestation_moe = false;
               vm.stepjusti_d_tra_moe = false;
               vm.stepsuiviexecution = false;
@@ -468,7 +474,59 @@
              });
              vm.selectedItemConvention_entete.$selected = true;
         });
-        function donnee_menu_pr(item,session)
+        vm.step_menu_pr = function()
+        {
+            return new Promise(function (resolve, reject)
+            {
+                apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                        vm.allcontrat_partenaire_relai = result.data.response;
+                        console.log(vm.allcontrat_partenaire_relai);
+                        return resolve('ok');
+                }); 
+                vm.styleTabfils = "acc_sous_menu";
+                vm.stepimporte_pr = false;
+                vm.stepprestaion_pr = false;            
+            });
+        }
+        vm.step_menu_moe = function()
+        {
+            return new Promise(function (resolve, reject) 
+            {
+                apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.allpassation_marches_moe = result.data.response;
+                    apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                    {
+                        vm.allcontrat_moe = result.data.response;
+                        return resolve('ok'); 
+                    });
+                                
+                });
+                vm.styleTabfils = "acc_sous_menu";
+                vm.stepprestation_moe = false;
+                vm.step_importer_doc_moe = false;
+            });
+        }
+        vm.step_menu_mpe = function()
+        {
+            return new Promise(function (resolve, reject)
+            {
+                apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.allpassation_marches = result.data.response;
+                    console.log(vm.allpassation_marches);
+                    apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                    {
+                         vm.allcontrat_prestataire = result.data.response;
+                        return resolve('ok');
+                    });
+                }); 
+                vm.styleTabfils = "acc_sous_menu";            
+            });
+        }
+
+      /*  function donnee_menu_pr(item,session)
         {
             return new Promise(function (resolve, reject)
             {
@@ -479,8 +537,9 @@
                         return resolve('ok');
                 });            
             });
-        }
-        function donnee_menu_moe(item,session)
+        }*/
+
+       /* function donnee_menu_moe(item,session)
         {   vm.showbuttonNouvcontrat_moe=true;
             return new Promise(function (resolve, reject) 
             {
@@ -495,7 +554,7 @@
                                 
                 });
             });
-        }
+        }*/
         function donnee_sousmenu_feffi(item,session)
         {
             return new Promise(function (resolve, reject) 
@@ -514,7 +573,7 @@
             });
         
         }
-        function donnee_menu_mpe(item,session)
+       /* function donnee_menu_mpe(item,session)
         {
             return new Promise(function (resolve, reject)
             {
@@ -529,7 +588,7 @@
                     });
                 });             
             });
-        }
+        }*/
 
         function donnee_menu_indicateur(item,session)
         {
@@ -611,7 +670,13 @@
   /**********************************************Avenant convention***************************************************/
 
   
-  /*********************************************debut contrat pr**********************************************/  
+  /*********************************************debut contrat pr**********************************************/ 
+      vm.stepcontrat_pr = function()
+      {
+        vm.stepprestaion_pr=false;
+        vm.stepimporte_pr = false;
+        vm.styleTabfils = "acc_sous_menu";
+      } 
 //col table
         vm.contrat_partenaire_relai_column = [
         {titre:"Partenaire relai"
@@ -667,13 +732,11 @@
                           console.log(vm.allmodule_sep);
                       });
 
-                    apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-                    {
-                        vm.alldocument_pr_scan = result.data.response;                                        
-                    });
+                    
               }
               vm.validation_contrat_pr = item.validation;
               vm.stepprestaion_pr=true;
+              vm.stepimporte_pr = true;
               /*apiFactory.getAPIgeneraliserREST("situation_participant_odc/index",'id_classification_site',vm.selectedItemConvention_entete.site.id_classification_site).then(function(result)
               {
                   vm.allsituation_participant_odc = result.data.response;
@@ -696,7 +759,14 @@
 /*****************************************fin contrat_partenaire_relai********************************************/
 
 /**********************************************Debut Dossier entreprise***************************************************/
-   
+    vm.step_importer_doc_pr = function()
+    {
+        apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+        {
+            vm.alldocument_pr_scan = result.data.response;                                        
+        });
+        vm.styleTabfils = "acc_sous_menu";
+    }
         //fonction selection item justificatif batiment
         vm.selectionDocument_pr_scan= function (item)
         {
@@ -718,6 +788,10 @@
 
 
 /*******************************************debut formation dpp**************************************************/
+        vm.step_prestation_pr = function()
+        {
+            vm.styleTabfils = "acc_menu";
+        }
 //col table
         vm.module_dpp_column = [
         {titre:"Date debut previsionnelle formation"
@@ -1224,8 +1298,15 @@
   /******************************************fin participant sep*********************************************************/
 
   /******************************************debut maitrise d'oeuvre*****************************************************/
-
+        vm.step_prestation_moe = function()
+        {            
+            vm.styleTabfils = "acc_menu";
+        }
       /**************************************fin passation marchés***************************************************/
+        vm.steppassation_marches_moe = function()
+        {            
+            vm.styleTabfils = "acc_sous_menu";
+        }
         //col table
         vm.passation_marches_moe_column = [
         {titre:"Date shortlist"
@@ -1299,7 +1380,10 @@
       /**************************************fin passation marchés***************************************************/
 
       /**************************************fin contrat moe***************************************************/
-        
+        vm.step_contrat_moe = function (item,session)
+        {   
+            vm.styleTabfils = "acc_sous_menu";
+        }
       //col table
         vm.contrat_moe_column = [
         {titre:"Bureau d'etude"
@@ -1318,8 +1402,6 @@
         vm.selectionContrat_moe= function (item)
         {
             vm.selectedItemContrat_moe = item;
-            vm.nouvelItemContrat_moe   = item;
-            currentItemContrat_moe    = JSON.parse(JSON.stringify(vm.selectedItemContrat_moe));
 
            if(item.id!=0)
            {
@@ -1357,8 +1439,9 @@
                     });
                 }
             vm.validation_contrat_moe = item.validation;
-            vm.stepprestation_moe = true;
-            console.log(item);
+            vm.stepprestation_moe = true;            
+            vm.step_importer_doc_moe = true;
+            //console.log(item);
            }
              
         };
@@ -1375,7 +1458,12 @@
       /*****************************************fin contrat moe******************************************************/
 
        /**********************************************Debut Dossier entreprise***************************************************/
-    
+        
+         vm.step_importerdocument_moe = function()
+            {
+            
+            vm.styleTabfils = "acc_sous_menu";
+            }
         //fonction selection item justificatif batiment
         vm.selectionDocument_moe_scan= function (item)
         {
@@ -1402,7 +1490,10 @@
     /******************************************debut dossier entreprise***********************************************/
 
     /*********************************************fin avenant moe***********************************************/
-
+        vm.step_avenant_moe = function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+        }
 //col table
         vm.avenant_moe_column = [
         {titre:"Description"
@@ -1573,9 +1664,13 @@
 
         
       /**************************************Debut police d'assurance***********************************************/
-
+           
    
 /**********************************debut passation_marches****************************************/
+        vm.click_passation_marches_mpe = function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+        }
 //col table
         vm.passation_marches_column = [
         {titre:"Date lancement"
@@ -1634,6 +1729,10 @@
 /**********************************fin passation_marches****************************************/
 
 /**********************************debut sousmissionnaire****************************************/
+        vm.click_mpe_soumissionaire = function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+        }
     vm.mpe_soumissionaire_column = [
         {titre:"MPE sousmissionnaire"
         },
@@ -1660,7 +1759,10 @@
 /**********************************fin sousmissionnaire****************************************/
 
 /**********************************debut contrat prestataire****************************************/
-        
+        vm.click_contrat_mpe = function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+        }
 //col table
         vm.contrat_prestataire_column = [
         {titre:"Prestataire"
@@ -1724,7 +1826,8 @@
            }
            vm.stepsuiviexecution = true;
            vm.stepavenant_mpe = true;
-           vm.stepattachement = true;  
+           vm.stepattachement = true; 
+           vm.step_importer_doc_mpe = true; 
         };
         $scope.$watch('vm.selectedItemContrat_prestataire', function()
         {
@@ -1739,7 +1842,10 @@
 /**********************************fin contrat_prestataire****************************************/
 
  /*********************************************fin avenant mpe***********************************************/
-
+        vm.click_avenant_mpe = function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+        }
 //col table
         vm.avenant_mpe_column = [
         {titre:"Description"
@@ -1782,6 +1888,10 @@
     /**********************************************Fin Avenant mpe***************************************************/
     
     /**********************************************Debut Dossier entreprise***************************************************/
+         vm.click_importer_doc_mpe = function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+        }   
             //fonction selection item justificatif batiment
         vm.selectionDocument_prestataire_scan= function (item)
         {
@@ -1808,7 +1918,10 @@
     /******************************************debut dossier entreprise***********************************************/
 
     /******************************************debut delai travaux***********************************************/
-
+        vm.clicksuivi_travaux = function()
+        {
+            vm.styleTabfils = "acc_menu";
+        }
     //col table
         vm.delai_travaux_column = [
         {titre:"Date prevu debut travaux"
@@ -1824,8 +1937,6 @@
         vm.selectionDelai_travaux= function (item)
         {
             vm.selectedItemDelai_travaux = item;
-            //vm.nouvelItemDelai_travaux   = item;
-            currentItemDelai_travaux    = JSON.parse(JSON.stringify(vm.selectedItemDelai_travaux));
            if(item.id!=0)
            {  
               apiFactory.getAPIgeneraliserREST("phase_sous_projet/index",'menu','getphasesousprojetBydelai','id_delai_travaux',item.id).then(function(result)

@@ -57,6 +57,7 @@
 		  /*****debut initialisation*****/
 
         var vm    = this;
+        vm.styleTabfils = "acc_sous_menu";
         vm.selectedItemConvention_entete = {} ;
         vm.allconvention_entete = [] ;
       
@@ -84,6 +85,7 @@
         vm.stepattachement_mobilier_travaux = false;
 
         vm.session = '';
+        vm.ciscos = [];
 
 
 /*******************************************Debut maitrise d'oeuvre*************************************/
@@ -330,18 +332,22 @@
         vm.filtre_change_region = function(item)
         { 
             vm.filtre.id_cisco = null;
-            if (item.id_region != '*')
+            if (vm.session=='ADMIN')
             {
-                apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+                if (item.id_region != '*')
                 {
-                    vm.ciscos = result.data.response;
-                    console.log(vm.ciscos);
-                }, function error(result){ alert('something went wrong')});
+                    apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+                    {
+                        vm.ciscos = result.data.response;
+                        console.log(vm.ciscos);
+                    }, function error(result){ alert('something went wrong')});
+                }
+                else
+                {
+                    vm.ciscos = [];
+                }
             }
-            else
-            {
-                vm.ciscos = [];
-            }
+            
           
         }
         vm.filtre_change_cisco = function(item)
@@ -395,7 +401,15 @@
               vm.roles = result.data.response.roles;
               switch (vm.roles[0])
                 {
-                 case 'BCAF':                            
+                 case 'BCAF':   
+                             vm.usercisco = result.data.response.cisco;
+                            vm.ciscos.push(vm.usercisco);
+                            console.log(vm.ciscos);
+                            apiFactory.getAPIgeneraliserREST("region/index","menu","getregionbycisco",'id_cisco',vm.usercisco.id).then(function(result)
+                            {
+                                vm.regions = result.data.response;
+                                console.log(vm.regions);
+                            }, function error(result){ alert('something went wrong')});                         
 
                             vm.session = 'BCAF';
                       
@@ -510,8 +524,11 @@
             
             vm.showbuttonNouvContrat_prestataire=true;
              
-            vm.stepMenu_reliquat =true;          
-            donnee_menu_moe(item,vm.session).then(function () 
+            vm.stepMenu_reliquat =true;
+            vm.stepMenu_moe=true;
+            vm.stepMenu_mpe=true; 
+
+           /* donnee_menu_moe(item,vm.session).then(function () 
             {
                     // On récupère le resultat de la requête dans la varible "response"                    
                 vm.stepMenu_moe=true;
@@ -522,7 +539,7 @@
                 // On récupère le resultat de la requête dans la varible "response"                    
                 vm.stepMenu_mpe=true;
                 console.log(vm.stepMenu_mpe);  
-            });            
+            }); */           
                           
               apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
               {
@@ -544,10 +561,41 @@
              });
              vm.selectedItemConvention_entete.$selected = true;
         });
-        function donnee_menu_moe(item,session)
-        {   vm.showbuttonNouvcontrat_moe=true;
+        
+        vm.step_menu_moe = function()
+        {
+            vm.showbuttonNouvcontrat_moe=true;
+            vm.styleTabfils = "acc_sous_menu";
+            vm.stepsuivi_paiement_moe = false;
             return new Promise(function (resolve, reject) 
+            {  
+                apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.allcontrat_moe = result.data.response;
+                    return resolve('ok'); 
+                });
+                  
+            });
+        }
+        vm.step_menu_mpe = function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+            vm.stepsuivi_paiement_mpe = false;
+            return new Promise(function (resolve, reject)
             {
+                apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.allcontrat_prestataire = result.data.response;
+                    return resolve('ok');
+                });           
+            });
+        }
+       /* function donnee_menu_moe(item,session)
+        {   vm.showbuttonNouvcontrat_moe=true;
+            vm.styleTabfils = "acc_sous_menu";
+            vm.stepsuivi_paiement_moe = false;
+            return new Promise(function (resolve, reject) 
+            {   
                 switch (session)
                 {
 
@@ -577,7 +625,9 @@
             });
         }
         function donnee_menu_mpe(item,session)
-        {
+        {   
+            vm.styleTabfils = "acc_sous_menu";
+            vm.stepsuivi_paiement_moe = false;
             return new Promise(function (resolve, reject)
             {
                 switch (session)
@@ -620,7 +670,7 @@
                     return resolve('ok');
                 });            
             });
-        }
+        }*/
        
   
   
@@ -630,6 +680,11 @@
       
 
       /**************************************fin contrat moe***************************************************/
+      vm.click_step_contrat_moe = function()
+        {
+            vm.stepsuivi_paiement_moe = false;
+             vm.styleTabfils = "acc_sous_menu"
+        }
         
       //col table
         vm.contrat_moe_column = [
@@ -720,6 +775,11 @@
       /*****************************************fin contrat moe******************************************************/
       
       /**********************************debut demande_debut_travaux_moe****************************************/
+
+      vm.click_step_suivi_paiement_moe = function()
+      {
+        vm.styleTabfils = "acc_menu";
+      }
 //col table
         vm.demande_debut_travaux_moe_column = [        
         {titre:"Objet"
@@ -4638,6 +4698,10 @@
 
 
 /**********************************debut contrat prestataire****************************************/
+ vm.step_contrat_mpe = function ()
+    {
+        vm.styleTabfils = "acc_sous_menu";            
+    } 
         
 //col table
         vm.contrat_prestataire_column = [
@@ -4748,6 +4812,7 @@
                 console.log(vm.allavance_demarrage);
                 console.log(vm.selectedItemContrat_prestataire.id);
             });
+            vm.styleTabfils = "acc_menu"; 
         }
         vm.avance_demarrage_column = [        
         {titre:"Description"

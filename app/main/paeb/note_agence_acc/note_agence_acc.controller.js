@@ -13,11 +13,12 @@
         var NouvelItem=false;
         var currentItem;
         vm.selectedItem = {} ;
+        vm.filtre = {};
         vm.allagence_acc =[];
         vm.allnote_agence_acc =[];
         vm.allannee =[];
         vm.showfiltre = false;
-
+        vm.showboutonfiltre = true;
         //style
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
@@ -63,12 +64,22 @@
         {
 
         vm.showfiltre = true;
+        vm.showboutonfiltre = false;
+
+        }
+        vm.annulerfiltre = function()
+        {
+
+        vm.showfiltre = false;
+        vm.filtre.id_agence_acc =null;
+        vm.filtre.annee = null;
+        vm.showboutonfiltre = true;
 
         }
         //Masque de saisi ajout
         vm.ajouter = function ()
         { 
-          vm.vm.showfiltre = false;
+          vm.showfiltre = false;
           if (NouvelItem == false)
           {
             var items = {

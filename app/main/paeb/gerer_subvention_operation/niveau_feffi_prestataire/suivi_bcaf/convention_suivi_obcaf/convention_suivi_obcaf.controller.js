@@ -41,6 +41,7 @@
 		  /*****debut initialisation*****/
 
         var vm    = this;
+        vm.styleTabfils = "acc_sous_menu";
         vm.selectedItemConvention_entete = {} ;
         vm.allconvention_entete = [] ;
        
@@ -680,7 +681,7 @@
         },
         {titre:"Feffi"
         },
-        {titre:"Site"
+        {titre:"Code projet Site"
         },
         {titre:"Reference convention"
         },
@@ -825,8 +826,10 @@
                         vm.allcontrat_partenaire_relai = result.data.response;
                         console.log(vm.allcontrat_partenaire_relai);
                         return resolve('ok');
-                });           
+                });  
+                vm.styleTabfils = "acc_sous_menu";         
             });
+            
         }
         vm.step_menu_moe = function ()
         {   vm.tabmaitrise = true;
@@ -847,8 +850,9 @@
                         return resolve('ok');
                                 
                 });
-                               
+                 vm.styleTabfils = "acc_sous_menu";              
             });
+            
         }
 
         vm.step_contrat_moe = function ()
@@ -866,6 +870,7 @@
                     }
                     return resolve('ok');
                 });
+                vm.styleTabfils = "acc_sous_menu";
                                
             });
         }
@@ -911,8 +916,9 @@
                     console.log(vm.allpassation_marches);
                     return resolve('ok');
                 });
-            
+                 vm.styleTabfils = "acc_sous_menu";
             });
+           
         }
 
        vm.step_contrat_mpe = function ()
@@ -928,8 +934,9 @@
                     }
                     return resolve('ok');
                 });
-                       
+               vm.styleTabfils = "acc_sous_menu";        
             });
+            
         }
 
         vm.step_menu_indicateur= function ()
@@ -951,7 +958,7 @@
             });
         }
 
-  /**********************************************Debut Dossier entreprise***************************************************/
+  /**********************************************Debut Dossier feffi***************************************************/
     //vm.myFile = [];
      $scope.uploadFile_doc_feffi = function(event)
        {
@@ -1347,7 +1354,7 @@
 
         }
        
-    /******************************************debut dossier entreprise***********************************************/ 
+    /******************************************debut dossier feffi***********************************************/ 
 
     /*******************************************debut importer avenant*************************************************/
 
@@ -1671,7 +1678,10 @@
   
   /*********************************************debut contrat pr**********************************************/
 
-  
+  vm.stepmenu_contrat_pr= function()
+  {
+    vm.styleTabfils = "acc_sous_menu";
+  }
 //col table
         vm.contrat_partenaire_relai_column = [
         {titre:"Partenaire relai"
@@ -1725,6 +1735,7 @@
              {
                 vm.alldocument_pr_scan = result.data.response;                                        
             });
+             vm.styleTabfils = "acc_sous_menu";
         }
 
         vm.step_prestation_pr = function()
@@ -1739,6 +1750,7 @@
                     vm.showbuttonNouvformdpp=false;
                 }
             });
+            vm.styleTabfils = "acc_menu";
         }
         vm.step_module_dpp = function()
         {
@@ -1821,7 +1833,7 @@
         
 /*****************************************fin contrat_partenaire_relai********************************************/
 
-/**********************************************Debut Dossier entreprise***************************************************/
+/**********************************************Debut Dossier partenaire relais***************************************************/
     //vm.myFile = [];
      $scope.uploadFile_doc_pr = function(event)
        {
@@ -2216,8 +2228,8 @@
 
         }
        
-    /******************************************debut dossier entreprise***********************************************/
-        /*******************************************debut importer passation moe*************************************************/
+    /******************************************debut dossier partenaire relai***********************************************/
+    /*******************************************debut importer passation moe*************************************************/
 
         vm.affichageformimporter_module_dpp = function()
         {
@@ -6616,6 +6628,10 @@
             vm.tabmaitrise = true;
             console.log(vm.tabmaitrise);
         }*/
+        vm.clickpassation_marches_moe = function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+        }
         //Masque de saisi ajout
         vm.ajouterPassation_marches_moe = function ()
         { 
@@ -7122,6 +7138,7 @@
                     vm.showbuttonNouvMemoire_technique = false;
                 }                           
             });
+            vm.styleTabfils = "acc_menu";
         }
 
         vm.step_memoire_technique = function()
@@ -7207,6 +7224,7 @@
                  vm.showbuttonNouvavenant_moe = true;
                  console.log(vm.allavenant_moe);
             });
+            vm.styleTabfils = "acc_sous_menu";
         }
 
         vm.step_importerdocument_moe = function()
@@ -7216,6 +7234,7 @@
                 vm.alldocument_moe_scan = result.data.response;
                                         
             });
+            vm.styleTabfils = "acc_sous_menu";
         }
 
 
@@ -7360,7 +7379,7 @@
         }
       /*****************************************fin contrat moe******************************************************/
 
-       /**********************************************Debut Dossier entreprise***************************************************/
+       /**********************************************Debut Dossier MOE***************************************************/
     //vm.myFile = [];
      $scope.uploadFile_doc_moe = function(event)
        {
@@ -7764,7 +7783,7 @@
         }
 
 
-    /******************************************debut dossier entreprise***********************************************/
+    /******************************************debut dossier MOE***********************************************/
 
     /*********************************************fin avenant moe***********************************************/
 
@@ -9701,6 +9720,10 @@
     /*******************************************fin importer passation moe***************************************************/
 
 /**********************************debut passation_marches****************************************/
+vm.steppassation_marches = function()
+{
+    vm.styleTabfils = "acc_sous_menu";
+}
 //col table
         vm.passation_marches_column = [
         {titre:"Date lancement"
@@ -10001,7 +10024,10 @@
 /**********************************fin passation_marches****************************************/
 
  /*******************************************debut importer passation moe*************************************************/
-
+        vm.stepmpe_soumissionaire = function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+        }
         vm.affichageformimporter_mpe_soumissionaire = function()
         {
           vm.showbuttonimporter_mpe_soumissionaire =false;
@@ -10528,6 +10554,7 @@
             {
                 vm.alldivers_attachement_batiment_prevu = result.data.response;       
             });
+            vm.styleTabfils = "acc_menu";
         }
         vm.step_attachement_batiment_prevu = function()
         {
@@ -10562,6 +10589,7 @@
                   vm.showbuttonNouvDelai_travaux=false;
                 }
              });
+            vm.styleTabfils = "acc_menu";
         }
         vm.step_delai_execution = function()
         {
@@ -10622,6 +10650,7 @@
                 vm.allavenant_mpe = result.data.response;
                 vm.showbuttonNouvavenant_mpe = true;
             });
+           vm.styleTabfils = "acc_sous_menu";
         }
         vm.step_importerdocument_mpe = function()
         {
@@ -10630,6 +10659,7 @@
                 vm.alldocument_prestataire_scan = result.data.response;
                                         
             });
+            vm.styleTabfils = "acc_sous_menu";
         }
 
         //fonction masque de saisie modification item feffi

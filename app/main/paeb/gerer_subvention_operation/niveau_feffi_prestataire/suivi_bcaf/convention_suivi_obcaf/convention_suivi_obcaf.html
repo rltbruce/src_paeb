@@ -1,23 +1,21 @@
   <div id="formsobcaf" class="page-layout simple fullwidth doc-page" layout="column" >
 
     <!-- HEADER -->
-    <div class="header md-accent-bg" layout="row" layout-align="space-between" >
+    <!--div class="header md-accent-bg" layout="row" layout-align="space-between" >
         <div layout="column" layout-align="space-between" style="height: 10px !important;">
             <div class="breadcrumb" layout="row" layout-align="start center" >
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
                 <span class="parent">Suivi convention CISCO/FEFFI</span>
                 
-                <!--md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Convention CISCO/FEFFI</span-->
             </div>
 
-            <!--div class="title">Convention CISCO/FEFFI</div-->
+            
                                        
             
         </div>
         
-    </div>    
+    </div-->    
     
     <!-- / HEADER -->
     
@@ -31,11 +29,11 @@
                       Chargement,veuillez patienter s'il vous plait ...
               </div>
             </div>
-<!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
+<!-----------------------------------------DEBUT TABS MERE----------------------------------------------------------->
          <ms-form-wizard flex>
-          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="">
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="" id="acc_menu">
 
-    <!------------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
+    <!----------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
             
             <md-tab>
               <md-tab-label >
@@ -49,8 +47,8 @@
               </md-tab-label>
               
               <md-tab-body>
-               <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+               <ms-form-wizard flex > 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
                   <!------------------------------DEBUT ESTIMATION CONVENTION---------------------------------------------> 
                     <md-tab>
@@ -194,7 +192,7 @@
                                   </td>
 
                                   <td>
-                                    <span>{{convention_entete.site.denomination_epp}}</span>
+                                    <span>{{convention_entete.site.code_sous_projet}}</span>
                                   </td>
 
                                   <td>                         
@@ -350,7 +348,7 @@
                               </div>
                       </md-tab-body>
                   </md-tab>
-          <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
+          <!---------------------------FIN CONVENTION CISCO/FEFFI------------------------------------------------->
                           
                           
                     <!-------------------------------Debut document feffi -------------------------------------------->
@@ -485,12 +483,12 @@
 
                       </md-tab-body>
                     </md-tab>
-                    <!--------------------------------------FIN document moe --------------------------------------------> 
+                    <!----------------------------------FIN document moe --------------------------------------------> 
                   </md-tabs> 
                 </ms-form-wizard>
               </md-tab-body>
             </md-tab>
-    <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
+    <!---------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
 
     
             <md-tab ng-disabled="!vm.stepMenu_pr" ng-click="vm.step_menu_pr()">
@@ -506,9 +504,9 @@
               </md-tab-label>
               
               <md-tab-body>
-               <ms-form-wizard flex id="sousmenu" ng-if="vm.tabpartenaire"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">                    
-                    <md-tab>
+               <ms-form-wizard flex ng-if="vm.tabpartenaire"> 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">                    
+                    <md-tab ng-click="vm.stepmenu_contrat_pr()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Contrat</span>
@@ -570,7 +568,7 @@
 
                <!---------------------------------FILS PRESTATION----------------------------------------------->       
                          <ms-form-wizard flex id="soussousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
                         <!-----------------------------DEBUT FORMATION DPP--------------------------------------> 
                               <md-tab ng-click="vm.step_module_dpp()">
@@ -2594,9 +2592,8 @@
 
                                 </md-tab-body>
                               </md-tab>
-                        <!--------------------------------------FIN participant_sep ------------------------------------->         
-                              <md-tab>
-                              </md-tab>
+                        <!----------------------------------FIN participant_sep ------------------------------------->        
+                              
                       <!---------------------convention cisco/feffi---------------->
                       
                             </md-tabs> 
@@ -2760,10 +2757,10 @@
               
               <md-tab-body>
                <ms-form-wizard flex id="sousmenu"  > 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" ng-if="vm.tabmaitrise">
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" ng-if="vm.tabmaitrise" id="{{vm.styleTabfils}}">
 
                     <!-------------------convention cisco/feffi----------------->
-                    <md-tab >
+                    <md-tab ng-click="vm.clickpassation_marches_moe()">
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">DF</span>
@@ -3133,9 +3130,9 @@
                       </md-tab-label>
                       
                       <md-tab-body>
-                       <!---------------------------------FILS PRESTATION----------------------------------------------->       
-                         <ms-form-wizard flex id="soussousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                       <!------------------------------FILS PRESTATION-------------------------------------------->       
+                         <ms-form-wizard flex> 
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
                         <!-----------------------------DEBUT FORMATION DPP--------------------------------------> 
                               <md-tab ng-click="vm.step_memoire_technique()"  ng-disabled="vm.validation_contrat_moe==0">
@@ -3841,9 +3838,7 @@
                             </md-tab-body>
                             </md-tab>
                         <!---------------------------------Fin Formation emies------------------------------------------>
-                                
-                              <md-tab>
-                              </md-tab>
+                            
                       <!---------------------convention cisco/feffi---------------->
                       
                             </md-tabs> 
@@ -4103,9 +4098,9 @@
               
               <md-tab-body>
                 <!--div style="padding: 1px"></div-->
-               <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" ng-if="vm.tabentreprise">
-                    <md-tab>
+               <ms-form-wizard flex > 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" ng-if="vm.tabentreprise" id="{{vm.styleTabfils}}">
+                    <md-tab ng-click="vm.steppassation_marches()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">DF</span>
@@ -4290,10 +4285,10 @@
 
                       </md-tab-body>
                     </md-tab>                    
-                    <!-----------------------------------Fin Passation marches-------------------------------------------->
+                    <!----------------------------Fin Passation marches-------------------------------------------->
 
                     <!-----------------------------------MPE sousmissionnaire-------------------------------------------->
-                       <md-tab ng-disabled="!vm.stepsoumissionnaire">
+                       <md-tab ng-disabled="!vm.stepsoumissionnaire" ng-click="vm.stepmpe_soumissionaire()">
                           <md-tab-label>
                             <span class="ms-form-wizard-step-label">
                                 <span class="ms-form-wizard-step-text">mpe soumissionaire</span>
@@ -4574,6 +4569,7 @@
                     <!-------------------------------Debut attachement -------------------------------------------->
                     <md-tab ng-disabled="!vm.stepattachement" ng-click="vm.step_attachement_prevu()">
                         <md-tab-label>
+
                           <span class="ms-form-wizard-step-label">
                               <span class="ms-form-wizard-step-text">Attachement prévu</span>
                           </span>
@@ -4581,7 +4577,7 @@
                         
                         <md-tab-body>
                           <ms-form-wizard flex id="sousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">                    
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">                    
                               <md-tab ng-click="vm.step_attachement_batiment_prevu()">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
@@ -4818,7 +4814,7 @@
                       
                       <md-tab-body>
                        <ms-form-wizard flex id="sousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">                    
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">                    
                               <md-tab ng-click="vm.step_delai_execution()">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
@@ -5132,7 +5128,7 @@
                                     </div>
                                 </md-tab-body>
                               </md-tab>
-                  <!---------------------------------Debut avancement_batiment -------------------------------------------->
+                  <!-----------------------Debut avancement_batiment -------------------------------------------->
                               <md-tab ng-click="vm.step_avancement_batiment()">
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
@@ -5245,7 +5241,7 @@
 
                                 </md-tab-body>
                               </md-tab>
-                  <!------------------------------FIN avancement_batiment ------------------------------------------------->
+                  <!--------------------------FIN avancement_batiment ----------------------------------------------->
                   <!----------------------------Debut avancement_batiment -------------------------------------------->
                               <md-tab ng-click="vm.step_avancement_latrine()">
                                   <md-tab-label>
@@ -5359,8 +5355,8 @@
 
                                 </md-tab-body>
                               </md-tab>
-                  <!------------------------------FIN avancement_latrine ------------------------------------------------->
-                  <!-------------------------------Debut avancement_mobilier -------------------------------------------->
+                  <!---------------------------FIN avancement_latrine ---------------------------------------------->
+                  <!---------------------------Debut avancement_mobilier ------------------------------------------->
                               <md-tab ng-disabled="vm.stepTwo==false" ng-click="vm.step_avancement_mobilier()">
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
@@ -5473,7 +5469,7 @@
 
                                 </md-tab-body>
                               </md-tab>
-                  <!--------------------------------FIN avancement_mobilier ---------------------------------------------->            
+                  <!----------------------------FIN avancement_mobilier -------------------------------------------->            
                             </md-tabs> 
                           </ms-form-wizard>               
                         </md-tab-body>
@@ -5595,8 +5591,8 @@
                               </div>
                       </md-tab-body>
                     </md-tab>
-                    <!--------------------------------------Fin Avenant mpe---------------------------------------------------> 
-                    <!-------------------------------Debut document prestataire -------------------------------------------->
+                    <!----------------------------Fin Avenant mpe------------------------------------------------> 
+                    <!---------------------------Debut document prestataire ---------------------------------------->
                     <md-tab ng-disabled="vm.validation_contrat_prestataire==0" ng-click="vm.step_importerdocument_mpe()">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
@@ -5875,8 +5871,7 @@
                           </div>
               </md-tab-body>
             </md-tab>
-            <md-tab>
-            </md-tab>
+          
             <!-----------------------FIN RELIQUAT--------------------------------------------->
             
           </md-tabs>

@@ -238,20 +238,38 @@
           vm.user.telephone = vm.selectedItem.telephone ;
           vm.user.email = vm.selectedItem.email ;
           vm.user.enabled = vm.selectedItem.enabled ;          
-          vm.user.id_region = vm.selectedItem.region.id ;          
-          vm.user.id_district = vm.selectedItem.district.id ;          
-          vm.user.id_cisco = vm.selectedItem.cisco.id ;
+                    
+         // vm.user.id_district = vm.selectedItem.district.id ;          
+         // vm.user.id_cisco = vm.selectedItem.cisco.id ;
           /*vm.user.sigle = vm.selectedItem.sigle ;
 		  vm.user.envoi_donnees = parseInt(vm.selectedItem.envoi_donnees) ;*/
-          vm.districts = vm.alldistrict.filter(function(obj)
-                {
-                    return obj.region.id == vm.selectedItem.region.id;
-                });
-         
+      if (vm.selectedItem.region.id)
+      {
+        vm.user.id_region = parseInt(vm.selectedItem.region.id);
+      }else vm.user.id_region = null;
+
+      if (vm.selectedItem.district.id)
+      {
+        vm.user.id_district = parseInt(vm.selectedItem.district.id);
+        if (vm.selectedItem.region.id) {}
+        vm.districts = vm.alldistrict.filter(function(obj)
+        {
+            return obj.region.id == vm.selectedItem.region.id;
+        });
+      }else vm.user.id_district =null;
+          
+       if (vm.selectedItem.cisco)
+       {
+        vm.user.id_cisco = parseInt(vm.selectedItem.cisco.id);
+        if (vm.selectedItem.district.id)
+        {
           vm.ciscos = vm.allcisco.filter(function(obj)
-                {
-                    return obj.district.id == vm.selectedItem.district.id;
-                });
+          {
+              return obj.district.id == vm.selectedItem.district.id;
+          });
+        }
+       }else vm.user.id_cisco = null; 
+          
          console.log(vm.selectedItem.district.id);
 console.log(vm.ciscos);
           vm.searchText="";

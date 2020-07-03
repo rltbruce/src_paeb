@@ -9,7 +9,7 @@
         
         <div style=" padding: 0px; margin-left: 20px">
             <!--h1 class="title is-1" style="font-family:monoton; font-size: 40px; padding: 0; margin: auto;float: left;">E-tantana</h1-->
-            <span style="margin: 0;padding: 0; "><img src="assets/images/logos/etantana7.png" style="width:  23%;height: 33% !important; margin: 0;padding: 0;"></span>
+            <span style="margin: 0;padding: 0; "><img src="assets/images/logos/etantana7.png" style="width:  18%;height: 28% !important; margin: 0;padding: 0;"></span>
         </div>
         <!--ms-search-bar></ms-search-bar-->
         <!--div style="width:  13%;">
@@ -19,7 +19,7 @@
                 
         <div class="toolbar-separator"></div>
         <md-progress-circular id="toolbar-progress" ng-if="$root.loadingProgress" class="md-accent"
-                              md-mode="indeterminate" md-diameter="64">
+                              md-mode="indeterminate" md-diameter="42">
         </md-progress-circular>
         
     </div>
@@ -45,7 +45,8 @@
                                      class="icon status s16">
                             </md-icon>
                         </div-->
-                        <span class="username" hide-xs> <u>Compte:</u>  {{ vm.userdetails.nom }} {{ vm.userdetails.prenom }}</span>
+                        <md-icon md-font-icon="icon-account-key" class="icon"></md-icon>
+                        <span class="username" hide-xs> <!--u>Compte:</u-->  {{ vm.userdetails.nom }} {{ vm.userdetails.prenom }}</span>
                         <md-icon md-font-icon="icon-chevron-down"
                                  class="icon s16" hide-xs></md-icon>
                     </div>
@@ -103,7 +104,7 @@
 
         <div class="toolbar-separator"></div>
 
-        <md-menu id="language-menu" md-offset="0 72" md-position-mode="target-right target">
+        <!--md-menu id="language-menu" md-offset="0 72" md-position-mode="target-right target">
             <md-button class="language-button" ng-click="$mdOpenMenu()"
                        aria-label="Language" md-menu-origin md-menu-align-target>
                 <div layout="row" layout-align="center center">
@@ -123,9 +124,9 @@
                     </md-button>
                 </md-menu-item>
             </md-menu-content>
-        </md-menu>
+        </md-menu-->
 
-        <div class="toolbar-separator"></div>
+        <!--div class="toolbar-separator"></div-->
 
         <!--md-button id="quick-panel-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('quick-panel')"
                    aria-label="Toggle quick panel" translate translate-attr-aria-label="TOOLBAR.TOGGLE_QUICK_PANEL">

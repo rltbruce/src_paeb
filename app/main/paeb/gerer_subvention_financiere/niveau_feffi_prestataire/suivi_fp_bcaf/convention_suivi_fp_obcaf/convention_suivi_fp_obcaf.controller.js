@@ -41,6 +41,7 @@
 		  /*****debut initialisation*****/
 
         var vm    = this;
+        vm.styleTabfils = "acc_sous_menu";
         vm.selectedItemConvention_entete = {} ;
         vm.allconvention_entete = [] ;
        
@@ -74,6 +75,7 @@
         vm.stepjusti_trans_reliqua = false;
 
         vm.session = '';
+        vm.ciscos = [];
 
 /*******************************************Debut maitrise d'oeuvre*************************************/
 
@@ -372,18 +374,22 @@
         vm.filtre_change_region = function(item)
         { 
             vm.filtre.id_cisco = null;
-            if (item.id_region != '*')
+            if (vm.session == 'ADMIN')
             {
-                apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+                if (item.id_region != '*')
                 {
-                    vm.ciscos = result.data.response;
-                    console.log(vm.ciscos);
-                }, function error(result){ alert('something went wrong')});
+                    apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+                    {
+                        vm.ciscos = result.data.response;
+                        console.log(vm.ciscos);
+                    }, function error(result){ alert('something went wrong')});
+                }
+                else
+                {
+                    vm.ciscos = [];
+                }
             }
-            else
-            {
-                vm.ciscos = [];
-            }
+            
           
         }
         vm.filtre_change_cisco = function(item)
@@ -439,6 +445,13 @@
                 {
                   case 'OBCAF': 
                             vm.usercisco = result.data.response.cisco;
+                            vm.ciscos.push(vm.usercisco);
+                            console.log(vm.ciscos);
+                            apiFactory.getAPIgeneraliserREST("region/index","menu","getregionbycisco",'id_cisco',vm.usercisco.id).then(function(result)
+                            {
+                                vm.regions = result.data.response;
+                                console.log(vm.regions);
+                            }, function error(result){ alert('something went wrong')});
                             vm.showbuttonNeauveaudemandefeffi=true;                            
                             vm.session = 'OBCAF';
 
@@ -585,19 +598,22 @@
         }*/
          vm.step_menu_moe = function()
         { 
+                vm.styleTabfils = "acc_sous_menu";                            
+                vm.stepsuivi_paiement_moe = false;
             return new Promise(function (resolve, reject) 
             {
                 apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.allcontrat_moe = result.data.response;
                     return resolve('ok'); 
-                });                            
-
+                });
             });
         }        
         
          vm.step_menu_mpe = function()
-        {
+        {   
+            vm.styleTabfils = "acc_sous_menu";
+            vm.stepsuivi_paiement_mpe = false;
             return new Promise(function (resolve, reject)
             {
                 apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
@@ -605,7 +621,8 @@
                     vm.allcontrat_prestataire = result.data.response;
                     return resolve('ok');
                 });
-           
+                  
+                
             });
         }
 
@@ -673,6 +690,7 @@
         vm.click_step_contrat_moe = function()
         {
             vm.stepsuivi_paiement_moe = false;
+             vm.styleTabfils = "acc_sous_menu"
         }
        
       /*****************************************fin contrat moe******************************************************/
@@ -685,6 +703,7 @@
                 return obj.validation == 0 || obj.validation == 4;
             });
             vm.showbuttonNouvDemande_debut_travaux_moe_creer = true;
+             vm.styleTabfils = "acc_menu"
         });
       }
       vm.click_step_batiment_moe = function()
@@ -1072,7 +1091,7 @@
               demande_debut_travaux_moe.$selected = false;
               demande_debut_travaux_moe.$edit = false;
               vm.selectedItemDemande_debut_travaux_moe = {};
-              vm.showbuttonNouvDemande_debut_travaux_moe_creer = false;
+             // vm.showbuttonNouvDemande_debut_travaux_moe_creer = false;
             vm.showbuttonValidationDemande_debut_travaux_moe_creer = false;
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
@@ -2107,7 +2126,7 @@
               demande_batiment_moe.$selected = false;
               demande_batiment_moe.$edit = false;
               vm.selectedItemDemande_batiment_moe = {};
-              vm.showbuttonNouvDemande_batiment_moe_creer = false;
+              //vm.showbuttonNouvDemande_batiment_moe_creer = false;
             vm.showbuttonValidationDemande_batiment_moe_creer = false;
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
@@ -3867,7 +3886,7 @@
                   var pourcentagecurrenttotal = result.data.response[0].pourcentage_total;
                   console.log(pourcentagecurrenttotal);
               
-                  if (pourcentagecurrenttotal != 100)
+                  if (parseInt(pourcentagecurrenttotal) != 100)
                   {   
                     apiFactory.getAPIgeneraliserREST("demande_fin_travaux_moe/index","menu","getdemandeBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
                     {         
@@ -4851,7 +4870,10 @@
 
 
 /**********************************debut contrat prestataire****************************************/
-        
+   vm.step_contrat_mpe = function ()
+    {
+        vm.styleTabfils = "acc_sous_menu";            
+    }     
 //col table
         vm.contrat_prestataire_column = [
         {titre:"Prestataire"
@@ -4977,7 +4999,7 @@
                     vm.showbuttonNouvAvance_demarrage = false;
                 }
             });
-            console.log('okok');
+            vm.styleTabfils = "acc_menu";  
         }
         vm.avance_demarrage_column = [        
         {titre:"Description"
@@ -5623,7 +5645,7 @@
                 else
                 {                  
                   facture_mpe.id  =   String(data.response);
-                  vm.showbuttonNouvFacture_mpe = false;
+                  //vm.showbuttonNouvFacture_mpe = false;
                 }
               //vm.showboutonValider = false;
 
@@ -5955,12 +5977,16 @@
                       {
                           return obj.id !== vm.selectedItemAttachement_travaux.id;
                       });
+
+                    vm.NouvelItemAttachement_travaux      = true;
                     }
                     
                 }
                 else
                 {                  
                   attachement_travaux.id  =   String(data.response);
+
+                vm.NouvelItemAttachement_travaux      = false;
                 }
               //vm.showboutonValider = false;
 
@@ -6466,6 +6492,7 @@ console.log(vm.dataLastedemande_batiment_mpe);
             apiFactory.getAPIgeneraliserREST("divers_attachement_batiment_travaux/index","menu","getdivers_attachementByDemande",'id_demande_batiment_mpe',vm.selectedItemDemande_batiment_mpe.id).then(function(result)
             {
                 vm.alldivers_attachement_batiment_travaux= result.data.response;
+                console.log(vm.alldivers_attachement_batiment_travaux);
             });
             apiFactory.getAPIgeneraliserREST("divers_attachement_batiment_prevu/index","menu","getdivers_attachement_prevuBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
@@ -6716,12 +6743,17 @@ console.log(vm.dataLastedemande_batiment_mpe);
                 //factory
             apiFactory.add("divers_attachement_batiment_travaux/index",datas, config).success(function (data)
             {
-
+                var bat_prevu = vm.alldivers_attachement_batiment_prevu.filter(function(obj)
+                {
+                    return obj.id == divers_attachement_batiment_travaux.id_divers_attachement_batiment_prevu;
+                });
+                console.log(bat_prevu);
               if (NouvelItemDivers_attachement_batiment_travaux == false)
               {
                     // Update_paiement or delete: id exclu                 
                     if(suppression==0)
-                    {
+                    {   
+                        vm.selectedItemDivers_attachement_batiment_travaux.divers_attachement_batiment_prevu  = bat_prevu[0].divers_attachement_batiment;
                         vm.selectedItemDivers_attachement_batiment_travaux.$selected  = false;
                         vm.selectedItemDivers_attachement_batiment_travaux.$edit      = false;
                         vm.selectedItemDivers_attachement_batiment_travaux ={};
@@ -6737,7 +6769,8 @@ console.log(vm.dataLastedemande_batiment_mpe);
               }
               else
               {
-                  divers_attachement_batiment_travaux.id_divers_attachement_batiment_travaux  =   String(data.response);              
+                  divers_attachement_batiment_travaux.id  =   String(data.response); 
+                  divers_attachement_batiment_travaux.divers_attachement_batiment_prevu  = bat_prevu[0].divers_attachement_batiment;             
                   NouvelItemDivers_attachement_batiment_travaux = false;                    
               }
 
@@ -7245,6 +7278,7 @@ console.log(vm.dataLastedemande_batiment_mpe);
             apiFactory.getAPIgeneraliserREST("divers_attachement_latrine_travaux/index","menu","getdivers_attachementByDemande",'id_demande_latrine_mpe',vm.selectedItemDemande_latrine_mpe.id).then(function(result)
             {
                 vm.alldivers_attachement_latrine_travaux= result.data.response;
+                console.log(vm.alldivers_attachement_latrine_travaux);
             });
             apiFactory.getAPIgeneraliserREST("divers_attachement_latrine_prevu/index","menu","getdivers_attachement_prevuBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
@@ -7495,12 +7529,17 @@ console.log(vm.dataLastedemande_batiment_mpe);
                 //factory
             apiFactory.add("divers_attachement_latrine_travaux/index",datas, config).success(function (data)
             {
-
+                var lat_prevu = vm.alldivers_attachement_latrine_prevu.filter(function(obj)
+                {
+                    return obj.id == divers_attachement_latrine_travaux.id_divers_attachement_latrine_prevu;
+                });
+                console.log(lat_prevu);
               if (NouvelItemDivers_attachement_latrine_travaux == false)
               {
                     // Update_paiement or delete: id exclu                 
                     if(suppression==0)
-                    {
+                    {   
+                         vm.selectedItemDivers_attachement_latrine_travaux.divers_attachement_latrine_prevu  = lat_prevu[0];
                         vm.selectedItemDivers_attachement_latrine_travaux.$selected  = false;
                         vm.selectedItemDivers_attachement_latrine_travaux.$edit      = false;
                         vm.selectedItemDivers_attachement_latrine_travaux ={};
@@ -7516,7 +7555,8 @@ console.log(vm.dataLastedemande_batiment_mpe);
               }
               else
               {
-                  divers_attachement_latrine_travaux.id_divers_attachement_latrine_travaux  =   String(data.response);              
+                   divers_attachement_latrine_travaux.divers_attachement_latrine_prevu  = lat_prevu[0];
+                    divers_attachement_latrine_travaux.id  =   String(data.response);              
                   NouvelItemDivers_attachement_latrine_travaux = false;                    
               }
 
@@ -8271,13 +8311,18 @@ console.log(vm.dataLastedemande_batiment_mpe);
                 console.log(datas);
                 //factory
             apiFactory.add("divers_attachement_mobilier_travaux/index",datas, config).success(function (data)
-            {
+            {   
+                var mob_prevu = vm.alldivers_attachement_mobilier_prevu.filter(function(obj)
+                {
+                    return obj.id == divers_attachement_mobilier_travaux.id_divers_attachement_mobilier_prevu;
+                });
 
               if (NouvelItemDivers_attachement_mobilier_travaux == false)
               {
                     // Update_paiement or delete: id exclu                 
                     if(suppression==0)
-                    {
+                    {   
+                        vm.selectedItemDivers_attachement_mobilier_travaux.divers_attachement_mobilier_prevu  = mob_prevu[0].divers_attachement_mobilier;
                         vm.selectedItemDivers_attachement_mobilier_travaux.$selected  = false;
                         vm.selectedItemDivers_attachement_mobilier_travaux.$edit      = false;
                         vm.selectedItemDivers_attachement_mobilier_travaux ={};
@@ -8293,7 +8338,8 @@ console.log(vm.dataLastedemande_batiment_mpe);
               }
               else
               {
-                  divers_attachement_mobilier_travaux.id_divers_attachement_mobilier_travaux  =   String(data.response);              
+                  divers_attachement_mobilier_travaux.id_divers_attachement_mobilier_travaux  =   String(data.response);
+                  divers_attachement_mobilier_travaux.divers_attachement_mobilier_prevu  = mob_prevu[0].divers_attachement_mobilier;              
                   NouvelItemDivers_attachement_mobilier_travaux = false;                    
               }
 

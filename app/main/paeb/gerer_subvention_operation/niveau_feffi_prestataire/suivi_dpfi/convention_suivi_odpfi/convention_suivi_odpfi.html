@@ -31,11 +31,11 @@
                       Chargement,veuillez patienter s'il vous plait ...
               </div>
             </div>
-<!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
+<!--------------------------------------DEBUT TABS MERE---------------------------------------------------------->
          <ms-form-wizard flex>
-          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="">
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menu">
 
-    <!------------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
+    <!---------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
             
             <!------------------------------DEBUT ESTIMATION CONVENTION---------------------------------------------> 
                     <md-tab>
@@ -219,7 +219,7 @@
     <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
 
     
-            <md-tab ng-disabled="vm.stepMenu_pr==false || vm.session=='ODAAF'">
+            <md-tab ng-disabled="vm.stepMenu_pr==false">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -231,8 +231,8 @@
               </md-tab-label>
               
               <md-tab-body>
-               <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+               <ms-form-wizard flex > 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
                     <!-------------------convention cisco/feffi----------------->
                     <md-tab ng-disabled="vm.session=='OBCAF'">
@@ -249,7 +249,7 @@
                       
                       <md-tab-body>
                           <div style="widht:100%;">  
-                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches_pr()" style="width:10%;" ng-show="vm.showbuttonNouvPassation_pr">
+                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches_pr()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPassation_pr">
                                 Nouveau
                               </md-button>
                             <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_passation_pr()" style="width:10%;" ng-show="vm.showbuttonimporter_passation_pr">
@@ -377,7 +377,7 @@
                       
                       <md-tab-body>
                         <div style="widht:100%;">  
-                            <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterContrat_partenaire_relai()" style="width:10%;" ng-show="vm.showbuttonNouvcontrat_pr">
+                            <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterContrat_partenaire_relai()" style="width:10%;" ng-disabled="!vm.showbuttonNouvcontrat_pr">
                               Nouveau
                             </md-button>
                             <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_pr()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_pr">
@@ -518,7 +518,7 @@
 
                       <md-tab-body>
                         <div style="widht:100%;">  
-                                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvenant_partenaire()" style="width:10%;" ng-show="vm.showbuttonNouvavenant_partenaire">
+                                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvenant_partenaire()" style="width:10%;" ng-disabled="!vm.showbuttonNouvavenant_partenaire">
                                       Nouveau
                                     </md-button>
                                 </div>
@@ -600,14 +600,13 @@
                               </div>
                       </md-tab-body>
                     </md-tab>
-                    <!---------------------------------Avenant partenaire----------------------------------------------->                
+                    <!----------------------------Avenant partenaire----------------------------------------------->                
                                
                   </md-tabs> 
                 </ms-form-wizard>               
               </md-tab-body>
             </md-tab>            
-            <md-tab>
-            </md-tab>
+            
             <!-----------------------FIN RELIQUAT--------------------------------------------->
             
           </md-tabs>

@@ -18,7 +18,7 @@
                     controller : 'Site_disponibleController as vm'
                 }
             },
-            bodyClass: 'site_disponible',
+            bodyClass: 'Nouveau site subventioné',
             data : {
               authorizer : true,
               permitted : ["USER","PERSONNEL","ADMIN"],

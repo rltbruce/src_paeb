@@ -31,11 +31,11 @@
                       Chargement,veuillez patienter s'il vous plait ...
               </div>
             </div>
-<!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
+<!---------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
          <ms-form-wizard flex>
-          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="">
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menu">
 
-    <!------------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
+    <!--------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
             
             <md-tab>
               <md-tab-label >
@@ -215,7 +215,7 @@
     <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
 
     
-            <md-tab ng-disabled="vm.stepMenu_pr==false || vm.session=='ODAAF'">
+            <md-tab ng-disabled="vm.stepMenu_pr==false">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -228,8 +228,8 @@
               </md-tab-label>
               
               <md-tab-body>
-               <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+               <ms-form-wizard flex > 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
                     <!-------------------convention cisco/feffi----------------->
                     <md-tab ng-disabled="vm.session=='OBCAF'">
@@ -246,7 +246,7 @@
                       
                       <md-tab-body>
                           <div style="widht:100%;"> 
-                              <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validation_passation_marche_pr()" style="width:10%;" ng-show="vm.showbuttonValidationpassation_pr && vm.permissionboutonvaliderpassation_pr && vm.validation_passation_pr==0">
+                              <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validation_passation_marche_pr()" style="width:10%;" ng-show="vm.showbuttonValidationpassation_pr && vm.validation_passation_pr==0">
                                     Validation
                               </md-button>
                           </div><br>
@@ -343,7 +343,7 @@
                       
                       <md-tab-body>
                         <div style="widht:100%;">                              
-                            <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.valider_contrat()" style="width:10%;" ng-show="vm.showbuttonValidationcontrat_pr && vm.permissionboutonvalidercontrat_pr && vm.validation_contrat_pr==0">
+                            <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.valider_contrat()" style="width:10%;" ng-show="vm.showbuttonValidationcontrat_pr && vm.validation_contrat_pr==0">
                               Validation
                             </md-button><br>
                         </div>

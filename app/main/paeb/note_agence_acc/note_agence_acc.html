@@ -9,7 +9,7 @@
                 <span class="parent">Note agence d'accompagnement</span>                
             </div>
 
-            <div class="title">Note agence d'accompagnement</div>
+            <!--div class="title">Note agence d'accompagnement</div-->
         </div>
     </div>
     <!-- / HEADER -->
@@ -36,7 +36,7 @@
           </div>
         </header>
         
-            <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-click="vm.afficherfiltre()">
+            <md-button type="submit" class="md-raised md-primary" aria-label="Enregistrer" ng-click="vm.afficherfiltre()" ng-show="vm.showboutonfiltre">
                              Filtre
             </md-button>
           <div ng-show="vm.showfiltre">
@@ -140,14 +140,14 @@
                 </td>
                                              
                 <td>
-                  <a ng-if="!note_agence_acc.$edit && note_agence_acc.validation==0" ng-click="vm.modifier(note_agence_acc)" title="Modifier">
+                  <a ng-if="!note_agence_acc.$edit " ng-click="vm.modifier(note_agence_acc)" title="Modifier">
                     <span class="icon-table-edit"></span>
                   </a>
                             
-                  <a ng-if="!note_agence_acc.$edit && note_agence_acc.validation==0" ng-click="vm.supprimer(note_agence_acc)" title="Supprimer">
+                  <a ng-if="!note_agence_acc.$edit " ng-click="vm.supprimer(note_agence_acc)" title="Supprimer">
                     <span class="icon-delete"></span>
                   </a>
-                   <span ng-if="!note_agence_acc.$edit && note_agence_acc.validation==1"></span>         
+                   <!--span ng-if="!note_agence_acc.$edit && note_agence_acc.validation!=0">Aucune action disponible</span-->         
                   <a ng-if="note_agence_acc.$edit" ng-click="vm.annuler(note_agence_acc)" title="Annuler modification">
                     <span class="icon-cancel"></span>
                   </a>

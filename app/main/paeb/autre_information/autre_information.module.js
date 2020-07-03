@@ -13,7 +13,7 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.autre_information', {
-            title : 'Autre information ',
+            title : 'Nouveau site',
             icon  : 'icon-data',
             weight: 6
         });

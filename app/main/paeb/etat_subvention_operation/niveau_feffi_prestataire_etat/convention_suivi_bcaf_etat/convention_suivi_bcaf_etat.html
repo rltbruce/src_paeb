@@ -31,11 +31,11 @@
                       Chargement,veuillez patienter s'il vous plait ...
               </div>
             </div>
-<!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
+<!--------------------------------------DEBUT TABS MERE--------------------------------------------------------->
          <ms-form-wizard flex>
-          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="">
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menu">
 
-    <!------------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
+    <!--------------------------------DEBUT CONVENTION CISCO/FEFFI----------------------------------------------->
             
             <md-tab>
               <md-tab-label >
@@ -50,9 +50,9 @@
               
               <md-tab-body>
                <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
-                  <!------------------------------DEBUT ESTIMATION CONVENTION---------------------------------------------> 
+                  <!------------------------DEBUT ESTIMATION CONVENTION-----------------------------------------> 
                     <md-tab>
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
@@ -167,10 +167,10 @@
                                       Recherche
                                 </md-button>
                                  
-                               <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                               <!--md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
                                                   ng-disabled="filtreform.$invalid" ng-click="vm.importerfiltre(vm.filtre)">
                                                   Exporter
-                               </md-button>
+                               </md-button-->
                                 <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
                                   Annuler
                                 </md-button>
@@ -281,9 +281,9 @@
                               </div>                        
                       </md-tab-body>
                   </md-tab>
-          <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
+          <!---------------------------FIN CONVENTION CISCO/FEFFI------------------------------------------------->
                           
-           <!----------------------------------------Debut document feffi --------------------------------------------------->
+           <!---------------------------------Debut document feffi -------------------------------------------------->
                     <md-tab >
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
@@ -375,15 +375,15 @@
 
                       </md-tab-body>
                     </md-tab>
-                    <!--------------------------------------FIN document moe --------------------------------------------> 
+                    <!-----------------------------------FIN document moe -----------------------------------------> 
                   </md-tabs> 
                 </ms-form-wizard>
               </md-tab-body>
             </md-tab>
-    <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
+    <!----------------------------------FIN CONVENTION CISCO/FEFFI------------------------------------------------->
 
     
-            <md-tab ng-disabled="vm.stepMenu_pr==false || vm.session=='ODAAF'">
+            <md-tab ng-disabled="vm.stepMenu_pr==false" ng-click="vm.step_menu_pr()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -396,11 +396,11 @@
               </md-tab-label>
               
               <md-tab-body>
-               <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+               <ms-form-wizard flex> 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
 
                     <!-------------------convention cisco/feffi----------------->                    
-                    <md-tab>
+                    <md-tab ng-click="vm.stepcontrat_pr()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Contrat</span>
@@ -452,7 +452,7 @@
 
                     </md-tab-body>
                     </md-tab>
-                    <md-tab ng-disabled="!vm.stepprestaion_pr || vm.validation_contrat_pr==0">
+                    <md-tab ng-disabled="!vm.stepprestaion_pr || vm.validation_contrat_pr==0" ng-click="vm.step_prestation_pr()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Prestation</span>
@@ -464,7 +464,7 @@
 
                <!---------------------------------FILS PRESTATION----------------------------------------------->       
                          <ms-form-wizard flex id="soussousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
                         <!-----------------------------DEBUT FORMATION DPP--------------------------------------> 
                               <md-tab>
@@ -1230,7 +1230,7 @@
                     </md-tab>                    
                     
                     <!-------------------------------Debut document moe -------------------------------------------->
-                    <md-tab >
+                    <md-tab ng-disabled="!vm.stepimporte_pr || vm.validation_contrat_pr==0" ng-click="vm.step_importer_doc_pr()">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
                               <span class="ms-form-wizard-step-text">Importer document</span>
@@ -1329,7 +1329,7 @@
             </md-tab>
 
             <!-----------------------DEBUT MAITRISE DOEUVRE------------------------------------>
-            <md-tab ng-disabled="vm.stepMenu_moe==false">
+            <md-tab ng-disabled="vm.stepMenu_moe==false" ng-click="vm.step_menu_moe()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -1342,11 +1342,11 @@
               </md-tab-label>
               
               <md-tab-body>
-               <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+               <ms-form-wizard flex> 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
 
                     <!-------------------convention cisco/feffi----------------->
-                    <md-tab>
+                    <md-tab ng-click="vm.steppassation_marches_moe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Passation des marchés</span>
@@ -1432,7 +1432,7 @@
 
                       </md-tab-body>
                     </md-tab>
-                    <md-tab>
+                    <md-tab ng-click="vm.step_contrat_moe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
@@ -1486,7 +1486,7 @@
 
                       </md-tab-body>
                     </md-tab>
-                    <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0">
+                    <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0" ng-click="vm.step_prestation_moe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Prestation</span>
@@ -1495,9 +1495,9 @@
                       </md-tab-label>
                       
                       <md-tab-body>
-                       <!---------------------------------FILS PRESTATION----------------------------------------------->       
-                         <ms-form-wizard flex id="soussousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                       <!------------------------------FILS PRESTATION----------------------------------------------->       
+                         <ms-form-wizard flex > 
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
                         <!-----------------------------DEBUT FORMATION DPP--------------------------------------> 
                               <md-tab>
@@ -1808,8 +1808,7 @@
                             </md-tab>
                         <!---------------------------------Fin Formation emies------------------------------------------>
                                 
-                              <md-tab>
-                              </md-tab>
+                    
                       <!---------------------convention cisco/feffi---------------->
                       
                             </md-tabs> 
@@ -1820,7 +1819,7 @@
                     </md-tab>
                     
                     <!---------------------------------Avenant MOE-----------------------------------------------> 
-                    <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0">                    
+                    <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0" ng-click="vm.step_avenant_moe()">                    
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Avenant</span>
@@ -1867,7 +1866,7 @@
                     </md-tab>
                     <!---------------------------------Avenant MOE-----------------------------------------------> 
                     <!-------------------------------Debut document moe -------------------------------------------->
-                    <md-tab ng-disabled="vm.validation_contrat_moe==0">
+                    <md-tab ng-disabled="!vm.step_importer_doc_moe || vm.validation_contrat_moe==0" ng-click="vm.step_importerdocument_moe()">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
                               <span class="ms-form-wizard-step-text">Importer document</span>
@@ -1907,6 +1906,11 @@
                                 <th class="secondary-text">
                                   <div class="table-header">
                                     <span class="column-title">Observation</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Action</span>
                                   </div>
                                 </th>
                               </tr>
@@ -1963,7 +1967,7 @@
 
 
              <!-----------------------DEBUT ENTREPRISE------------------------------------>
-            <md-tab ng-disabled="vm.stepMenu_mpe==false">
+            <md-tab ng-disabled="vm.stepMenu_mpe==false" ng-click="vm.step_menu_mpe()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepMenu==true">
@@ -1976,9 +1980,9 @@
               </md-tab-label>
               
               <md-tab-body>
-               <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
-                    <md-tab>
+               <ms-form-wizard flex> 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
+                    <md-tab ng-click="vm.click_passation_marches_mpe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">DF</span>
@@ -2055,10 +2059,10 @@
 
                       </md-tab-body>
                     </md-tab>                    
-                    <!------------------------------------------------Fin Passation marches-------------------------------------------->
+                    <!-----------------------------Fin Passation marches------------------------------------------>
 
-                    <!------------------------------------------------MPE sousmissionnaire-------------------------------------------->
-                       <md-tab ng-disabled="!vm.stepsoumissionnaire">
+                    <!---------------------------------MPE sousmissionnaire------------------------------------>
+                       <md-tab ng-disabled="!vm.stepsoumissionnaire" ng-click="vm.click_mpe_soumissionaire()">
                           <md-tab-label>
                             <span class="ms-form-wizard-step-label">
                                 <span class="ms-form-wizard-step-text">mpe soumissionaire</span>
@@ -2099,10 +2103,10 @@
 
                         </md-tab-body>
                       </md-tab>
-                    <!------------------------------------------------MPE sousmissionnaire-------------------------------------------->
+                    <!-----------------------------------MPE sousmissionnaire---------------------------------------->
 
-                    <!------------------------------------------------Debut contrat mpe----------------------------------------->
-                    <md-tab>
+                    <!-----------------------------------Debut contrat mpe----------------------------------------->
+                    <md-tab ng-click="vm.click_contrat_mpe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
@@ -2164,7 +2168,7 @@
 
                       </md-tab-body>
                     </md-tab>
-                    <md-tab ng-disabled = "!vm.stepsuiviexecution || vm.validation_contrat_prestataire==0">
+                    <md-tab ng-disabled = "!vm.stepsuiviexecution || vm.validation_contrat_prestataire==0" ng-click="vm.clicksuivi_travaux()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
@@ -2178,7 +2182,7 @@
                       
                       <md-tab-body>
                        <ms-form-wizard flex id="sousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">                    
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">                    
                               <md-tab>
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
@@ -2335,7 +2339,7 @@
                                     </div>
                                 </md-tab-body>
                               </md-tab>
-                  <!---------------------------------------------Debut avancement_batiment -------------------------------------------->
+                  <!----------------------------Debut avancement_batiment -------------------------------------------->
                               <md-tab>
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
@@ -2503,7 +2507,7 @@
                     </md-tab>
                     
                   <!--------------------------------------------------Avenant MOE----------------------------------------------------> 
-                    <md-tab ng-disabled="!vm.stepavenant_mpe">                    
+                    <md-tab ng-disabled="!vm.stepavenant_mpe" ng-click="vm.click_avenant_mpe()">                    
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Avenant</span>
@@ -2556,12 +2560,12 @@
                               </div>
                       </md-tab-body>
                     </md-tab>
-                    <!--------------------------------------Fin Avenant mpe---------------------------------------------------> 
-                    <!-------------------------------Debut document prestataire -------------------------------------------->
-                    <md-tab >
+                    <!---------------------------Fin Avenant mpe---------------------------------------------------> 
+                    <!-----------------------Debut document prestataire -------------------------------------------->
+                    <md-tab ng-disabled="!vm.step_importer_doc_mpe" ng-click="vm.click_importer_doc_mpe()">
                         <md-tab-label>
                           <span class="ms-form-wizard-step-label">
-                              <span class="ms-form-wizard-step-text">Scan document</span>
+                              <span class="ms-form-wizard-step-text">Importer document</span>
                           </span>
                         </md-tab-label>
                         
@@ -2598,6 +2602,11 @@
                                 <th class="secondary-text">
                                   <div class="table-header">
                                     <span class="column-title">Observation</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Action</span>
                                   </div>
                                 </th>
                               </tr>

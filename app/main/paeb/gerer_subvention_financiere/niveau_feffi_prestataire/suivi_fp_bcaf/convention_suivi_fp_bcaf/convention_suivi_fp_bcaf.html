@@ -31,11 +31,11 @@
                       Chargement,veuillez patienter s'il vous plait ...
               </div>
             </div>
-<!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
+<!-------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
          <ms-form-wizard flex>
-          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="">
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menu">
 
-    <!------------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
+    <!--------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
             
             <md-tab>
               <md-tab-label >
@@ -206,10 +206,10 @@
               </div>
               </md-tab-body>
             </md-tab>
-    <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
+    <!------------------------------------FIN CONVENTION CISCO/FEFFI------------------------------------------------>
 
             <!-----------------------DEBUT MAITRISE DOEUVRE------------------------------------>
-            <md-tab ng-disabled="vm.stepMenu_moe==false">
+            <md-tab ng-disabled="vm.stepMenu_moe==false" ng-click="vm.step_menu_moe()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -222,10 +222,10 @@
               </md-tab-label>
               
               <md-tab-body>
-               <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+               <ms-form-wizard flex> 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
                     
-                    <md-tab>
+                    <md-tab ng-click="vm.click_step_contrat_moe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
@@ -280,7 +280,7 @@
                       </md-tab-body>
                     </md-tab>
 
-                    <md-tab ng-disabled="!vm.stepsuivi_paiement_moe || vm.validation_contrat_moe==0">
+                    <md-tab ng-disabled="!vm.stepsuivi_paiement_moe || vm.validation_contrat_moe==0" ng-click="vm.click_step_suivi_paiement_moe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">Suivi payement</span>
@@ -291,7 +291,7 @@
                       <md-tab-body>
                        <!---------------------------------FILS PRESTATION----------------------------------------------->       
                          <ms-form-wizard flex id="soussousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
                         <!-----------------------------DEBUT demande debut travaux moe-------------------------> 
                               <md-tab>
@@ -1745,7 +1745,7 @@
 
 
              <!-----------------------DEBUT ENTREPRISE------------------------------------>
-            <md-tab ng-disabled="vm.stepMenu_mpe==false">
+            <md-tab ng-disabled="vm.stepMenu_mpe==false" ng-click="vm.step_menu_mpe()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepMenu==true">
@@ -1759,10 +1759,10 @@
               
               <md-tab-body>
                <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
                                         
-                    <!------------------------------------------------Debut contrat mpe----------------------------------------->
-                    <md-tab>
+                    <!--------------------------------------Debut contrat mpe------------------------------------>
+                    <md-tab ng-click="vm.step_contrat_mpe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
@@ -1835,9 +1835,9 @@
 
                       </md-tab-body>
                     </md-tab>
-                  <!-------------------------------------------FIN CONTRAT------------------------------------------------->
+                  <!------------------------------------FIN CONTRAT--------------------------------------------->
 
-                  <!------------------------------------DEBUT SUIVI PAIEMENT-----------------------------------------------> 
+                  <!-----------------------------DEBUT SUIVI PAIEMENT-------------------------------------------> 
                     <md-tab ng-disabled="!vm.stepsuivi_paiement_mpe" ng-click="vm.click_tabs_suivi_paiement()">
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
@@ -1846,11 +1846,11 @@
                        
                       </md-tab-label>                            
                       <md-tab-body>
-                    <!----------------------------------FILS DEBUT SUIVI PAIEMENT--------------------------------------------->  
+                    <!---------------------------FILS DEBUT SUIVI PAIEMENT--------------------------------------->  
                       <ms-form-wizard  flex id="sousmenu">
-                        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
-                        <!--------------------------------DEBUT AVANCE DE DEMARRAGE------------------------------------------> 
+                        <!-----------------------DEBUT AVANCE DE DEMARRAGE--------------------------------------> 
                           <md-tab>
                             <md-tab-label >
                               <span class="ms-form-wizard-step-label">
@@ -1967,9 +1967,9 @@
 
                             </md-tab-body> 
                           </md-tab>
-                        <!---------------------------------FIN AVANCE DE DEMARRAGE------------------------------------------>
+                        <!-----------------------FIN AVANCE DE DEMARRAGE---------------------------------------->
 
-                         <!------------------------------------DEBUT FACTURE--------------------------------------------> 
+                         <!------------------------------DEBUT FACTURE-----------------------------------------> 
                           <md-tab ng-click="vm.click_tab_facture_mpe()">
                             <md-tab-label >
                               <span class="ms-form-wizard-step-label">
@@ -3173,7 +3173,7 @@
           <!-------------------------------------------FIN ENTREPRISE-----------------------------------------------------> 
 
           <!----------------------------------------------DEBUT RELIQUAT-------------------------------------------------->
-            <md-tab ng-disabled="vm.stepMenu_reliquat==false" ng-click="vm.step_menu_reliquat()">
+            <!--md-tab ng-disabled="vm.stepMenu_reliquat==false" ng-click="vm.step_menu_reliquat()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-text">Reliquat</span>
@@ -3402,12 +3402,11 @@
                       </md-tab-body>
                     </md-tab>
                                        
-                    <md-tab>
-                    </md-tab>            
+                                
                   </md-tabs> 
                 </ms-form-wizard>               
               </md-tab-body>
-            </md-tab>
+            </md-tab-->
             <!------------------------------------------------FIN RELIQUAT------------------------------------------------>
                         
           </md-tabs>

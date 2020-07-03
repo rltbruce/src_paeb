@@ -41,6 +41,7 @@
 		  /*****debut initialisation*****/
 
         var vm    = this;
+        vm.styleTabfils = "acc_sous_menu";
         vm.selectedItemConvention_entete = {} ;
         vm.allconvention_entete = [] ;
       
@@ -379,7 +380,17 @@
             });
         }
 
+        vm.step_menu_mpe=function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+            vm.stepsuivi_paiement_mpe = false;
+        }
 
+        vm.step_menu_moe=function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+            vm.stepsuivi_paiement_moe = false;
+        }
         vm.step_menu_reliquat=function()
         {
             return new Promise(function (resolve, reject)
@@ -388,7 +399,9 @@
                 {
                     vm.alltransfert_reliquat = result.data.response;
                     return resolve('ok');
-                });            
+                }); 
+                 vm.styleTabfils = "acc_sous_menu";
+                 vm.stepjusti_trans_reliqua = false;           
             });
         }
        
@@ -400,7 +413,10 @@
       
 
       /**************************************fin contrat moe***************************************************/
-        
+        vm.click_step_contrat_moe=function()
+      {
+        vm.styleTabfils = "acc_sous_menu";
+      }
       //col table
         vm.contrat_moe_column = [
         {titre:"Bureau d'etude"
@@ -459,7 +475,10 @@
 
        
       /*****************************************fin contrat moe******************************************************/
-      
+      vm.step_suivi_paiement=function()
+      {
+        vm.styleTabfils = "acc_menu";
+      }
       /**********************************debut demande_debut_travaux_moe****************************************/
 //col table
         vm.demande_debut_travaux_moe_column = [        
@@ -952,6 +971,8 @@
         {titre:"Reste à décaisser"
         },
         {titre:"Date"
+        },
+        {titre:"Situation"
         }];
 
       
@@ -1086,7 +1107,10 @@
 
 
 /**********************************debut contrat prestataire****************************************/
-        
+         vm.click_step_contrat_mpe=function()
+      {
+        vm.styleTabfils = "acc_sous_menu";
+      }
 //col table
         vm.contrat_prestataire_column = [
         {titre:"Prestataire"
@@ -1140,6 +1164,7 @@
                 console.log(vm.allavance_demarrage);
                 console.log(vm.selectedItemContrat_prestataire.id);
             });
+            vm.styleTabfils = "acc_menu";
         }
         vm.avance_demarrage_column = [        
         {titre:"Description"

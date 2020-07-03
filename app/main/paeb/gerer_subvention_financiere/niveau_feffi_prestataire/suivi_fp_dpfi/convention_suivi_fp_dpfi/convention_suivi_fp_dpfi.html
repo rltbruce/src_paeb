@@ -33,7 +33,7 @@
             </div>
 <!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
          <ms-form-wizard flex>
-          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="">
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menu">
 
     <!------------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
             
@@ -206,10 +206,10 @@
               </div>
               </md-tab-body>
             </md-tab>
-          <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
+          <!---------------------------FIN CONVENTION CISCO/FEFFI----------------------------------------------->
           
           <!-----------------------DEBUT MAITRISE DOEUVRE------------------------------------>
-            <md-tab ng-disabled="vm.stepMenu_moe==false">
+            <md-tab ng-disabled="vm.stepMenu_moe==false" ng-click="vm.step_menu_moe()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -223,10 +223,10 @@
               
               <md-tab-body>
                <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
 
                     
-                    <md-tab>
+                    <md-tab ng-click="vm.click_step_contrat_moe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
@@ -283,7 +283,7 @@
                       </md-tab-body>
                     </md-tab>
 
-                    <md-tab ng-disabled="!vm.stepprestation_moe">
+                    <md-tab ng-disabled="!vm.stepprestation_moe" ng-click="vm.click_step_suivi_paiement_moe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
@@ -298,7 +298,7 @@
                       <md-tab-body>
                        <!---------------------------------FILS PRESTATION----------------------------------------------->       
                          <ms-form-wizard flex id="soussousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
                         <!-----------------------------DEBUT demande debut travaux moe-------------------------> 
                               <md-tab>
@@ -308,7 +308,7 @@
                                         <i class="icon-basket-fill s16"></i>
                                       </span-->                          
                                       
-                                      <span class="ms-form-wizard-step-text">Preparation travaux</span>
+                                      <span class="ms-form-wizard-step-text">Facture à la signature</span>
                                   </span>
                                  
                                 </md-tab-label>
@@ -318,12 +318,12 @@
                                         <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_debut_travaux_moe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationDemande_debut_travaux_moe_encourdpfi &&  vm.validation_demande_debut_travaux_moe ==1">
                                           Mettre en-cours
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_debut_travaux_moe_rejedpfi()" style="width:10%;" ng-show="vm.showbuttonValidationDemande_debut_travaux_moe_rejedpfi &&  vm.validation_demande_debut_travaux_moe ==2">
-                                          Rejeter
-                                        </md-button>
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_debut_travaux_moe_validedpfi()" style="width:10%;" ng-show="vm.showbuttonValidationDemande_debut_travaux_moe_validedpfi &&  vm.validation_demande_debut_travaux_moe ==2">
+                                        <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_debut_travaux_moe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_debut_travaux_moe_validedpfi &&  vm.validation_demande_debut_travaux_moe ==2">
                                           Valider
                                         </md-button>
+                                        <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_debut_travaux_moe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_debut_travaux_moe_rejedpfi &&  vm.validation_demande_debut_travaux_moe ==2">
+                                          Rejeter
+                                        </md-button><br>
                                     </div>
                                    <div>        
                                     <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
@@ -458,7 +458,7 @@
                                         <i class="icon-basket-fill s16"></i>
                                       </span-->                          
                                       
-                                      <span class="ms-form-wizard-step-text">Batiment</span>
+                                      <span class="ms-form-wizard-step-text">Facture travaux (Batiment)</span>
                                   </span>
                                  
                                 </md-tab-label>
@@ -468,13 +468,14 @@
                                         <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_batiment_moe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationDemande_batiment_moe_encourdpfi &&  vm.validation_demande_batiment_moe ==1">
                                           Mettre en-cours
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_batiment_moe_rejedpfi()" style="width:10%;" ng-show="vm.showbuttonValidationDemande_batiment_moe_rejedpfi &&  vm.validation_demande_batiment_moe ==2">
-                                          Rejeter
-                                        </md-button>
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_batiment_moe_validedpfi()" style="width:10%;" ng-show="vm.showbuttonValidationDemande_batiment_moe_validedpfi &&  vm.validation_demande_batiment_moe ==2">
+                                        <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_batiment_moe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_batiment_moe_validedpfi &&  vm.validation_demande_batiment_moe ==2">
                                           Valider
                                         </md-button>
-                                    </div>
+
+                                        <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_batiment_moe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_batiment_moe_rejedpfi &&  vm.validation_demande_batiment_moe ==2">
+                                          Rejeter
+                                        </md-button>                                    
+                                      </div>
                                    <div>        
                                     <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                       <thead>
@@ -611,7 +612,7 @@
                                         <i class="icon-basket-fill s16"></i>
                                       </span-->                          
                                       
-                                      <span class="ms-form-wizard-step-text">Latrine</span>
+                                      <span class="ms-form-wizard-step-text">Facture travaux (Latrine)</span>
                                   </span>
                                  
                                 </md-tab-label>
@@ -621,11 +622,11 @@
                                         <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_latrine_moe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationDemande_latrine_moe_encourdpfi &&  vm.validation_demande_latrine_moe ==1">
                                           Mettre en-cours
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_latrine_moe_rejedpfi()" style="width:10%;" ng-show="vm.showbuttonValidationDemande_latrine_moe_rejedpfi &&  vm.validation_demande_latrine_moe ==2">
-                                          Rejeter
-                                        </md-button>
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_latrine_moe_validedpfi()" style="width:10%;" ng-show="vm.showbuttonValidationDemande_latrine_moe_validedpfi &&  vm.validation_demande_latrine_moe ==2">
+                                        <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_latrine_moe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_latrine_moe_validedpfi &&  vm.validation_demande_latrine_moe ==2">
                                           Valider
+                                        </md-button>
+                                        <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_latrine_moe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_latrine_moe_rejedpfi &&  vm.validation_demande_latrine_moe ==2">
+                                          Rejeter
                                         </md-button><br>
                                     </div>
                                    <div>        
@@ -766,7 +767,7 @@
                                         <i class="icon-basket-fill s16"></i>
                                       </span-->                          
                                       
-                                      <span class="ms-form-wizard-step-text">A la fin travaux</span>
+                                      <span class="ms-form-wizard-step-text">Facture a la fin travaux</span>
                                   </span>
                                  
                                 </md-tab-label>
@@ -776,11 +777,11 @@
                                         <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_fin_travaux_moe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationDemande_fin_travaux_moe_encourdpfi &&  vm.validation_demande_fin_travaux_moe ==1">
                                           Mettre en-cours
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_fin_travaux_moe_rejedpfi()" style="width:10%;" ng-show="vm.showbuttonValidationDemande_fin_travaux_moe_rejedpfi &&  vm.validation_demande_fin_travaux_moe ==2">
-                                          Rejeter
-                                        </md-button>
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_fin_travaux_moe_validedpfi()" style="width:10%;" ng-show="vm.showbuttonValidationDemande_fin_travaux_moe_validedpfi &&  vm.validation_demande_fin_travaux_moe ==2">
+                                        <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_fin_travaux_moe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_fin_travaux_moe_validedpfi &&  vm.validation_demande_fin_travaux_moe ==2">
                                           Valider
+                                        </md-button>
+                                        <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_fin_travaux_moe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_fin_travaux_moe_rejedpfi &&  vm.validation_demande_fin_travaux_moe ==2">
+                                          Rejeter
                                         </md-button><br>
                                     </div>
                                    <div>        
@@ -930,7 +931,7 @@
 
 
              <!-----------------------DEBUT ENTREPRISE------------------------------------>
-            <md-tab ng-disabled="vm.stepMenu_mpe==false">
+            <md-tab ng-disabled="vm.stepMenu_mpe==false" ng-click="vm.step_menu_mpe()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepMenu==true">
@@ -944,10 +945,10 @@
               
               <md-tab-body>
                <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
                     
-                    <!------------------------------------------------Debut contrat mpe----------------------------------------->
-                    <md-tab>
+                    <!------------------------------------Debut contrat mpe--------------------------------------->
+                    <md-tab ng-click="vm.step_contrat_mpe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
@@ -1013,9 +1014,9 @@
                       </md-tab-body>
                     </md-tab>
                     
-                   <!-------------------------------------------FIN CONTRAT------------------------------------------------->
+                   <!-----------------------------------FIN CONTRAT----------------------------------------------->
 
-                  <!------------------------------------DEBUT SUIVI PAIEMENT-----------------------------------------------> 
+                  <!---------------------------------DEBUT SUIVI PAIEMENT------------------------------------------> 
                     <md-tab ng-disabled="!vm.stepsuivi_paiement_mpe" ng-click="vm.click_tabs_suivi_paiement()">
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
@@ -1024,11 +1025,11 @@
                        
                       </md-tab-label>                            
                       <md-tab-body>
-                    <!----------------------------------FILS DEBUT SUIVI PAIEMENT--------------------------------------------->  
-                      <ms-form-wizard  flex id="sousmenu">
-                        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                    <!---------------------------FILS DEBUT SUIVI PAIEMENT----------------------------------------->  
+                      <ms-form-wizard  flex>
+                        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
-                        <!--------------------------------DEBUT AVANCE DE DEMARRAGE------------------------------------------> 
+                        <!-------------------------DEBUT AVANCE DE DEMARRAGE---------------------------------------> 
                           <md-tab>
                             <md-tab-label >
                               <span class="ms-form-wizard-step-label">
@@ -1042,11 +1043,11 @@
                                         <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerAvance_demarrage_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationAvance_demarrage_encourdpfi &&  vm.validation_avance_demarrage ==1">
                                           Mettre en-cours
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerAvance_demarrage_rejedpfi()" style="width:10%;" ng-show="vm.showbuttonValidationAvance_demarrage_rejedpfi &&  vm.validation_avance_demarrage ==2">
-                                          Rejeter
-                                        </md-button>
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerAvance_demarrage_validedpfi()" style="width:10%;" ng-show="vm.showbuttonValidationAvance_demarrage_validedpfi &&  vm.validation_avance_demarrage ==2">
+                                        <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.validerAvance_demarrage_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationAvance_demarrage_validedpfi &&  vm.validation_avance_demarrage ==2">
                                           Valider
+                                        </md-button>
+                                        <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.validerAvance_demarrage_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationAvance_demarrage_rejedpfi &&  vm.validation_avance_demarrage ==2">
+                                          Rejeter
                                         </md-button><br>
                                     </div>
                                    <div>        
@@ -1108,11 +1109,11 @@
                                         <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerFacture_mpe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationFacture_mpe_encourdpfi &&  vm.validation_facture_mpe ==1">
                                           Mettre en-cours
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerFacture_mpe_rejedpfi()" style="width:10%;" ng-show="vm.showbuttonValidationFacture_mpe_rejedpfi &&  vm.validation_facture_mpe ==2">
-                                          Rejeter
-                                        </md-button>
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerFacture_mpe_validedpfi()" style="width:10%;" ng-show="vm.showbuttonValidationFacture_mpe_validedpfi &&  vm.validation_facture_mpe ==2">
+                                        <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.validerFacture_mpe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationFacture_mpe_validedpfi &&  vm.validation_facture_mpe ==2">
                                           Valider
+                                        </md-button>
+                                        <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.validerFacture_mpe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationFacture_mpe_rejedpfi &&  vm.validation_facture_mpe ==2">
+                                          Rejeter
                                         </md-button><br>
                                     </div>
                                    <div>        

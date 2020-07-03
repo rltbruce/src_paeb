@@ -41,6 +41,7 @@
 		  /*****debut initialisation*****/
 
         var vm    = this;
+        vm.styleTabfils = "acc_sous_menu";
         vm.selectedItemConvention_entete = {} ;
         vm.allconvention_entete = [] ;
        
@@ -435,7 +436,11 @@
           pagingType: 'simple',
           autoWidth: false          
         };
-       
+       /*,
+        columnDefs: [
+            { width: 200, targets: 0 },{ width: 200, targets: 4 }
+        ],
+        fixedColumns: true*/
         vm.datenow = new Date();       
 
         apiFactory.getAll("bureau_etude/index").then(function(result)
@@ -656,7 +661,7 @@
         },
         {titre:"Feffi"
         },
-        {titre:"Site"
+        {titre:"Code projet Site"
         },
         {titre:"Reference convention"
         },
@@ -722,6 +727,7 @@
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
+                                console.log(vm.allconvention_entete);
                             });                 
                       break;
                   default:
@@ -800,11 +806,12 @@
                         vm.allcontrat_partenaire_relai = result.data.response;
                         console.log(vm.allcontrat_partenaire_relai);
                         return resolve('ok');
-                });           
+                });
+                vm.styleTabfils = "acc_sous_menu";           
             });
         }
        vm.step_menu_moe = function (item,session)
-        {   vm.showbuttonNouvcontrat_moe=true;
+        {   
             return new Promise(function (resolve, reject) 
             {
                 apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
@@ -816,7 +823,24 @@
                         return resolve('ok'); 
                     });
                                 
-                });            });
+                }); 
+                vm.styleTabfils = "acc_sous_menu";           
+            });
+        }
+
+        vm.step_contrat_moe = function (item,session)
+        {   vm.showbuttonNouvcontrat_moe=true;
+            return new Promise(function (resolve, reject) 
+            {
+                apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.allcontrat_moe = result.data.response;
+                    return resolve('ok'); 
+                });
+                                
+                
+                vm.styleTabfils = "acc_sous_menu";           
+            });
         }
        vm.step_avenant_feffi= function (item,session)
         {
@@ -828,7 +852,7 @@
                     return resolve('ok');                                   
                 });
                             
-                vm.nbr_demande_feffi_creer = item.nbr_demande_feffi_creer;            
+                //vm.nbr_demande_feffi_creer = item.nbr_demande_feffi_creer;            
             });
         
         }
@@ -842,7 +866,7 @@
                     return resolve('ok');                                       
                 });
                             
-                vm.nbr_demande_feffi_creer = item.nbr_demande_feffi_creer;            
+               // vm.nbr_demande_feffi_creer = item.nbr_demande_feffi_creer;            
             });
         
         }
@@ -855,7 +879,8 @@
                     vm.allpassation_marches = result.data.response;
                     console.log(vm.allpassation_marches);
                     return resolve('ok');
-                });          
+                });
+                vm.styleTabfils = "acc_sous_menu";          
             });
         }
        vm.step_contrat_mpe = function (item,session)
@@ -867,7 +892,7 @@
                     vm.allcontrat_prestataire = result.data.response;
                     return resolve('ok');
                 });
-                       
+                 vm.styleTabfils = "acc_sous_menu";                       
             });
         }
 
@@ -1593,7 +1618,12 @@
   /**********************************************Avenant convention***************************************************/
 
   
-  /*********************************************debut contrat pr**********************************************/  
+  /*********************************************debut contrat pr**********************************************/ 
+
+  vm.stepmenu_contrat_pr= function()
+  {
+    vm.styleTabfils = "acc_sous_menu";
+  } 
 //col table
         vm.contrat_partenaire_relai_column = [
         {titre:"Partenaire relai"
@@ -1662,6 +1692,7 @@
                 vm.allmodule_dpp = result.data.response;                          
                 console.log(vm.allmodule_dpp);
             });
+            vm.styleTabfils = "acc_menu";
         }
         vm.step_module_dpp = function()
         {
@@ -2313,7 +2344,7 @@
             vm.stepparticipantdpp=false;
         };
 
-        //fonction bouton suppression item passation_marches_moe
+        //fonction bouton suppression item module dpp
         vm.supprimerModule_dpp = function()
         {
             var confirm = $mdDialog.confirm()
@@ -5406,6 +5437,11 @@
   /******************************************debut maitrise d'oeuvre*****************************************************/
 
       /**************************************fin passation marchés***************************************************/
+       
+       vm.clickpassation_marches_moe = function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+        }
         //col table
         vm.passation_marches_moe_column = [
         {titre:"Date shortlist"
@@ -5845,6 +5881,7 @@
             {
                 vm.allmemoire_technique = result.data.response;                           
             });
+            vm.styleTabfils = "acc_menu";
         }
 
         vm.step_memoire_technique = function()
@@ -5893,6 +5930,7 @@
             {
                 vm.allavenant_moe = result.data.response;
             });
+             vm.styleTabfils = "acc_sous_menu";
         }
 
         vm.step_importerdocument_moe = function()
@@ -5901,6 +5939,7 @@
              {
                  vm.alldocument_moe_scan = result.data.response;                                        
             });
+            vm.styleTabfils = "acc_sous_menu";
         }
 
         //fonction masque de saisie modification item feffi
@@ -8049,6 +8088,11 @@
 
    
 /**********************************debut passation_marches****************************************/
+
+vm.steppassation_marches = function()
+{
+    vm.styleTabfils = "acc_sous_menu";
+}
 //col table
         vm.passation_marches_column = [
         {titre:"Date lancement"
@@ -8354,6 +8398,10 @@
 /**********************************fin passation_marches****************************************/
 
 /**********************************debut sousmissionnaire****************************************/
+        vm.stepmpe_soumissionaire = function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+        }
     vm.mpe_soumissionaire_column = [
         {titre:"MPE sousmissionnaire"
         },
@@ -8667,6 +8715,7 @@
             {
                 vm.alldelai_travaux = result.data.response;                              
             });
+            vm.styleTabfils = "acc_menu";
         }
         vm.step_delai_execution = function()
         {
@@ -8709,6 +8758,7 @@
             {
                 vm.allavenant_mpe = result.data.response;
             });
+            vm.styleTabfils = "acc_sous_menu";
         }
         vm.step_importerdocument_mpe = function()
         {
@@ -8716,6 +8766,7 @@
             {
                 vm.alldocument_prestataire_scan = result.data.response;                                        
             });
+            vm.styleTabfils = "acc_sous_menu";
         }
 
         vm.step_attachement_prevu = function()
@@ -8725,6 +8776,7 @@
             {
                 vm.alldivers_attachement_batiment_prevu = result.data.response;       
             });
+            vm.styleTabfils = "acc_menu";
         }
         vm.step_attachement_batiment_prevu = function()
         {

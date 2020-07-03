@@ -369,8 +369,10 @@
            // vm.allconvention= [] ;
             
             vm.showbuttonNouvContrat_prestataire=true;
+            vm.stepMenu_moe=true;
+            vm.stepMenu_mpe=true;
 
-            donnee_menu_moe(item,vm.session).then(function () 
+           /* donnee_menu_moe(item,vm.session).then(function () 
             {
                     // On récupère le resultat de la requête dans la varible "response"                    
                 vm.stepMenu_moe=true;
@@ -381,7 +383,7 @@
                     // On récupère le resultat de la requête dans la varible "response"                    
                 vm.stepMenu_mpe=true;
                 console.log(vm.stepMenu_mpe);  
-            });
+            });*/
               
               vm.stepjusti_d_tra_moe = false;
               vm.nbr_decaiss_feffi = item.nbr_decaiss_feffi;
@@ -396,8 +398,37 @@
              });
              vm.selectedItemConvention_entete.$selected = true;
         });
+
+        vm.step_menu_moe = function()
+        {
+          
+            vm.styleTabfils = "acc_sous_menu";
+            vm.stepsuivi_paiement_moe = false;
+            return new Promise(function (resolve, reject) 
+            {
+                apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.allcontrat_moe = result.data.response;
+                    return resolve('ok');
+                });
+            });
+        }
+        vm.step_menu_mpe = function()
+        {
+            vm.styleTabfils = "acc_sous_menu";
+            vm.stepsuivi_paiement_mpe = false;
+            return new Promise(function (resolve, reject)
+            {
+                apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.allcontrat_prestataire = result.data.response;
+                                    
+                    return resolve('ok');
+                });           
+            });
+        }
         
-        function donnee_menu_moe(item,session)
+       /* function donnee_menu_moe(item,session)
         {   vm.showbuttonNouvcontrat_moe=true;
             return new Promise(function (resolve, reject) 
             {
@@ -463,7 +494,7 @@
               
                 }            
             });
-        }   
+        }  */ 
 
 
   
@@ -471,7 +502,11 @@
   /******************************************debut maitrise d'oeuvre*****************************************************/
 
        /**************************************fin contrat moe***************************************************/
-        
+        vm.click_step_contrat_moe = function()
+        {
+            vm.stepsuivi_paiement_moe = false;
+             vm.styleTabfils = "acc_sous_menu"
+        }
       //col table
         vm.contrat_moe_column = [
         {titre:"Bureau d'etude"
@@ -564,6 +599,10 @@
 
       
       /**********************************debut demande_debut_travaux_moe****************************************/
+      vm.click_step_suivi_paiement_moe = function()
+      {
+        vm.styleTabfils = "acc_menu";
+      }
 //col table
         vm.demande_debut_travaux_moe_column = [        
         {titre:"Objet"
@@ -1141,7 +1180,10 @@
 
 
 /**********************************debut contrat prestataire****************************************/
-        
+         vm.step_contrat_mpe = function ()
+        {
+            vm.styleTabfils = "acc_sous_menu";            
+        }
 //col table
         vm.contrat_prestataire_column = [
         {titre:"Prestataire"
@@ -1256,6 +1298,7 @@
             {
                 vm.allavance_demarrage = result.data.response;
             });
+            vm.styleTabfils = "acc_menu";
         }
         vm.avance_demarrage_column = [        
         {titre:"Description"

@@ -52,6 +52,7 @@
         vm.stepjusti_trans_reliqua = false;
 
         vm.session = '';
+        vm.ciscos=[];
 
 /*******************************Debut initialisation suivi financement feffi******************************/
 
@@ -125,28 +126,27 @@
         };
 
        
-        vm.datenow = new Date();
-
-        apiFactory.getAll("region/index").then(function success(response)
-        {
-          vm.regions = response.data.response;
-        }, function error(response){ alert('something went wrong')});
+        vm.datenow = new Date();        
 
         vm.filtre_change_region = function(item)
         { 
             vm.filtre.id_cisco = null;
-            if (item.id_region != '*')
+            if (vm.session=='ADMIN')
             {
-                apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
-                {
-                    vm.ciscos = result.data.response;
-                    console.log(vm.ciscos);
-                }, function error(result){ alert('something went wrong')});
+              if (item.id_region != '*')
+              {
+                  apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+                  {
+                      vm.ciscos = result.data.response;
+                      console.log(vm.ciscos);
+                  }, function error(result){ alert('something went wrong')});
+              }
+              else
+              {
+                  vm.ciscos = [];
+              }
             }
-            else
-            {
-                vm.ciscos = [];
-            }
+            
           
         }
         vm.filtre_change_cisco = function(item)
@@ -197,16 +197,30 @@
         var id_user = $cookieStore.get('id');
          apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
-              vm.roles = result.data.response.roles;vm.usercisco = result.data.response.cisco;
+              vm.roles = result.data.response.roles;
               switch (vm.roles[0])
                 {
                  case 'BCAF':                           
 
+                            vm.usercisco = result.data.response.cisco;
+                            vm.ciscos.push(vm.usercisco);
+                            console.log(vm.ciscos);
+                            apiFactory.getAPIgeneraliserREST("region/index","menu","getregionbycisco",'id_cisco',vm.usercisco.id).then(function(result)
+                            {
+                                vm.regions = result.data.response;
+                                console.log(vm.regions);
+                            }, function error(result){ alert('something went wrong')});
+                            
+                            
                             vm.session = 'BCAF';
                       
                       break;
 
-                  case 'ADMIN':                            
+                  case 'ADMIN': 
+                            apiFactory.getAll("region/index").then(function success(response)
+                            {
+                              vm.regions = response.data.response;
+                            }, function error(response){ alert('something went wrong')});                           
                             vm.session = 'ADMIN';                  
                       break;
                   default:

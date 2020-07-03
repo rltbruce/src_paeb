@@ -649,7 +649,7 @@
                       
                       <md-tab-body>
                           <div style="widht:100%;">  
-                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterTransfert_reliquat()" style="width:10%;" ng-show="vm.showbuttonNouvTransfert_reliquat">
+                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterTransfert_reliquat()" style="width:10%;" ng-disabled="!vm.showbuttonNouvTransfert_reliquat">
                                 Nouveau
                               </md-button><br>
                           </div>
@@ -687,7 +687,7 @@
                                             Amelioration infrastructure
                                           </md-option>
                                           <md-option  value="1">
-                                            Nouvelle construction
+                                            Se procurer de nouvel fourniture
                                           </md-option>
                                         </md-select>
                                       </md-input-container>
@@ -779,9 +779,9 @@
                       
                       <md-tab-body>
                         <div style="widht:100%;">  
-                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_transfert_reliquat()" style="width:10%;" ng-show="vm.validation_transfert_reliquat ==0 && (vm.session=='OBCAF' || vm.session=='ADMIN')">
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_transfert_reliquat()" style="width:10%;" ng-show="vm.validation_transfert_reliquat ==0">
                             Nouveau
-                          </md-button>br
+                          </md-button><br>
                         </div>
                        <div>        
                         <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>

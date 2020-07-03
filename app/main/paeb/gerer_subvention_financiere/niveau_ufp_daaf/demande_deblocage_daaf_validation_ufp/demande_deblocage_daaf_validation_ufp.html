@@ -12,7 +12,7 @@
                 <span class="parent" href="javascript:;"> Validation demande de déblocage UFP</span>
             </div>
 
-            <div class="title">Validation demande de déblocage UFP</div>
+            <!--div class="title">Validation demande de déblocage UFP</div-->
         </div>
     </div>
     <!-- / HEADER -->
@@ -139,11 +139,11 @@
                     Mettre en-cours
                   </md-button>
 
-                  <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_finaliser()" style="width:10%;" ng-disabled="vm.situation>2" ng-show="vm.showbutton && vm.validation_item==2">
-                    Finalisée
+                  <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_finaliser()" style="width:10%; color: white" ng-disabled="vm.situation>2" ng-show="vm.showbutton && vm.validation_item==2">
+                    Valider
                   </md-button>
 
-                  <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_rejeter()" style="width:10%;" ng-disabled="vm.situation>3" ng-show="vm.showbutton && vm.validation_item==2">
+                  <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_rejeter()" style="width:10%; color: white" ng-disabled="vm.situation>3" ng-show="vm.showbutton && vm.validation_item==2">
                     Rejeter
                   </md-button>
               </div> <br>
@@ -222,7 +222,7 @@
                   <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==true">
                       <i class="icon-check s16"></i>
                   </span>
-                <span class="ms-form-wizard-step-text">Pièce justificatif</span>
+                <span class="ms-form-wizard-step-text">Pièce justificative</span>
               </span>
             </md-tab-label>
             
@@ -274,7 +274,7 @@
             
             <md-tab-body>
                <div style="widht:100%;">  
-                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterTransfert_ufp()" style="width:10%;" ng-show="vm.showbuttonNouvtransfert">
+                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterTransfert_ufp()" style="width:10%;" ng-disabled="!vm.showbuttonNouvtransfert">
                     Nouveau
                   </md-button>
               </div> <br>
@@ -369,7 +369,7 @@
              
             </md-tab-body>
           </md-tab>          
-<md-tab></md-tab>
+
           </md-tabs>
           </ms-form-wizard>       
                   

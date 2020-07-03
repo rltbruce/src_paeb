@@ -1,20 +1,26 @@
 #toolbar {
-    height: $toolbarHeight;
+   /* height: $toolbarHeight;
     min-height: $toolbarHeight;
-    max-height: $toolbarHeight;
+    max-height: $toolbarHeight;*/
+
+    height: 45px;
+    min-height: 45px;
+    max-height: 45px;
     z-index: 55 !important;
 
     #navigation-toggle {
         width: $toolbarHeight;
         min-width: $toolbarHeight;
-        height: $toolbarHeight;
+        //height: $toolbarHeight;
+        height: 45px;
         margin: 0;
         border-right: 1px solid rgba(0, 0, 0, 0.12);
         border-radius: 0;
     }
 
     #user-menu {
-        height: $toolbarHeight;
+        //height: $toolbarHeight;
+        height: 45px;
         padding: 0;
 
         md-menu-item .md-button {
@@ -44,7 +50,8 @@
         .user-button {
             margin: 0;
             padding: 0 16px;
-            height: $toolbarHeight;
+            //height: $toolbarHeight;
+            height: 45px;
             text-transform: none;
 
             .avatar-wrapper {
@@ -64,7 +71,8 @@
     }
 
     #language-menu {
-        height: $toolbarHeight;
+        //height: $toolbarHeight;
+        height: 45px;
 
         .language-button {
             min-width: $toolbarHeight;
@@ -85,13 +93,15 @@
 
     #quick-panel-toggle {
         width: $toolbarHeight;
-        height: $toolbarHeight;
+        //height: $toolbarHeight;
+        height: 45px;
         margin: 0;
         border-radius: 0;
     }
 
     .toolbar-separator {
-        height: $toolbarHeight;
+       // height: $toolbarHeight;
+       height: 45px;
         width: 1px;
         background: rgba(0, 0, 0, 0.12);
     }

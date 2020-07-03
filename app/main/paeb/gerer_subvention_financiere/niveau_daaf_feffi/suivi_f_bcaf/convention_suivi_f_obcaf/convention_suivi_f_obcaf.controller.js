@@ -51,6 +51,7 @@
         vm.stepjusti_trans_reliqua = false;
 
         vm.session = '';
+        vm.ciscos=[];
 
 /*******************************Debut initialisation suivi financement feffi******************************/        
 
@@ -121,26 +122,27 @@
 
         vm.datenow = new Date();
 
-        apiFactory.getAll("region/index").then(function success(response)
-        {
-          vm.regions = response.data.response;
-        }, function error(response){ alert('something went wrong')});
+       
 
         vm.filtre_change_region = function(item)
         { 
             vm.filtre.id_cisco = null;
-            if (item.id_region != '*')
+            if (vm.session=='ADMIN')
             {
-                apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
-                {
-                    vm.ciscos = result.data.response;
-                    console.log(vm.ciscos);
-                }, function error(result){ alert('something went wrong')});
+              if (item.id_region != '*')
+              {
+                  apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+                  {
+                      vm.ciscos = result.data.response;
+                      console.log(vm.ciscos);
+                  }, function error(result){ alert('something went wrong')});
+              }
+              else
+              {               
+                  vm.ciscos = [];                
+              }
             }
-            else
-            {
-                vm.ciscos = [];
-            }
+            
           
         }
         vm.filtre_change_cisco = function(item)
@@ -196,6 +198,12 @@
                 {
                   case 'OBCAF': 
                             vm.usercisco = result.data.response.cisco;
+                            apiFactory.getAPIgeneraliserREST("region/index","menu","getregionbycisco",'id_cisco',vm.usercisco.id).then(function(result)
+                            {
+                                vm.regions = result.data.response;
+                                console.log(vm.regions);
+                            }, function error(result){ alert('something went wrong')});
+                            vm.ciscos.push(vm.usercisco);
                             vm.showbuttonNeauveaudemandefeffi=true;                            
                             vm.session = 'OBCAF';
 
@@ -203,6 +211,10 @@
 
                   case 'ADMIN':                            
                             vm.showbuttonNeauveaudemandefeffi=true;
+                             apiFactory.getAll("region/index").then(function success(response)
+                            {
+                              vm.regions = response.data.response;
+                            }, function error(response){ alert('something went wrong')});
                             vm.session = 'ADMIN';                  
                       break;
                   default:

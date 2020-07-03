@@ -31,9 +31,9 @@
                       Chargement,veuillez patienter s'il vous plait ...
               </div>
             </div>
-<!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
+<!-------------------------------------DEBUT TABS MERE----------------------------------------------------------->
          <ms-form-wizard flex>
-          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="">
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menu">
             <md-tab>
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
@@ -200,10 +200,10 @@
               </md-tab-body>
             </md-tab>
           
-          <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
+          <!-------------------------------FIN CONVENTION CISCO/FEFFI----------------------------------------------->
 
 
-          <!------------------------------------DEBUT MAITRISE D'OEUVRE----------------------------------------------------->      
+          <!--------------------------------DEBUT MAITRISE D'OEUVRE------------------------------------------------>      
             <md-tab ng-disabled="vm.stepMenu_moe==false" ng-click="vm.step_menu_moe()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
@@ -213,11 +213,11 @@
               </md-tab-label>
               <md-tab-body>
 
-              <!----------------------------------FILS DEBUT MAITRISE D'OEUVRE--------------------------------------------->  
+              <!---------------------------FILS DEBUT MAITRISE D'OEUVRE----------------------------------------->  
                 <ms-form-wizard  flex id="sousmenu">
-                  <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                  <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
 
-                  <!-----------------------------------------DEBUT CONTRAT-------------------------------------------------> 
+                  <!----------------------------------DEBUT CONTRAT---------------------------------------------> 
                     <md-tab ng-click="vm.click_step_contrat_moe()">
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
@@ -267,9 +267,9 @@
                         </div>
                       </md-tab-body> 
                     </md-tab>
-                  <!-------------------------------------------FIN CONTRAT------------------------------------------------->
+                  <!------------------------------------FIN CONTRAT----------------------------------------------->
 
-                  <!------------------------------------DEBUT SUIVI PAIEMENT-----------------------------------------------> 
+                  <!------------------------------DEBUT SUIVI PAIEMENT--------------------------------------------> 
                     <md-tab ng-disabled="!vm.stepsuivi_paiement_moe" ng-click="vm.click_step_suivi_paiement_moe()">
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
@@ -279,9 +279,9 @@
                       </md-tab-label>                            
                       <md-tab-body>                        
                       
-                      <!---------------------------------FILS DEBUT SUIVI PAIEMENT----------------------------------------->       
+                      <!--------------------------FILS DEBUT SUIVI PAIEMENT--------------------------------------->       
                         <ms-form-wizard flex id="soussousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
                              <!-----------------------------DEBUT demande debut travaux moe-------------------------> 
                               <md-tab>
                                 <md-tab-label>
@@ -294,7 +294,7 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_debut_travaux_moe()" style="width:10%;" ng-show="vm.showbuttonNouvDemande_debut_travaux_moe_creer">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_debut_travaux_moe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvDemande_debut_travaux_moe_creer">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -467,7 +467,7 @@
                                   
                                    <md-tab-body>
                                       <div style="widht:100%;">  
-                                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_debut_travaux_moe()" style="width:10%;" ng-show="vm.validation_demande_debut_travaux_moe ==0">
+                                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_debut_travaux_moe()" style="width:10%;" ng-disabled="vm.validation_demande_debut_travaux_moe !=0">
                                             Nouveau
                                           </md-button><br>
                                       </div>
@@ -563,7 +563,7 @@
                                 
                                 <md-tab-body>
                                   <div style="widht:100%;">  
-                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPaiement_debut_travaux_moe()" style="width:10%;" ng-show="vm.showbuttonNouvPaiement_debut_travaux_moe">
+                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPaiement_debut_travaux_moe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPaiement_debut_travaux_moe">
                                         Nouveau
                                       </md-button><br>
                                   </div>
@@ -650,7 +650,7 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_batiment_moe()" style="width:10%;" ng-show="vm.showbuttonNouvDemande_batiment_moe_creer">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_batiment_moe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvDemande_batiment_moe_creer">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -823,7 +823,7 @@
                                   
                                    <md-tab-body>
                                       <div style="widht:100%;">  
-                                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_batiment_moe()" style="width:10%;" ng-show="vm.validation_demande_batiment_moe ==0 && (vm.session=='OBCAF' || vm.session=='BCAF' || vm.session=='ADMIN')">
+                                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_batiment_moe()" style="width:10%;" ng-disabled="vm.validation_demande_batiment_moe !=0">
                                             Nouveau
                                           </md-button><br>
                                       </div>
@@ -920,7 +920,7 @@
                                 
                                 <md-tab-body>
                                   <div style="widht:100%;">  
-                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPaiement_batiment_moe()" style="width:10%;" ng-show="vm.showbuttonNouvPaiement_batiment_moe">
+                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPaiement_batiment_moe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPaiement_batiment_moe">
                                         Nouveau
                                       </md-button><br>
                                   </div>
@@ -1007,7 +1007,7 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">                                    
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_latrine_moe()" style="width:10%;" ng-show="vm.showbuttonNouvDemande_latrine_moe_creer">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_latrine_moe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvDemande_latrine_moe_creer">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -1180,7 +1180,7 @@
                                   
                                    <md-tab-body>
                                       <div style="widht:100%;">  
-                                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_latrine_moe()" style="width:10%;" ng-show="vm.validation_demande_latrine_moe ==0 && (vm.session=='OBCAF' || vm.session=='BCAF' || vm.session=='ADMIN')">
+                                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_latrine_moe()" style="width:10%;" ng-disabled="vm.validation_demande_latrine_moe !=0 ">
                                             Nouveau
                                           </md-button><br>
                                       </div>
@@ -1277,7 +1277,7 @@
                                 
                                 <md-tab-body>
                                   <div style="widht:100%;">  
-                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPaiement_latrine_moe()" style="width:10%;" ng-show="vm.showbuttonNouvPaiement_latrine_moe">
+                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPaiement_latrine_moe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPaiement_latrine_moe">
                                         Nouveau
                                       </md-button><br>
                                   </div>
@@ -1364,7 +1364,7 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_fin_travaux_moe()" style="width:10%;" ng-show="vm.showbuttonNouvDemande_fin_travaux_moe_creer">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_fin_travaux_moe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvDemande_fin_travaux_moe_creer">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -1537,7 +1537,7 @@
                                   
                                    <md-tab-body>
                                       <div style="widht:100%;">  
-                                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_fin_travaux_moe()" style="width:10%;" ng-show="vm.validation_demande_fin_travaux_moe ==0 && (vm.session=='OBCAF' || vm.session=='BCAF' || vm.session=='ADMIN')">
+                                          <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_fin_travaux_moe()" style="width:10%;" ng-disabled="vm.validation_demande_fin_travaux_moe !=0 ">
                                             Nouveau
                                           </md-button><br>
                                       </div>
@@ -1633,7 +1633,7 @@
                                 
                                 <md-tab-body>
                                   <div style="widht:100%;">  
-                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPaiement_fin_travaux_moe()" style="width:10%;" ng-show="vm.showbuttonNouvPaiement_fin_travaux_moe">
+                                      <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPaiement_fin_travaux_moe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPaiement_fin_travaux_moe">
                                         Nouveau
                                       </md-button><br>
                                   </div>
@@ -1706,22 +1706,22 @@
 
                               </md-tab-body>
                               </md-tab>
-                       <!---------------------------------FIN paiement fin travaux moe------------------------------->
+                       <!-------------------------------FIN paiement fin travaux moe------------------------------->
                           </md-tabs> 
                         </ms-form-wizard>
-                      <!---------------------------------FILS DEBUT SUIVI PAIEMENT-----------------------------------------> 
+                      <!--------------------------FILS DEBUT SUIVI PAIEMENT-----------------------------------------> 
                       </md-tab-body> 
                     </md-tab>
-                  <!-------------------------------------FIN SUIVI PAIEMENT----------------------------------------------->
+                  <!------------------------------FIN SUIVI PAIEMENT----------------------------------------------->
 
                   </md-tabs> 
                 </ms-form-wizard>
-              <!---------------------------------FILS DEBUT MAITRISE D'OEUVRE---------------------------------------------->  
+              <!-------------------------FILS DEBUT MAITRISE D'OEUVRE---------------------------------------------->  
               </md-tab-body>  
             </md-tab>
-          <!--------------------------------------FIN MAITRISE D'OEUVRE---------------------------------------------------> 
+          <!------------------------------FIN MAITRISE D'OEUVRE---------------------------------------------------> 
 
-          <!-----------------------------------------DEBUT ENTREPRISE-----------------------------------------------------> 
+          <!--------------------------------DEBUT ENTREPRISE-----------------------------------------------------> 
             <md-tab ng-disabled="vm.stepMenu_mpe==false" ng-click="vm.step_menu_mpe()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
@@ -1731,12 +1731,12 @@
               </md-tab-label>                            
               <md-tab-body>
 
-              <!----------------------------------FILS DEBUT MAITRISE D'OEUVRE--------------------------------------------->  
-                <ms-form-wizard  flex id="sousmenu">
-                  <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+              <!--------------------------FILS DEBUT MAITRISE D'OEUVRE--------------------------------------------->  
+                <ms-form-wizard  flex >
+                  <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
 
-                  <!-----------------------------------------DEBUT CONTRAT-------------------------------------------------> 
-                    <md-tab>
+                  <!---------------------------------DEBUT CONTRAT-------------------------------------------------> 
+                    <md-tab ng-click="vm.step_contrat_mpe()">
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
                             <span class="ms-form-wizard-step-text">CONTRAT</span>
@@ -1792,9 +1792,9 @@
                         </div>
                       </md-tab-body> 
                     </md-tab>
-                  <!-------------------------------------------FIN CONTRAT------------------------------------------------->
+                  <!----------------------------------FIN CONTRAT----------------------------------------------->
 
-                  <!------------------------------------DEBUT SUIVI PAIEMENT-----------------------------------------------> 
+                  <!-----------------------------DEBUT SUIVI PAIEMENT-------------------------------------------> 
                     <md-tab ng-disabled="!vm.stepsuivi_paiement_mpe" ng-click="vm.click_tabs_suivi_paiement()">
                       <md-tab-label >
                         <span class="ms-form-wizard-step-label">
@@ -1805,7 +1805,7 @@
                       <md-tab-body>
                     <!----------------------------------FILS DEBUT SUIVI PAIEMENT--------------------------------------------->  
                       <ms-form-wizard  flex id="sousmenu">
-                        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
                         <!--------------------------------DEBUT AVANCE DE DEMARRAGE------------------------------------------> 
                           <md-tab>
@@ -1818,7 +1818,7 @@
                             <md-tab-body>
 
                               <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvance_demarrage()" style="width:10%;" ng-show="vm.showbuttonNouvAvance_demarrage">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvance_demarrage()" style="width:10%;" ng-disabled="!vm.showbuttonNouvAvance_demarrage">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -1936,7 +1936,7 @@
                             </md-tab-label>                            
                             <md-tab-body>
                               <div style="widht:100%;">  
-                                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterFacture_mpe()" style="width:10%;" ng-show="vm.showbuttonNouvFacture_mpe">
+                                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterFacture_mpe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvFacture_mpe">
                                           Nouveau
                                   </md-button><br>
                               </div>
@@ -2145,7 +2145,7 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAttachement_travaux()" style="width:10%;" ng-show="vm.showbuttonNouvAttachement_travaux">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAttachement_travaux()" style="width:10%;" ng-disabled="!vm.showbuttonNouvAttachement_travaux">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -2271,7 +2271,7 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_batiment_mpe()" style="width:10%;" ng-show="vm.showbuttonNouvDemande_batiment_mpe_creer">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_batiment_mpe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvDemande_batiment_mpe_creer">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -2478,7 +2478,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!divers_attachement_batiment_travaux.$edit">{{divers_attachement_batiment_travaux.montant_prevu}}</span>
+                                            <span ng-if="!divers_attachement_batiment_travaux.$edit">{{divers_attachement_batiment_travaux.divers_attachement_batiment_prevu.montant_prevu}}</span>
                                           </td>
 
                                           <td>
@@ -2565,7 +2565,7 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_latrine_mpe()" style="width:10%;" ng-show="vm.showbuttonNouvDemande_latrine_mpe_creer">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_latrine_mpe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvDemande_latrine_mpe_creer">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -2772,7 +2772,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!divers_attachement_latrine_travaux.$edit">{{divers_attachement_latrine_travaux.montant_prevu}}</span>
+                                            <span ng-if="!divers_attachement_latrine_travaux.$edit">{{divers_attachement_latrine_travaux.divers_attachement_latrine_prevu.montant_prevu}}</span>
                                           </td>
 
                                           <td>
@@ -2859,7 +2859,7 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">  
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_mobilier_mpe()" style="width:10%;" ng-show="vm.showbuttonNouvDemande_mobilier_mpe_creer">
+                                        <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterDemande_mobilier_mpe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvDemande_mobilier_mpe_creer">
                                           Nouveau
                                         </md-button><br>
                                     </div>
@@ -3066,7 +3066,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.montant_prevu}}</span>
+                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.divers_attachement_mobilier_prevu.montant_prevu}}</span>
                                           </td>
 
                                           <td>
@@ -3169,7 +3169,7 @@
           <!-------------------------------------------FIN ENTREPRISE-----------------------------------------------------> 
 
           <!----------------------------------------------DEBUT RELIQUAT-------------------------------------------------->
-            <md-tab ng-disabled="vm.stepMenu_reliquat==false" ng-click="vm.step_menu_reliquat()">
+            <!--md-tab ng-disabled="vm.stepMenu_reliquat==false" ng-click="vm.step_menu_reliquat()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-text">Reliquat</span>
@@ -3408,7 +3408,7 @@
                   </md-tabs> 
                 </ms-form-wizard>               
               </md-tab-body>
-            </md-tab>
+            </md-tab-->
             <!------------------------------------------------FIN RELIQUAT------------------------------------------------->
 
                         

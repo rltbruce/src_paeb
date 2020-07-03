@@ -281,7 +281,7 @@
 
                         default:
 
-                            vm.showAlert('Le dernier demande est en cours de traitement!!!');
+                            vm.showAlert('La dernière demande est en cours de traitement!!!');
                             vm.allcurenttranche_deblocage_daaf = [];
                             break;
                     

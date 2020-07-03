@@ -239,16 +239,16 @@
                             <md-tab-body>
                               <div style="widht:100%;">                                    
 
-                                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.valider_demandeemidaaf(5)" style="width:12%;" ng-if="vm.showbuttonValidationencourdaaf && vm.permissionboutonvaliderdaaf && vm.validation==4">
+                                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.valider_demandeemidaaf(5)" style="width:12%;" ng-if="vm.showbuttonValidationencourdaaf && vm.permissionboutonvaliderdaaf && vm.validation==4">
                                      Mettre en-cours
                                     </md-button>
 
-                                    <md-button type="submit" class="md-raised md-primary" aria-label="Nouveau" ng-click="vm.rejeter_demandedaaf(6)" style="width:10%;" ng-if="vm.showbuttonValidationenrejedaaf && vm.permissionboutonvaliderdaaf && vm.validation==5">
-                                     Rejeter
+                                    <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.valider_demande_final(7)" style="width:10%; color: white" ng-if="vm.showbuttonValidationdaaf && vm.permissionboutonvaliderdaaf && vm.validation==5">
+                                     Valider
                                     </md-button>
 
-                                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.valider_demande_final(7)" style="width:10%;" ng-if="vm.showbuttonValidationdaaf && vm.permissionboutonvaliderdaaf && vm.validation==5">
-                                     Valider
+                                    <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.rejeter_demandedaaf(6)" style="width:10%; color: white" ng-if="vm.showbuttonValidationenrejedaaf && vm.permissionboutonvaliderdaaf && vm.validation==5">
+                                     Rejeter
                                     </md-button>
                               </div> <br>
 
