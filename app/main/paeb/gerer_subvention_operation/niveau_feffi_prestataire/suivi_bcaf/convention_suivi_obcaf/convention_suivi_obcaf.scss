@@ -10,8 +10,8 @@
             md-tabs-wrapper
             {
                 height:60px !important;
-                background-color: transparent !important;
-
+               background-color: transparent !important;
+                //background-color: rgb(239,239,239) !important ;
                 margin: auto !important;
                 //border: 1px solid red;
                md-icon.md-default-theme, md-icon {
@@ -122,8 +122,10 @@
                 //background-color: rgb(56,110,148) !important ; 
               // background-color: rgba(30,128,174,1) !important ; 
                //background-color: rgb(71,91,120) !important ; 
-                background-image: url('/assets/images/backgrounds/header-bg.png');      
+               background-image: url('/assets/images/backgrounds/header-bg.png');      
                background-color: rgb(59,88,130) !important ;
+               //background-color: transparent !important;
+               //background-image: none;  
                background-size: cover;
                md-icon.md-default-theme, md-icon {
                     color: rgba(1,161,245,0.5) !important;

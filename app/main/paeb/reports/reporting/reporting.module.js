@@ -3,18 +3,18 @@
     'use strict';
 
     angular
-        .module('app.paeb.reporting', [])
+        .module('app.paeb.reports.reporting', [])
         .config(config);
 
     /** @ngInject */
     function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
     {
         // State
-        $stateProvider.state('app.paeb_reporting', {
+        $stateProvider.state('app.paeb_reports_reporting', {
             url      : '/donnees-de-base/reporting',
             views    : {
                 'content@app': {
-                    templateUrl: 'app/main/paeb/reporting/reporting.html',
+                    templateUrl: 'app/main/paeb/reports/reporting/reporting.html',
                     controller : 'ReportingController as vm'
                 }
             },
@@ -27,11 +27,11 @@
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.reporting', {
+        msNavigationServiceProvider.saveItem('paeb.reports.reporting', {
             title: 'Reporting',
             icon  : 'icon-nfc-variant',
-            state: 'app.paeb_reporting',
-			weight: 5
+            state: 'app.paeb_reports_reporting',
+			weight: 1
         });
     }
 

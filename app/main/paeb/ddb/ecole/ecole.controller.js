@@ -420,7 +420,7 @@
                     if(suppression==0)
                     {
                         vm.selectedItem.zap   = zap[0];
-                        vm.selectedItem.com  = com[0];
+                        vm.selectedItem.commune  = com[0];
                         vm.selectedItem.cisco   = cisc[0];
                         vm.selectedItem.zone_subvention   = zosub[0];
                         vm.selectedItem.acces_zone   = azone[0];
@@ -440,7 +440,7 @@
                 else
                 {
                   ecole.zap   = zap[0];
-                  ecole.com  = com[0];
+                  ecole.commune  = com[0];
                   ecole.cisco   = cisc[0];
                   ecole.zone_subvention = zosub[0];
                   ecole.acces_zone = azone[0];
@@ -487,10 +487,38 @@ vm.ecolevueMap = {
                         zoom  : 5,
                         marker: vm.liste
                     };
+
+vm.insertecoordonnees= function()
+{
+    vm.polylines.forEach(function(item)
+    {
+      if (item.id == 1 )
+      {
+        var datas = $.param({
+                    id:        item.id,      
+                    coordonnees:      item.path                
+                });
+                console.log(item);
+       var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+                
+            apiFactory.add("district_coordo/index",datas, config).success(function (data)
+            {
+            
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+      }
+      
+
+    }); 
+   
+}
+
 vm.polylines = [
              //District Tsiombe 1               
             {               
-                id: 1 ,
+                id: 106,
                 path: [
                     
                     {
@@ -973,281 +1001,11 @@ vm.polylines = [
                 },
             }, 
 
-             //District BELOHA 2              
-            {               
-                id: 2 ,
-                path: [
-                    {
-                        latitude: -25.553608292642224,     
-                        longitude: 45.13433107917093, 
-                    },
-                    {
-                        latitude: -25.534950759377082,     
-                        longitude: 45.11916659462257, 
-                    },
-                    {
-                        latitude: -25.476471697677184,     
-                        longitude: 44.974414696661, 
-                    }, 
-                    {
-                        latitude: -25.41920931975112,     
-                        longitude: 44.939949959051106, 
-                    },
-                    {
-                        latitude: -25.33949466845685,      
-                        longitude: 44.80898395613348, 
-                    },
-                    {
-                        latitude: -25.288399845135928,   //Mihisaka aty amn ilan manambatra   
-                        longitude: 44.519480160210335, 
-                    },                    
-
-                    {
-                        latitude: -25.288399845135928,   // faran av aty amn sisin amban   
-                        longitude: 44.519480160210335, 
-                    },                                    
-                    {
-                        latitude: -25.24351833993093,    
-                        longitude: 44.496044138635604, 
-                    },                                    
-                    {
-                        latitude: -25.181155411273636,    
-                        longitude: 44.522237339219124, 
-                    },                                    
-                    {
-                        latitude: -24.912631698528898,   
-                        longitude: 44.86137035730054, 
-                    },                                    
-                    {
-                        latitude: -24.916382581587825,     
-                        longitude: 44.89721368441482, 
-                    },                                    
-                    {
-                        latitude: -24.881369905588144,     
-                        longitude: 44.91513534797197, 
-                    },                                    
-                    {
-                        latitude: -24.739967993600516,     
-                        longitude: 45.04610135088959, 
-                    },                                    
-                    {
-                        latitude: -24.691128160471678,    
-                        longitude: 45.05161570890715, 
-                    },                                    
-                    {
-                        latitude: -24.657304749626476,    
-                        longitude: 45.06815878295992, 
-                    },                                    
-                    {
-                        latitude: -24.614699265688884,    
-                        longitude: 45.05437288791597, 
-                    },                                    
-                    {
-                        latitude: -24.573332998554122,    // Mis fifandraisana telo manaraka sad  missiny
-                        longitude: 45.0791874989951, //Mihidina indray av eto 
-                    },            
-
-
-                    {
-                        latitude: -24.56204891766545,    
-                        longitude: 45.113652236604985, 
-                    },                                    
-                    {
-                        latitude: -24.592137541814253,    
-                        longitude: 45.15914569025006, 
-                    },                                    
-                    {
-                        latitude: -24.614699265688884,   
-                        longitude: 45.15087415322368, 
-                    },                                    
-                    {
-                        latitude: -24.692380703200016,    
-                        longitude: 45.21566785993028, 
-                    },                                    
-                    {
-                        latitude: -24.721185710240675,     
-                        longitude: 45.32733360978636, 
-                    },                                    
-                    {
-                        latitude: -24.748732088478945,    
-                        longitude: 45.36041975789187, 
-                    },                                    
-                    {
-                        latitude: -24.77752404859278,    // Mis fifandraisana telo ambon indray
-                        longitude: 45.379720010953406, 
-                    },
-
-
-                    {
-                        latitude: -24.80130367547619,    
-                        longitude: 45.35766257888307, 
-                    },                                    
-                    {
-                        latitude: -24.87511659721777,     
-                        longitude: 45.371448473927025, 
-                    },                                    
-                    {
-                        latitude: -24.986378114738073,     
-                        longitude: 45.30251899870723, 
-                    },                                    
-                    {
-                        latitude: -25.040097657551655,     
-                        longitude: 45.32181925176878, 
-                    },                                    
-                    {
-                        latitude: -25.041346669552198,     
-                        longitude: 45.356283989378674, 
-                    },                                    
-                    {
-                        latitude: -25.075065183783934,     
-                        longitude: 45.37558424244022, 
-                    },
-                    {
-                        latitude: -25.11947927997535,   
-                        longitude: 45.353013812106425, 
-                    },
-
-
-                    {
-                        latitude: -25.13115816946872,   
-                        longitude: 45.33400867249297, 
-                    },
-                    {
-                        latitude: -25.136607935792696,   
-                        longitude: 45.29617038547975, 
-                    },
-                    {
-                        latitude: -25.139332727752745,   
-                        longitude: 45.27957313685803, 
-                    },
-                    {
-                        latitude: -25.200896800629508,   
-                        longitude: 45.26968358457048, 
-                    },
-                    {
-                        latitude: -25.22945009912908,   
-                        longitude: 45.28430292273468, 
-                    },
-                    {
-                        latitude: -25.233417465839295,   
-                        longitude: 45.309671774254916, 
-                    },
-                    {
-                        latitude: -25.246563304653336,   
-                        longitude: 45.36023748508168, 
-                    },
-                    {
-                        latitude: -25.252630135252048,   
-                        longitude: 45.368235123018565, 
-                    },
-                    {
-                        latitude: -25.261574268701978,   
-                        longitude: 45.36926707630074, 
-                    },
-                    {
-                        latitude: -25.280549204646263,   
-                        longitude: 45.366171216454205, 
-                    },
-                    {
-                        latitude: -25.287702918425538,   
-                        longitude: 45.360667465615926, 
-                    },
-                    {
-                        latitude: -25.299909912028554,   
-                        longitude: 45.344328205314774, 
-                    },
-                    {
-                        latitude: -25.309472494148437,   
-                        longitude: 45.34140433768192, 
-                    },
-                    {
-                        latitude: -25.32626349484299,   
-                        longitude: 45.33065482432589, 
-                    },
-                    {
-                        latitude: -25.339554719100207,   
-                        longitude: 45.31577749784115, 
-                    },
-                    {
-                        latitude: -25.342197244685735,   
-                        longitude: 45.294192475022236, 
-                    },
-                    {
-                        latitude: -25.338311157677524,   
-                        longitude: 45.25325832816248, 
-                    },
-                    {
-                        latitude: -25.367764583661497,   
-                        longitude: 45.228921429924426, 
-                    },
-                    {
-                        latitude: -25.375457040632753,   
-                        longitude: 45.20475652390007, 
-                    },
-                    {
-                        latitude: -25.41468871703904,   
-                        longitude: 45.138109541092675, 
-                    },
-                    {
-                        latitude: -25.447850892281636,   
-                        longitude: 45.12383418735587, 
-                    },
-                    {
-                        latitude: -25.474793288788774,   
-                        longitude: 45.12589809392021, 
-                    },
-                    {
-                        latitude: -25.49769346222196,   
-                        longitude: 45.12237225353945, 
-                    },
-                    {
-                        latitude: -25.52291741403225,   
-                        longitude: 45.13982946322963, 
-                    },
-                    {
-                        latitude: -25.548446415228938,   
-                        longitude: 45.143785284144656, 
-                    },
-                    {
-                        latitude: -25.55465325359785,   
-                        longitude: 45.13466969681876, 
-                    },
-
-                                          
-                ],
-                stroke: {
-                    color: '#6060FB',
-                    weight: 1
-                },
-                //editable: true,
-                //draggable: true,
-                //geodesic: true,
-                //visible: true,
-                fill: {
-                    
-                    opacity: 0
-                     
-                },
-                events: { 
-                  click: function()
-                  { 
-                  console.log("click ok"); 
-                  },
-                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
-                    polyModel.fill.opacity = '0.5';
-                   console.log("mouseover Miseo");
-                   vm.showwindow = true;
-                  },
-                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
-                    polyModel.fill.opacity = '0';
-                    console.log("mouseout Miala");
-                  }
-                },
-            },
+            
 
             //District AMPANIHY 3              
             {               
-                id: 3 ,
+                id: 94,
                 path: [                                       
                     {
                         latitude: -25.288399845135928,   // faran av aty amn sisin amban                           
@@ -1698,7 +1456,7 @@ vm.polylines = [
 
             //District BETIOKY  4             
             {               
-                id: 4 ,
+                id: 98,
                 path: [                                       
                      {
                         latitude: -23.888893641875455,  //Telo mihidina ndrea  
@@ -2512,7 +2270,7 @@ vm.polylines = [
 
             //District TOLIARA II   5            
             {               
-                id: 5 ,
+                id: 102,
                 path: [                                                           
                     {
                         latitude: -24.191858272317646, //telo faharoa av gauche     
@@ -2988,7 +2746,7 @@ vm.polylines = [
 
             //District BENENITRA  6             
             {               
-                id: 6 ,
+                id: 96,
                 path: [                                       
                     
                     {
@@ -3309,7 +3067,7 @@ vm.polylines = [
 
             //District BEKILY  7             
             {               
-                id: 7 ,
+                id: 104,
                 path: [                                       
                     
 
@@ -3515,7 +3273,7 @@ vm.polylines = [
             
              //District AMBOVOMBE 8              
             {               
-                id: 8 ,
+                id: 103,
                 path: [  
 
 
@@ -3888,7 +3646,7 @@ vm.polylines = [
 
             //District AMBOASARY ATSIMO  9             
             {               
-                id: 9 ,
+                id: 107,
                 path: [  
                     
                     
@@ -4157,7 +3915,7 @@ vm.polylines = [
 
             //District TAOLANARO 10               
             {               
-                id: 10 ,
+                id: 109,
                 path: [  
                                                           
                     {
@@ -4419,7 +4177,7 @@ vm.polylines = [
 
             //District BEFOTAKA   11            
             {               
-                id: 11 ,
+                id: 32,
                 path: [  
                                                                                                                                                                                     
                     {
@@ -4691,7 +4449,7 @@ vm.polylines = [
 
              //District VANGAINDRANO  12             
             {               
-                id: 12 ,
+                id: 35 ,
                 path: [  
                                          
                     {
@@ -4903,7 +4661,7 @@ vm.polylines = [
 
              //District MIDONGY_ATM 13              
             {               
-                id: 13 ,
+                id: 34 ,
                 path: [                                                               
                     {
                         latitude: -23.149819720948884, //kiondalana le ety ambon av eo    
@@ -5116,7 +4874,7 @@ vm.polylines = [
 
             //District VONDROZO  14             
             {               
-                id: 14 ,
+                id: 36 ,
                 path: [                                                               
                      
                     {
@@ -5334,7 +5092,7 @@ vm.polylines = [
 
             //District ivohibe 15              
             {               
-                id: 15 ,
+                id: 54 ,
                 path: [                                                                                                        
                     {
                         latitude: -22.170762489557376,//kiondalana ihan koa     
@@ -5550,7 +5308,7 @@ vm.polylines = [
 
             //District Farafangana  16            
             {               
-                id: 16 ,
+                id: 33 ,
                 path: [                                                               
                      
                     {
@@ -5718,7 +5476,7 @@ vm.polylines = [
 
             //District BETROKA 17             
             {               
-                id: 17 ,
+                id: 108 ,
                 path: [                                       
                     
                    
@@ -6025,7 +5783,7 @@ vm.polylines = [
 
             //District IAKORA 18             
             {               
-                id: 18 ,
+                id: 52 ,
                 path: [                                       
                     
                                        
@@ -6323,7 +6081,7 @@ vm.polylines = [
 
             //District IHOSY 19             
             {               
-                id: 19 ,
+                id: 53 ,
                 path: [                                       
                  
                     {
@@ -6745,7 +6503,7 @@ vm.polylines = [
 
             //District SAKARAHA  20            
             {               
-                id: 20 ,
+                id: 100 ,
                 path: [                                                           
                     
                     {
@@ -7083,7 +6841,7 @@ vm.polylines = [
 
             //District MOROMBE 21            
             {               
-                id: 21 ,
+                id: 99 ,
                 path: [                                                           
                     
                     
@@ -7371,7 +7129,7 @@ vm.polylines = [
 
             //District ANKAZOABO 22            
             {               
-                id: 22 ,
+                id: 95 ,
                 path: [                                                           
                    
                     {
@@ -7695,7 +7453,7 @@ vm.polylines = [
 
            //District MANJA 23            
             {               
-                id: 23 ,
+                id: 112 ,
                 path: [                                                           
                     
                     
@@ -8018,7 +7776,7 @@ vm.polylines = [
 
             //District BEROROHA 24            
             {               
-                id: 24 ,
+                id: 97 ,
                 path: [                                                           
                     
                     {
@@ -8314,7 +8072,7 @@ vm.polylines = [
 
             //District MORONDAVA 25            
             {               
-                id: 25 ,
+                id: 114 ,
                 path: [                                                           
                     
                     
@@ -8555,7 +8313,7 @@ vm.polylines = [
 
             //District MAHABO 26            
             {               
-                id: 26 ,
+                id: 111 ,
                 path: [ 
 
                     {
@@ -8878,7 +8636,7 @@ vm.polylines = [
 
             //District IKALAMAVONY 27            
             {               
-                id: 27 ,
+                id: 24 ,
                 path: [                                                           
                     
                     
@@ -9069,7 +8827,7 @@ vm.polylines = [
 
             //District AMBALAVAO 28            
             {               
-                id: 28 ,
+                id: 21 ,
                 path: [                                                           
                     
                     {
@@ -9289,7 +9047,7 @@ vm.polylines = [
 
             //District ISANDRA 29            
             {               
-                id: 29 ,
+                id: 25 ,
                 path: [                                                                               
                     {
                         latitude: -21.86585879092644,//Ikongo amban     
@@ -9485,7 +9243,7 @@ vm.polylines = [
 
             //District FIANARANTSOA I 30            
             {               
-                id: 30 ,
+                id: 23 ,
                 path: [                                                                               
                     {
                         latitude: -21.383116686633585,    
@@ -9619,7 +9377,7 @@ vm.polylines = [
 
             //District TOLIARA I 31            
             {               
-                id: 31 ,
+                id: 101 ,
                 path: [                                                                               
                     {
                         latitude: -23.315580261307517,    
@@ -9694,7 +9452,7 @@ vm.polylines = [
 
             //District VOHIPENO  32            
             {               
-                id: 32 ,
+                id: 42 ,
                 path: [                                                               
                      
                     {
@@ -9860,7 +9618,7 @@ vm.polylines = [
 
             //District MANAKARA  33            
             {               
-                id: 33 ,
+                id: 39 ,
                 path: [                                                               
                      
                     
@@ -10078,7 +9836,7 @@ vm.polylines = [
 
             //District IKONGO  34             
             {               
-                id: 34 ,
+                id: 38 ,
                 path: [                                                               
                      
                     
@@ -10305,7 +10063,7 @@ vm.polylines = [
 
             //District MANANJARY  35            
             {               
-                id: 35 ,
+                id: 40 ,
                 path: [                                                               
                      
                     {
@@ -10486,7 +10244,7 @@ vm.polylines = [
 
             //District IFANADIANA  36            
             {               
-                id: 36 ,
+                id: 37 ,
                 path: [                                                               
                      
                     {
@@ -10754,7 +10512,7 @@ vm.polylines = [
 
             //District AMBOHIMAHASOA  37            
             {               
-                id: 37 ,
+                id: 22 ,
                 path: [                                                               
                      
                     
@@ -10955,7 +10713,7 @@ vm.polylines = [
 
             //District AMBATOFINANDRAHANA 38            
             {               
-                id: 38 ,
+                id: 28 ,
                 path: [                                                           
                     
                                               
@@ -11232,7 +10990,7 @@ vm.polylines = [
 
             //District MANANDRIANA 39            
             {               
-                id: 39 ,
+                id: 31 ,
                 path: [                                                           
                     
                                               
@@ -11363,7 +11121,7 @@ vm.polylines = [
 
             //District AMBOSITRA 40            
             {               
-                id: 40 ,
+                id: 29 ,
                 path: [                                                           
                     
                                               
@@ -11632,11 +11390,8 @@ vm.polylines = [
 
             //District FANDRIANA 41            
             {               
-                id: 41 ,
-                path: [                                                           
-                    
-                                              
-                   
+                id: 30 ,
+                path: [
                     
                    
                     {
@@ -11883,7 +11638,7 @@ vm.polylines = [
 
             //District ANTSIRABE II 42            
             {               
-                id: 42 ,
+                id: 17 ,
                 path: [                                                           
                     
                   
@@ -12063,7 +11818,7 @@ vm.polylines = [
 
             //District ANTSIRABE I 43            
             {               
-                id: 43 ,
+                id: 16 ,
                 path: [                                                           
                     
                      
@@ -12312,7 +12067,7 @@ vm.polylines = [
 
             //District MIANDRIVAZO 45            
             {               
-                id: 45 ,
+                id: 113 ,
                 path: [                                                           
                     
                     
@@ -12586,7 +12341,7 @@ vm.polylines = [
 
             //District BELO SUR TSIRIBIHINA 46            
             {               
-                id: 46 ,
+                id: 110 ,
                 path: [                                                           
                     
                     
@@ -12801,7 +12556,7 @@ vm.polylines = [
 
             //District ANTSALOVA 47            
             {               
-                id: 47 ,
+                id: 90 ,
                 path: [                                                           
                     
 
@@ -13018,7 +12773,7 @@ vm.polylines = [
 
             //District TSIROANOMANDIDY 48            
             {               
-                id: 48 ,
+                id: 12 ,
                 path: [                                                           
                     
                     {
@@ -13228,7 +12983,7 @@ vm.polylines = [
 
             //District SOAVINANDRIANA 49            
             {               
-                id: 49 ,
+                id: 11 ,
                 path: [                                                           
                                         
                     {
@@ -13363,7 +13118,7 @@ vm.polylines = [
 
             //District MIARINARIVO 50            
             {               
-                id: 50 ,
+                id: 10 ,
                 path: [                                                           
                     
 
@@ -13576,7 +13331,7 @@ vm.polylines = [
 
              //District FARATSIHO 51            
             {               
-                id: 51 ,
+                id: 19 ,
                 path: [                                                           
                      
 
@@ -13786,7 +13541,7 @@ vm.polylines = [
 
             //District ANTANIFOTSY 52            
             {               
-                id: 52 ,
+                id: 15 ,
                 path: [                                                           
                     
                     {
@@ -14121,7 +13876,7 @@ vm.polylines = [
 
             //District MAROLAMBO 53            
             {               
-                id: 53 ,
+                id: 58 ,
                 path: [                                                           
                     
 
@@ -14364,7 +14119,7 @@ vm.polylines = [
 
             //District NOSY VARIKA 54            
             {               
-                id: 54 ,
+                id: 41 ,
                 path: [                                                           
                     
 
@@ -14602,7 +14357,7 @@ vm.polylines = [
 
             //District MAHANORO 55            
             {               
-                id: 55 ,
+                id: 57 ,
                 path: [                                                           
                     
 
@@ -14820,7 +14575,7 @@ vm.polylines = [
 
             //District VATOMANDRY 56            
             {               
-                id: 56 ,
+                id: 61 ,
                 path: [                                                           
                     
 
@@ -15065,7 +14820,7 @@ vm.polylines = [
 
             //District ANTANAMBAO MANAMPOTSY 57            
             {               
-                id: 57 ,
+                id: 55 ,
                 path: [                                                           
                     
 
@@ -15263,7 +15018,7 @@ vm.polylines = [
 
             //District ANOSIBE AN'ALA 58            
             {               
-                id: 58 ,
+                id: 65 ,
                 path: [                                                           
                     
 
@@ -15459,7 +15214,7 @@ vm.polylines = [
 
              //District AMBATOLAMPY 59            
             {               
-                id: 59 ,
+                id: 14 ,
                 path: [                                                           
                     
 
@@ -15798,7 +15553,7 @@ vm.polylines = [
 
             //District ANDRAMASINA 60            
             {               
-                id: 60 ,
+                id: 8 ,
                 path: [                                                           
                     
 
@@ -16006,7 +15761,7 @@ vm.polylines = [
 
             //District ARIVONIMAMO 61           
             {               
-                id: 61 ,
+                id: 9 ,
                 path: [
 
 
@@ -16289,7 +16044,7 @@ vm.polylines = [
 
             //District ANTANANARIVO ATSIMONDRANO 62         
             {               
-                id: 62 ,
+                id: 2 ,
                 path: [
 
                     
@@ -16769,7 +16524,7 @@ vm.polylines = [
 
             //District ANTANANARIVO VI 63         
             {               
-                id: 63 ,
+                id: 1 ,
                 path: [
 
                     {
@@ -16973,47 +16728,7 @@ vm.polylines = [
                         latitude: -18.894807786055125,//ANTANANARIVO VI DROITE   
                         longitude: 47.493903245483835, //ANTANANARIVO I GAUCHE
                     },
-                    
-                     
-                ],
-                stroke: {
-                    color: '#6060FB',
-                    weight: 1
-                },
-                //editable: true,
-                //draggable: true,
-                //geodesic: true,
-                //visible: true,
-                fill: {
-                    
-                    opacity: 0
-                     
-                },
-                events: { 
-                  click: function()
-                  { 
-                  console.log("click ok"); 
-                  },
-                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
-                    polyModel.fill.opacity = '0.5';
-                   console.log("mouseover ok");
-                  },
-                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
-                    polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
-            },
-
-            //District ANTANANARIVO I 64         
-            {               
-                id: 64 ,
-                path: [
-
-
-                   
-                    
-                    
+                    //District ANTANANARIVO I 64 
                     
                     {
                         latitude: -18.894568201636105,    
@@ -17171,54 +16886,16 @@ vm.polylines = [
                         latitude: -18.89678581368794,   
                         longitude: 47.51419544219971, 
                     },
-                    {
+                   /* {
                         latitude: -18.895324122395778,   
                         longitude: 47.515482902526855, 
                     },
                     {
                         latitude: -18.894593271963203,//TANA III DROITE  
                         longitude: 47.51719951629638, //TANA I DROITE
-                    },
-                    
-                ],
-                stroke: {
-                    color: '#6060FB',
-                    weight: 1
-                },
-                //editable: true,
-                //draggable: true,
-                //geodesic: true,
-                //visible: true,
-                fill: {
-                    
-                    opacity: 0
-                     
-                },
-                events: { 
-                  click: function()
-                  { 
-                  console.log("click ok"); 
-                  },
-                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
-                    polyModel.fill.opacity = '0.5';
-                   console.log("mouseover ok");
-                  },
-                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
-                    polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
-            },
+                    },*/
 
-            //District ANTANANARIVO IV 65         
-            {               
-                id: 65 ,
-                path: [
-
-
-                   
-                    
-                    
+                    //District ANTANANARIVO IV 65
                     
                     {
                         latitude: -18.919278008397868,//TANA II GAUCHE    
@@ -17413,41 +17090,7 @@ vm.polylines = [
                         longitude: 47.531856408417426, 
                     },
                     
-                      
-                ],
-                stroke: {
-                    color: '#6060FB',
-                    weight: 1
-                },
-                //editable: true,
-                //draggable: true,
-                //geodesic: true,
-                //visible: true,
-                fill: {
-                    
-                    opacity: 0
-                     
-                },
-                events: { 
-                  click: function()
-                  { 
-                  console.log("click ok"); 
-                  },
-                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
-                    polyModel.fill.opacity = '0.5';
-                   console.log("mouseover ok");
-                  },
-                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
-                    polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
-            },
-
-            //District ANTANANARIVO III 66         
-            {               
-                id: 66 ,
-                path: [
+                //District ANTANANARIVO III 66
                     {
                         latitude: -18.871529242090276,//TANA V DROITE    
                         longitude: 47.51093387603759, //TANA III GAUCHE
@@ -17556,54 +17199,7 @@ vm.polylines = [
                         latitude: -18.87154354252023,    
                         longitude: 47.510819158463455, 
                     },
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                     
-                ],
-                stroke: {
-                    color: '#6060FB',
-                    weight: 1
-                },
-                //editable: true,
-                //draggable: true,
-                //geodesic: true,
-                //visible: true,
-                fill: {
-                    
-                    opacity: 0
-                     
-                },
-                events: { 
-                  click: function()
-                  { 
-                  console.log("click ok"); 
-                  },
-                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
-                    polyModel.fill.opacity = '0.5';
-                   console.log("mouseover ok");
-                  },
-                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
-                    polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
-            },
-
-            //District ANTANANARIVO II 67        
-            {               
-                id: 67 ,
-                path: [
-
-
-                   
-                    
-                    
+                    //District ANTANANARIVO II 67 
                     
                     {
                         latitude: -18.949290924281797,//AVARADRANO GAUCHE   
@@ -17854,51 +17450,7 @@ vm.polylines = [
                         longitude: 47.542925275203366,//TANA AVARADRANO GAUCHE
                     },
                     
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                      
-                ],
-                stroke: {
-                    color: '#6060FB',
-                    weight: 1
-                },
-                //editable: true,
-                //draggable: true,
-                //geodesic: true,
-                //visible: true,
-                fill: {
-                    
-                    opacity: 0
-                     
-                },
-                events: { 
-                  click: function()
-                  { 
-                  console.log("click ok"); 
-                  },
-                  mouseover: function(gPoly, eventName, polyModel, latLngArgs) {
-                    polyModel.fill.opacity = '0.5';
-                   console.log("mouseover ok");
-                  },
-                  mouseout: function(gPoly, eventName, polyModel, latLngArgs) {
-                    polyModel.fill.opacity = '0';
-                    console.log("mouseout ok");
-                  }
-                },
-            },
-
-            //District ANTANANARIVO V 68         
-            {               
-                id: 68 ,
-                path: [
-
-
+                //District ANTANANARIVO V 68
 
                     {
                         latitude: -18.917011613928594,//TANA AVARADRANO DROITE   
@@ -18154,10 +17706,8 @@ vm.polylines = [
 
             //District ANTANANARIVO AVARADRANO 69         
             {               
-                id: 69 ,
+                id: 3 ,
                 path: [
-
-
 
                     
                     {
@@ -18716,7 +18266,7 @@ vm.polylines = [
 
              //District MANJAKANDRIANA 70         
             {               
-                id: 70 ,
+                id: 7 ,
                 path: [
 
 
@@ -18909,7 +18459,7 @@ vm.polylines = [
 
             //District MORAMANGA 71        
             {               
-                id: 71 ,
+                id: 66 ,
                 path: [
 
 
@@ -19167,7 +18717,7 @@ vm.polylines = [
 
             //District BRICKAVILLE 72        
             {               
-                id: 72 ,
+                id: 56 ,
                 path: [
 
 
@@ -19345,7 +18895,7 @@ vm.polylines = [
 
             //District TAMATAVE II 73       
             {               
-                id: 73 ,
+                id: 60 ,
                 path: [
 
 
@@ -19570,7 +19120,7 @@ vm.polylines = [
 
             //District TAMATAVE I 74        
             {               
-                id: 74 ,
+                id: 59 ,
                 path: [
 
                     {
@@ -19635,7 +19185,7 @@ vm.polylines = [
 
             //District VAVATENINA 75        
             {               
-                id: 75 ,
+                id: 72 ,
                 path: [
 
 
@@ -19867,7 +19417,7 @@ vm.polylines = [
 
             //District FENOARIVO ANTSINANA 76        
             {               
-                id: 76 ,
+                id: 67 ,
                 path: [
 
 
@@ -20094,7 +19644,7 @@ vm.polylines = [
 
             //District SOANIERANA IVONGO 77        
             {               
-                id: 77 ,
+                id: 71 ,
                 path: [
 
                     {
@@ -20321,7 +19871,7 @@ vm.polylines = [
 
             //District MANANARA 78        
             {               
-                id: 78,
+                id: 68,
                 path: [
 
 
@@ -20505,7 +20055,7 @@ vm.polylines = [
 
             //District MAROANTSETRA 79        
             {               
-                id: 79 ,
+                id: 69 ,
                 path: [
 
 
@@ -20734,7 +20284,7 @@ vm.polylines = [
 
             //District ANTALAHA 80        
             {               
-                id: 80 ,
+                id: 49 ,
                 path: [
 
 
@@ -20964,7 +20514,7 @@ vm.polylines = [
 
             //District SAMBAVA 81        
             {               
-                id: 81 ,
+                id: 50 ,
                 path: [
 
 
@@ -21214,7 +20764,7 @@ vm.polylines = [
 
             //District VOHIMARINA 82       
             {               
-                id: 82 ,
+                id: 115 ,
                 path: [
 
 
@@ -21459,7 +21009,7 @@ vm.polylines = [
 
             //District Antsiranana II  83          
             {               
-                id:83  ,
+                id: 46 ,
                 path: [                                                           
                     
                     {
@@ -21587,7 +21137,7 @@ vm.polylines = [
 
             //District Antsiranana I 84          
             {               
-                id:84  ,
+                id: 45,
                 path: [                                                           
                     
                     {
@@ -21703,14 +21253,8 @@ vm.polylines = [
             
             //District AMBILOBE 85       
             {               
-                id: 85 ,
-                path: [
-
-
-                                  
-                                   
-                                   
-                                  
+                id: 44 ,
+                path: [             
                                    
                     {
                         latitude: -13.94178460809745,//SAMBAVA AMBON   
@@ -21910,7 +21454,7 @@ vm.polylines = [
 
             //District AMBANJA 86       
             {               
-                id: 86 ,
+                id: 43 ,
                 path: [
 
            
@@ -22089,7 +21633,7 @@ vm.polylines = [
 
             //District BEALALANA 87       
             {               
-                id: 87 ,
+                id: 84 ,
                 path: [
 
            
@@ -22260,7 +21804,7 @@ vm.polylines = [
 
             //District ANDAPA 88        
             {               
-                id: 88 ,
+                id: 48 ,
                 path: [
               
                     {
@@ -22435,7 +21979,7 @@ vm.polylines = [
 
             //District BEFANDRIANA AVARATRA 89       
             {               
-                id: 89 ,
+                id: 85 ,
                 path: [
 
 
@@ -22636,11 +22180,8 @@ vm.polylines = [
 
             //District ANTSOHIHY 90       
             {               
-                id: 90 ,
+                id: 83 ,
                 path: [
-
-
-
 
 
                     {
@@ -22798,13 +22339,8 @@ vm.polylines = [
 
             //District ANALALAVA 91       
             {               
-                id: 91 ,
+                id: 82 ,
                 path: [
-
-
-
-
-
                                                              
                     {
                         latitude: -15.399288717992647,//BORIZINY GAUCHE    
@@ -23066,7 +22602,7 @@ vm.polylines = [
 
             //District BORIZINY(PORT BERGER) 92       
             {               
-                id: 92 ,
+                id: 88 ,
                 path: [
 
 
@@ -23262,7 +22798,7 @@ vm.polylines = [
 
             //District MAHAJANGA II 93       
             {               
-                id: 93 ,
+                id: 75 ,
                 path: [
 
 
@@ -23431,7 +22967,7 @@ vm.polylines = [
 
             //District MAHAJANGA I 94       
             {               
-                id: 94 ,
+                id: 74 ,
                 path: [
 
 
@@ -23497,7 +23033,7 @@ vm.polylines = [
 
             //District MAROVOAY 95       
             {               
-                id: 95 ,
+                id: 76 ,
                 path: [
 
 
@@ -23667,7 +23203,7 @@ vm.polylines = [
 
             //District MITSINJO 96       
             {               
-                id: 96 ,
+                id: 77 ,
                 path: [
 
 
@@ -23822,7 +23358,7 @@ vm.polylines = [
 
             //District AMBATO BOENI 97       
             {               
-                id: 97 ,
+                id: 73 ,
                 path: [
 
 
@@ -24034,7 +23570,7 @@ vm.polylines = [
 
             //District MAMPIKONY 98      
             {               
-                id: 98 ,
+                id: 86 ,
                 path: [
 
 
@@ -24205,7 +23741,7 @@ vm.polylines = [
 
             //District TSARATANANA 99      
             {               
-                id: 99 ,
+                id: 81 ,
                 path: [
 
 
@@ -24410,7 +23946,7 @@ vm.polylines = [
 
             //District ANDILAMENA 100      
             {               
-                id: 100 ,
+                id: 64 ,
                 path: [
 
                     {
@@ -24599,7 +24135,7 @@ vm.polylines = [
 
             //District MANDRITSARA 101      
             {               
-                id: 101 ,
+                id: 87 ,
                 path: [                   
                     {
                         latitude: -16.68804522237805,//andilamena ambon   
@@ -24828,7 +24364,7 @@ vm.polylines = [
 
             //District AMPARAFARAVOLA 102      
             {               
-                id: 102 ,
+                id: 63 ,
                 path: [
                    
                     {
@@ -25012,7 +24548,7 @@ vm.polylines = [
 
             //District AMBATONDRAZAKA 103      
             {               
-                id: 103 ,
+                id: 62 ,
                 path: [
                                        
                     {
@@ -25278,7 +24814,7 @@ vm.polylines = [
 
             //District ANJOZOROBE 104      
             {               
-                id: 104 ,
+                id: 6 ,
                 path: [
 
                     
@@ -25450,7 +24986,7 @@ vm.polylines = [
 
             //District AMBOHIDRATRIMO 105      
             {               
-                id: 105 ,
+                id: 4 ,
                 path: [
 
                     {
@@ -25729,7 +25265,7 @@ vm.polylines = [
 
             //District ANKAZOBE 106      
             {               
-                id: 106 ,
+                id: 5 ,
                 path: [
 
                     {
@@ -25911,7 +25447,7 @@ vm.polylines = [
 
             //District MAEVATANANA 107      
             {               
-                id: 107 ,
+                id: 80 ,
                 path: [
 
                     {
@@ -26097,7 +25633,7 @@ vm.polylines = [
 
             //District KANDREHO 108      
             {               
-                id: 108 ,
+                id: 79 ,
                 path: [
 
                     
@@ -26226,7 +25762,7 @@ vm.polylines = [
 
             //District AMBATOMAINTY 109      
             {               
-                id: 109 ,
+                id: 89 ,
                 path: [
 
                     
@@ -26362,7 +25898,7 @@ vm.polylines = [
 
              //District MORAFENOBE 110    
             {               
-                id: 110 ,
+                id: 93 ,
                 path: [
 
                     {
@@ -26548,7 +26084,7 @@ vm.polylines = [
 
             //District MAINTIRANO 111     
             {               
-                id: 111 ,
+                id: 92 ,
                 path: [
 
                     
@@ -26695,7 +26231,7 @@ vm.polylines = [
 
             //District BESALAMPY 112     
             {               
-                id: 112,
+                id: 91,
                 path: [
 
                     
@@ -26838,7 +26374,7 @@ vm.polylines = [
 
             //District SOALALA 113     
             {               
-                id: 113,
+                id: 78,
                 path: [
 
                     {
@@ -26968,7 +26504,7 @@ vm.polylines = [
 
             //District FENOARIVOBE 114            
             {               
-                id: 114,
+                id: 13,
                 path: [                                                           
                     
                     
@@ -27153,7 +26689,7 @@ vm.polylines = [
 
             //District SAINTE-MARI 115            
             {               
-                id: 115,
+                id: 70,
                 path: [                                                           
                     
                     
@@ -27254,7 +26790,7 @@ vm.polylines = [
 
             //District NOSY-BE 116           
             {               
-                id: 116,
+                id: 47,
                 path: [                                                           
                     
                     

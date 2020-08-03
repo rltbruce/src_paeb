@@ -58,6 +58,7 @@
 
         var vm    = this;
         vm.styleTabfils = "acc_sous_menu";
+        vm.styleTabfils2 = "acc_sous_menu";
         vm.selectedItemConvention_entete = {} ;
         vm.allconvention_entete = [] ;
       
@@ -112,12 +113,6 @@
         vm.selectedItemJustificatif_debut_travaux_moe = {} ;
         vm.alljustificatif_debut_travaux_moe = [] ;
 
-        var NouvelItemPaiement_debut_travaux_moe = false;
-        var currentItemPaiement_debut_travaux_moe;
-        vm.selectedItemPaiement_debut_travaux_moe = {} ;
-        vm.ajoutPaiement_debut_travaux_moe  = ajoutPaiement_debut_travaux_moe ;
-        vm.allpaiement_debut_travaux_moe = [] ;
-
         vm.ajoutDemande_batiment_moe = ajoutDemande_batiment_moe;
         vm.NouvelItemDemande_batiment_moe=false;
         var currentItemDemande_batiment_moe;
@@ -137,12 +132,6 @@
         var currentItemJustificatif_batiment_moe;
         vm.selectedItemJustificatif_batiment_moe = {} ;
         vm.alljustificatif_batiment_moe = [] ;
-
-        var NouvelItemPaiement_batiment_moe = false;
-        var currentItemPaiement_batiment_moe;
-        vm.selectedItemPaiement_batiment_moe = {} ;
-        vm.ajoutPaiement_batiment_moe  = ajoutPaiement_batiment_moe ;
-        vm.allpaiement_batiment_moe = [] ;
 
         vm.ajoutDemande_latrine_moe = ajoutDemande_latrine_moe;
         vm.NouvelItemDemande_latrine_moe=false;
@@ -164,11 +153,6 @@
         vm.selectedItemJustificatif_latrine_moe = {} ;
         vm.alljustificatif_latrine_moe = [] ;
 
-        var NouvelItemPaiement_latrine_moe = false;
-        var currentItemPaiement_latrine_moe;
-        vm.selectedItemPaiement_latrine_moe = {} ;
-        vm.ajoutPaiement_latrine_moe  = ajoutPaiement_latrine_moe ;
-        vm.allpaiement_latrine_moe = [] ;
 
         vm.ajoutDemande_fin_travaux_moe = ajoutDemande_fin_travaux_moe;
         vm.NouvelItemDemande_fin_travaux_moe=false;
@@ -189,12 +173,6 @@
         var currentItemJustificatif_fin_travaux_moe;
         vm.selectedItemJustificatif_fin_travaux_moe = {} ;
         vm.alljustificatif_fin_travaux_moe = [] ;
-
-        var NouvelItemPaiement_fin_travaux_moe = false;
-        var currentItemPaiement_fin_travaux_moe;
-        vm.selectedItemPaiement_fin_travaux_moe = {} ;
-        vm.ajoutPaiement_fin_travaux_moe  = ajoutPaiement_fin_travaux_moe ;
-        vm.allpaiement_fin_travaux_moe = [] ;
 
 /*********************************************Fin maitrise d'oeuvre*************************************/
 
@@ -590,90 +568,6 @@
                 });           
             });
         }
-       /* function donnee_menu_moe(item,session)
-        {   vm.showbuttonNouvcontrat_moe=true;
-            vm.styleTabfils = "acc_sous_menu";
-            vm.stepsuivi_paiement_moe = false;
-            return new Promise(function (resolve, reject) 
-            {   
-                switch (session)
-                {
-
-                 case 'BCAF':
-                           
-                            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allcontrat_moe = result.data.response;
-                                return resolve('ok'); 
-                            });                            
-                                              
-                      break;
-
-                  case 'ADMIN':
-                            
-                           apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allcontrat_moe = result.data.response;
-                                return resolve('ok'); 
-                            });
-                       
-                      break;
-                  default:
-                      break;
-              
-                }
-            });
-        }
-        function donnee_menu_mpe(item,session)
-        {   
-            vm.styleTabfils = "acc_sous_menu";
-            vm.stepsuivi_paiement_moe = false;
-            return new Promise(function (resolve, reject)
-            {
-                switch (session)
-                {
-                 case 'BCAF':
-                            
-                            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allcontrat_prestataire = result.data.response;
-                                    
-                                return resolve('ok');
-                            });
-                       
-                      break;
-
-                  case 'ADMIN':
-                            
-                            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allcontrat_prestataire = result.data.response;
-                                return resolve('ok');
-                            });                            
-                       
-                      break;
-                  default:
-                      break;
-              
-                }            
-            });
-        }
-
-
-        vm.step_menu_reliquat=function()
-        {
-            return new Promise(function (resolve, reject)
-            {
-                apiFactory.getAPIgeneraliserREST("transfert_reliquat/index",'menu','gettransfertByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
-                {
-                    vm.alltransfert_reliquat = result.data.response;
-                    return resolve('ok');
-                });            
-            });
-        }*/
-       
-  
-  
 
   /******************************************debut maitrise d'oeuvre*****************************************************/
 
@@ -872,26 +766,7 @@
                 {
                     vm.alljustificatif_debut_travaux_moe = result.data.response;
                     console.log(vm.alljustificatif_debut_travaux_moe);
-                });
-                if (vm.session=='BCAF') 
-                {
-                  apiFactory.getAPIgeneraliserREST("paiement_debut_travaux_moe/index",'menu','getpaiementBydemande','id_demande_debut_travaux',vm.selectedItemDemande_debut_travaux_moe.id).then(function(result)
-                  {
-                      vm.allpaiement_debut_travaux_moe = result.data.response;
-                  });
-                  vm.showbuttonValidationDemande_debut_travaux_moe_creer = true;
-                  vm.showbuttonValidationPaiement_debut_travaux_moe = true;
-                }
-                
-                if (vm.session=='ADMIN') 
-                {
-                  apiFactory.getAPIgeneraliserREST("paiement_debut_travaux_moe/index",'menu','getpaiementBydemande','id_demande_debut_travaux',vm.selectedItemDemande_debut_travaux_moe.id).then(function(result)
-                  {
-                      vm.allpaiement_debut_travaux_moe = result.data.response;
-                      vm.showbuttonValidationDemande_debut_travaux_moe_creer = true;                      
-                      vm.showbuttonValidationPaiement_debut_travaux_moe = true;
-                  });
-                } 
+                });                 
             
             vm.validation_demande_debut_travaux_moe = item.validation;
             vm.stepjusti_d_tra_moe = true;
@@ -1518,248 +1393,6 @@
         }
 /***************************************fin justificatif debut_travaux**********************************************/
 
-/**********************************debut paiement****************************************/
-//col table
-        vm.paiement_debut_travaux_moe_column = [        
-        {titre:"Montant"},
-        //{titre:"Cumul"},
-        {titre:"Date paiement"},
-        //{titre:"Pourcentage paiement"},
-        {titre:"Observation"},
-        {titre:"Action"}];
-
-        //fonction ajout dans bdd
-        function ajoutPaiement_debut_travaux_moe(paiement_debut_travaux_moe,suppression)
-        {
-            if (NouvelItemPaiement_debut_travaux_moe==false)
-            {
-                test_existancePaiement_debut_travaux_moe (paiement_debut_travaux_moe,suppression); 
-            } 
-            else
-            {
-                insert_in_basePaiement_debut_travaux_moe(paiement_debut_travaux_moe,suppression);
-            }
-        }
-
-        //fonction de bouton d'annulation paiement_debut_travaux_moe
-        vm.annulerPaiement_debut_travaux_moe = function(item)
-        {
-          if (NouvelItemPaiement_debut_travaux_moe == false)
-          {
-              item.$edit = false;
-              item.$selected = false;
-              item.montant_paiement = currentItemPaiement_debut_travaux_moe.montant_paiement;
-              item.observation    = currentItemPaiement_debut_travaux_moe.observation;
-              item.date_paiement = currentItemPaiement_debut_travaux_moe.date_paiement; 
-          }else
-          {
-            vm.allpaiement_debut_travaux_moe = vm.allpaiement_debut_travaux_moe.filter(function(obj)
-            {
-                return obj.id !== vm.selectedItemPaiement_debut_travaux_moe.id;
-            });
-          }
-
-          vm.selectedItemPaiement_debut_travaux_moe = {} ;
-          NouvelItemPaiement_debut_travaux_moe      = false;
-          
-        };
-
-        //fonction selection item paiement_debut_travaux_moe convention cisco/feffi
-        vm.selectionPaiement_debut_travaux_moe = function (item)
-        {
-            vm.selectedItemPaiement_debut_travaux_moe = item;
-
-            if (item.$selected == false || item.$selected==undefined)
-            {
-              currentItemPaiement_debut_travaux_moe     = JSON.parse(JSON.stringify(vm.selectedItemPaiement_debut_travaux_moe));
-              vm.showbuttonValidationPaiement_debut_travaux_moe = true;
-            }
-            vm.validation_paiement_debut_travaux_moe = item.validation;
-                        
-
-        };
-        $scope.$watch('vm.selectedItemPaiement_debut_travaux_moe', function()
-        {
-             if (!vm.allpaiement_debut_travaux_moe) return;
-             vm.allpaiement_debut_travaux_moe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemPaiement_debut_travaux_moe.$selected = true;
-        });
-
-        //fonction masque de saisie modification item convention
-        vm.modifierPaiement_debut_travaux_moe = function(item)
-        {
-            NouvelItemPaiement_debut_travaux_moe = false ;
-            vm.selectedItemPaiement_debut_travaux_moe = item;
-            currentItemPaiement_debut_travaux_moe = angular.copy(vm.selectedItemPaiement_debut_travaux_moe);
-            $scope.vm.allpaiement_debut_travaux_moe.forEach(function(cis) {
-              cis.$edit = false;
-            });
-
-            item.$edit = true;
-            item.$selected = true;
-
-            item.montant_paiement = parseInt(vm.selectedItemPaiement_debut_travaux_moe.montant_paiement) ;            
-            item.observation = vm.selectedItemPaiement_debut_travaux_moe.observation ;
-            item.date_paiement = new Date(vm.selectedItemPaiement_debut_travaux_moe.date_paiement);
-        };
-
-        //fonction bouton suppression item paiement_debut_travaux_moe convention cisco feffi
-        vm.supprimerPaiement_debut_travaux_moe = function()
-        {
-            var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-              $mdDialog.show(confirm).then(function() {
-                vm.ajoutPaiement_debut_travaux_moe(vm.selectedItemPaiement_debut_travaux_moe,1);
-              }, function() {
-                //alert('rien');
-              });
-        };
-
-        //function teste s'il existe une modification item entente convention cisco feffi
-        function test_existancePaiement_debut_travaux_moe (item,suppression)
-        {          
-            if (suppression!=1)
-            {
-               var convT = vm.allpaiement_debut_travaux_moe.filter(function(obj)
-                {
-                   return obj.id == currentItemPaiement_debut_travaux_moe.id;
-                });
-                if(convT[0])
-                {
-                   if((convT[0].observation!=currentItemPaiement_debut_travaux_moe.observation)
-                    || (convT[0].date_paiement!=currentItemPaiement_debut_travaux_moe.date_paiement)
-                    || (convT[0].montant_paiement!=currentItemPaiement_debut_travaux_moe.montant_paiement))                    
-                      {
-                          insert_in_basePaiement_debut_travaux_moe(item,suppression);                        
-                      }
-                      else
-                      {  
-                        item.$selected = true;
-                        item.$edit = false;
-                      }
-                }
-            } else
-                  insert_in_basePaiement_debut_travaux_moe(item,suppression);
-        }
-
-        //insertion ou mise a jours ou suppression item dans bdd convention
-        function insert_in_basePaiement_debut_travaux_moe(paiement_debut_travaux_moe,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemPaiement_debut_travaux_moe ==false)
-            {
-                getId = vm.selectedItemPaiement_debut_travaux_moe.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,
-                    montant_paiement:    paiement_debut_travaux_moe.montant_paiement,
-                    observation: paiement_debut_travaux_moe.observation,
-                    date_paiement: convertionDate(new Date(paiement_debut_travaux_moe.date_paiement)), 
-                    id_demande_debut_travaux: vm.selectedItemDemande_debut_travaux_moe.id,
-                    validation : 0            
-                });
-                //console.log(datas);
-                //factory
-            apiFactory.add("paiement_debut_travaux_moe/index",datas, config).success(function (data)
-            {
-
-                if (NouvelItemPaiement_debut_travaux_moe == false)
-                {
-                    // Update_paiement or delete: id exclu                 
-                    if(suppression==0)
-                    {
-                        vm.selectedItemPaiement_debut_travaux_moe.$selected  = false;
-                        vm.selectedItemPaiement_debut_travaux_moe.$edit      = false;
-                        vm.selectedItemPaiement_debut_travaux_moe ={};
-                    }
-                    else 
-                    {    
-                      vm.allpaiement_debut_travaux_moe = vm.allpaiement_debut_travaux_moe.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemPaiement_debut_travaux_moe.id;
-                      });
-                      vm.showbuttonNouvPaiement_debut_travaux_moe = true;
-                    }
-                }
-                else
-                { 
-                  paiement_debut_travaux_moe.validation = 0;
-                  paiement_debut_travaux_moe.id  =   String(data.response);              
-                  NouvelItemPaiement_debut_travaux_moe = false;
-
-                  vm.showbuttonNouvPaiement_debut_travaux_moe = false;
-            }
-              paiement_debut_travaux_moe.$selected = false;
-              paiement_debut_travaux_moe.$edit = false;
-              vm.selectedItemPaiement_debut_travaux_moe = {};
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-
-        }
-
-        vm.valider_paiement_debut_travaux_moe= function()
-        {
-              validation_in_basepaiement_debut_travaux_moe(vm.selectedItemPaiement_debut_travaux_moe,0);
-        }
-        function validation_in_basepaiement_debut_travaux_moe(paiement_debut_travaux_moe,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemPaiement_debut_travaux_moe ==false)
-            {
-                getId = vm.selectedItemPaiement_debut_travaux_moe.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,
-                    montant_paiement:    paiement_debut_travaux_moe.montant_paiement,
-                    observation: paiement_debut_travaux_moe.observation,
-                    date_paiement: convertionDate(new Date(paiement_debut_travaux_moe.date_paiement)), 
-                    id_demande_debut_travaux: vm.selectedItemDemande_debut_travaux_moe.id,
-                    validation : 1            
-                });
-                //console.log(datas);
-                //factory
-            apiFactory.add("paiement_debut_travaux_moe/index",datas, config).success(function (data)
-            { 
-              paiement_debut_travaux_moe.validation = 1;
-              vm.validation_paiement_debut_travaux_moe = 1;
-              paiement_debut_travaux_moe.$selected = false;
-              paiement_debut_travaux_moe.$edit = false;
-              vm.selectedItemPaiement_debut_travaux_moe = {};
-
-              vm.showbuttonValidationPaiement_debut_travaux_moe = false;
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-
-        }
-
-
-/**********************************fin paiement****************************************/
-
 /**********************************debut demande_debut_travaux_moe****************************************/
 //col table
         vm.demande_batiment_moe_column = [        
@@ -1846,26 +1479,6 @@
                     vm.alljustificatif_batiment_moe = result.data.response;
                     console.log(vm.alljustificatif_batiment_moe);
                 });
-                
-                if (vm.session=='BCAF') 
-                {
-                  apiFactory.getAPIgeneraliserREST("paiement_batiment_moe/index",'menu','getpaiementBydemande','id_demande_batiment_moe',vm.selectedItemDemande_batiment_moe.id).then(function(result)
-                  {
-                      vm.allpaiement_batiment_moe = result.data.response;
-                  });
-                  vm.showbuttonValidationDemande_batiment_moe_creer = true;
-                  vm.showbuttonValidationPaiement_batiment_moe = true;
-                }
-                
-                if (vm.session=='ADMIN') 
-                {
-                  apiFactory.getAPIgeneraliserREST("paiement_batiment_moe/index",'menu','getpaiementBydemande','id_demande_batiment_moe',vm.selectedItemDemande_batiment_moe.id).then(function(result)
-                  {
-                      vm.allpaiement_batiment_moe = result.data.response;
-                      vm.showbuttonValidationDemande_batiment_moe_creer = true;                     
-                      vm.showbuttonValidationPaiement_batiment_moe = true;
-                  });
-                }
             
             vm.validation_demande_batiment_moe = item.validation;
             
@@ -2493,248 +2106,6 @@
         }
 /***************************************fin justificatif batiment_moe**********************************************/
 
-/**********************************debut paiement****************************************/
-//col table
-        vm.paiement_batiment_moe_column = [        
-        {titre:"Montant"},
-        //{titre:"Cumul"},
-        {titre:"Date paiement"},
-        //{titre:"Pourcentage paiement"},
-        {titre:"Observation"},
-        {titre:"Action"}];
-        //fonction ajout dans bdd
-        function ajoutPaiement_batiment_moe(paiement_batiment_moe,suppression)
-        {
-            if (NouvelItemPaiement_batiment_moe==false)
-            {
-                test_existancePaiement_batiment_moe (paiement_batiment_moe,suppression); 
-            } 
-            else
-            {
-                insert_in_basePaiement_batiment_moe(paiement_batiment_moe,suppression);
-            }
-        }
-
-        //fonction de bouton d'annulation paiement_batiment_moe
-        vm.annulerPaiement_batiment_moe = function(item)
-        {
-          if (NouvelItemPaiement_batiment_moe == false)
-          {
-              item.$edit = false;
-              item.$selected = false;
-              item.montant_paiement = currentItemPaiement_batiment_moe.montant_paiement;
-              item.observation    = currentItemPaiement_batiment_moe.observation;
-              item.date_paiement = currentItemPaiement_batiment_moe.date_paiement; 
-          }else
-          {
-            vm.allpaiement_batiment_moe = vm.allpaiement_batiment_moe.filter(function(obj)
-            {
-                return obj.id !== vm.selectedItemPaiement_batiment_moe.id;
-            });
-          }
-
-          vm.selectedItemPaiement_batiment_moe = {} ;
-          NouvelItemPaiement_batiment_moe      = false;
-          
-        };
-
-        //fonction selection item paiement_batiment_moe convention cisco/feffi
-        vm.selectionPaiement_batiment_moe = function (item)
-        {
-            vm.selectedItemPaiement_batiment_moe = item;
-
-            if (item.$selected == false || item.$selected==undefined)
-            {
-              currentItemPaiement_batiment_moe     = JSON.parse(JSON.stringify(vm.selectedItemPaiement_batiment_moe));
-              vm.showbuttonValidationPaiement_batiment_moe = true;
-            }
-            vm.validation_paiement_batiment_moe = item.validation;
-                        
-
-        };
-        $scope.$watch('vm.selectedItemPaiement_batiment_moe', function()
-        {
-             if (!vm.allpaiement_batiment_moe) return;
-             vm.allpaiement_batiment_moe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemPaiement_batiment_moe.$selected = true;
-        });
-
-        //fonction masque de saisie modification item convention
-        vm.modifierPaiement_batiment_moe = function(item)
-        {
-            NouvelItemPaiement_batiment_moe = false ;
-            vm.selectedItemPaiement_batiment_moe = item;
-            currentItemPaiement_batiment_moe = angular.copy(vm.selectedItemPaiement_batiment_moe);
-            $scope.vm.allpaiement_batiment_moe.forEach(function(cis) {
-              cis.$edit = false;
-            });
-
-            item.$edit = true;
-            item.$selected = true;
-
-            item.montant_paiement = parseInt(vm.selectedItemPaiement_batiment_moe.montant_paiement) ;            
-            item.observation = vm.selectedItemPaiement_batiment_moe.observation ;
-            item.date_paiement = new Date(vm.selectedItemPaiement_batiment_moe.date_paiement);
-        };
-
-        //fonction bouton suppression item paiement_batiment_moe convention cisco feffi
-        vm.supprimerPaiement_batiment_moe = function()
-        {
-            var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-              $mdDialog.show(confirm).then(function() {
-                vm.ajoutPaiement_batiment_moe(vm.selectedItemPaiement_batiment_moe,1);
-              }, function() {
-                //alert('rien');
-              });
-        };
-
-        //function teste s'il existe une modification item entente convention cisco feffi
-        function test_existancePaiement_batiment_moe (item,suppression)
-        {          
-            if (suppression!=1)
-            {
-               var convT = vm.allpaiement_batiment_moe.filter(function(obj)
-                {
-                   return obj.id == currentItemPaiement_batiment_moe.id;
-                });
-                if(convT[0])
-                {
-                   if((convT[0].observation!=currentItemPaiement_batiment_moe.observation)
-                    || (convT[0].date_paiement!=currentItemPaiement_batiment_moe.date_paiement)
-                    || (convT[0].montant_paiement!=currentItemPaiement_batiment_moe.montant_paiement))                    
-                      {
-                          insert_in_basePaiement_batiment_moe(item,suppression);                        
-                      }
-                      else
-                      {  
-                        item.$selected = true;
-                        item.$edit = false;
-                      }
-                }
-            } else
-                  insert_in_basePaiement_batiment_moe(item,suppression);
-        }
-
-        //insertion ou mise a jours ou suppression item dans bdd convention
-        function insert_in_basePaiement_batiment_moe(paiement_batiment_moe,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemPaiement_batiment_moe ==false)
-            {
-                getId = vm.selectedItemPaiement_batiment_moe.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,
-                    montant_paiement:    paiement_batiment_moe.montant_paiement,
-                    observation: paiement_batiment_moe.observation,
-                    date_paiement: convertionDate(new Date(paiement_batiment_moe.date_paiement)), 
-                    id_demande_batiment_moe: vm.selectedItemDemande_batiment_moe.id,
-                    validation : 0            
-                });
-                //console.log(datas);
-                //factory
-            apiFactory.add("paiement_batiment_moe/index",datas, config).success(function (data)
-            {
-
-                if (NouvelItemPaiement_batiment_moe == false)
-                {
-                    // Update_paiement or delete: id exclu                 
-                    if(suppression==0)
-                    {
-                        vm.selectedItemPaiement_batiment_moe.$selected  = false;
-                        vm.selectedItemPaiement_batiment_moe.$edit      = false;
-                        vm.selectedItemPaiement_batiment_moe ={};
-                    }
-                    else 
-                    {    
-                      vm.allpaiement_batiment_moe = vm.allpaiement_batiment_moe.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemPaiement_batiment_moe.id;
-                      });
-                      vm.showbuttonNouvPaiement_batiment_moe = true;
-                    }
-                }
-                else
-                { 
-                  paiement_batiment_moe.validation = 0;
-                  paiement_batiment_moe.id  =   String(data.response);              
-                  NouvelItemPaiement_batiment_moe = false;
-
-                  vm.showbuttonNouvPaiement_batiment_moe = false;
-            }
-              paiement_batiment_moe.$selected = false;
-              paiement_batiment_moe.$edit = false;
-              vm.selectedItemPaiement_batiment_moe = {};
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-
-        }
-
-        vm.valider_paiement_batiment_moe= function()
-        {
-              validation_in_basepaiement_batiment_moe(vm.selectedItemPaiement_batiment_moe,0);
-        }
-        function validation_in_basepaiement_batiment_moe(paiement_batiment_moe,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemPaiement_batiment_moe ==false)
-            {
-                getId = vm.selectedItemPaiement_batiment_moe.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,
-                    montant_paiement:    paiement_batiment_moe.montant_paiement,
-                    observation: paiement_batiment_moe.observation,
-                    date_paiement: convertionDate(new Date(paiement_batiment_moe.date_paiement)), 
-                    id_demande_batiment_moe: vm.selectedItemDemande_batiment_moe.id,
-                    validation : 1            
-                });
-                //console.log(datas);
-                //factory
-            apiFactory.add("paiement_batiment_moe/index",datas, config).success(function (data)
-            { 
-              paiement_batiment_moe.validation = 1;
-              vm.validation_paiement_batiment_moe = 1;
-              paiement_batiment_moe.$selected = false;
-              paiement_batiment_moe.$edit = false;
-              vm.selectedItemPaiement_batiment_moe = {};
-
-              vm.showbuttonValidationPaiement_batiment_moe = false;
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-
-        }
-
-
-/**********************************fin paiement****************************************/
-
-
 /**********************************debut demande_latrine_moe****************************************/
 //col table
         vm.demande_latrine_moe_column = [        
@@ -2822,30 +2193,7 @@
                     vm.alljustificatif_latrine_moe = result.data.response;
                     console.log(vm.alljustificatif_latrine_moe);
                 });
-                if (vm.session=='BCAF') 
-                {
-                  apiFactory.getAPIgeneraliserREST("paiement_latrine_moe/index",'menu','getpaiementBydemande','id_demande_latrine_moe',vm.selectedItemDemande_latrine_moe.id).then(function(result)
-                  {
-                      vm.allpaiement_latrine_moe = result.data.response;
-                      vm.showbuttonNouvPaiement_latrine_moe= false;
-                  });
-                  vm.showbuttonValidationDemande_latrine_moe_creer = true;
-                  vm.showbuttonValidationPaiement_latrine_moe = true;
-                }
-                /*if (vm.session=='OBCAF') 
-                {
-                  vm.alltransfert_daaf = [];
-                }*/
-                if (vm.session=='ADMIN') 
-                {
-                  apiFactory.getAPIgeneraliserREST("paiement_latrine_moe/index",'menu','getpaiementBydemande','id_demande_latrine_moe',vm.selectedItemDemande_latrine_moe.id).then(function(result)
-                  {
-                      vm.allpaiement_latrine_moe = result.data.response;
-                      vm.showbuttonValidationDemande_latrine_moe_creer = true;                      
-                      vm.showbuttonValidationPaiement_latrine_moe = true;
-                  });
-                }
-            
+                       
             vm.validation_demande_latrine_moe = item.validation;
             vm.stepjusti_latrine_moe = true;
            }
@@ -3472,248 +2820,6 @@
         }
 /***************************************fin justificatif latrine_moe**********************************************/
 
-/**********************************debut paiement****************************************/
-//col table
-        vm.paiement_latrine_moe_column = [        
-        {titre:"Montant"},
-        //{titre:"Cumul"},
-        {titre:"Date paiement"},
-        //{titre:"Pourcentage paiement"},
-        {titre:"Observation"},
-        {titre:"Action"}];
-
-        //fonction ajout dans bdd
-        function ajoutPaiement_latrine_moe(paiement_latrine_moe,suppression)
-        {
-            if (NouvelItemPaiement_latrine_moe==false)
-            {
-                test_existancePaiement_latrine_moe (paiement_latrine_moe,suppression); 
-            } 
-            else
-            {
-                insert_in_basePaiement_latrine_moe(paiement_latrine_moe,suppression);
-            }
-        }
-
-        //fonction de bouton d'annulation paiement_latrine_moe
-        vm.annulerPaiement_latrine_moe = function(item)
-        {
-          if (NouvelItemPaiement_latrine_moe == false)
-          {
-              item.$edit = false;
-              item.$selected = false;
-              item.montant_paiement = currentItemPaiement_latrine_moe.montant_paiement;
-              item.observation    = currentItemPaiement_latrine_moe.observation;
-              item.date_paiement = currentItemPaiement_latrine_moe.date_paiement; 
-          }else
-          {
-            vm.allpaiement_latrine_moe = vm.allpaiement_latrine_moe.filter(function(obj)
-            {
-                return obj.id !== vm.selectedItemPaiement_latrine_moe.id;
-            });
-          }
-
-          vm.selectedItemPaiement_latrine_moe = {} ;
-          NouvelItemPaiement_latrine_moe      = false;
-          
-        };
-
-        //fonction selection item paiement_latrine_moe convention cisco/feffi
-        vm.selectionPaiement_latrine_moe = function (item)
-        {
-            vm.selectedItemPaiement_latrine_moe = item;
-
-            if (item.$selected == false || item.$selected==undefined)
-            {
-              currentItemPaiement_latrine_moe     = JSON.parse(JSON.stringify(vm.selectedItemPaiement_latrine_moe));
-              vm.showbuttonValidationPaiement_latrine_moe = true;
-            }
-            vm.validation_paiement_latrine_moe = item.validation;
-                        
-
-        };
-        $scope.$watch('vm.selectedItemPaiement_latrine_moe', function()
-        {
-             if (!vm.allpaiement_latrine_moe) return;
-             vm.allpaiement_latrine_moe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemPaiement_latrine_moe.$selected = true;
-        });
-
-        //fonction masque de saisie modification item convention
-        vm.modifierPaiement_latrine_moe = function(item)
-        {
-            NouvelItemPaiement_latrine_moe = false ;
-            vm.selectedItemPaiement_latrine_moe = item;
-            currentItemPaiement_latrine_moe = angular.copy(vm.selectedItemPaiement_latrine_moe);
-            $scope.vm.allpaiement_latrine_moe.forEach(function(cis) {
-              cis.$edit = false;
-            });
-
-            item.$edit = true;
-            item.$selected = true;
-
-            item.montant_paiement = parseInt(vm.selectedItemPaiement_latrine_moe.montant_paiement) ;            
-            item.observation = vm.selectedItemPaiement_latrine_moe.observation ;
-            item.date_paiement = new Date(vm.selectedItemPaiement_latrine_moe.date_paiement);
-        };
-
-        //fonction bouton suppression item paiement_latrine_moe convention cisco feffi
-        vm.supprimerPaiement_latrine_moe = function()
-        {
-            var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-              $mdDialog.show(confirm).then(function() {
-                vm.ajoutPaiement_latrine_moe(vm.selectedItemPaiement_latrine_moe,1);
-              }, function() {
-                //alert('rien');
-              });
-        };
-
-        //function teste s'il existe une modification item entente convention cisco feffi
-        function test_existancePaiement_latrine_moe (item,suppression)
-        {          
-            if (suppression!=1)
-            {
-               var convT = vm.allpaiement_latrine_moe.filter(function(obj)
-                {
-                   return obj.id == currentItemPaiement_latrine_moe.id;
-                });
-                if(convT[0])
-                {
-                   if((convT[0].observation!=currentItemPaiement_latrine_moe.observation)
-                    || (convT[0].date_paiement!=currentItemPaiement_latrine_moe.date_paiement)
-                    || (convT[0].montant_paiement!=currentItemPaiement_latrine_moe.montant_paiement))                    
-                      {
-                          insert_in_basePaiement_latrine_moe(item,suppression);                        
-                      }
-                      else
-                      {  
-                        item.$selected = true;
-                        item.$edit = false;
-                      }
-                }
-            } else
-                  insert_in_basePaiement_latrine_moe(item,suppression);
-        }
-
-        //insertion ou mise a jours ou suppression item dans bdd convention
-        function insert_in_basePaiement_latrine_moe(paiement_latrine_moe,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemPaiement_latrine_moe ==false)
-            {
-                getId = vm.selectedItemPaiement_latrine_moe.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,
-                    montant_paiement:    paiement_latrine_moe.montant_paiement,
-                    observation: paiement_latrine_moe.observation,
-                    date_paiement: convertionDate(new Date(paiement_latrine_moe.date_paiement)), 
-                    id_demande_latrine_moe: vm.selectedItemDemande_latrine_moe.id,
-                    validation : 0            
-                });
-                //console.log(datas);
-                //factory
-            apiFactory.add("paiement_latrine_moe/index",datas, config).success(function (data)
-            {
-
-                if (NouvelItemPaiement_latrine_moe == false)
-                {
-                    // Update_paiement or delete: id exclu                 
-                    if(suppression==0)
-                    {
-                        vm.selectedItemPaiement_latrine_moe.$selected  = false;
-                        vm.selectedItemPaiement_latrine_moe.$edit      = false;
-                        vm.selectedItemPaiement_latrine_moe ={};
-                    }
-                    else 
-                    {    
-                      vm.allpaiement_latrine_moe = vm.allpaiement_latrine_moe.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemPaiement_latrine_moe.id;
-                      });
-                      vm.showbuttonNouvPaiement_latrine_moe = true;
-                    }
-                }
-                else
-                { 
-                  paiement_latrine_moe.validation = 0;
-                  paiement_latrine_moe.id  =   String(data.response);              
-                  NouvelItemPaiement_latrine_moe = false;
-
-                  vm.showbuttonNouvPaiement_latrine_moe = false;
-            }
-              paiement_latrine_moe.$selected = false;
-              paiement_latrine_moe.$edit = false;
-              vm.selectedItemPaiement_latrine_moe = {};
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-
-        }
-
-        vm.valider_paiement_latrine_moe= function()
-        {
-              validation_in_basepaiement_latrine_moe(vm.selectedItemPaiement_latrine_moe,0);
-        }
-        function validation_in_basepaiement_latrine_moe(paiement_latrine_moe,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemPaiement_latrine_moe ==false)
-            {
-                getId = vm.selectedItemPaiement_latrine_moe.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,
-                    montant_paiement:    paiement_latrine_moe.montant_paiement,
-                    observation: paiement_latrine_moe.observation,
-                    date_paiement: convertionDate(new Date(paiement_latrine_moe.date_paiement)), 
-                    id_demande_latrine_moe: vm.selectedItemDemande_latrine_moe.id,
-                    validation : 1            
-                });
-                //console.log(datas);
-                //factory
-            apiFactory.add("paiement_latrine_moe/index",datas, config).success(function (data)
-            { 
-              paiement_latrine_moe.validation = 1;
-              vm.validation_paiement_latrine_moe = 1;
-              paiement_latrine_moe.$selected = false;
-              paiement_latrine_moe.$edit = false;
-              vm.selectedItemPaiement_latrine_moe = {};
-
-              vm.showbuttonValidationPaiement_latrine_moe = false;
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-
-        }
-
-
-/**********************************fin paiement****************************************/
-
 
       /**********************************debut demande_debut_travaux_moe****************************************/
 //col table
@@ -3809,26 +2915,6 @@
                     vm.alljustificatif_fin_travaux_moe = result.data.response;
                     console.log(vm.alljustificatif_fin_travaux_moe);
                 });
-               
-                if (vm.session=='BCAF') 
-                {
-                  apiFactory.getAPIgeneraliserREST("paiement_fin_travaux_moe/index",'menu','getpaiementBydemande','id_demande_fin_travaux',vm.selectedItemDemande_fin_travaux_moe.id).then(function(result)
-                  {
-                      vm.allpaiement_fin_travaux_moe = result.data.response;
-                  });
-                  vm.showbuttonValidationDemande_fin_travaux_moe_creer = true;
-                  vm.showbuttonValidationPaiement_fin_travaux_moe = true;
-                }
-               
-                if (vm.session=='ADMIN') 
-                {
-                  apiFactory.getAPIgeneraliserREST("paiement_fin_travaux_moe/index",'menu','getpaiementBydemande','id_demande_fin_travaux',vm.selectedItemDemande_fin_travaux_moe.id).then(function(result)
-                  {
-                      vm.allpaiement_fin_travaux_moe = result.data.response;
-                      vm.showbuttonValidationDemande_fin_travaux_moe_creer = true;                     
-                      vm.showbuttonValidationPaiement_fin_travaux_moe = true;
-                  });
-                } 
             
             vm.validation_demande_fin_travaux_moe = item.validation;
             vm.stepjusti_f_tra_moe = true;
@@ -4454,248 +3540,6 @@
         }
 /***************************************fin justificatif fin_travaux**********************************************/
 
-/**********************************fin paiement****************************************/
-//col table
-        vm.paiement_fin_travaux_moe_column = [        
-        {titre:"Montant"},
-        //{titre:"Cumul"},
-        {titre:"Date paiement"},
-        //{titre:"Pourcentage paiement"},
-        {titre:"Observation"},
-        {titre:"Action"}];
-
-          //fonction ajout dans bdd
-        function ajoutPaiement_fin_travaux_moe(paiement_fin_travaux_moe,suppression)
-        {
-            if (NouvelItemPaiement_fin_travaux_moe==false)
-            {
-                test_existancePaiement_fin_travaux_moe (paiement_fin_travaux_moe,suppression); 
-            } 
-            else
-            {
-                insert_in_basePaiement_fin_travaux_moe(paiement_fin_travaux_moe,suppression);
-            }
-        }
-
-        //fonction de bouton d'annulation paiement_fin_travaux_moe
-        vm.annulerPaiement_fin_travaux_moe = function(item)
-        {
-          if (NouvelItemPaiement_fin_travaux_moe == false)
-          {
-              item.$edit = false;
-              item.$selected = false;
-              item.montant_paiement = currentItemPaiement_fin_travaux_moe.montant_paiement;
-              item.observation    = currentItemPaiement_fin_travaux_moe.observation;
-              item.date_paiement = currentItemPaiement_fin_travaux_moe.date_paiement; 
-          }else
-          {
-            vm.allpaiement_fin_travaux_moe = vm.allpaiement_fin_travaux_moe.filter(function(obj)
-            {
-                return obj.id !== vm.selectedItemPaiement_fin_travaux_moe.id;
-            });
-          }
-
-          vm.selectedItemPaiement_fin_travaux_moe = {} ;
-          NouvelItemPaiement_fin_travaux_moe      = false;
-          
-        };
-
-        //fonction selection item paiement_fin_travaux_moe convention cisco/feffi
-        vm.selectionPaiement_fin_travaux_moe = function (item)
-        {
-            vm.selectedItemPaiement_fin_travaux_moe = item;
-
-            if (item.$selected == false || item.$selected==undefined)
-            {
-              currentItemPaiement_fin_travaux_moe     = JSON.parse(JSON.stringify(vm.selectedItemPaiement_fin_travaux_moe));
-              vm.showbuttonValidationPaiement_fin_travaux_moe = true;
-            }
-            vm.validation_paiement_fin_travaux_moe = item.validation;
-                        
-
-        };
-        $scope.$watch('vm.selectedItemPaiement_fin_travaux_moe', function()
-        {
-             if (!vm.allpaiement_fin_travaux_moe) return;
-             vm.allpaiement_fin_travaux_moe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemPaiement_fin_travaux_moe.$selected = true;
-        });
-
-        //fonction masque de saisie modification item convention
-        vm.modifierPaiement_fin_travaux_moe = function(item)
-        {
-            NouvelItemPaiement_fin_travaux_moe = false ;
-            vm.selectedItemPaiement_fin_travaux_moe = item;
-            currentItemPaiement_fin_travaux_moe = angular.copy(vm.selectedItemPaiement_fin_travaux_moe);
-            $scope.vm.allpaiement_fin_travaux_moe.forEach(function(cis) {
-              cis.$edit = false;
-            });
-
-            item.$edit = true;
-            item.$selected = true;
-
-            item.montant_paiement = parseInt(vm.selectedItemPaiement_fin_travaux_moe.montant_paiement) ;            
-            item.observation = vm.selectedItemPaiement_fin_travaux_moe.observation ;
-            item.date_paiement = new Date(vm.selectedItemPaiement_fin_travaux_moe.date_paiement);
-        };
-
-        //fonction bouton suppression item paiement_fin_travaux_moe convention cisco feffi
-        vm.supprimerPaiement_fin_travaux_moe = function()
-        {
-            var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-              $mdDialog.show(confirm).then(function() {
-                vm.ajoutPaiement_fin_travaux_moe(vm.selectedItemPaiement_fin_travaux_moe,1);
-              }, function() {
-                //alert('rien');
-              });
-        };
-
-        //function teste s'il existe une modification item entente convention cisco feffi
-        function test_existancePaiement_fin_travaux_moe (item,suppression)
-        {          
-            if (suppression!=1)
-            {
-               var convT = vm.allpaiement_fin_travaux_moe.filter(function(obj)
-                {
-                   return obj.id == currentItemPaiement_fin_travaux_moe.id;
-                });
-                if(convT[0])
-                {
-                   if((convT[0].observation!=currentItemPaiement_fin_travaux_moe.observation)
-                    || (convT[0].date_paiement!=currentItemPaiement_fin_travaux_moe.date_paiement)
-                    || (convT[0].montant_paiement!=currentItemPaiement_fin_travaux_moe.montant_paiement))                    
-                      {
-                          insert_in_basePaiement_fin_travaux_moe(item,suppression);                        
-                      }
-                      else
-                      {  
-                        item.$selected = true;
-                        item.$edit = false;
-                      }
-                }
-            } else
-                  insert_in_basePaiement_fin_travaux_moe(item,suppression);
-        }
-
-        //insertion ou mise a jours ou suppression item dans bdd convention
-        function insert_in_basePaiement_fin_travaux_moe(paiement_fin_travaux_moe,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemPaiement_fin_travaux_moe ==false)
-            {
-                getId = vm.selectedItemPaiement_fin_travaux_moe.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,
-                    montant_paiement:    paiement_fin_travaux_moe.montant_paiement,
-                    observation: paiement_fin_travaux_moe.observation,
-                    date_paiement: convertionDate(new Date(paiement_fin_travaux_moe.date_paiement)), 
-                    id_demande_fin_travaux: vm.selectedItemDemande_fin_travaux_moe.id,
-                    validation : 0            
-                });
-                //console.log(datas);
-                //factory
-            apiFactory.add("paiement_fin_travaux_moe/index",datas, config).success(function (data)
-            {
-
-                if (NouvelItemPaiement_fin_travaux_moe == false)
-                {
-                    // Update_paiement or delete: id exclu                 
-                    if(suppression==0)
-                    {
-                        vm.selectedItemPaiement_fin_travaux_moe.$selected  = false;
-                        vm.selectedItemPaiement_fin_travaux_moe.$edit      = false;
-                        vm.selectedItemPaiement_fin_travaux_moe ={};
-                    }
-                    else 
-                    {    
-                      vm.allpaiement_fin_travaux_moe = vm.allpaiement_fin_travaux_moe.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemPaiement_fin_travaux_moe.id;
-                      });
-                      vm.showbuttonNouvPaiement_fin_travaux_moe = true;
-                    }
-                }
-                else
-                { 
-                  paiement_fin_travaux_moe.validation = 0;
-                  paiement_fin_travaux_moe.id  =   String(data.response);              
-                  NouvelItemPaiement_fin_travaux_moe = false;
-
-                  vm.showbuttonNouvPaiement_fin_travaux_moe = false;
-            }
-              paiement_fin_travaux_moe.$selected = false;
-              paiement_fin_travaux_moe.$edit = false;
-              vm.selectedItemPaiement_fin_travaux_moe = {};
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-
-        }
-
-        vm.valider_paiement_fin_travaux_moe= function()
-        {
-              validation_in_basepaiement_fin_travaux_moe(vm.selectedItemPaiement_fin_travaux_moe,0);
-        }
-        function validation_in_basepaiement_fin_travaux_moe(paiement_fin_travaux_moe,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemPaiement_fin_travaux_moe ==false)
-            {
-                getId = vm.selectedItemPaiement_fin_travaux_moe.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,
-                    montant_paiement:    paiement_fin_travaux_moe.montant_paiement,
-                    observation: paiement_fin_travaux_moe.observation,
-                    date_paiement: convertionDate(new Date(paiement_fin_travaux_moe.date_paiement)), 
-                    id_demande_fin_travaux: vm.selectedItemDemande_fin_travaux_moe.id,
-                    validation : 1            
-                });
-                //console.log(datas);
-                //factory
-            apiFactory.add("paiement_fin_travaux_moe/index",datas, config).success(function (data)
-            { 
-              paiement_fin_travaux_moe.validation = 1;
-              vm.validation_paiement_fin_travaux_moe = 1;
-              paiement_fin_travaux_moe.$selected = false;
-              paiement_fin_travaux_moe.$edit = false;
-              vm.selectedItemPaiement_fin_travaux_moe = {};
-
-              vm.showbuttonValidationPaiement_fin_travaux_moe = false;
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-
-        }
-
-
-/**********************************fin paiement****************************************/
-
 
 /**********************************debut contrat prestataire****************************************/
  vm.step_contrat_mpe = function ()
@@ -4730,64 +3574,7 @@
             vm.stepsuivi_paiement_mpe = true;
            if(item.id!=0)
            {
-
-               /* apiFactory.getAPIgeneraliserREST("attachement_batiment/index",'id_contrat_prestataire',item.id).then(function(result)
-                {
-                    vm.allattachement_batiment = result.data.response;
-                });
-                apiFactory.getAPIgeneraliserREST("attachement_latrine/index",'id_contrat_prestataire',item.id).then(function(result)
-                {
-                    vm.allattachement_latrine = result.data.response;
-                });
-
-                apiFactory.getAPIgeneraliserREST("attachement_mobilier/index",'id_contrat_prestataire',item.id).then(function(result)
-                {
-                    vm.allattachement_mobilier = result.data.response;
-                });*/
-            vm.validation_contrat_prestataire = item.validation;
-             /* switch (vm.session)
-              {
-                
-               case 'BCAF':
-                          
-                          apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index","menu","getdemandeBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
-                            {
-                              vm.alldemande_batiment_mpe = result.data.response;
-                            });
-                          apiFactory.getAPIgeneraliserREST("demande_latrine_prestataire/index","menu","getdemandeBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
-                            {
-                              vm.alldemande_latrine_mpe = result.data.response;
-                            });
-
-                          apiFactory.getAPIgeneraliserREST("demande_mobilier_prestataire/index","menu","getdemandeBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
-                            {
-                              vm.alldemande_mobilier_mpe = result.data.response;
-                            }); 
-                     
-                    break;
-                
-                case 'ADMIN':
-                          
-                          apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index","menu","getdemandeBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
-                            {
-                              vm.alldemande_batiment_mpe = result.data.response;
-                            });
-                          apiFactory.getAPIgeneraliserREST("demande_latrine_prestataire/index","menu","getdemandeBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
-                            {
-                              vm.alldemande_latrine_mpe = result.data.response;
-                            });
-
-                          apiFactory.getAPIgeneraliserREST("demande_mobilier_prestataire/index","menu","getdemandeBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
-                            {
-                              vm.alldemande_mobilier_mpe = result.data.response;
-                            });                   
-                     
-                    break;               
-                default:
-                    break;
-            
-              }*/
-              
+                vm.validation_contrat_prestataire = item.validation;              
            }  
         };
         $scope.$watch('vm.selectedItemContrat_prestataire', function()
@@ -4812,7 +3599,14 @@
                 console.log(vm.allavance_demarrage);
                 console.log(vm.selectedItemContrat_prestataire.id);
             });
-            vm.styleTabfils = "acc_menu"; 
+            vm.styleTabfils = "acc_menu";             
+            vm.styleTabfils2 = "acc_sous_menu";
+            vm.stepattachement_mpe = false;
+        }
+        vm.click_tab_avance_mpe = function()
+        {                        
+            vm.styleTabfils2 = "acc_sous_menu";
+            vm.stepattachement_mpe = false;
         }
         vm.avance_demarrage_column = [        
         {titre:"Description"
@@ -5090,6 +3884,9 @@
                     return obj.validation == 0;
                 });
             });
+                         
+            vm.styleTabfils2 = "acc_sous_menu";
+            vm.stepattachement_mpe = false;
         }
         vm.facture_mpe_column = [        
         {titre:"Numero"
@@ -5439,7 +4236,7 @@
             {
                 vm.allattachement_travaux = result.data.response;
             });
-            console.log('okok');
+            vm.styleTabfils2 = "acc_menu";
         }
         vm.attachement_travaux_column = [        
         {titre:"Numero"
@@ -5921,41 +4718,6 @@
            if(item.$edit==false || item.$edit==undefined)
            {
                 vm.stepattachement_batiment_travaux = true;
-           /* apiFactory.getAPIgeneraliserREST("justificatif_batiment_pre/index",'id_demande_pay_pre',vm.selectedItemDemande_batiment_mpe.id).then(function(result)
-            {
-                vm.alljustificatif_batiment_mpe = result.data.response;
-                console.log(vm.alljustificatif_batiment_mpe);
-            });
-            switch (vm.session)
-            {
-              case 'OBCAF':
-                        apiFactory.getAPIgeneraliserREST("paiement_batiment_prestataire/index",'menu','getpaiementinvalideBydemande','id_demande_batiment_pre',item.id).then(function(result)
-                          {
-                              vm.allpaiement_batiment_mpe = result.data.response;
-                              if (vm.allpaiement_batiment_mpe.length>0)
-                              {
-                                vm.showbuttonNouvPaiement_batiment_mpe= false;
-                              }
-                              
-                          });
-                                        
-                  break;
-
-             
-              case 'ADMIN':
-                        apiFactory.getAPIgeneraliserREST("paiement_batiment_prestataire/index",'menu','getpaiementinvalideBydemande','id_demande_batiment_pre',item.id).then(function(result)
-                      {
-                          vm.allpaiement_batiment_mpe = result.data.response;
-                          if (vm.allpaiement_batiment_mpe.length>0)
-                          {
-                            vm.showbuttonNouvPaiement_batiment_mpe= false;
-                          }
-                      });                   
-                  break;
-              default:
-                  break;          
-            }*/
-
            }
             vm.validation_demande_batiment_mpe = item.validation;
             vm.stepjusti_batiment_mpe = true;   
@@ -5979,12 +4741,6 @@
             $scope.vm.alldemande_batiment_mpe.forEach(function(mem) {
               mem.$edit = false;
             });
-
-            /*apiFactory.getAPIgeneraliserREST("batiment_construction/index",'menu','getbatimentByContrat_prestataire','id_contrat_prestataire',item.contrat_prestataire.id).then(function(result)
-            {
-                vm.allbatiment_construction = result.data.response;
-                console.log(vm.allbatiment_construction);
-            });*/
 
             item.$edit = true;
             item.$selected = true;
@@ -6692,41 +5448,6 @@
            if(item.$edit==false || item.$edit==undefined)
            {
                 vm.stepattachement_latrine_travaux = true;
-           /* apiFactory.getAPIgeneraliserREST("justificatif_latrine_pre/index",'id_demande_pay_pre',vm.selectedItemDemande_latrine_mpe.id).then(function(result)
-            {
-                vm.alljustificatif_latrine_mpe = result.data.response;
-                console.log(vm.alljustificatif_latrine_mpe);
-            });
-            switch (vm.session)
-            {
-              case 'OBCAF':
-                        apiFactory.getAPIgeneraliserREST("paiement_latrine_prestataire/index",'menu','getpaiementinvalideBydemande','id_demande_latrine_pre',item.id).then(function(result)
-                          {
-                              vm.allpaiement_latrine_mpe = result.data.response;
-                              if (vm.allpaiement_latrine_mpe.length>0)
-                              {
-                                vm.showbuttonNouvPaiement_latrine_mpe= false;
-                              }
-                              
-                          });
-                                        
-                  break;
-
-             
-              case 'ADMIN':
-                        apiFactory.getAPIgeneraliserREST("paiement_latrine_prestataire/index",'menu','getpaiementinvalideBydemande','id_demande_latrine_pre',item.id).then(function(result)
-                      {
-                          vm.allpaiement_latrine_mpe = result.data.response;
-                          if (vm.allpaiement_latrine_mpe.length>0)
-                          {
-                            vm.showbuttonNouvPaiement_latrine_mpe= false;
-                          }
-                      });                   
-                  break;
-              default:
-                  break;          
-            }*/
-
            }
             vm.validation_demande_latrine_mpe = item.validation;
             vm.stepjusti_latrine_mpe = true;   
@@ -6750,12 +5471,6 @@
             $scope.vm.alldemande_latrine_mpe.forEach(function(mem) {
               mem.$edit = false;
             });
-
-            /*apiFactory.getAPIgeneraliserREST("latrine_construction/index",'menu','getlatrineByContrat_prestataire','id_contrat_prestataire',item.contrat_prestataire.id).then(function(result)
-            {
-                vm.alllatrine_construction = result.data.response;
-                console.log(vm.alllatrine_construction);
-            });*/
 
             item.$edit = true;
             item.$selected = true;
@@ -7401,41 +6116,6 @@
            if(item.$edit==false || item.$edit==undefined)
            {
                 vm.stepattachement_mobilier_travaux = true;
-           /* apiFactory.getAPIgeneraliserREST("justificatif_mobilier_pre/index",'id_demande_pay_pre',vm.selectedItemDemande_mobilier_mpe.id).then(function(result)
-            {
-                vm.alljustificatif_mobilier_mpe = result.data.response;
-                console.log(vm.alljustificatif_mobilier_mpe);
-            });
-            switch (vm.session)
-            {
-              case 'OBCAF':
-                        apiFactory.getAPIgeneraliserREST("paiement_mobilier_prestataire/index",'menu','getpaiementinvalideBydemande','id_demande_mobilier_pre',item.id).then(function(result)
-                          {
-                              vm.allpaiement_mobilier_mpe = result.data.response;
-                              if (vm.allpaiement_mobilier_mpe.length>0)
-                              {
-                                vm.showbuttonNouvPaiement_mobilier_mpe= false;
-                              }
-                              
-                          });
-                                        
-                  break;
-
-             
-              case 'ADMIN':
-                        apiFactory.getAPIgeneraliserREST("paiement_mobilier_prestataire/index",'menu','getpaiementinvalideBydemande','id_demande_mobilier_pre',item.id).then(function(result)
-                      {
-                          vm.allpaiement_mobilier_mpe = result.data.response;
-                          if (vm.allpaiement_mobilier_mpe.length>0)
-                          {
-                            vm.showbuttonNouvPaiement_mobilier_mpe= false;
-                          }
-                      });                   
-                  break;
-              default:
-                  break;          
-            }*/
-
            }
             vm.validation_demande_mobilier_mpe = item.validation;
             vm.stepjusti_mobilier_mpe = true;   
@@ -7460,12 +6140,7 @@
               mem.$edit = false;
             });
 
-            /*apiFactory.getAPIgeneraliserREST("mobilier_construction/index",'menu','getmobilierByContrat_prestataire','id_contrat_prestataire',item.contrat_prestataire.id).then(function(result)
-            {
-                vm.allmobilier_construction = result.data.response;
-                console.log(vm.allmobilier_construction);
-            });*/
-
+            
             item.$edit = true;
             item.$selected = true;
             item.id_tranche_demande_mpe = vm.selectedItemDemande_mobilier_mpe.tranche.id ;

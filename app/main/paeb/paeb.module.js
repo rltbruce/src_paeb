@@ -22,7 +22,7 @@
             'app.paeb.note_agence_acc',
             //'app.paeb.suivi_bcaf',
             //'app.paeb.suivi_daaf',
-            'app.paeb.reporting',
+            'app.paeb.reports',
             'app.paeb.autre_information'
         ] ;
 

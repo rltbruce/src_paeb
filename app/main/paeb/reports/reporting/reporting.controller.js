@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('app.paeb.reporting')
+        .module('app.paeb.reports.reporting')
         .controller('ReportingController', ReportingController);
     /** @ngInject */
     function ReportingController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,apiUrlexcel)
@@ -678,6 +678,22 @@
                 var date_final= annee+"-"+mois+"-"+jour;
                 return date_final
             }      
+        }
+
+        //Alert
+        vm.Alert = function(titre,content)
+        {
+          $mdDialog.show(
+            $mdDialog.alert()
+            .parent(angular.element(document.querySelector('#popupContainer')))
+            .clickOutsideToClose(false)
+            .parent(angular.element(document.body))
+            .title(titre)
+            .textContent(content)
+            .ariaLabel('Alert')
+            .ok('Fermer')
+            .targetEvent()
+          );
         }
     }
 

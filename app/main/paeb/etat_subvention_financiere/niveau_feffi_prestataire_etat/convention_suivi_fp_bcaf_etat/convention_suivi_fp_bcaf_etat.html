@@ -434,57 +434,7 @@
                               </md-tab>
                         <!---------------------------------FIN justificatif debut travaux moe--------------------------->
 
-                        <!---------------------------------DEBUT paiement debut travaux moe------------------------------->
-                              <md-tab ng-disabled="!vm.stepjusti_d_tra_moe || vm.validation_demande_debut_travaux_moe!=4">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">
-                                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                                        <i class="icon-attachment s16"></i>
-                                      </span-->
-                                      <span class="ms-form-wizard-step-text">Paiement</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body><br>
-                                 <div>        
-                                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                    <thead>
-                                      <tr>
-                                        <th class="secondary-text" ng-repeat="pai in ::vm.paiement_debut_travaux_moe_column">
-                                          <div class="table-header">
-                                            <span class="column-title">{{pai.titre}}</span>
-                                          </div>
-                                        </th>
-                                      </tr>
-                                    </thead>
-                                             
-                                    <tbody>
-                                      <tr ng-repeat="paiement_debut_travaux_moe in vm.allpaiement_debut_travaux_moe"  ng-class="{selected: paiement_debut_travaux_moe.$selected}" ng-click="vm.selectionPaiement_debut_travaux_moe(paiement_debut_travaux_moe)">
-                                                  
-                                        <td>                                                    
-                                          <span>{{paiement_debut_travaux_moe.montant_paiement}}</span>
-                                        </td>
-
-                                         <td>                         
-                                          <span>{{vm.formatDate(paiement_debut_travaux_moe.date_paiement)}}</span>
-                                        </td>
-                                                  
-                                        <td>                                                    
-                                          <span>{{paiement_debut_travaux_moe.observation}}</span>
-                                        </td>
-                                        
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </div>
-
-                              </md-tab-body>
-                              </md-tab>
-
-                       <!---------------------------------FIN paiement debut travaux moe------------------------------->
-
-                       <!-----------------------------DEBUT demande Batiment moe------------------------------> 
+                               <!-----------------------------DEBUT demande Batiment moe------------------------------> 
                               <md-tab>
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
@@ -626,56 +576,6 @@
                                   </md-tab-body>
                               </md-tab>
                         <!---------------------------------FIN justificatif batiment moe-------------------------------->
-
-                         <!---------------------------------DEBUT paiement batiment moe------------------------------------>
-                              <md-tab ng-disabled="!vm.stepjusti_batiment_moe || vm.validation_demande_batiment_moe!=4">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">
-                                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                                        <i class="icon-attachment s16"></i>
-                                      </span-->
-                                      <span class="ms-form-wizard-step-text">Paiement</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body><br>
-                                 <div>        
-                                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                    <thead>
-                                      <tr>
-                                        <th class="secondary-text" ng-repeat="pai in ::vm.paiement_batiment_moe_column">
-                                          <div class="table-header">
-                                            <span class="column-title">{{pai.titre}}</span>
-                                          </div>
-                                        </th>
-                                      </tr>
-                                    </thead>
-                                             
-                                    <tbody>
-                                      <tr ng-repeat="paiement_batiment_moe in vm.allpaiement_batiment_moe"  ng-class="{selected: paiement_batiment_moe.$selected}" ng-click="vm.selectionPaiement_batiment_moe(paiement_batiment_moe)">
-                                                  
-                                        <td>                                                    
-                                          <span>{{paiement_batiment_moe.montant_paiement}}</span>
-                                        </td>
-
-                                         <td>                          
-                                          <span>{{vm.formatDate(paiement_batiment_moe.date_paiement)}}</span>
-                                        </td>
-                                                  
-                                        <td>                                                    
-                                          <span>{{paiement_batiment_moe.observation}}</span>
-                                        </td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </div>
-
-                              </md-tab-body>
-                              </md-tab>
-
-                       <!---------------------------------FIN paiement batiment moe------------------------------------>
-                        
                         <!-----------------------------DEBUT demande latrine moe------------------------------> 
                               <md-tab>
                                 <md-tab-label>
@@ -815,56 +715,6 @@
                                   </md-tab-body>
                               </md-tab>
                         <!---------------------------------FIN justificatif latrine moe-------------------------------->
-
-                        <!---------------------------------DEBUT paiement latrine moe------------------------------------>
-                              <md-tab ng-disabled="!vm.stepjusti_latrine_moe || vm.validation_demande_latrine_moe!=4">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">
-                                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                                        <i class="icon-attachment s16"></i>
-                                      </span-->
-                                      <span class="ms-form-wizard-step-text">Paiement</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body><br>
-                                 <div>        
-                                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                    <thead>
-                                      <tr>
-                                        <th class="secondary-text" ng-repeat="pai in ::vm.paiement_latrine_moe_column">
-                                          <div class="table-header">
-                                            <span class="column-title">{{pai.titre}}</span>
-                                          </div>
-                                        </th>
-                                      </tr>
-                                    </thead>
-                                             
-                                    <tbody>
-                                      <tr ng-repeat="paiement_latrine_moe in vm.allpaiement_latrine_moe"  ng-class="{selected: paiement_latrine_moe.$selected}" ng-click="vm.selectionPaiement_latrine_moe(paiement_latrine_moe)">
-                                                  
-                                        <td>                                                    
-                                          <span>{{paiement_latrine_moe.montant_paiement}}</span>
-                                        </td>
-
-                                         <td>                         
-                                          <span>{{vm.formatDate(paiement_latrine_moe.date_paiement)}}</span>
-                                        </td>
-                                                  
-                                        <td>                                                    
-                                          <span>{{paiement_latrine_moe.observation}}</span>
-                                        </td>                                        
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </div>
-
-                              </md-tab-body>
-                              </md-tab>
-
-                       <!---------------------------------FIN paiement batiment moe------------------------------------>
-
                         <!-----------------------------DEBUT demande debut travaux moe-------------------------> 
                               <md-tab>
                                 <md-tab-label>
@@ -1006,55 +856,6 @@
                                   </md-tab-body>
                               </md-tab>
                         <!---------------------------------FIN justificatif fin travaux moe--------------------------->
-                        <!---------------------------------fin paiement fin travaux moe------------------------------->
-                              <md-tab ng-disabled="!vm.stepjusti_f_tra_moe || vm.validation_demande_fin_travaux_moe!=4">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">
-                                      <!--span class="ms-form-wizard-step-number md-accent-bg">
-                                        <i class="icon-attachment s16"></i>
-                                      </span-->
-                                      <span class="ms-form-wizard-step-text">Paiement</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body><br>
-                                 <div>        
-                                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                    <thead>
-                                      <tr>
-                                        <th class="secondary-text" ng-repeat="pai in ::vm.paiement_fin_travaux_moe_column">
-                                          <div class="table-header">
-                                            <span class="column-title">{{pai.titre}}</span>
-                                          </div>
-                                        </th>
-                                      </tr>
-                                    </thead>
-                                             
-                                    <tbody>
-                                      <tr ng-repeat="paiement_fin_travaux_moe in vm.allpaiement_fin_travaux_moe"  ng-class="{selected: paiement_fin_travaux_moe.$selected}" ng-click="vm.selectionPaiement_fin_travaux_moe(paiement_fin_travaux_moe)">
-                                                  
-                                        <td>                                                    
-                                          <span ng-if="!paiement_fin_travaux_moe.$edit">{{paiement_fin_travaux_moe.montant_paiement}}</span>
-                                        </td>
-
-                                         <td>                         
-                                          <span ng-if="!paiement_fin_travaux_moe.$edit">{{vm.formatDate(paiement_fin_travaux_moe.date_paiement)}}</span>
-                                        </td>
-                                                  
-                                        <td>                                                    
-                                          <span ng-if="!paiement_fin_travaux_moe.$edit">{{paiement_fin_travaux_moe.observation}}</span>
-                                        </td>
-                                         
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </div>
-
-                              </md-tab-body>
-                              </md-tab>
-                       <!---------------------------------FIN paiement fin travaux moe------------------------------->
-
                               <md-tab>
                               </md-tab>
                       <!---------------------convention cisco/feffi---------------->
@@ -1177,10 +978,10 @@
                       <md-tab-body>
                     <!----------------------------------FILS DEBUT SUIVI PAIEMENT--------------------------------------------->  
                       <ms-form-wizard  flex id="sousmenu">
-                        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
+                        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils2}}">
 
                         <!--------------------------------DEBUT AVANCE DE DEMARRAGE------------------------------------------> 
-                          <md-tab>
+                          <md-tab ng-click="vm.click_tab_avance_mpe()">
                             <md-tab-label >
                               <span class="ms-form-wizard-step-label">
                                   <span class="ms-form-wizard-step-text">Avance de démarrage</span>
@@ -1330,7 +1131,7 @@
                             <md-tab-body>
                           <!----------------------------------FILS DEBUT ATTACHEMENT--------------------------------------->  
                             <ms-form-wizard  flex id="sousmenu">
-                              <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                              <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="vm.acc_sous_menu">
                                 <!-----------------------------DEBUT demande batiment mpe------------------------------> 
                               <md-tab>
                                 <md-tab-label>

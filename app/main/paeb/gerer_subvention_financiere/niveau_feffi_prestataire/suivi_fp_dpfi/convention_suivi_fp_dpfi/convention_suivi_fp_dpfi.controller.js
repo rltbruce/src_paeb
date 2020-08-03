@@ -428,76 +428,7 @@
             });
         }
         
-       /* function donnee_menu_moe(item,session)
-        {   vm.showbuttonNouvcontrat_moe=true;
-            return new Promise(function (resolve, reject) 
-            {
-                switch (session)
-                {
-                  
-                  case 'DPFI':
-                           apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allcontrat_moe = result.data.response;
-                                vm.showbuttonNouvcontrat_moe=false;
-                                return resolve('ok');
-                            });
-                                               
-                      break;
-
-                  case 'ADMIN':
-                            
-                            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allcontrat_moe = result.data.response;
-                                vm.showbuttonNouvcontrat_moe=false;
-                                return resolve('ok');
-                            });
-                       
-                      break;
-                  default:
-                      break;
-              
-                }
-            });
-        }
-        
-        function donnee_menu_mpe(item,session)
-        {
-            return new Promise(function (resolve, reject)
-            {
-                switch (session)
-                {
-                  case 'DPFI':
-                            
-                            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allcontrat_prestataire = result.data.response;
-                                    
-                                return resolve('ok');
-                            });
-                       
-                      break;
-
-                  case 'ADMIN':
-                            
-                            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                            {
-                                vm.allcontrat_prestataire = result.data.response;
-                                    
-                                return resolve('ok');
-                            });                            
-                       
-                      break;
-                  default:
-                      break;
-              
-                }            
-            });
-        }  */ 
-
-
-  
+ 
   
   /******************************************debut maitrise d'oeuvre*****************************************************/
 

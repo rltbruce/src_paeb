@@ -83,17 +83,11 @@
         vm.selectedItemJustificatif_debut_travaux_moe = {} ;
         vm.alljustificatif_debut_travaux_moe = [] ;
 
-        vm.selectedItemPaiement_debut_travaux_moe = {} ;
-        vm.allpaiement_debut_travaux_moe = [] ;
-
         vm.selectedItemDemande_batiment_moe = {};
         vm.alldemande_batiment_moe = [];
 
         vm.selectedItemJustificatif_batiment_moe = {} ;
         vm.alljustificatif_batiment_moe = [] ;
-
-        vm.selectedItemPaiement_batiment_moe = {} ;
-        vm.allpaiement_batiment_moe = [] ;
 
         vm.selectedItemDemande_latrine_moe = {};
         vm.alldemande_latrine_moe = [];
@@ -101,17 +95,11 @@
         vm.selectedItemJustificatif_latrine_moe = {} ;
         vm.alljustificatif_latrine_moe = [] ;
 
-        vm.selectedItemPaiement_latrine_moe = {} ;
-        vm.allpaiement_latrine_moe = [] ;
-
         vm.selectedItemDemande_fin_travaux_moe = {};
         vm.alldemande_fin_travaux_moe = [];
 
         vm.selectedItemJustificatif_fin_travaux_moe = {} ;
         vm.alljustificatif_fin_travaux_moe = [] ;
-
-        vm.selectedItemPaiement_fin_travaux_moe = {} ;
-        vm.allpaiement_fin_travaux_moe = [] ;
 
 /*********************************************Fin maitrise d'oeuvre*************************************/
 
@@ -518,10 +506,6 @@
                 {
                     vm.alljustificatif_debut_travaux_moe = result.data.response;
                     console.log(vm.alljustificatif_debut_travaux_moe);
-                });
-                apiFactory.getAPIgeneraliserREST("paiement_debut_travaux_moe/index",'menu','getpaiementBydemande','id_demande_debut_travaux',vm.selectedItemDemande_debut_travaux_moe.id).then(function(result)
-                {
-                    vm.allpaiement_debut_travaux_moe = result.data.response;
                 }); 
             
             vm.validation_demande_debut_travaux_moe = item.validation;
@@ -604,37 +588,6 @@
         }
 /***************************************fin justificatif debut_travaux**********************************************/
 
-/**********************************debut paiement****************************************/
-//col table
-        vm.paiement_debut_travaux_moe_column = [        
-        {titre:"Montant"},
-        //{titre:"Cumul"},
-        {titre:"Date paiement"},
-        //{titre:"Pourcentage paiement"},
-        {titre:"Observation"}];
-
-       
-        //fonction selection item paiement_debut_travaux_moe convention cisco/feffi
-        vm.selectionPaiement_debut_travaux_moe = function (item)
-        {
-            vm.selectedItemPaiement_debut_travaux_moe = item;
-
-            vm.validation_paiement_debut_travaux_moe = item.validation;                       
-
-        };
-        $scope.$watch('vm.selectedItemPaiement_debut_travaux_moe', function()
-        {
-             if (!vm.allpaiement_debut_travaux_moe) return;
-             vm.allpaiement_debut_travaux_moe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemPaiement_debut_travaux_moe.$selected = true;
-        });
-
-      
-/**********************************fin paiement****************************************/
-
 /**********************************debut demande_debut_travaux_moe****************************************/
 //col table
         vm.demande_batiment_moe_column = [        
@@ -674,11 +627,6 @@
                 {
                     vm.alljustificatif_batiment_moe = result.data.response;
                     console.log(vm.alljustificatif_batiment_moe);
-                });
-                
-                apiFactory.getAPIgeneraliserREST("paiement_batiment_moe/index",'menu','getpaiementBydemande','id_demande_batiment_moe',vm.selectedItemDemande_batiment_moe.id).then(function(result)
-                {
-                    vm.allpaiement_batiment_moe = result.data.response;
                 });
             
             vm.validation_demande_batiment_moe = item.validation;
@@ -758,37 +706,6 @@
         }
 /***************************************fin justificatif batiment_moe**********************************************/
 
-/**********************************debut paiement****************************************/
-//col table
-        vm.paiement_batiment_moe_column = [        
-        {titre:"Montant"},
-        //{titre:"Cumul"},
-        {titre:"Date paiement"},
-        //{titre:"Pourcentage paiement"},
-        {titre:"Observation"}];
-        
-        //fonction selection item paiement_batiment_moe convention cisco/feffi
-        vm.selectionPaiement_batiment_moe = function (item)
-        {
-            vm.selectedItemPaiement_batiment_moe = item;
-
-            vm.validation_paiement_batiment_moe = item.validation;
-                        
-
-        };
-        $scope.$watch('vm.selectedItemPaiement_batiment_moe', function()
-        {
-             if (!vm.allpaiement_batiment_moe) return;
-             vm.allpaiement_batiment_moe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemPaiement_batiment_moe.$selected = true;
-        });
-
-        
-/**********************************fin paiement****************************************/
-
 
 /**********************************debut demande_latrine_moe****************************************/
 //col table
@@ -830,10 +747,6 @@
                 {
                     vm.alljustificatif_latrine_moe = result.data.response;
                     console.log(vm.alljustificatif_latrine_moe);
-                });
-                apiFactory.getAPIgeneraliserREST("paiement_latrine_moe/index",'menu','getpaiementBydemande','id_demande_latrine_moe',vm.selectedItemDemande_latrine_moe.id).then(function(result)
-                {
-                    vm.allpaiement_latrine_moe = result.data.response;
                 });
             
             vm.validation_demande_latrine_moe = item.validation;
@@ -915,38 +828,6 @@
         }
 /***************************************fin justificatif latrine_moe**********************************************/
 
-/**********************************debut paiement****************************************/
-//col table
-        vm.paiement_latrine_moe_column = [        
-        {titre:"Montant"},
-        //{titre:"Cumul"},
-        {titre:"Date paiement"},
-        //{titre:"Pourcentage paiement"},
-        {titre:"Observation"}];
-
-        
-        //fonction selection item paiement_latrine_moe convention cisco/feffi
-        vm.selectionPaiement_latrine_moe = function (item)
-        {
-            vm.selectedItemPaiement_latrine_moe = item;
-
-            vm.validation_paiement_latrine_moe = item.validation;                        
-
-        };
-        $scope.$watch('vm.selectedItemPaiement_latrine_moe', function()
-        {
-             if (!vm.allpaiement_latrine_moe) return;
-             vm.allpaiement_latrine_moe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemPaiement_latrine_moe.$selected = true;
-        });
-
-        
-/**********************************fin paiement****************************************/
-
-
       /**********************************debut demande_debut_travaux_moe****************************************/
 //col table
         vm.demande_fin_travaux_moe_column = [        
@@ -989,11 +870,6 @@
                     vm.alljustificatif_fin_travaux_moe = result.data.response;
                     console.log(vm.alljustificatif_fin_travaux_moe);
                 });
-               
-                apiFactory.getAPIgeneraliserREST("paiement_fin_travaux_moe/index",'menu','getpaiementBydemande','id_demande_fin_travaux',vm.selectedItemDemande_fin_travaux_moe.id).then(function(result)
-                {
-                     vm.allpaiement_fin_travaux_moe = result.data.response;
-                }); 
             
             vm.validation_demande_fin_travaux_moe = item.validation;
             vm.stepjusti_f_tra_moe = true;
@@ -1074,38 +950,6 @@
         }
 /***************************************fin justificatif fin_travaux**********************************************/
 
-/**********************************fin paiement****************************************/
-//col table
-        vm.paiement_fin_travaux_moe_column = [        
-        {titre:"Montant"},
-        //{titre:"Cumul"},
-        {titre:"Date paiement"},
-        //{titre:"Pourcentage paiement"},
-        {titre:"Observation"}];
-
-               //fonction selection item paiement_fin_travaux_moe convention cisco/feffi
-        vm.selectionPaiement_fin_travaux_moe = function (item)
-        {
-            vm.selectedItemPaiement_fin_travaux_moe = item;
-
-            vm.validation_paiement_fin_travaux_moe = item.validation;
-                        
-
-        };
-        $scope.$watch('vm.selectedItemPaiement_fin_travaux_moe', function()
-        {
-             if (!vm.allpaiement_fin_travaux_moe) return;
-             vm.allpaiement_fin_travaux_moe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemPaiement_fin_travaux_moe.$selected = true;
-        });
-
-        
-/**********************************fin paiement****************************************/
-
-
 /**********************************debut contrat prestataire****************************************/
          vm.click_step_contrat_mpe=function()
       {
@@ -1165,6 +1009,14 @@
                 console.log(vm.selectedItemContrat_prestataire.id);
             });
             vm.styleTabfils = "acc_menu";
+            vm.styleTabfils2 = "acc_sous_menu";
+            vm.stepattachement_mpe = false;
+        }
+
+        vm.click_tab_avance_mpe = function()
+        {                        
+            vm.styleTabfils2 = "acc_sous_menu";
+            vm.stepattachement_mpe = false;
         }
         vm.avance_demarrage_column = [        
         {titre:"Description"
@@ -1211,6 +1063,10 @@
             {
                 vm.allfacture_mpe = result.data.response;
             });
+
+
+            vm.styleTabfils2 = "acc_sous_menu";
+            vm.stepattachement_mpe = false;
         }
         vm.facture_mpe_column = [        
         {titre:"Numero"
@@ -1299,7 +1155,8 @@
                     vm.showbuttonNouvAttachement_travaux = false;
                 }
             });
-            console.log('okok');
+            
+            vm.styleTabfils2 = "acc_menu";
         }
         vm.attachement_travaux_column = [        
         {titre:"Numero"

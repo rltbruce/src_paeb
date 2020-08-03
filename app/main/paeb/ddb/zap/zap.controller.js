@@ -4,9 +4,38 @@
 
     angular
         .module('app.paeb.ddb.zap')
+        .directive('customOnChange', function() {
+      return {
+        restrict: 'A',
+        require:'ngModel',
+        link: function (scope, element, attrs,ngModel) {
+          var onChangeHandler = scope.$eval(attrs.customOnChange);
+          element.bind('change', onChangeHandler);
+          element.on("change", function(e) {
+          var files = element[0].files;
+          ngModel.$setViewValue(files);
+        });
+        }
+      };
+    })
+    .service('fileUpload', ['$http', function ($http) {
+      this.uploadFileToUrl = function(file, uploadUrl){
+        var fd = new FormData();
+        var rep='test';
+        fd.append('file', file);
+        $http.post(uploadUrl, fd,{
+          transformRequest: angular.identity,
+          headers: {'Content-Type': undefined}
+        }).success(function(){
+           console.log('tafa');
+        }).error(function(){
+           console.log('Rivotra');
+        });
+      }
+    }])
         .controller('ZapController', ZapController);
     /** @ngInject */
-    function ZapController($mdDialog, $scope, apiFactory, $state)
+    function ZapController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,apiUrlexcel)
     {
 		    var vm = this;
         vm.ajout = ajout ;
@@ -20,6 +49,165 @@
           pagingType: 'simple',
           autoWidth: false          
         };
+        $scope.uploadFile = function(event)
+       {
+         // console.dir(event);
+          var files = event.target.files;
+          vm.myFile = files;
+        }
+
+        vm.importerzapcommune = function (item,suppression) {
+          var file =vm.myFile[0];
+          var repertoire = 'importerzap/';
+          var uploadUrl = apiUrl + "importer_zap/importerzapcommune";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé inserer: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importerzap/"+data.nomFile;
+                    vm.allzapp = data.zap_inserer;
+                    console.log(vm.allzapp);
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+          }
+        }
+
+        vm.importertest_commune = function (item,suppression) {
+          var file =vm.myFile[0];
+          var repertoire = 'importerzap/';
+          var uploadUrl = apiUrl + "importer_zap/importertestcommune";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé inserer: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importerzap/"+data.nomFile;
+                    vm.allzapp = data.zap_inserer;
+                    console.log(vm.allzapp);
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+          }
+        }
+
+         vm.importerzap = function (item,suppression) {
+          var file =vm.myFile[0];
+          var repertoire = 'importerzap/';
+          var uploadUrl = apiUrl + "importer_zap/importerdonneezap";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé inserer: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importerzap/"+data.nomFile;
+                    vm.allzapp = data.zap_inserer;
+                    console.log(vm.allzapp);
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+          }
+        }
 
         //col table
         vm.zap_column = [{titre:"Code"},{titre:"Nom"},{titre:"Action"}];

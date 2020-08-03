@@ -12,7 +12,7 @@
                 <span class="parent" href="javascript:;"> Zap</span>
             </div>
 
-            <div class="title">Zap</div>
+            <!--div class="title">Zap</div-->
         </div>
     </div>
     <!-- / HEADER -->
@@ -48,6 +48,32 @@
             </thead>
                      
             <tbody>
+              <div>
+                  <form name="filtreformimporter" class="md-inline-form" novalidate >
+                        <br>
+                        <div layout="column" layout-gt-xs="row">
+
+                          <md-input-container flex="100" flex-gt-xs="90">
+                            <label>Fichier</label>
+                            <input ng-model="vm.fichier" id="fichier" name="fichier" type="file" custom-on-change="uploadFile"  ng-multiple="false" required />
+                            <div ng-messages="filtreformimporter.fichier.$error" role="alert">
+                              <div ng-message="required"><span>Fichier</span></div>
+                            </div>
+                          </md-input-container>
+                        </div>
+
+                        <div>
+                         <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                      ng-disabled="filtreformimporter.$invalid" ng-click="vm.importertest_commune()">
+                                      Importer
+                        </md-button>
+                        <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltreimporter()">
+                                  Annuler
+                        </md-button>
+                        </div>
+                  </form>
+                  <md-divider></md-divider><br>
+                </div>
               <tr ng-repeat="zap in vm.allzap"  ng-class="{selected: zap.$selected}" ng-click="vm.selection(zap)">           
                 <td>
                   <span ng-if="zap.$edit">

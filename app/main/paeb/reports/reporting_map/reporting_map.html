@@ -1,0 +1,44 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Reporting</span>                
+            </div>
+
+            <!--div class="title">Note agence d'accompagnement</div-->
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column" layout-align="center end">
+
+      <!-- Convention -->
+      <div class="form-wrapper md-whiteframe-1dp" ng-if="vm.showmap">
+                   
+          <ui-gmap-google-map center="vm.ecolevueMap.center" zoom="vm.ecolevueMap.zoom" draggable="true" options="options" bounds="" >
+            <ui-gmap-polygon ng-repeat="p in vm.polylines" path="p.path" stroke="p.stroke" visible='p.visible'
+                  geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" clickable='true' icons='p.icons' events="p.events" fill="p.fill">
+              <!--ui-gmap-marker  idKey='p.id_marker' coords='p.marker_coord' options="" events="p.eventvm.parameters"-->    
+                <ui-gmap-window idKey="p.id_window" show="vm.showwindow==p.id_window" coords='p.marker_coord'>
+                    <div class="package-type md-accent-fg" style="margin: 0;padding: 0">{{p.nom_district}}
+                    </div>
+                </ui-gmap-window>
+              <!--/ui-gmap-marker-->      
+            </ui-gmap-polygon>
+        </ui-gmap-google-map>
+          
+                 
+      </div>
+      <!-- / convention -->
+    </div>
+    <!-- / CONTENT -->
+  </div>
+
+  <!--ui-gmap-window show="vm.showwindow" coords="vm.ecolevueMap.center" closeclick="polywindow.closeClick()">
+                  <h1> {{p.nom_district }}</h1>
+                </ui-gmap-window-->

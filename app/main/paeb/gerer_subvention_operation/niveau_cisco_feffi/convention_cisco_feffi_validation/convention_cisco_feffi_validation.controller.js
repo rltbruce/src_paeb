@@ -745,8 +745,10 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
                         {currentItemTete.site.ecole = {id: currentItemTete.site.id_ecole}
 
                           console.log(fef[0].ecole);
-                            maj_site_in_base(currentItemTete.site,0,0,fef[0].ecole.id); //site talou avadika validation 0
-                                maj_site_in_base(sit[0],0,1,fef[0].ecole.id); //site vao2 validation 1
+                            //maj_site_in_base(currentItemTete.site,0,0,fef[0].ecole.id); //site talou avadika validation 0
+                            //    maj_site_in_base(sit[0],0,1,fef[0].ecole.id); //site vao2 validation 1
+                            maj_site_in_base(currentItemTete.site,0,0); //site talou avadika validation 0
+                                maj_site_in_base(sit[0],0,1); //site vao2 validation 1
                               
                           
                         }
@@ -758,7 +760,8 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
                           return obj.id !== vm.selectedItemTete.id;
                       });
                       
-                      maj_site_in_base(vm.selectedItemTete.site,0,0,vm.selectedItemTete.ecole.id);
+                      //maj_site_in_base(vm.selectedItemTete.site,0,0,vm.selectedItemTete.ecole.id);
+                      maj_site_in_base(vm.selectedItemTete.site,0,0);
                     }
                 }
                 else
@@ -772,7 +775,8 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
                   convention_cife_tete.id  =   String(data.response);
                   NouvelItemTete = false;
                   console.log(convention_cife_tete.ecole);
-                  maj_site_in_base(sit[0],0,1,fef[0].ecole.id);
+                 // maj_site_in_base(sit[0],0,1,fef[0].ecole.id);
+                  maj_site_in_base(sit[0],0,1);
                   if (convention_cife_tete.type_convention == 1)
                   {
                     insert_initial_Batiment_construction(vm.subvention_initial[0],0,String(data.response));
@@ -996,7 +1000,7 @@ console.log(fef[0]);
                 });*/
                 vm.selectedItemTete.validation=1;
                 vm.validation_item =1;
-                maj_site_in_base(vm.selectedItemTete.site,0,2,vm.selectedItemTete.ecole.id);
+                maj_site_in_base(vm.selectedItemTete.site,0,2);
                    
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
         }
@@ -1026,14 +1030,21 @@ console.log(fef[0]);
             
             var datas = $.param({
                     supprimer: suppression,
-                    id:        site.id,      
-                    code_sous_projet:      site.code_sous_projet,
-                    denomination_epp:      site.denomination_epp,      
+                    id:        site.id,                     
+
+                    code_sous_projet:      site.code_sous_projet,     
+                    lot:    site.lot,      
                     observation:    site.observation,
-                    agence_acc:   site.agence_acc,
+                    id_agence_acc:   site.id_agence_acc,
                     statu_convention:    statu,
                     objet_sous_projet: site.objet_sous_projet,
-                    id_ecole: id_ecole,                
+                    id_region: site.id_region,
+                    id_cisco: site.id_cisco,
+                    id_commune: site.id_commune,
+                    id_zap: site.id_zap,
+                    id_ecole: site.id_ecole,
+                    id_classification_site: site.id_classification_site, 
+                    validation:1              
                 });
                 console.log(datas);
                 //factory

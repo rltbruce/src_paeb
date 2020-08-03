@@ -46,6 +46,9 @@
           },
           getimg: function(controller, data, config) {
             return $http.post(apiUrl+controller, data, config);
+          },
+          getAPIall:function(all){
+            return $http.get(apiUrl+all);
           }
 
 

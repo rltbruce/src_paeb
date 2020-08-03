@@ -1,0 +1,30 @@
+
+
+  <md-dialog ng-cloak aria-label="dialog_type_effort" class="price-table">
+      <md-subheader style="background-color: rgb(245,245,245)">
+        <div class="package-type md-accent-fg">{{to_upper(data_dialog.nom)}}</div>
+          <!--h2 mat-dialog-title  style="margin:0px">{{data_dialog.nom}}</h2-->
+      </md-subheader>
+
+      <md-dialog-content layout="row">
+
+          <div ng-repeat="reports in data_dialog.reporting">
+            <div class="period"><span class="text-bold">Référance convention:</span> {{reports.ref_convention}}</div>
+
+            <div class="terms" layout="column" layout-align="start center"style="margin: 0;padding: 0">
+                <div class="term"style="margin: 0;padding: 0"><span class="">Avancement physique:</span> {{reports.avancement_tot | number:0}} %</div>
+            </div>
+            <md-divider></md-divider><br>
+          </div> 
+      </md-dialog-content>
+
+      <md-dialog-actions style="background-color: rgb(245,245,245); margin: 0px !important">
+        <span>
+          
+        <md-button type="submit" class="md-raised md-primary" ng-click="cancel()";>Fermer</md-button>
+        </span>             
+      </md-dialog-actions>
+   
+  </md-dialog>
+
+
