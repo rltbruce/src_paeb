@@ -28,7 +28,7 @@ var vs;
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.etat_subvention_operation.niveau_ufp_daaf_etat.convention_ufp_daaf_etat', {
-            title: 'Validation convention',
+            title: 'Convention UFP/DAAF',
             icon  : 'icon-source-pull',
             state: 'app.paeb_etat_subvention_operation_niveau_ufp_daaf_etat_convention_ufp_daaf_etat',
             weight: 4,

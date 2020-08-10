@@ -767,7 +767,7 @@
                     vm.alljustificatif_debut_travaux_moe = result.data.response;
                     console.log(vm.alljustificatif_debut_travaux_moe);
                 });                 
-            
+            vm.showbuttonValidationDemande_debut_travaux_moe_creer = true;
             vm.validation_demande_debut_travaux_moe = item.validation;
             vm.stepjusti_d_tra_moe = true;
             vm.steppai_d_tra_moe = true;
@@ -1481,6 +1481,7 @@
                 });
             
             vm.validation_demande_batiment_moe = item.validation;
+            vm.showbuttonValidationDemande_batiment_moe_creer =true;
             
             vm.stepjusti_batiment_moe = true;
            }
@@ -2193,7 +2194,7 @@
                     vm.alljustificatif_latrine_moe = result.data.response;
                     console.log(vm.alljustificatif_latrine_moe);
                 });
-                       
+            vm.showbuttonValidationDemande_latrine_moe_creer = true;           
             vm.validation_demande_latrine_moe = item.validation;
             vm.stepjusti_latrine_moe = true;
            }
@@ -2915,7 +2916,7 @@
                     vm.alljustificatif_fin_travaux_moe = result.data.response;
                     console.log(vm.alljustificatif_fin_travaux_moe);
                 });
-            
+            vm.showbuttonValidationDemande_fin_travaux_moe_creer = true;
             vm.validation_demande_fin_travaux_moe = item.validation;
             vm.stepjusti_f_tra_moe = true;
            }

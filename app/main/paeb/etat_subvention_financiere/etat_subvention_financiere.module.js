@@ -15,7 +15,7 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.etat_subvention_financiere', {
-            title : 'Etat subvention financiere',
+            title : 'Etats financiers des activités ',
             icon  : 'icon-credit-card-multiple',
             weight: 4
         });

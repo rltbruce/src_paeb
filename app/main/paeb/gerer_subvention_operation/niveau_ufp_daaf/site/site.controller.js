@@ -35,7 +35,11 @@
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
-          autoWidth: false         
+          autoWidth: false ,
+          //scrollX: true,
+         /* columnDefs: [
+        {  Width: 50, targets: [0, 1] }
+      ] */       
         };
 
         vm.showformfiltre = function()

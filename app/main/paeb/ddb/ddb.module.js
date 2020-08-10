@@ -18,6 +18,7 @@
             'app.paeb.ddb.etape_sousprojet',
             'app.paeb.ddb.agence_acc',
             'app.paeb.ddb.zap',
+            'app.paeb.ddb.piece_justificatif_prevu'
             //'app.paeb.ddb.cadre_bordereau'
 
             ] ;

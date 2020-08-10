@@ -29,7 +29,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.etat_subvention_financiere.niveau_ufp_daaf_etat.demande_deblocage_daaf_validation_ufp_etat', {
-            title: 'Etat financier',
+            title: 'Etat financier UFP/DAAF',
             icon  : 'icon-link',
             state: 'app.paeb_etat_subvention_financiere_niveau_ufp_daaf_etat_demande_deblocage_daaf_validation_ufp_etat',
             weight: 1

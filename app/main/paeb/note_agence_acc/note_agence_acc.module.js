@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.note_agence_acc', {
-            title: 'note agence',
+            title: 'Attribution des notes AAC',
             icon  : 'icon-nfc-variant',
             state: 'app.paeb_note_agence_acc',
 			weight: 5

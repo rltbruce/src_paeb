@@ -809,12 +809,14 @@
 
           if (vm.allcurenttranche_deblocage_feffi[0].code =='tranche 1')
             {
-              prevu = parseInt(vm.allconvention_entete[0].montant_divers)+((parseInt(vm.allconvention_entete[0].montant_trav_mob) * parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100);
+              //prevu = parseInt(vm.allconvention_entete[0].montant_divers)+((parseInt(vm.allconvention_entete[0].montant_trav_mob) * parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100);
+              prevu = ((parseInt(vm.allconvention_entete[0].montant_divers) + parseInt(vm.allconvention_entete[0].montant_trav_mob)) * parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
             console.log(prevu);
             } 
             else 
             {
-              prevu = (parseInt(vm.allconvention_entete[0].montant_trav_mob )* parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
+              //prevu = (parseInt(vm.allconvention_entete[0].montant_trav_mob )* parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
+            prevu = ((parseInt(vm.allconvention_entete[0].montant_divers) + parseInt(vm.allconvention_entete[0].montant_trav_mob)) * parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
             console.log(prevu);
             }
 

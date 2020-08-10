@@ -116,7 +116,16 @@
              vm.selectedItemConvention_ufp_daaf_entete.$selected = true;
 
         });             
-
+          
+        vm.affichevague = function(num_vague)
+        {
+          var affiche = 'Première vague';
+          if (num_vague==2)
+          {
+            affiche= 'Deuxième vague';
+          }
+          return affiche;
+        }
   /*****************Fin StepOne convention_ufp_daaf_entete****************/
 
   /*****************Debut StepTwo demande_deblocage_daaf_validation_ufp****************/

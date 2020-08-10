@@ -28,7 +28,7 @@ var vs;
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.etat_subvention_operation.niveau_cisco_feffi_etat.convention_cisco_feffi_etat', {
-            title: 'Convention',
+            title: 'Convention CISCO/FEFFI',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_etat_subvention_operation_niveau_cisco_feffi_etat_convention_cisco_feffi_etat',
 			weight: 2,

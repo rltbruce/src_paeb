@@ -5505,7 +5505,7 @@ console.log(vm.dataLastedemande_batiment_mpe);
             });
 
             item.montant_prevu = vm.allmontant_prevu[0].montant_prevu;
-
+            item.divers_attachement_batiment_prevu = $.param({montant_prevu: vm.allmontant_prevu[0].montant_prevu});
             apiFactory.getAPIgeneraliserREST("divers_attachement_batiment_travaux/index","menu",
                 "getmaxattachement_travauxByattachement_prevu",'id_divers_attachement_batiment_prevu',
                 item.id_divers_attachement_batiment_prevu,'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)

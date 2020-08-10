@@ -1,4 +1,4 @@
-  <div id="formsobcaf" class="page-layout simple fullwidth doc-page" layout="column" >
+  <div id="formsobcafd" class="page-layout simple fullwidth doc-page" layout="column" >
 
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="space-between" >
@@ -23,7 +23,7 @@
     
     <!-- CONTENT -->
     <div class="content" layout="column">
-      <div class="form-wrapper md-whiteframe-1dp" >
+      <div class="form-wrapper md-whiteframe-1dp acc_menu" >
         <div style="clear:both;"></div>            
             <div style="float: top !important">
               <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
@@ -33,7 +33,7 @@
             </div>
 <!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
          <ms-form-wizard flex>
-          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="">
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
     <!------------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
             
@@ -228,7 +228,7 @@
 
                <!---------------------------------FILS SUIVI FINANCIER FEFFI----------------------------------------------->       
                      <ms-form-wizard flex id="soussousmenu"> 
-                      <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                      <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
 
                     <!---------------------------------DEBUT DEMANDE PAYEMENT-----------------------------------------------> 
                           <md-tab>
@@ -509,7 +509,7 @@
                                     <i class="icon-basket-unfill s16"></i>
                                   </span-->
                                   <span class="ms-form-wizard-step-text">Décaissement fonctionnement</span>
-                                  <span class="ms-form-wizard-step-number md-accent-bg notification">{{vm.nbr_decaiss_feffi}}</span>
+                                  <!--span class="ms-form-wizard-step-number md-accent-bg notification">{{vm.nbr_decaiss_feffi}}</span-->
                               </span>
                              
                             </md-tab-label>
@@ -614,8 +614,7 @@
                           </md-tab>
 
                    <!---------------------------FIN DECAISSEMENT FONCTIONNEMENT FEFFI-------------------------------------->         
-                          <md-tab>
-                          </md-tab>                  
+                                            
                         </md-tabs> 
                       </ms-form-wizard>
 
@@ -638,7 +637,7 @@
               
               <md-tab-body>
                <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
                     <md-tab>
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
@@ -869,8 +868,7 @@
               </md-tab-body>
             </md-tab>
             <!-----------------------FIN RELIQUAT--------------------------------------------->
-            <md-tab>
-            </md-tab>
+          
             <!-----------------------FIN RELIQUAT--------------------------------------------->
             
           </md-tabs>

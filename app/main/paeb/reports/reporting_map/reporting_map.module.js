@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.reports.reporting_map', {
-            title: 'Reporting_map',
+            title: 'Carte',
             icon  : 'icon-nfc-variant',
             state: 'app.paeb_reports_reporting_map',
 			weight: 1

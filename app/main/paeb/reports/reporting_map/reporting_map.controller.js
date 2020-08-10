@@ -71,22 +71,22 @@
                       }
                     }; 
 
-                     /* vm.polylines.push(item);
+                      vm.polylines.push(item);
                       if (vm.polylines.length == 111)
                      {
                         vm.showmap = true;
                         console.log(vm.showmap);
-                     };*/
+                     };
 
-                     if (data.id==1) {
-                       vm.polylines.push(item);
-                      if (vm.polylines.length == 1)
+                   /*  if (data.id==1) {*/
+                     //  vm.polylines.push(item);
+                     /* if (vm.polylines.length == 1)
                      {
                         vm.showmap = true;
                         console.log(vm.showmap);
                      }
                       
-                    }                     
+                    }*/                     
                 });
             });
 

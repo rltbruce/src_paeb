@@ -15,7 +15,7 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.etat_subvention_operation', {
-            title : 'Etat operation subvention ',
+            title : 'Etats techniques des activités ',
             icon  : 'icon-data',
             weight: 3
         });

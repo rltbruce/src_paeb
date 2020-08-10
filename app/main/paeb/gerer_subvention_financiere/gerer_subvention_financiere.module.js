@@ -21,7 +21,7 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere', {
-            title : 'Gérer subvention financiere',
+            title : 'Gestion financière des activités',
             icon  : 'icon-credit-card-multiple',
             weight: 2
         });
