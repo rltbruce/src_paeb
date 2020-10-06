@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.etat_subvention_operation.niveau_feffi_prestataire_etat.convention_suivi_bcaf_etat', {
-            title: 'Suivi operation',
+            title: 'Etat activité technique',
             icon  : 'icon-rotate-3d',
             state: 'app.paeb_etat_subvention_operation_niveau_feffi_prestataire_etat_convention_suivi_bcaf_etat',
 			weight: 2,

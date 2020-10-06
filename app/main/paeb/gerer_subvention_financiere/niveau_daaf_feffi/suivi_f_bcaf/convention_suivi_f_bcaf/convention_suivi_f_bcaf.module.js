@@ -29,7 +29,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_bcaf.convention_suivi_f_bcaf', {
-            title: 'Suivi convention (BCAF)',
+            title: 'Validation activitée financière (BCAF)',
             icon  : 'icon-rotate-3d',
             state: 'app.paeb_gerer_subvention_financiere_niveau_daaf_feffi_suivi_f_bcaf_convention_suivi_f_bcaf',
             weight: 1,

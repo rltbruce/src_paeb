@@ -29,7 +29,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.etat_subvention_financiere.niveau_daaf_feffi_etat.convention_suivi_f_daaf_etat', {
-            title: 'Etat financier DAAF/FEFFI',
+            title: 'Etat activité financier DAAF/FEFFI',
             icon  : 'icon-rotate-3d',
             state: 'app.paeb_etat_subvention_financiere_niveau_daaf_feffi_etat_convention_suivi_f_daaf_etat',
             weight: 1

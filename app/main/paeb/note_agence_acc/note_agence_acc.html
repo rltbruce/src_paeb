@@ -1,4 +1,4 @@
-  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+  <div id="formsnoteagence" class="page-layout simple fullwidth doc-page" layout="column">
 
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="space-between">
@@ -35,11 +35,9 @@
               </div>                      
           </div>
         </header>
-        
-            <md-button type="submit" class="md-raised md-primary" aria-label="Enregistrer" ng-click="vm.afficherfiltre()" ng-show="vm.showboutonfiltre">
-                             Filtre
-            </md-button>
-          <div ng-show="vm.showfiltre">
+                
+        <div style="margin-top: 1px;">
+             <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
               <form name="filtreform" class="md-inline-form" novalidate >
                                 
                 <div layout="column" layout-gt-xs="row">
@@ -63,19 +61,33 @@
                             <div ng-message="required"><span>agence d'accompagnement</span></div>
                         </div>
                     </md-input-container>
-                </div>
+                    </div>  
+                   <div class="footer-animate-show-hide">
+                       <md-button class="md-raised boutonfixe" disabled>
+                       </md-button>
+                       <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                            Réinitialise
+                       </md-button>
+                         <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
+                       </md-button>
+                  </div>
+              </form>
+          </div>
 
-                <div>
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
-                             Recherche
-                    </md-button>
-                    <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
-                                  Annuler
-                    </md-button>
-                </div>
-                </form>
-                <md-divider></md-divider><br>
-              </div>
+            <div class="bouton-animate-show-hide">
+
+              <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+                <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+              </md-icon>                           
+                <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+              </md-icon>
+              <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+              </md-icon>
+              <md-tooltip><span>Bouton filtre</span></md-tooltip>
+              </md-button>
+          </div>
+      </div>
       
           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
             <thead>
@@ -145,7 +157,7 @@
                   </a>
                             
                   <a ng-if="!note_agence_acc.$edit " ng-click="vm.supprimer(note_agence_acc)" title="Supprimer">
-                    <span class="icon-delete"></span>
+                    <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                   </a>
                    <!--span ng-if="!note_agence_acc.$edit && note_agence_acc.validation!=0">Aucune action disponible</span-->         
                   <a ng-if="note_agence_acc.$edit" ng-click="vm.annuler(note_agence_acc)" title="Annuler modification">

@@ -98,6 +98,7 @@
           pagingType: 'simple',
           autoWidth: false          
         }; 
+
         
         //recuperation donnée tranche deblocage feffi
         apiFactory.getAll("tranche_deblocage_daaf/index").then(function(result)
@@ -107,10 +108,15 @@
           console.log(vm.allcurenttranche_deblocage_daaf);
         });
        
-       vm.showformfiltre = function()
+      
+        vm.showformfiltre = function()
         {
-          vm.showbuttonfiltre=false;
-          vm.showfiltre=true;
+          vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
         }
 
         vm.recherchefiltre = function(filtre)
@@ -124,12 +130,6 @@
                   vm.allconvention_ufp_daaf_entete = result.data.response; 
                   console.log(vm.allconvention_ufp_daaf_entete);
               });
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showbuttonfiltre=true;
-            vm.showfiltre=false;
         }
 
   /*****************Debut StepOne convention_ufp_daaf_entete***************/
@@ -279,7 +279,7 @@
             vm.selectedItemDemande_deblocage_daaf = item;
             currentItemDemande_deblocage_daaf     = JSON.parse(JSON.stringify(vm.selectedItemDemande_deblocage_daaf));
            //recuperation donnée demande_deblocage_daaf
-            apiFactory.getAPIgeneraliserREST("justificatif_daaf/index",'id_demande_deblocage_daaf',item.id).then(function(result)
+            apiFactory.getAPIgeneraliserREST("justificatif_daaf/index",'id_demande_deblocage_daaf',item.id,'id_tranche',item.tranche.id).then(function(result)
             {
                 vm.alljustificatif_daaf = result.data.response;
                 console.log(vm.alljustificatif_daaf);
@@ -504,13 +504,13 @@
                 console.log(vm.alldetailcout);
               if (vm.allcurenttranche_deblocage_daaf[0].code =='tranche 1')
               {
-                prevu = parseInt(vm.alldetailcout[0].montant_divers)+((parseInt(vm.alldetailcout[0].montant_trav_mob) * parseInt(vm.allcurenttranche_deblocage_daaf[0].pourcentage))/100);
-              console.log(prevu);
+                 prevu = ((parseInt(vm.alldetailcout[0].montant_divers)+parseInt(vm.alldetailcout[0].montant_trav_mob)) * parseInt(vm.allcurenttranche_deblocage_daaf[0].pourcentage))/100;
+               console.log(prevu);
               } 
               else 
               {
-                prevu = (parseInt(vm.alldetailcout[0].montant_trav_mob )* parseInt(vm.allcurenttranche_deblocage_daaf[0].pourcentage))/100;
-              console.log(prevu);
+                 prevu = ((parseInt(vm.alldetailcout[0].montant_divers)+parseInt(vm.alldetailcout[0].montant_trav_mob)) * parseInt(vm.allcurenttranche_deblocage_daaf[0].pourcentage))/100;
+               console.log(prevu);
               }
               cumul = prevu;
               if (vm.alldemande_deblocage_daaf_conv.length>0)
@@ -551,9 +551,28 @@ console.log(conventioufpdaaf);
           
          
         }
-        vm.valider_convention = function()
-        {
-            maj_in_baseDemande_deblocage_daaf_validation_daaf(vm.selectedItemDemande_deblocage_daaf,0);
+        vm.valider_demande = function()
+        {   
+
+            var count_justif_prevu = vm.alljustificatif_daaf.length;
+            var count_justif_current=0;
+             vm.alljustificatif_daaf.forEach(function(item)
+             {
+                if (item.id!=0 && item.id!=null && item.id!=undefined)
+                {
+                  count_justif_current = count_justif_current + 1;
+                }
+             });
+             if (parseInt(count_justif_prevu)==parseInt(count_justif_current))
+             {
+                maj_in_baseDemande_deblocage_daaf_validation_daaf(vm.selectedItemDemande_deblocage_daaf,0);
+            }
+             else
+             {
+                vm.showAlert("Validation interrompue","Pièce justificative incomplète");
+             }
+             console.log(count_justif_prevu);
+             console.log(count_justif_current);
         }
 
 
@@ -600,9 +619,9 @@ console.log(conventioufpdaaf);
         }
   /*****************Fin StepTwo demande_deblocage_daaf****************/
 
-  /*****************Fin StepThree justificatif_daaf****************/
-
-  //col table
+ 
+  /**********************************************Debut justicatif daaf***************************************************/
+    //vm.myFile = [];
         vm.justificatif_daaf_column = [
         {titre:"Description"
         },
@@ -617,39 +636,7 @@ console.log(conventioufpdaaf);
           var files = event.target.files;
           vm.myFile = files;
           vm.selectedItemJustificatif_daaf.fichier = vm.myFile[0].name;
-          console.log(vm.selectedItemJustificatif_daaf.fichier);
         } 
-
-        //Masque de saisi ajout
-        vm.ajouterJustificatif_daaf = function ()
-        { 
-          if (NouvelItemJustificatif_daaf == false)
-          {
-            var items = {
-              $edit: true,
-              $selected: true,
-              id: '0',         
-              description: '',
-              fichier: ''
-            };
-        
-            vm.alljustificatif_daaf.push(items);
-            vm.alljustificatif_daaf.forEach(function(mem)
-            {
-              if(mem.$selected==true)
-              {
-                vm.selectedItemJustificatif_daaf = mem;
-              }
-            });
-console.log('ato');
-            NouvelItemJustificatif_daaf = true ;
-            //vm.showThParcourir = true;
-          }else
-          {
-            vm.showAlert('Ajout Justificatif_daaf','Un formulaire d\'ajout est déjà ouvert!!!');
-          }                
-                      
-        };
 
         //fonction ajout dans bdd
         function ajoutJustificatif_daaf(justificatif_daaf,suppression)
@@ -664,21 +651,27 @@ console.log('ato');
             }
         }
 
-        //fonction de bouton d'annulation Justificatif_daaf
+        //fonction de bouton d'annulation document_feffi_scan
         vm.annulerJustificatif_daaf = function(item)
         {
           if (NouvelItemJustificatif_daaf == false)
           {
             item.$edit = false;
             item.$selected = false;
-            item.description   = currentItemJustificatif_daaf.description ;
             item.fichier   = currentItemJustificatif_daaf.fichier ;
-          }else
+          }
+          else
           {
-            vm.alljustificatif_daaf = vm.alljustificatif_daaf.filter(function(obj)
+            /*vm.alljustificatif_daaf = vm.alljustificatif_daaf.filter(function(obj)
             {
-                return obj.id !== vm.selectedItemJustificatif_daaf.id;
-            });
+                return obj.id != vm.selectedItemJustificatif_daaf.id;
+            });*/
+
+            item.fichier   = '';
+            item.$edit = false;
+            item.$selected = false;
+
+            item.id = 0;
           }
 
           vm.selectedItemJustificatif_daaf = {} ;
@@ -690,8 +683,12 @@ console.log('ato');
         vm.selectionJustificatif_daaf= function (item)
         {
             vm.selectedItemJustificatif_daaf = item;
-            vm.nouvelItemJustificatif_daaf   = item;
-            currentItemJustificatif_daaf    = JSON.parse(JSON.stringify(vm.selectedItemJustificatif_daaf)); 
+            if (item.$edit==false || item.$edit==undefined)
+            {
+              currentItemJustificatif_daaf    = JSON.parse(JSON.stringify(vm.selectedItemJustificatif_daaf));
+            }
+            
+            
         };
         $scope.$watch('vm.selectedItemJustificatif_daaf', function()
         {
@@ -706,25 +703,37 @@ console.log('ato');
         //fonction masque de saisie modification item feffi
         vm.modifierJustificatif_daaf = function(item)
         {
-            NouvelItemJustificatif_daaf = false ;
+            
             vm.selectedItemJustificatif_daaf = item;
             currentItemJustificatif_daaf = angular.copy(vm.selectedItemJustificatif_daaf);
             $scope.vm.alljustificatif_daaf.forEach(function(jus) {
               jus.$edit = false;
             });
-
             item.$edit = true;
             item.$selected = true;
-            item.description   = vm.selectedItemJustificatif_daaf.description ;
-            item.fichier   = vm.selectedItemJustificatif_daaf.fichier ;
+            if (item.id==0)
+            {   
+                NouvelItemJustificatif_daaf=true;
+                item.fichier   = vm.selectedItemJustificatif_daaf.fichier ;
+                item.id = 0 ;
+
+            }
+            else
+            {   
+                NouvelItemJustificatif_daaf = false ;
+                item.fichier = vm.selectedItemJustificatif_daaf.fichier ;
+            }
+            
+            
+            //console.log(item);
             //vm.showThParcourir = true;
         };
 
-        //fonction bouton suppression item Justificatif_daaf
+        //fonction bouton suppression item document_feffi_scan
         vm.supprimerJustificatif_daaf = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -743,14 +752,13 @@ console.log('ato');
         {          
             if (suppression!=1)
             {
-               var just = vm.alljustificatif_daaf.filter(function(obj)
+               var mem = vm.alljustificatif_daaf.filter(function(obj)
                 {
                    return obj.id == currentItemJustificatif_daaf.id;
                 });
-                if(just[0])
+                if(mem[0])
                 {
-                   if((just[0].description   != currentItemJustificatif_daaf.description )
-                    ||(just[0].fichier   != currentItemJustificatif_daaf.fichier ))                   
+                   if(mem[0].fichier != currentItemJustificatif_daaf.fichier )                   
                       { 
                          insert_in_baseJustificatif_daaf(item,suppression);
                       }
@@ -783,10 +791,9 @@ console.log('ato');
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    description: justificatif_daaf.description,
+                    id_justificatif_prevu: justificatif_daaf.id_justificatif_prevu,
                     fichier: justificatif_daaf.fichier,
-                    id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf.id,
-                    validation:0               
+                    id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf.id              
                 });
                 console.log(datas);
                 //factory
@@ -807,7 +814,7 @@ console.log('ato');
                           if(file)
                           { 
 
-                            var name_file = vm.selectedItemDemande_deblocage_daaf.convention_ufp_daaf_entete.ref_convention+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                            var name_file = vm.selectedItemConvention_ufp_daaf_entete.ref_convention+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                             var fd = new FormData();
                             fd.append('file', file);
@@ -829,7 +836,7 @@ console.log('ato');
                                   var datas = $.param({
                                                       supprimer: suppression,
                                                       id:        getIdFile,
-                                                      description: justificatif_daaf.description,
+                                                      id_justificatif_prevu: justificatif_daaf.id_justificatif_prevu,
                                                       fichier: justificatif_daaf.fichier,
                                                       id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf.id,
                                                       //validation:0
@@ -850,7 +857,7 @@ console.log('ato');
                                   var datas = $.param({
                                         supprimer: suppression,
                                         id:        getIdFile,
-                                        description: justificatif_daaf.description,
+                                        id_justificatif_prevu: justificatif_daaf.id_justificatif_prevu,
                                         fichier: justificatif_daaf.fichier,
                                         id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf.id,
                                         //validation:0               
@@ -878,10 +885,10 @@ console.log('ato');
                     }
                     else 
                     {    
-                      vm.alljustificatif_daaf = vm.alljustificatif_daaf.filter(function(obj)
+                      /*vm.alljustificatif_daaf = vm.alljustificatif_daaf.filter(function(obj)
                       {
                           return obj.id !== vm.selectedItemJustificatif_daaf.id;
-                      });
+                      });*/
                       vm.showbuttonNouvManuel = true;
                       var chemin= vm.selectedItemJustificatif_daaf.fichier;
                       var fd = new FormData();
@@ -893,12 +900,17 @@ console.log('ato');
                       headers: {'Content-Type': undefined}, chemin: chemin
                       }).success(function(data)
                       {
-                         console.log('ok');
+                         vm.selectedItemJustificatif_daaf.fichier = '';
+
+                          vm.selectedItemJustificatif_daaf.id = 0;
+                          vm.selectedItemJustificatif_daaf = {};
+
+                      console.log(vm.selectedItemJustificatif_daaf);
                       }).error(function()
                       {
                           showDialog(event,chemin);
                       });
-                      vm.showbuttonValidation = false;
+                      console.log(vm.selectedItemJustificatif_daaf);
                     }
               }
               else
@@ -916,7 +928,7 @@ console.log('ato');
                     if(file)
                     { 
 
-                      var name_file = vm.selectedItemDemande_deblocage_daaf.convention_ufp_daaf_entete.ref_convention+'_'+getIdFile+'_'+vm.myFile[0].name ;
+                      var name_file = vm.selectedItemConvention_ufp_daaf_entete.ref_convention+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                       var fd = new FormData();
                       fd.append('file', file);
@@ -938,10 +950,9 @@ console.log('ato');
                             var datas = $.param({
                                                 supprimer: suppression,
                                                 id:        getIdFile,
-                                                description: justificatif_daaf.description,
+                                                id_justificatif_prevu: justificatif_daaf.id_justificatif_prevu,
                                                 fichier: justificatif_daaf.fichier,
-                                                id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf.id,
-                                                validation:0
+                                                id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf.id
                                   });
                                 apiFactory.add("justificatif_daaf/index",datas, config).success(function (data)
                                 {  
@@ -959,10 +970,9 @@ console.log('ato');
                             var datas = $.param({
                                   supprimer: suppression,
                                   id:        getIdFile,
-                                  description: justificatif_daaf.description,
+                                  id_justificatif_prevu: justificatif_daaf.id_justificatif_prevu,
                                   fichier: justificatif_daaf.fichier,
-                                  id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf.id,
-                                  validation:0               
+                                  id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf.id               
                               });
                             apiFactory.add("justificatif_daaf/index",datas, config).success(function (data)
                             {
@@ -981,7 +991,7 @@ console.log('ato');
               }
               justificatif_daaf.$selected = false;
               justificatif_daaf.$edit = false;
-              vm.selectedItemJustificatif_daaf = {};
+              //vm.selectedItemJustificatif_daaf = {};
               vm.showbuttonValidation = false;
 
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -992,8 +1002,9 @@ console.log('ato');
         {//console.log(item.fichier);
             window.location = apiUrlFile+item.fichier;
         }
-
-  /*****************Fin StepThree justificatif_daaf****************/ 
+       
+    /******************************************debut justicatif daaf***********************************************/
+ 
         
 
         //Alert

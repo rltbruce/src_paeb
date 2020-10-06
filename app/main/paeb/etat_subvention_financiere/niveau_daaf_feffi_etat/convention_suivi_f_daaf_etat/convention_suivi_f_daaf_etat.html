@@ -1,15 +1,17 @@
-  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column" >
+  <div id="formsetatfinandf_df" class="page-layout simple fullwidth doc-page" layout="column" >
 
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="space-between" >
         <div layout="column" layout-align="space-between" style="height: 10px !important;">
             <div class="breadcrumb" layout="row" layout-align="start center" >
-                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Suivi convention CISCO/FEFFI</span>
+                <span class="parent">Etat financier des activités</span>
                 
-                <!--md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Convention CISCO/FEFFI</span-->
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Niveau DAAF/FEFFI</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Etat activité financier DAAF/FEFFI</span>
             </div>
 
             <!--div class="title">Convention CISCO/FEFFI</div-->
@@ -23,7 +25,7 @@
     
     <!-- CONTENT -->
     <div class="content" layout="column">
-      <div class="form-wrapper md-whiteframe-1dp" >
+      <div class="form-wrapper md-whiteframe-1dp acc_menu" >
         <div style="clear:both;"></div>            
             <div style="float: top !important">
               <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
@@ -50,33 +52,33 @@
                       </md-tab-label>
                       
                       <md-tab-body>
-                        <div>
+                
+                      <div style="margin-top: 1px;">
+                          <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
                           <form name="filtreform" class="md-inline-form" novalidate >
                                 <br>
+                            <div style="margin: 0px 15px 10px 15px;">
                               <div layout="column" layout-gt-xs="row">
                                   <md-input-container>
-                                    <span>Date du</span>
+                                    <span style="font-size: 14.5px" class="text-semibold">Date signature convention du: &nbsp</span>
                                   </md-input-container>
 
-                                  <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required>                     
+                                  <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required style="">                     
                                   </md-datepicker>
 
                                   <md-input-container>
-                                    <span>&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
+                                    <span style="font-size: 14.5px" class="text-semibold">&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
                                   </md-input-container>
 
                                   <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
                                   </md-datepicker>
-
-                                  <!--md-datepicker ng-model="vm.filtre.date_fin" md-placeholder="Enter date de fin"
-                                md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow"  md-date-locale="monthFormat" md-open-on-focus="true" ng-disabled="!vm.filtre.date_debut" required md-mode="'month'">                        
-                                  </md-datepicker-->
                                 </div>
-                                <div layout="column" layout-gt-xs="row" ng-show="vm.session=='ADMIN' || vm.session=='ODAAF' || vm.session=='DAAF' || vm.session=='ODPFI' || vm.session=='DPFI' || vm.session=='UFP'">
+                                <div layout="column" layout-gt-xs="row">
 
                                   <md-input-container flex="100" flex-gt-xs="90">
                                     <label>Lot</label>
                                     <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                                      <md-option value="*">*</md-option>
                                       <md-option value="1">Lot 1</md-option>
                                       <md-option value="2">Lot 2</md-option>
                                       <md-option value="3">Lot 3</md-option>
@@ -124,7 +126,7 @@
                                     <label>Ecole</label>
                                     <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
                                       <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.code}}
+                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
                                       </md-option>
                                     </md-select>
                                     <div ng-messages="filtreform.ecole.$error" role="alert">
@@ -143,19 +145,33 @@
                                     </div>
                                   </md-input-container>
                                 </div>
-
-                                <div>
-                                 <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
-                                      ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
-                                      Recherche
-                                </md-button>
-                                <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
-                                  Annuler
-                                </md-button>
-                                </div>
+                              </div>  
+                              <div class="footer-animate-show-hide">
+                                  <md-button class="md-raised boutonfixe" disabled>
+                                  </md-button>
+                                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                            Réinitialise
+                                  </md-button>
+                                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
+                                  </md-button>
+                              </div>
                           </form>
-                          <md-divider></md-divider><br>
-                        </div>
+                      </div>
+
+                       <div class="bouton-animate-show-hide">
+
+                          <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+                           <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+                          </md-icon>                           
+                           <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+                          </md-icon>
+                          <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+                          </md-icon>
+                          <md-tooltip><span>Bouton filtre</span></md-tooltip>
+                          </md-button>
+                      </div>
+                  </div>
 
                         <div>        
                           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
@@ -176,7 +192,7 @@
                                   </td>
 
                                   <td>
-                                          <span>{{convention_entete.feffi.denomination}}</span>
+                                    <span>{{convention_entete.feffi.denomination}}</span>
                                   </td>
 
                                   <td>
@@ -200,7 +216,7 @@
                                   </td>
 
                                   <td>                          
-                                    <span>{{convention_entete.avancement}}</span>
+                                    <span>{{vm.affichage_avancement_financ(convention_entete.avancement_financ)}}</span>
                                   </td>
 
                                   <td>                          

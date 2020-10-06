@@ -1,4 +1,4 @@
-  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+  <div id="formsinsertionfeffi" class="page-layout simple fullwidth doc-page" layout="column">
 
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="space-between">
@@ -6,10 +6,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Gerer situation feffi</span>
+                <span class="parent">Gestion technique des activitées</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Feffi</span>
+                <span class="parent" href="javascript:;"> Niveau CISCO/FEFFI</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Renseignement FEFFI</span>
             </div>
 
             <!--div class="title">Feffi</div-->
@@ -42,13 +45,9 @@
               </md-tab-label>
               
               <md-tab-body>
-                <div style="widht:100%;">
-                    <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.showformfiltre()" ng-show="vm.showbuttonfiltre">
-                          Filtre
-                    </md-button>
-                </div>
-                 <div>
-            <div ng-show="vm.showfiltre">
+
+          <div style="margin-top: 1px;">
+              <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
               <form name="filtreform" class="md-inline-form" novalidate >
                                 <br>
                   <div layout="column" layout-gt-xs="row" >
@@ -111,19 +110,32 @@
                       </div>
                     </md-input-container-->
                   </div>
-
-                  <div>
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
-                      Recherche
-                  </md-button>
-                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
-                      Annuler
-                  </md-button>
+                  
+                  <div class="footer-animate-show-hide">
+                      <md-button class="md-raised boutonfixe" disabled>
+                      </md-button>
+                      <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                            Réinitialise
+                      </md-button>
+                        <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
+                      </md-button>
                   </div>
             </form>
-             <md-divider></md-divider><br>
-              
-            </div>
+            </div>            
+            <div class="bouton-animate-show-hide">
+
+            <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+               <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+              </md-icon>                           
+               <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+              </md-icon>
+              <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+              </md-icon>
+              <md-tooltip><span>Bouton filtre</span></md-tooltip>
+              </md-button> 
+          </div>
+          </div>
                <div>        
                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                   <thead>
@@ -211,7 +223,7 @@
               
               <md-tab-body>
                 <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouter()" style="width:10%;" ng-show="vm.nouveaubuttonfeffi">
+                    <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouter()" style="width:10%;" ng-show="vm.nouveaubuttonfeffi">
                       Nouveau
                     </md-button>
                 </div>
@@ -315,7 +327,7 @@
                         </a>
                                   
                         <a ng-if="!feffi.$edit" ng-click="vm.supprimer(feffi)" title="Supprimer">
-                          <span class="icon-delete"></span>
+                          <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                         </a>
                                   
                         <a ng-if="feffi.$edit" ng-click="vm.annuler(feffi)" title="Annuler modification">
@@ -351,7 +363,7 @@
               
               <md-tab-body>
                 <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterMembre()" style="width:10%;">
+                    <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterMembre()" style="width:10%;">
                       Nouveau
                     </md-button>
                 </div>
@@ -409,7 +421,7 @@
                         <span ng-if="membre.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Age</label>
-                            <input name="age" type="number" ng-model="membre.age"/>
+                            <input name="age" type="number" ng-model="membre.age" ng-min="1"/>
                           </md-input-container>   
                         </span>
                                   
@@ -439,7 +451,7 @@
                         </a>
                                   
                         <a ng-if="!membre.$edit" ng-click="vm.supprimerMembre(membre)" title="Supprimer">
-                          <span class="icon-delete"></span>
+                          <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                         </a>
                                   
                         <a ng-if="membre.$edit" ng-click="vm.annulerMembre(membre)" title="Annuler modification">
@@ -476,7 +488,7 @@
               
               <md-tab-body>
                 <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterCompte_feffi()" style="width:10%;">
+                    <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterCompte_feffi()" style="width:10%;">
                       Nouveau
                     </md-button>
                 </div>
@@ -519,7 +531,7 @@
                         <span ng-if="compte_feffi.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>RIB</label>
-                            <input name="rib" type="number" ng-model="compte_feffi.rib"/>
+                            <input name="rib" type="number" ng-model="compte_feffi.rib" ng-min="1"/>
                           </md-input-container>   
                         </span>
                                   
@@ -530,7 +542,7 @@
                         <span ng-if="compte_feffi.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
                             <label>Numero compte</label>
-                            <input name="numero_compte" type="number" ng-model="compte_feffi.numero_compte"/>
+                            <input name="numero_compte" type="number" ng-model="compte_feffi.numero_compte"  ng-min="1"/>
                           </md-input-container>   
                         </span>
                                   
@@ -556,7 +568,7 @@
                         </a>
                                   
                         <a ng-if="!compte_feffi.$edit" ng-click="vm.supprimerCompte_feffi(compte_feffi)" title="Supprimer">
-                          <span class="icon-delete"></span>
+                          <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                         </a>
                                   
                         <a ng-if="compte_feffi.$edit" ng-click="vm.annulerCompte_feffi(compte_feffi)" title="Annuler modification">
@@ -593,7 +605,7 @@
               
               <md-tab-body>
                 <div style="widht:100%;">  
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterMembre_titulaire()" style="width:10%;">
+                    <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterMembre_titulaire()" style="width:10%;">
                       Nouveau
                     </md-button>
                 </div>
@@ -660,7 +672,7 @@
                         </a>
                                   
                         <a ng-if="!membre_titulaire.$edit" ng-click="vm.supprimerMembre_titulaire(membre_titulaire)" title="Supprimer">
-                          <span class="icon-delete"></span>
+                          <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                         </a>
                                   
                         <a ng-if="membre_titulaire.$edit" ng-click="vm.annulerMembre_titulaire(membre_titulaire)" title="Annuler modification">

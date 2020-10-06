@@ -131,10 +131,10 @@ vm.mainGridOptions = {
                         code: {type: "string",validation: {required: true}},
                         libelle: {type: "string",validation: {required: true}},
                         description: {type: "string",validation: {required: true}},
-                        nbr_salle: {type: "string",validation: {required: true}},
+                        nbr_salle: {type: "string",validation: {required: true,min: 1}},
                         zone_subvention: {validation: {required: true}},
                         acces_zone: { validation: {required: true}},
-                        cout_batiment: {type: "number", validation: {required: true}}
+                        cout_batiment: {type: "number", validation: {required: true,min: 0.0001}}
                     }
                 }
             },     
@@ -411,7 +411,7 @@ vm.mainGridOptions = {
         };
       };
 
-      vm.alldivers_attachement_batiment = function(id_type_batiment) {
+   /*   vm.alldivers_attachement_batiment = function(id_type_batiment) {
         return {
           dataSource:
           {
@@ -554,7 +554,7 @@ vm.mainGridOptions = {
                   },{name: "destroy", text: ""}]
             }]
         };
-      };
+      };*/
 
 /* ***************FIN TYPE OUVRAGE**********************/
         

@@ -16,6 +16,7 @@
         var currentItemTete;
         vm.allfeffi = [];
         vm.allsite = [];
+        vm.filtre = {};
 
         var NouvelItemDetail = false;
         var currentItemDetail;
@@ -114,10 +115,7 @@
         var id_user = $cookieStore.get('id');
         var annee = vm.date_now.getFullYear();
         
-        apiFactory.getAll("region/index").then(function success(response)
-        {
-          vm.regions = response.data.response;
-        });
+       
 
 
 /********************************Debut get convention entete by cisco***********************************/
@@ -129,10 +127,11 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
             vm.allcisco.push(usercisco);
 
             if(result.data.response.roles.indexOf("BCAF")!= -1)
-            {
+            {   
+                vm.ciscos=[];
                 if (usercisco.id!=undefined)
-                {
-                    apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioninvalideBycisconow','id_cisco',usercisco.id,'annee',annee).then(function(result)
+                { 
+                    apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalideBycisconow','id_cisco',usercisco.id,'annee',annee).then(function(result)
                     {
                         vm.allconvention_cife_tete = result.data.response; 
                         console.log(vm.allconvention_cife_tete);
@@ -140,26 +139,46 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
                     vm.session='BCAF';
                   //vm.session='ADMIN';
 
-            vm.id_cisco = result.data.response.cisco.id;
+                  vm.id_cisco = result.data.response.cisco.id;
+                  vm.ciscos.push(result.data.response.cisco);
+                  vm.filtre.id_cisco = result.data.response.cisco.id
+                  apiFactory.getAPIgeneraliserREST("region/index",'menu','getregionBycisco','id_cisco',vm.id_cisco).then(function(result)
+                  {
+                      vm.regions = result.data.response;
+                console.log(result.data.response);
+                console.log(vm.id_cisco);
+                      vm.filtre.id_region= vm.regions[0].id;
+                  });
+                  apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",vm.id_cisco).then(function(result)
+                  {
+                    vm.communes = result.data.response;
+                  });
                 }
             }
             else
             {
-                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioninvalidenow','annee',annee).then(function(result)
+                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalidenow','annee',annee).then(function(result)
                 {
                     vm.allconvention_cife_tete = result.data.response; 
                     console.log(vm.allconvention_cife_tete);
                 });
+                 apiFactory.getAll("region/index").then(function success(response)
+                {
+                  vm.regions = response.data.response;
+                });
                 vm.session='ADMIN';
-                 //vm.session='OBCAF';
+                console.log('ato');
             }
             
         });
-
-        vm.showformfiltre = function()
+      vm.showformfiltre = function()
         {
-          vm.showbuttonfiltre=false;
-          vm.showfiltre=true;
+          vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
         }
 
         vm.recherchefiltre = function(filtre)
@@ -169,8 +188,17 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
 
             if(vm.session=='BCAF')
             {
-                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionByciscofiltre','id_cisco',vm.id_cisco,
+               /* apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionByciscofiltre','id_cisco',vm.id_cisco,
               'date_debut',date_debut,'date_fin',date_fin).then(function(result)
+              {
+                  vm.allconvention_cife_tete = result.data.response; 
+                  console.log(vm.allconvention_cife_tete);
+              });*/
+
+              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerfiltre',
+              'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
+              filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
+              filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
               {
                   vm.allconvention_cife_tete = result.data.response; 
                   console.log(vm.allconvention_cife_tete);
@@ -178,7 +206,7 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
             }
             else
             {
-              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionfiltre',
+              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerfiltre',
               'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
                 filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
                 filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
@@ -188,12 +216,6 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
               });
             }
             
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showbuttonfiltre=true;
-            vm.showfiltre=false;
         }
 
          vm.filtre_change_region = function(item)
@@ -232,9 +254,10 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
             vm.filtre.id_zap = null;
             if (item.id_commune != '*')
             {
-                apiFactory.getAPIgeneraliserREST("zap_commune/index","getzap_communeBycommune","id_commune",item.id_commune).then(function(result)
+                apiFactory.getAPIgeneraliserREST("zap_commune/index","menu","getzapBycommune","id_commune",item.id_commune).then(function(result)
               {
                 vm.zaps = result.data.response;
+                console.log(vm.zaps);
               });
             }
             else
@@ -298,11 +321,13 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
 
         //col table
         vm.convention_cife_tete_column = [
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
-        {titre:"Feffi"
+        {titre:"FEFFI"
         },
-        {titre:"Site"
+        {titre:"Code sous projet site"
+        },
+        {titre:"Accés site"
         },
         {titre:"Type convention"
         },
@@ -314,9 +339,11 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
         },
         {titre:"Cout éstimé"
         },
-        {titre:"Avancement"
-        },
+       /* {titre:"Avancement"
+        },*/
         {titre:"Utilisateur"
+        },
+        {titre:"Date création"
         },
         {titre:"Action"
         }];
@@ -347,12 +374,14 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
                         id_cisco:'',
                         id_feffi:'',
                         id_site:'',
+                        acces:'',
                         type_convention:'',
                         ref_convention: ref_auto,
                         objet: 'MOD pour la construction de 02 salles de classe équipées',
                         ref_financement: 'Crédit IDA N° 62170',
                         montant_total:0,
-                        avancement:0,
+                        //avancement:0,,
+                        date_creation:vm.date_now,
                         user_nom:vm.user.nom
                       };       
                       vm.allconvention_cife_tete.push(items);
@@ -398,11 +427,13 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
               item.id_cisco    = currentItemTete.id_cisco ;
               item.id_feffi    = currentItemTete.id_feffi ;
               item.id_site    = currentItemTete.id_site ;
+              item.acces    = currentItemTete.acces ;
               item.ref_convention  = currentItemTete.ref_convention ;
               item.objet       = currentItemTete.objet ;              
               item.ref_financement = currentItemTete.ref_financement ;
               item.montant_total = currentItemTete.montant_total; 
-              item.avancement = currentItemTete.avancement; 
+              //item.avancement = currentItemTete.avancement;
+              item.date_creation = currentItemTete.date_creation; 
               item.user_nom = currentItemTete.user.nom;
               
           }else
@@ -574,12 +605,14 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
             item.id_cisco = vm.selectedItemTete.cisco.id ;
             item.id_feffi = vm.selectedItemTete.feffi.id ;
             item.id_site = vm.selectedItemTete.site.id ;
+            item.acces = vm.selectedItemTete.site.acces ;
 
             item.ref_convention  = vm.selectedItemTete.ref_convention ;
             item.objet           = vm.selectedItemTete.objet ;
             item.ref_financement = vm.selectedItemTete.ref_financement ;
-            item.montant_total = parseInt(vm.selectedItemTete.montant_total);
-            item.avancement = parseInt(vm.selectedItemTete.avancement);
+            item.montant_total = parseFloat(vm.selectedItemTete.montant_total);
+            //item.avancement = parseInt(vm.selectedItemTete.avancement);
+            item.date_creation = vm.selectedItemTete.date_creation;
             item.user_nom           = vm.selectedItemTete.user.nom ;
 
             vm.afficherboutonValider = false; 
@@ -602,7 +635,7 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
         {
             var confirm = $mdDialog.confirm()
                     .title('Etes-vous sûr de supprimer cet enregistrement?')
-                    .textContent('')
+                    .textContent('Les données: detail,batiment, latrine... seront supprimés également')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
@@ -646,7 +679,7 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
                         {   
                             var confirm = $mdDialog.confirm()
                                         .title('Etes-vous sûr de cet enregistrement?')
-                                        .textContent('En changeant FEFFI vous allez être supprimer tous données detail,batiment,latrine...')
+                                        .textContent('En changeant FEFFI vous allez supprimer: detail,batiment,latrine...')
                                         .ariaLabel('Lucky day')
                                         .clickOutsideToClose(true)
                                         .parent(angular.element(document.body))
@@ -705,7 +738,7 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
                     ref_financement:  convention_cife_tete.ref_financement,
                     ref_convention:   convention_cife_tete.ref_convention,
                     montant_total:    convention_cife_tete.montant_total,
-                    avancement:    convention_cife_tete.avancement,
+                    //avancement:    convention_cife_tete.avancement,
                     id_user:    user,
                     validation: 0               
                 });
@@ -739,7 +772,7 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
                         vm.selectedItemTete.site = sit[0];
                         vm.selectedItemTete.$selected  = false;
                         vm.selectedItemTete.$edit      = false;
-                        vm.selectedItemTete ={};
+                        //vm.selectedItemTete ={};
                         
                         if (convention_cife_tete.id_site!=currentItemTete.site.id)
                         {currentItemTete.site.ecole = {id: currentItemTete.site.id_ecole}
@@ -824,12 +857,10 @@ console.log(fef[0]);
         }
 
         vm.change_feffi = function(item)
-        { console.log(item);
+        { 
           apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.id_feffi).then(function(result)
           {
               vm.allcompte_feffi = result.data.response;
-              console.log(vm.allcompte_feffi);
-
           });
           var fef = vm.allfeffi.filter(function(obj)
           {
@@ -846,27 +877,47 @@ console.log(fef[0]);
                     }
              item.ecole=tem;
           });
-          item.id_site = null;
           if(NouvelItemTete == false)
           { 
-            apiFactory.getAPIgeneraliserREST("site/index",'menu','getsitecreeByfeffi','id_feffi',item.id_feffi).then(function(result)
-              {
-                vm.allsite= result.data.response;
-                vm.allsite.push(item.site);
-                console.log(vm.allsite);
-              });
-
             if (currentItemTete.feffi.id!=item.id_feffi)
-            {
-              vm.showAlert('Avertissement','Les detailles ainsi que travaux de construction seront supprimer si vous enregistre cette operation');
+            {   
+                apiFactory.getAPIgeneraliserREST("site/index",'menu','getsitecreeByfeffi','id_feffi',item.id_feffi).then(function(result)
+                {
+                  vm.allsite= result.data.response;
+                  
+                  item.id_site = null;
+                  item.acces = null;
+                  if (vm.allsite.length==0)
+                  {
+                    vm.showAlert('Information','Aucun site disponible pour cet établissement');
+                  }
+                  else
+                  {
+                    vm.showAlert('Avertissement','Les detailles ainsi que travaux de construction seront supprimées si vous continuez cette operation');                    
+                  }
+                });
+            }
+            else
+            { 
+              var site_base=[];
+              apiFactory.getAPIgeneraliserREST("site/index",'menu','getsitecreeByfeffi','id_feffi',item.id_feffi).then(function(result)
+              {
+                  vm.allsite= result.data.response;                 
+                  vm.allsite.push(item.site);
+                  item.id_site = item.site.id;
+                  item.acces = item.site.acces;
+              });
             }  
           }
           else 
-            {
+            { 
               apiFactory.getAPIgeneraliserREST("site/index",'menu','getsitecreeByfeffi','id_feffi',item.id_feffi).then(function(result)
               {
                 vm.allsite= result.data.response;
-                console.log(vm.allsite);
+                if (vm.allsite.length==0)
+                {
+                  vm.showAlert('Information','Aucun site disponible pour cet établissement');
+                }
               });
             }
         }
@@ -985,7 +1036,7 @@ console.log(fef[0]);
                     ref_financement:  vm.selectedItemTete.ref_financement,
                     ref_convention:   vm.selectedItemTete.ref_convention,
                     montant_total:    vm.selectedItemTete.montant_total,
-                    avancement:    vm.selectedItemTete.avancement,
+                    //avancement:    vm.selectedItemTete.avancement,
                     id_user: vm.selectedItemTete.user.id,
                     validation: 1               
                 });
@@ -1043,6 +1094,7 @@ console.log(fef[0]);
                     id_commune: site.id_commune,
                     id_zap: site.id_zap,
                     id_ecole: site.id_ecole,
+                    acces: site.acces,
                     id_classification_site: site.id_classification_site, 
                     validation:1              
                 });

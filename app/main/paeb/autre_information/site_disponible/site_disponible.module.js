@@ -29,7 +29,7 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.autre_information.site_disponible', {
             title: 'Site disponible',
-            icon  : 'icon-nfc-variant',
+            icon  : 'icon-vector-point',
             state: 'app.paeb_autre_information_site_disponible',
             weight: 1
         });

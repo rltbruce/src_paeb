@@ -30,22 +30,28 @@
           columnDefs: [{width: '50%', targets: 0}]         
         };
 
+             
+
         vm.showformfiltre = function()
         {
-          vm.showbuttonfiltre=false;
-          vm.showfiltre=true;
+          //vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
         }
         //col table
         vm.site_column = [
         {titre:"Region"
         },
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
         {titre:"Commune"
         },
-        {titre:"Zap"
+        {titre:"ZAP"
         },
-        {titre:"Epp"
+        {titre:"EPP"
         },
         {titre:"Code sous projet"
         },
@@ -60,8 +66,7 @@
         {titre:"Statut"
         },
         {titre:"Observation"
-        },
-        {titre:"Action"}];
+        }];
         
 
         apiFactory.getAll("region/index").then(function success(response)
@@ -141,13 +146,8 @@
               filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
               {
                   vm.allsite = result.data.response;
+                  console.log(vm.allsite);
               });
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showbuttonfiltre=true;
-            vm.showfiltre=false;
         }
 
         vm.change_region = function(item)

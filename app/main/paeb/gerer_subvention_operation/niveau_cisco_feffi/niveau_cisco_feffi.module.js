@@ -7,7 +7,8 @@
             'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.convention_cisco_feffi',
             'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.convention_cisco_feffi_validation',
             'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.feffi'
-            ])       
+            ])
+        .run(testPermission)        
         .config(config);
         var vs ;
 
@@ -17,7 +18,11 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_cisco_feffi', {
             title : 'Niveau CISCO/FEFFI',
             icon  : 'icon-black-mesa',
-            weight: 1
+            weight: 1,
+            hidden: function()
+            {
+                    return vs;
+            }
         });
 
 
@@ -37,7 +42,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["BCAF","OBCAF","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

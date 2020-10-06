@@ -52,10 +52,15 @@
             
         });
 
+        
         vm.showformfiltre = function()
         {
-          vm.showbuttonfiltre=false;
-          vm.showfiltre=true;
+          vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
         }
 
         vm.recherchefiltre = function(filtre)
@@ -69,12 +74,6 @@
                   vm.allconvention_ufp_daaf_entete = result.data.response; 
                   console.log(vm.allconvention_ufp_daaf_entete);
               });
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showbuttonfiltre=true;
-            vm.showfiltre=false;
         }
 
          /*****************Debut StepOne convention_ufp_daaf_entete***************/
@@ -162,11 +161,11 @@
         vm.selectionDemande_deblocage_daaf_validation_ufp= function (item)
         {
             vm.selectedItemDemande_deblocage_daaf_validation_ufp = item;
-           //recuperation donnée demande_deblocage_daaf_validation_ufp
-            apiFactory.getAPIgeneraliserREST("justificatif_daaf/index",'id_demande_deblocage_daaf',item.id).then(function(result)
+           //recuperation donnée demande_deblocage_daaf
+            apiFactory.getAPIgeneraliserREST("justificatif_daaf/index",'id_demande_deblocage_daaf',item.id,'id_tranche',item.tranche.id).then(function(result)
             {
                 vm.alljustificatif_daaf = result.data.response;
-                console.log(vm.alljustificatif_daaf);
+                
             });
             if (item.validation==3)
             {
@@ -244,6 +243,19 @@
               vm.stepTwo = false;
               vm.stepThree = false;
               vm.showbutton = false;
+              if(validation==3)
+              {
+                var items = {
+                      montant_transfert: parseInt(demande_deblocage_daaf_validation_ufp.prevu),
+                      frais_bancaire:0,
+                      montant_total:parseInt(demande_deblocage_daaf_validation_ufp.prevu),
+                      date:convertionDate(new Date()),
+                      observation:'',
+                      validation:0
+                    };
+                insertion_in_baseTransfert_ufpifvalider(items);
+              }
+
               //vm.selectedItemDemande_deblocage_daaf_validation_ufp = {};
             }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
@@ -276,6 +288,35 @@
             }
         }
 
+        //insertion ou mise a jours ou suppression item dans bdd convention
+        function insertion_in_baseTransfert_ufpifvalider(transfert_ufp)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            var datas = $.param({
+                    supprimer: 0,
+                    id:        0,      
+                    montant_transfert:    transfert_ufp.montant_transfert,
+                    frais_bancaire:    transfert_ufp.frais_bancaire,
+                    montant_total: transfert_ufp.montant_total,
+                    observation: transfert_ufp.observation,
+                    date: transfert_ufp.date,
+                    validation: transfert_ufp.validation, 
+                    id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf_validation_ufp.id             
+                });
+                //console.log(datas);
+                //factory
+            apiFactory.add("transfert_ufp/index",datas, config).success(function (data)
+            {
+              //vm.selectedItemTransfert_ufp = {};
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+
+        }
+
   /*****************Fin StepTwo demande_deblocage_daaf_validation_ufp****************/
 
   /*****************Fin StepThree justificatif_daaf****************/
@@ -303,7 +344,8 @@
               frais_bancaire:'',
               montant_total:'',
               date:'',
-              observation:''
+              observation:'',
+              validation:0
             };         
             vm.alltransfert_ufp.push(items);
             vm.alltransfert_ufp.forEach(function(conv)
@@ -347,6 +389,7 @@
               item.montant_total = currentItemTransfert_ufp.montant_total;
               item.date = currentItemTransfert_ufp.date;
               item.observation    = currentItemTransfert_ufp.observation;
+              item.validation    = currentItemTransfert_ufp.validation;
           }else
           {
             vm.alltransfert_ufp = vm.alltransfert_ufp.filter(function(obj)
@@ -364,9 +407,13 @@
         vm.selectionTransfert_ufp = function (item)
         {
             vm.selectedItemTransfert_ufp = item;
-            currentItemTransfert_ufp     = JSON.parse(JSON.stringify(vm.selectedItemTransfert_ufp));
+            if(item.$edit==false || item.$edit==undefined)
+           {
+              currentItemTransfert_ufp     = JSON.parse(JSON.stringify(vm.selectedItemTransfert_ufp));
+           }
            // vm.allconvention= [] ;
            // vm.stepTwo = true;
+           vm.validation_ufp = item.validation;
                         
 
         };
@@ -470,7 +517,8 @@
                     montant_total: transfert_ufp.montant_total,
                     observation: transfert_ufp.observation,
                     date: convertionDate(new Date(transfert_ufp.date)), 
-                    id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf_validation_ufp.id             
+                    id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf_validation_ufp.id,
+                    validation: transfert_ufp.validation             
                 });
                 //console.log(datas);
                 //factory
@@ -516,6 +564,39 @@
           item.montant_total = parseInt(item.montant_transfert) + parseInt(item.frais_bancaire);
         }
 
+        vm.validertransfert_ufp = function()
+        {   
+            valider_insert_in_baseTransfert_ufp(vm.selectedItemTransfert_ufp,0,1);
+        }
+        function valider_insert_in_baseTransfert_ufp(transfert_ufp,suppression,validation)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            }; 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        transfert_ufp.id,      
+                    montant_transfert:    transfert_ufp.montant_transfert,
+                    frais_bancaire:    transfert_ufp.frais_bancaire,
+                    montant_total: transfert_ufp.montant_total,
+                    observation: transfert_ufp.observation,
+                    date: transfert_ufp.date, 
+                    id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf_validation_ufp.id,
+                    validation: validation             
+                });
+                //console.log(datas);
+                //factory
+            apiFactory.add("transfert_ufp/index",datas, config).success(function (data)
+            {
+              transfert_ufp.validation = validation;
+              vm.validation_ufp = validation;
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+
+        }
 
   /*****************Fin StepThree Transfert ufp****************/ 
 

@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_ufp_daaf.demande_deblocage_daaf', {
-            title: 'Saisie demande',
+            title: 'Saisie demande de déblocage',
             icon  : 'icon-link',
             state: 'app.paeb_gerer_subvention_financiere_niveau_ufp_daaf_demande_deblocage_daaf',
             weight: 1,

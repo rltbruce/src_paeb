@@ -18,7 +18,7 @@
         msNavigationServiceProvider.saveItem('paeb.administration', {
             title : 'Administration',
             icon  : 'icon-camera-iris',
-            weight: 1,
+            weight: 2,
             hidden: function()
             {
                     return vs;

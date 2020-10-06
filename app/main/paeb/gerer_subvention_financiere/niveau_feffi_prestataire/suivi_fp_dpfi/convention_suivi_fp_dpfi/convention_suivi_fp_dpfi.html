@@ -1,4 +1,4 @@
-  <div id="formsdpfi" class="page-layout simple fullwidth doc-page" layout="column" >
+  <div id="formsdpfivactivif_fp" class="page-layout simple fullwidth doc-page" layout="column" >
 
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="space-between" >
@@ -6,10 +6,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center" >
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Suivi convention CISCO/FEFFI</span>
+                <span class="parent">Gestion financière des activitées</span>
                 
-                <!--md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Convention CISCO/FEFFI</span-->
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Niveau FEFFI/PRESTATAIRE</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Validation activitée financière (DPFI)</span>
             </div>
 
             <!--div class="title">Convention CISCO/FEFFI</div-->
@@ -23,7 +26,7 @@
     
     <!-- CONTENT -->
     <div class="content" layout="column">
-      <div class="form-wrapper md-whiteframe-1dp" >
+      <div class="form-wrapper md-whiteframe-1dp acc_menu" >
         <div style="clear:both;"></div>            
             <div style="float: top !important">
               <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
@@ -33,7 +36,7 @@
             </div>
 <!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
          <ms-form-wizard flex>
-          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menu">
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
     <!------------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
             
@@ -49,108 +52,126 @@
               </md-tab-label>
               
               <md-tab-body>
-               <div>
-             <form name="filtreform" class="md-inline-form" novalidate >
-                  <br>
-                 <div layout="column" layout-gt-xs="row">
-                     <md-input-container>
-                      <span>Date du</span>
-                     </md-input-container>
+                
+                      <div style="margin-top: 1px;">
+                          <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
+                          <form name="filtreform" class="md-inline-form" novalidate >
+                                <br>
+                            <div style="margin: 0px 15px 10px 15px;">
+                              <div layout="column" layout-gt-xs="row">
+                                  <md-input-container>
+                                    <span style="font-size: 14.5px" class="text-semibold">Date signature convention du: &nbsp</span>
+                                  </md-input-container>
 
-                     <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required>                     
-                     </md-datepicker>
+                                  <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required style="">                     
+                                  </md-datepicker>
 
-                     <md-input-container>
-                       <span>&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
-                    </md-input-container>
+                                  <md-input-container>
+                                    <span style="font-size: 14.5px" class="text-semibold">&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
+                                  </md-input-container>
 
-                    <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
-                    </md-datepicker>
-                   </div>
-                   <div layout="column" layout-gt-xs="row" ng-show="vm.session=='ADMIN' || vm.session=='ODAAF' || vm.session=='DAAF' || vm.session=='ODPFI' || vm.session=='DPFI' || vm.session=='UFP'">
+                                  <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
+                                  </md-datepicker>
+                                </div>
+                                <div layout="column" layout-gt-xs="row">
 
-                     <md-input-container flex="100" flex-gt-xs="90">
-                       <label>Lot</label>
-                      <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
-                         <md-option value="1">Lot 1</md-option>
-                         <md-option value="2">Lot 2</md-option>
-                        <md-option value="3">Lot 3</md-option>
-                         <md-option value="4">Lot 4</md-option>
-                      </md-select>
-                       <div ng-messages="filtreform.lot.$error" role="alert">
-                        <div ng-message="required"><span>Lot</span></div>
-                      </div>
-                     </md-input-container>
-                    <md-input-container flex="100" flex-gt-xs="90">
-                       <label>Région</label>
-                      <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)">
-                        <md-option  value="*">*</md-option>
-                         <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
-                      </md-select>
-                       <div ng-messages="filtreform.region.$error" role="alert">
-                         <div ng-message="required"><span>Région</span></div>
-                       </div>
-                    </md-input-container>
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Lot</label>
+                                    <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                                      <md-option value="*">*</md-option>
+                                      <md-option value="1">Lot 1</md-option>
+                                      <md-option value="2">Lot 2</md-option>
+                                      <md-option value="3">Lot 3</md-option>
+                                      <md-option value="4">Lot 4</md-option>
+                                    </md-select>
+                                    <div ng-messages="filtreform.lot.$error" role="alert">
+                                      <div ng-message="required"><span>Lot</span></div>
+                                    </div>
+                                  </md-input-container>
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Région</label>
+                                    <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
+                                    </md-select>
+                                    <div ng-messages="filtreform.region.$error" role="alert">
+                                      <div ng-message="required"><span>Région</span></div>
+                                    </div>
+                                  </md-input-container>
                                   
-                    <md-input-container flex="100" flex-gt-xs="90">
-                      <label>Cisco</label>
-                       <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
-                         <md-option  value="*">*</md-option>
-                         <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Cisco</label>
+                                    <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
                                                   
-                        </md-select>
-                       <div ng-messages="filtreform.cisco.$error" role="alert">
-                         <div ng-message="required"><span>Cisco</span></div>
-                      </div>
-                    </md-input-container>
+                                     </md-select>
+                                     <div ng-messages="filtreform.cisco.$error" role="alert">
+                                      <div ng-message="required"><span>Cisco</span></div>
+                                    </div>
+                                  </md-input-container>
                                   
-                     <md-input-container flex="100" flex-gt-xs="90">
-                      <label>Commune</label>
-                      <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
-                        <md-option  value="*">*</md-option>
-                         <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
-                      </md-select>
-                       <div ng-messages="filtreform.commune.$error" role="alert">
-                         <div ng-message="required"><span>Commune</span></div>
-                       </div>
-                     </md-input-container>
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Commune</label>
+                                    <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
+                                    </md-select>
+                                    <div ng-messages="filtreform.commune.$error" role="alert">
+                                      <div ng-message="required"><span>Commune</span></div>
+                                    </div>
+                                  </md-input-container>
                                   
-                     <md-input-container flex="100" flex-gt-xs="90">
-                       <label>Ecole</label>
-                      <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
-                         <md-option  value="*">*</md-option>
-                        <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.code}}
-                         </md-option>
-                       </md-select>
-                       <div ng-messages="filtreform.ecole.$error" role="alert">
-                         <div ng-message="required"><span>Ecole</span></div>
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Ecole</label>
+                                    <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
+                                      </md-option>
+                                    </md-select>
+                                    <div ng-messages="filtreform.ecole.$error" role="alert">
+                                      <div ng-message="required"><span>Ecole</span></div>
+                                    </div>
+                                  </md-input-container>
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Convention</label>
+                                    <md-select ng-model="vm.filtre.id_convention_entete" name="convention" ng-disabled="!vm.filtre.id_ecole">
+                                      <md-option  value="*">*</md-option>
+                                      <md-option ng-repeat="eco in vm.convention_cisco_feffi_entetes" value="{{eco.id}}"> {{eco.ref_convention}}
+                                      </md-option>
+                                    </md-select>  
+                                    <div ng-messages="filtreform.convention_entete.$error" role="alert">
+                                      <div ng-message="required"><span>Convention</span></div>
+                                    </div>
+                                  </md-input-container>
+                                </div>
+                              </div>  
+                              <div class="footer-animate-show-hide">
+                                  <md-button class="md-raised boutonfixe" aria-label="" disabled>
+                                  </md-button>
+                                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                            Réinitialise
+                                  </md-button>
+                                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
+                                  </md-button>
+                              </div>
+                          </form>
                       </div>
-                    </md-input-container>
-                     <md-input-container flex="100" flex-gt-xs="90">
-                      <label>Convention</label>
-                       <md-select ng-model="vm.filtre.id_convention_entete" name="convention" ng-disabled="!vm.filtre.id_ecole">
-                         <md-option  value="*">*</md-option>
-                         <md-option ng-repeat="eco in vm.convention_cisco_feffi_entetes" value="{{eco.id}}"> {{eco.ref_convention}}
-                        </md-option>
-                      </md-select>  
-                      <div ng-messages="filtreform.convention_entete.$error" role="alert">
-                        <div ng-message="required"><span>Convention</span></div>
-                      </div>
-                    </md-input-container>
-                  </div>
+                                   
+                      <div class="bouton-animate-show-hide">
 
-                  <div>
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
-                                      ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
-                                      Recherche
-                   </md-button>
-                   <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
-                                  Annuler
-                   </md-button>
-                   </div>
-             </form>
-             <md-divider></md-divider><br>
-          </div>
+                        <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+                         <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+                        </md-icon>                           
+                         <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+                        </md-icon>
+                        <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+                        </md-icon>
+                        <md-tooltip><span>Bouton filtre</span></md-tooltip>
+                        </md-button> 
+                    </div>
+                  </div>
 
             <div>        
                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
@@ -175,7 +196,7 @@
                       </td>
 
                       <td>
-                        <span>{{convention_entete.site.denomination_epp}}</span>
+                        <span>{{convention_entete.site.code_sous_projet}}</span>
                       </td>
 
                        <td>                         
@@ -193,9 +214,9 @@
                         <span>{{convention_entete.montant_total}}</span>
                       </td>
 
-                      <td>                          
+                      <!--td>                          
                         <span>{{convention_entete.avancement}}</span>
-                       </td>
+                       </td-->
 
                        <td>                          
                         <span>{{convention_entete.user.nom}}</span>
@@ -223,7 +244,7 @@
               
               <md-tab-body>
                <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
                     
                     <md-tab ng-click="vm.click_step_contrat_moe()">
@@ -233,7 +254,7 @@
                             <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
                               <i class="icon-check s16"></i>
                             </span-->
-                            <span class="ms-form-wizard-step-text">Contrat</span>
+                            <span class="ms-form-wizard-step-text">Détail contrat</span>
                         </span>
                        
                       </md-tab-label>
@@ -256,23 +277,34 @@
                               <tr ng-repeat="contrat_moe in vm.allcontrat_moe"  ng-class="{selected: contrat_moe.$selected}" ng-click="vm.selectionContrat_moe(contrat_moe)">
                                           
                                 <td>                                            
-                                  <span ng-if="!contrat_moe.$edit">{{contrat_moe.bureau_etude.nom}}</span>
+                                  <span>{{contrat_moe.bureau_etude.nom}}</span>
                                 </td>
                                           
                                 <td>      
-                                  <span ng-if="!contrat_moe.$edit">{{contrat_moe.intitule}}</span>
+                                  <span>{{contrat_moe.intitule}}</span>
                                 </td>
                                           
                                 <td>      
-                                  <span ng-if="!contrat_moe.$edit">{{contrat_moe.ref_contrat}}</span>
+                                  <span>{{contrat_moe.ref_contrat}}</span>
                                 </td>
                                           
                                 <td>       
-                                  <span ng-if="!contrat_moe.$edit">{{contrat_moe.montant_contrat}}</span>
+                                  <span>{{contrat_moe.montant_contrat | number:2}}</span>
+                                </td>
+                                <td>                        
+                                  <span>{{vm.formatDate(contrat_moe.passation.notification_intention)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(contrat_moe.passation.date_notification_attribution)}}</span>
                                 </td>
 
                                 <td>                          
-                                  <span ng-if="!contrat_moe.$edit">{{vm.formatDate(contrat_moe.date_signature)}}</span>
+                                  <span>{{vm.formatDate(contrat_moe.date_signature)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(contrat_moe.passation.date_os)}}</span>
                                 </td>                                                           
                                 
                               </tr>
@@ -298,7 +330,7 @@
                       <md-tab-body>
                        <!---------------------------------FILS PRESTATION----------------------------------------------->       
                          <ms-form-wizard flex id="soussousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
                         <!-----------------------------DEBUT demande debut travaux moe-------------------------> 
                               <md-tab>
@@ -308,20 +340,20 @@
                                         <i class="icon-basket-fill s16"></i>
                                       </span-->                          
                                       
-                                      <span class="ms-form-wizard-step-text">Facture à la signature</span>
+                                      <span class="ms-form-wizard-step-text">Facture avant travaux</span>
                                   </span>
                                  
                                 </md-tab-label>
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;"> 
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_debut_travaux_moe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationDemande_debut_travaux_moe_encourdpfi &&  vm.validation_demande_debut_travaux_moe ==1">
+                                        <md-button type="submit" class="md-raised md-warn  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerDemande_debut_travaux_moe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationDemande_debut_travaux_moe_encourdpfi &&  vm.validation_demande_debut_travaux_moe ==1">
                                           Mettre en-cours
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_debut_travaux_moe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_debut_travaux_moe_validedpfi &&  vm.validation_demande_debut_travaux_moe ==2">
+                                        <md-button type="submit" class="md-raised  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerDemande_debut_travaux_moe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_debut_travaux_moe_validedpfi &&  vm.validation_demande_debut_travaux_moe ==2">
                                           Valider
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_debut_travaux_moe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_debut_travaux_moe_rejedpfi &&  vm.validation_demande_debut_travaux_moe ==2">
+                                        <md-button type="submit" class="md-raised md-red-500-bg" aria-label="Nouveau" ng-click="vm.validerDemande_debut_travaux_moe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_debut_travaux_moe_rejedpfi &&  vm.validation_demande_debut_travaux_moe ==2">
                                           Rejeter
                                         </md-button><br>
                                     </div>
@@ -465,14 +497,14 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_batiment_moe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationDemande_batiment_moe_encourdpfi &&  vm.validation_demande_batiment_moe ==1">
+                                        <md-button type="submit" class="md-raised md-warn  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerDemande_batiment_moe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationDemande_batiment_moe_encourdpfi &&  vm.validation_demande_batiment_moe ==1">
                                           Mettre en-cours
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_batiment_moe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_batiment_moe_validedpfi &&  vm.validation_demande_batiment_moe ==2">
+                                        <md-button type="submit" class="md-raised  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerDemande_batiment_moe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_batiment_moe_validedpfi &&  vm.validation_demande_batiment_moe ==2">
                                           Valider
                                         </md-button>
 
-                                        <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_batiment_moe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_batiment_moe_rejedpfi &&  vm.validation_demande_batiment_moe ==2">
+                                        <md-button type="submit" class="md-raised md-red-500-bg" aria-label="Nouveau" ng-click="vm.validerDemande_batiment_moe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_batiment_moe_rejedpfi &&  vm.validation_demande_batiment_moe ==2">
                                           Rejeter
                                         </md-button>                                    
                                       </div>
@@ -619,13 +651,13 @@
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_latrine_moe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationDemande_latrine_moe_encourdpfi &&  vm.validation_demande_latrine_moe ==1">
+                                        <md-button type="submit" class="md-raised md-warn  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerDemande_latrine_moe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationDemande_latrine_moe_encourdpfi &&  vm.validation_demande_latrine_moe ==1">
                                           Mettre en-cours
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_latrine_moe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_latrine_moe_validedpfi &&  vm.validation_demande_latrine_moe ==2">
+                                        <md-button type="submit" class="md-raised  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerDemande_latrine_moe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_latrine_moe_validedpfi &&  vm.validation_demande_latrine_moe ==2">
                                           Valider
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_latrine_moe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_latrine_moe_rejedpfi &&  vm.validation_demande_latrine_moe ==2">
+                                        <md-button type="submit" class="md-raised md-red-500-bg" aria-label="Nouveau" ng-click="vm.validerDemande_latrine_moe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_latrine_moe_rejedpfi &&  vm.validation_demande_latrine_moe ==2">
                                           Rejeter
                                         </md-button><br>
                                     </div>
@@ -767,20 +799,20 @@
                                         <i class="icon-basket-fill s16"></i>
                                       </span-->                          
                                       
-                                      <span class="ms-form-wizard-step-text">Facture a la fin travaux</span>
+                                      <span class="ms-form-wizard-step-text">Facture fin travaux</span>
                                   </span>
                                  
                                 </md-tab-label>
                                 
                                 <md-tab-body>
                                     <div style="widht:100%;">
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerDemande_fin_travaux_moe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationDemande_fin_travaux_moe_encourdpfi &&  vm.validation_demande_fin_travaux_moe ==1">
+                                        <md-button type="submit" class="md-raised md-warn  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerDemande_fin_travaux_moe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationDemande_fin_travaux_moe_encourdpfi &&  vm.validation_demande_fin_travaux_moe ==1">
                                           Mettre en-cours
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_fin_travaux_moe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_fin_travaux_moe_validedpfi &&  vm.validation_demande_fin_travaux_moe ==2">
+                                        <md-button type="submit" class="md-raised  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerDemande_fin_travaux_moe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_fin_travaux_moe_validedpfi &&  vm.validation_demande_fin_travaux_moe ==2">
                                           Valider
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.validerDemande_fin_travaux_moe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_fin_travaux_moe_rejedpfi &&  vm.validation_demande_fin_travaux_moe ==2">
+                                        <md-button type="submit" class="md-raised md-red-500-bg" aria-label="Nouveau" ng-click="vm.validerDemande_fin_travaux_moe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationDemande_fin_travaux_moe_rejedpfi &&  vm.validation_demande_fin_travaux_moe ==2">
                                           Rejeter
                                         </md-button><br>
                                     </div>
@@ -945,7 +977,7 @@
               
               <md-tab-body>
                <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
                     
                     <!------------------------------------Debut contrat mpe--------------------------------------->
                     <md-tab ng-click="vm.step_contrat_mpe()">
@@ -955,7 +987,7 @@
                             <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
                               <i class="icon-check s16"></i>
                             </span-->
-                            <span class="ms-form-wizard-step-text">Contrat</span>
+                            <span class="ms-form-wizard-step-text">Détail contrat</span>
                         </span>
                        
                       </md-tab-label>
@@ -990,21 +1022,40 @@
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.cout_batiment}}</span>
+                                  <span>{{contrat_prestataire.cout_batiment | number:2}} Ar</span>
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.cout_latrine}}</span>
+                                  <span>{{contrat_prestataire.cout_latrine | number:2}} Ar</span>
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.cout_mobilier}}</span>
+                                  <span>{{contrat_prestataire.cout_mobilier | number:2}} Ar</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{contrat_prestataire.montant_total_ht | number:2}} Ar</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{contrat_prestataire.montant_total_ttc | number:2}} Ar</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(contrat_prestataire.passation.notification_intention)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(contrat_prestataire.passation.date_notification_attribution)}}</span>
                                 </td>
 
                                 <td>                         
                                   <span>{{vm.formatDate(contrat_prestataire.date_signature)}}</span>
                                 </td>
-                                                             
+
+                                <td>                         
+                                  <span>{{vm.formatDate(contrat_prestataire.passation.date_os)}}</span>
+                                </td>                                                             
                                 
                               </tr>
                             </tbody>
@@ -1027,7 +1078,7 @@
                       <md-tab-body>
                     <!---------------------------FILS DEBUT SUIVI PAIEMENT----------------------------------------->  
                       <ms-form-wizard  flex>
-                        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
+                        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
                         <!-------------------------DEBUT AVANCE DE DEMARRAGE---------------------------------------> 
                           <md-tab>
@@ -1040,13 +1091,13 @@
                             <md-tab-body>
 
                               <div style="widht:100%;">
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerAvance_demarrage_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationAvance_demarrage_encourdpfi &&  vm.validation_avance_demarrage ==1">
+                                        <md-button type="submit" class="md-raised md-warn  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerAvance_demarrage_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationAvance_demarrage_encourdpfi &&  vm.validation_avance_demarrage ==1">
                                           Mettre en-cours
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.validerAvance_demarrage_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationAvance_demarrage_validedpfi &&  vm.validation_avance_demarrage ==2">
+                                        <md-button type="submit" class="md-raised  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerAvance_demarrage_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationAvance_demarrage_validedpfi &&  vm.validation_avance_demarrage ==2">
                                           Valider
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.validerAvance_demarrage_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationAvance_demarrage_rejedpfi &&  vm.validation_avance_demarrage ==2">
+                                        <md-button type="submit" class="md-raised md-red-500-bg" aria-label="Nouveau" ng-click="vm.validerAvance_demarrage_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationAvance_demarrage_rejedpfi &&  vm.validation_avance_demarrage ==2">
                                           Rejeter
                                         </md-button><br>
                                     </div>
@@ -1096,8 +1147,872 @@
                           </md-tab>
                         <!---------------------------------FIN AVANCE DE DEMARRAGE------------------------------------------>
 
+                        <!------------------------------------DEBUT ATTACHEMENT--------------------------------------------> 
+                          <md-tab ng-click="vm.click_tabs_attachement_travaux()" ng-disabled="!vm.stepattachement_mpe">
+                            <md-tab-label >
+                              <span class="ms-form-wizard-step-label">
+                                  <span class="ms-form-wizard-step-text">ATTACHEMENT</span>
+                              </span>
+                             
+                            </md-tab-label>                            
+                            <md-tab-body>
+                          <!----------------------------------FILS DEBUT ATTACHEMENT--------------------------------------->  
+                            <ms-form-wizard  flex id="sousmenu">
+                              <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true"-->
+                              <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                                <!-----------------------------DEBUT demande batiment mpe------------------------------> 
+                              <md-tab>
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                   
+                                      
+                                      <span class="ms-form-wizard-step-text">Attachement entête</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.attachement_travaux_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="attachement_travaux in vm.allattachement_travaux"  ng-class="{selected: attachement_travaux.$selected}" ng-click="vm.selectionAttachement_travaux(attachement_travaux)">
+                                                   
+                                          <td>                                                      
+                                            <span>{{attachement_travaux.numero}}</span>
+                                          </td>
+                                                    
+                                          <td>                          
+                                            <span>{{vm.formatDate(attachement_travaux.date_debut)}}</span>
+                                          </td>
+                                                    
+                                          <td>                         
+                                            <span>{{vm.formatDate(attachement_travaux.date_fin)}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{attachement_travaux.total_prevu}}</span>
+                                          </td>
+
+                                        <td>
+                                          <span>{{attachement_travaux.total_cumul}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{attachement_travaux.total_anterieur}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{attachement_travaux.total_periode}}</span>
+                                        </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------------FIN demande batiment mpe--------------------------------------->
+                        <!-----------------------------DEBUT demande batiment mpe------------------------------> 
+                              <md-tab ng-disabled ="!vm.stepbatiment_mpe" ng-click="vm.click_tab_tranche_batiment()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                        
+                                      
+                                      <span class="ms-form-wizard-step-text">Tranche paiement Batiment</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.demande_batiment_mpe_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="demande_batiment_mpe in vm.alldemande_batiment_mpe"  ng-class="{selected: demande_batiment_mpe.$selected}" ng-click="vm.selectionDemande_batiment_mpe(demande_batiment_mpe)">                                                         
+
+                                        <td>
+                                          <span>{{demande_batiment_mpe.tranche.libelle}}</span>
+                                        </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{demande_batiment_mpe.montant}}</span>
+                                          </td>
+
+                                        <td>
+                                          <span>{{demande_batiment_mpe.cumul}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{demande_batiment_mpe.anterieur}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{demande_batiment_mpe.tranche.periode}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{demande_batiment_mpe.tranche.pourcentage}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{demande_batiment_mpe.reste}}</span>
+                                        </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------------FIN demande batiment mpe--------------------------------------->
+
+
+                        <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
+                              <md-tab ng-disabled ="!vm.steprubriquebatiment_mpe" ng-click="vm.click_rubrique_attachement_batiment_mpe()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                        
+                                      
+                                      <span class="ms-form-wizard-step-text">Rubrique attachement batiment</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>                                   
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.rubrique_attachement_batiment_mpe_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="rubrique_attachement_batiment_mpe in vm.allrubrique_attachement_batiment_mpe"  ng-class="{selected: rubrique_attachement_batiment_mpe.$selected}" ng-click="vm.selectionRubrique_attachement_batiment_mpe(rubrique_attachement_batiment_mpe)" style="text-align: center">
+
+                                        <td>
+                                          <span>{{rubrique_attachement_batiment_mpe.numero}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_batiment_mpe.libelle}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_batiment_mpe.montant_prevu}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_batiment_mpe.montant_periode}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_batiment_mpe.montant_anterieur}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_batiment_mpe.montant_cumul}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{vm.chiffrevirgule(rubrique_attachement_batiment_mpe.pourcentage)}}</span>
+                                        </td>
+                                      </tbody>
+
+                                      <tfoot >
+                                          <!--tr style="background-color: rgba(54,117,136,0.9); color:white;text-align: center"-->
+                                          <tr style=" font-weight:bold; text-align: center">
+                                            <td colspan="2">TOTAL GENERAL</td>
+                                            <td>{{vm.Total_prevu()}}</td>
+                                            <td>{{vm.Total_periode()}}</td>
+                                            <td>{{vm.Total_anterieur()}}</td>
+                                            <td>{{vm.Total_cumul()}}</td>
+                                            <td>{{vm.Total_pourcentage()}}</td>
+
+                                          </tr>
+                                      </tfoot> 
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------------FIN rubrique batiment mpe---------------------------------------> 
+
+                         <!-------------------------------Debut attachement travaux-------------------------------------------->                                      
+                              <md-tab ng-disabled="!vm.stepattachement_batiment_travaux" ng-click="vm.click_tab_attachement_batiment_travaux()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Detail Attachement batiment</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Libelle</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Unite</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Quantité prévu</span>
+                                            </div>
+                                          </th>
+
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Quantité période</span>
+                                          </th>
+
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Quantité anterieur</span>
+                                          </th>
+
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Quantité cumul</span>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Prix unitaire</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant prevu</span>
+                                            </div>
+                                          </th>
+
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant periode</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant anterieur</span>
+                                            </div>
+                                          </th>                                          
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant cumul</span>
+                                            </div>
+                                          </th>                                           
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Pourcentage</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="divers_attachement_batiment_travaux in vm.alldivers_attachement_batiment_travaux"  ng-class="{selected: divers_attachement_batiment_travaux.$selected}" ng-click="vm.selectionDivers_attachement_batiment_travaux(divers_attachement_batiment_travaux)" style="text-align: center">
+
+                                        <td>
+                                          <span>{{divers_attachement_batiment_travaux.attachement_batiment_prevu.numero}}{{divers_attachement_batiment_travaux.attachement_batiment_prevu.libelle}}</span>
+                                        </td> 
+                                          <td>                                                      
+                                            <span>{{divers_attachement_batiment_travaux.attachement_batiment_prevu.unite}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_batiment_travaux.attachement_batiment_prevu.quantite_prevu}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_batiment_travaux.quantite_periode}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_batiment_travaux.quantite_anterieur}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_batiment_travaux.quantite_cumul}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_batiment_travaux.attachement_batiment_prevu.prix_unitaire}}</span>
+                                          </td>            
+
+                                          
+                                          <td>                                                      
+                                            <span>{{divers_attachement_batiment_travaux.attachement_batiment_prevu.montant_prevu}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_batiment_travaux.montant_periode}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_batiment_travaux.montant_anterieur}}</span>
+                                          </td>
+                                          
+                                          <td>                                                      
+                                            <span>{{divers_attachement_batiment_travaux.montant_cumul}}</span>
+                                          </td>
+
+                                          <td>                                                      
+                                            <span>{{divers_attachement_batiment_travaux.pourcentage}}</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  </md-tab-body>
+                                </md-tab> 
+                        <!----------------------------------Debut attachement_travaux------------------------------->
+
+                         <!-----------------------------DEBUT demande latrine mpe------------------------------> 
+                              <md-tab ng-disabled ="!vm.steplatrine_mpe" ng-click="vm.click_tab_tranche_latrine()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                        
+                                      
+                                      <span class="ms-form-wizard-step-text">Tranche paiement latrine</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.demande_latrine_mpe_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="demande_latrine_mpe in vm.alldemande_latrine_mpe"  ng-class="{selected: demande_latrine_mpe.$selected}" ng-click="vm.selectionDemande_latrine_mpe(demande_latrine_mpe)">                                                         
+
+                                        <td>
+                                          <span>{{demande_latrine_mpe.tranche.libelle}}</span>
+                                        </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{demande_latrine_mpe.montant}}</span>
+                                          </td>
+
+                                        <td>
+                                          <span>{{demande_latrine_mpe.cumul}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{demande_latrine_mpe.anterieur}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{demande_latrine_mpe.tranche.periode}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{demande_latrine_mpe.tranche.pourcentage}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{demande_latrine_mpe.reste}}</span>
+                                        </td>                                                                       
+                                          
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------------FIN demande latrine mpe---------------------------------------> 
+
+
+                        <!-----------------------------DEBUT rubrique latrine mpe------------------------------> 
+                              <md-tab ng-disabled ="!vm.steprubriquelatrine_mpe" ng-click="vm.click_rubrique_attachement_latrine_mpe()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                        
+                                      
+                                      <span class="ms-form-wizard-step-text">Rubrique attachement latrine</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>                                   
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.rubrique_attachement_latrine_mpe_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="rubrique_attachement_latrine_mpe in vm.allrubrique_attachement_latrine_mpe"  ng-class="{selected: rubrique_attachement_latrine_mpe.$selected}" ng-click="vm.selectionRubrique_attachement_latrine_mpe(rubrique_attachement_latrine_mpe)" style="text-align: center">
+
+                                        <td>
+                                          <span>{{rubrique_attachement_latrine_mpe.numero}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_latrine_mpe.libelle}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_latrine_mpe.montant_prevu}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_latrine_mpe.montant_periode}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_latrine_mpe.montant_anterieur}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_latrine_mpe.montant_cumul}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{vm.chiffrevirgule(rubrique_attachement_latrine_mpe.pourcentage)}}</span>
+                                        </td>
+                                      </tbody>
+
+                                      <tfoot >
+                                          <!--tr style="background-color: rgba(54,117,136,0.9); color:white;text-align: center"-->
+                                          <tr style=" font-weight:bold; text-align: center">
+                                            <td colspan="2">TOTAL GENERAL</td>
+                                            <td>{{vm.Total_prevu_latrine_mpe()}}</td>
+                                            <td>{{vm.Total_periode_latrine_mpe()}}</td>
+                                            <td>{{vm.Total_anterieur_latrine_mpe()}}</td>
+                                            <td>{{vm.Total_cumul_latrine_mpe()}}</td>
+                                            <td>{{vm.Total_pourcentage_latrine_mpe()}}</td>
+
+                                          </tr>
+                                      </tfoot> 
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------------FIN rubrique latrine mpe--------------------------------------->
+
+                         <!-------------------------------Debut attachement travaux-------------------------------------------->                                      
+                              <md-tab ng-disabled="!vm.stepattachement_latrine_travaux" ng-click="vm.click_tab_attachement_latrine_travaux()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Detail Attachement latrine</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Libelle</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Unite</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Quantité prévu</span>
+                                            </div>
+                                          </th>
+
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Quantité période</span>
+                                          </th>
+
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Quantité anterieur</span>
+                                          </th>
+
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Quantité cumul</span>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Prix unitaire</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant prevu</span>
+                                            </div>
+                                          </th>
+
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant periode</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant anterieur</span>
+                                            </div>
+                                          </th>                                          
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant cumul</span>
+                                            </div>
+                                          </th>                                           
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Pourcentage</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="divers_attachement_latrine_travaux in vm.alldivers_attachement_latrine_travaux"  ng-class="{selected: divers_attachement_latrine_travaux.$selected}" ng-click="vm.selectionDivers_attachement_latrine_travaux(divers_attachement_latrine_travaux)" style="text-align: center">
+
+                                        <td>
+                                          <span>{{divers_attachement_latrine_travaux.attachement_latrine_prevu.numero}}{{divers_attachement_latrine_travaux.attachement_latrine_prevu.libelle}}</span>
+                                        </td> 
+                                          <td>                                                      
+                                            <span>{{divers_attachement_latrine_travaux.attachement_latrine_prevu.unite}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_latrine_travaux.attachement_latrine_prevu.quantite_prevu}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_latrine_travaux.quantite_periode}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_latrine_travaux.quantite_anterieur}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_latrine_travaux.quantite_cumul}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_latrine_travaux.attachement_latrine_prevu.prix_unitaire}}</span>
+                                          </td>            
+
+                                          
+                                          <td>                                                      
+                                            <span>{{divers_attachement_latrine_travaux.attachement_latrine_prevu.montant_prevu}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_latrine_travaux.montant_periode}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span>{{divers_attachement_latrine_travaux.montant_anterieur}}</span>
+                                          </td>
+                                          
+                                          <td>                                                      
+                                            <span>{{divers_attachement_latrine_travaux.montant_cumul}}</span>
+                                          </td>
+
+                                          <td>                                                      
+                                            <span>{{divers_attachement_latrine_travaux.pourcentage}}</span>
+                                          </td>                                          
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  </md-tab-body>
+                                </md-tab> 
+                        <!----------------------------------Debut attachement_travaux------------------------------->
+
+                         <!-----------------------------DEBUT demande mobilier mpe------------------------------> 
+                              <md-tab ng-disabled ="!vm.stepmobilier_mpe" ng-click="vm.click_tab_tranche_mobilier()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                        
+                                      
+                                      <span class="ms-form-wizard-step-text">Tranche paiement mobilier</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.demande_mobilier_mpe_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="demande_mobilier_mpe in vm.alldemande_mobilier_mpe"  ng-class="{selected: demande_mobilier_mpe.$selected}" ng-click="vm.selectionDemande_mobilier_mpe(demande_mobilier_mpe)">                                                         
+
+                                        <td>
+                                          <span>{{demande_mobilier_mpe.tranche.libelle}}</span>
+                                        </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{demande_mobilier_mpe.montant}}</span>
+                                          </td>
+
+                                        <td>
+                                          <span>{{demande_mobilier_mpe.cumul}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{demande_mobilier_mpe.anterieur}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{demande_mobilier_mpe.tranche.periode}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{demande_mobilier_mpe.tranche.pourcentage}}</span>
+                                        </td>
+
+                                        <td>
+                                          <span>{{demande_mobilier_mpe.reste}}</span>
+                                        </td>                                        
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------------FIN demande mobilier mpe---------------------------------------> 
+
+
+                        <!-----------------------------DEBUT rubrique latrine mpe------------------------------> 
+                              <md-tab ng-disabled ="!vm.steprubriquemobilier_mpe" ng-click="vm.click_rubrique_attachement_mobilier_mpe()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                        
+                                      
+                                      <span class="ms-form-wizard-step-text">Rubrique attachement mobilier</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>                                   
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.rubrique_attachement_mobilier_mpe_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="rubrique_attachement_mobilier_mpe in vm.allrubrique_attachement_mobilier_mpe"  ng-class="{selected: rubrique_attachement_mobilier_mpe.$selected}" ng-click="vm.selectionRubrique_attachement_mobilier_mpe(rubrique_attachement_mobilier_mpe)" style="text-align: center">
+
+                                        <td>
+                                          <span>{{rubrique_attachement_mobilier_mpe.numero}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_mobilier_mpe.libelle}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_mobilier_mpe.montant_prevu}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_mobilier_mpe.montant_periode}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_mobilier_mpe.montant_anterieur}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_mobilier_mpe.montant_cumul}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{vm.chiffrevirgule(rubrique_attachement_mobilier_mpe.pourcentage)}}</span>
+                                        </td>
+                                      </tbody>
+
+                                      <tfoot >
+                                          <!--tr style="background-color: rgba(54,117,136,0.9); color:white;text-align: center"-->
+                                          <tr style=" font-weight:bold; text-align: center">
+                                            <td colspan="2">TOTAL GENERAL</td>
+                                            <td>{{vm.Total_prevu_mobilier_mpe()}}</td>
+                                            <td>{{vm.Total_periode_mobilier_mpe()}}</td>
+                                            <td>{{vm.Total_anterieur_mobilier_mpe()}}</td>
+                                            <td>{{vm.Total_cumul_mobilier_mpe()}}</td>
+                                            <td>{{vm.Total_pourcentage_mobilier_mpe()}}</td>
+
+                                          </tr>
+                                      </tfoot> 
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------------FIN rubrique mobilier mpe--------------------------------------->
+
+                         <!-------------------------------Debut attachement travaux-------------------------------------------->                                      
+                              <md-tab ng-disabled="!vm.stepattachement_mobilier_travaux" ng-click="vm.click_tab_attachement_mobilier_travaux()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Detail Attachement mobilier</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Libelle</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Unite</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Quantité prévu</span>
+                                            </div>
+                                          </th>
+
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Quantité période</span>
+                                          </th>
+
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Quantité anterieur</span>
+                                          </th>
+
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Quantité cumul</span>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Prix unitaire</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant prevu</span>
+                                            </div>
+                                          </th>
+
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant periode</span>
+                                            </div>
+                                          </th>
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant anterieur</span>
+                                            </div>
+                                          </th>                                          
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Montant cumul</span>
+                                            </div>
+                                          </th>                                           
+                                          <th class="secondary-text">
+                                            <div class="table-header">
+                                              <span class="column-title">Pourcentage</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="divers_attachement_mobilier_travaux in vm.alldivers_attachement_mobilier_travaux"  ng-class="{selected: divers_attachement_mobilier_travaux.$selected}" ng-click="vm.selectionDivers_attachement_mobilier_travaux(divers_attachement_mobilier_travaux)" style="text-align: center">
+
+                                        <td>
+                                          <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.attachement_mobilier_prevu.numero}}{{divers_attachement_mobilier_travaux.attachement_mobilier_prevu.libelle}}</span>
+                                        </td> 
+                                          <td>                                                      
+                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.attachement_mobilier_prevu.unite}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.attachement_mobilier_prevu.quantite_prevu}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.quantite_periode}}</span>
+                                          </td>
+                                          <td>                                                     
+                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.quantite_anterieur}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.quantite_cumul}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.attachement_mobilier_prevu.prix_unitaire}}</span>
+                                          </td>            
+
+                                          
+                                          <td>                                                      
+                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.attachement_mobilier_prevu.montant_prevu}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.montant_periode}}</span>
+                                          </td>
+                                          <td>                                                      
+                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.montant_anterieur}}</span>
+                                          </td>
+                                          
+                                          <td>                                                      
+                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.montant_cumul}}</span>
+                                          </td>
+
+                                          <td>                                                      
+                                            <span ng-if="!divers_attachement_mobilier_travaux.$edit">{{divers_attachement_mobilier_travaux.pourcentage}}</span>
+                                          </td>                                          
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  </md-tab-body>
+                                </md-tab> 
+                        <!----------------------------------Debut attachement_travaux------------------------------->
+                                
+                              </md-tabs> 
+                            </ms-form-wizard>
+                          <!---------------------------------FILS FIN ATTACHEMENT-----------------------------------------> 
+
+                            </md-tab-body> 
+                          </md-tab>
+                        <!-------------------------------------FIN ATTACHEMENT-------------------------------------------->
+
+
                         <!------------------------------------DEBUT FACTURE--------------------------------------------> 
-                          <md-tab ng-click="vm.click_tab_facture_mpe()">
+                          <md-tab ng-click="vm.click_tab_facture_mpe()" ng-disabled="!vm.stepfacture_mpe">
                             <md-tab-label >
                               <span class="ms-form-wizard-step-label">
                                   <span class="ms-form-wizard-step-text">FACTURE</span>
@@ -1106,13 +2021,13 @@
                             </md-tab-label>                            
                             <md-tab-body>
                                     <div style="widht:100%;">
-                                        <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.validerFacture_mpe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationFacture_mpe_encourdpfi &&  vm.validation_facture_mpe ==1">
+                                        <md-button type="submit" class="md-raised md-warn  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerFacture_mpe_encourdpfi()" style="width:14%;" ng-show="vm.showbuttonValidationFacture_mpe_encourdpfi &&  vm.validation_facture_mpe ==1">
                                           Mettre en-cours
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-light-green-300-bg" aria-label="Nouveau" ng-click="vm.validerFacture_mpe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationFacture_mpe_validedpfi &&  vm.validation_facture_mpe ==2">
+                                        <md-button type="submit" class="md-raised  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerFacture_mpe_validedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationFacture_mpe_validedpfi &&  vm.validation_facture_mpe ==2">
                                           Valider
                                         </md-button>
-                                        <md-button type="submit" class="md-raised md-red-300-bg" aria-label="Nouveau" ng-click="vm.validerFacture_mpe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationFacture_mpe_rejedpfi &&  vm.validation_facture_mpe ==2">
+                                        <md-button type="submit" class="md-raised md-red-500-bg" aria-label="Nouveau" ng-click="vm.validerFacture_mpe_rejedpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationFacture_mpe_rejedpfi &&  vm.validation_facture_mpe ==2">
                                           Rejeter
                                         </md-button><br>
                                     </div>
@@ -1180,7 +2095,8 @@
                                                     
                                           <td>                          
                                             <span>{{vm.formatDate(facture_mpe.date_signature)}}</span>
-                                          </td>
+                                          </td>                                        
+                                        
                                         </tr>
                                       </tbody>
                                     </table>
@@ -1189,550 +2105,67 @@
                             </md-tab-body> 
                           </md-tab>
                         <!-------------------------------------FIN FACTURE-------------------------------------------->
+                        <!----------------------------------Debut justificatif facture mpe------------------------------->
+                              <md-tab ng-disabled="!vm.stepjusti_attachement_mpe">
+                                  <md-tab-label>
+                                    <span class="ms-form-wizard-step-label">
+                                        <span class="ms-form-wizard-step-text">Pièce jointe</span>
+                                    </span>
+                                  </md-tab-label>
+                                  
+                                   <md-tab-body><br>
+                                     <div>        
+                                      <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                        <thead>
+                                          <tr>
+                                            <th class="secondary-text">
+                                              <div class="table-header">
+                                                <span class="column-title">Description</span>
+                                              </div>
+                                            </th>
+                                            <th class="secondary-text">
+                                              <div class="table-header">
+                                                <span class="column-title">Fichier</span>
+                                              </div>
+                                            </th>
+                                            <th class="secondary-text">
+                                              <div class="table-header">
+                                                <span class="column-title">Action</span>
+                                              </div>
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                                 
+                                        <tbody>
+                                          <tr ng-repeat="justificatif_attachement_mpe in vm.alljustificatif_attachement_mpe"  ng-class="{selected: justificatif_attachement_mpe.$selected}" ng-click="vm.selectionJustificatif_attachement_mpe(justificatif_attachement_mpe)">
+                                                     
+                                            <td>
+                                              <span ng-if="justificatif_attachement_mpe.$edit">
+                                                <md-input-container style="width:100%;display: flex !important;">
+                                                  <label>Description</label>
+                                                  <input name="description" type="text" ng-model="justificatif_attachement_mpe.description"/>
+                                                </md-input-container>   
+                                              </span>
+                                                        
+                                              <span>{{justificatif_attachement_mpe.description}}</span>
+                                            </td>
+                                                      
+                                            <td>                                                        
+                                              <span>{{justificatif_attachement_mpe.fichier}}</span>
+                                            </td>                       
+                                            <td>
+                                              <a ng-click="vm.download_piece_attachement_mpe(justificatif_attachement_mpe)" title="Telecharger">
+                                                <span class="icon-box-download"></span>
+                                              </a>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
 
-                        <!------------------------------------DEBUT ATTACHEMENT--------------------------------------------> 
-                          <md-tab ng-click="vm.click_tabs_attachement_travaux()" ng-disabled="!vm.stepattachement_mpe">
-                            <md-tab-label >
-                              <span class="ms-form-wizard-step-label">
-                                  <span class="ms-form-wizard-step-text">ATTACHEMENT</span>
-                              </span>
-                             
-                            </md-tab-label>                            
-                            <md-tab-body>
-                          <!----------------------------------FILS DEBUT ATTACHEMENT--------------------------------------->  
-                            <ms-form-wizard  flex id="sousmenu">
-                              <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
-                                <!-----------------------------DEBUT demande batiment mpe------------------------------> 
-                              <md-tab>
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">                   
-                                      
-                                      <span class="ms-form-wizard-step-text">Attachement entête</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body><br>
-                                   <div>        
-                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                      <thead>
-                                        <tr>
-                                          <th class="secondary-text" ng-repeat="mem in ::vm.attachement_travaux_column">
-                                            <div class="table-header">
-                                              <span class="column-title">{{mem.titre}}</span>
-                                            </div>
-                                          </th>
-                                        </tr>
-                                      </thead>
-                                               
-                                      <tbody>
-                                        <tr ng-repeat="attachement_travaux in vm.allattachement_travaux"  ng-class="{selected: attachement_travaux.$selected}" ng-click="vm.selectionAttachement_travaux(attachement_travaux)">
-                                                   
-                                          <td>                                                      
-                                            <span>{{attachement_travaux.numero}}</span>
-                                          </td>
-                                                    
-                                          <td>                          
-                                            <span>{{vm.formatDate(attachement_travaux.date_debut)}}</span>
-                                          </td>
-                                                    
-                                          <td>                          
-                                            <span>{{vm.formatDate(attachement_travaux.date_fin)}}</span>
-                                          </td>
-                                                    
-                                          <td>                                                      
-                                            <span>{{attachement_travaux.total_prevu}}</span>
-                                          </td>
-
-                                        <td>
-                                          <span>{{attachement_travaux.total_cumul}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{attachement_travaux.total_anterieur}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{attachement_travaux.total_periode}}</span>
-                                        </td>                                                                      
-                                          
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-
-                                </md-tab-body>
-                              </md-tab>
-                        <!---------------------------------FIN demande batiment mpe--------------------------------------->
-                        <!-----------------------------DEBUT demande batiment mpe------------------------------> 
-                              <md-tab ng-disabled ="!vm.stepbatiment_mpe" ng-click="vm.click_tab_tranche_batiment()">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">                        
-                                      
-                                      <span class="ms-form-wizard-step-text">Total Batiment</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body><br>
-                                   <div>        
-                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                      <thead>
-                                        <tr>
-                                          <th class="secondary-text" ng-repeat="mem in ::vm.demande_batiment_mpe_column">
-                                            <div class="table-header">
-                                              <span class="column-title">{{mem.titre}}</span>
-                                            </div>
-                                          </th>
-                                        </tr>
-                                      </thead>
-                                               
-                                      <tbody>
-                                        <tr ng-repeat="demande_batiment_mpe in vm.alldemande_batiment_mpe"  ng-class="{selected: demande_batiment_mpe.$selected}" ng-click="vm.selectionDemande_batiment_mpe(demande_batiment_mpe)">                                                         
-
-                                        <td>
-                                          <span>{{demande_batiment_mpe.tranche.libelle}}</span>
-                                        </td>
-                                                    
-                                          <td>                                                      
-                                            <span>{{demande_batiment_mpe.montant}}</span>
-                                          </td>
-
-                                        <td>
-                                          <span>{{demande_batiment_mpe.cumul}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{demande_batiment_mpe.anterieur}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{demande_batiment_mpe.tranche.periode}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{demande_batiment_mpe.tranche.pourcentage}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{demande_batiment_mpe.reste}}</span>
-                                        </td>                                                                       
-                                          
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-
-                                </md-tab-body>
-                              </md-tab>
-                        <!---------------------------------FIN demande batiment mpe---------------------------------------> 
-
-                         <!-------------------------------Debut attachement travaux-------------------------------------------->                                      
-                              <md-tab ng-disabled="!vm.stepattachement_batiment_travaux" ng-click="vm.click_tab_attachement_batiment_travaux()">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">
-                                      <span class="ms-form-wizard-step-text">Attachement batiment</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body><br>
-                                   <div>        
-                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                      <thead>
-                                        <tr>
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Libelle</span>
-                                            </div>
-                                          </th>
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Montant prevu</span>
-                                            </div>
-                                          </th>
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Montant periode</span>
-                                            </div>
-                                          </th>
-
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Montant anterieur</span>
-                                            </div>
-                                          </th>                                           
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Montant cumul</span>
-                                            </div>
-                                          </th>                                           
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Pourcentage</span>
-                                            </div>
-                                          </th>                                         
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Action</span>
-                                            </div>
-                                          </th>
-                                        </tr>
-                                      </thead>
-                                               
-                                      <tbody>
-                                        <tr ng-repeat="divers_attachement_batiment_travaux in vm.alldivers_attachement_batiment_travaux"  ng-class="{selected: divers_attachement_batiment_travaux.$selected}" ng-click="vm.selectionDivers_attachement_batiment_travaux(divers_attachement_batiment_travaux)">
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.divers_attachement_batiment_prevu.libelle}}</span>
-                                          </td>                                          
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.montant_prevu}}</span>
-                                          </td>
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.montant_periode}}</span>
-                                          </td>
-
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.montant_anterieur}}</span>
-                                          </td>
-
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.montant_cumul}}</span>
-                                          </td>
-
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.pourcentage}}</span>
-                                          </td>
-
-                                          
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
                                   </md-tab-body>
-                                </md-tab> 
-                        <!----------------------------------Debut attachement_travaux------------------------------->
-
-                         <!-----------------------------DEBUT demande latrine mpe------------------------------> 
-                              <md-tab ng-disabled ="!vm.steplatrine_mpe" ng-click="vm.click_tab_tranche_latrine()">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">                        
-                                      
-                                      <span class="ms-form-wizard-step-text">Total latrine</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body><br>
-                                   <div>        
-                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                      <thead>
-                                        <tr>
-                                          <th class="secondary-text" ng-repeat="mem in ::vm.demande_latrine_mpe_column">
-                                            <div class="table-header">
-                                              <span class="column-title">{{mem.titre}}</span>
-                                            </div>
-                                          </th>
-                                        </tr>
-                                      </thead>
-                                               
-                                      <tbody>
-                                        <tr ng-repeat="demande_latrine_mpe in vm.alldemande_latrine_mpe"  ng-class="{selected: demande_latrine_mpe.$selected}" ng-click="vm.selectionDemande_latrine_mpe(demande_latrine_mpe)">                                                         
-
-                                        <td>
-                                          <span>{{demande_latrine_mpe.tranche.libelle}}</span>
-                                        </td>
-                                                    
-                                          <td>                                                      
-                                            <span>{{demande_latrine_mpe.montant}}</span>
-                                          </td>
-
-                                        <td>
-                                          <span>{{demande_latrine_mpe.cumul}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{demande_latrine_mpe.anterieur}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{demande_latrine_mpe.tranche.periode}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{demande_latrine_mpe.tranche.pourcentage}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{demande_latrine_mpe.reste}}</span>
-                                        </td>                                        
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-
-                                </md-tab-body>
                               </md-tab>
-                        <!---------------------------------FIN demande latrine mpe---------------------------------------> 
-
-                         <!-------------------------------Debut attachement travaux-------------------------------------------->                                      
-                              <md-tab ng-disabled="!vm.stepattachement_latrine_travaux" ng-click="vm.click_tab_attachement_latrine_travaux()">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">
-                                      <span class="ms-form-wizard-step-text">Attachement latrine</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body><br>
-                                   <div>        
-                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                      <thead>
-                                        <tr>
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Libelle</span>
-                                            </div>
-                                          </th>
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Montant prevu</span>
-                                            </div>
-                                          </th>
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Montant periode</span>
-                                            </div>
-                                          </th>
-
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Montant anterieur</span>
-                                            </div>
-                                          </th>                                           
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Montant cumul</span>
-                                            </div>
-                                          </th>                                           
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Pourcentage</span>
-                                            </div>
-                                          </th>                                         
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Action</span>
-                                            </div>
-                                          </th>
-                                        </tr>
-                                      </thead>
-                                               
-                                      <tbody>
-                                        <tr ng-repeat="divers_attachement_latrine_travaux in vm.alldivers_attachement_latrine_travaux"  ng-class="{selected: divers_attachement_latrine_travaux.$selected}" ng-click="vm.selectionDivers_attachement_latrine_travaux(divers_attachement_latrine_travaux)">
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.divers_attachement_latrine_prevu.libelle}}</span>
-                                          </td>                                          
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.montant_prevu}}</span>
-                                          </td>
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.montant_periode}}</span>
-                                          </td>
-
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.montant_anterieur}}</span>
-                                          </td>
-
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.montant_cumul}}</span>
-                                          </td>
-
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.pourcentage}}</span>
-                                          </td>
-
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                  </md-tab-body>
-                                </md-tab> 
-                        <!----------------------------------Debut attachement_travaux------------------------------->
-
-                         <!-----------------------------DEBUT demande mobilier mpe------------------------------> 
-                              <md-tab ng-disabled ="!vm.stepmobilier_mpe" ng-click="vm.click_tab_tranche_mobilier()">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">                        
-                                      
-                                      <span class="ms-form-wizard-step-text">Total mobilier</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body><br>
-                                   <div>        
-                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                      <thead>
-                                        <tr>
-                                          <th class="secondary-text" ng-repeat="mem in ::vm.demande_mobilier_mpe_column">
-                                            <div class="table-header">
-                                              <span class="column-title">{{mem.titre}}</span>
-                                            </div>
-                                          </th>
-                                        </tr>
-                                      </thead>
-                                               
-                                      <tbody>
-                                        <tr ng-repeat="demande_mobilier_mpe in vm.alldemande_mobilier_mpe"  ng-class="{selected: demande_mobilier_mpe.$selected}" ng-click="vm.selectionDemande_mobilier_mpe(demande_mobilier_mpe)">                                                         
-
-                                        <td>
-                                          <span>{{demande_mobilier_mpe.tranche.libelle}}</span>
-                                        </td>
-                                                    
-                                          <td>                                                      
-                                            <span>{{demande_mobilier_mpe.montant}}</span>
-                                          </td>
-
-                                        <td>
-                                          <span>{{demande_mobilier_mpe.cumul}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{demande_mobilier_mpe.anterieur}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{demande_mobilier_mpe.tranche.periode}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{demande_mobilier_mpe.tranche.pourcentage}}</span>
-                                        </td>
-
-                                        <td>
-                                          <span>{{demande_mobilier_mpe.reste}}</span>
-                                        </td>
-                                        
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-
-                                </md-tab-body>
-                              </md-tab>
-                        <!---------------------------------FIN demande mobilier mpe---------------------------------------> 
-
-                         <!-------------------------------Debut attachement travaux-------------------------------------------->                                      
-                              <md-tab ng-disabled="!vm.stepattachement_mobilier_travaux" ng-click="vm.click_tab_attachement_mobilier_travaux()">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">
-                                      <span class="ms-form-wizard-step-text">Attachement mobilier</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body><br>
-                                   <div>        
-                                    <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                      <thead>
-                                        <tr>
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Libelle</span>
-                                            </div>
-                                          </th>
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Montant prevu</span>
-                                            </div>
-                                          </th>
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Montant periode</span>
-                                            </div>
-                                          </th>
-
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Montant anterieur</span>
-                                            </div>
-                                          </th>                                           
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Montant cumul</span>
-                                            </div>
-                                          </th>                                           
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Pourcentage</span>
-                                            </div>
-                                          </th>                                         
-                                          <th class="secondary-text">
-                                            <div class="table-header">
-                                              <span class="column-title">Action</span>
-                                            </div>
-                                          </th>
-                                        </tr>
-                                      </thead>
-                                               
-                                      <tbody>
-                                        <tr ng-repeat="divers_attachement_mobilier_travaux in vm.alldivers_attachement_mobilier_travaux"  ng-class="{selected: divers_attachement_mobilier_travaux.$selected}" ng-click="vm.selectionDivers_attachement_mobilier_travaux(divers_attachement_mobilier_travaux)">
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.divers_attachement_mobilier_prevu.libelle}}</span>
-                                          </td>                                          
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.montant_prevu}}</span>
-                                          </td>
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.montant_periode}}</span>
-                                          </td>
-
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.montant_anterieur}}</span>
-                                          </td>
-
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.montant_cumul}}</span>
-                                          </td>
-
-
-                                          <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.pourcentage}}</span>
-                                          </td>
-
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                  </md-tab-body>
-                                </md-tab> 
-                        <!----------------------------------Debut attachement_travaux------------------------------->
-                                
-                              </md-tabs> 
-                            </ms-form-wizard>
-                          <!---------------------------------FILS FIN ATTACHEMENT-----------------------------------------> 
-
-                            </md-tab-body> 
-                          </md-tab>
-                        <!-------------------------------------FIN ATTACHEMENT-------------------------------------------->
+                        <!---------------------------------FIN justificatif facture mpe-------------------------------->
 
                           
                         </md-tabs> 

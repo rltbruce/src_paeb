@@ -42,16 +42,20 @@
           autoWidth: false          
         }; 
         
-        apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemande_deblocage_daaf_invalide","validation",1).then(function(result)
+       /* apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemande_deblocage_daaf_invalide","validation",1).then(function(result)
         {
             vm.alldemande_deblocage_daaf_valide_daaf = result.data.response;
             
-        });
+        });*/
 
         vm.showformfiltre = function()
         {
-          vm.showbuttonfiltre=false;
-          vm.showfiltre=true;
+          vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
         }
 
         vm.recherchefiltre = function(filtre)
@@ -59,18 +63,12 @@
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
 
-              apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','getconventionByfiltre',
+              apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','getetatconventionwithpourcenfinancByfiltre',
               'date_debut',date_debut,'date_fin',date_fin).then(function(result)
               {
                   vm.allconvention_ufp_daaf_entete = result.data.response; 
                   console.log(vm.allconvention_ufp_daaf_entete);
               });
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showbuttonfiltre=true;
-            vm.showfiltre=false;
         }
 
          /*****************Debut StepOne convention_ufp_daaf_entete***************/
@@ -84,7 +82,8 @@
         {titre:"Frais bancaire"},        
         {titre:"Montant convention"},        
         {titre:"Numero vague"},        
-        {titre:"Nombre bénéficiaire"}
+        {titre:"Nombre bénéficiaire"},        
+        {titre:"Avancement financière"}
         ];
         
         
@@ -126,6 +125,16 @@
           }
           return affiche;
         }
+
+        vm.affichage_avancement_financ = function(avance)
+        {
+          var avance_p=0;
+          if (avance)
+          {
+            avance_p = parseFloat(avance).toFixed(2);
+          }
+          return avance_p +"%";
+        }
   /*****************Fin StepOne convention_ufp_daaf_entete****************/
 
   /*****************Debut StepTwo demande_deblocage_daaf_validation_ufp****************/
@@ -149,7 +158,7 @@
         {
             vm.selectedItemDemande_deblocage_daaf_validation_ufp = item;
            //recuperation donnée demande_deblocage_daaf_validation_ufp
-            apiFactory.getAPIgeneraliserREST("justificatif_daaf/index",'id_demande_deblocage_daaf',item.id).then(function(result)
+            apiFactory.getAPIgeneraliserREST("justificatif_daaf/index",'id_demande_deblocage_daaf',item.id,'id_tranche',item.tranche.id).then(function(result)
             {
                 vm.alljustificatif_daaf = result.data.response;
                 console.log(vm.alljustificatif_daaf);

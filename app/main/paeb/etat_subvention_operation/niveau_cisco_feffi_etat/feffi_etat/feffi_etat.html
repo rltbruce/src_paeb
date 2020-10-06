@@ -1,4 +1,4 @@
-  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+  <div id="formsetatfefficf" class="page-layout simple fullwidth doc-page" layout="column">
 
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="space-between">
@@ -6,10 +6,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Gerer situation feffi</span>
+                <span class="parent">Etat technique des activités</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Feffi</span>
+                <span class="parent" href="javascript:;"> Niveau CISCO/FEFFI</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Renseignement FEFFI</span>
             </div>
 
             <!--div class="title">Feffi</div-->
@@ -42,13 +45,9 @@
               </md-tab-label>
               
               <md-tab-body>
-                <div style="widht:100%;">
-                    <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.showformfiltre()" ng-show="vm.showbuttonfiltre">
-                          Filtre
-                    </md-button>
-                </div>
-                 <div>
-            <div ng-show="vm.showfiltre">
+                
+            <div style="margin-top: 1px;">
+                <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
               <form name="filtreform" class="md-inline-form" novalidate >
                                 <br>
                   <div layout="column" layout-gt-xs="row" >
@@ -98,32 +97,33 @@
                         <div ng-message="required"><span>Zap</span></div>
                       </div>
                     </md-input-container>
-                                  
-                    <!--md-input-container flex="100" flex-gt-xs="90">
-                      <label>Ecole</label>
-                      <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_zap">
-                        <md-option  value="*">*</md-option>
-                        <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
-                        </md-option>
-                      </md-select>
-                      <div ng-messages="filtreform.ecole.$error" role="alert">
-                        <div ng-message="required"><span>Ecole</span></div>
-                      </div>
-                    </md-input-container-->
-                  </div>
+                    </div>  
+                    <div class="footer-animate-show-hide">
+                        <md-button class="md-raised boutonfixe" disabled>
+                        </md-button>
+                        <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                            Réinitialise
+                        </md-button>
+                           <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
+                        </md-button>
+                    </div>
+                 </form>
+             </div>
+                                   
+              <div class="bouton-animate-show-hide">
 
-                  <div>
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
-                      Recherche
-                  </md-button>
-                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
-                      Annuler
-                  </md-button>
-                  </div>
-            </form>
-             <md-divider></md-divider><br>
-              
+                 <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+                  <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+                </md-icon>                           
+                  <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+                 </md-icon>
+                 <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+                 </md-icon>
+                 <md-tooltip><span>Bouton filtre</span></md-tooltip>
+                 </md-button> 
             </div>
+           </div>
                <div>        
                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                   <thead>

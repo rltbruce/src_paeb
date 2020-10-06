@@ -81,10 +81,16 @@
 
         });*/
 
+        
+
         vm.showformfiltre = function()
         {
-          vm.showbuttonfiltre=false;
-          vm.showfiltre=true;
+          //vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
         }
 /*****************Debut StepOne convention_ufp_daaf_entete****************/
 
@@ -97,12 +103,13 @@
         {titre:"Montant à transferer"},
         {titre:"Frais bancaire"},        
         {titre:"Nombre bénéficiaire"},        
-        {titre:"Montant convention"},
+        {titre:"Montant convention"},        
+        {titre:"Date création"},
         {titre:"Action"}];
         
         var annee = vm.date_now.getFullYear();
   //recuperation donnée programmation
-        apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_invalide_now","annee",annee).then(function(result)
+        apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_creerinvalide_now","annee",annee).then(function(result)
         {
             vm.allconvention_ufp_daaf_entete = result.data.response;
         });
@@ -113,18 +120,13 @@
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
 
-            apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_invalideByfiltre",'date_debut',
+            apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_creerinvalideByfiltre",'date_debut',
                                     date_debut,'date_fin',date_fin).then(function(result)
             {
                 vm.allconvention_ufp_daaf_entete = result.data.response;
+                console.log(vm.allconvention_ufp_daaf_entete);
                 vm.affiche_load = false;
             });
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showbuttonfiltre=true;
-            vm.showfiltre=false;
         }
 
    //recuperation donnée programmation
@@ -167,7 +169,8 @@
                       montant_trans_comm: 0,
                       frais_bancaire: 0,
                       num_vague: '',
-                      nbr_beneficiaire: 0
+                      nbr_beneficiaire: 0,
+                      date_creation: vm.date_now
                     };         
                     vm.allconvention_ufp_daaf_entete.push(items);
                     //$setTimeout(function() {console.log('ok')}, 5000);
@@ -218,6 +221,7 @@
             item.frais_bancaire = currentItemConvention_ufp_daaf_entete.frais_bancaire ; 
             item.num_vague = currentItemConvention_ufp_daaf_entete.num_vague ;
             item.nbr_beneficiaire = currentItemConvention_ufp_daaf_entete.nbr_beneficiaire ;
+            item.date_creation = currentItemConvention_ufp_daaf_entete.date_creation ;
           }
           else
           {
@@ -294,6 +298,7 @@
             item.frais_bancaire = parseInt(vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire) ;
             item.num_vague = parseInt(vm.selectedItemConvention_ufp_daaf_entete.num_vague) ;
             item.nbr_beneficiaire = parseInt(vm.selectedItemConvention_ufp_daaf_entete.nbr_beneficiaire) ;
+            item.date_creation = vm.selectedItemConvention_ufp_daaf_entete.date_creation ;
         };
 
         //fonction bouton suppression item convention_ufp_daaf_entete
@@ -746,14 +751,14 @@
 
         //col table
         vm.convention_cisco_feffi_entete_column = [
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
-        {titre:"Feffi"
+        {titre:"FEFFI"
         },
         {titre:"Site"
         },
-       // {titre:"Type convention"
-       // },
+       {titre:"Accés"
+       },
         {titre:"Reference convention"
         },
         {titre:"Objet"
@@ -762,8 +767,8 @@
         },
         {titre:"Cout éstimé"
         },
-        {titre:"Avancement"
-        },
+       /* {titre:"Avancement"
+        },*/
         {titre:"Utilisateur"
         },
         {titre:"Action"
@@ -814,7 +819,7 @@
           NouvelItemConvention_cisco_feffi_entete = true;
           var confirm = $mdDialog.confirm({
           controller: ConventionDialogController,
-          templateUrl: 'app/main/paeb/gerer_convention_ufp_daaf/convention_ufp_daaf/conventiondialog.html',
+          templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_ufp_daaf/convention_ufp_daaf/conventiondialog.html',
           parent: angular.element(document.body),
           targetEvent: ev, 
           
@@ -878,7 +883,7 @@
                     ref_financement:  convention_cisco_feffi_entete.ref_financement,
                     ref_convention:   convention_cisco_feffi_entete.ref_convention,
                     montant_total:    convention_cisco_feffi_entete.montant_total,
-                    avancement:    convention_cisco_feffi_entete.avancement,
+                    //avancement:    convention_cisco_feffi_entete.avancement,
                     id_user:    convention_cisco_feffi_entete.user.id,
                     id_convention_ufpdaaf : vm.selectedItemConvention_ufp_daaf_entete.id,
                     validation: 2               
@@ -897,7 +902,7 @@
                     ref_financement:  convention_cisco_feffi_entete.ref_financement,
                     ref_convention:   convention_cisco_feffi_entete.ref_convention,
                     montant_total:    convention_cisco_feffi_entete.montant_total,
-                    avancement:    convention_cisco_feffi_entete.avancement,
+                    //avancement:    convention_cisco_feffi_entete.avancement,
                     id_user:    convention_cisco_feffi_entete.user.id,
                     validation: 1              
                 });
@@ -1050,24 +1055,24 @@
         var convention_a_anvoyer= [];
 
         dg.conventiondialog_column = [
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
-        {titre:"Feffi"
+        {titre:"FEFFI"
         },
-        {titre:"Site"
+        {titre:"Code sous projet site"
         },
-        {titre:"Type convention"
+        {titre:"Accés site"
         },
-        {titre:"Reference convention"
+        {titre:"Référence convention"
         },
         {titre:"Objet"
         },
-        {titre:"Reference Financement"
+        {titre:"Référence Financement"
         },
         {titre:"Cout éstimé"
         },
-        {titre:"Avancement"
-        },
+        /*{titre:"Avancement"
+        },*/
         {titre:"Utilisateur"
         },
         {titre:"Attachée"

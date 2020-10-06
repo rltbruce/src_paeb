@@ -30,7 +30,7 @@
       apiFactory.getAPIgeneraliserREST("utilisateurs/index","type_get","findAll").then(function(result) {
 
         vm.listes_utilisateurs = result.data.response;
-
+console.log(vm.listes_utilisateurs);
       });
 
       apiFactory.getAll("region/index").then(function(result)
@@ -121,7 +121,7 @@
       vm.selection = function (item) 
       {        
         vm.selectedItem = item;
-  
+  console.log(item);
         vm.nouvelItem = item;
         //currentItem = JSON.parse(JSON.stringify(vm.selectedItem));
         vm.afficherboutonModifSupr = 1 ;
@@ -243,15 +243,15 @@
          // vm.user.id_cisco = vm.selectedItem.cisco.id ;
           /*vm.user.sigle = vm.selectedItem.sigle ;
 		  vm.user.envoi_donnees = parseInt(vm.selectedItem.envoi_donnees) ;*/
-      if (vm.selectedItem.region.id)
+      if (vm.selectedItem.region)
       {
         vm.user.id_region = parseInt(vm.selectedItem.region.id);
       }else vm.user.id_region = null;
 
-      if (vm.selectedItem.district.id)
+      if (vm.selectedItem.district)
       {
         vm.user.id_district = parseInt(vm.selectedItem.district.id);
-        if (vm.selectedItem.region.id) {}
+        //if (vm.selectedItem.region.id) {}
         vm.districts = vm.alldistrict.filter(function(obj)
         {
             return obj.region.id == vm.selectedItem.region.id;
@@ -270,7 +270,7 @@
         }
        }else vm.user.id_cisco = null; 
           
-         console.log(vm.selectedItem.district.id);
+         console.log(vm.selectedItem.district);
 console.log(vm.ciscos);
           vm.searchText="";
           vm.searchTextPers="";
@@ -447,10 +447,22 @@ console.log(vm.ciscos);
                   
               });
 
-
+console.log(datas);
               apiFactory.add("utilisateurs/index",datas, config)
               .success(function (data) 
               {
+                  var cis = vm.ciscos.filter(function(obj)
+                  {
+                      return obj.id == vm.user.id_cisco;
+                  });
+                  var dis = vm.districts.filter(function(obj)
+                  {
+                      return obj.id == vm.user.id_district;
+                  });
+                  var reg = vm.allregion.filter(function(obj)
+                  {
+                      return obj.id == vm.user.id_region;
+                  });
                   //*******************************confirmation mail
                  /* if (user.enabled == 1) 
                   {
@@ -462,6 +474,9 @@ console.log(vm.ciscos);
                       });
                   };*/
                   //*******************************
+                  vm.selectedItem.cisco = cis[0] ;
+                  vm.selectedItem.district = dis[0] ;
+                  vm.selectedItem.region = reg[0] ;
                   vm.selectedItem.roles = tab ;
                   vm.selectedItem.nom = user.nom;
                   vm.selectedItem.email = user.email;
@@ -536,7 +551,131 @@ console.log(vm.ciscos);
           vm.user = {} ;
           vm.affichageMasque = 0 ;
       }
-
-     
+      vm.change_acc = function(item)
+      {
+        if (item.acc==true) 
+        {
+          item.obcaf = false;
+          item.bcaf = false;
+          item.odaaf = false;
+          item.daaf = false;
+          item.odpfi = false;
+          item.dpfi = false;
+          item.ufp = false;
+          item.admin = false;
+        }
+      }
+      vm.change_obcaf = function(item)
+      {
+        if (item.obcaf==true) 
+        {
+          item.acc = false;
+          item.bcaf = false;
+          item.odaaf = false;
+          item.daaf = false;
+          item.odpfi = false;
+          item.dpfi = false;
+          item.ufp = false;
+          item.admin = false;
+        }
+      }
+      vm.change_bcaf = function(item)
+      {
+        if (item.bcaf==true) 
+        {
+          item.obcaf = false;
+          item.acc = false;
+          item.odaaf = false;
+          item.daaf = false;
+          item.odpfi = false;
+          item.dpfi = false;
+          item.ufp = false;
+          item.admin = false;
+        }
+      }
+      vm.change_odaaf = function(item)
+      {
+        if (item.odaaf==true) 
+        {
+          item.obcaf = false;
+          item.bcaf = false;
+          item.acc = false;
+          item.daaf = false;
+          item.odpfi = false;
+          item.dpfi = false;
+          item.ufp = false;
+          item.admin = false;
+        }
+      }
+      vm.change_daaf = function(item)
+      {
+        if (item.daaf==true) 
+        {
+          item.obcaf = false;
+          item.bcaf = false;
+          item.odaaf = false;
+          item.acc = false;
+          item.odpfi = false;
+          item.dpfi = false;
+          item.ufp = false;
+          item.admin = false;
+        }
+      }
+      vm.change_odpfi = function(item)
+      {
+        if (item.odpfi==true) 
+        {
+          item.obcaf = false;
+          item.bcaf = false;
+          item.odaaf = false;
+          item.daaf = false;
+          item.acc = false;
+          item.dpfi = false;
+          item.ufp = false;
+          item.admin = false;
+        }
+      }
+      vm.change_dpfi = function(item)
+      {
+        if (item.dpfi==true) 
+        {
+          item.obcaf = false;
+          item.bcaf = false;
+          item.odaaf = false;
+          item.daaf = false;
+          item.odpfi = false;
+          item.acc = false;
+          item.ufp = false;
+          item.admin = false;
+        }
+      }
+      vm.change_ufp = function(item)
+      {
+        if (item.ufp==true) 
+        {
+          item.obcaf = false;
+          item.bcaf = false;
+          item.odaaf = false;
+          item.daaf = false;
+          item.odpfi = false;
+          item.dpfi = false;
+          item.acc = false;
+          item.admin = false;
+        }
+      }
+      vm.change_admin = function(item)
+      {
+        if (item.admin==true) 
+        {
+          item.obcaf = false;
+          item.bcaf = false;
+          item.odaaf = false;
+          item.daaf = false;
+          item.odpfi = false;
+          item.dpfi = false;
+          item.ufp = false;
+          item.acc = false;
+        }
+      }    
     }
 })();

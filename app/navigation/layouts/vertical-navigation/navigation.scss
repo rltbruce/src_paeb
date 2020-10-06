@@ -1,7 +1,7 @@
 #vertical-navigation {
     //width: 300px;
     min-width: $navigationWidth;
-    width: 320px !important;
+    width: 360px !important;
     overflow-x: hidden;
     transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2), width 0.1s linear, min-width 0.1s linear, max-width 0.1s linear;
     box-shadow: $whiteframe-shadow-6dp;

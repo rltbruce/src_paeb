@@ -10,6 +10,7 @@
             'app.paeb.gerer_subvention_operation.niveau_ufp_daaf.convention_ufp_daaf_validation',            
             'app.paeb.gerer_subvention_operation.niveau_ufp_daaf.compte_daaf'
             ])
+        .run(testPermission)
         .config(config);
         var vs ;
 

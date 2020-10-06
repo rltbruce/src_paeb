@@ -29,7 +29,7 @@
         vm.colspan_maitrise_oeuvre = 31;
         vm.current_colspan_maitrise_oeuvre =vm.colspan_maitrise_oeuvre;
 
-        vm.colspan_entreprise = 60;
+        vm.colspan_entreprise = 62;
         vm.current_colspan_entreprise =vm.colspan_entreprise;
 
         vm.cacher.convention_feffi = true;
@@ -64,10 +64,15 @@
           vm.regions = response.data.response;
         }, function error(response){ alert('something went wrong')});
 
-        vm.afficherfiltre = function()
+        
+        vm.showformfiltre = function()
         {
-            vm.formfiltre = true;
-            vm.showboutonfiltre = false;
+          //vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
         }
 
         vm.filtre_change_region = function(item)
@@ -523,11 +528,11 @@
 
             if (checkbox.suivi_paiement_mpe == false)
             {
-                vm.current_colspan_entreprise = vm.current_colspan_entreprise - 24;
+                vm.current_colspan_entreprise = vm.current_colspan_entreprise - 26;
             }
             else
             {
-                vm.current_colspan_entreprise = vm.current_colspan_entreprise + 24;
+                vm.current_colspan_entreprise = vm.current_colspan_entreprise + 26;
             }
         }
 
@@ -646,12 +651,6 @@
 
                 console.log(vm.current_colspan_maitrise_oeuvre);
             });
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showboutonfiltre = true;
-            vm.formfiltre = false;
         }
         function convertionDate(daty)
         {   

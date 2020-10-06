@@ -31,7 +31,7 @@
             title: 'Acces zone',
             icon  : 'icon-fullscreen-exit',
             state: 'app.paeb_ddb_acces_zone',
-            weight: 6
+            weight: 7
         });
     }
 

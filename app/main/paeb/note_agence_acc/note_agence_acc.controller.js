@@ -50,6 +50,17 @@
           console.log(vm.allecole);
         });
 
+
+        vm.showformfiltre = function()
+        {
+          //vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
+
          
         vm.recherchefiltre = function(filtre)
         {console.log(filtre);
@@ -58,23 +69,6 @@
             vm.allnote_agence_acc= result.data.response;
             console.log(vm.allnote_agence_acc);
           });
-        }
-
-        vm.afficherfiltre = function()
-        {
-
-        vm.showfiltre = true;
-        vm.showboutonfiltre = false;
-
-        }
-        vm.annulerfiltre = function()
-        {
-
-        vm.showfiltre = false;
-        vm.filtre.id_agence_acc =null;
-        vm.filtre.annee = null;
-        vm.showboutonfiltre = true;
-
         }
         //Masque de saisi ajout
         vm.ajouter = function ()

@@ -1,4 +1,4 @@
-  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+  <div id="formsvalidationsite" class="page-layout simple fullwidth doc-page" layout="column">
 
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="space-between">
@@ -6,16 +6,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Gerer subvention operation</span>
+                <span class="parent">Gestion technique des activitées</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
                 <span class="parent" href="javascript:;"> Niveau UFP/DAAF</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Niveau DAAF</span>
-                
-                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Site</span>
+                <span class="parent" href="javascript:;"> Validation site</span>
             </div>
 
             <!--div class="title">Site</div-->
@@ -38,21 +35,16 @@
               <div>
 
                 <md-button class="md-icon-button" aria-label="add site" ng-click="vm.ajouter()">
-                  <md-icon md-font-icon="icon-plus"></md-icon>
-                  <md-tooltip><span>Ajout site</span></md-tooltip>
+                  <!--md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout site</span></md-tooltip-->
                 </md-button>
               </div>                      
           </div>
         </header>
         <div>
 
-            <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.showformfiltre()" ng-show="vm.showbuttonfiltre">
-                  Filtre
-            </md-button>
-            <md-button type="submit" class="md-raised md-warn" aria-label="Annuler" ng-click="vm.validation()" ng-show="vm.showbuttonvalidation && vm.validation_item==0">
-                  Validation
-            </md-button>
-            <div ng-show="vm.showfiltre">
+          <div style="margin-top: 1px;">
+              <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
               <form name="filtreform" class="md-inline-form" novalidate >
                                 <br>
                   <div layout="column" layout-gt-xs="row" >
@@ -108,7 +100,7 @@
                       <label>Zap</label>
                       <md-select ng-model="vm.filtre.id_zap" name="zap" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_zap(vm.filtre)">
                         <md-option  value="*">*</md-option>
-                        <md-option ng-repeat="zaps in vm.zaps" value="{{zaps.zap.id}}"> {{zaps.zap.nom}}
+                        <md-option ng-repeat="zaps in vm.zaps" value="{{zaps.id}}"> {{zaps.nom}}
                         </md-option>
                       </md-select>  
                       <div ng-messages="filtreform.zap.$error" role="alert">
@@ -128,23 +120,38 @@
                       </div>
                     </md-input-container>
                   </div>
-
-                  <div>
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
-                      Recherche
-                  </md-button>
-                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
-                      Annuler
-                  </md-button>
+                  
+                  <div class="footer-animate-show-hide">
+                      <md-button class="md-raised boutonfixe" disabled>
+                      </md-button>
+                      <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                            Réinitialise
+                      </md-button>
+                        <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
+                      </md-button>
                   </div>
             </form>
-             <md-divider></md-divider><br>
-              
-            </div>
-            
-        
-                
-          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+            </div>            
+            <div class="bouton-animate-show-hide">
+
+            <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+               <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+              </md-icon>                           
+               <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+              </md-icon>
+              <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+              </md-icon>
+              <md-tooltip><span>Bouton filtre</span></md-tooltip>
+              </md-button> 
+          </div>
+          </div>
+          <div style="widht:100%;">
+            <md-button type="submit" class="md-raised md-warn md-pink-900-bg" aria-label="Annuler" ng-click="vm.validation()" ng-show="vm.showbuttonvalidation && vm.validation_item==0">
+                  Valider
+            </md-button>
+          </div>      
+          <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
             <thead>
               <tr>
                 <th class="secondary-text" ng-repeat="cisc in ::vm.site_column">
@@ -201,8 +208,8 @@
                     <md-input-container style="width:100%;display: flex !important;">
                       <label>ZAP</label>
                       <md-select ng-model="site.id_zap"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="!site.id_commune" ng-change="vm.change_zap(site)">
-                        <md-option ng-repeat="zaps in vm.zaps" value="{{zaps.zap.id}}">
-                                                            {{zaps.zap.nom}}
+                        <md-option ng-repeat="zaps in vm.zaps" value="{{zaps.id}}">
+                                                            {{zaps.nom}}
                         </md-option>
                       </md-select>
                     </md-input-container>  
@@ -223,6 +230,15 @@
                   </span>
                   <span ng-if="!site.$edit">{{site.ecole.description}}</span>
                 </td>           
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Accés</label>
+                      <input name="acces" type="text" ng-model="site.acces" disabled/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!site.$edit">{{site.acces}}</span>
+                </td>            
                 <td>
                   <span ng-if="site.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
@@ -347,14 +363,14 @@
                   </a>
                             
                   <a ng-if="!site.$edit && site.validation==0" ng-click="vm.supprimer(site)" title="Supprimer">
-                    <span class="icon-delete"></span>
+                    <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                   </a>
                   <span ng-if="!site.$edit && site.validation!=0">Aucune action disponible</span>          
                   <a ng-if="site.$edit" ng-click="vm.annuler(site)" title="Annuler modification">
                     <span class="icon-cancel"></span>
                   </a>
                             
-                  <a ng-if="site.$edit && site.code_sous_projet && site.objet_sous_projet && site.id_agence_acc && site.lot>''" ng-click="vm.ajout(site,0)" title="Sauvegarder">
+                  <a ng-if="site.$edit && site.code_sous_projet && site.objet_sous_projet && site.id_region && site.id_cisco && site.id_commune && site.id_zap && site.id_ecole && site.code_sous_projet && site.objet_sous_projet  && site.id_classification_site && site.id_agence_acc && site.lot>''" ng-click="vm.ajout(site,0)" title="Sauvegarder">
                     <span class="icon-content-save"></span>
                   </a>
                 </td>

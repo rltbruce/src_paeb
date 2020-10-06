@@ -17,7 +17,7 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation', {
             title : 'Gestion technique des activités',
             icon  : 'icon-data',
-            weight: 1
+            weight: 3
         });
 
 

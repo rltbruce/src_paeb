@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_ufp_daaf.compte_daaf', {
-            title: 'Compte paeb',
+            title: 'Compte Bancaire DAAF',
             icon  : 'icon-bank',
             state: 'app.paeb_gerer_subvention_operation_niveau_ufp_daaf_compte_daaf',
 			weight: 5

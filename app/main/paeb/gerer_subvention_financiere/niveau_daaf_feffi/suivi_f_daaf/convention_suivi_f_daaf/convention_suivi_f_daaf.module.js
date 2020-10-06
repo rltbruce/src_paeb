@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_daaf.convention_suivi_f_daaf', {
-            title: 'Suivi convention (DAAF)',
+            title: 'Validation et transfert (DAAF)',
             icon  : 'icon-rotate-3d',
             state: 'app.paeb_gerer_subvention_financiere_niveau_daaf_feffi_suivi_f_daaf_convention_suivi_f_daaf',
             weight: 1,

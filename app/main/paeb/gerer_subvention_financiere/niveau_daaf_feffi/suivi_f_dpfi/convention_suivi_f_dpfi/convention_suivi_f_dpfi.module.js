@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_dpfi.convention_suivi_f_dpfi', {
-            title: 'Suivi convention (DPFI)',
+            title: 'Validation technique activitée (DPFI)',
             icon  : 'icon-rotate-3d',
             state: 'app.paeb_gerer_subvention_financiere_niveau_daaf_feffi_suivi_f_dpfi_convention_suivi_f_dpfi',
             weight: 1,

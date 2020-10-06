@@ -1,15 +1,54 @@
-#formsbcaff {
+#formsbcaffvactivif_fp{
 
 
 
     .content 
-    {
-    
+    {   
+        .animate-show-hide
+        {
+            md-icon
+            {
+                color: rgb(22,152,214);
+            }
+            margin:0px 6px 0px 6px;
+            //border-top: 2px solid rgba(50,64,99,0.9);
+            .footer-animate-show-hide
+            {
+                background-color:  rgb(250,250,250); 
+                border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+            }
+
+            .boutonfixe
+            {
+                background-color: transparent !important;
+                border: none !important;
+                box-shadow:none !important;
+            }
+        }
+
+        .bouton-animate-show-hide
+        {
+            padding: 0 !important;
+            margin: 0px 0px 0px 6px !important;
+            .bouton-show-hide
+            {
+                margin: 0 0 10px 0 !important; 
+                border-radius: 0px 0px 6px 6px !important; 
+                opacity: 0.9; 
+                min-height: 5px !important;
+                height: 20px !important;
+                font-size: 9px;
+                line-height: 20px !important;
+                background-color: rgba(21,28,43,0.8);
+                min-width:5px !important;
+            }
+        }                
     .acc_menu
         {
             md-tabs-wrapper
             {
-                height:60px !important;
+                height:55px !important;
                 background-color: transparent !important;
 
                 margin: auto !important;
@@ -22,14 +61,14 @@
 
             md-tabs-canvas
             {
-                height:60px !important; 
+                height:55px !important; 
                 margin: auto !important;
                 //border: 1px solid green;
             }
             
             md-pagination-wrapper
             {
-               height:60px !important;
+               height:55px !important;
             }
             .ms-form-wizard md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item
             {    
@@ -60,7 +99,7 @@
                 color: rgb(59,88,130) !important;
                 font-weight:none !important;
           
-                padding:18px 24px 18px 24px !important;
+                padding:16px 24px 16px 24px !important;
                 font-size: 13px;
                 margin: auto !important;
                font-family: Franklin Gothic Medium !important;
@@ -70,11 +109,12 @@
             .ms-form-wizard-step-label 
             { 
                 background: transparent !important;
-                width: 160px !important;
-                max-width: 160px !important;
-                min-width: 160px !important;
+                width: 200px !important;
+                max-width: 200px !important;
+                min-width: 200px !important;
                 text-align: center !important;
                 margin:auto !important;
+                padding: 0 !important;
             }
             .ms-form-wizard .ms-form-wizard-step-label .ms-form-wizard-step-number.notification {
      

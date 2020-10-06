@@ -1,4 +1,4 @@
-  <div id="formsodpfi" class="page-layout simple fullwidth doc-page" layout="column" >
+  <div id="formsodpfi_fepr" class="page-layout simple fullwidth doc-page" layout="column" >
 
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="space-between" >
@@ -6,10 +6,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center" >
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Suivi convention CISCO/FEFFI</span>
+                <span class="parent">Gestion technique des activitées</span>
                 
-                <!--md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Convention CISCO/FEFFI</span-->
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Niveau FEFFI/PRESTATAIRE</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Insertion activitée technique (ODPFI)</span>
             </div>
 
             <!--div class="title">Convention CISCO/FEFFI</div-->
@@ -23,7 +26,7 @@
     
     <!-- CONTENT -->
     <div class="content" layout="column">
-      <div class="form-wrapper md-whiteframe-1dp" >
+      <div class="form-wrapper md-whiteframe-1dp acc_menu" >
         <div style="clear:both;"></div>            
             <div style="float: top !important">
               <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
@@ -33,7 +36,7 @@
             </div>
 <!--------------------------------------DEBUT TABS MERE---------------------------------------------------------->
          <ms-form-wizard flex>
-          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menu">
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
     <!---------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
             
@@ -52,113 +55,138 @@
                       </md-tab-label>
                       
                       <md-tab-body>
-                        <div>
+                
+                      <div style="margin-top: 1px;">
+                          <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
                           <form name="filtreform" class="md-inline-form" novalidate >
                                 <br>
+                            <div style="margin: 0px 15px 10px 15px;">
                               <div layout="column" layout-gt-xs="row">
                                   <md-input-container>
-                                    <span>Date du</span>
+                                    <span style="font-size: 14.5px" class="text-semibold">Date signature convention du: &nbsp</span>
                                   </md-input-container>
 
-                                  <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required>                     
+                                  <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required style="">                     
                                   </md-datepicker>
 
                                   <md-input-container>
-                                    <span>&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
+                                    <span style="font-size: 14.5px" class="text-semibold">&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
                                   </md-input-container>
 
                                   <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
                                   </md-datepicker>
-
-                                  <!--md-datepicker ng-model="vm.filtre.date_fin" md-placeholder="Enter date de fin"
-                                md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow"  md-date-locale="monthFormat" md-open-on-focus="true" ng-disabled="!vm.filtre.date_debut" required md-mode="'month'">                        
-                                  </md-datepicker-->
                                 </div>
-                                <div layout="column" layout-gt-xs="row" ng-show="vm.session=='ADMIN' || vm.session=='ODAAF' || vm.session=='DAAF' || vm.session=='ODPFI' || vm.session=='DPFI' || vm.session=='UFP'">
+                                <div layout="column" layout-gt-xs="row">
 
                                   <md-input-container flex="100" flex-gt-xs="90">
-                                    <label>Lot</label>
-                                    <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
-                                      <md-option value="*">*</md-option>
-                                      <md-option value="1">Lot 1</md-option>
-                                      <md-option value="2">Lot 2</md-option>
-                                      <md-option value="3">Lot 3</md-option>
-                                      <md-option value="4">Lot 4</md-option>
+                                  <label>Lot</label>
+                                  <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                                    <md-option value="*">*</md-option>
+                                    <md-option value="1">Lot 1</md-option>
+                                    <md-option value="2">Lot 2</md-option>
+                                    <md-option value="3">Lot 3</md-option>
+                                    <md-option value="4">Lot 4</md-option>
+                                  </md-select>
+                                  <div ng-messages="filtreform.lot.$error" role="alert">
+                                    <div ng-message="required"><span>Lot</span></div>
+                                  </div>
+                                </md-input-container>
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Région</label>
+                                  <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)">
+                                    <md-option  value="*">*</md-option>
+                                    <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
+                                  </md-select>
+                                  <div ng-messages="filtreform.region.$error" role="alert">
+                                    <div ng-message="required"><span>Région</span></div>
+                                  </div>
+                                </md-input-container>
+                                        
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Cisco</label>
+                                  <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
+                                    <md-option  value="*">*</md-option>
+                                    <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                                                        
                                     </md-select>
-                                    <div ng-messages="filtreform.lot.$error" role="alert">
-                                      <div ng-message="required"><span>Lot</span></div>
-                                    </div>
-                                  </md-input-container>
-                                  <md-input-container flex="100" flex-gt-xs="90">
-                                    <label>Région</label>
-                                    <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)">
-                                      <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
-                                    </md-select>
-                                    <div ng-messages="filtreform.region.$error" role="alert">
-                                      <div ng-message="required"><span>Région</span></div>
-                                    </div>
-                                  </md-input-container>
-                                  
-                                  <md-input-container flex="100" flex-gt-xs="90">
-                                    <label>Cisco</label>
-                                    <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
-                                      <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
-                                                  
-                                     </md-select>
-                                     <div ng-messages="filtreform.cisco.$error" role="alert">
-                                      <div ng-message="required"><span>Cisco</span></div>
-                                    </div>
-                                  </md-input-container>
-                                  
-                                  <md-input-container flex="100" flex-gt-xs="90">
-                                    <label>Commune</label>
-                                    <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
-                                      <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
-                                    </md-select>
-                                    <div ng-messages="filtreform.commune.$error" role="alert">
-                                      <div ng-message="required"><span>Commune</span></div>
-                                    </div>
-                                  </md-input-container>
-                                  
-                                  <md-input-container flex="100" flex-gt-xs="90">
-                                    <label>Ecole</label>
-                                    <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
-                                      <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
-                                      </md-option>
-                                    </md-select>
-                                    <div ng-messages="filtreform.ecole.$error" role="alert">
-                                      <div ng-message="required"><span>Ecole</span></div>
-                                    </div>
-                                  </md-input-container>
-                                  <md-input-container flex="100" flex-gt-xs="90">
-                                    <label>Convention</label>
-                                    <md-select ng-model="vm.filtre.id_convention_entete" name="convention" ng-disabled="!vm.filtre.id_ecole">
-                                      <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="eco in vm.convention_cisco_feffi_entetes" value="{{eco.id}}"> {{eco.ref_convention}}
-                                      </md-option>
-                                    </md-select>  
-                                    <div ng-messages="filtreform.convention_entete.$error" role="alert">
-                                      <div ng-message="required"><span>Convention</span></div>
-                                    </div>
-                                  </md-input-container>
-                                </div>
+                                    <div ng-messages="filtreform.cisco.$error" role="alert">
+                                    <div ng-message="required"><span>Cisco</span></div>
+                                  </div>
+                                </md-input-container>
+                                        
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Commune</label>
+                                  <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
+                                    <md-option  value="*">*</md-option>
+                                    <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
+                                  </md-select>
+                                  <div ng-messages="filtreform.commune.$error" role="alert">
+                                    <div ng-message="required"><span>Commune</span></div>
+                                  </div>
+                                 </md-input-container>                                 
 
-                                <div>
-                                 <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
-                                      ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
-                                      Recherche
-                                </md-button>
-                                <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
-                                  Annuler
-                                </md-button>
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Zap</label>
+                                  <md-select ng-model="vm.filtre.id_zap" name="zap" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_zap(vm.filtre)">
+                                    <md-option  value="*">*</md-option>
+                                    <md-option ng-repeat="zaps in vm.zaps" value="{{zaps.id}}"> {{zaps.nom}}
+                                    </md-option>
+                                  </md-select>  
+                                  <div ng-messages="filtreform.zap.$error" role="alert">
+                                    <div ng-message="required"><span>Zap</span></div>
+                                  </div>
+                                </md-input-container>
+                                        
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Ecole</label>
+                                  <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
+                                    <md-option  value="*">*</md-option>
+                                    <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
+                                    </md-option>
+                                  </md-select>
+                                  <div ng-messages="filtreform.ecole.$error" role="alert">
+                                    <div ng-message="required"><span>Ecole</span></div>
+                                  </div>
+                                </md-input-container>
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Convention</label>
+                                  <md-select ng-model="vm.filtre.id_convention_entete" name="convention" ng-disabled="!vm.filtre.id_ecole">
+                                    <md-option  value="*">*</md-option>
+                                    <md-option ng-repeat="eco in vm.convention_cisco_feffi_entetes" value="{{eco.id}}"> {{eco.ref_convention}}
+                                    </md-option>
+                                  </md-select>  
+                                  <div ng-messages="filtreform.convention_entete.$error" role="alert">
+                                    <div ng-message="required"><span>Convention</span></div>
+                                  </div>
+                                </md-input-container>
                                 </div>
+                              </div>  
+                              <div class="footer-animate-show-hide">
+                                  <md-button class="md-raised boutonfixe" disabled>
+                                  </md-button>
+                                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                            Réinitialise
+                                  </md-button>
+                                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
+                                  </md-button>
+                              </div>
                           </form>
-                          <md-divider></md-divider><br>
-                        </div>
+                      </div>
+                                   
+                      <div class="bouton-animate-show-hide">
+
+                        <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+                         <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+                        </md-icon>                           
+                         <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+                        </md-icon>
+                        <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+                        </md-icon>
+                        <md-tooltip><span>Bouton filtre</span></md-tooltip>
+                        </md-button> 
+                    </div>
+                  </div>
 
                         <div>        
                           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
@@ -179,11 +207,15 @@
                                   </td>
 
                                   <td>
-                                          <span>{{convention_entete.feffi.denomination}}</span>
+                                      <span>{{convention_entete.feffi.denomination}}</span>
                                   </td>
 
                                   <td>
-                                    <span>{{convention_entete.site.denomination_epp}}</span>
+                                    <span>{{convention_entete.site.code_sous_projet}}</span>
+                                  </td>
+
+                                  <td>
+                                    <span>{{convention_entete.site.acces}}</span>
                                   </td>
 
                                   <td>                         
@@ -200,10 +232,6 @@
 
                                   <td>                          
                                     <span>{{convention_entete.montant_total}}</span>
-                                  </td>
-
-                                  <td>                          
-                                    <span>{{convention_entete.avancement}}</span>
                                   </td>
 
                                   <td>                          
@@ -232,7 +260,8 @@
               
               <md-tab-body>
                <ms-form-wizard flex > 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
+                <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu"-->
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
                     <!-------------------convention cisco/feffi----------------->
                     <md-tab ng-disabled="vm.session=='OBCAF'">
@@ -249,10 +278,10 @@
                       
                       <md-tab-body>
                           <div style="widht:100%;">  
-                              <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches_pr()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPassation_pr">
+                              <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches_pr()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPassation_pr">
                                 Nouveau
                               </md-button>
-                            <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_passation_pr()" style="width:10%;" ng-show="vm.showbuttonimporter_passation_pr">
+                            <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_passation_pr()" style="width:10%;" ng-show="vm.showbuttonimporter_passation_pr">
                                     Importer
                             </md-button>
                           </div><br>
@@ -324,12 +353,20 @@
                                   <span ng-if="passation_marches_pr.$edit">
                                     <md-input-container style="width:100%;display: flex !important;">
                                       <label>Nombre offre recu</label>
-                                      <input name="nbr_offre_recu" type="number" ng-model="passation_marches_pr.nbr_offre_recu"/>
+                                      <input name="nbr_offre_recu" type="number" ng-model="passation_marches_pr.nbr_offre_recu" ng-min="1"/>
                                     </md-input-container>   
                                   </span>
                                             
                                   <span ng-if="!passation_marches_pr.$edit">{{passation_marches_pr.nbr_offre_recu}}</span>
-                                </td>                      
+                                </td>                       
+
+                                <td>
+                                  <span ng-if="passation_marches_pr.$edit">
+                                    <md-datepicker ng-model="passation_marches_pr.date_signature_contrat" md-placeholder="Date de signature" md-min-date="passation_marches_pr.date_remise" md-max-date="vm.datenow" required>                       
+                                    </md-datepicker>
+                                  </span>                          
+                                  <span ng-if="!passation_marches_pr.$edit">{{vm.formatDate(passation_marches_pr.date_signature_contrat)}}</span>
+                                </td>                     
 
                                 <td>
                                   <span ng-if="passation_marches_pr.$edit">
@@ -352,7 +389,7 @@
                                     <span class="icon-cancel"></span>
                                   </a>
                                             
-                                  <a ng-if="passation_marches_pr.$edit && passation_marches_pr.date_manifestation && passation_marches_pr.date_lancement_dp && passation_marches_pr.date_remise && passation_marches_pr.nbr_offre_recu >''" ng-click="vm.ajoutPassation_marches_pr(passation_marches_pr,0)" title="Sauvegarder">
+                                  <a ng-if="passation_marches_pr.$edit && passation_marches_pr.date_manifestation && passation_marches_pr.date_lancement_dp && passation_marches_pr.date_remise && passation_marches_pr.nbr_offre_recu && passation_marches_pr.date_os >''" ng-click="vm.ajoutPassation_marches_pr(passation_marches_pr,0)" title="Sauvegarder">
                                     <span class="icon-content-save"></span>
                                   </a>
                                 </td>
@@ -370,17 +407,17 @@
                             <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
                               <i class="icon-check s16"></i>
                             </span-->
-                            <span class="ms-form-wizard-step-text">Contrat</span>
+                            <span class="ms-form-wizard-step-text">Détail contrat</span>
                         </span>
                        
                       </md-tab-label>
                       
                       <md-tab-body>
                         <div style="widht:100%;">  
-                            <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterContrat_partenaire_relai()" style="width:10%;" ng-disabled="!vm.showbuttonNouvcontrat_pr">
+                            <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterContrat_partenaire_relai()" style="width:10%;" ng-disabled="!vm.showbuttonNouvcontrat_pr">
                               Nouveau
                             </md-button>
-                            <md-button type="submit" class="md-raised md-accent" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_pr()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_pr">
+                            <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_pr()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_pr">
                                     Importer
                             </md-button>
                           </div><br>
@@ -464,7 +501,7 @@
                                 <span ng-if="contrat_partenaire_relai.$edit">
                                   <md-input-container style="width:100%;display: flex !important;">
                                     <label>Montant contrat</label>
-                                    <input name="montant_contrat" type="number" ng-model="contrat_partenaire_relai.montant_contrat"/>
+                                    <input name="montant_contrat" type="number" ng-model="contrat_partenaire_relai.montant_contrat" ng-min="1"/>
                                   </md-input-container>   
                                 </span>
                                           
@@ -473,7 +510,7 @@
 
                               <td>
                                 <span ng-if="contrat_partenaire_relai.$edit">
-                                  <md-datepicker ng-model="contrat_partenaire_relai.date_signature" md-placeholder="Date de signature" md-max-date="vm.datenow" required>                       
+                                  <md-datepicker ng-model="contrat_partenaire_relai.date_signature" md-placeholder="Date de signature" md-max-date="vm.datenow" required disabled>                       
                                   </md-datepicker>
                                 </span>                          
                                 <span ng-if="!contrat_partenaire_relai.$edit">{{vm.formatDate(contrat_partenaire_relai.date_signature)}}</span>
@@ -518,7 +555,7 @@
 
                       <md-tab-body>
                         <div style="widht:100%;">  
-                                    <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterAvenant_partenaire()" style="width:10%;" ng-disabled="!vm.showbuttonNouvavenant_partenaire">
+                                    <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterAvenant_partenaire()" style="width:10%;" ng-disabled="!vm.showbuttonNouvavenant_partenaire">
                                       Nouveau
                                     </md-button>
                                 </div>
@@ -563,7 +600,7 @@
                                         <span ng-if="avenant_partenaire.$edit">
                                           <md-input-container style="width:100%;display: flex !important;">
                                             <label>Cout batiment</label>
-                                            <input name="montant" type="text" ng-model="avenant_partenaire.montant"/>
+                                            <input name="montant" type="number" ng-model="avenant_partenaire.montant" ng-min="1"/>
                                           </md-input-container>   
                                         </span>
                                                   

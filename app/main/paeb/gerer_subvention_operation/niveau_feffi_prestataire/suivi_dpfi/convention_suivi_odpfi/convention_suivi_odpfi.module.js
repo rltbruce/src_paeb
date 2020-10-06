@@ -4,6 +4,7 @@
 
     angular
         .module('app.paeb.gerer_subvention_operation.niveau_feffi_prestataire.suivi_dpfi.convention_suivi_odpfi', [])
+        .run(testPermission)
         .config(config);
     var vs ;
     /** @ngInject */
@@ -28,10 +29,10 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_feffi_prestataire.suivi_dpfi.convention_suivi_odpfi', {
-            title: 'Suivi convention (O-DPFI)',
+            title: 'Insertion activité technique (O-DPFI)',
             icon  : 'icon-rotate-3d',
             state: 'app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_suivi_dpfi_convention_suivi_odpfi',
-            weight: 2,
+            weight: 1,
             hidden: function()
             {
                     return vs;

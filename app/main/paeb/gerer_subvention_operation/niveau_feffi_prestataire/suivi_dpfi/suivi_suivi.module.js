@@ -38,8 +38,6 @@
             apiFactory.getOne("utilisateurs/index", id_user).then(function(result) 
             {
                 var user = result.data.response;
-               
-
                 var permission = user.roles;
                 var permissions = ["DAAF","ODAAF","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        

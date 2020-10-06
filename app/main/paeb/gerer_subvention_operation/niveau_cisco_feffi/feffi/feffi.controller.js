@@ -61,11 +61,11 @@
         },
         {titre:"Denomination"
         },
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
         {titre:"Commune"
         },
-        {titre:"Zap"
+        {titre:"ZAP"
         },
         {titre:"Fokontany"
         },
@@ -103,13 +103,16 @@
 
           vm.showformfiltre = function()
         {
-          vm.showbuttonfiltre=false;
-          vm.showfiltre=true;
-
+          vm.showfiltre=!vm.showfiltre;
+          
           switch (vm.session)
                 {
                  case 'BCAF':
                       vm.filtre.id_region=vm.allecole[0].region.id;
+                      vm.regions = vm.regions.filter(function(obj)
+                      {
+                         return obj.id == vm.allecole[0].region.id;
+                      });
                       apiFactory.getAPIgeneraliserREST("cisco/index","id_region",vm.filtre.id_region).then(function(result)
                       {
                           vm.ciscos = result.data.response;
@@ -123,7 +126,11 @@
                       break;
 
                   case 'OBCAF':
-                      vm.filtre.id_region=vm.allecole[0].region.id;
+                      vm.filtre.id_region=vm.allecole[0].region.id;                      
+                      vm.regions = vm.regions.filter(function(obj)
+                      {
+                         return obj.id == vm.allecole[0].region.id;
+                      });
                       apiFactory.getAPIgeneraliserREST("cisco/index","id_region",vm.filtre.id_region).then(function(result)
                       {
                           vm.ciscos = result.data.response;
@@ -138,6 +145,11 @@
                       break;
               
                 }
+        }
+
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
         }
         apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
@@ -250,12 +262,6 @@
               {
                   vm.allecole = result.data.response;
               });
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showbuttonfiltre=true;
-            vm.showfiltre=false;
         }
 
         vm.selectionecole = function (item)
@@ -942,7 +948,7 @@
             {
                var comp = vm.allcompte_feffi.filter(function(obj)
                 {
-                   return obj.id == currentItem.id;
+                   return obj.id == currentItemCompte_feffi.id;
                 });
                 if(comp[0])
                 {

@@ -85,10 +85,16 @@
             }
 
         });*/
+        
+
         vm.showformfiltre = function()
         {
-          vm.showbuttonfiltre=false;
-          vm.showfiltre=true;
+          vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
         }
 /*****************Debut StepOne convention_ufp_daaf_entete****************/
 
@@ -101,7 +107,8 @@
         {titre:"Montant à transferer"},
         {titre:"Frais bancaire"},        
         {titre:"Nombre bénéficiaire"},        
-        {titre:"Montant convention"},
+        {titre:"Montant convention"},        
+        {titre:"Date création"},
         {titre:"Action"}];
       var annee = vm.date_now.getFullYear();
   //recuperation donnée programmation
@@ -120,12 +127,6 @@
             {
                 vm.allconvention_ufp_daaf_entete = result.data.response;
             });
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showbuttonfiltre=true;
-            vm.showfiltre=false;
         }
 
    //recuperation donnée programmation
@@ -164,6 +165,7 @@
             item.frais_bancaire = currentItemConvention_ufp_daaf_entete.frais_bancaire ; 
             item.num_vague = currentItemConvention_ufp_daaf_entete.num_vague ;
             item.nbr_beneficiaire = currentItemConvention_ufp_daaf_entete.nbr_beneficiaire ;
+            item.date_creation = currentItemConvention_ufp_daaf_entete.date_creation ;
           }
           else
           {
@@ -209,7 +211,7 @@
               vm.afficherboutonValider = true;
               
            }
-           vm.validation_button = item.validation;
+           vm.validation_item = item.validation;
         };
         $scope.$watch('vm.selectedItemConvention_ufp_daaf_entete', function()
         {
@@ -242,6 +244,7 @@
             item.frais_bancaire = parseInt(vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire) ;
             item.num_vague = parseInt(vm.selectedItemConvention_ufp_daaf_entete.num_vague) ;
             item.nbr_beneficiaire = parseInt(vm.selectedItemConvention_ufp_daaf_entete.nbr_beneficiaire) ;
+            item.date_creation = vm.selectedItemConvention_ufp_daaf_entete.date_creation ;
             vm.afficherboutonValider = false; 
         };
 
@@ -397,6 +400,7 @@
               });*/
               vm.afficherboutonValider = false;
               vm.selectedItemConvention_ufp_daaf_entete.validation = 1;
+              vm.validation_item=1;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de validation de donnée');});
         }
@@ -695,14 +699,14 @@
 
         //col table
         vm.convention_cisco_feffi_entete_column = [
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
-        {titre:"Feffi"
+        {titre:"FEFFI"
         },
         {titre:"Site"
         },
-       // {titre:"Type convention"
-       // },
+        {titre:"Accés"
+        },
         {titre:"Reference convention"
         },
         {titre:"Objet"
@@ -711,8 +715,8 @@
         },
         {titre:"Cout éstimé"
         },
-        {titre:"Avancement"
-        },
+       /* {titre:"Avancement"
+        },*/
         {titre:"Utilisateur"
         },
         {titre:"Action"
@@ -762,7 +766,7 @@
           NouvelItemConvention_cisco_feffi_entete = true;
           var confirm = $mdDialog.confirm({
           controller: ConventionDialogController,
-          templateUrl: 'app/main/paeb/gerer_convention_ufp_daaf/convention_ufp_daaf/conventiondialog.html',
+          templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_ufp_daaf/convention_ufp_daaf_validation/conventiondialog.html',
           parent: angular.element(document.body),
           targetEvent: ev, 
           
@@ -812,7 +816,7 @@
                     ref_financement:  convention_cisco_feffi_entete.ref_financement,
                     ref_convention:   convention_cisco_feffi_entete.ref_convention,
                     montant_total:    convention_cisco_feffi_entete.montant_total,
-                    avancement:    convention_cisco_feffi_entete.avancement,
+                    //avancement:    convention_cisco_feffi_entete.avancement,
                     id_user:    convention_cisco_feffi_entete.user.id,
                     id_convention_ufpdaaf : vm.selectedItemConvention_ufp_daaf_entete.id,
                     validation: 2               
@@ -831,7 +835,7 @@
                     ref_financement:  convention_cisco_feffi_entete.ref_financement,
                     ref_convention:   convention_cisco_feffi_entete.ref_convention,
                     montant_total:    convention_cisco_feffi_entete.montant_total,
-                    avancement:    convention_cisco_feffi_entete.avancement,
+                   // avancement:    convention_cisco_feffi_entete.avancement,
                     id_user:    convention_cisco_feffi_entete.user.id,
                     validation: 1              
                 });
@@ -983,24 +987,26 @@
         var convention_a_anvoyer= [];
 
         dg.conventiondialog_column = [
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
-        {titre:"Feffi"
+        {titre:"FEFFI"
         },
-        {titre:"Site"
+        {titre:"Code sous projet site"
+        },
+        {titre:"Accés site"
         },
         {titre:"Type convention"
         },
-        {titre:"Reference convention"
+        {titre:"Référence convention"
         },
         {titre:"Objet"
         },
-        {titre:"Reference Financement"
+        {titre:"Référence Financement"
         },
         {titre:"Cout éstimé"
         },
-        {titre:"Avancement"
-        },
+      /*  {titre:"Avancement"
+        },*/
         {titre:"Utilisateur"
         },
         {titre:"Attachée"
@@ -1014,7 +1020,7 @@
         };
 
         apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalidedaaf').then(function(result)
-        {dg.allconventionDialog = result.data.response;});
+        {dg.allconventionDialog = result.data.response;console.log(result.data.response);});
 
         dg.cancel = function()
         {

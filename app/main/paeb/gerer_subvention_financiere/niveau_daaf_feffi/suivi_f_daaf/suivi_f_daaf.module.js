@@ -5,7 +5,7 @@
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_daaf', [         
             'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_daaf.convention_suivi_f_daaf',         
-            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_daaf.convention_suivi_f_odaaf'
+            //'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_daaf.convention_suivi_f_odaaf'
             ])       
         .config(config);
         var vs ;

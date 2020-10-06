@@ -28,7 +28,7 @@ var vs;
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_ufp_daaf.convention_ufp_daaf', {
-            title: 'Saisie convention',
+            title: 'Insertion convention UFP/DAAF',
             icon  : 'icon-source-pull',
             state: 'app.paeb_gerer_subvention_operation_niveau_ufp_daaf_convention_ufp_daaf',
             weight: 3,

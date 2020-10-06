@@ -428,7 +428,7 @@ vm.mainGridOptions = {
         };
       };
       
-      vm.alldivers_attachement_mobilier = function(id_type_mobilier) {
+   /*  vm.alldivers_attachement_mobilier = function(id_type_mobilier) {
         return {
           dataSource:
           {
@@ -570,7 +570,7 @@ vm.mainGridOptions = {
                   },{name: "destroy", text: ""}]
             }]
         };
-      };
+      };*/
 
 /* ***************FIN TYPE OUVRAGE**********************/
         

@@ -17,7 +17,7 @@
         msNavigationServiceProvider.saveItem('paeb.etat_subvention_operation', {
             title : 'Etats techniques des activités ',
             icon  : 'icon-data',
-            weight: 3
+            weight: 5
         });
 
 

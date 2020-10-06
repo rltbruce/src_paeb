@@ -28,7 +28,7 @@ var vs ;
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_ufp_daaf.site', {
-            title: 'Saisie site',
+            title: 'Insertion site',
             icon  : 'icon-nfc-variant',
             state: 'app.paeb_gerer_subvention_operation_niveau_ufp_daaf_site',
             weight: 1,

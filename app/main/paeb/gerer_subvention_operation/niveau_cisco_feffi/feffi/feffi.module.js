@@ -4,6 +4,7 @@
 
     angular
         .module('app.paeb.gerer_subvention_operation.niveau_cisco_feffi.feffi', [])
+        .run(testPermission)
         .config(config);
 var vs;
     /** @ngInject */

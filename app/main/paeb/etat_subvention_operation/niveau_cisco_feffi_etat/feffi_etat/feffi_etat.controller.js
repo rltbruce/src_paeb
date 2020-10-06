@@ -77,6 +77,19 @@
           {titre:"Nombre membre"},
           {titre:"Adresse"},
           {titre:"Observation"}];
+
+
+
+        vm.showformfiltre = function()
+        {
+          //vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+          console.log(vm.showfiltre);
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
         
         
           var id_user = $cookieStore.get('id');
@@ -86,11 +99,6 @@
           vm.regions = response.data.response;
           console.log(vm.regions);
         });
-         vm.showformfiltre = function()
-        {
-          vm.showbuttonfiltre=false;
-          vm.showfiltre=true;
-        }
 
          vm.filtre_change_region = function(item)
         { 
@@ -156,7 +164,7 @@
           
         }
 
-         vm.recherchefiltre = function(filtre)
+        vm.recherchefiltre = function(filtre)
         {
             apiFactory.getAPIgeneraliserREST("ecole/index",'menus',
               'getecoleByfiltre','id_region',filtre.id_region,'id_cisco',
@@ -164,12 +172,6 @@
               {
                   vm.allecole = result.data.response;
               });
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showbuttonfiltre=true;
-            vm.showfiltre=false;
         }
 
         vm.selectionecole = function (item)

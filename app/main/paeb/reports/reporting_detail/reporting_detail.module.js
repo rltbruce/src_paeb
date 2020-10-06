@@ -29,7 +29,7 @@
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.reports.reporting_detail', {
             title: 'Reporting',
-            icon  : 'icon-nfc-variant',
+            icon  : 'icon-calendar-text',
             state: 'app.paeb_reports_reporting_detail',
 			weight: 1
         });

@@ -49,7 +49,19 @@
           autoWidth: false          
         };
 
+        vm.showbuttonfiltre=true;
+        vm.showfiltre=false;
 
+        
+        vm.showformfiltre = function()
+        {
+          vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
         
         apiFactory.getAll("region/index").then(function success(response)
         {
@@ -159,7 +171,7 @@
         },
         {titre:"Cout éstimé"
         },
-        {titre:"Avancement"
+        {titre:"Avancement financière"
         },
         {titre:"Utilisateur"
         }]; 
@@ -169,7 +181,7 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
-            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufp_avancement_financBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
             {
                 vm.allconvention_entete = result.data.response;
@@ -177,11 +189,6 @@
             });
                 console.log(filtre);
         }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-        }
-        
         /***************fin convention cisco/feffi************/
 
          //fonction selection item entete convention cisco/feffi
@@ -220,7 +227,18 @@
                 });            
             });
         
-        }               
+        } 
+
+
+        vm.affichage_avancement_financ = function(avance)
+        {
+          var avance_p=0;
+          if (avance)
+          {
+            avance_p = parseFloat(avance).toFixed(2);
+          }
+          return avance_p +"%";
+        }              
 
 /*****************Debut StepTwo demande_realimentation_feffi****************/
 
@@ -245,7 +263,7 @@
             if (item.$selected ==false || item.$selected == undefined)
             {
                //recuperation donnée demande_realimentation_feffi
-                apiFactory.getAPIgeneraliserREST("piece_justificatif_feffi/index",'id_demande_rea_feffi',item.id).then(function(result)
+                apiFactory.getAPIgeneraliserREST("piece_justificatif_feffi/index",'id_demande_rea_feffi',item.id,'id_tranche',item.tranche.id).then(function(result)
                 {
                     vm.allpiece_justificatif_feffi = result.data.response;
                     
@@ -276,7 +294,56 @@
     
         vm.situationdemande = function(validation)
         {
+            
             switch (validation)
+            {
+              case '1':
+                      return 'Validée par BCAF';                  
+                  break;
+
+             case '2':
+                  
+                  return 'En cours de traitement DPFI'; 
+                  break;
+              case '3':
+                  
+                  return 'Rejetée par DPFI'; 
+                  break;
+              
+              case '4':
+                        return 'Emise AU DAAF'; 
+                  break;
+              case '5':    
+                  return 'En cours de traitement DAAF'; 
+                  break;
+
+              case '6':
+                  
+                  return 'Rejetée par DAAF'; 
+                  break;
+
+              case '8':    
+                  return 'En cours de traitement UFP'; 
+                  break;
+
+              case '9':
+                  
+                  return 'Rejetée par UFP'; 
+                  break;
+
+              case '7':
+                  
+                  return 'Finalisée'; 
+                  break;
+
+              case '0':
+                      return 'Creer';                  
+                  break;
+              default:
+                  break;
+          
+            }
+            /*switch (validation)
             {
               case '1':
                       return 'Emise au DPFI';                  
@@ -314,7 +381,7 @@
               default:
                   break;
           
-            }
+            }*/
         }
   
   /*************************Fin StepTwo demande_realimentation_feffi***************************************/

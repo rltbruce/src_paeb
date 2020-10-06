@@ -420,7 +420,7 @@ vm.mainGridOptions = {
         };
       };
       
-      vm.alldivers_attachement_latrine = function(id_type_latrine) {
+     /* vm.alldivers_attachement_latrine = function(id_type_latrine) {
         return {
           dataSource:
           {
@@ -562,7 +562,7 @@ vm.mainGridOptions = {
                   },{name: "destroy", text: ""}]
             }]
         };
-      };
+      };*/
     
       
 /* ***************FIN TYPE OUVRAGE**********************/

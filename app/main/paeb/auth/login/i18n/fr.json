@@ -9,7 +9,7 @@
         "OR": "Ou",
         "WITH_GOOGLE": "Se connecter avec Google",
         "WITH_FACEBOOK": "Se connecter avec Facebook",
-        "DONT_HAVE_ACCOUNT": "Pas encors inscrit?",
+        "DONT_HAVE_ACCOUNT": "Pas encore inscrit?",
         "CREATE_ACCOUNT": "Créer un compte",
         "ERRORS": {
             "EMAIL_REQUIRED": "Courriel obligatoire!",

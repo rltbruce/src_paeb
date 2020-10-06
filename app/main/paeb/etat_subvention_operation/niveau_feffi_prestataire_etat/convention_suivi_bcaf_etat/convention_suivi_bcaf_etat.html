@@ -1,4 +1,4 @@
-  <div id="formsbcafo" class="page-layout simple fullwidth doc-page" layout="column" >
+  <div id="formsbcafetattechni_fp" class="page-layout simple fullwidth doc-page" layout="column" >
 
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="space-between" >
@@ -6,10 +6,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center" >
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Suivi convention CISCO/FEFFI</span>
+                <span class="parent">Etat technique des activités</span>
                 
-                <!--md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Convention CISCO/FEFFI</span-->
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Niveau FEFFI/PRESTATAIRE</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Etat activité technique</span>
             </div>
 
             <!--div class="title">Convention CISCO/FEFFI</div-->
@@ -23,7 +26,7 @@
     
     <!-- CONTENT -->
     <div class="content" layout="column">
-      <div class="form-wrapper md-whiteframe-1dp" >
+      <div class="form-wrapper md-whiteframe-1dp acc_menu" >
         <div style="clear:both;"></div>            
             <div style="float: top !important">
               <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
@@ -33,7 +36,7 @@
             </div>
 <!--------------------------------------DEBUT TABS MERE--------------------------------------------------------->
          <ms-form-wizard flex>
-          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menu">
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
     <!--------------------------------DEBUT CONVENTION CISCO/FEFFI----------------------------------------------->
             
@@ -50,7 +53,7 @@
               
               <md-tab-body>
                <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
                   <!------------------------DEBUT ESTIMATION CONVENTION-----------------------------------------> 
                     <md-tab>
@@ -65,35 +68,35 @@
                         </span>
                        
                       </md-tab-label>
-                      
+                      <!--background-color: rgba(50,64,99,0.9);-->
                       <md-tab-body>
-                        <div>
+                
+                      <div style="margin-top: 1px;">
+                          <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
                           <form name="filtreform" class="md-inline-form" novalidate >
                                 <br>
+                            <div style="margin: 0px 15px 10px 15px;">
                               <div layout="column" layout-gt-xs="row">
                                   <md-input-container>
-                                    <span>Date du</span>
+                                    <span style="font-size: 14.5px" class="text-semibold">Date signature convention du: &nbsp</span>
                                   </md-input-container>
 
-                                  <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required>                     
+                                  <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required style="">                     
                                   </md-datepicker>
 
                                   <md-input-container>
-                                    <span>&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
+                                    <span style="font-size: 14.5px" class="text-semibold">&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
                                   </md-input-container>
 
                                   <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
                                   </md-datepicker>
-
-                                  <!--md-datepicker ng-model="vm.filtre.date_fin" md-placeholder="Enter date de fin"
-                                md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow"  md-date-locale="monthFormat" md-open-on-focus="true" ng-disabled="!vm.filtre.date_debut" required md-mode="'month'">                        
-                                  </md-datepicker-->
                                 </div>
-                                <div layout="column" layout-gt-xs="row" ng-show="vm.session=='ADMIN' || vm.session=='ODAAF' || vm.session=='DAAF' || vm.session=='ODPFI' || vm.session=='DPFI' || vm.session=='UFP'">
+                                <div layout="column" layout-gt-xs="row">
 
                                   <md-input-container flex="100" flex-gt-xs="90">
                                     <label>Lot</label>
                                     <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                                      <md-option value="*">*</md-option>
                                       <md-option value="1">Lot 1</md-option>
                                       <md-option value="2">Lot 2</md-option>
                                       <md-option value="3">Lot 3</md-option>
@@ -141,7 +144,7 @@
                                     <label>Ecole</label>
                                     <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
                                       <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.code}}
+                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
                                       </md-option>
                                     </md-select>
                                     <div ng-messages="filtreform.ecole.$error" role="alert">
@@ -160,25 +163,33 @@
                                     </div>
                                   </md-input-container>
                                 </div>
-
-                                <div>
-                                 <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
-                                      ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
-                                      Recherche
-                                </md-button>
-                                 
-                               <!--md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
-                                                  ng-disabled="filtreform.$invalid" ng-click="vm.importerfiltre(vm.filtre)">
-                                                  Exporter
-                               </md-button-->
-                                <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
-                                  Annuler
-                                </md-button>
-                                </div>
+                              </div>  
+                              <div class="footer-animate-show-hide">
+                                  <md-button class="md-raised boutonfixe" disabled>
+                                  </md-button>
+                                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                            Réinitialise
+                                  </md-button>
+                                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
+                                  </md-button>
+                              </div>
                           </form>
-                          <md-divider></md-divider><br>
-                        </div>
+                      </div>
 
+                       <div class="bouton-animate-show-hide">
+
+                        <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+                         <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+                        </md-icon>                           
+                         <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+                        </md-icon>
+                        <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+                        </md-icon>
+                        <md-tooltip><span>Bouton filtre</span></md-tooltip>
+                        </md-button> 
+                      </div>
+                  </div>
                         <div>        
                           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                               <thead>
@@ -198,11 +209,15 @@
                                   </td>
 
                                   <td>
-                                          <span>{{convention_entete.feffi.denomination}}</span>
+                                    <span>{{convention_entete.feffi.denomination}}</span>
                                   </td>
 
                                   <td>
-                                    <span>{{convention_entete.site.denomination_epp}}</span>
+                                    <span>{{convention_entete.site.code_sous_projet}}</span>
+                                  </td>
+
+                                  <td>
+                                    <span>{{convention_entete.site.acces}}</span>
                                   </td>
 
                                   <td>                         
@@ -222,7 +237,7 @@
                                   </td>
 
                                   <td>                          
-                                    <span>{{convention_entete.avancement}}</span>
+                                    <span>{{convention_entete.avancement}} %</span>
                                   </td>
 
                                   <td>                          
@@ -397,9 +412,65 @@
               
               <md-tab-body>
                <ms-form-wizard flex> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
+                <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}"--> 
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
-                    <!-------------------convention cisco/feffi----------------->                    
+                    <!-------------------convention cisco/feffi----------------->
+                    <md-tab>
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Passation des marchés</span>
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body>
+                         <div>        
+                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                            <thead>
+                              <tr>
+                                <th class="secondary-text" ng-repeat="mem in ::vm.passation_marches_pr_column">
+                                  <div class="table-header">
+                                    <span class="column-title">{{mem.titre}}</span>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                                     
+                            <tbody>
+                              <tr ng-repeat="passation_marches_pr in vm.allpassation_marches_pr"  ng-class="{selected: passation_marches_pr.$selected}" ng-click="vm.selectionPassation_marches_pr(passation_marches_pr)">
+
+                                <td>                         
+                                  <span>{{vm.formatDate(passation_marches_pr.date_manifestation)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(passation_marches_pr.date_lancement_dp)}}</span>
+                                </td>
+                                          
+                                <td>
+                                            
+                                  <span>{{vm.formatDate(passation_marches_pr.date_remise)}}</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{passation_marches_pr.nbr_offre_recu}}</span>
+                                </td>                       
+
+                                <td>                         
+                                  <span>{{vm.formatDate(passation_marches_pr.date_signature_contrat)}}</span>
+                                </td>                     
+
+                                <td>                          
+                                  <span>{{vm.formatDate(passation_marches_pr.date_os)}}</span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </md-tab-body>
+                    </md-tab>                  
                     <md-tab ng-click="vm.stepcontrat_pr()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
@@ -464,7 +535,8 @@
 
                <!---------------------------------FILS PRESTATION----------------------------------------------->       
                          <ms-form-wizard flex id="soussousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
+                          <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu"-->
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
                         <!-----------------------------DEBUT FORMATION DPP--------------------------------------> 
                               <md-tab>
@@ -1343,7 +1415,8 @@
               
               <md-tab-body>
                <ms-form-wizard flex> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
+                <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}"-->
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
                     <!-------------------convention cisco/feffi----------------->
                     <md-tab ng-click="vm.steppassation_marches_moe()">
@@ -1475,15 +1548,184 @@
                                 <td>                                            
                                   <span>{{contrat_moe.montant_contrat}}</span>
                                 </td>
+                                <td>                        
+                                  <span>{{vm.formatDate(contrat_moe.passation.notification_intention)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(contrat_moe.passation.date_notification_attribution)}}</span>
+                                </td>
 
                                 <td>                          
                                   <span>{{vm.formatDate(contrat_moe.date_signature)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(contrat_moe.passation.date_os)}}</span>
                                 </td>
                               </tr>
                             </tbody>
                           </table>
                         </div>
 
+                      </md-tab-body>
+                    </md-tab>
+                    
+
+                    <!-------------------------------Debut attachement -------------------------------------------->
+                    <md-tab ng-disabled="!vm.stepcalendrier_paie_moe" ng-click="vm.step_calendrier_paie_moe()">
+                        <md-tab-label>
+
+                          <span class="ms-form-wizard-step-label">
+                              <span class="ms-form-wizard-step-text">Calendrier de paiement</span>
+                          </span>
+                        </md-tab-label>
+                        
+                        <md-tab-body>
+                          <ms-form-wizard flex id="sousmenu"> 
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" class="kendogrid">
+                          <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
+                              <md-tab ng-click="vm.click_rubrique_calendrier_paie_moe()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Rubrique calendrier</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>                                   
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border" dt-options="vm.dtOptions" ms-responsive-table><br>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.rubrique_calendrier_paie_moe_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="rubrique_calendrier_paie_moe in vm.allrubrique_calendrier_paie_moe"  ng-class="{selected: rubrique_calendrier_paie_moe.$selected}" ng-click="vm.selectionRubrique_calendrier_paie_moe(rubrique_calendrier_paie_moe)" style="text-align: center">
+                                        <td>
+                                          <span>{{rubrique_calendrier_paie_moe.libelle}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_calendrier_paie_moe.montant_prevu | number: 2}} Ar</span>
+                                        </td>
+                                      </tbody>
+
+                                      <tfoot >
+                                          <!--tr style="background-color: rgba(54,117,136,0.9); color:white;text-align: center"-->
+                                          <tr style=" font-weight:bold; text-align: center">
+                                            <td>TOTAL BATIMENT</td>
+                                            <td>{{vm.Total_prevu_rubrique_moe()}} Ar</td>
+
+                                          </tr>
+                                      </tfoot>
+                                    </table>
+
+                                    <div style="margin-bottom: 30px"></div>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------FIN rubrique batiment mpe---------------------------------->
+                          <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
+                              <md-tab ng-click="vm.click_sousrubrique_calendrier_paie_moe()" ng-disabled="!vm.sousrubrique_calendrier">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Sous rubrique calendrier</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>                                   
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border" dt-options="vm.dtOptions" ms-responsive-table><br>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.sousrubrique_calendrier_paie_moe_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="sousrubrique_calendrier_paie_moe in vm.allsousrubrique_calendrier_paie_moe"  ng-class="{selected: sousrubrique_calendrier_paie_moe.$selected}" ng-click="vm.selectionSousrubrique_calendrier_paie_moe(sousrubrique_calendrier_paie_moe)" style="text-align: center">
+                                        <td>
+                                          <span>{{sousrubrique_calendrier_paie_moe.libelle}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{sousrubrique_calendrier_paie_moe.montant_prevu | number: 2}} Ar</span>
+                                        </td>
+                                      </tbody>
+
+                                      <tfoot >
+                                          <!--tr style="background-color: rgba(54,117,136,0.9); color:white;text-align: center"-->
+                                          <tr style=" font-weight:bold; text-align: center">
+                                            <td>TOTAL BATIMENT</td>
+                                            <td>{{vm.Total_prevu_sousrubrique_moe()}} Ar</td>
+                                            <!--td>{{vm.Total_prevu_sousrubrique()}} Ar HT &nbsp | &nbsp{{vm.Total_prevu_ttc()}} Ar TTC</td-->
+
+                                          </tr>
+                                      </tfoot>
+                                    </table>
+
+                                    <div style="margin-bottom: 30px"></div>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------FIN rubrique batiment mpe---------------------------------->
+
+                         <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
+                              <md-tab ng-click="vm.click_calendrier_paie_moe_prevu()" ng-disabled="!vm.calendrier_prevu">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">
+                                      <span class="ms-form-wizard-step-text">Détail rubrique calendrier</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>                                   
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border" dt-options="vm.dtOptions" ms-responsive-table><br>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.calendrier_paie_moe_prevucolumn">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="calendrier_paie_moe_prevu in vm.allcalendrier_paie_moe_prevu"  ng-class="{selected: calendrier_paie_moe_prevu.$selected}" ng-click="vm.selectionCalendrier_paie_moe_prevu(calendrier_paie_moe_prevu)" style="text-align: center">
+                                        <td>
+                                          <span>{{calendrier_paie_moe_prevu.libelle}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{calendrier_paie_moe_prevu.pourcentage}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{calendrier_paie_moe_prevu.montant_prevu | number: 2}} Ar</span>
+                                        </td>
+                                      </tbody>
+                                    </table>
+                                    <div style="margin-bottom: 30px"></div>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------FIN rubrique batiment mpe---------------------------------->
+
+                            </md-tabs> 
+                          </ms-form-wizard>
                       </md-tab-body>
                     </md-tab>
                     <md-tab ng-disabled="!vm.stepprestation_moe || vm.validation_contrat_moe==0" ng-click="vm.step_prestation_moe()">
@@ -1497,7 +1739,8 @@
                       <md-tab-body>
                        <!------------------------------FILS PRESTATION----------------------------------------------->       
                          <ms-form-wizard flex > 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">
+                          <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu"--> 
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
                         <!-----------------------------DEBUT FORMATION DPP--------------------------------------> 
                               <md-tab>
@@ -1981,7 +2224,8 @@
               
               <md-tab-body>
                <ms-form-wizard flex> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}">
+                <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}"-->
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
                     <md-tab ng-click="vm.click_passation_marches_mpe()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
@@ -2147,19 +2391,39 @@
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.cout_batiment}}</span>
+                                  <span>{{contrat_prestataire.cout_batiment}} Ar</span>
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.cout_latrine}}</span>
+                                  <span>{{contrat_prestataire.cout_latrine}} Ar</span>
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.cout_mobilier}}</span>
+                                  <span>{{contrat_prestataire.cout_mobilier}} Ar</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{contrat_prestataire.montant_total_ht}} Ar</span>
+                                </td>
+                                          
+                                <td>                                            
+                                  <span>{{contrat_prestataire.montant_total_ttc}} Ar</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(contrat_prestataire.passation.notification_intention)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(contrat_prestataire.passation.date_notification_attribution)}}</span>
                                 </td>
 
                                 <td>                         
                                   <span>{{vm.formatDate(contrat_prestataire.date_signature)}}</span>
+                                </td>
+
+                                <td>                         
+                                  <span>{{vm.formatDate(contrat_prestataire.passation.date_os)}}</span>
                                 </td>
                               </tr>
                             </tbody>
@@ -2168,6 +2432,354 @@
 
                       </md-tab-body>
                     </md-tab>
+
+
+                    <!-------------------------------Debut attachement -------------------------------------------->
+                    <md-tab ng-disabled="!vm.stepattachement" ng-click="vm.step_attachement_prevu()">
+                        <md-tab-label>
+
+                          <span class="ms-form-wizard-step-label">
+                              <span class="ms-form-wizard-step-text">Attachement prévu</span>
+                          </span>
+                        </md-tab-label>
+                        
+                        <md-tab-body>
+                          <ms-form-wizard flex id="sousmenu"> 
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" class="kendogrid">
+                          <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
+                              <md-tab ng-click="vm.click_rubrique_attachement_batiment_mpe()">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                        
+                                      
+                                      <span class="ms-form-wizard-step-text">Rubrique attachement batiment</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>                                   
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.rubrique_attachement_batiment_mpe_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="rubrique_attachement_batiment_mpe in vm.allrubrique_attachement_batiment_mpe"  ng-class="{selected: rubrique_attachement_batiment_mpe.$selected}" ng-click="vm.selectionRubrique_attachement_batiment_mpe(rubrique_attachement_batiment_mpe)" style="text-align: center">
+
+                                        <td>
+                                          <span>{{rubrique_attachement_batiment_mpe.numero}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_batiment_mpe.libelle}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_batiment_mpe.montant_prevu | number: 2}}</span>
+                                        </td>
+                                      </tbody>
+
+                                      <tfoot >
+                                          <!--tr style="background-color: rgba(54,117,136,0.9); color:white;text-align: center"-->
+                                          <tr style=" font-weight:bold; text-align: center">
+                                            <td colspan="2">TOTAL BATIMENT</td>
+                                            <td>{{vm.Total_prevu()}}</td>
+
+                                          </tr>
+                                      </tfoot> 
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------FIN rubrique batiment mpe---------------------------------->
+
+                        <!------------------------Debut attachement batiment prevu------------------------------>
+                              <md-tab ng-click="vm.click_tab_attachement_batiment_prevu()" ng-disabled="!vm.stepattachement_batiment_detail">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                        
+                                      
+                                      <span class="ms-form-wizard-step-text">Attachement batiment détail</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>                                   
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.attachement_batiment_prevu_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="divers_attachement_batiment_prevu in vm.alldivers_attachement_batiment_prevu"  ng-class="{selected: divers_attachement_batiment_prevu.$selected}" ng-click="vm.selectionDivers_attachement_batiment_prevu(divers_attachement_batiment_prevu)">
+
+                                        <td>
+                                          <span>{{divers_attachement_batiment_prevu.numero}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{divers_attachement_batiment_prevu.libelle}}</span>
+                                        </td>
+
+                                        <td>                                                    
+                                          <span>{{divers_attachement_batiment_prevu.unite}}</span>
+                                        </td>
+
+                                        <td>                                                    
+                                          <span>{{divers_attachement_batiment_prevu.quantite_prevu | number: 2}}</span>
+                                        </td>
+
+                                        <td>                                                    
+                                          <span>{{divers_attachement_batiment_prevu.prix_unitaire | number: 2}}</span>
+                                        </td>
+
+                                        <td>
+                                                    
+                                          <span>{{divers_attachement_batiment_prevu.montant_prevu | number: 2}}</span>
+                                        </td>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                         
+                        <!------------------------Debut attachement batiment prevu------------------------------>  
+
+                        <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
+                              <md-tab ng-click="vm.click_rubrique_attachement_latrine_mpe()" ng-disabled="!vm.steprubriquetachement_latrine">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                        
+                                      
+                                      <span class="ms-form-wizard-step-text">Rubrique attachement latrine</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>                                   
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.rubrique_attachement_latrine_mpe_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="rubrique_attachement_latrine_mpe in vm.allrubrique_attachement_latrine_mpe"  ng-class="{selected: rubrique_attachement_latrine_mpe.$selected}" ng-click="vm.selectionRubrique_attachement_latrine_mpe(rubrique_attachement_latrine_mpe)" style="text-align: center">
+
+                                        <td>
+                                          <span>{{rubrique_attachement_latrine_mpe.numero}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_latrine_mpe.libelle}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_latrine_mpe.montant_prevu | number: 2}}</span>
+                                        </td>
+                                      </tbody>
+
+                                      <tfoot >
+                                          <!--tr style="background-color: rgba(54,117,136,0.9); color:white;text-align: center"-->
+                                          <tr style=" font-weight:bold; text-align: center">
+                                            <td colspan="2">TOTAL LATRINE</td>
+                                            <td>{{vm.Total_prevu_latrine()}}</td>
+
+                                          </tr>
+                                      </tfoot> 
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------FIN rubrique latrine mpe---------------------------------->
+
+                        <!------------------------Debut attachement latrine prevu------------------------------>
+                              <md-tab ng-click="vm.click_tab_attachement_latrine_prevu()" ng-disabled="!vm.stepattachement_latrine_detail">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                        
+                                      
+                                      <span class="ms-form-wizard-step-text">Attachement latrine détail</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>                                   
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.attachement_latrine_prevu_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="divers_attachement_latrine_prevu in vm.alldivers_attachement_latrine_prevu"  ng-class="{selected: divers_attachement_latrine_prevu.$selected}" ng-click="vm.selectionDivers_attachement_latrine_prevu(divers_attachement_latrine_prevu)">
+
+                                        <td>
+                                          <span>{{divers_attachement_latrine_prevu.numero}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{divers_attachement_latrine_prevu.libelle}}</span>
+                                        </td>
+
+                                        <td>                                                    
+                                          <span>{{divers_attachement_latrine_prevu.unite}}</span>
+                                        </td>
+
+                                        <td>                                                    
+                                          <span>{{divers_attachement_latrine_prevu.quantite_prevu | number: 2}}</span>
+                                        </td>
+
+                                        <td>                                                    
+                                          <span>{{divers_attachement_latrine_prevu.prix_unitaire | number: 2}}</span>
+                                        </td>
+
+                                        <td>                                                    
+                                          <span>{{divers_attachement_latrine_prevu.montant_prevu | number: 2}}</span>
+                                        </td>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!------------------------Fin attachement latrine prevu------------------------------>
+  
+
+                        <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
+                              <md-tab ng-click="vm.click_rubrique_attachement_mobilier_mpe()" ng-disabled="!vm.steprubriquetachement_mobilier">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                        
+                                      
+                                      <span class="ms-form-wizard-step-text">Rubrique attachement mobilier</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>                                   
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.rubrique_attachement_mobilier_mpe_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="rubrique_attachement_mobilier_mpe in vm.allrubrique_attachement_mobilier_mpe"  ng-class="{selected: rubrique_attachement_mobilier_mpe.$selected}" ng-click="vm.selectionRubrique_attachement_mobilier_mpe(rubrique_attachement_mobilier_mpe)" style="text-align: center">
+
+                                        <td>
+                                          <span>{{rubrique_attachement_mobilier_mpe.numero}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_mobilier_mpe.libelle}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{rubrique_attachement_mobilier_mpe.montant_prevu | number: 2}}</span>
+                                        </td>
+                                      </tbody>
+
+                                      <tfoot >
+                                          <!--tr style="background-color: rgba(54,117,136,0.9); color:white;text-align: center"-->
+                                          <tr style=" font-weight:bold; text-align: center">
+                                            <td colspan="2">TOTAL MOBILIER</td>
+                                            <td>{{vm.Total_prevu_mobilier()}}</td>
+
+                                          </tr>
+                                      </tfoot> 
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                        <!---------------------------FIN rubrique mobilier mpe---------------------------------->
+
+                        <!------------------------Debut attachement mobilier prevu------------------------------>
+                              <md-tab ng-click="vm.click_tab_attachement_mobilier_prevu()" ng-disabled="!vm.stepattachement_mobilier_detail">
+                                <md-tab-label>
+                                  <span class="ms-form-wizard-step-label">                        
+                                      
+                                      <span class="ms-form-wizard-step-text">Attachement mobilier détail</span>
+                                  </span>
+                                 
+                                </md-tab-label>
+                                
+                                <md-tab-body><br>                                   
+                                   <div>        
+                                    <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                      <thead>
+                                        <tr>
+                                          <th class="secondary-text" ng-repeat="mem in ::vm.attachement_mobilier_prevu_column">
+                                            <div class="table-header">
+                                              <span class="column-title">{{mem.titre}}</span>
+                                            </div>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                               
+                                      <tbody>
+                                        <tr ng-repeat="divers_attachement_mobilier_prevu in vm.alldivers_attachement_mobilier_prevu"  ng-class="{selected: divers_attachement_mobilier_prevu.$selected}" ng-click="vm.selectionDivers_attachement_mobilier_prevu(divers_attachement_mobilier_prevu)">
+
+                                        <td>
+                                          <span>{{divers_attachement_mobilier_prevu.numero}}</span>
+                                        </td>
+                                        <td>
+                                          <span>{{divers_attachement_mobilier_prevu.libelle}}</span>
+                                        </td>
+
+                                        <td>
+                                                    
+                                          <span>{{divers_attachement_mobilier_prevu.unite}}</span>
+                                        </td>
+
+                                        <td>
+                                                    
+                                          <span>{{divers_attachement_mobilier_prevu.quantite_prevu | number: 2}}</span>
+                                        </td>
+
+                                        <td>
+                                                    
+                                          <span>{{divers_attachement_mobilier_prevu.prix_unitaire | number: 2}}</span>
+                                        </td>
+
+                                        <td>
+                                                    
+                                          <span>{{divers_attachement_mobilier_prevu.montant_prevu | number: 2}}</span>
+                                        </td>
+                                      </tbody>
+                                    </table>
+                                  </div>
+
+                                </md-tab-body>
+                              </md-tab>
+                            </md-tabs> 
+                          </ms-form-wizard>
+                      </md-tab-body>
+                    </md-tab>
+                    <!-----------------------------------FIN document moe ------------------------------------------>
                     <md-tab ng-disabled = "!vm.stepsuiviexecution || vm.validation_contrat_prestataire==0" ng-click="vm.clicksuivi_travaux()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
@@ -2182,7 +2794,8 @@
                       
                       <md-tab-body>
                        <ms-form-wizard flex id="sousmenu"> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu">                    
+                          <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu"-->  
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">                  
                               <md-tab>
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
@@ -2366,24 +2979,16 @@
                                       <tbody>
                                         <tr ng-repeat="avancement_batiment in vm.allavancement_batiment"  ng-class="{selected: avancement_batiment.$selected}" ng-click="vm.selectionAvancement_batiment(avancement_batiment)">
                                                                            
-                                          <td>                                                      
-                                            <span>{{avancement_batiment.intitule}}</span>
-                                          </td>
-                                                    
-                                          <td>                                                      
-                                            <span>{{avancement_batiment.description}}</span>
-                                          </td>
-
-                                          <td>                                                      
-                                            <span>{{avancement_batiment.attachement_batiment.ponderation_batiment}}% {{avancement_batiment.attachement_batiment.libelle}}</span>
-                                          </td>
-
                                           <td>                        
                                             <span>{{vm.formatDate(avancement_batiment.date)}}</span>
                                           </td>
                                                     
                                           <td>                                                      
-                                            <span>{{avancement_batiment.observation}}</span>
+                                            <span>{{avancement_batiment.attachement_detail.libelle}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{avancement_batiment.pourcentage}}</span>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -2420,24 +3025,17 @@
                                       <tbody>
                                         <tr ng-repeat="avancement_latrine in vm.allavancement_latrine"  ng-class="{selected: avancement_latrine.$selected}" ng-click="vm.selectionAvancement_latrine(avancement_latrine)">
                                                                            
-                                          <td>                                                      
-                                            <span>{{avancement_latrine.intitule}}</span>
-                                          </td>
-                                                    
-                                          <td>                                                      
-                                            <span>{{avancement_latrine.description}}</span>
-                                          </td>
-
-                                          <td>                                                      
-                                            <span>{{avancement_latrine.attachement_latrine.ponderation_latrine}}% {{avancement_latrine.attachement_latrine.libelle}}</span>
-                                          </td>
-
-                                          <td>                          
+                                                                          
+                                          <td>                        
                                             <span>{{vm.formatDate(avancement_latrine.date)}}</span>
                                           </td>
                                                     
                                           <td>                                                      
-                                            <span>{{avancement_latrine.observation}}</span>
+                                            <span>{{avancement_latrine.attachement_detail.libelle}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{avancement_latrine.pourcentage}}</span>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -2474,24 +3072,17 @@
                                       <tbody>
                                         <tr ng-repeat="avancement_mobilier in vm.allavancement_mobilier"  ng-class="{selected: avancement_mobilier.$selected}" ng-click="vm.selectionAvancement_mobilier(avancement_mobilier)">
                                                                            
-                                          <td>                                                      
-                                            <span>{{avancement_mobilier.intitule}}</span>
-                                          </td>
-                                                    
-                                          <td>                                                      
-                                            <span>{{avancement_mobilier.description}}</span>
-                                          </td>
-
-                                          <td>                                                      
-                                            <span>{{avancement_mobilier.attachement_mobilier.ponderation_mobilier}}% {{avancement_mobilier.attachement_mobilier.libelle}}</span>
-                                          </td>
-
-                                          <td>                          
+                                                                           
+                                          <td>                        
                                             <span>{{vm.formatDate(avancement_mobilier.date)}}</span>
                                           </td>
                                                     
                                           <td>                                                      
-                                            <span>{{avancement_mobilier.observation}}</span>
+                                            <span>{{avancement_mobilier.attachement_detail.libelle}}</span>
+                                          </td>
+                                                    
+                                          <td>                                                      
+                                            <span>{{avancement_mobilier.pourcentage}}</span>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -2549,6 +3140,14 @@
                                                 
                                       <td>                                                  
                                         <span>{{avenant_mpe.cout_mobilier}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{avenant_mpe.cout_total_ht}}</span>
+                                      </td>
+                                                
+                                      <td>                                                  
+                                        <span>{{avenant_mpe.cout_total_ttc}}</span>
                                       </td>
 
                                       <td>                         
@@ -2722,8 +3321,6 @@
                             </table>
                           </div>
               </md-tab-body>
-            </md-tab>
-            <md-tab>
             </md-tab>
             <!-----------------------FIN RELIQUAT--------------------------------------------->
             

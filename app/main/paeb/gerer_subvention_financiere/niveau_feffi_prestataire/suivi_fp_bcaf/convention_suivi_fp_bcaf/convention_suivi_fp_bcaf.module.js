@@ -29,7 +29,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_feffi_prestataire.suivi_fp_bcaf.convention_suivi_fp_bcaf', {
-            title: 'Suivi convention (BCAF)',
+            title: 'Validation activité financier (BCAF)',
             icon  : 'icon-rotate-3d',
             state: 'app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_suivi_fp_bcaf_convention_suivi_fp_bcaf',
             weight: 1,
@@ -53,7 +53,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["OBCAF","ADMIN"];
+                var permissions = ["BCAF","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

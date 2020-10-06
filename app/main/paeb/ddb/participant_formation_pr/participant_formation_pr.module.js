@@ -17,7 +17,7 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.participant_formation_pr', {
-            title : 'Participant formation PR',
+            title : 'Fonction Participant formation PR',
             icon  : 'icon-account-network',
             weight: 13
         });

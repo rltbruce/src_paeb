@@ -151,6 +151,12 @@
         vm.selectedItemContrat_moe = {} ;
         vm.allcontrat_moe = [] ;
 
+        vm.allrubrique_calendrier_paie_moe = [];
+        vm.selectedItemRubrique_calendrier_paie_moe = {};
+
+        vm.allsousrubrique_calendrier_paie_moe = [];
+        vm.selectedItemSousrubrique_calendrier_paie_moe = {};
+
         vm.selectedItemAvenant_moe = {} ;
         vm.allavenant_moe = [] ;
 
@@ -182,6 +188,21 @@
 
         vm.selectedItemContrat_prestataire = {} ;
         vm.allcontrat_prestataire = [] ;
+
+        vm.allrubrique_attachement_batiment_mpe = [];
+        vm.selectedItemRubrique_attachement_batiment_mpe = {};
+
+        vm.selectedItemDivers_attachement_batiment_prevu = {} ;
+
+        vm.allrubrique_attachement_latrine_mpe = [];
+        vm.selectedItemRubrique_attachement_latrine_mpe = {};
+
+        vm.selectedItemDivers_attachement_latrine_prevu = {} ;
+
+        vm.allrubrique_attachement_mobilier_mpe = [];
+        vm.selectedItemRubrique_attachement_mobilier_mpe = {};
+
+        vm.selectedItemDivers_attachement_mobilier_prevu = {} ;
 
         vm.selectedItemAvenant_mpe = {} ;
         vm.allavenant_mpe = [] ;
@@ -226,6 +247,33 @@
           pagingType: 'simple',
           autoWidth: false          
         };
+
+        vm.showbuttonfiltre=true;
+        vm.showfiltre=false;
+
+       /* vm.showformfiltre = function()
+        {
+          vm.showbuttonfiltre=false;
+          vm.showfiltre=true;
+        }
+
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+
+            vm.showfiltre=false;
+            vm.showbuttonfiltre=true;
+        }*/
+        vm.showformfiltre = function()
+        {
+          //vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
        
         vm.datenow = new Date();       
 
@@ -332,21 +380,23 @@
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
-        {titre:"Feffi"
+        {titre:"FEFFI"
         },
-        {titre:"Site"
+        {titre:"Code sous projet site"
         },
-        {titre:"Reference convention"
+        {titre:"Accés site"
+        },
+        {titre:"Référence convention"
         },
         {titre:"Objet"
         },
-        {titre:"Reference Financement"
+        {titre:"Référence Financement"
         },
-        {titre:"Cout éstimé"
+        {titre:"Coût éstimé"
         },
-        {titre:"Avancement"
+        {titre:"Avancement physique"
         },
         {titre:"Utilisateur"
         }]; 
@@ -393,10 +443,6 @@
                 console.log(vm.allconvention_entete);
             });
                 console.log(filtre);
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
         }
         
         /***************fin convention cisco/feffi************/
@@ -477,12 +523,15 @@
         vm.step_menu_pr = function()
         {
             return new Promise(function (resolve, reject)
-            {
-                apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+            {   
+                apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(resul)
                 {
+                    vm.allpassation_marches_pr = resul.data.response;
+                    apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                    {
                         vm.allcontrat_partenaire_relai = result.data.response;
-                        console.log(vm.allcontrat_partenaire_relai);
                         return resolve('ok');
+                    });
                 }); 
                 vm.styleTabfils = "acc_sous_menu";
                 vm.stepimporte_pr = false;
@@ -493,13 +542,13 @@
         {
             return new Promise(function (resolve, reject) 
             {
-                apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(resul)
                 {
-                    vm.allpassation_marches_moe = result.data.response;
+                    vm.allpassation_marches_moe = resul.data.response;
                     apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                     {
                         vm.allcontrat_moe = result.data.response;
-                        return resolve('ok'); 
+                        return resolve('ok');
                     });
                                 
                 });
@@ -512,10 +561,9 @@
         {
             return new Promise(function (resolve, reject)
             {
-                apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(resul)
                 {
-                    vm.allpassation_marches = result.data.response;
-                    console.log(vm.allpassation_marches);
+                    vm.allpassation_marches = resul.data.response;
                     apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                     {
                          vm.allcontrat_prestataire = result.data.response;
@@ -525,36 +573,6 @@
                 vm.styleTabfils = "acc_sous_menu";            
             });
         }
-
-      /*  function donnee_menu_pr(item,session)
-        {
-            return new Promise(function (resolve, reject)
-            {
-                apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                {
-                        vm.allcontrat_partenaire_relai = result.data.response;
-                        console.log(vm.allcontrat_partenaire_relai);
-                        return resolve('ok');
-                });            
-            });
-        }*/
-
-       /* function donnee_menu_moe(item,session)
-        {   vm.showbuttonNouvcontrat_moe=true;
-            return new Promise(function (resolve, reject) 
-            {
-                apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationvalideByconvention','id_convention_entete',item.id).then(function(result)
-                {
-                    vm.allpassation_marches_moe = result.data.response;
-                    apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                    {
-                        vm.allcontrat_moe = result.data.response;
-                                    return resolve('ok'); 
-                    });
-                                
-                });
-            });
-        }*/
         function donnee_sousmenu_feffi(item,session)
         {
             return new Promise(function (resolve, reject) 
@@ -573,22 +591,6 @@
             });
         
         }
-       /* function donnee_menu_mpe(item,session)
-        {
-            return new Promise(function (resolve, reject)
-            {
-                apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationvalideByconvention','id_convention_entete',item.id).then(function(result)
-                {
-                    vm.allpassation_marches = result.data.response;
-                    console.log(vm.allpassation_marches);
-                    apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',item.id).then(function(result)
-                    {
-                         vm.allcontrat_prestataire = result.data.response;
-                        return resolve('ok');
-                    });
-                });             
-            });
-        }*/
 
         function donnee_menu_indicateur(item,session)
         {
@@ -669,7 +671,20 @@
 
   /**********************************************Avenant convention***************************************************/
 
-  
+  //col table
+        vm.passation_marches_pr_column = [
+        {titre:"Date Appel manifestation"
+        },
+        {titre:"Date lancement DP"
+        },
+        {titre:"Date remise"
+        },
+        {titre:"Nombre plis reçu"
+        },
+        {titre:"Date signature contrat"
+        },       
+        {titre:"Date OS"
+        }];
   /*********************************************debut contrat pr**********************************************/ 
       vm.stepcontrat_pr = function()
       {
@@ -685,7 +700,7 @@
         },
         {titre:"Réference contrat"
         },
-        {titre:"montant contrat"
+        {titre:"Montant contrat"
         },
         {titre:"Date signature"
         }];
@@ -1383,6 +1398,9 @@
         vm.step_contrat_moe = function (item,session)
         {   
             vm.styleTabfils = "acc_sous_menu";
+            vm.stepcalendrier_paie_moe=false;
+            vm.sousrubrique_calendrier=false;
+            vm.calendrier_prevu=false;
         }
       //col table
         vm.contrat_moe_column = [
@@ -1394,7 +1412,13 @@
         },
         {titre:"montant contrat"
         },
+        {titre:"Date Notification intention"
+        },
+        {titre:"Date Notification attribution"
+        },
         {titre:"Date signature"
+        },
+        {titre:"Date OS"
         }];
      
         
@@ -1440,7 +1464,10 @@
                 }
             vm.validation_contrat_moe = item.validation;
             vm.stepprestation_moe = true;            
-            vm.step_importer_doc_moe = true;
+            vm.step_importer_doc_moe = true;            
+            vm.stepcalendrier_paie_moe=true;
+            vm.sousrubrique_calendrier=false;
+            vm.calendrier_prevu=false;
             //console.log(item);
            }
              
@@ -1456,6 +1483,151 @@
         });
         
       /*****************************************fin contrat moe******************************************************/
+
+        
+        /**********************************fin contrat_prestataire****************************************/
+
+        vm.step_calendrier_paie_moe = function()
+        {
+
+            vm.sousrubrique_calendrier= false;
+            vm.calendrier_prevu= false;
+             apiFactory.getAPIgeneraliserREST("divers_rubrique_calendrier_paie_moe/index","menu","getrubriquewithmontant_prevubycontrat","id_contrat_bureau_etude",vm.selectedItemContrat_moe.id).then(function(result)
+            {   
+                vm.allrubrique_calendrier_paie_moe= result.data.response;
+
+                console.log(vm.allrubrique_calendrier_paie_moe);
+            });
+        }
+        /************************************************Debut rubrique attachement batiment_mpe***************************************************/
+       /************************************************Debut rubrique attachement batiment_mpe***************************************************/
+       
+        vm.rubrique_calendrier_paie_moe_column = [
+        {titre:"Libelle"
+        },
+        {titre:"Montant prévu"
+        }];
+
+        vm.click_rubrique_calendrier_paie_moe = function()
+        {
+            apiFactory.getAPIgeneraliserREST("divers_rubrique_calendrier_paie_moe/index","menu","getrubriquewithmontant_prevubycontrat","id_contrat_bureau_etude",vm.selectedItemContrat_moe.id).then(function(result)
+            {   
+                vm.allrubrique_calendrier_paie_moe= result.data.response;                
+                vm.sousrubrique_calendrier= false;
+                vm.calendrier_prevu= false;
+
+                console.log(vm.allrubrique_calendrier_paie_moe);
+            });
+        }
+ //fonction selection item rubrique attachement batiment mpe
+        vm.selectionRubrique_calendrier_paie_moe= function (item)
+        {
+            vm.selectedItemRubrique_calendrier_paie_moe = item;
+            vm.sousrubrique_calendrier= true;
+            vm.calendrier_prevu= false;
+            //vm.stepattachement_batiment_detail = true;
+            
+        };
+
+        $scope.$watch('vm.selectedItemRubrique_calendrier_paie_moe', function()
+        {
+             if (!vm.allrubrique_calendrier_paie_moe) return;
+             vm.allrubrique_calendrier_paie_moe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemRubrique_calendrier_paie_moe.$selected = true;
+        });
+
+        vm.Total_prevu_rubrique_moe = function()
+        {
+            var total_prevu = 0;
+            if (vm.allrubrique_calendrier_paie_moe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_calendrier_paie_moe.length; i++){
+                    var product = vm.allrubrique_calendrier_paie_moe[i];
+                    total_prevu += parseFloat(product.montant_prevu);
+                }
+            }
+            return total_prevu.toFixed(2);
+        }
+
+/************************************************fin rubrique attachement batiment_mpe***************************************************/
+
+/************************************************Debut rubrique attachement batiment_mpe***************************************************/
+       
+        vm.sousrubrique_calendrier_paie_moe_column = [
+        {titre:"Libelle"
+        },
+        {titre:"Montant prévu"
+        }];
+
+        vm.click_sousrubrique_calendrier_paie_moe = function()
+        {
+            apiFactory.getAPIgeneraliserREST("divers_sousrubrique_calendrier_paie_moe/index","menu","getsousrubriquewithmontant_prevubycontrat","id_contrat_bureau_etude",vm.selectedItemContrat_moe.id,"id_rubrique",vm.selectedItemRubrique_calendrier_paie_moe.id).then(function(result)
+            {   
+                vm.allsousrubrique_calendrier_paie_moe= result.data.response;
+                //vm.stepattachement_batiment_detail = false;
+
+                console.log(vm.allsousrubrique_calendrier_paie_moe);
+            });
+        }
+ //fonction selection item rubrique attachement batiment mpe
+        vm.selectionSousrubrique_calendrier_paie_moe= function (item)
+        {
+            vm.selectedItemSousrubrique_calendrier_paie_moe = item;
+            vm.calendrier_prevu= true;
+            //vm.stepattachement_batiment_detail = true;
+            
+        };
+
+        $scope.$watch('vm.selectedItemSousrubrique_calendrier_paie_moe', function()
+        {
+             if (!vm.allsousrubrique_calendrier_paie_moe) return;
+             vm.allsousrubrique_calendrier_paie_moe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemSousrubrique_calendrier_paie_moe.$selected = true;
+        });
+
+        vm.Total_prevu_sousrubrique_moe = function()
+        {
+            var total_prevu = 0;
+            if (vm.allsousrubrique_calendrier_paie_moe.length!=0)
+            {                
+                for(var i = 0; i < vm.allsousrubrique_calendrier_paie_moe.length; i++){
+                    var product = vm.allsousrubrique_calendrier_paie_moe[i];
+                    total_prevu += parseFloat(product.montant_prevu);
+                }
+            }
+            return total_prevu.toFixed(2);
+        }
+
+/************************************************fin rubrique attachement batiment_mpe***************************************************/
+
+/************************************************Debut rubrique attachement batiment_mpe***************************************************/
+       
+        vm.calendrier_paie_moe_prevucolumn = [
+        {titre:"Libelle"
+        },
+        {titre:"Pourcentage"
+        },
+        {titre:"Montant prévu"
+        }];
+
+        vm.click_calendrier_paie_moe_prevu = function()
+        {
+            apiFactory.getAPIgeneraliserREST("divers_calendrier_paie_moe_prevu/index","menu","getcalendrier_paie_moe_prevuwithdetailbycontrat","id_contrat_bureau_etude",vm.selectedItemContrat_moe.id,"id_sousrubrique",vm.selectedItemSousrubrique_calendrier_paie_moe.id).then(function(result)
+            {   
+                vm.allcalendrier_paie_moe_prevu= result.data.response;
+                //vm.stepattachement_batiment_detail = false;
+
+                console.log(vm.allcalendrier_paie_moe_prevu);
+            });
+        }
+
+/************************************************fin rubrique attachement batiment_mpe***************************************************/
 
        /**********************************************Debut Dossier entreprise***************************************************/
         
@@ -1777,7 +1949,17 @@
         },
         {titre:"Cout mobilier"
         },
+        {titre:"Montant total HT"
+        },
+        {titre:"Montant total TTC"
+        },
+        {titre:"Date Notification intention"
+        },
+        {titre:"Date Notification attribution"
+        },
         {titre:"Date signature"
+        },
+        {titre:"Date OS"
         }];
         //Masque de saisi ajout
        
@@ -1798,17 +1980,17 @@
                               vm.allreception_mpe = result.data.response;                              
                           });
 
-                          apiFactory.getAPIgeneraliserREST("avancement_batiment/index",'menu','getavancementvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                          apiFactory.getAPIgeneraliserREST("avancement_physi_batiment/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
                           {
                               vm.allavancement_batiment = result.data.response;                              
                           });
 
-                          apiFactory.getAPIgeneraliserREST("avancement_latrine/index",'menu','getavancementvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                          apiFactory.getAPIgeneraliserREST("avancement_physi_latrine/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
                           {
                               vm.allavancement_latrine = result.data.response;                              
                           });
 
-                          apiFactory.getAPIgeneraliserREST("avancement_mobilier/index",'menu','getavancementvalideBycontrat','id_contrat_prestataire',item.id).then(function(result)
+                          apiFactory.getAPIgeneraliserREST("avancement_physi_mobilier/index",'menu','getavancementBycontrat','id_contrat_prestataire',item.id).then(function(result)
                           {
                               vm.allavancement_mobilier = result.data.response;                              
                           });
@@ -1841,6 +2023,328 @@
         
 /**********************************fin contrat_prestataire****************************************/
 
+        vm.step_attachement_prevu = function()
+        {
+                vm.steprubriquetachement_latrine = false;
+                vm.steprubriquetachement_mobilier = false;
+             apiFactory.getAPIgeneraliserREST("divers_attachement_batiment/index","menu","getrubrique_attachement_withmontant_prevu","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
+            {   
+                vm.allrubrique_attachement_batiment_mpe= result.data.response;
+                vm.stepattachement_batiment_detail = false;
+                vm.stepattachement_latrine_detail = false;
+                vm.stepattachement_mobilier_detail = false;
+
+                vm.steprubriquetachement_latrine = true;
+                vm.steprubriquetachement_mobilier = true;
+            });
+        }
+
+/************************************************Debut rubrique attachement batiment_mpe***************************************************/
+       
+        vm.rubrique_attachement_batiment_mpe_column = [
+        {titre:"Numero"
+        },
+        {titre:"Libelle"
+        },
+        {titre:"Montant prévu"
+        }];
+
+        vm.click_rubrique_attachement_batiment_mpe = function()
+        {
+            apiFactory.getAPIgeneraliserREST("divers_attachement_batiment/index","menu","getrubrique_attachement_withmontant_prevu","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
+            {   
+                vm.allrubrique_attachement_batiment_mpe= result.data.response;
+                vm.stepattachement_batiment_detail = false;
+
+                console.log(vm.allrubrique_attachement_batiment_mpe);
+            });
+        }
+ //fonction selection item rubrique attachement batiment mpe
+        vm.selectionRubrique_attachement_batiment_mpe= function (item)
+        {
+            vm.selectedItemRubrique_attachement_batiment_mpe = item;
+            vm.stepattachement_batiment_detail = true;
+            
+        };
+
+        $scope.$watch('vm.selectedItemRubrique_attachement_batiment_mpe', function()
+        {
+             if (!vm.allrubrique_attachement_batiment_mpe) return;
+             vm.allrubrique_attachement_batiment_mpe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemRubrique_attachement_batiment_mpe.$selected = true;
+        });
+
+        vm.Total_prevu = function()
+        {
+            var total_prevu = 0;
+            if (vm.allrubrique_attachement_batiment_mpe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_attachement_batiment_mpe.length; i++){
+                    var product = vm.allrubrique_attachement_batiment_mpe[i];
+                    total_prevu += parseFloat(product.montant_prevu);
+                }
+            }
+            return total_prevu.toFixed(2);
+        }
+
+/************************************************fin rubrique attachement batiment_mpe***************************************************/
+/**********************************************debut attachement batiment travauxe***************************************************/
+        vm.click_tab_attachement_batiment_prevu = function()
+        {
+            
+            apiFactory.getAPIgeneraliserREST("divers_attachement_batiment_prevu/index","menu","getattachement_batiment_prevuwithdetailbyrubrique",
+                    "id_attachement_batiment",vm.selectedItemRubrique_attachement_batiment_mpe.id,
+                    "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.alldivers_attachement_batiment_prevu = result.data.response;
+                console.log(vm.alldivers_attachement_batiment_prevu);
+            });
+           /* apiFactory.getAPIgeneraliserREST("divers_attachement_batiment_prevu/index","menu","getdivers_attachement_prevuBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.alldivers_attachement_batiment_prevu= result.data.response;
+            console.log(vm.alldivers_attachement_batiment_prevu);
+            });*/
+        }
+
+
+        vm.attachement_batiment_prevu_column = [
+        {titre:"Numero"
+        },
+        {titre:"Libelle"
+        },
+        {titre:"Unite"
+        },
+        {titre:"Quantite prévu"
+        },
+        {titre:"Prix unitaire"
+        },
+        {titre:"Montant prévu"
+        }];
+
+        //fonction selection item justificatif batiment
+        vm.selectionDivers_attachement_batiment_prevu= function (item)
+        {
+            vm.selectedItemDivers_attachement_batiment_prevu = item;
+            
+        };
+        $scope.$watch('vm.selectedItemDivers_attachement_batiment_prevu', function()
+        {
+             if (!vm.alldivers_attachement_batiment_prevu) return;
+             vm.alldivers_attachement_batiment_prevu.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDivers_attachement_batiment_prevu.$selected = true;
+        });
+    
+    /******************************************fin attachement batiment travaux***********************************************/
+ /************************************************Debut rubrique attachement batiment_mpe***************************************************/
+       
+        vm.rubrique_attachement_latrine_mpe_column = [
+        {titre:"Numero"
+        },
+        {titre:"Libelle"
+        },
+        {titre:"Montant prévu"
+        }];
+
+        vm.click_rubrique_attachement_latrine_mpe = function()
+        {
+            apiFactory.getAPIgeneraliserREST("divers_attachement_latrine/index","menu","getrubrique_attachement_withmontant_prevu","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
+            {   
+                vm.allrubrique_attachement_latrine_mpe= result.data.response;
+                vm.stepattachement_latrine_detail = false;
+
+                console.log(vm.allrubrique_attachement_latrine_mpe);
+            });
+        }
+ //fonction selection item rubrique attachement latrine mpe
+        vm.selectionRubrique_attachement_latrine_mpe= function (item)
+        {
+            vm.selectedItemRubrique_attachement_latrine_mpe = item;
+            vm.stepattachement_latrine_detail = true;
+            
+        };
+
+        $scope.$watch('vm.selectedItemRubrique_attachement_latrine_mpe', function()
+        {
+             if (!vm.allrubrique_attachement_latrine_mpe) return;
+             vm.allrubrique_attachement_latrine_mpe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemRubrique_attachement_latrine_mpe.$selected = true;
+        });
+
+        vm.Total_prevu_latrine = function()
+        {
+            var total_prevu = 0;
+            if (vm.allrubrique_attachement_latrine_mpe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_attachement_latrine_mpe.length; i++){
+                    var product = vm.allrubrique_attachement_latrine_mpe[i];
+                    total_prevu += parseFloat(product.montant_prevu);
+                }
+            }
+            return total_prevu.toFixed(2);
+        }
+
+/************************************************fin rubrique attachement latrine_mpe***************************************************/
+
+/**********************************************debut attachement latrine travauxe***************************************************/
+        vm.click_tab_attachement_latrine_prevu = function()
+        {
+            
+            apiFactory.getAPIgeneraliserREST("divers_attachement_latrine_prevu/index","menu","getattachement_latrine_prevuwithdetailbyrubrique",
+                    "id_attachement_latrine",vm.selectedItemRubrique_attachement_latrine_mpe.id,
+                    "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.alldivers_attachement_latrine_prevu = result.data.response;
+                console.log(vm.alldivers_attachement_latrine_prevu);
+            });
+           /* apiFactory.getAPIgeneraliserREST("divers_attachement_latrine_prevu/index","menu","getdivers_attachement_prevuBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.alldivers_attachement_latrine_prevu= result.data.response;
+            console.log(vm.alldivers_attachement_latrine_prevu);
+            });*/
+        }
+
+
+        vm.attachement_latrine_prevu_column = [
+        {titre:"Numero"
+        },
+        {titre:"Libelle"
+        },
+        {titre:"Unite"
+        },
+        {titre:"Quantite prévu"
+        },
+        {titre:"Prix unitaire"
+        },
+        {titre:"Montant prévu"
+        }];
+        //fonction selection item justificatif latrine
+        vm.selectionDivers_attachement_latrine_prevu= function (item)
+        {
+            vm.selectedItemDivers_attachement_latrine_prevu = item;
+            
+        };
+        $scope.$watch('vm.selectedItemDivers_attachement_latrine_prevu', function()
+        {
+             if (!vm.alldivers_attachement_latrine_prevu) return;
+             vm.alldivers_attachement_latrine_prevu.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDivers_attachement_latrine_prevu.$selected = true;
+        });
+
+    /******************************************fin attachement latrine travaux***********************************************/
+ /************************************************Debut rubrique attachement mobilier_mpe***************************************************/
+       
+        vm.rubrique_attachement_mobilier_mpe_column = [
+        {titre:"Numero"
+        },
+        {titre:"Libelle"
+        },
+        {titre:"Montant prévu"
+        }];
+
+        vm.click_rubrique_attachement_mobilier_mpe = function()
+        {
+            apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier/index","menu","getrubrique_attachement_withmontant_prevu","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
+            {   
+                vm.allrubrique_attachement_mobilier_mpe= result.data.response;
+                vm.stepattachement_mobilier_detail = false;
+
+                console.log(vm.allrubrique_attachement_mobilier_mpe);
+            });
+        }
+ //fonction selection item rubrique attachement mobilier mpe
+        vm.selectionRubrique_attachement_mobilier_mpe= function (item)
+        {
+            vm.selectedItemRubrique_attachement_mobilier_mpe = item;
+            vm.stepattachement_mobilier_detail = true;
+            
+        };
+
+        $scope.$watch('vm.selectedItemRubrique_attachement_mobilier_mpe', function()
+        {
+             if (!vm.allrubrique_attachement_mobilier_mpe) return;
+             vm.allrubrique_attachement_mobilier_mpe.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemRubrique_attachement_mobilier_mpe.$selected = true;
+        });
+
+        vm.Total_prevu_mobilier = function()
+        {
+            var total_prevu = 0;
+            if (vm.allrubrique_attachement_mobilier_mpe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_attachement_mobilier_mpe.length; i++){
+                    var product = vm.allrubrique_attachement_mobilier_mpe[i];
+                    total_prevu += parseFloat(product.montant_prevu);
+                }
+            }
+            return total_prevu.toFixed(2);
+        }
+
+/************************************************fin rubrique attachement mobilier_mpe***************************************************/
+/**********************************************debut attachement mobilier travauxe***************************************************/
+        vm.click_tab_attachement_mobilier_prevu = function()
+        {
+            
+            apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier_prevu/index","menu","getattachement_mobilier_prevuwithdetailbyrubrique",
+                    "id_attachement_mobilier",vm.selectedItemRubrique_attachement_mobilier_mpe.id,
+                    "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.alldivers_attachement_mobilier_prevu = result.data.response;
+                console.log(vm.alldivers_attachement_mobilier_prevu);
+            });
+           /* apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier_prevu/index","menu","getdivers_attachement_prevuBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.alldivers_attachement_mobilier_prevu= result.data.response;
+            console.log(vm.alldivers_attachement_mobilier_prevu);
+            });*/
+        }
+
+
+        vm.attachement_mobilier_prevu_column = [
+        {titre:"Numero"
+        },
+        {titre:"Libelle"
+        },
+        {titre:"Unite"
+        },
+        {titre:"Quantite prévu"
+        },
+        {titre:"Prix unitaire"
+        },
+        {titre:"Montant prévu"
+        }];
+
+        //fonction selection item justificatif mobilier
+        vm.selectionDivers_attachement_mobilier_prevu= function (item)
+        {
+            vm.selectedItemDivers_attachement_mobilier_prevu = item;
+            
+        };
+        $scope.$watch('vm.selectedItemDivers_attachement_mobilier_prevu', function()
+        {
+             if (!vm.alldivers_attachement_mobilier_prevu) return;
+             vm.alldivers_attachement_mobilier_prevu.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDivers_attachement_mobilier_prevu.$selected = true;
+        });
+/******************************************fin attachement mobilier travaux***********************************************/
+
  /*********************************************fin avenant mpe***********************************************/
         vm.click_avenant_mpe = function()
         {
@@ -1857,6 +2361,10 @@
         {titre:"Cout latrine"
         },
         {titre:"Cout mobilier"
+        },
+        {titre:"Cout total HT"
+        },
+        {titre:"Cout total TTC"
         },
         {titre:"Date signature"
         }];
@@ -2048,36 +2556,17 @@
 /**********************************debut avancement batiment****************************************/
 //col table
         vm.avancement_batiment_column = [
-        {titre:"Intitule"
-        },
-        {titre:"Description"
+        {titre:"Date"
         },
         {titre:"Attachement"
         },
-        //{titre:"Ponderation"
-        //},
-        {titre:"Date"
-        },
-        {titre:"Observation"
+        {titre:"Pourcentage"
         }];
             
         //fonction selection item region
         vm.selectionAvancement_batiment= function (item)
         {
             vm.selectedItemAvancement_batiment = item;
-           if(item.id!=0)
-           {
-
-            apiFactory.getAPIgeneraliserREST("avancement_batiment_doc/index",'id_avancement_batiment',vm.selectedItemAvancement_batiment.id).then(function(result)
-            {
-                vm.allavancement_batiment_doc = result.data.response;
-                console.log(vm.allavancement_batiment_doc);
-            });       
-
-           }
-              vm.validation_avancement_batiment = item.validation; 
-             console.log(vm.validation_avancement_batiment); 
-             console.log(item.validation);
         };
         $scope.$watch('vm.selectedItemAvancement_batiment', function()
         {
@@ -2095,36 +2584,17 @@
 /**********************************debut avancement batiment****************************************/
 //col table
         vm.avancement_latrine_column = [
-        {titre:"Intitule"
-        },
-        {titre:"Description"
+        {titre:"Date"
         },
         {titre:"Attachement"
         },
-        //{titre:"Ponderation"
-        //},
-        {titre:"Date"
-        },
-        {titre:"Observation"
+        {titre:"Pourcentage"
         }];
         
         //fonction selection item region
         vm.selectionAvancement_latrine= function (item)
         {
             vm.selectedItemAvancement_latrine = item;
-           if(item.id!=0)
-           {
-
-            apiFactory.getAPIgeneraliserREST("avancement_latrine_doc/index",'id_avancement_latrine',vm.selectedItemAvancement_latrine.id).then(function(result)
-            {
-                vm.allavancement_latrine_doc = result.data.response;
-                console.log(vm.allavancement_latrine_doc);
-            });       
-
-           }
-              vm.validation_avancement_latrine = item.validation; 
-             console.log(vm.validation_avancement_latrine); 
-             console.log(item.validation);
         };
         $scope.$watch('vm.selectedItemAvancement_latrine', function()
         {
@@ -2141,36 +2611,17 @@
 /**********************************debut avancement batiment****************************************/
 //col table
         vm.avancement_mobilier_column = [
-        {titre:"Intitule"
-        },
-        {titre:"Description"
+        {titre:"Date"
         },
         {titre:"Attachement"
         },
-        //{titre:"Ponderation"
-        //},
-        {titre:"Date"
-        },
-        {titre:"Observation"
-        }];
+        {titre:"Pourcentage"
+        }]
            
         //fonction selection item region
         vm.selectionAvancement_mobilier= function (item)
         {
             vm.selectedItemAvancement_mobilier = item;
-           if(item.id!=0)
-           {
-
-            apiFactory.getAPIgeneraliserREST("avancement_mobilier_doc/index",'id_avancement_mobilier',vm.selectedItemAvancement_mobilier.id).then(function(result)
-            {
-                vm.allavancement_mobilier_doc = result.data.response;
-                console.log(vm.allavancement_mobilier_doc);
-            });         
-
-           }
-              vm.validation_avancement_mobilier = item.validation; 
-             console.log(vm.validation_avancement_mobilier); 
-             console.log(item.validation);
         };
         $scope.$watch('vm.selectedItemAvancement_mobilier', function()
         {

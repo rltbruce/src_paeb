@@ -4,6 +4,7 @@
 
     angular
         .module('app.paeb.gerer_subvention_operation.niveau_cisco_feffi.convention_cisco_feffi', [])
+        .run(testPermission)
         .config(config);
 var vs;
     /** @ngInject */
@@ -28,7 +29,7 @@ var vs;
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation.niveau_cisco_feffi.convention_cisco_feffi', {
-            title: 'Saisie convention',
+            title: 'Insertion convention CISCO/FEFFI',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_subvention_operation_niveau_cisco_feffi_convention_cisco_feffi',
 			weight: 2,

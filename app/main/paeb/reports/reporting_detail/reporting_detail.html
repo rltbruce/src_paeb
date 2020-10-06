@@ -1,4 +1,4 @@
-  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+  <div id="formsreporting" class="page-layout simple fullwidth doc-page" layout="column">
 
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="space-between">
@@ -42,23 +42,21 @@
               </div>                      
           </div>
         </header>
-        
-            <md-button type="submit" class="md-raised md-primary" aria-label="Enregistrer" ng-click="vm.afficherfiltre()" ng-show="vm.showboutonfiltre">
-                             Filtre
-            </md-button>
-          <div ng-show="vm.formfiltre">
+                
+        <div style="margin-top: 1px;">
+            <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
              <form name="filtreform" class="md-inline-form" novalidate >
                   <br>
                  <div layout="column" layout-gt-xs="row">
                      <md-input-container>
-                      <span>Date du</span>
-                     </md-input-container>
+                      <span style="font-size: 14.5px" class="text-semibold">Date signature convention du: &nbsp</span>
+                    </md-input-container>
 
                      <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required>                     
                      </md-datepicker>
 
                      <md-input-container>
-                       <span>&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
+                      <span style="font-size: 14.5px" class="text-semibold">&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
                     </md-input-container>
 
                     <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
@@ -138,7 +136,7 @@
 
                   <div layout="row">
                     <fieldset class="standard flex" style="display:inline-block;border:none;vertical-align:top;">
-                        <legend><code><md-checkbox ng-model="vm.cacher.convention_feffi" aria-label="Convetion"  style="margin: 4px;" ng-change="vm.change_convention_feffi(vm.cacher)" disabled>CONVENTION FEFFI</md-checkbox></code></legend>
+                        <legend><code><md-checkbox ng-model="vm.cacher.convention_feffi" aria-label="Convetion"  style="margin: 4px;" ng-change="vm.change_convention_feffi(vm.cacher)" disabled>CONVENTION FEFFI </md-checkbox></code></legend>
                         
                         <div style="font-size: 12px; margin-left:12px">
                             <!--md-checkbox ng-model="vm.cacher.estimation_convention" aria-label="ESTIMATION DE LA CONVENTION"  style="margin: 4px;" ng-change="vm.change_estimation_convention(vm.cacher)">Estimation de la convention</md-checkbox><br-->
@@ -152,9 +150,9 @@
                     </fieldset>
 
                       <fieldset class="standard flex" style="border:none;vertical-align:top;">
-                        <legend><code><md-checkbox ng-model="vm.cacher.partenaire_relais" aria-label="Partenaire relais"  style="margin: 4px;" ng-change="vm.change_partenaire_relais(vm.cacher)">Partenaire relais</md-checkbox></code></legend>                        
+                        <legend><code><md-checkbox ng-model="vm.cacher.partenaire_relais" aria-label="Partenaire relais"  style="margin: 4px;" ng-change="vm.change_partenaire_relais(vm.cacher)">Partenaire relais </md-checkbox></code></legend>                        
                         
-                          <div style="font-size: 12px; margin-left:12px">
+                          <div style="font-size: 12px; margin-left:12px" class="check_child">
                               <md-checkbox ng-model="vm.cacher.suivi_passation_marches_pr" aria-label="Suivi Passation des marchés PR"  style="margin: 4px;" ng-change="vm.change_suivi_passation_marches_pr(vm.cacher)">Suivi Passation des marchés PR</md-checkbox><br>
                               <md-checkbox ng-model="vm.cacher.suivi_prestation_pr" aria-label="Suivi Prestation par PR"  style="margin: 4px;" ng-change="vm.change_suivi_prestation_pr(vm.cacher)">Suivi Prestation par PR</md-checkbox> <br>
                           </div>
@@ -164,7 +162,7 @@
                     <fieldset class="standard flex" style="display:inline-block;border:none;vertical-align:top;">
                         <legend><code><md-checkbox ng-model="vm.cacher.maitrise_oeuvre" aria-label="Maitrise d'oeuvre"  style="margin: 4px;" ng-change="vm.change_maitrise_oeuvre(vm.cacher)">Maitrise d'oeuvre</md-checkbox></code></legend>
 
-                        <div style="font-size: 12px; margin-left:12px">
+                        <div style="font-size: 12px; margin-left:12px" class="check_child">
                             <md-checkbox ng-model="vm.cacher.suivi_passation_marches_moe" aria-label="Suivi Passation des marchés MOE"  style="margin: 4px;" ng-change="vm.change_suivi_passation_marches_moe(vm.cacher)">Suivi Passation des marchés MOE</md-checkbox><br>
                             <md-checkbox ng-model="vm.cacher.suivi_prestation_moe" aria-label="Suivi Prestation MOE"  style="margin: 4px;" ng-change="vm.change_suivi_prestation_moe(vm.cacher)">Suivi Prestation MOE</md-checkbox> <br>
                             <md-checkbox ng-model="vm.cacher.suivi_paiement_moe" aria-label="Suivi paiement MOE"  style="margin: 4px;" ng-change="vm.change_suivi_paiement_moe(vm.cacher)">Suivi paiement MOE</md-checkbox> <br>
@@ -176,7 +174,7 @@
                     <fieldset class="flex" style="display:inline-block;border:none;vertical-align:top;">
                         <legend><code><md-checkbox ng-model="vm.cacher.entreprise" aria-label="Entreprise"  style="margin: 4px;" ng-change="vm.change_entreprise(vm.cacher)">Entreprise</md-checkbox></code></legend>
 
-                        <div style="font-size: 12px; margin-left:12px">
+                        <div style="font-size: 12px; margin-left:12px" class="check_child">
                             <md-checkbox ng-model="vm.cacher.suivi_passation_marches_mpe" aria-label="Suivi Passation des marchés MPE"  style="margin: 4px;" ng-change="vm.change_suivi_passation_marches_mpe(vm.cacher)">Suivi Passation des marchés MPE</md-checkbox><br>
                             <md-checkbox ng-model="vm.cacher.suivi_execution_travau_mpe" aria-label="Suivi de l'exécution de chaque contrat des travaux MPE"  style="margin: 4px;" ng-change="vm.change_suivi_execution_travau_mpe(vm.cacher)">Suivi de l'exécution de chaque contrat des travaux MPE</md-checkbox> <br>
                             <!--md-checkbox ng-model="vm.cacher.police_assurance_mpe" aria-label="Date d'expiration police d'assurance MPE"  style="margin: 4px;" ng-change="vm.change_police_assurance_mpe(vm.cacher)">Date d'expiration police d'assurance MPE</md-checkbox><br-->
@@ -196,38 +194,42 @@
                           <legend><code><md-checkbox ng-model="vm.cacher.indicateur" aria-label="Indicateur"  style="margin: 4px;" >Indicateur</md-checkbox></code></legend>
                         
                       </fieldset>
-                    </div>
-                    
-                    
-                  </div>
+                      </div>
+                    </div>  
+                    <div class="footer-animate-show-hide">
+                        <md-button class="md-raised boutonfixe" disabled>
+                        </md-button>
+                        <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                            Réinitialise
+                        </md-button>
 
-                  <div>
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
-                                      ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
-                                      Recherche
-                   </md-button>
-                   <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
-                                      ng-disabled="filtreform.$invalid" ng-click="vm.importerfiltre(vm.filtre)">
-                                      Exporter
-                   </md-button>
-                   <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
-                                  Annuler
-                   </md-button>
-                   </div>
-             </form>
-             <md-divider></md-divider><br>
+                       <md-button type="submit" class="md-raised md-accent md-cyan-600-bg" aria-label="Enregistrer"ng-disabled="filtreform.$invalid" ng-click="vm.importerfiltre(vm.filtre)" style="float: right;" >
+                                Exporter
+                       </md-button>
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
+                        </md-button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bouton-animate-show-hide">
+
+              <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+                <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+              </md-icon>                           
+               <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+              </md-icon>
+               <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+              </md-icon>
+              <md-tooltip><span>Bouton filtre</span></md-tooltip>
+               </md-button>
           </div>
+      </div>
       <div class="simple-table-container md-whiteframe-4dp">
 
-          <table class="dataTable row-border hover cell-border text-center" dt-options="vm.dtOptions" ms-responsive-table>
+          <table class="dataTable row-border hover cell-border text-center" dt-options="vm.dtOptions" ms-responsive-table style="margin-bottom: 30px !important">
             <thead>
-              <!--tr>
-                <th class="secondary-text" ng-repeat="cisc in ::vm.reporting_column">
-                  <div class="table-header">
-                    <span class="column-title">{{cisc.titre}}</span>
-                  </div>
-                </th>
-              </tr-->
               <tr>
 
                 <th class="secondary-text" rowSpan="2" colspan="6" style="background: rgb(190, 212, 237); border-right: 1px solid rgb(170,170,170) ">
@@ -322,7 +324,7 @@
                    <div class="table-header"> <span class="column-title text-center">Suivi de l'exécution de chaque contrat des travaux</span> </div>
 
                 </th>                
-                <th class="secondary-text" colspan="24" style="background: rgb(94, 153, 189); border-right: 1px solid rgb(170,170,170)" ng-show="vm.cacher.suivi_paiement_mpe">                            
+                <th class="secondary-text" colspan="26" style="background: rgb(94, 153, 189); border-right: 1px solid rgb(170,170,170)" ng-show="vm.cacher.suivi_paiement_mpe">                            
                    <div class="table-header"> <span class="column-title text-center">Suivi de paiement de chaque contrat des travaux</span> </div>
 
                 </th>
@@ -591,6 +593,8 @@
                 <th class="secondary-text" rowSpan="2" style="background: rgb(151, 200, 230); border-right: 1px solid rgb(170,170,170)" ng-show="vm.cacher.suivi_execution_travau_mpe"> <div class="table-header"> <span class="column-title text-center">SUIVI DATE D'EXPIRATION POLICE D'ASSURANCE MPE</span> </div>
                 </th> 
 
+                <th class="secondary-text" colspan="2" style="background: rgb(151, 200, 230); border-right: 1px solid rgb(170,170,170)" ng-show="vm.cacher.suivi_paiement_mpe"> <div class="table-header"> <span class="column-title text-center">Avance demarrage</span> </div>
+                </th>
                 <th class="secondary-text" colspan="2" style="background: rgb(151, 200, 230); border-right: 1px solid rgb(170,170,170)" ng-show="vm.cacher.suivi_paiement_mpe"> <div class="table-header"> <span class="column-title text-center">Premier paiement</span> </div>
                 </th>
                 <th class="secondary-text" colspan="2" style="background: rgb(151, 200, 230); border-right: 1px solid rgb(170,170,170)" ng-show="vm.cacher.suivi_paiement_mpe"> <div class="table-header"> <span class="column-title text-center">Deuxième paiement</span> </div>
@@ -890,6 +894,10 @@
                 </th>
                 <th class="secondary-text" style="background: rgb(151, 200, 230); border-right: 1px solid rgb(170,170,170)" ng-show="vm.cacher.suivi_paiement_mpe"> <div class="table-header"> <span class="column-title text-center">montant en Ar</span> </div>
                 </th>
+
+                <th class="secondary-text" style="background: rgb(151, 200, 230); border-right: 1px solid rgb(170,170,170)" ng-show="vm.cacher.suivi_paiement_mpe"> <div class="table-header"> <span class="column-title text-center">Date d'approbation</span> </div>
+                </th>
+                <th class="secondary-text" style="background: rgb(151, 200, 230); border-right: 1px solid rgb(170,170,170)" ng-show="vm.cacher.suivi_paiement_mpe"> <div class="table-header"> <span class="column-title text-center">montant en Ar</span> </div>
 
                 <th class="secondary-text" style="background: rgb(151, 200, 230); border-right: 1px solid rgb(170,170,170)" ng-show="vm.cacher.suivi_paiement_mpe"> <div class="table-header"> <span class="column-title text-center">Date d'approbation</span> </div>
                 </th>
@@ -1561,6 +1569,12 @@
 
 
                 <td ng-show="vm.cacher.suivi_paiement_mpe">
+                  <span>{{reporting.date_approbation_avance_mpe}}</span>
+                </td>
+                <td ng-show="vm.cacher.suivi_paiement_mpe">
+                  <span>{{reporting.montant_paiement_avance_mpe}}</span>
+                </td>
+                <td ng-show="vm.cacher.suivi_paiement_mpe">
                   <span>{{reporting.date_approbation_mpe1}}</span>
                 </td>
                 <td ng-show="vm.cacher.suivi_paiement_mpe">
@@ -1698,6 +1712,90 @@
                 <td ng-show="vm.cacher.indicateur">
                   <span>{{reporting.observation_indicateur}}</span>
                 </td>   
+
+              </tr>
+              <!--------------------- ENTREPRISE ----------------->
+              
+              <tr ng-if="!vm.datafound" style=" height: 100px !important">
+
+                <td colspan="17">
+                  <span>No data available in table</span>
+                </td>
+                <td ng-show="vm.cacher.suivi_financier_daaf_feffi" colspan="11">
+                  <span>No data available in table</span>
+                </td>
+
+                <td ng-show="vm.cacher.suivi_financier_feffi_prestataire" colspan="3">
+                  <span>No data available in table</span>
+                </td>
+
+                <td ng-show="vm.cacher.suivi_financier_feffi_fonctionnement" colspan="3">
+                  <span>No data available in table</span>
+                </td>
+
+                <td ng-show="vm.cacher.total_convention_decaissee">
+                  <span>No data available in table</span>
+                </td>
+                <td ng-show="vm.cacher.reliquat_des_fonds">
+                  <span>No data available in table</span>
+                </td>
+
+
+
+                <td ng-show="vm.cacher.suivi_passation_marches_pr" colspan="11">
+                  <span>No data available in table</span>
+                </td>
+
+
+                <td ng-show="vm.cacher.suivi_prestation_pr" colspan="72">
+                  <span>No data available in table</span>
+                </td>
+
+
+                 <td ng-show="vm.cacher.suivi_passation_marches_moe " colspan="18">
+                  <span>No data available in table</span>
+                </td>
+
+
+                <td ng-show="vm.cacher.suivi_prestation_moe" colspan="10">
+                  <span>No data available in table</span>
+                </td>
+
+
+                <td ng-show="vm.cacher.suivi_paiement_moe" colspan="2">
+                  <span>No data available in table</span>
+                </td>
+
+                <td ng-show="vm.cacher.police_assurance_moe">
+                  <span>No data available in table</span>
+                </td>
+
+                <td ng-show="vm.cacher.suivi_passation_marches_mpe" colspan="20">
+                  <span>No data available in table</span>
+                </td> 
+
+                <td ng-show="vm.cacher.suivi_execution_travau_mpe" colspan="4">
+                  <span>No data available in table</span>
+                </td>
+
+
+                <td ng-show="vm.cacher.suivi_execution_travau_mpe" colspan="12">
+                  <span>No data available in table</span>
+                </td>  
+
+
+                <td ng-show="vm.cacher.suivi_paiement_mpe" colspan="26">
+                  <span>No data available in table</span>
+                </td> 
+
+                <td ng-show="vm.cacher.transfert_reliquat"colspan="4">
+                  <span>No data available in table</span>
+                </td>
+
+
+                <td ng-show="vm.cacher.indicateur" colspan="17">
+                  <span>No data available in table</span>
+                </td>  
 
               </tr>
             </tbody>

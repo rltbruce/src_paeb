@@ -1,6 +1,59 @@
-#forms {
+#formsreporting {
 
-    .content {
+    .content {//rgba(3,155,229,0.87)
+
+            .check_child
+            {
+                md-checkbox.md-default-theme.md-checked .md-icon, md-checkbox.md-checked .md-icon {
+                //background-color: rgb(216,27,96) !important; 
+                }
+               /* md-checkbox.md-default-theme[disabled] .md-label, md-checkbox[disabled] .md-label {
+                    color: rgba(0,0,0,0.26) !important;
+                }
+                md-checkbox.md-default-theme[disabled].md-checked .md-icon, md-checkbox[disabled].md-checked .md-icon {
+                    background-color: rgba(0,0,0,0.26)!important;
+                }*/
+            }
+        .animate-show-hide
+        {
+            md-icon
+            {
+                color: rgb(22,152,214);
+            }
+            margin:0px 6px 0px 6px;
+            //border-top: 2px solid rgba(50,64,99,0.9);
+            .footer-animate-show-hide
+            {
+                background-color:  rgb(250,250,250); 
+                border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+            }
+
+            .boutonfixe
+            {
+                background-color: transparent !important;
+                border: none !important;
+                box-shadow:none !important;
+            }
+        }
+
+        .bouton-animate-show-hide
+        {
+            padding: 0 !important;
+            margin: 0px 0px 0px 6px !important;
+            .bouton-show-hide
+            {
+                margin: 0 0 10px 0 !important; 
+                border-radius: 0px 0px 6px 6px !important; 
+                opacity: 0.9; 
+                min-height: 5px !important;
+                height: 20px !important;
+                font-size: 9px;
+                line-height: 20px !important;
+                background-color: rgba(21,28,43,0.8);
+                min-width:5px !important;
+            }
+        } 
 
         .form-wrapper {
             md-tab-item {

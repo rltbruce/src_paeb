@@ -87,10 +87,27 @@
           autoWidth: false          
         };
 
+          
+        vm.showbuttonfiltre=true;
+        vm.showfiltre=false;
+
+        vm.showformfiltre = function()
+        {
+          vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
+     
         apiFactory.getAll("region/index").then(function success(response)
         {
           vm.regions = response.data.response;
         }, function error(response){ alert('something went wrong')});
+
+
+
 
         vm.filtre_change_region = function(item)
         { 
@@ -125,16 +142,32 @@
             }
           
         }
+        
         vm.filtre_change_commune = function(item)
         { 
-            vm.filtre.id_ecole = null;
+            vm.filtre.id_zap = null;
             if (item.id_commune != '*')
             {
-                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleBycommune","id_commune",item.id_commune).then(function(result)
+                apiFactory.getAPIgeneraliserREST("zap_commune/index","menu","getzapBycommune","id_commune",item.id_commune).then(function(result)
+              {
+                vm.zaps = result.data.response;
+              });
+            }
+            else
+            {
+                vm.zaps = [];
+            }
+          
+        }
+        vm.filtre_change_zap = function(item)
+        { 
+            vm.filtre.id_ecole = null;
+            if (item.id_zap != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleByzap","id_zap",item.id_zap).then(function(result)
               {
                 vm.ecoles = result.data.response;
-                console.log(vm.ecoles);
-              }, function error(result){ alert('something went wrong')});
+              });
             }
             else
             {
@@ -185,21 +218,21 @@
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
-        {titre:"Feffi"
+        {titre:"FEFFI"
         },
-        {titre:"Site"
+        {titre:"Code sous projet Site"
         },
-        {titre:"Reference convention"
+        {titre:"Accés site"
+        },
+        {titre:"Référence convention"
         },
         {titre:"Objet"
         },
-        {titre:"Reference Financement"
+        {titre:"Référence Financement"
         },
         {titre:"Cout éstimé"
-        },
-        {titre:"Avancement"
         },
         {titre:"Utilisateur"
         }]; 
@@ -238,7 +271,7 @@
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
               apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
-                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
               {
                   vm.allconvention_entete = result.data.response;
               });
@@ -313,6 +346,8 @@
         },
         {titre:"Nombre plis reçu"
         },       
+        {titre:"Date signature contrat"
+        },       
         {titre:"Date OS"
         },
         {titre:"Action"
@@ -342,7 +377,7 @@
             item.nbr_offre_recu = currentItemPassation_marches_pr.nbr_offre_recu;
             item.date_lancement_dp = currentItemPassation_marches_pr.date_lancement_dp ;
             item.date_manifestation   = currentItemPassation_marches_pr.date_manifestation ;
-            //item.id_partenaire_relai = currentItemPassation_marches_pr.id_partenaire_relai ;            
+            item.date_signature_contrat = currentItemPassation_marches_pr.date_signature_contrat ;            
           }else
           {
             vm.allpassation_marches_pr = vm.allpassation_marches_pr.filter(function(obj)
@@ -360,7 +395,7 @@
         vm.selectionPassation_marches_pr= function (item)
         {
             vm.selectedItemPassation_marches_pr = item;
-            if (item.$selected ==false || item.$selected == undefined)
+            if (item.$edit ==false || item.$edit == undefined)
             {
               currentItemPassation_marches_pr    = JSON.parse(JSON.stringify(vm.selectedItemPassation_marches_pr));
               vm.showbuttonValidationpassation_pr = true;
@@ -389,12 +424,12 @@
 
             item.$edit = true;
             item.$selected = true;
-            item.date_os   = new Date(vm.selectedItemPassation_marches_pr.date_os)  ;
-            item.date_remise   = new Date(vm.selectedItemPassation_marches_pr.date_remise) ;
+            item.date_os   = vm.injectDateinInput(vm.selectedItemPassation_marches_pr.date_os)  ;
+            item.date_remise   = vm.injectDateinInput(vm.selectedItemPassation_marches_pr.date_remise) ;
             item.nbr_offre_recu = parseInt(vm.selectedItemPassation_marches_pr.nbr_offre_recu);
-            item.date_lancement_dp = new Date(vm.selectedItemPassation_marches_pr.date_lancement_dp) ;
-            item.date_manifestation   = new Date(vm.selectedItemPassation_marches_pr.date_manifestation) ;
-            //item.partenaire_relai   = vm.selectedItemPassation_marches_pr.partenaire_relai.id;
+            item.date_lancement_dp = vm.injectDateinInput(vm.selectedItemPassation_marches_pr.date_lancement_dp) ;
+            item.date_manifestation   = vm.injectDateinInput(vm.selectedItemPassation_marches_pr.date_manifestation) ;
+            item.date_signature_contrat   = vm.selectedItemPassation_marches_pr.date_signature_contrat;
              vm.showbuttonValidationpassation_pr = false;
             
         };
@@ -433,6 +468,7 @@
                     || (pass[0].nbr_offre_recu != currentItemPassation_marches_pr.nbr_offre_recu)
                     || (pass[0].date_lancement_dp != currentItemPassation_marches_pr.date_lancement_dp )
                     || (pass[0].date_manifestation   != currentItemPassation_marches_pr.date_manifestation)
+                    || (pass[0].date_signature_contrat   != currentItemPassation_marches_pr.date_signature_contrat)
                     )                   
                       { 
                          insert_in_basePassation_marches_pr(item,suppression);
@@ -471,6 +507,7 @@
                     nbr_offre_recu: passation_marches_pr.nbr_offre_recu,                    
                     id_partenaire_relai: passation_marches_pr.id_partenaire_relai,
                     date_manifestation: convertionDate(new Date(passation_marches_pr.date_manifestation)),
+                    date_signature_contrat: convertionDate(new Date(passation_marches_pr.date_signature_contrat)),
                     id_convention_entete: vm.selectedItemConvention_entete.id,
                     validation:0              
                 });
@@ -539,6 +576,7 @@
                     nbr_offre_recu: passation_marches_pr.nbr_offre_recu,                    
                     id_partenaire_relai: passation_marches_pr.id_partenaire_relai,
                     date_manifestation: convertionDate(new Date(passation_marches_pr.date_manifestation)),
+                    date_signature_contrat: convertionDate(new Date(passation_marches_pr.date_signature_contrat)),
                     id_convention_entete: vm.selectedItemConvention_entete.id,
                     validation:1               
                 });
@@ -564,7 +602,7 @@
         vm.contrat_partenaire_relai_column = [
         {titre:"Partenaire relai"
         },
-        {titre:"Intitule"
+        {titre:"Intitulé"
         },
         {titre:"Réference contrat"
         },
@@ -923,7 +961,7 @@
             item.$selected = true;
             item.ref_avenant   = vm.selectedItemAvenant_partenaire.ref_avenant ;
             item.description   = vm.selectedItemAvenant_partenaire.description ;
-            item.montant   = vm.selectedItemAvenant_partenaire.montant ;
+            item.montant   = parseFloat(vm.selectedItemAvenant_partenaire.montant);
             item.date_signature = vm.selectedItemAvenant_partenaire.date_signature ;            
             vm.showbuttonValidation_avenant_partenaire = false;
         };
@@ -1139,6 +1177,18 @@
           }
           return affiche;
         };
+
+
+        vm.injectDateinInput = function (daty)
+        { 
+            var date  ='';
+            if (daty!=null) 
+            {
+                date  = new Date(daty);
+            }            
+
+            return date;
+        }
  
     }
 })();

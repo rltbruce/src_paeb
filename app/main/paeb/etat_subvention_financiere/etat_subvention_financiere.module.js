@@ -17,7 +17,7 @@
         msNavigationServiceProvider.saveItem('paeb.etat_subvention_financiere', {
             title : 'Etats financiers des activités ',
             icon  : 'icon-credit-card-multiple',
-            weight: 4
+            weight: 6
         });
 
 

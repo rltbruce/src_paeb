@@ -111,81 +111,16 @@
 
 /********************************Debut get convention entete by cisco***********************************/
 
+        
         vm.showformfiltre = function()
         {
-          vm.showbuttonfiltre=false;
-          vm.showfiltre=true;
-        }
-        vm.showformfiltreimporter = function()
-        {
-          vm.showbuttonfiltreimporter=false;
-          vm.showformimporter=true;
-          $scope.uploadFile ="";
-          angular.element("#fichier").value = "";
-        }
-         $scope.uploadFile = function(event)
-       {
-         // console.dir(event);
-          var files = event.target.files;
-          vm.myFile = files;
-        }
-        vm.annulerfiltreimporter = function()
-        {
-            vm.fichier = {};
-            //angular.element("#fichier").$setUntouched();
-            vm.showbuttonfiltreimporter=true;
-            vm.showformimporter=false;
-            //$scope.uploadFile.$setUntouched();
+          vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
         }
 
-        vm.importerconvention = function (item,suppression) {
-          var file =vm.myFile[0];
-          var repertoire = 'importerconvention/';
-          var uploadUrl = apiUrl + "importer_convention/importerdonneeconvention";
-          var name = vm.myFile[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier=data["nom_fichier"];
-              vm.repertoire=data["repertoire"];
-              if(data.erreur==true) {
-               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé inserer: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importerconvention/"+data.nomFile;
-                    vm.allconvention_cife_tete = data.convention_inserer;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
         }
 
         vm.recherchefiltre = function(filtre)
@@ -193,19 +128,13 @@
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
             
-            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalidedaafBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
             {
                 vm.allconvention_cife_tete = result.data.response;
                  console.log(vm.allconvention_cife_tete);
             });
             
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showbuttonfiltre=true;
-            vm.showfiltre=false;
         }
 
          vm.filtre_change_region = function(item)

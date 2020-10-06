@@ -35,6 +35,9 @@
           getDemande_realimentationByInvalide: function(controller, invalide) {
             return $http.get(apiUrl+controller+"?invalide="+invalide);
           },
+          getConvention_cisco_feffiCount: function(controller, roles, validation) {
+            return $http.get(apiUrl+controller+"?roles="+roles+"?validation="+validation);
+          },
           getAPIgeneraliser: function(controller,champ1,valeur1,champ2,valeur2) {
             return $http.get(apiUrl+controller+"?"+champ1+"="+valeur1+"&"+champ2+"="+valeur2);
           },
@@ -120,7 +123,27 @@
                     storageService.set('enabled',data.response.enabled);
                     if(data.response.enabled==0)
                     {
-                      $location.path("/auth/lock");
+                      //$location.path("/auth/lock");
+                      $mdDialog.show({
+                      controller         : function ($scope, $mdDialog)
+                      {
+                        $scope.closeDialog = function ()
+                        {
+                          $mdDialog.hide();
+                        }
+                      },
+                      template           : '<md-dialog>' +
+                      '  <md-dialog-content><h1 class="md-warn-fg" translate="LOGIN.error.titre">titre</h1><div><pre>Votre compte est inactif</pre></div></md-dialog-content>' +
+                      '  <md-dialog-actions>' +
+                      '    <md-button ng-click="closeDialog()" class="md-primary" translate="LOGIN.error.quitter">' +
+                      '      Quitter' +
+                      '    </md-button>' +
+                      '  </md-dialog-actions>' +
+                      '</md-dialog>',
+                      parent             : angular.element('body'),
+                      targetEvent        : ev,
+                      clickOutsideToClose: true
+                    });
                     }
                     else
                     {

@@ -1,5 +1,5 @@
 
-   <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+   <div id="formsvdeblodaff" class="page-layout simple fullwidth doc-page" layout="column">
 
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="space-between">
@@ -7,10 +7,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Gestion subvention financière</span>
+                <span class="parent">Gestion financière des activitées</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Saisie demande de déblocage daaf</span>
+                <span class="parent" href="javascript:;"> Niveau UFP/DAAF</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Validation demande de déblocage par DAAF</span>
             </div>
 
             <!--div class="title">Saisie demande de déblocage daaf</div-->
@@ -39,41 +42,51 @@
             </md-tab-label>
             
             <md-tab-body>
-              <div style="widht:100%;">
-                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.showformfiltre()" ng-show="vm.showbuttonfiltre">
-                        Filtre
-                  </md-button>
-                </div>
-              <div ng-show="vm.showfiltre">
+                <div style="margin-top: 1px">
+                    <div ng-show="vm.showfiltre" class="md-whiteframe-3dp check-element animate-show-hide">
                   <form name="filtreform" class="md-inline-form" novalidate >
                         <br>
                       <div layout="column" layout-gt-xs="row">
                           <md-input-container>
-                            <span>Date du</span>
+                            <span style="font-size: 14.5px" class="text-semibold">Date signature convention du: &nbsp</span>
                           </md-input-container>
 
-                          <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required>                     
+                           <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required style="">                     
                           </md-datepicker>
 
-                          <md-input-container>
-                            <span>&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
+                           <md-input-container>
+                             <span style="font-size: 14.5px" class="text-semibold">&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
                           </md-input-container>
 
                           <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
-                          </md-datepicker>
+                           </md-datepicker>
+                        </div>  
+                        <div class="footer-animate-show-hide">
+                            <md-button class="md-raised boutonfixe" disabled>
+                            </md-button>
+                            <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                            Réinitialise
+                            </md-button>
+                              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
+                            </md-button>
                         </div>
-                        <div>
-                         <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
-                                      ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)">
-                                      Recherche
-                        </md-button>
-                        <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()">
-                                  Annuler
-                        </md-button>
-                        </div>
-                  </form>
-                  <md-divider></md-divider><br>
-                </div>
+                      </form>
+                    </div>
+                                   
+                    <div class="bouton-animate-show-hide">
+
+                      <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+                        <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+                      </md-icon>                           
+                       <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+                      </md-icon>
+                       <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+                      </md-icon>
+                      <md-tooltip><span>Bouton filtre</span></md-tooltip>
+                      </md-button> 
+                  </div>
+        </div>
               <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                 <thead>
                   <tr>
@@ -117,7 +130,7 @@
                     </td>                
 
                     <td>                                    
-                      <span>{{convention_ufp_daaf_entete.nbr_bebeficiaire}}</span>
+                      <span>{{convention_ufp_daaf_entete.nbr_beneficiaire}}</span>
                     </td> 
                   </tr>
                 </tbody>
@@ -138,8 +151,8 @@
             
             <md-tab-body>
               <div style="widht:100%;">
-                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.valider_convention()" style="width:10%;" ng-show="vm.showbuttonValidation && vm.validation_item==0">
-                      Validation
+                    <md-button type="submit" class="md-raised md-warn md-pink-900-bg" aria-label="Nouveau" ng-click="vm.valider_demande()" style="width:10%;" ng-show="vm.showbuttonValidation && vm.validation_item==0">
+                      Valider
                     </md-button>
               </div> <br>
 
@@ -278,14 +291,14 @@
                       </a>
                                 
                       <a ng-if="!demande_deblocage_daaf.$edit && demande_deblocage_daaf.validation=='0'" ng-click="vm.supprimerDemande_deblocage_daaf(demande_deblocage_daaf)" title="Supprimer">
-                        <span class="icon-delete"></span>
+                        <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                       </a>
                       <span ng-if="!demande_deblocage_daaf.$edit && demande_deblocage_daaf.validation!='0'">Aucune action disponible</span>         
                       <a ng-if="demande_deblocage_daaf.$edit" ng-click="vm.annulerDemande_deblocage_daaf(demande_deblocage_daaf)" title="Annuler modification">
                         <span class="icon-cancel"></span>
                       </a>
                                 
-                      <a ng-if="demande_deblocage_daaf.$edit && demande_deblocage_daaf.date && demande_deblocage_daaf.id_tranche_deblocage_daaf && demande_deblocage_daaf.id_convention_ufp_daaf_entete && demande_deblocage_daaf.ref_demande && demande_deblocage_daaf.objet>''" ng-click="vm.ajoutDemande_deblocage_daaf(demande_deblocage_daaf,0)" title="Sauvegarder">
+                      <a ng-if="demande_deblocage_daaf.$edit && demande_deblocage_daaf.date && demande_deblocage_daaf.id_tranche_deblocage_daaf && demande_deblocage_daaf.id_convention_ufp_daaf_entete && demande_deblocage_daaf.ref_demande && demande_deblocage_daaf.objet && demande_deblocage_daaf.id_compte_daaf>''" ng-click="vm.ajoutDemande_deblocage_daaf(demande_deblocage_daaf,0)" title="Sauvegarder">
                         <span class="icon-content-save"></span>
                       </a>
                     </td>
@@ -307,12 +320,7 @@
               </span>
             </md-tab-label>
             
-            <md-tab-body>
-               <div style="widht:100%;">  
-                  <md-button type="submit" class="md-raised md-accent" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_daaf()" style="width:10%;" ng-show="vm.validation_item==0">
-                    Nouveau
-                  </md-button>
-              </div> <br>
+            <md-tab-body><br>
 
               <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
             <thead>
@@ -328,13 +336,7 @@
               <tr ng-repeat="justificatif_daaf in vm.alljustificatif_daaf"  ng-class="{selected: justificatif_daaf.$selected}" ng-click="vm.selectionJustificatif_daaf(justificatif_daaf)">
 
                 <td>
-                  <span ng-if="justificatif_daaf.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Description</label>
-                      <input name="description" type="text" ng-model="justificatif_daaf.description"/>
-                    </md-input-container>  
-                  </span>
-                  <span ng-if="!justificatif_daaf.$edit">{{justificatif_daaf.description}}</span>
+                  <span>{{justificatif_daaf.intitule}}</span>
                 </td>
 
                 <td>
@@ -355,15 +357,15 @@
                 </td>
                                              
                 <td>  
-                  <a ng-if="!justificatif_daaf.$edit && vm.validation_item=='0'" ng-click="vm.modifierJustificatif_daaf(justificatif_daaf)" title="Modifier">
+                  <a ng-if="!justificatif_daaf.$edit && vm.validation_item==0" ng-click="vm.modifierJustificatif_daaf(justificatif_daaf)" title="Modifier">
                     <span class="icon-table-edit"></span>
                   </a>
                             
-                  <a ng-if="!justificatif_daaf.$edit && vm.validation_item=='0'" ng-click="vm.supprimerJustificatif_daaf(justificatif_daaf)" title="Supprimer">
-                    <span class="icon-delete"></span>
+                  <a ng-if="!justificatif_daaf.$edit && justificatif_daaf.id!=0 && vm.validation_item==0" ng-click="vm.supprimerJustificatif_daaf(justificatif_daaf)" title="Supprimer">
+                    <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                   </a>
                                   
-                  <a ng-if="!justificatif_daaf.$edit" ng-click="vm.download_justificatif(justificatif_daaf)" title="Telecharger fichier">
+                  <a ng-if="!justificatif_daaf.$edit && justificatif_daaf.id!=0" ng-click="vm.download_justificatif(justificatif_daaf)" title="Telecharger fichier">
                     <span class="icon-box-download"></span>
                   </a>
                             
@@ -371,7 +373,7 @@
                     <span class="icon-cancel"></span>
                   </a>
                             
-                  <a ng-if="justificatif_daaf.$edit && justificatif_daaf.description>''" ng-click="vm.ajoutJustificatif_daaf(justificatif_daaf,0)" title="Sauvegarder">
+                  <a ng-if="justificatif_daaf.$edit && justificatif_daaf.fichier>''" ng-click="vm.ajoutJustificatif_daaf(justificatif_daaf,0)" title="Sauvegarder">
                     <span class="icon-content-save"></span>
                   </a>
                 </td>
@@ -380,6 +382,7 @@
           </table>
             </md-tab-body>
           </md-tab>
+          <md-tab></md-tab>
           </md-tabs>
           </ms-form-wizard>       
                   

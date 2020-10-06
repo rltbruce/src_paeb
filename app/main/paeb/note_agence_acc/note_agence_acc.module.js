@@ -31,7 +31,7 @@
             title: 'Attribution des notes AAC',
             icon  : 'icon-nfc-variant',
             state: 'app.paeb_note_agence_acc',
-			weight: 5
+			weight: 8
         });
     }
 

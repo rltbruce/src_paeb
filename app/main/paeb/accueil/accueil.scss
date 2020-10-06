@@ -19,3 +19,35 @@
         }
     }
 }
+.ms-navigation-item .icon
+{
+    color: rgb(3,169,244) !important;
+}
+.has-children .has-children .has-children .ms-navigation-item .icon
+{
+    //color: rgb(103,58,183) !important;
+    color: rgb(136,14,79) !important;
+}
+
+.has-children .has-children .has-children ul .ms-navigation-item .icon
+{
+    color: rgb(124,179,66) !important;
+}
+.has-children .has-children .has-children ul ul .ms-navigation-item .icon
+{
+    color: rgb(63,81,181) !important;
+}
+
+
+.icon-google-maps:before { //reportmap
+    //color: rgb(103,58,183) !important;
+    color: rgb(136,14,79) !important;
+}
+.icon-calendar-text:before { // reportindgetail
+    //color: rgb(103,58,183) !important;
+    color: rgb(136,14,79) !important;
+}
+.icon-vector-point:before { //sitedisponible
+    //color: rgb(103,58,183) !important;
+    color: rgb(136,14,79) !important;
+}

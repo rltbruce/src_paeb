@@ -20,6 +20,7 @@
         vm.ciscos =[];
         vm.communes =[];
         vm.zaps =[];
+        vm.ecoles =[];
 
         vm.showbuttonvalidation = false;
         vm.showbuttonfiltre=true;
@@ -30,24 +31,30 @@
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
           autoWidth: false         
-        };
+        }; 
 
         vm.showformfiltre = function()
         {
-          vm.showbuttonfiltre=false;
-          vm.showfiltre=true;
+          //vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
         }
         //col table
         vm.site_column = [
         {titre:"Region"
         },
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
         {titre:"Commune"
         },
-        {titre:"Zap"
+        {titre:"ZAP"
         },
-        {titre:"Epp"
+        {titre:"EPP"
+        },
+        {titre:"Acces"
         },
         {titre:"Code sous projet"
         },
@@ -134,7 +141,7 @@
             vm.filtre.id_zap = null;
             if (item.id_commune != '*')
             {
-                apiFactory.getAPIgeneraliserREST("zap_commune/index","getzap_communeBycommune","id_commune",item.id_commune).then(function(result)
+                apiFactory.getAPIgeneraliserREST("zap_commune/index","menu","getzapBycommune","id_commune",item.id_commune).then(function(result)
               {
                 vm.zaps = result.data.response;
               });
@@ -171,12 +178,6 @@
                   vm.allsite = result.data.response;
               });
         }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showbuttonfiltre=true;
-            vm.showfiltre=false;
-        }
 
         vm.change_region = function(item)
         {            
@@ -191,7 +192,7 @@
             {
                 vm.ciscos = [];
             }
-          
+          item.id_cisco = null;
         }
         vm.change_cisco = function(item)
         { item.id_commune = null;
@@ -213,7 +214,7 @@
             item.id_zap = null;
             if (item.id_commune != '*')
             {
-                apiFactory.getAPIgeneraliserREST("zap_commune/index",'menu',"getzap_communeBycommune","id_commune",item.id_commune).then(function(result)
+                apiFactory.getAPIgeneraliserREST("zap_commune/index",'menu',"getzapBycommune","id_commune",item.id_commune).then(function(result)
               {
                 vm.zaps = result.data.response;
               });
@@ -272,6 +273,7 @@
             item.id_commune    = currentItem.id_commune;
             item.id_zap    = currentItem.id_zap;
             item.id_ecole    = currentItem.id_ecole; 
+            item.acces    = currentItem.acces;
             item.id_classification_site    = currentItem.id_classification_site;
           }else
           {
@@ -290,12 +292,35 @@
         vm.selection= function (item)
         {
             vm.selectedItem = item;
-            vm.nouvelItem   = item;
-            currentItem     = JSON.parse(JSON.stringify(vm.selectedItem));
             if (item.$edit==false || item.$edit==undefined)
             {
-              vm.validation_item = item.validation;
-              vm.showbuttonvalidation = true;
+                vm.validation_item = item.validation;
+                vm.showbuttonvalidation = true;
+                currentItem     = JSON.parse(JSON.stringify(vm.selectedItem));
+                var zp = vm.zaps.filter(function(obj)
+                  {
+                      return obj.id == item.zap.id;
+                  });
+                  if (zp.length==0)
+                  {                
+                    vm.zaps.push(item.zap);
+                  }
+                  var cm = vm.communes.filter(function(obj)
+                  {
+                      return obj.id == item.commune.id;
+                  });
+                  if (cm.length==0)
+                  {
+                    vm.communes.push(item.commune);
+                  }
+                  var ec = vm.ecoles.filter(function(obj)
+                  {
+                      return obj.id == item.ecole.id;
+                  });
+                  if (ec.length==0)
+                  {
+                    vm.ecoles.push(item.ecole);
+                  }
             }
            // vm.allsite= [] ;
            //console.log(item); 
@@ -328,7 +353,7 @@
             {
                 vm.communes = result.data.response;
             });
-            apiFactory.getAPIgeneraliserREST("zap_commune/index",'menu',"getzap_communeBycommune","id_commune",item.commune.id).then(function(result)
+            apiFactory.getAPIgeneraliserREST("zap_commune/index",'menu',"getzapBycommune","id_commune",item.commune.id).then(function(result)
             {
                 vm.zaps = result.data.response;
             });
@@ -351,6 +376,7 @@
             item.id_commune = vm.selectedItem.commune.id ;
             item.id_zap = vm.selectedItem.zap.id ;
             item.id_ecole = vm.selectedItem.ecole.id ;
+            item.acces      = vm.selectedItem.acces ;
             item.id_classification_site = vm.selectedItem.classification_site.id ; 
             vm.showbuttonvalidation = false;
         };
@@ -440,6 +466,7 @@
                     id_commune: site.id_commune,
                     id_zap: site.id_zap,
                     id_ecole: site.id_ecole,
+                    acces: site.acces,
                     id_classification_site: site.id_classification_site,
                     validation:0                 
                 });
@@ -546,7 +573,8 @@
                     id_cisco: site.cisco.id,
                     id_commune: site.commune.id,
                     id_zap: site.zap.id,
-                    id_ecole: site.ecole.id,
+                    id_ecole: site.ecole.id,   
+                    acces:    site.acces,
                     id_classification_site: site.classification_site.id,
                     validation:validation                 
                 });
@@ -566,6 +594,17 @@
         vm.validation = function()
         {
           maj_insertioninbase(vm.selectedItem,0,1);
+        }
+
+        
+        vm.change_ecole = function(site)
+        {
+          console.log(vm.allecole);
+          var ecol = vm.allecole.filter(function(obj)
+          {
+              return obj.id == site.id_ecole;
+          });
+          site.acces = ecol[0].zone_subvention.libelle+ecol[0].acces_zone.libelle;
         }
 
         //Alert

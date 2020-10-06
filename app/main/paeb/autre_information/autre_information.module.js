@@ -15,7 +15,7 @@
         msNavigationServiceProvider.saveItem('paeb.autre_information', {
             title : 'Nouveau site',
             icon  : 'icon-data',
-            weight: 6
+            weight: 9
         });
 
 

@@ -17,7 +17,7 @@
         msNavigationServiceProvider.saveItem('paeb.reports', {
             title : 'Reporting',
             icon  : 'icon-data',
-            weight: 5
+            weight: 7
         });
 
 

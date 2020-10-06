@@ -26,7 +26,7 @@
        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
           <div layout="row" layout-align="start" flex>
               <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
-                <span style="line-height: normal;"> Compte DAAF</span>
+                <span style="line-height: normal;"> Compte bancaire DAAF</span>
               </div>
 
               <div>
@@ -91,7 +91,7 @@
                   </a>
                             
                   <a ng-if="!compte_daaf.$edit" ng-click="vm.supprimer(compte_daaf)" title="Supprimer">
-                    <span class="icon-delete"></span>
+                    <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                   </a>
                             
                   <a ng-if="compte_daaf.$edit" ng-click="vm.annuler(compte_daaf)" title="Annuler modification">

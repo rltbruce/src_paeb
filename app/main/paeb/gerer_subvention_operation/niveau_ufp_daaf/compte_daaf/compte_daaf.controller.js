@@ -29,7 +29,7 @@
         },
         {titre:"Agence"
         },
-        {titre:"Compte"
+        {titre:"Numero de compte"
         },
         {titre:"Action"}];
         

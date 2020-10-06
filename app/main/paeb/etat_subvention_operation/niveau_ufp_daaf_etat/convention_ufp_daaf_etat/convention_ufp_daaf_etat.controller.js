@@ -57,6 +57,17 @@
           autoWidth: false          
         };
 
+        vm.showformfiltre = function()
+        {
+          //vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
+
          var id_user = $cookieStore.get('id');
 
        /* apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
@@ -77,11 +88,6 @@
             }
 
         });*/
-        vm.showformfiltre = function()
-        {
-          vm.showbuttonfiltre=false;
-          vm.showfiltre=true;
-        }
 /*****************Debut StepOne convention_ufp_daaf_entete****************/
 
   //col table
@@ -93,12 +99,14 @@
         {titre:"Montant à transferer"},
         {titre:"Frais bancaire"},        
         {titre:"Nombre bénéficiaire"},        
-        {titre:"Montant convention"}];
+        {titre:"Montant convention"},        
+        {titre:"Avancement physique"}];
       var annee = vm.date_now.getFullYear();
   //recuperation donnée programmation
-        apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_now","annee",annee).then(function(result)
+        apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getetatconvention_now","annee",annee).then(function(result)
         {
             vm.allconvention_ufp_daaf_entete = result.data.response;
+                console.log(vm.allconvention_ufp_daaf_entete)
         });
 
          vm.recherchefiltre = function(filtre)
@@ -106,17 +114,12 @@
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
 
-            apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconventionByfiltre",'date_debut',
+            apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getetatconventionByfiltre",'date_debut',
                                     date_debut,'date_fin',date_fin).then(function(result)
             {
                 vm.allconvention_ufp_daaf_entete = result.data.response;
+                console.log(vm.allconvention_ufp_daaf_entete);
             });
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-            vm.showbuttonfiltre=true;
-            vm.showfiltre=false;
         }
 
 
@@ -198,14 +201,14 @@
             
             vm.stepTwo = false;
             vm.stepThree = false;
-           if (vm.selectedItemConvention_ufp_daaf_detail.id!=0)
+          /* if (vm.selectedItemConvention_ufp_daaf_detail.id!=0)
            {
               //recuperation donnée convention
               apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'id_convention_ufpdaaf',vm.selectedItemConvention_ufp_daaf_detail.id).then(function(result)
               {
                   vm.allconvention_cisco_feffi = result.data.response;                  
               });
-           }
+           }*/
         };
         $scope.$watch('vm.selectedItemConvention_ufp_daaf_detail', function()
         {
@@ -234,9 +237,9 @@
 
         //col table
         vm.convention_cisco_feffi_entete_column = [
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
-        {titre:"Feffi"
+        {titre:"FEFFI"
         },
         {titre:"Site"
         },
@@ -248,7 +251,7 @@
         },
         {titre:"Cout éstimé"
         },
-        {titre:"Avancement"
+        {titre:"Avancement physique"
         },
         {titre:"Utilisateur"
         }];
@@ -316,6 +319,16 @@
           }            
 
         }
+        vm.affichage_avancement_physi = function(avance)
+        {
+          var avance_p=0;
+          if (avance)
+          {
+            avance_p = parseFloat(avance).toFixed(2);
+          }
+          return avance_p +"%";
+        }
+
 
     }
 

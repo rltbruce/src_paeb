@@ -7,8 +7,22 @@
         .controller('Reporting_mapController', Reporting_mapController);
     /** @ngInject */
     function Reporting_mapController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,apiUrlexcel)
-    {
-		    var vm = this;
+    { 
+        var vm = this;  
+
+        vm.showbuttonfiltre=true;
+        vm.showfiltre=false;
+
+        vm.showformfiltre = function()
+        {
+          vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+          console.log('mande');
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
             vm.polylines = [];
             vm.parameters =[];
             vm.ecolevueMap = {
@@ -38,9 +52,9 @@
                       nom_district:data.nom,
                       marker_coord:vm.get_center_poly(data.coordonnees),
                       reporting:data.reporting,
-                      /*marker_option:{
-                        icon:'assets/images/logos/mapmarker.png'
-                      },*/                     
+                      //marker_option:{
+                      //  icon:'assets/images/logos/mapmarker.png'
+                      //},                     
                       stroke: {
                           color: '#777777',
                           weight: 1
@@ -78,15 +92,15 @@
                         console.log(vm.showmap);
                      };
 
-                   /*  if (data.id==1) {*/
+                   /// if (data.id==1) {
                      //  vm.polylines.push(item);
-                     /* if (vm.polylines.length == 1)
-                     {
-                        vm.showmap = true;
-                        console.log(vm.showmap);
-                     }
+                     // if (vm.polylines.length == 1)
+                    // {
+                    //    vm.showmap = true;
+                    //    console.log(vm.showmap);
+                    // }
                       
-                    }*/                     
+                   // }                     
                 });
             });
 

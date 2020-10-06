@@ -12,6 +12,7 @@
             //'app.paeb.gerer_subvention_financiere.transfert_daaf',
             'app.paeb.gerer_subvention_financiere.niveau_ufp_daaf',
             'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi',
+            'app.paeb.gerer_subvention_financiere.niveau_ufp_feffi',
             'app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire'
             ])       
         .config(config);
@@ -23,7 +24,7 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere', {
             title : 'Gestion financière des activités',
             icon  : 'icon-credit-card-multiple',
-            weight: 2
+            weight: 4
         });
 
 

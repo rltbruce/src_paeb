@@ -18,8 +18,9 @@
             'app.paeb.ddb.etape_sousprojet',
             'app.paeb.ddb.agence_acc',
             'app.paeb.ddb.zap',
-            'app.paeb.ddb.piece_justificatif_prevu'
-            //'app.paeb.ddb.cadre_bordereau'
+            'app.paeb.ddb.piece_justificatif_prevu',
+            'app.paeb.ddb.divers_attachement',
+            'app.paeb.ddb.divers_calendrier_paie_moe'
 
             ] ;
 

@@ -28,13 +28,13 @@ var vs;
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.etat_subvention_operation.niveau_cisco_feffi_etat.convention_cisco_feffi_etat', {
-            title: 'Convention CISCO/FEFFI',
+            title: 'Information sur convention CISCO/FEFFI',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_etat_subvention_operation_niveau_cisco_feffi_etat_convention_cisco_feffi_etat',
 			weight: 2,
             hidden: function()
             {
-                    return vs;
+                return vs;
             }
         });
 

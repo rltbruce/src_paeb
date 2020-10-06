@@ -6,7 +6,8 @@
         .module('app.paeb.gerer_subvention_operation.niveau_feffi_prestataire', [
             'app.paeb.gerer_subvention_operation.niveau_feffi_prestataire.suivi_bcaf',
             'app.paeb.gerer_subvention_operation.niveau_feffi_prestataire.suivi_dpfi'
-            ])       
+            ])
+        .run(testPermission)       
         .config(config);
         var vs ;
 
@@ -40,7 +41,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["ACC","ADMIN"];
+                var permissions = ["BCAF","DPFI","ACC","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

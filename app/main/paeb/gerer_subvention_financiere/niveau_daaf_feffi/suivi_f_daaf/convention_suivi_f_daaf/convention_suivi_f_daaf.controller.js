@@ -53,17 +53,24 @@
         vm.selectedItemContrat_moe = {} ;
         vm.allcontrat_moe = [] ;
 
-
-        
-        
-
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
           autoWidth: false          
         };
 
-
+        
+        vm.showbuttonfiltre=true;
+        vm.showfiltre=false;
+        vm.showformfiltre = function()
+        {
+          vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
         
         apiFactory.getAll("region/index").then(function success(response)
         {
@@ -174,11 +181,13 @@
         });
 
         vm.convention_entete_column = [
-        {titre:"Cisco"
+        {titre:"CISCO"
         },
-        {titre:"Feffi"
+        {titre:"FEFFI"
         },
         {titre:"Site"
+        },
+        {titre:"Accés"
         },
         {titre:"Reference convention"
         },
@@ -187,8 +196,6 @@
         {titre:"Reference Financement"
         },
         {titre:"Cout éstimé"
-        },
-        {titre:"Avancement"
         },
         {titre:"Utilisateur"
         }]; 
@@ -254,10 +261,6 @@
               
                 }
                 console.log(filtre);
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
         }
         
         /***************fin convention cisco/feffi************/
@@ -342,28 +345,16 @@
             if (item.$selected ==false || item.$selected == undefined)
             {
                //recuperation donnée demande_realimentation_feffi
-                apiFactory.getAPIgeneraliserREST("piece_justificatif_feffi/index",'id_demande_rea_feffi',item.id).then(function(result)
+                apiFactory.getAPIgeneraliserREST("piece_justificatif_feffi/index",'id_demande_rea_feffi',item.id,'id_tranche',item.tranche.id).then(function(result)
                 {
                     vm.allpiece_justificatif_feffi = result.data.response;
-                    
                 });
                
-                if (vm.session=='DAAF') 
+                apiFactory.getAPIgeneraliserREST("transfert_daaf/index",'menu','gettransferBydemande','id_demande_rea_feffi',item.id).then(function(result)
                 {
-                  apiFactory.getAPIgeneraliserREST("transfert_daaf/index",'menu','gettransferBydemande','id_demande_rea_feffi',item.id).then(function(result)
-                  {
-                      vm.alltransfert_daaf = result.data.response;
+                    vm.alltransfert_daaf = result.data.response;
                       
-                  });
-                } 
-                
-                if (vm.session=='ADMIN') 
-                {
-                  apiFactory.getAPIgeneraliserREST("transfert_daaf/index",'menu','gettransferBydemande','id_demande_rea_feffi',item.id).then(function(result)
-                  {
-                      vm.alltransfert_daaf = result.data.response;
-                  });
-                }                      
+                });                    
                   
                 
                 console.log(item.validation);
@@ -439,8 +430,6 @@
                 vm.selectedItemDemande_realimentation.validation = String(validation);
                         
                 //vm.alldemande_realimentation_valide.push(vm.selectedItemDemande_realimentation);
-                
-
                 /*vm.alldemande_realimentation_invalide = vm.alldemande_realimentation_invalide.filter(function(obj)
                 {
                     return obj.id !== vm.selectedItemDemande_realimentation.id;
@@ -453,8 +442,23 @@
                 vm.nbr_demande_feffi = parseInt(vm.nbr_demande_feffi)-1;
 
                 vm.showbuttonValidationenrejedaaf = false;
-                vm.showbuttonValidationencourdaaf = false;      96 
+                vm.showbuttonValidationencourdaaf = false;
                 vm.showbuttonValidationdaaf = false;
+
+                if (validation==7)
+                {
+                    var items = {
+                        id:        '0',      
+                        montant_transfert:    demande_realimentation.prevu,
+                        frais_bancaire:    0,
+                        montant_total: demande_realimentation.prevu,
+                        observation: '',
+                        date: convertionDate(new Date()), 
+                        id_demande_rea_feffi: demande_realimentation.id,
+                        validation:0
+                    };
+                    insert_in_baseautoTransfert_daaf(items,0);
+                }
 
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -486,7 +490,7 @@
 
               case '6':
                   
-                  return 'Rejeté par DPFI'; 
+                  return 'Rejeté par DAAF'; 
                   break;
 
               case '7':
@@ -511,7 +515,6 @@
         vm.piece_justificatif_feffi_column = [
         {titre:"Description"},
         {titre:"Fichier"},
-        {titre:"Date"},
         {titre:"Action"}];
 
    
@@ -520,7 +523,6 @@
         vm.selectionPiece_justificatif_feffi= function (item)
         {
             vm.selectedItemPiece_justificatif_feffi = item;
-            currentItemPiece_justificatif_feffi     = JSON.parse(JSON.stringify(vm.selectedItemPiece_justificatif_feffi));
            // vm.allconvention_cisco_feffi_entete= [] ; 
         };
         $scope.$watch('vm.selectedItemPiece_justificatif_feffi', function()
@@ -821,6 +823,34 @@ console.log(vm.validation_transfert_daaf);
           }
           return affichage;
         }
+
+        function insert_in_baseautoTransfert_daaf(transfert_daaf,suppression)
+            {
+                //add
+                var config =
+                {
+                    headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+                }; 
+                
+                var datas = $.param({
+                        supprimer: suppression,
+                        id:        transfert_daaf.id,      
+                        montant_transfert:    transfert_daaf.montant_transfert,
+                        frais_bancaire:    transfert_daaf.frais_bancaire,
+                        montant_total: transfert_daaf.montant_total,
+                        observation: transfert_daaf.observation,
+                        date: transfert_daaf.date, 
+                        id_demande_rea_feffi: transfert_daaf.id_demande_rea_feffi,
+                        validation:transfert_daaf.validation           
+                    });
+                    //console.log(datas);
+                    //factory
+                apiFactory.add("transfert_daaf/index",datas, config).success(function (data)
+                {
+              }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+
+            }
   /**********************************Fin StepThree transfert daaf***********************************/
   /******************************************fin maitrise d'oeuvre*******************************************************/
         vm.showAlert = function(titre,content)

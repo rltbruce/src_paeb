@@ -63,6 +63,19 @@
           autoWidth: false          
         };
 
+
+        vm.showbuttonfiltre=true;
+        vm.showfiltre=false;
+        vm.showformfiltre = function()
+        {
+          vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
+
         apiFactory.getAll("region/index").then(function success(response)
         {
           vm.regions = response.data.response;
@@ -160,6 +173,8 @@
         },
         {titre:"Site"
         },
+        {titre:"Accès"
+        },
         {titre:"Reference convention"
         },
         {titre:"Objet"
@@ -167,8 +182,6 @@
         {titre:"Reference Financement"
         },
         {titre:"Cout éstimé"
-        },
-        {titre:"Avancement"
         },
         {titre:"Utilisateur"
         }]; 
@@ -219,10 +232,6 @@
                 console.log(vm.allconvention_entete);
             });
                 console.log(filtre);
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
         }
         
         /***************fin convention cisco/feffi************/
@@ -292,10 +301,9 @@
             if (item.$selected ==false || item.$selected == undefined)
             {
                //recuperation donnée demande_realimentation_feffi
-                apiFactory.getAPIgeneraliserREST("piece_justificatif_feffi/index",'id_demande_rea_feffi',item.id).then(function(result)
+                apiFactory.getAPIgeneraliserREST("piece_justificatif_feffi/index",'id_demande_rea_feffi',item.id,'id_tranche',item.tranche.id).then(function(result)
                 {
                     vm.allpiece_justificatif_feffi = result.data.response;
-                    
                 });
                 
                 console.log(item.validation);
@@ -416,7 +424,7 @@
 
               case '6':
                   
-                  return 'Rejeté par DPFI'; 
+                  return 'Rejeté par DAAF'; 
                   break;
 
               case '7':
@@ -441,7 +449,6 @@
         vm.piece_justificatif_feffi_column = [
         {titre:"Description"},
         {titre:"Fichier"},
-        {titre:"Date"},
         {titre:"Action"}];
 
         //fonction selection item Piece_justificatif_feffi
