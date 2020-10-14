@@ -6,7 +6,8 @@
         .module('app.paeb.gerer_subvention_financiere.niveau_ufp_feffi', [			
             'app.paeb.gerer_subvention_financiere.niveau_ufp_feffi.suivi_f_bcaf_ufp',          
             'app.paeb.gerer_subvention_financiere.niveau_ufp_feffi.suivi_f_ufp'
-            ])       
+            ])
+        .run(testPermission)        
         .config(config);
         var vs ;
 
@@ -16,7 +17,11 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_ufp_feffi', {
             title : 'Niveau UFP/FEFFI',
             icon  : 'icon-flattr',
-            weight: 1
+            weight: 1,
+            hidden: function()
+            {
+                    return vs;
+            }
         });
 
 
@@ -36,7 +41,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["ADMIN","OBCAF","BCAF","UFP"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

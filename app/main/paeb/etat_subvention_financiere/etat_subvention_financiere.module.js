@@ -6,7 +6,8 @@
         .module('app.paeb.etat_subvention_financiere', [
             'app.paeb.etat_subvention_financiere.niveau_ufp_daaf_etat',
             'app.paeb.etat_subvention_financiere.niveau_daaf_feffi_etat',
-            'app.paeb.etat_subvention_financiere.niveau_feffi_prestataire_etat'
+            'app.paeb.etat_subvention_financiere.niveau_feffi_prestataire_etat',
+            'app.paeb.etat_subvention_financiere.niveau_feffi_feffi_etat'
             ])       
         .config(config);
         var vs ;

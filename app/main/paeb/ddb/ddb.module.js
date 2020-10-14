@@ -26,14 +26,14 @@
 
     angular
         .module('app.paeb.ddb', tab.sort())
-        .run(testPermission)
+        //.run(testPermission)
         .config(config);
         var vs ;
 
     /** @ngInject */
     function config(msNavigationServiceProvider)
     {
-        /*msNavigationServiceProvider.saveItem('paeb.ddb', {
+       /* msNavigationServiceProvider.saveItem('paeb.ddb', {
             title : 'Données de Bases',
             icon  : 'icon-data',
             weight: 2,

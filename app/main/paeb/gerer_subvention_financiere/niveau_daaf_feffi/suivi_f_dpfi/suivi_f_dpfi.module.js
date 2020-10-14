@@ -5,7 +5,8 @@
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_dpfi', [         
             'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_dpfi.convention_suivi_f_dpfi'
-            ])       
+            ])
+        .run(testPermission)        
         .config(config);
         var vs ;
 
@@ -15,7 +16,11 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_dpfi', {
             title : 'Niveau DPFI',
             icon  : 'icon-link',
-            weight: 1
+            weight: 1,
+            hidden: function()
+            {
+                    return vs;
+            }
         });
 
 
@@ -35,7 +40,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["ADMIN","DPFI"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

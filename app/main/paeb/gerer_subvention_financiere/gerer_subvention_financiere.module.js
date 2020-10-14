@@ -13,8 +13,10 @@
             'app.paeb.gerer_subvention_financiere.niveau_ufp_daaf',
             'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi',
             'app.paeb.gerer_subvention_financiere.niveau_ufp_feffi',
-            'app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire'
-            ])       
+            'app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire',
+            'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi'
+            ])
+        .run(testPermission)        
         .config(config);
         var vs ;
 
@@ -24,7 +26,11 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere', {
             title : 'Gestion financière des activités',
             icon  : 'icon-credit-card-multiple',
-            weight: 4
+            weight: 4,
+            hidden: function()
+            {
+                    return vs;
+            }
         });
 
 
@@ -44,7 +50,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["UFP","OBCAF","BCAF","DAAF","DPFI","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

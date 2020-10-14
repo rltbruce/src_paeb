@@ -44,6 +44,8 @@
         vm.styleTabfils = "acc_sous_menu";
         vm.selectedItemConvention_entete = {} ;
         vm.allconvention_entete = [] ;
+
+        vm.affiche_load =false;
        
         vm.stepMenu_pr=false;
         vm.stepMenu_mpe=false;
@@ -789,6 +791,7 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
+            vm.affiche_load =true;
             
             switch (vm.session)
                 {
@@ -797,7 +800,7 @@
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
-                                console.log(vm.allconvention_entete);
+                                vm.affiche_load =false;
                             });
 
                       break;
@@ -807,7 +810,7 @@
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
-                                console.log(vm.allconvention_entete);
+                                vm.affiche_load =false;
                             });                 
                       break;
                   default:
@@ -11074,7 +11077,7 @@ vm.steppassation_marches = function()
         vm.change_montant_mpe= function(item)
         {
             item.montant_total_ttc = parseFloat(item.cout_batiment) + parseFloat(item.cout_latrine) + parseFloat(item.cout_mobilier);
-            item.montant_total_ht = (parseFloat(item.cout_batiment) + parseFloat(item.cout_latrine) + parseFloat(item.cout_mobilier))/1.2;
+            item.montant_total_ht = (parseFloat(item.cout_batiment) + parseFloat(item.cout_latrine) + parseFloat(item.cout_mobilier))/1;
         }
         
 /**********************************fin contrat_prestataire****************************************/
@@ -11164,7 +11167,8 @@ vm.steppassation_marches = function()
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            var total_prevu_ttc = total_prevu + ((total_prevu*20)/100);
+            //var total_prevu_ttc = total_prevu + ((total_prevu*20)/100);
+            var total_prevu_ttc = total_prevu;
             return total_prevu_ttc.toFixed(2);
         }
 
@@ -11421,7 +11425,8 @@ vm.steppassation_marches = function()
                         vm.selectedItemDivers_attachement_batiment_prevu.$edit      = false;
                         vm.selectedItemDivers_attachement_batiment_prevu ={};
                         vm.showbuttonValidation = false;
-                        var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu)+((parseFloat(divers_attachement_batiment_prevu.montant_prevu)*20)/100) -parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)*20)/100);
+                        //var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu)+((parseFloat(divers_attachement_batiment_prevu.montant_prevu)*20)/100) -parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)*20)/100);
+                        var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu);
                         console.log(cout_batiment);
                         maj_insertion_contrat_in_base(cout_batiment);
                     }
@@ -11432,7 +11437,8 @@ vm.steppassation_marches = function()
                           return obj.id !== vm.selectedItemDivers_attachement_batiment_prevu.id;
                       });*/ 
 
-                        var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) - parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)*20)/100);
+                        //var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) - parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)*20)/100);
+                        var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) - parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu);
                         console.log(cout_batiment);
                         maj_insertion_contrat_in_base(cout_batiment); 
                         vm.selectedItemDivers_attachement_batiment_prevu.unite   = '' ;
@@ -11447,7 +11453,9 @@ vm.steppassation_marches = function()
                   divers_attachement_batiment_prevu.id  =   String(data.response);              
                   NouvelItemDivers_attachement_batiment_prevu = false;
 
-                  var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu)+((parseFloat(divers_attachement_batiment_prevu.montant_prevu)*20)/100);
+                  //var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu)+((parseFloat(divers_attachement_batiment_prevu.montant_prevu)*20)/100);
+                  
+                  var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu);
                   //vm.selectedItemContrat_prestataire.cout_batiment = cout_batiment;
                   
                   maj_insertion_contrat_in_base(cout_batiment);
@@ -11623,8 +11631,9 @@ vm.steppassation_marches = function()
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            var total_prevu_ttc = total_prevu + ((total_prevu*20)/100);
-            return total_prevu_ttc.toFixed(2);
+            //var total_prevu_ttc = total_prevu + ((total_prevu*20)/100);
+             var total_prevu_ttc = total_prevu;
+           return total_prevu_ttc.toFixed(2);
         }
 
 /************************************************fin rubrique attachement latrine_mpe***************************************************/
@@ -11885,8 +11894,9 @@ vm.steppassation_marches = function()
                     if(suppression==0)
                     {   
                         //vm.selectedItemDivers_attachement_latrine_prevu.attachement_latrine_prevu  = bat_prevu[0];
+                        //var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) + parseFloat(divers_attachement_latrine_prevu.montant_prevu)+((parseFloat(divers_attachement_latrine_prevu.montant_prevu)*20)/100) -parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)*20)/100);                        
                         
-                        var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) + parseFloat(divers_attachement_latrine_prevu.montant_prevu)+((parseFloat(divers_attachement_latrine_prevu.montant_prevu)*20)/100) -parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)*20)/100);                        
+                        var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) + parseFloat(divers_attachement_latrine_prevu.montant_prevu);                        
                         maj_insertion_contrat_in_base_latrine(cout_latrine);
                         vm.selectedItemDivers_attachement_latrine_prevu.$selected  = false;
                         vm.selectedItemDivers_attachement_latrine_prevu.$edit      = false;
@@ -11899,8 +11909,9 @@ vm.steppassation_marches = function()
                       {
                           return obj.id !== vm.selectedItemDivers_attachement_latrine_prevu.id;
                       });*/ 
-
-                        var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) - parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)*20)/100);
+                        //var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) - parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)*20)/100);
+                        
+                        var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) - parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu);
                         //console.log(cout_latrine);
                         maj_insertion_contrat_in_base_latrine(cout_latrine); 
                         vm.selectedItemDivers_attachement_latrine_prevu.unite   = '' ;
@@ -11914,7 +11925,8 @@ vm.steppassation_marches = function()
               {
                   divers_attachement_latrine_prevu.id  =   String(data.response);              
                   NouvelItemDivers_attachement_latrine_prevu = false;
-                  var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) + parseFloat(divers_attachement_latrine_prevu.montant_prevu)+((parseFloat(divers_attachement_latrine_prevu.montant_prevu)*20)/100);
+                  //var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) + parseFloat(divers_attachement_latrine_prevu.montant_prevu)+((parseFloat(divers_attachement_latrine_prevu.montant_prevu)*20)/100);
+                  var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) + parseFloat(divers_attachement_latrine_prevu.montant_prevu);
                   maj_insertion_contrat_in_base_latrine(cout_latrine);
 
               }
@@ -11998,7 +12010,8 @@ vm.steppassation_marches = function()
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            var total_prevu_ttc = total_prevu + ((total_prevu*20)/100);
+            //var total_prevu_ttc = total_prevu + ((total_prevu*20)/100);
+            var total_prevu_ttc = total_prevu;
             return total_prevu_ttc.toFixed(2);
         }
 
@@ -12261,7 +12274,7 @@ vm.steppassation_marches = function()
                     {   
                         //vm.selectedItemDivers_attachement_mobilier_prevu.attachement_mobilier_prevu  = bat_prevu[0];
                         
-                        var cout_mobilier =parseFloat(vm.selectedItemContrat_prestataire.cout_mobilier) + parseFloat(divers_attachement_mobilier_prevu.montant_prevu)+((parseFloat(divers_attachement_mobilier_prevu.montant_prevu)*20)/100) -parseFloat(currentItemDivers_attachement_mobilier_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_mobilier_prevu.montant_prevu)*20)/100);                        
+                        var cout_mobilier =parseFloat(vm.selectedItemContrat_prestataire.cout_mobilier) + parseFloat(divers_attachement_mobilier_prevu.montant_prevu)-parseFloat(currentItemDivers_attachement_mobilier_prevu.montant_prevu);                        
                         maj_insertion_contrat_in_base_mobilier(cout_mobilier);
                         vm.selectedItemDivers_attachement_mobilier_prevu.$selected  = false;
                         vm.selectedItemDivers_attachement_mobilier_prevu.$edit      = false;
@@ -12289,7 +12302,7 @@ vm.steppassation_marches = function()
               {
                   divers_attachement_mobilier_prevu.id  =   String(data.response);              
                   NouvelItemDivers_attachement_mobilier_prevu = false;
-                  var cout_mobilier =parseFloat(vm.selectedItemContrat_prestataire.cout_mobilier) + parseFloat(divers_attachement_mobilier_prevu.montant_prevu)+((parseFloat(divers_attachement_mobilier_prevu.montant_prevu)*20)/100);
+                  var cout_mobilier =parseFloat(vm.selectedItemContrat_prestataire.cout_mobilier) + parseFloat(divers_attachement_mobilier_prevu.montant_prevu);
                   //vm.selectedItemContrat_prestataire.cout_batiment = cout_batiment;
                   
                   maj_insertion_contrat_in_base_mobilier(cout_mobilier);
@@ -12369,7 +12382,7 @@ vm.steppassation_marches = function()
         };
         vm.change_cout_avenant= function(item)
         {   console.log(item);
-            item.cout_total_ht = (parseFloat(item.cout_batiment) + parseFloat(item.cout_latrine) + parseFloat(item.cout_mobilier))/1.2;
+            item.cout_total_ht = (parseFloat(item.cout_batiment) + parseFloat(item.cout_latrine) + parseFloat(item.cout_mobilier))/1;
             item.cout_total_ttc = parseFloat(item.cout_batiment) + parseFloat(item.cout_latrine) + parseFloat(item.cout_mobilier);
         }
 

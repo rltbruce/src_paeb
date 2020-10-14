@@ -49,7 +49,7 @@
             {
                 var user = result.data.response;
                 var permission = user.roles;
-                var permissions = ["ADMIN","BCAF","DAAF","DPFI","OBCAF","ODAAF","ODPFI","UFP"];
+                var permissions = ["ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
               

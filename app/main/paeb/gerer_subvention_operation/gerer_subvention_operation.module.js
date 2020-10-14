@@ -7,7 +7,8 @@
             'app.paeb.gerer_subvention_operation.niveau_ufp_daaf',
             'app.paeb.gerer_subvention_operation.niveau_cisco_feffi',
             'app.paeb.gerer_subvention_operation.niveau_feffi_prestataire'
-            ])       
+            ])
+        .run(testPermission)       
         .config(config);
         var vs ;
 
@@ -17,7 +18,11 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_operation', {
             title : 'Gestion technique des activités',
             icon  : 'icon-data',
-            weight: 3
+            weight: 3,
+            hidden: function()
+            {
+                    return vs;
+            }
         });
 
 
@@ -37,7 +42,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["DAAF","ODAAF","ADMIN","BCAF","ACC","DPFI","ODPFI"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

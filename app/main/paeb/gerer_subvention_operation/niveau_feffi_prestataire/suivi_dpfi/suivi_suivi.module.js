@@ -39,7 +39,7 @@
             {
                 var user = result.data.response;
                 var permission = user.roles;
-                var permissions = ["DAAF","ODAAF","ADMIN"];
+                var permissions = ["DPFI","ODPFI","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

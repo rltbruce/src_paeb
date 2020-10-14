@@ -6,7 +6,8 @@
         .module('app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_daaf', [         
             'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_daaf.convention_suivi_f_daaf',         
             //'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_daaf.convention_suivi_f_odaaf'
-            ])       
+            ])
+        .run(testPermission)       
         .config(config);
         var vs ;
 
@@ -16,7 +17,11 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_daaf', {
             title : 'Niveau DAAF',
             icon  : 'icon-link',
-            weight: 1
+            weight: 1,
+            hidden: function()
+            {
+                    return vs;
+            }
         });
 
 
@@ -36,7 +41,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["ADMIN","DAAF","ODAAF"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

@@ -8,7 +8,8 @@
             'app.paeb.gerer_subvention_financiere.niveau_ufp_daaf.demande_deblocage_daaf_validation_daaf',
             'app.paeb.gerer_subvention_financiere.niveau_ufp_daaf.demande_deblocage_daaf_validation_ufp',
             //'app.paeb.gerer_subvention_financiere.niveau_ufp_daaf.transfert_ufp'
-            ])       
+            ]) 
+        .run(testPermission)       
         .config(config);
         var vs ;
 
@@ -16,9 +17,13 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_ufp_daaf', {
-            title : 'Niveau UFP/DAAF',
+            title : 'Niveau UFP/DAAF-DPFI',
             icon  : 'icon-flattr',
-            weight: 1
+            weight: 1,
+            hidden: function()
+            {
+                    return vs;
+            }
         });
 
 
@@ -38,7 +43,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["ADMIN","ODAAF","DAAF","UFP"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

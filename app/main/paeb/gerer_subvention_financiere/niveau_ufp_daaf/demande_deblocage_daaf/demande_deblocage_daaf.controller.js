@@ -59,6 +59,7 @@
         vm.stepOne   = false;
         vm.stepTwo   = false;
         vm.stepThree   = false;
+        vm.affiche_load =true;
 
 
         //initialisation convention_ufp_daaf_entete
@@ -123,12 +124,12 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
-
+            vm.affiche_load =true;
               apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','getconventionByfiltre',
               'date_debut',date_debut,'date_fin',date_fin).then(function(result)
               {
                   vm.allconvention_ufp_daaf_entete = result.data.response; 
-                  console.log(vm.allconvention_ufp_daaf_entete);
+                  vm.affiche_load =false;
               });
         }
 
@@ -138,7 +139,7 @@
         apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','getconventionByinvalidedemande').then(function(result)
         {
             vm.allconvention_ufp_daaf_entete = result.data.response;
-            console.log(vm.allconvention_ufp_daaf_entete);
+            vm.affiche_load =false;
         });
 
         //col table
@@ -500,8 +501,7 @@
             
             var datas = $.param({
                     supprimer: suppression,
-                    id:        getId,
-                    ref_demande: demande_deblocage_daaf.ref_demande ,      
+                    id:        getId,      
                     id_compte_daaf: demande_deblocage_daaf.id_compte_daaf ,
                     id_tranche_deblocage_daaf: demande_deblocage_daaf.id_tranche_deblocage_daaf ,
                     prevu: demande_deblocage_daaf.prevu ,

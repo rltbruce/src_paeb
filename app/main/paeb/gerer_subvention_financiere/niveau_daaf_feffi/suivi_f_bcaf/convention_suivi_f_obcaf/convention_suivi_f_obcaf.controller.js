@@ -52,6 +52,8 @@
 
         vm.session = '';
         vm.ciscos=[];
+        vm.affiche_load =false;
+
 
 /*******************************Debut initialisation suivi financement feffi******************************/        
 
@@ -290,6 +292,8 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
+            vm.affiche_load =true;
+
               switch (vm.session)
                 { 
                   case 'OBCAF':console.log(vm.usercisco.id);
@@ -298,6 +302,8 @@
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
                               {
                                   vm.allconvention_entete = result.data.response;
+                                  vm.affiche_load =false;
+
                               });
                          
                 console.log(filtre);                
@@ -309,7 +315,8 @@
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
-                                console.log(vm.allconvention_entete);
+                                vm.affiche_load =false;
+
                             });                 
                       break;
                   default:

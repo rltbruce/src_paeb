@@ -1,0 +1,370 @@
+(function ()
+{
+    'use strict';
+
+    angular
+        .module('app.paeb.etat_subvention_financiere.niveau_feffi_feffi_etat.decai_fonctionnement_etat') 
+        .controller('Decai_fonctionnement_etatController', Decai_fonctionnement_etatController)
+    /** @ngInject */
+    function Decai_fonctionnement_etatController($mdDialog, $scope, apiFactory, $state,loginService,apiUrl,$http,$cookieStore,apiUrlFile)
+    {
+		  /*****debut initialisation*****/
+
+        var vm    = this;
+        vm.selectedItemConvention_entete = {} ;
+        vm.allconvention_entete = [] ;
+      
+        vm.stepDecaiss=false;
+
+        vm.session = '';
+        vm.ciscos=[];
+        vm.affiche_load =false;
+
+
+/*******************************Debut initialisation suivi financement feffi******************************/ 
+        vm.validation = 0;
+        vm.roles = [];
+
+
+        //initialisation decaissement fonctionnement feffi
+        vm.selectedItemDecaiss_fonct_feffi = {} ;
+        vm.alldecaiss_fonct_feffi = [] ;    
+
+/*******************************Fin initialisation suivi financement feffi******************************/
+
+        vm.dtOptions = {
+          dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
+          pagingType: 'simple',
+          autoWidth: false          
+        };
+
+        vm.showbuttonfiltre=true;
+        vm.showfiltre=false;
+        vm.showformfiltre = function()
+        {
+          vm.showbuttonfiltre=!vm.showbuttonfiltre;
+          vm.showfiltre=!vm.showfiltre;
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
+
+        vm.datenow = new Date();
+
+       
+
+        vm.filtre_change_region = function(item)
+        { 
+            vm.filtre.id_cisco = null;
+            if (vm.session=='ADMIN')
+            {
+              if (item.id_region != '*')
+              {
+                  apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+                  {
+                      vm.ciscos = result.data.response;
+                      console.log(vm.ciscos);
+                  }, function error(result){ alert('something went wrong')});
+              }
+              else
+              {               
+                  vm.ciscos = [];                
+              }
+            }
+            
+          
+        }
+        vm.filtre_change_cisco = function(item)
+        { vm.filtre.id_commune = null;
+            if (item.id_cisco != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",item.id_cisco).then(function(result)
+              {
+                vm.communes = result.data.response;
+                console.log(vm.communes);
+              }, function error(result){ alert('something went wrong')});
+            }
+            else
+            {
+                vm.communes = [];
+            }
+          
+        }
+        vm.filtre_change_commune = function(item)
+        { 
+            vm.filtre.id_ecole = null;
+            if (item.id_commune != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleBycommune","id_commune",item.id_commune).then(function(result)
+              {
+                vm.ecoles = result.data.response;
+                console.log(vm.ecoles);
+              }, function error(result){ alert('something went wrong')});
+            }
+            else
+            {
+                vm.ecoles = [];
+            }
+          
+        }
+        vm.filtre_change_ecole = function(item)
+        { 
+            vm.filtre.id_convention_entete_entete = null;
+            if (item.id_ecole != '*')
+            {
+                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByecole","id_ecole",item.id_ecole).then(function(result)
+                  {
+                    vm.convention_cisco_feffi_entetes = result.data.response;
+                    console.log(vm.convention_cisco_feffi_entetes );
+                  }, function error(result){ alert('something went wrong')});
+            }
+        }
+        var id_user = $cookieStore.get('id');
+         apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+              vm.roles = result.data.response.roles;
+              switch (vm.roles[0])
+                {
+                  case 'OBCAF': 
+                            vm.usercisco = result.data.response.cisco;
+                            apiFactory.getAPIgeneraliserREST("region/index","menu","getregionbycisco",'id_cisco',vm.usercisco.id).then(function(result)
+                            {
+                                vm.regions = result.data.response;
+                                console.log(vm.regions);
+                            }, function error(result){ alert('something went wrong')});
+                            vm.ciscos.push(vm.usercisco);
+                            vm.showbuttonNeauveaudemandefeffi=true;                            
+                            vm.session = 'OBCAF';
+
+                      break;
+
+                  case 'ADMIN':                            
+                            vm.showbuttonNeauveaudemandefeffi=true;
+                             apiFactory.getAll("region/index").then(function success(response)
+                            {
+                              vm.regions = response.data.response;
+                            }, function error(response){ alert('something went wrong')});
+                            vm.session = 'ADMIN';                  
+                      break;
+                  default:
+                      break;
+              
+                }                  
+
+         });
+
+        /***************debut convention cisco/feffi**********/
+        vm.convention_entete_column = [
+        {titre:"CISCO"
+        },
+        {titre:"FEFFI"
+        },
+        {titre:"Code sous projet site"
+        },
+        {titre:"Accés site"
+        },
+        {titre:"Référence convention"
+        },
+        {titre:"Objet"
+        },
+        {titre:"Référence Financement"
+        },
+        {titre:"Cout éstimé"
+        },
+        {titre:"Utilisateur"
+        }]; 
+     
+
+        vm.recherchefiltre = function(filtre)
+        {
+            var date_debut = convertionDate(filtre.date_debut);
+            var date_fin = convertionDate(filtre.date_fin);
+            vm.affiche_load =true;
+
+              switch (vm.session)
+                { 
+                  case 'OBCAF':console.log(vm.usercisco.id);
+                            
+                              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpByfiltrecisco','id_cisco_user',vm.usercisco.id,'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                              {
+                                  vm.allconvention_entete = result.data.response;
+                                  vm.affiche_load =false;
+
+                              });
+                         
+                console.log(filtre);                
+                      break;
+
+                  case 'ADMIN':
+                           
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                            {
+                                vm.allconvention_entete = result.data.response;
+                                vm.affiche_load =false;
+
+                            });                 
+                      break;
+                  default:
+                      break;
+              
+                }
+        }
+        
+        /***************fin convention cisco/feffi************/
+
+         //fonction selection item entete convention cisco/feffi
+        vm.selectionConvention_entete = function (item)
+        {
+            vm.selectedItemConvention_entete = item;
+           // vm.allconvention= [] ;
+            
+            vm.showbuttonNouvContrat_prestataire=true;
+
+            donnee_sousmenu_feffi(item,vm.session).then(function () 
+            {
+                    // On récupère le resultat de la requête dans la varible "response"                    
+                vm.stepDecaiss=true;
+                console.log(vm.stepMenu_feffi);  
+            });
+              
+              vm.steppiecefeffi=false;
+              vm.steptransdaaf=false;
+              vm.nbr_decaiss_feffi = item.nbr_decaiss_feffi;
+              //console.log(vm.nbr_demande_feffi);
+                         
+
+        };
+        $scope.$watch('vm.selectedItemConvention_entete', function()
+        {
+             if (!vm.allconvention_entete) return;
+             vm.allconvention_entete.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemConvention_entete.$selected = true;
+        });
+        
+        function donnee_sousmenu_feffi(item,session)
+        {
+            return new Promise(function (resolve, reject) 
+            {
+                switch (session)
+                {
+                  case 'OBCAF':
+                              apiFactory.getAPIgeneraliserREST("decaiss_fonct_feffi/index",'menu','getdecaiss_valideByconvention','id_convention_entete',item.id).then(function(result)
+                              {
+                                  vm.alldecaiss_fonct_feffi = result.data.response; 
+                                  return resolve('ok');
+                              });
+
+                              vm.modif_suppre = true;
+                              //vm.nbr_demande_feffi = item.nbr_demande_feffi_creer
+                            
+                      break;
+
+                  case 'ADMIN':
+                           apiFactory.getAPIgeneraliserREST("decaiss_fonct_feffi/index",'menu','getdecaiss_valideByconvention','id_convention_entete',item.id).then(function(result)
+                            {
+                                vm.alldecaiss_fonct_feffi = result.data.response; 
+                                return resolve('ok');
+                            });                              
+                       
+                      break;
+                  default:
+                      break;
+              
+                }            
+            });
+        
+        }
+
+
+  /**********************************fin decaissement fonctionnement feffi******************************/
+
+
+       
+
+        //fonction selection item justificatif batiment
+        vm.selectionDecaiss_fonct_feffi= function (item)
+        {
+            vm.selectedItemDecaiss_fonct_feffi = item;
+            vm.validation_decais_fef=item.validation;
+            
+        };
+        $scope.$watch('vm.selectedItemDecaiss_fonct_feffi', function()
+        {
+             if (!vm.alldecaiss_fonct_feffi) return;
+             vm.alldecaiss_fonct_feffi.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemDecaiss_fonct_feffi.$selected = true;
+        });
+
+                
+
+    /*********************************************Fin justificatif reliquat************************************************/
+
+  /******************************************fin maitrise d'oeuvre*******************************************************/
+        vm.showAlert = function(titre,content)
+        {
+          $mdDialog.show(
+            $mdDialog.alert()
+            .parent(angular.element(document.querySelector('#popupContainer')))
+            .clickOutsideToClose(false)
+            .parent(angular.element(document.body))
+            .title(titre)
+            .textContent(content)
+            .ariaLabel('Alert')
+            .ok('Fermer')
+            .targetEvent()
+          );
+        }
+        function convertionDate(daty)
+        {   
+          if(daty)
+            {
+                var date     = new Date(daty);
+                var jour  = date.getDate();
+                var mois  = date.getMonth()+1;
+                var annee = date.getFullYear();
+                if(mois <10)
+                {
+                    mois = '0' + mois;
+                }
+                var date_final= annee+"-"+mois+"-"+jour;
+                return date_final
+            }      
+        }
+        //format date affichage sur datatable
+        vm.formatDate = function (daty)
+        {
+          if (daty) 
+          {
+            var date  = new Date(daty);
+            var mois  = date.getMonth()+1;
+            var dates = (date.getDate()+"-"+mois+"-"+date.getFullYear());
+            return dates;
+          }            
+
+        }
+        vm.affichage_sexe= function (sexe)
+        { var affiche='';
+          switch (sexe)
+          {
+            case '1':
+                affiche= 'Masculin';
+                break;
+            case '2':
+                affiche= 'Feminin';
+                break;
+            default:
+          }
+          return affiche;
+        };
+ 
+    }
+})();

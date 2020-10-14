@@ -6,7 +6,8 @@
         .module('app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_bcaf', [			
             'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_bcaf.convention_suivi_f_obcaf',         
             'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_bcaf.convention_suivi_f_bcaf'
-            ])       
+            ])
+        .run(testPermission)        
         .config(config);
         var vs ;
 
@@ -16,7 +17,11 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_bcaf', {
             title : 'Niveau BCAF',
             icon  : 'icon-link',
-            weight: 1
+            weight: 1,
+            hidden: function()
+            {
+                    return vs;
+            }
         });
 
 
@@ -36,7 +41,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["ADMIN","BCAF","OBCAF"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

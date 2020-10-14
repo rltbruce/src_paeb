@@ -5,7 +5,8 @@
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_ufp_feffi.suivi_f_ufp', [         
             'app.paeb.gerer_subvention_financiere.niveau_ufp_feffi.suivi_f_ufp.convention_suivi_f_ufp'
-            ])       
+            ])
+        .run(testPermission)       
         .config(config);
         var vs ;
 
@@ -15,7 +16,11 @@
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_ufp_feffi.suivi_f_ufp', {
             title : 'Niveau UFP',
             icon  : 'icon-link',
-            weight: 1
+            weight: 1,
+            hidden: function()
+            {
+                    return vs;
+            }
         });
 
 
@@ -35,7 +40,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["ADMIN","UFP"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

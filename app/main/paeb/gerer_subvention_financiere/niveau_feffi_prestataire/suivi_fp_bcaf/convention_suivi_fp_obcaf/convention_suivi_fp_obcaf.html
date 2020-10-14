@@ -27,13 +27,7 @@
     <!-- CONTENT -->
     <div class="content" layout="column">
       <div class="form-wrapper md-whiteframe-1dp acc_menu" >
-        <div style="clear:both;"></div>            
-            <div style="float: top !important">
-              <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
-              <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
-                      Chargement,veuillez patienter s'il vous plait ...
-              </div>
-            </div>
+        
 <!-------------------------------------DEBUT TABS MERE----------------------------------------------------------->
          <ms-form-wizard flex>
           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" >
@@ -166,7 +160,13 @@
                         </md-button> 
                     </div>
                   </div>
-
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
                 <div>        
                  <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                     <thead>
@@ -400,7 +400,7 @@
                         <!---------------------------------FIN demande batiment mpe--------------------------------------->
                     
                           <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
-                              <md-tab ng-click="vm.click_step_rubrique_calendrier_paie_moe()">
+                              <md-tab ng-click="vm.click_step_rubrique_calendrier_paie_moe()" ng-disabled="!vm.steprubriquecalendrier">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
                                       <span class="ms-form-wizard-step-text">Rubrique calendrier</span>
@@ -477,7 +477,7 @@
                         <!---------------------------FIN rubrique batiment mpe---------------------------------->
 
                         <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
-                              <md-tab ng-click="vm.click_step_sousrubrique_calendrier_paie_moe()">
+                              <md-tab ng-click="vm.click_step_sousrubrique_calendrier_paie_moe()" ng-disabled="!vm.stepsousrubriquecalendrier">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
                                       <span class="ms-form-wizard-step-text">Sous rubrique calendrier</span>
@@ -538,7 +538,7 @@
                         <!---------------------------FIN rubrique batiment mpe---------------------------------->
 
                         <!-------------------------------Debut attachement travaux-------------------------------------------->                                      
-                              <md-tab ng-click="vm.click_step_facture_moe_detail()">
+                              <md-tab ng-click="vm.click_step_facture_moe_detail()" ng-disabled="!vm.stepfacture_detail">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
                                       <span class="ms-form-wizard-step-text">Facture détail</span>
@@ -621,7 +621,7 @@
                                             <span>{{facture_moe_detail.pourcentage}}</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{facture_moe_detail.montant_prevu}}</span>
+                                            <span>{{facture_moe_detail.montant_prevu_detail}}</span>
                                           </td>
                                           <td>
                                             <span ng-if="facture_moe_detail.$edit">
@@ -667,7 +667,7 @@
                                               <span class="icon-table-edit"></span>
                                             </a>
                                                       
-                                            <a ng-if="!facture_moe_detail.$edit" ng-click="vm.supprimerFacture_moe_detail(facture_moe_detail)" title="Supprimer">
+                                            <a ng-if="!facture_moe_detail.$edit && facture_moe_detail.id" ng-click="vm.supprimerFacture_moe_detail(facture_moe_detail)" title="Supprimer">
                                               <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                             </a> 
                                                       
@@ -687,8 +687,8 @@
                                 </md-tab> 
                         <!----------------------------------Debut attachement_travaux------------------------------->
 
-                        <!----------------------------------Debut justificatif batiment moe------------------------------->
-                              <md-tab ng-disabled="!vm.stepjusti_facture_moe">
+                        <!----------------------------------Debut justificatif batiment moe-------------------------ng-disabled="!vm.stepjusti_facture_moe"------>
+                              <md-tab ng-disabled="!vm.stepjusti_facture_moe" ng-click="vm.click_step_justi_facture_moe()">
                                   <md-tab-label>
                                     <span class="ms-form-wizard-step-label">
                                         <span class="ms-form-wizard-step-text">Pièce jointe</span>
@@ -697,7 +697,7 @@
                                   
                                    <md-tab-body>
                                       <div style="widht:100%;">  
-                                          <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_facture_moe()" style="width:10%;" ng-disabled="vm.validation_demande_facture_moe !=0">
+                                          <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterJustificatif_facture_moe()" style="width:10%;">
                                             Nouveau
                                           </md-button><br>
                                       </div>
@@ -755,14 +755,14 @@
                                               <span ng-if="!justificatif_facture_moe.$edit">{{justificatif_facture_moe.fichier}}</span>
                                             </td>                       
                                             <td>
-                                              <a ng-if="!justificatif_facture_moe.$edit && vm.validation_demande_facture_moe ==0" ng-click="vm.modifierJustificatif_facture_moe(justificatif_facture_moe)" title="Modifier">
+                                              <a ng-if="!justificatif_facture_moe.$edit" ng-click="vm.modifierJustificatif_facture_moe(justificatif_facture_moe)" title="Modifier">
                                                 <span class="icon-table-edit"></span>
                                               </a>
                                                         
-                                              <a ng-if="!justificatif_facture_moe.$edit && vm.validation_demande_facture_moe ==0" ng-click="vm.supprimerJustificatif_facture_moe(justificatif_facture_moe)" title="Supprimer">
+                                              <a ng-if="!justificatif_facture_moe.$edit" ng-click="vm.supprimerJustificatif_facture_moe(justificatif_facture_moe)" title="Supprimer">
                                                 <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                               </a>
-                                              <a ng-if="!justificatif_facture_moe.$edit" ng-click="vm.download_piece(justificatif_facture_moe)" title="Telecharger">
+                                              <a ng-if="!justificatif_facture_moe.$edit" ng-click="vm.download_piece_facture_moe(justificatif_facture_moe)" title="Telecharger">
                                                 <span class="icon-box-download"></span>
                                               </a>
                                                         
@@ -790,7 +790,11 @@
               </md-tab-body>  
             </md-tab>
           <!------------------------------FIN MAITRISE D'OEUVRE---------------------------------------------------> 
-
+              </md-tabs> 
+                </ms-form-wizard>
+              <!-------------------------FILS DEBUT MAITRISE D'OEUVRE---------------------------------------------->  
+              </md-tab-body>  
+            </md-tab>
           <!--------------------------------DEBUT ENTREPRISE-----------------------------------------------------> 
             <md-tab ng-disabled="vm.stepMenu_mpe==false" ng-click="vm.step_menu_mpe()">
               <md-tab-label >

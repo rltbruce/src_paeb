@@ -17,6 +17,7 @@
         vm.allfeffi = [];
         vm.allsite = [];
         vm.filtre = {};
+        vm.affiche_load =true;
 
         var NouvelItemDetail = false;
         var currentItemDetail;
@@ -134,7 +135,7 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
                     apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalideBycisconow','id_cisco',usercisco.id,'annee',annee).then(function(result)
                     {
                         vm.allconvention_cife_tete = result.data.response; 
-                        console.log(vm.allconvention_cife_tete);
+                        vm.affiche_load =false;
                     });
                     vm.session='BCAF';
                   //vm.session='ADMIN';
@@ -160,7 +161,7 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
                 apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalidenow','annee',annee).then(function(result)
                 {
                     vm.allconvention_cife_tete = result.data.response; 
-                    console.log(vm.allconvention_cife_tete);
+                    vm.affiche_load =false;
                 });
                  apiFactory.getAll("region/index").then(function success(response)
                 {
@@ -185,6 +186,7 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
+            vm.affiche_load =true;
 
             if(vm.session=='BCAF')
             {
@@ -201,7 +203,7 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
               filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
               {
                   vm.allconvention_cife_tete = result.data.response; 
-                  console.log(vm.allconvention_cife_tete);
+                  vm.affiche_load =false;
               });
             }
             else
@@ -212,7 +214,7 @@ apiFactory.getOne("utilisateurs/index", id_user).then(function(result)
                 filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
               {
                   vm.allconvention_cife_tete = result.data.response; 
-                  console.log(vm.allconvention_cife_tete);
+                  vm.affiche_load =false;
               });
             }
             

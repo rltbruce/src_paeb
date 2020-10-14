@@ -7,7 +7,8 @@
             'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_bcaf',          
             'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_dpfi',          
             'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_daaf'
-            ])       
+            ])
+        .run(testPermission)        
         .config(config);
         var vs ;
 
@@ -15,9 +16,13 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_daaf_feffi', {
-            title : 'Niveau DAAF/FEFFI',
+            title : 'Niveau DAAF-DPFI/FEFFI',
             icon  : 'icon-flattr',
-            weight: 1
+            weight: 1,
+            hidden: function()
+            {
+                    return vs;
+            }
         });
 
 
@@ -37,7 +42,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DDB"];
+                var permissions = ["ADMIN","DPFI","DAAF","ODAAF","BCAF","OBCAF"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

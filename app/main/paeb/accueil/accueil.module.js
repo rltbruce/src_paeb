@@ -35,12 +35,7 @@
             icon  : 'icon-palette-advanced',
             state : 'app.population_accueil',
             translate: 'accueil.menu.titre',
-            weight: 1,
-            hidden: function ()
-            {
-              //var permissions = ["ALLp"];
-              //var x =  loginService.isPermitted(permissions);
-            }
+            weight: 1
         });
     }
 

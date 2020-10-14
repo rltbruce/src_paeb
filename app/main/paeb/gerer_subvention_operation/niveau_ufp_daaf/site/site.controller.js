@@ -31,6 +31,7 @@
         vm.selectedItemChange = selectedItemChange;
         vm.searchTextChange   = searchTextChange;
         vm.match = true;
+        vm.affiche_load =true;
 
         //style
         vm.dtOptions = {
@@ -91,6 +92,8 @@
          'getsiteByenpreparationinvalide').then(function(result)
         {
           vm.allsite = result.data.response;
+
+          vm.affiche_load =false;
         });
 
         /*apiFactory.getAPIgeneraliserREST("site/index",'menu',
@@ -218,12 +221,15 @@
         }
 
         vm.recherchefiltre = function(filtre)
-        {
+        {   
+
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("site/index",'menu',
               'getsiteByenpreparationinvalide','lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
               filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
               {
                   vm.allsite = result.data.response;
+                  vm.affiche_load =false;
               });
         }
 

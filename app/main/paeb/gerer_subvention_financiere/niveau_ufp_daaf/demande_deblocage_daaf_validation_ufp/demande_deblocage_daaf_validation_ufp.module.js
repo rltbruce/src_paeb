@@ -66,7 +66,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["DAAF","ADMIN"];
+                var permissions = ["UFP","ADMIN"];
                 affichage =  loginService.gestionMenu(permissions,permission);  
 
                 //**************************************************

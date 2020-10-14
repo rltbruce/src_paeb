@@ -57,7 +57,7 @@
             // Reload the page to apply the changes
             location.reload();
 
-            $window.location.href = '/bianco';//mis à jour modules pour gestion securité
+            $window.location.href = '/paeb';//mis à jour modules pour gestion securité
         }
     }
 

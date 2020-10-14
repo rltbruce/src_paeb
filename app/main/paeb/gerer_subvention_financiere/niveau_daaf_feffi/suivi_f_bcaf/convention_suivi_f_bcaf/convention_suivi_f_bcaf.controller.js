@@ -53,6 +53,8 @@
 
         vm.session = '';
         vm.ciscos=[];
+        vm.affiche_load =true;
+
 
 /*******************************Debut initialisation suivi financement feffi******************************/
 
@@ -227,6 +229,8 @@
                             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionNeeddemandefeffivalidationbcafwithcisco','id_cisco_user',vm.usercisco.id).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
+                                vm.affiche_load =false;
+
                             });
                             vm.session = 'BCAF';
                       
@@ -241,6 +245,8 @@
                             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionNeeddemandefeffivalidationbcaf').then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
+                                vm.affiche_load =false;
+
                             });                           
                             vm.session = 'ADMIN';                  
                       break;
@@ -305,6 +311,8 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
+            vm.affiche_load =true;
+
               switch (vm.session)
                 {
                  case 'BCAF':
@@ -312,6 +320,8 @@
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
                               {
                                   vm.allconvention_entete = result.data.response;
+                                  vm.affiche_load =false;
+
                               });
                       
                       break;
@@ -322,7 +332,8 @@
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
-                                console.log(vm.allconvention_entete);
+                                vm.affiche_load =false;
+
                             });                 
                       break;
                   default:

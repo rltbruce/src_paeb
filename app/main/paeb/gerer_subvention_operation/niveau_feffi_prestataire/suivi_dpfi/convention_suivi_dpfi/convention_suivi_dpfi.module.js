@@ -4,7 +4,7 @@
 
     angular
         .module('app.paeb.gerer_subvention_operation.niveau_feffi_prestataire.suivi_dpfi.convention_suivi_dpfi', [])
-        .run(testPermission)
+       .run(testPermission)
         .config(config);
     var vs ;
     /** @ngInject */

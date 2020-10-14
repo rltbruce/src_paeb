@@ -65,24 +65,29 @@
 
     function insertiondemande_ufp_daaf_syst($cookieStore,apiFactory,$interval,loginService)
     {
-                   
-            apiFactory.getAll("count_avancement_travaux/index").then(function(result)
-            {
-                var allavan= result.data.response;
-                console.log(allavan);
-            });
-            
+             var id_user = $cookieStore.get('id');
 
-                //**************************************************
+             if (id_user >0) 
+             {
+                     
+                apiFactory.getAll("count_avancement_travaux/index").then(function(result)
+                {
+                    var allavan= result.data.response;
+                    console.log(allavan);
+                });
+                
 
-                    $interval(function(){apiFactory.getAll("count_avancement_travaux/index").then(function(result)
-                    {
-                        var allavan= result.data.response;
-                        console.log(allavan);
-                    });},15000) ;
-              
-                //**************************************************
+                    //**************************************************
 
+                        $interval(function(){apiFactory.getAll("count_avancement_travaux/index").then(function(result)
+                        {
+                            var allavan= result.data.response;
+                            console.log(allavan);
+                        });},15000) ;
+                  
+                    //**************************************************
+
+             } 
        
      
     }

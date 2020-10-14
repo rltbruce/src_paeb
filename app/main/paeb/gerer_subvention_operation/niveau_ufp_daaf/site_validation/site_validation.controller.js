@@ -25,6 +25,7 @@
         vm.showbuttonvalidation = false;
         vm.showbuttonfiltre=true;
         vm.showfiltre=false;
+        vm.affiche_load =true;
 
         //style
         vm.dtOptions = {
@@ -79,6 +80,8 @@
          'getsiteByenpreparationinvalide').then(function(result)
         {
           vm.allsite = result.data.response;
+
+        vm.affiche_load =false;
         });
         apiFactory.getAll("classification_site/index").then(function(result)
         {
@@ -170,12 +173,16 @@
         }
 
         vm.recherchefiltre = function(filtre)
-        {
+        {   
+
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("site/index",'menu',
               'getsiteByfiltre','lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
               filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
               {
                   vm.allsite = result.data.response;
+                  
+        vm.affiche_load =false;
               });
         }
 

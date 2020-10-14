@@ -10,6 +10,7 @@
     function Convention_ufp_daaf_validationController($mdDialog, $scope, apiFactory, $state,$cookieStore,loginService)
     {
 		    var vm = this;
+        vm.affiche_load =true;
 
     //initialisation convetion ufp/daaf entete 
         vm.ajoutConvention_ufp_daaf_entete = ajoutConvention_ufp_daaf_entete ;
@@ -115,17 +116,19 @@
         apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_now","annee",annee).then(function(result)
         {
             vm.allconvention_ufp_daaf_entete = result.data.response;
+            vm.affiche_load =false;
         });
 
          vm.recherchefiltre = function(filtre)
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
-
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconventionByfiltre",'date_debut',
                                     date_debut,'date_fin',date_fin).then(function(result)
             {
                 vm.allconvention_ufp_daaf_entete = result.data.response;
+                vm.affiche_load =false;
             });
         }
 

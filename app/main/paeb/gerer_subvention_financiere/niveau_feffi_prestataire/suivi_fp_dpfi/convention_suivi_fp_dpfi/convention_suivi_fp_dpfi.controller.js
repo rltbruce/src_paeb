@@ -64,8 +64,10 @@
         vm.steprubriquemobilier_mpe = false;
 
         vm.stepjusti_attachement_mpe = false;
-
+        
+        vm.stepdecompte =false;
         vm.session = '';
+        vm.affiche_load =true;
 
 /*******************************Debut initialisation suivi financement feffi******************************/
       
@@ -101,50 +103,24 @@
         vm.selectedItemContrat_moe = {} ;
         vm.allcontrat_moe = [] ;       
 
-        vm.selectedItemDemande_debut_travaux_moe = {};
-        vm.alldemande_debut_travaux_moe = [];
+        vm.selectedItemFacture_moe_entete = {};
+        vm.allfacture_moe_entete = [];
 
-        vm.alldemande_debut_travaux_moe = [];
-        vm.showbuttonValidationDemande_debut_travaux_moe_encourdpfi = false;
-        vm.showbuttonValidationDemande_debut_travaux_moe_rejedpfi = false;  
-        vm.showbuttonValidationDemande_debut_travaux_moe_validedpfi = false;
+        vm.selectedItemRubrique_calendrier_paie_moe = {};
+        vm.allrubrique_calendrier_paie_moe = [];
 
-        vm.selectedItemJustificatif_debut_travaux_moe = {} ;
-        vm.alljustificatif_debut_travaux_moe = [] ;
+        vm.selectedItemSousrubrique_calendrier_paie_moe = {};
+        vm.allsousrubrique_calendrier_paie_moe = [];
 
-        vm.selectedItemDemande_batiment_moe = {};
-        vm.alldemande_batiment_moe = [];
+        vm.selectedItemFacture_moe_detail = {} ;
+        vm.allfacture_moe_detail = [] ;
 
-        vm.alldemande_batiment_moe = [];
+        vm.selectedItemJustificatif_facture_moe = {} ;
+        vm.alljustificatif_facture_moe = [] ;
 
-        vm.showbuttonValidationDemande_batiment_moe_encourdpfi = false;
-        vm.showbuttonValidationDemande_batiment_moe_rejedpfi = false;
- 
-        vm.selectedItemJustificatif_batiment_moe = {} ;
-        vm.alljustificatif_batiment_moe = [] ;
-       
-        vm.selectedItemDemande_latrine_moe = {};
-        vm.alldemande_latrine_moe = [];
-
-        vm.alldemande_latrine_moe = [];
-
-        vm.showbuttonValidationDemande_latrine_moe_encourdpfi = false;
-        vm.showbuttonValidationDemande_latrine_moe_rejedpfi = false;
-        vm.showbuttonValidationDemande_latrine_moe_validedpfi = false;
-        
-        vm.selectedItemJustificatif_latrine_moe = {} ;
-        vm.alljustificatif_latrine_moe = [] ;
-        
-        vm.selectedItemDemande_fin_travaux_moe = {};
-        vm.alldemande_fin_travaux_moe = [];
-
-        vm.showbuttonValidationDemande_fin_travaux_moe_encourdpfi = false;
-        vm.showbuttonValidationDemande_fin_travaux_moe_rejedpfi = false;
-        vm.showbuttonValidationDemande_fin_travaux_moe_validedpfi = false;
-
-        vm.selectedItemJustificatif_fin_travaux_moe = {} ;
-        vm.alljustificatif_fin_travaux_moe = [] ;        
-
+        vm.showbuttonValidationFacture_moe_encourdpfi = false;
+        vm.showbuttonValidationFacture_moe_rejedpfi = false;
+        vm.showbuttonValidationFacture_moe_validedpfi = false;
 /*********************************************Fin maitrise d'oeuvre*************************************/
 
 /********************************************Debut entreprise******************************************/
@@ -340,9 +316,9 @@
         }]; 
 
         apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionNeedvalidationpdfi').then(function(result)
-        {
+        {   
             vm.allconvention_entete = result.data.response;
-            console.log(vm.allconvention_entete);
+            vm.affiche_load =false;
         });
 
         vm.importerfiltre =function(filtre)
@@ -378,11 +354,12 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
             {
                 vm.allconvention_entete = result.data.response;
-                console.log(vm.allconvention_entete);
+                vm.affiche_load =false;
             });
                 console.log(filtre);
         }
@@ -491,56 +468,6 @@
 
            if(item.id!=0)
            {
-              if (item.$selected==false || item.$selected==undefined)
-              {
-                  vm.showbuttonValidationcontrat_pr = true;
-                  
-                  if(vm.roles.indexOf("DPFI")!= -1)
-                  {
-                      
-                     apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                      vm.alldemande_debut_travaux_moe = result.data.response;
-                    });
-                     apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                      vm.alldemande_batiment_moe = result.data.response;
-                    });
-                     apiFactory.getAPIgeneraliserREST("demande_latrine_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                      vm.alldemande_latrine_moe = result.data.response;
-                    });
-                     apiFactory.getAPIgeneraliserREST("demande_fin_travaux_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                      vm.alldemande_fin_travaux_moe = result.data.response;
-                    });
-                  }
-
-                  
-                  if(vm.roles.indexOf("ADMIN")!= -1)
-                  {
-                      apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                      vm.alldemande_debut_travaux_moe = result.data.response;
-                      console.log(vm.alldemande_debut_travaux_moe);
-                    });
-                     apiFactory.getAPIgeneraliserREST("demande_batiment_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                      vm.alldemande_batiment_moe = result.data.response;
-                    });
-                     apiFactory.getAPIgeneraliserREST("demande_latrine_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                      vm.alldemande_latrine_moe = result.data.response;
-                    });
-                     apiFactory.getAPIgeneraliserREST("demande_fin_travaux_moe/index","menu","getdemandeemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
-                    {
-                      vm.alldemande_fin_travaux_moe = result.data.response;
-                    });
-
-                  }
-                }
-
-
             vm.showbuttonValidationcontrat_moe = true;
             vm.validation_contrat_moe = item.validation;
             vm.stepprestation_moe = true;
@@ -562,414 +489,362 @@
       /*****************************************fin contrat moe******************************************************/
 
       
-      /**********************************debut demande_debut_travaux_moe****************************************/
+     
+    /**************************************debut facture moe entete*********************************************/
       vm.click_step_suivi_paiement_moe = function()
       {
-        vm.styleTabfils = "acc_menu";
+        apiFactory.getAPIgeneraliserREST("facture_moe_entete/index","menu","getfactureemidpfiBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+        {
+            vm.allfacture_moe_entete = result.data.response;
+            console.log(vm.allfacture_moe_entete);
+        });        
+
+        vm.steprubriquecalendrier = false;
+        vm.stepsousrubriquecalendrier = false;
+        vm.stepjusti_facture_moe = false;
+        vm.stepfacture_detail = false;
+
+        vm.showbuttonValidationFacture_moe_encourdpfi = false;
+        vm.showbuttonValidationFacture_moe_rejedpfi = false;
+        vm.showbuttonValidationFacture_moe_validedpfi = false;
       }
-//col table
-        vm.demande_debut_travaux_moe_column = [        
-        {titre:"Objet"
-        },
-        {titre:"Description"
-        },
-        {titre:"Référence facture"
-        },
-        {titre:"Tranche"
-        },
-        {titre:"Période"
-        },
-        {titre:"Cumul"
-        },
-        {titre:"Antérieur"
-        },
-        {titre:"Calendrier de paiement"
-        },
-        {titre:"Pourcentage"
-        },
-        {titre:"Reste à décaisser"
-        },
-        {titre:"Date"
-        }];
-        //fonction selection item Demande_debut_travaux_moe
-        vm.selectionDemande_debut_travaux_moe= function (item)
-        {
-            vm.selectedItemDemande_debut_travaux_moe = item;
-           if(item.id!=0)
-           {
-               apiFactory.getAPIgeneraliserREST("justificatif_debut_travaux_moe/index",'id_demande_debut_travaux',vm.selectedItemDemande_debut_travaux_moe.id).then(function(result)
-                {
-                    vm.alljustificatif_debut_travaux_moe = result.data.response;
-                    console.log(vm.alljustificatif_debut_travaux_moe);
-                });                 
 
-                vm.showbuttonValidationDemande_debut_travaux_moe_encourdpfi = true;
-                vm.showbuttonValidationDemande_debut_travaux_moe_rejedpfi = true;
-                vm.showbuttonValidationDemande_debut_travaux_moe_validedpfi = true;               
-            
-            vm.validation_demande_debut_travaux_moe = item.validation;
-            vm.stepjusti_d_tra_moe = true;
-           }
-             
-        };
-        $scope.$watch('vm.selectedItemDemande_debut_travaux_moe', function()
+        vm.facture_moe_entete_column = [        
+        {titre:"Numero"
+        },
+        {titre:"Date de BR"
+        }];
+
+//fonction selection item Demande_batiment_mpe
+        vm.selectionFacture_moe_entete= function (item)
         {
-             if (!vm.alldemande_debut_travaux_moe) return;
-             vm.alldemande_debut_travaux_moe.forEach(function(item)
+            vm.selectedItemFacture_moe_entete = item;
+           // vm.NouvelItemFacture_moe_entete   = item;
+           if (item.$edit==false || item.$edit==undefined)
+           {
+                vm.steprubriquecalendrier = true;
+                vm.stepsousrubriquecalendrier = false;
+                vm.stepjusti_facture_moe = true;
+                vm.stepfacture_detail = false;
+           }
+
+            vm.validation_fact_moe = item.validation;
+            vm.showbuttonValidationFacture_moe_encourdpfi = true;
+            vm.showbuttonValidationFacture_moe_rejedpfi = true;
+            vm.showbuttonValidationFacture_moe_validedpfi = true;           
+            //vm.stepjusti_batiment_mpe = true;   
+        };
+        $scope.$watch('vm.selectedItemFacture_moe_entete', function()
+        {
+             if (!vm.allfacture_moe_entete) return;
+             vm.allfacture_moe_entete.forEach(function(item)
              {
                 item.$selected = false;
              });
-             vm.selectedItemDemande_debut_travaux_moe.$selected = true;
+             vm.selectedItemFacture_moe_entete.$selected = true;
         });
 
-        vm.validerDemande_debut_travaux_moe_encourdpfi = function()
+        vm.validerFacture_moe_encourdpfi = function()
         {
-          maj_in_baseDemande_debut_travaux_moe(vm.selectedItemDemande_debut_travaux_moe,0,2);
+          maj_in_baseFacture_moe_entete(vm.selectedItemFacture_moe_entete,0,2);
         }
-        vm.validerDemande_debut_travaux_moe_rejedpfi = function()
+        vm.validerFacture_moe_rejedpfi = function()
         {
-          maj_in_baseDemande_debut_travaux_moe(vm.selectedItemDemande_debut_travaux_moe,0,3);
+          maj_in_baseFacture_moe_entete(vm.selectedItemFacture_moe_entete,0,3);
         }
-        vm.validerDemande_debut_travaux_moe_validedpfi = function()
+        vm.validerFacture_moe_validedpfi = function()
         {
-          maj_in_baseDemande_debut_travaux_moe(vm.selectedItemDemande_debut_travaux_moe,0,4);
+          maj_in_baseFacture_moe_entete(vm.selectedItemFacture_moe_entete,0,4);
         }
-
-        function maj_in_baseDemande_debut_travaux_moe(demande_debut_travaux_moe,suppression,validation)
+         //insertion ou mise a jours ou suppression item dans bdd Facture_moe_entete
+        function maj_in_baseFacture_moe_entete(facture_moe_entete,suppression,validation)
         {
             //add
             var config =
             {
                 headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            }; 
+            };
             
             var datas = $.param({
                     supprimer: suppression,
-                    id:        demande_debut_travaux_moe.id,
-                    objet: demande_debut_travaux_moe.objet,
-                    description:demande_debut_travaux_moe.description,
-                    ref_facture:demande_debut_travaux_moe.ref_facture,
-                    id_tranche_d_debut_travaux_moe: demande_debut_travaux_moe.tranche.id ,
-                    montant: demande_debut_travaux_moe.montant,
-                    cumul: demande_debut_travaux_moe.cumul ,
-                    anterieur: demande_debut_travaux_moe.anterieur ,
-                    reste: demande_debut_travaux_moe.reste ,
-                    date: convertionDate(new Date(demande_debut_travaux_moe.date)),
-                    id_contrat_bureau_etude: demande_debut_travaux_moe.contrat_bureau_etude.id,
+                    id:        facture_moe_entete.id,
+                    numero: facture_moe_entete.numero,
+                    date_br:convertionDate(new Date(facture_moe_entete.date_br)),
+                    id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                     validation: validation               
                 });
                 console.log(datas);
                 //factory
-            apiFactory.add("demande_debut_travaux_moe/index",datas, config).success(function (data)
-            { 
-              demande_debut_travaux_moe.validation = validation; 
-              vm.validation_demande_debut_travaux_moe = validation;
-              demande_debut_travaux_moe.$selected = false;
-              demande_debut_travaux_moe.$edit = false;
-              vm.selectedItemDemande_debut_travaux_moe = {};
-              vm.showbuttonValidationDemande_debut_travaux_moe_creer = false;
-              vm.showbuttonValidationDemande_debut_travaux_moe_encourdpfi = false;
+            apiFactory.add("facture_moe_entete/index",datas, config).success(function (data)
+            {
+              //vm.showboutonValider = false;
+              vm.showbuttonValidationDemande_facture_moe_creer = false;
+              facture_moe_entete.validation = validation;
+              vm.validation_fact_moe = validation;
+              facture_moe_entete.$selected = false;
+              facture_moe_entete.$edit = false;
+              vm.selectedItemFacture_moe_entete = {};
+            
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
-/******************************************fin demande_debut_travaux_moe****************************************/
 
-/**********************************fin justificatif attachement****************************************/
+    /**************************************fin facture moe entete*********************************************/
 
-//col table
-        vm.justificatif_debut_travaux_moe_column = [
-        {titre:"Description"
-        },
-        {titre:"Fichier"
-        },
-        {titre:"Action"
-        }];
-        
-        //fonction selection item justificatif debut_travaux
-        vm.selectionJustificatif_debut_travaux_moe= function (item)
+    /**************************************debut facture moe detail*********************************************/
+
+      vm.click_step_rubrique_calendrier_paie_moe = function()
+      {
+        apiFactory.getAPIgeneraliserREST("divers_rubrique_calendrier_paie_moe/index","menu","getrubrique_calendrier_moewithmontantByentetecontrat",'id_facture_moe_entete',vm.selectedItemFacture_moe_entete.id,'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
         {
-            vm.selectedItemJustificatif_debut_travaux_moe = item; 
-        };
-        $scope.$watch('vm.selectedItemJustificatif_debut_travaux_moe', function()
-        {
-             if (!vm.alljustificatif_debut_travaux_moe) return;
-             vm.alljustificatif_debut_travaux_moe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemJustificatif_debut_travaux_moe.$selected = true;
+            vm.allrubrique_calendrier_paie_moe = result.data.response;
+            console.log(vm.allrubrique_calendrier_paie_moe);
         });
-     
-        vm.download_piece = function(item)
-        {
-            window.location = apiUrlFile+item.fichier ;
-        }
-/***************************************fin justificatif debut_travaux**********************************************/
 
+        vm.stepsousrubriquecalendrier = false;
+        vm.stepfacture_detail = false;
+      }
 
-/**********************************debut demande_debut_travaux_moe****************************************/
-//col table
-        vm.demande_batiment_moe_column = [        
-        {titre:"Objet"
-        },
-        {titre:"Description"
-        },
-        {titre:"Référence facture"
-        },
-        {titre:"Tranche"
-        },
-        {titre:"Période"
-        },
-        {titre:"Cumul"
-        },
-        {titre:"Antérieur"
-        },
-        {titre:"Calendrier de paiement"
+      vm.rubrique_calendrier_paie_moe_column =[
+        {titre:"Libelle"
         },
         {titre:"Pourcentage"
         },
-        {titre:"Reste à décaisser"
+        {titre:"Cout"
         },
-        {titre:"Date"
+        {titre:"Pourcentage période"
+        },
+        {titre:"Pourcentage antérieure"
+        },
+        {titre:"Pourcentage cumulée"
+        },
+        {titre:"Montant période"
+        },
+        {titre:"Montant antérieure"
+        },
+        {titre:"Montant cumulée"
         }];
-     
-        //fonction selection item Demande_batiment_moe
-        vm.selectionDemande_batiment_moe= function (item)
-        {
-            vm.selectedItemDemande_batiment_moe = item;
-           if(item.id!=0)
-           {
-               apiFactory.getAPIgeneraliserREST("justificatif_batiment_moe/index",'id_demande_batiment_moe',vm.selectedItemDemande_batiment_moe.id).then(function(result)
-                {
-                    vm.alljustificatif_batiment_moe = result.data.response;
-                    console.log(vm.alljustificatif_batiment_moe);
-                }); 
 
-                vm.showbuttonValidationDemande_batiment_moe_encourdpfi = true;
-                vm.showbuttonValidationDemande_batiment_moe_rejedpfi = true;
-                vm.showbuttonValidationDemande_batiment_moe_validedpfi = true;               
-            
-            vm.validation_demande_batiment_moe = item.validation;
-            vm.stepjusti_d_tra_moe = true;
-           }
-             
-        };
-        $scope.$watch('vm.selectedItemDemande_batiment_moe', function()
+        //vm.allrubrique_calendrier_paie_moe = [];
+
+        vm.selectionRubrique_calendrier_paie_moe= function (item)
         {
-             if (!vm.alldemande_batiment_moe) return;
-             vm.alldemande_batiment_moe.forEach(function(item)
+            vm.selectedItemRubrique_calendrier_paie_moe = item; 
+
+
+        vm.stepsousrubriquecalendrier = true;
+        vm.stepfacture_detail = false;  
+        };
+        $scope.$watch('vm.selectedItemRubrique_calendrier_paie_moe', function()
+        {
+             if (!vm.allrubrique_calendrier_paie_moe) return;
+             vm.allrubrique_calendrier_paie_moe.forEach(function(item)
              {
                 item.$selected = false;
              });
-             vm.selectedItemDemande_batiment_moe.$selected = true;
+             vm.selectedItemRubrique_calendrier_paie_moe.$selected = true;
+        });
+        vm.Total_prevu_rubrique_moe = function()
+        {
+            var total_prevu = 0;
+            if (vm.allrubrique_calendrier_paie_moe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_calendrier_paie_moe.length; i++){
+                    var product = vm.allrubrique_calendrier_paie_moe[i];
+                    total_prevu += parseFloat(product.montant_prevu);
+                }
+            }
+            return total_prevu.toFixed(2);
+        }
+
+        vm.Total_pource_rubrique_moe = function()
+        {
+            var total_prevu = 0;
+            if (vm.allrubrique_calendrier_paie_moe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_calendrier_paie_moe.length; i++){
+                    var product = vm.allrubrique_calendrier_paie_moe[i];
+                    total_prevu += parseFloat(product.pourcentage);
+                }
+            }
+            return total_prevu.toFixed(2);
+        }
+
+        vm.Total_pourcecumul_rubrique_moe = function()
+        {
+            var total_cumulc = 0;
+            var total_prevuc = 0;
+            if (vm.allrubrique_calendrier_paie_moe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_calendrier_paie_moe.length; i++){
+                    var product = vm.allrubrique_calendrier_paie_moe[i];
+                    total_cumulc += parseFloat(product.montant_cumul);
+                    total_prevuc += parseFloat(product.montant_prevu);
+                }
+            }
+            return ((total_cumulc*100)/total_prevuc).toFixed(2);
+        }
+
+        vm.Total_pourceanterieur_rubrique_moe = function()
+        {
+            var total_prevu = 0;
+            var total_anterieur = 0;
+            if (vm.allrubrique_calendrier_paie_moe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_calendrier_paie_moe.length; i++){
+                    var product = vm.allrubrique_calendrier_paie_moe[i];
+                    total_anterieur += parseFloat(product.montant_anterieur);
+                    total_prevu += parseFloat(product.montant_prevu);
+                }
+            }
+            return ((total_anterieur*100)/total_prevu).toFixed(2);
+        }
+
+        vm.Total_pourceperiode_rubrique_moe = function()
+        {
+            var total_prevu = 0;
+            var total_periode = 0;
+            if (vm.allrubrique_calendrier_paie_moe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_calendrier_paie_moe.length; i++){
+                    var product = vm.allrubrique_calendrier_paie_moe[i];
+                    total_periode += parseFloat(product.montant_periode);
+                    total_prevu += parseFloat(product.montant_prevu);
+                }
+            }
+            return ((total_periode*100)/total_prevu).toFixed(2);
+        }
+
+        vm.Total_montantcumul_rubrique_moe = function()
+        {
+            var total_prevu = 0;
+            if (vm.allrubrique_calendrier_paie_moe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_calendrier_paie_moe.length; i++){
+                    var product = vm.allrubrique_calendrier_paie_moe[i];
+                    total_prevu += parseFloat(product.montant_cumul);
+                }
+            }
+            return total_prevu.toFixed(2);
+        }
+
+        vm.Total_montantanterieur_rubrique_moe = function()
+        {
+            var total_prevu = 0;
+            if (vm.allrubrique_calendrier_paie_moe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_calendrier_paie_moe.length; i++){
+                    var product = vm.allrubrique_calendrier_paie_moe[i];
+                    total_prevu += parseFloat(product.montant_anterieur);
+                }
+            }
+            return total_prevu.toFixed(2);
+        }
+
+        vm.Total_montantperiode_rubrique_moe = function()
+        {
+            var total_prevu = 0;
+            if (vm.allrubrique_calendrier_paie_moe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_calendrier_paie_moe.length; i++){
+                    var product = vm.allrubrique_calendrier_paie_moe[i];
+                    total_prevu += parseFloat(product.montant_periode);
+                }
+            }
+            return total_prevu.toFixed(2);
+        }
+
+    /**************************************fin facture moe detail*********************************************/
+/**************************************debut facture moe detail*********************************************/
+
+      vm.click_step_sousrubrique_calendrier_paie_moe = function()
+      {
+        apiFactory.getAPIgeneraliserREST("divers_sousrubrique_calendrier_paie_moe/index","menu","getsousrubrique_calendrier_moewithmontantByentetecontrat",'id_facture_moe_entete',vm.selectedItemFacture_moe_entete.id,'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'id_rubrique',vm.selectedItemRubrique_calendrier_paie_moe.id).then(function(result)
+        {
+            vm.allsousrubrique_calendrier_paie_moe = result.data.response;
+            console.log(vm.allsousrubrique_calendrier_paie_moe);
         });
 
-        vm.validerDemande_batiment_moe_encourdpfi = function()
-        {
-          maj_in_baseDemande_batiment_moe(vm.selectedItemDemande_batiment_moe,0,2);
-        }
-        vm.validerDemande_batiment_moe_rejedpfi = function()
-        {
-          maj_in_baseDemande_batiment_moe(vm.selectedItemDemande_batiment_moe,0,3);
-        }
-        vm.validerDemande_batiment_moe_validedpfi = function()
-        {
-          maj_in_baseDemande_batiment_moe(vm.selectedItemDemande_batiment_moe,0,4);
-        }
+        vm.stepfacture_detail = false;
+      }
 
-        function maj_in_baseDemande_batiment_moe(demande_batiment_moe,suppression,validation)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            }; 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        demande_batiment_moe.id,
-                    objet: demande_batiment_moe.objet,
-                    description:demande_batiment_moe.description,
-                    ref_facture:demande_batiment_moe.ref_facture,
-                    id_tranche_demande_batiment_moe: demande_batiment_moe.tranche.id ,
-                    montant: demande_batiment_moe.montant,
-                    cumul: demande_batiment_moe.cumul ,
-                    anterieur: demande_batiment_moe.anterieur ,
-                    reste: demande_batiment_moe.reste ,
-                    date: convertionDate(new Date(demande_batiment_moe.date)),
-                    id_contrat_bureau_etude: demande_batiment_moe.contrat_bureau_etude.id,
-                    validation: validation               
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("demande_batiment_moe/index",datas, config).success(function (data)
-            { 
-              demande_batiment_moe.validation = validation; 
-              vm.validation_demande_batiment_moe = validation;
-              demande_batiment_moe.$selected = false;
-              demande_batiment_moe.$edit = false;
-              vm.selectedItemDemande_batiment_moe = {};
-              vm.showbuttonValidationDemande_batiment_moe_creer = false;
-              vm.showbuttonValidationDemande_batiment_moe_encourdpfi = false;
-              vm.showbuttonValidationDemande_batiment_moe_rejedpfi = false;
-              vm.showbuttonValidationDemande_batiment_moe_validedpfi = false;
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
-/******************************************fin demande_batiment_moe****************************************/
-
-/**********************************fin justificatif attachement****************************************/
-
-//col table
-        vm.justificatif_batiment_moe_column = [
-        {titre:"Description"
-        },
-        {titre:"Fichier"
-        },
-        {titre:"Action"
-        }];
-
-     
-        //fonction selection item justificatif batiment_moe
-        vm.selectionJustificatif_batiment_moe= function (item)
-        {
-            vm.selectedItemJustificatif_batiment_moe = item;
-        };
-        $scope.$watch('vm.selectedItemJustificatif_batiment_moe', function()
-        {
-             if (!vm.alljustificatif_batiment_moe) return;
-             vm.alljustificatif_batiment_moe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemJustificatif_batiment_moe.$selected = true;
-        });
-      
-        vm.download_piece = function(item)
-        {
-            window.location = apiUrlFile+item.fichier ;
-        }
-/***************************************fin justificatif batiment_moe**********************************************/
-
-
-/**********************************debut demande_latrine_moe****************************************/
-//col table
-        vm.demande_latrine_moe_column = [        
-        {titre:"Objet"
-        },
-        {titre:"Description"
-        },
-        {titre:"Référence facture"
-        },
-        {titre:"Tranche"
-        },
-        {titre:"Période"
-        },
-        {titre:"Cumul"
-        },
-        {titre:"Antérieur"
-        },
-        {titre:"Calendrier de paiement"
+      vm.sousrubrique_calendrier_paie_moe_column =[
+        {titre:"Libelle"
         },
         {titre:"Pourcentage"
         },
-        {titre:"Reste à décaisser"
+        {titre:"Cout"
         },
-        {titre:"Date"
+        {titre:"Pourcentage période"
+        },
+        {titre:"Pourcentage antérieure"
+        },
+        {titre:"Pourcentage cumulée"
+        },
+        {titre:"Montant période"
+        },
+        {titre:"Montant antérieure"
+        },
+        {titre:"Montant cumulée"
         }];
 
-
-        //fonction selection item Demande_latrine_moe
-        vm.selectionDemande_latrine_moe= function (item)
+        vm.selectionSousrubrique_calendrier_paie_moe= function (item)
         {
-            vm.selectedItemDemande_latrine_moe = item;
-           if(item.id!=0)
-           {
-               apiFactory.getAPIgeneraliserREST("justificatif_latrine_moe/index",'id_demande_latrine_moe',vm.selectedItemDemande_latrine_moe.id).then(function(result)
-                {
-                    vm.alljustificatif_latrine_moe = result.data.response;
-                    console.log(vm.alljustificatif_latrine_moe);
-                });
+            vm.selectedItemSousrubrique_calendrier_paie_moe = item; 
 
-                  vm.showbuttonValidationDemande_latrine_moe_encourdpfi = true;
-                  vm.showbuttonValidationDemande_latrine_moe_rejedpfi = true;
-                  vm.showbuttonValidationDemande_latrine_moe_validedpfi = true;
-                            
-            vm.validation_demande_latrine_moe = item.validation;
-            vm.stepjusti_d_tra_moe = true;
-           }
-             
+            vm.stepfacture_detail = true;  
         };
-        $scope.$watch('vm.selectedItemDemande_latrine_moe', function()
+        $scope.$watch('vm.selectedItemSousrubrique_calendrier_paie_moe', function()
         {
-             if (!vm.alldemande_latrine_moe) return;
-             vm.alldemande_latrine_moe.forEach(function(item)
+             if (!vm.allsousrubrique_calendrier_paie_moe) return;
+             vm.allsousrubrique_calendrier_paie_moe.forEach(function(item)
              {
                 item.$selected = false;
              });
-             vm.selectedItemDemande_latrine_moe.$selected = true;
+             vm.selectedItemSousrubrique_calendrier_paie_moe.$selected = true;
+        });        
+
+    /**************************************fin facture moe detail*********************************************/
+    /**********************************************debut attachement batiment travauxe***************************************************/
+        vm.click_step_facture_moe_detail = function()
+        {
+            apiFactory.getAPIgeneraliserREST("facture_moe_detail/index","menu","getfacture_moe_detailwithcalendrier_detailbyentete",
+                    "id_facture_moe_entete",vm.selectedItemFacture_moe_entete.id,"id_sousrubrique",vm.selectedItemSousrubrique_calendrier_paie_moe.id,
+                    "id_contrat_bureau_etude",vm.selectedItemContrat_moe.id).then(function(result)
+            {
+                vm.allfacture_moe_detail = result.data.response;
+                console.log(vm.allfacture_moe_detail);
+            });
+        }
+        //fonction selection item justificatif batiment
+        vm.selectionFacture_moe_detail= function (item)
+        {
+            vm.selectedItemFacture_moe_detail = item;
+        };
+        $scope.$watch('vm.selectedItemFacture_moe_detail', function()
+        {
+             if (!vm.allfacture_moe_detail) return;
+             vm.allfacture_moe_detail.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemFacture_moe_detail.$selected = true;
         });
 
-        //fonction masque de saisie modification item feffi
-       
-        vm.validerDemande_latrine_moe_encourdpfi = function()
-        {
-          maj_in_baseDemande_latrine_moe(vm.selectedItemDemande_latrine_moe,0,2);
-        }
-        vm.validerDemande_latrine_moe_rejedpfi = function()
-        {
-          maj_in_baseDemande_latrine_moe(vm.selectedItemDemande_latrine_moe,0,3);
-        }
-        vm.validerDemande_latrine_moe_validedpfi = function()
-        {
-          maj_in_baseDemande_latrine_moe(vm.selectedItemDemande_latrine_moe,0,4);
-        }
 
-        function maj_in_baseDemande_latrine_moe(demande_latrine_moe,suppression,validation)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            }; 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        demande_latrine_moe.id,
-                    objet: demande_latrine_moe.objet,
-                    description:demande_latrine_moe.description,
-                    ref_facture:demande_latrine_moe.ref_facture,
-                    id_tranche_demande_latrine_moe: demande_latrine_moe.tranche.id ,
-                    montant: demande_latrine_moe.montant,
-                    cumul: demande_latrine_moe.cumul ,
-                    anterieur: demande_latrine_moe.anterieur ,
-                    reste: demande_latrine_moe.reste ,
-                    date: convertionDate(new Date(demande_latrine_moe.date)),
-                    id_contrat_bureau_etude: demande_latrine_moe.contrat_bureau_etude.id,
-                    validation: validation               
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("demande_latrine_moe/index",datas, config).success(function (data)
-            { 
-              demande_latrine_moe.validation = validation; 
-              vm.validation_demande_latrine_moe = validation;
-              demande_latrine_moe.$selected = false;
-              demande_latrine_moe.$edit = false;
-              vm.selectedItemDemande_latrine_moe = {};
-              vm.showbuttonValidationDemande_latrine_moe_creer = false;
-              vm.showbuttonValidationDemande_latrine_moe_encourdpfi = false;
-              vm.showbuttonValidationDemande_latrine_moe_rejedpfi = false;
-              vm.showbuttonValidationDemande_latrine_moe_validedpfi = false;
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
-/******************************************fin demande_latrine_moe****************************************/
+    /******************************************fin attachement batiment travaux***********************************************/
 
 /**********************************fin justificatif attachement****************************************/
-
+    vm.click_step_justi_facture_moe = function()
+    {
+        apiFactory.getAPIgeneraliserREST("justificatif_facture_moe/index",'id_facture_moe_entete',vm.selectedItemFacture_moe_entete.id).then(function(result)
+        {
+            vm.alljustificatif_facture_moe = result.data.response;
+            console.log(vm.alljustificatif_facture_moe);
+        });
+    }
 //col table
-        vm.justificatif_latrine_moe_column = [
+        vm.justificatif_facture_moe_column = [
         {titre:"Description"
         },
         {titre:"Fichier"
@@ -977,169 +852,28 @@
         {titre:"Action"
         }];
 
-        //fonction selection item justificatif latrine_moe
-        vm.selectionJustificatif_latrine_moe= function (item)
+        //fonction selection item justificatif facture_moe
+        vm.selectionJustificatif_facture_moe= function (item)
         {
-            vm.selectedItemJustificatif_latrine_moe = item;
+            vm.selectedItemJustificatif_facture_moe = item;
         };
-        $scope.$watch('vm.selectedItemJustificatif_latrine_moe', function()
+        $scope.$watch('vm.selectedItemJustificatif_facture_moe', function()
         {
-             if (!vm.alljustificatif_latrine_moe) return;
-             vm.alljustificatif_latrine_moe.forEach(function(item)
+             if (!vm.alljustificatif_facture_moe) return;
+             vm.alljustificatif_facture_moe.forEach(function(item)
              {
                 item.$selected = false;
              });
-             vm.selectedItemJustificatif_latrine_moe.$selected = true;
+             vm.selectedItemJustificatif_facture_moe.$selected = true;
         });
 
-        vm.download_piece = function(item)
+
+        vm.download_piece_facture_moe = function(item)
         {
             window.location = apiUrlFile+item.fichier ;
         }
-/***************************************fin justificatif latrine_moe**********************************************/
+/***************************************fin justificatif facture_moe**********************************************/
 
-
-      /**********************************debut demande_debut_travaux_moe****************************************/
-//col table
-        vm.demande_fin_travaux_moe_column = [        
-        {titre:"Objet"
-        },
-        {titre:"Description"
-        },
-        {titre:"Référence facture"
-        },
-        {titre:"Tranche"
-        },
-        {titre:"Période"
-        },
-        {titre:"Cumul"
-        },
-        {titre:"Antérieur"
-        },
-        {titre:"Calendrier de paiement"
-        },
-        {titre:"Pourcentage"
-        },
-        {titre:"Reste à décaisser"
-        },
-        {titre:"Date"
-        }];
-
-        //fonction selection item Demande_fin_travaux_moe
-        vm.selectionDemande_fin_travaux_moe= function (item)
-        {
-            vm.selectedItemDemande_fin_travaux_moe = item;
-           if(item.id!=0)
-           {
-               apiFactory.getAPIgeneraliserREST("justificatif_fin_travaux_moe/index",'id_demande_fin_travaux',vm.selectedItemDemande_fin_travaux_moe.id).then(function(result)
-                {
-                    vm.alljustificatif_fin_travaux_moe = result.data.response;
-                    console.log(vm.alljustificatif_fin_travaux_moe);
-                });
-
-
-                  vm.showbuttonValidationDemande_fin_travaux_moe_encourdpfi = true;
-                  vm.showbuttonValidationDemande_fin_travaux_moe_rejedpfi = true;
-                  vm.showbuttonValidationDemande_fin_travaux_moe_validedpfi = true;
-                            
-            vm.validation_demande_fin_travaux_moe = item.validation;
-            vm.stepjusti_d_tra_moe = true;
-           }
-             
-        };
-        $scope.$watch('vm.selectedItemDemande_fin_travaux_moe', function()
-        {
-             if (!vm.alldemande_fin_travaux_moe) return;
-             vm.alldemande_fin_travaux_moe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemDemande_fin_travaux_moe.$selected = true;
-        });
-
-      
-        vm.validerDemande_fin_travaux_moe_encourdpfi = function()
-        {
-          maj_in_baseDemande_fin_travaux_moe(vm.selectedItemDemande_fin_travaux_moe,0,2);
-        }
-        vm.validerDemande_fin_travaux_moe_rejedpfi = function()
-        {
-          maj_in_baseDemande_fin_travaux_moe(vm.selectedItemDemande_fin_travaux_moe,0,3);
-        }
-        vm.validerDemande_fin_travaux_moe_validedpfi = function()
-        {
-          maj_in_baseDemande_fin_travaux_moe(vm.selectedItemDemande_fin_travaux_moe,0,4);
-        }
-
-        function maj_in_baseDemande_fin_travaux_moe(demande_fin_travaux_moe,suppression,validation)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            }; 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        demande_fin_travaux_moe.id,
-                    objet: demande_fin_travaux_moe.objet,
-                    description:demande_fin_travaux_moe.description,
-                    ref_facture:demande_fin_travaux_moe.ref_facture,
-                    id_tranche_d_fin_travaux_moe: demande_fin_travaux_moe.tranche.id ,
-                    montant: demande_fin_travaux_moe.montant,
-                    cumul: demande_fin_travaux_moe.cumul ,
-                    anterieur: demande_fin_travaux_moe.anterieur ,
-                    reste: demande_fin_travaux_moe.reste ,
-                    date: convertionDate(new Date(demande_fin_travaux_moe.date)),
-                    id_contrat_bureau_etude: demande_fin_travaux_moe.contrat_bureau_etude.id,
-                    validation: validation               
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("demande_fin_travaux_moe/index",datas, config).success(function (data)
-            { 
-              demande_fin_travaux_moe.validation = validation; 
-              vm.validation_demande_fin_travaux_moe = validation;
-              demande_fin_travaux_moe.$selected = false;
-              demande_fin_travaux_moe.$edit = false;
-              vm.selectedItemDemande_fin_travaux_moe = {};
-              vm.showbuttonValidationDemande_fin_travaux_moe_creer = false;
-              vm.showbuttonValidationDemande_fin_travaux_moe_encourdpfi = false;
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
-/******************************************fin demande_fin_travaux_moe****************************************/
-
-/**********************************fin justificatif attachement****************************************/
-
-//col table
-        vm.justificatif_fin_travaux_moe_column = [
-        {titre:"Description"
-        },
-        {titre:"Fichier"
-        },
-        {titre:"Action"
-        }];
-
-        //fonction selection item justificatif fin_travaux
-        vm.selectionJustificatif_fin_travaux_moe= function (item)
-        {
-            vm.selectedItemJustificatif_fin_travaux_moe = item;
-        };
-        $scope.$watch('vm.selectedItemJustificatif_fin_travaux_moe', function()
-        {
-             if (!vm.alljustificatif_fin_travaux_moe) return;
-             vm.alljustificatif_fin_travaux_moe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemJustificatif_fin_travaux_moe.$selected = true;
-        });
-   
-        vm.download_piece = function(item)
-        {
-            window.location = apiUrlFile+item.fichier ;
-        }
 /***************************************fin justificatif fin_travaux**********************************************/
 
 
@@ -1301,11 +1035,21 @@
 /************************************************debut facture*************************************************/
         vm.click_tab_facture_mpe = function()
         {
-            /*apiFactory.getAPIgeneraliserREST("facture_mpe/index","menu","getfacture_mpevalidebcafBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            
+            apiFactory.getAPIgeneraliserREST("facture_mpe/index","menu","getfacture_mpeByattachement",'id_attachement_travaux',vm.selectedItemAttachement_travaux.id).then(function(result)
             {
-                vm.allfacture_mpe = result.data.response;
-                console.log(vm.allfacture_mpe);
-            });*/
+                   vm.facture_mpe = result.data.response[0];
+                    if (result.data.response.length>0)
+                    {
+                        vm.validation_facture_mpe = result.data.response[0].validation;
+                        vm.showbuttonNouvFacture_mpe = false; 
+                        vm.id_facture_mpe = parseInt(result.data.response[0].id);
+                    }else{
+                        vm.validation_facture_mpe = 0;
+                        vm.showbuttonNouvFacture_mpe = true;
+                        vm.id_facture_mpe = 0;
+                    }
+            });
         }
         vm.facture_mpe_column = [        
         {titre:"Numero"
@@ -1356,8 +1100,20 @@
              });
              vm.selectedItemFacture_mpe.$selected = true;
         });
+        vm.validerFacture_mpe_encourdpfi = function(facture_mpe)
+        {
+          maj_insertFacture_mpe(facture_mpe,0,2);
+        }
+        vm.validerFacture_mpe_rejedpfi = function(facture_mpe)
+        {
+          maj_insertFacture_mpe(facture_mpe,0,3);
+        }
+        vm.validerFacture_mpe_validedpfi = function(facture_mpe)
+        {
+          maj_insertFacture_mpe(facture_mpe,0,4);
+        }
 
-        vm.validerFacture_mpe_encourdpfi = function()
+        /*vm.validerFacture_mpe_encourdpfi = function()
         {
           maj_insertFacture_mpe(vm.selectedItemFacture_mpe,0,2);
         }
@@ -1368,7 +1124,7 @@
         vm.validerFacture_mpe_validedpfi = function()
         {
           maj_insertFacture_mpe(vm.selectedItemFacture_mpe,0,4);
-        }
+        }*/
             
         function maj_insertFacture_mpe(facture_mpe,suppression,validation)
         {
@@ -1404,7 +1160,7 @@
                 facture_mpe.validation = validation; 
               facture_mpe.$selected = false;
               vm.selectedItemFacture_mpe = {};
-
+              vm.validation_facture_mpe = validation;
               vm.showbuttonValidationFacture_mpe_encourdpfi = false;
               vm.showbuttonValidationFacture_mpe_rejedpfi = false;
               vm.showbuttonValidationFacture_mpe_validedpfi = false;
@@ -1415,6 +1171,25 @@
         }
 
 /************************************************fin avance demarrage***************************************************/
+        /************************************************debut Decompte*************************************************/
+        vm.click_tab_decompte_mpe = function()
+        {   
+
+            apiFactory.getAPIgeneraliserREST("facture_mpe/index","menu","getdecompte_mpeBycontratandfacture",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id,'id_facture_mpe',vm.id_facture_mpe).then(function(result)
+            {
+                vm.decompte_mpes = result.data.response[0];
+                console.log(vm.decompte_mpes);
+            });
+        }
+        vm.decompte_mpe_column = [        
+        {titre:"Nature de depenses"
+        },
+        {titre:"Montant cumule"
+        },
+        {titre:"Montant antérieur"
+        },
+        {titre:"Montant de la période"
+        }];
 
 /************************************************debut attachement*************************************************/
         vm.click_tabs_attachement_travaux = function()
@@ -1437,6 +1212,7 @@
                         
             vm.stepfacture_mpe = false;
             vm.stepjusti_attachement_mpe = false;
+            vm.stepdecompte =false;
         }
         vm.attachement_travaux_column = [        
         {titre:"Numero"
@@ -1468,8 +1244,11 @@
                     if (vm.allfacture_mpe.length>0)
                     {
                         vm.validation_facture_mpe = vm.allfacture_mpe[0].validation; 
+
+                        vm.id_facture_mpe = parseInt(result.data.response[0].id);
                     }else{
                         vm.validation_facture_mpe = 0;
+                        vm.id_facture_mpe = 0;
                     }
                 });
 
@@ -1483,6 +1262,7 @@
                 vm.stepmobilier_mpe = true;
                 vm.stepfacture_mpe = true;
                 vm.stepjusti_attachement_mpe = true;
+                vm.stepdecompte =true;
            }
             vm.validation_attachement_travaux = item.validation;
             //vm.stepjusti_batiment_mpe = true;   

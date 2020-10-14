@@ -4,6 +4,7 @@
 
     angular
         .module('app.paeb.gerer_subvention_operation.niveau_ufp_daaf.site_validation', [])
+        .run(testPermission)        
         .config(config);
 var vs ;
     /** @ngInject */

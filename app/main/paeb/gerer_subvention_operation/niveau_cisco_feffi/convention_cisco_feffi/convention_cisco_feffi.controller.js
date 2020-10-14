@@ -46,6 +46,7 @@
         vm.allfeffi = [];
         vm.allsite = [];
         vm.filtre = {};
+        vm.affiche_load =true;
 
         var NouvelItemDetail = false;
         var currentItemDetail;
@@ -170,7 +171,7 @@
                                 apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalideByutilisateurnow','id_utilisateur',id_user,'annee',annee).then(function(result)
                                 {
                                     vm.allconvention_cife_tete = result.data.response; 
-                                    console.log(vm.allconvention_cife_tete);
+                                    vm.affiche_load =false;
                                 });
                                 vm.session='OBCAF';
                                 vm.id_cisco = result.data.response.cisco.id;
@@ -193,7 +194,7 @@
                             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalideByutilisateurnow','id_utilisateur',id_user,'annee',annee).then(function(result)
                             {
                                 vm.allconvention_cife_tete = result.data.response; 
-                                console.log(vm.allconvention_cife_tete);
+                                vm.affiche_load =false;
                             });
                             apiFactory.getAll("cisco/index").then(function success(response)
                             {
@@ -210,7 +211,7 @@
                             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalidenow','annee',annee).then(function(result)
                             {
                                 vm.allconvention_cife_tete = result.data.response; 
-                                console.log(vm.allconvention_cife_tete);
+                                vm.affiche_load =false;
                             });
                             apiFactory.getAll("cisco/index").then(function success(response)
                             {
@@ -315,6 +316,7 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
+            vm.affiche_load =true;
             switch (vm.session)
                 {
                   case 'OBCAF': 
@@ -324,7 +326,7 @@
                               filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
                                 vm.allconvention_cife_tete = result.data.response; 
-                                console.log(vm.allconvention_cife_tete);
+                                vm.affiche_load =false;
                             });
 
                       break;
@@ -336,7 +338,7 @@
                               filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
                                 vm.allconvention_cife_tete = result.data.response; 
-                                console.log(vm.allconvention_cife_tete);
+                                vm.affiche_load =false;
                             })                  
                       break;
 
@@ -347,7 +349,7 @@
                               filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
                                 vm.allconvention_cife_tete = result.data.response; 
-                                console.log(vm.allconvention_cife_tete);
+                                vm.affiche_load =false;
                             });                  
                       break;
                   default:

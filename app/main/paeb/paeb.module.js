@@ -15,13 +15,7 @@
             'app.paeb.gerer_subvention_operation',
             'app.paeb.etat_subvention_financiere',
             'app.paeb.etat_subvention_operation',
-            //'app.paeb.gerer_situation_feffi',
-            //'app.paeb.gerer_convention_ufp_daaf',
-            //'app.paeb.convention_suivi',           
-            //'app.paeb.convention_suivi_acc',
             'app.paeb.note_agence_acc',
-            //'app.paeb.suivi_bcaf',
-            //'app.paeb.suivi_daaf',
             'app.paeb.reports',
             'app.paeb.autre_information'
         ] ;
