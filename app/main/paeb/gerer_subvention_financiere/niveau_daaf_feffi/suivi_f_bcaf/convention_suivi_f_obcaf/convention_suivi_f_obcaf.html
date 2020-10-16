@@ -216,7 +216,7 @@
                          <span>{{convention_entete.ref_financement}}</span>
                       </td>
                       <td>                          
-                        <span>{{convention_entete.montant_total}}</span>
+                        <span>{{vm.formatMillier(convention_entete.montant_total)}} Ar</span>
                       </td>
 
                        <td>                          
@@ -245,10 +245,10 @@
                     <md-tab-body>
 
                <!---------------------------------FILS SUIVI FINANCIER FEFFI----------------------------------------------->       
-                     <ms-form-wizard flex id="soussousmenu"> 
-                      <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                        <ms-form-wizard flex id="soussousmenu"> 
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
 
-                    <!---------------------------------DEBUT DEMANDE PAYEMENT-----------------------------------------------> 
+                            <!---------------------------------DEBUT DEMANDE PAYEMENT-----------------------------------------------> 
                           <md-tab>
                             <md-tab-label>
                               <span class="ms-form-wizard-step-label">
@@ -302,17 +302,7 @@
                                           <input name="prevu" type="text" ng-model="demande_realimentation.prevu" disabled/>
                                         </md-input-container>  
                                       </span>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.prevu}}</span>
-                                    </td>
-
-                                    <td>
-                                      <span ng-if="demande_realimentation.$edit">
-                                        <md-input-container style="width:100%;display: flex !important;">
-                                          <label>Cumul</label>
-                                          <input name="cumul" type="text" ng-model="demande_realimentation.cumul" disabled/>
-                                        </md-input-container>  
-                                      </span>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.cumul}}</span>
+                                      <span ng-if="!demande_realimentation.$edit">{{vm.formatMillier(demande_realimentation.prevu)}} Ar</span>
                                     </td>
 
                                     <td>
@@ -322,7 +312,17 @@
                                           <input name="anterieur" type="text" ng-model="demande_realimentation.anterieur" disabled/>
                                         </md-input-container>  
                                       </span>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.anterieur}}</span>
+                                      <span ng-if="!demande_realimentation.$edit">{{vm.formatMillier(demande_realimentation.anterieur)}} Ar</span>
+                                    </td>
+
+                                    <td>
+                                      <span ng-if="demande_realimentation.$edit">
+                                        <md-input-container style="width:100%;display: flex !important;">
+                                          <label>Cumul</label>
+                                          <input name="cumul" type="text" ng-model="demande_realimentation.cumul" disabled/>
+                                        </md-input-container>  
+                                      </span>
+                                      <span ng-if="!demande_realimentation.$edit">{{vm.formatMillier(demande_realimentation.cumul)}} Ar</span>
                                     </td>
 
                                     <td>
@@ -342,7 +342,7 @@
                                           <input name="pourcentage" type="text" ng-model="demande_realimentation.pourcentage" disabled/>
                                         </md-input-container>  
                                       </span>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.tranche.pourcentage}}</span>
+                                      <span ng-if="!demande_realimentation.$edit">{{vm.formatMillier(demande_realimentation.tranche.pourcentage)}} %</span>
                                     </td>
 
                                     <td>
@@ -352,7 +352,7 @@
                                           <input name="reste" type="text" ng-model="demande_realimentation.reste" disabled/>
                                         </md-input-container>  
                                       </span>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.reste}}</span>
+                                      <span ng-if="!demande_realimentation.$edit">{{vm.formatMillier(demande_realimentation.reste)}} Ar</span>
                                     </td>
                                     <td>
                                       <span ng-if="demande_realimentation.$edit">
@@ -365,7 +365,7 @@
                                           </md-select>
                                         </md-input-container>  
                                       </span>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.compte_feffi.numero_compte}}</span>
+                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.compte_feffi.nom_banque}}</span>
                                     </td>
                                     <td>
                                       <span ng-if="demande_realimentation.$edit">
@@ -414,25 +414,15 @@
                           </md-tab>
                     <!--------------------------FIN DEMANDE PAYEMENT------------------------------------------->
 
-
-                    <!-------------------------DEBUT PIECE JUSTIFICATIVE-------------------------------------->
                           <md-tab ng-disabled="vm.steppiecefeffi==false">
                             <md-tab-label>
                               <span class="ms-form-wizard-step-label">
-                                  <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
-                                  <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
-                                    <i class="icon-attachment s16"></i>
-                                  </span-->
-                                  <!--span class="ms-form-wizard-step-number md-accent-bg">
-                                    <i class="icon-attachment s16"></i>
-                                  </span-->
                                   <span class="ms-form-wizard-step-text">Pièce jointe</span>
                               </span>
                              
                             </md-tab-label>
                             
-                             <md-tab-body>
-                               <div style="widht:100%;"> <br>
+                            <md-tab-body> <br>
 
                               <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                 <thead>
@@ -492,127 +482,12 @@
                                   </tr>
                                 </tbody>
                               </table>
-                            </md-tab-body>
-                          </md-tab>
-
-                   <!---------------------------------FIN PIECE JUSTIFICATIVE------------------------------------------->
-                  
-                    <!-----------------------DEBUT DECAISSEMENT FONCTIONNEMENT FEFFI------------------------------------->
-                          <md-tab ng-disabled="vm.session=='ODAAF' || vm.session=='ODPFI'">
-                            <md-tab-label>
-                              <span class="ms-form-wizard-step-label">
-                                  <!--span class="ms-form-wizard-step-number md-accent-bg">
-                                    <i class="icon-basket-unfill s16"></i>
-                                  </span-->
-                                  <span class="ms-form-wizard-step-text">Décaissement fonctionnement</span>
-                                  <!--span class="ms-form-wizard-step-number md-accent-bg notification">{{vm.nbr_decaiss_feffi}}</span-->
-                              </span>
                              
-                            </md-tab-label>
-                            
-                           <md-tab-body>
-                               <div style="widht:100%;">  
-                                  <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterDecaiss_fonct_feffi()" style="width:10%;">
-                                    Nouveau
-                                  </md-button><br>
-                              </div>
-
-                              <div>        
-                              <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                <thead>
-                                  <tr>
-                                    <th class="secondary-text">
-                                      <div class="table-header">
-                                        <span class="column-title">Montant</span>
-                                      </div>
-                                    </th>
-                                    <th class="secondary-text">
-                                      <div class="table-header">
-                                        <span class="column-title">Date décaissement</span>
-                                      </div>
-                                    </th>
-                                    <!--th class="secondary-text">
-                                      <div class="table-header">
-                                        <span class="column-title">Situation</span>
-                                      </div>
-                                    </th-->
-                                    <th class="secondary-text">
-                                      <div class="table-header">
-                                        <span class="column-title">Observation</span>
-                                      </div>
-                                    </th>
-                                    <th class="secondary-text">
-                                      <div class="table-header">
-                                        <span class="column-title">Action</span>
-                                      </div>
-                                    </th>
-                                  </tr>
-                                </thead>
-                                         
-                                <tbody>
-                                  <tr ng-repeat="decaiss_fonct_feffi in vm.alldecaiss_fonct_feffi"  ng-class="{selected: decaiss_fonct_feffi.$selected}" ng-click="vm.selectionDecaiss_fonct_feffi(decaiss_fonct_feffi)">
-
-                                    <td>
-                                      <span ng-if="decaiss_fonct_feffi.$edit">
-                                        <md-input-container style="width:100%;display: flex !important;">
-                                          <label>Montant</label>
-                                          <input name="montant" type="number" ng-model="decaiss_fonct_feffi.montant" ng-min="1"/>
-                                        </md-input-container>   
-                                      </span>
-                                                
-                                      <span ng-if="!decaiss_fonct_feffi.$edit">{{decaiss_fonct_feffi.montant}}</span>
-                                    </td>
-
-                                    <td>
-                                      <span ng-if="decaiss_fonct_feffi.$edit">
-                                        <md-datepicker ng-model="decaiss_fonct_feffi.date_decaissement" md-placeholder="Date de decaissement" md-max-date="vm.datenow" required>                       
-                                        </md-datepicker>
-                                      </span>                          
-                                      <span ng-if="!decaiss_fonct_feffi.$edit">{{vm.formatDate(decaiss_fonct_feffi.date_decaissement)}}</span>
-                                    </td>
-                                    <!--td>                                                
-                                      <span>{{vm.affichage_situa_decais(decaiss_fonct_feffi.validation)}}</span>
-                                    </td-->
-
-                                    <td>
-                                      <span ng-if="decaiss_fonct_feffi.$edit">
-                                        <md-input-container style="width:100%;display: flex !important;">
-                                          <label>Observation</label>
-                                          <input name="observation" type="text" ng-model="decaiss_fonct_feffi.observation"/>
-                                        </md-input-container>   
-                                      </span>
-                                                
-                                      <span ng-if="!decaiss_fonct_feffi.$edit">{{decaiss_fonct_feffi.observation}}</span>
-                                    </td>
-
-                                    <td>
-                                      <a ng-if="!decaiss_fonct_feffi.$edit && decaiss_fonct_feffi.validation==0" ng-click="vm.modifierDecaiss_fonct_feffi(decaiss_fonct_feffi)" title="Modifier">
-                                        <span class="icon-table-edit"></span>
-                                      </a>
-                                                
-                                      <a ng-if="!decaiss_fonct_feffi.$edit && decaiss_fonct_feffi.validation==0" ng-click="vm.supprimerDecaiss_fonct_feffi(decaiss_fonct_feffi)" title="Supprimer">
-                                        <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
-                                      </a>
-                                      <span ng-if="decaiss_fonct_feffi.validation==1">Aucune action disponible</span>          
-                                      <a ng-if="decaiss_fonct_feffi.$edit" ng-click="vm.annulerDecaiss_fonct_feffi(decaiss_fonct_feffi)" title="Annuler modification">
-                                        <span class="icon-cancel"></span>
-                                      </a>
-                                                
-                                      <a ng-if="decaiss_fonct_feffi.$edit && decaiss_fonct_feffi.montant && decaiss_fonct_feffi.date_decaissement >''" ng-click="vm.ajoutDecaiss_fonct_feffi(decaiss_fonct_feffi,0)" title="Sauvegarder">
-                                        <span class="icon-content-save"></span>
-                                      </a>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
                             </md-tab-body>
                           </md-tab>
-
-                   <!---------------------------FIN DECAISSEMENT FONCTIONNEMENT FEFFI-------------------------------------->         
-                                            
-                        </md-tabs> 
-                      </ms-form-wizard>
+                                                                 
+                          </md-tabs> 
+                        </ms-form-wizard>
 
                     </md-tab-body>
                   </md-tab>
@@ -632,8 +507,9 @@
               </md-tab-label>
               
               <md-tab-body>
-               <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                <ms-form-wizard flex id="sousmenu"> 
+                  <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
                     <md-tab>
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
@@ -671,7 +547,7 @@
                                         <input name="montant" type="number" ng-model="transfert_reliquat.montant" ng-change="vm.change_montant(transfert_reliquat)" ng-min="1"/>
                                       </md-input-container>
                                     </span>                          
-                                    <span ng-if="!transfert_reliquat.$edit">{{transfert_reliquat.montant}}</span>
+                                    <span ng-if="!transfert_reliquat.$edit">{{vm.formatMillier(transfert_reliquat.montant)}} Ar</span>
                                   </td>
                                   <td>
                                     <span ng-if="transfert_reliquat.$edit">
@@ -856,9 +732,7 @@
                       </div>
                       </md-tab-body>
                     </md-tab>
-                                       
-                    <md-tab>
-                    </md-tab>            
+                                         
                   </md-tabs> 
                 </ms-form-wizard>               
               </md-tab-body>

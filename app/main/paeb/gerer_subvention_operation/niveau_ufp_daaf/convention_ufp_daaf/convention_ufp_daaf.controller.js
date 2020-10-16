@@ -293,9 +293,9 @@
             item.objet = vm.selectedItemConvention_ufp_daaf_entete.objet ;            
             item.ref_convention = vm.selectedItemConvention_ufp_daaf_entete.ref_convention ;
             item.ref_financement = vm.selectedItemConvention_ufp_daaf_entete.ref_financement ;
-            item.montant_convention = parseInt(vm.selectedItemConvention_ufp_daaf_entete.montant_convention) ; 
-            item.montant_trans_comm = parseInt(vm.selectedItemConvention_ufp_daaf_entete.montant_trans_comm) ;
-            item.frais_bancaire = parseInt(vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire) ;
+            item.montant_convention = parseFloat(vm.selectedItemConvention_ufp_daaf_entete.montant_convention) ; 
+            item.montant_trans_comm = parseFloat(vm.selectedItemConvention_ufp_daaf_entete.montant_trans_comm) ;
+            item.frais_bancaire = parseFloat(vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire) ;
             item.num_vague = parseInt(vm.selectedItemConvention_ufp_daaf_entete.num_vague) ;
             item.nbr_beneficiaire = parseInt(vm.selectedItemConvention_ufp_daaf_entete.nbr_beneficiaire) ;
             item.date_creation = vm.selectedItemConvention_ufp_daaf_entete.date_creation ;
@@ -419,7 +419,7 @@
         }
         vm.changefraisbancaire = function(item)
         {
-          item.montant_convention = parseInt(item.montant_trans_comm) + parseInt(item.frais_bancaire);
+          item.montant_convention = parseFloat(item.montant_trans_comm) + parseFloat(item.frais_bancaire);
         }
         vm.validerConvention = function()
         {
@@ -1038,6 +1038,35 @@
             affichage = 'Autre';
           }
           return affichage;
+        }
+
+      vm.formatMillier = function (nombre) 
+      {   //var nbr = nombre.toFixed(0);
+        var nbr=parseFloat(nombre);
+        var n = nbr.toFixed(2);
+        var spl= n.split('.');
+        var apre_virgule = spl[1];
+        var avan_virgule = spl[0];
+
+          if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+              avan_virgule += '';
+              var sep = ' ';
+              var reg = /(\d+)(\d{3})/;
+              while (reg.test(avan_virgule)) {
+                  avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+              }
+              return avan_virgule+","+apre_virgule;
+          } else {
+              return "0,00";
+          }
+      }
+        vm.format_montant = function(nbr)
+        {
+          var number = parseFloat(nbr);
+          var x = number.toFixed(2) ;
+          var str = ""+x ;
+          var res = x.replace(".",",") ;
+          return res ;
         }
     }
     

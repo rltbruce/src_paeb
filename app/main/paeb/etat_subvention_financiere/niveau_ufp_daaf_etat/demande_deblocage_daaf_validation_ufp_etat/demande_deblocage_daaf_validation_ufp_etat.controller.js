@@ -9,6 +9,7 @@
     function Demande_deblocage_daaf_validation_ufp_etatController($mdDialog, $scope, apiFactory, $state,loginService,apiUrl,$http,apiUrlFile)
     {
 		    var vm    = this;
+        vm.affiche_load =false; 
 
     //initialisation
         vm.stepOne   = false;
@@ -35,6 +36,7 @@
 
         vm.showbuttonfiltre=true;
         vm.showfiltre=false;
+        vm.datenow = new Date();
         //style
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
@@ -62,12 +64,12 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
-
+            vm.affiche_load =true; 
               apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','getetatconventionwithpourcenfinancByfiltre',
               'date_debut',date_debut,'date_fin',date_fin).then(function(result)
               {
                   vm.allconvention_ufp_daaf_entete = result.data.response; 
-                  console.log(vm.allconvention_ufp_daaf_entete);
+                  vm.affiche_load =false; 
               });
         }
 
@@ -334,5 +336,26 @@
                 return date_final
             }      
         }
+
+        vm.formatMillier = function (nombre) 
+          {   //var nbr = nombre.toFixed(0);
+            var nbr=parseFloat(nombre);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+          }
     }
 })();

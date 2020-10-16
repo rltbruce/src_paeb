@@ -1,35 +1,11 @@
-#forms {
-
-    .content {
-
-        .form-wrapper {
-            md-tab-item {
-                //background:rgb(49,140,231) !important;
-            }
-
-            .ms-form-wizard-step-label {
-               //background:transparent; 
-            }
-
-            md-tabs-wrapper {
-                //background:rgba(255,255,255,5)!important;
-            }
-
-        }
-		
-        .form-data-wrapper {
-            margin-left: 16px;
-
-            .json-data-wrapper {
-                overflow: hidden;
-
-                pre {
-                    font-size: 16px;
-                }
-            }
-        }
-    }
-}
+#forme {
+            position: absolute !important;
+            z-index: 1 !important;
+           // opacity: 80% !important;
+            background-color:  white;
+           margin-top: -13px !important;
+           //float: top !important;
+          }
 .map-wrapper {
   position: relative;
   height: calc(100vh - 4em - 64px) !important;
@@ -44,4 +20,7 @@
   left: 0;
   height: 100%!important;
   z-index: 0 !important;
+}
+md-input-container {
+    margin: 5px 0px 5px 0px !important;
 }

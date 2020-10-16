@@ -167,7 +167,7 @@
                           <input name="montant_trans_comm" type="text" ng-model="convention_ufp_daaf_entete.montant_trans_comm" disabled/>
                         </md-input-container>
                       </span>                          
-                      <span ng-if="!convention_ufp_daaf_entete.$edit">{{convention_ufp_daaf_entete.montant_trans_comm}}</span>
+                      <span ng-if="!convention_ufp_daaf_entete.$edit">{{vm.formatMillier(convention_ufp_daaf_entete.montant_trans_comm)}} Ar</span>
                     </td>
                               
                     <td>
@@ -178,7 +178,7 @@
                         </md-input-container>   
                       </span>
                                 
-                      <span ng-if="!convention_ufp_daaf_entete.$edit">{{convention_ufp_daaf_entete.frais_bancaire}}</span>
+                      <span ng-if="!convention_ufp_daaf_entete.$edit">{{vm.formatMillier(convention_ufp_daaf_entete.frais_bancaire)}} Ar</span>
                     </td>
 
                      <td>
@@ -200,7 +200,7 @@
                         </md-input-container>   
                       </span>
                                 
-                      <span ng-if="!convention_ufp_daaf_entete.$edit">{{convention_ufp_daaf_entete.montant_convention}}</span>
+                      <span ng-if="!convention_ufp_daaf_entete.$edit">{{vm.formatMillier(convention_ufp_daaf_entete.montant_convention)}} Ar</span>
                     </td>
 
                     <td>                         
@@ -513,7 +513,7 @@
                         </td>
 
                         <td>                          
-                          <span>{{convention_cisco_feffi_entete.montant_total}}</span>
+                          <span>{{vm.formatMillier(convention_cisco_feffi_entete.montant_total)}} Ar</span>
                         </td>
 
                         <!--td>                          

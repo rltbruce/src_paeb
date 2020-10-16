@@ -245,7 +245,7 @@
                                   </td>
 
                                   <td>                          
-                                    <span>{{convention_entete.montant_total}}</span>
+                                    <span>{{vm.formatMillier(convention_entete.montant_total)}} Ar</span>
                                   </td>
                                   <td>                          
                                     <span>{{convention_entete.user.nom}}</span>
@@ -347,7 +347,7 @@
                                           </md-input-container>   
                                         </span>
                                                   
-                                        <span ng-if="!avenant_convention.$edit">{{avenant_convention.montant}} Ar</span>
+                                        <span ng-if="!avenant_convention.$edit">{{vm.formatMillier(avenant_convention.montant)}} Ar</span>
                                       </td>
 
                                       <td>
@@ -576,7 +576,7 @@
                               </td>
                                         
                               <td>       
-                                <span >{{contrat_partenaire_relai.montant_contrat}} Ar</span>
+                                <span >{{vm.formatMillier(contrat_partenaire_relai.montant_contrat)}} Ar</span>
                               </td>
 
                               <td>                         
@@ -3114,7 +3114,7 @@
                                     </md-input-container>   
                                   </span>
                                             
-                                  <span ng-if="!contrat_moe.$edit">{{contrat_moe.montant_contrat | number:2}} Ar</span>
+                                  <span ng-if="!contrat_moe.$edit">{{vm.formatMillier(contrat_moe.montant_contrat)}} Ar</span>
                                 </td>                                
 
                                 <td>
@@ -3213,7 +3213,7 @@
                                           <span>{{rubrique_calendrier_paie_moe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_calendrier_paie_moe.montant_prevu | number: 2}} Ar</span>
+                                          <span>{{vm.formatMillier(rubrique_calendrier_paie_moe.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
 
@@ -3261,7 +3261,7 @@
                                           <span>{{sousrubrique_calendrier_paie_moe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{sousrubrique_calendrier_paie_moe.montant_prevu | number: 2}} Ar</span>
+                                          <span>{{vm.formatMillier(sousrubrique_calendrier_paie_moe.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
 
@@ -3314,7 +3314,7 @@
                                           <span>{{calendrier_paie_moe_prevu.pourcentage}}</span>
                                         </td>
                                         <td>
-                                          <span>{{calendrier_paie_moe_prevu.montant_prevu | number: 2}} Ar</span>
+                                          <span>{{vm.formatMillier(calendrier_paie_moe_prevu.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
                                     </table>
@@ -4121,7 +4121,7 @@
                                           </md-input-container>   
                                         </span>
                                                   
-                                        <span ng-if="!avenant_moe.$edit">{{avenant_moe.montant}} Ar</span>
+                                        <span ng-if="!avenant_moe.$edit">{{vm.formatMillier(avenant_moe.montant)}} Ar</span>
                                       </td>
 
                                       <td>
@@ -4409,7 +4409,7 @@
                                     </md-input-container>   
                                   </span>
                                             
-                                  <span ng-if="!passation_marches.$edit">{{passation_marches.montant_moin_chere}} Ar</span>
+                                  <span ng-if="!passation_marches.$edit">{{vm.formatMillier(passation_marches.montant_moin_chere)}} Ar</span>
                                 </td>
 
                                 <td>
@@ -4731,7 +4731,7 @@
                                     </md-input-container>   
                                   </span>
                                             
-                                  <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.cout_batiment | number:2}} Ar</span>
+                                  <span ng-if="!contrat_prestataire.$edit">{{vm.formatMillier(contrat_prestataire.cout_batiment)}} Ar</span>
                                 </td>
                                           
                                 <td>
@@ -4742,7 +4742,7 @@
                                     </md-input-container>   
                                   </span>
                                             
-                                  <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.cout_latrine | number:2}} Ar</span>
+                                  <span ng-if="!contrat_prestataire.$edit">{{vm.formatMillier(contrat_prestataire.cout_latrine)}} Ar</span>
                                 </td>
                                           
                                 <td>
@@ -4753,7 +4753,7 @@
                                     </md-input-container>   
                                   </span>
                                             
-                                  <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.cout_mobilier | number:2}} Ar</span>
+                                  <span ng-if="!contrat_prestataire.$edit">{{vm.formatMillier(contrat_prestataire.cout_mobilier)}} Ar</span>
                                 </td>
                                           
                                 <td>
@@ -4764,7 +4764,7 @@
                                     </md-input-container>   
                                   </span>
                                             
-                                  <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.montant_total_ht | number:2}} Ar</span>
+                                  <span ng-if="!contrat_prestataire.$edit">{{vm.formatMillier(contrat_prestataire.montant_total_ht)}} Ar</span>
                                 </td>
                                           
                                 <td>
@@ -4775,7 +4775,7 @@
                                     </md-input-container>   
                                   </span>
                                             
-                                  <span ng-if="!contrat_prestataire.$edit">{{contrat_prestataire.montant_total_ttc | number:2}} Ar</span>
+                                  <span ng-if="!contrat_prestataire.$edit">{{vm.formatMillier(contrat_prestataire.montant_total_ttc)}} Ar</span>
                                 </td>
 
                                 <td>                         
@@ -4868,7 +4868,7 @@
                                           <span>{{rubrique_attachement_batiment_mpe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_batiment_mpe.montant_prevu | number: 2}} Ar</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_batiment_mpe.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
 
@@ -4939,7 +4939,7 @@
                                             </md-input-container>  
                                           </span>
                                                     
-                                          <span ng-if="!divers_attachement_batiment_prevu.$edit">{{divers_attachement_batiment_prevu.quantite_prevu | number: 2}}</span>
+                                          <span ng-if="!divers_attachement_batiment_prevu.$edit">{{vm.formatMillier(divers_attachement_batiment_prevu.quantite_prevu)}}</span>
                                         </td>
 
                                         <td>
@@ -4950,7 +4950,7 @@
                                             </md-input-container>  
                                           </span>
                                                     
-                                          <span ng-if="!divers_attachement_batiment_prevu.$edit">{{divers_attachement_batiment_prevu.prix_unitaire | number: 2}} Ar</span>
+                                          <span ng-if="!divers_attachement_batiment_prevu.$edit">{{vm.formatMillier(divers_attachement_batiment_prevu.prix_unitaire)}} Ar</span>
                                         </td>
 
                                         <td>
@@ -4961,7 +4961,7 @@
                                             </md-input-container>  
                                           </span>
                                                     
-                                          <span ng-if="!divers_attachement_batiment_prevu.$edit">{{divers_attachement_batiment_prevu.montant_prevu | number: 2}} Ar</span>
+                                          <span ng-if="!divers_attachement_batiment_prevu.$edit">{{vm.formatMillier(divers_attachement_batiment_prevu.montant_prevu)}} Ar</span>
                                         </td>
                                                                      
                                         <td>  
@@ -5024,7 +5024,7 @@
                                           <span>{{rubrique_attachement_latrine_mpe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_latrine_mpe.montant_prevu | number: 2}} Ar</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_latrine_mpe.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
 
@@ -5094,7 +5094,7 @@
                                             </md-input-container>  
                                           </span>
                                                     
-                                          <span ng-if="!divers_attachement_latrine_prevu.$edit">{{divers_attachement_latrine_prevu.quantite_prevu | number: 2}}</span>
+                                          <span ng-if="!divers_attachement_latrine_prevu.$edit">{{vm.formatMillier(divers_attachement_latrine_prevu.quantite_prevu)}}</span>
                                         </td>
 
                                         <td>
@@ -5105,7 +5105,7 @@
                                             </md-input-container>  
                                           </span>
                                                     
-                                          <span ng-if="!divers_attachement_latrine_prevu.$edit">{{divers_attachement_latrine_prevu.prix_unitaire | number: 2}} Ar</span>
+                                          <span ng-if="!divers_attachement_latrine_prevu.$edit">{{vm.formatMillier(divers_attachement_latrine_prevu.prix_unitaire)}} Ar</span>
                                         </td>
 
                                         <td>
@@ -5116,7 +5116,7 @@
                                             </md-input-container>  
                                           </span>
                                                     
-                                          <span ng-if="!divers_attachement_latrine_prevu.$edit">{{divers_attachement_latrine_prevu.montant_prevu | number: 2}} Ar</span>
+                                          <span ng-if="!divers_attachement_latrine_prevu.$edit">{{vm.formatMillier(divers_attachement_latrine_prevu.montant_prevu)}} Ar</span>
                                         </td>
                                                                      
                                         <td>  
@@ -5178,7 +5178,7 @@
                                           <span>{{rubrique_attachement_mobilier_mpe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_mobilier_mpe.montant_prevu | number: 2}} Ar</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_mobilier_mpe.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
 
@@ -5248,7 +5248,7 @@
                                             </md-input-container>  
                                           </span>
                                                     
-                                          <span ng-if="!divers_attachement_mobilier_prevu.$edit">{{divers_attachement_mobilier_prevu.quantite_prevu | number: 2}}</span>
+                                          <span ng-if="!divers_attachement_mobilier_prevu.$edit">{{vm.formatMillier(divers_attachement_mobilier_prevu.quantite_prevu)}}</span>
                                         </td>
 
                                         <td>
@@ -5259,7 +5259,7 @@
                                             </md-input-container>  
                                           </span>
                                                     
-                                          <span ng-if="!divers_attachement_mobilier_prevu.$edit">{{divers_attachement_mobilier_prevu.prix_unitaire | number: 2}} Ar</span>
+                                          <span ng-if="!divers_attachement_mobilier_prevu.$edit">{{vm.formatMillier(divers_attachement_mobilier_prevu.prix_unitaire)}} Ar</span>
                                         </td>
 
                                         <td>
@@ -5270,7 +5270,7 @@
                                             </md-input-container>  
                                           </span>
                                                     
-                                          <span ng-if="!divers_attachement_mobilier_prevu.$edit">{{divers_attachement_mobilier_prevu.montant_prevu | number: 2}} Ar</span>
+                                          <span ng-if="!divers_attachement_mobilier_prevu.$edit">{{vm.formatMillier(divers_attachement_mobilier_prevu.montant_prevu)}} Ar</span>
                                         </td>
                                                                      
                                         <td>  
@@ -5297,67 +5297,7 @@
 
                                 </md-tab-body>
                               </md-tab>
-                        <!------------------------Fin attachement mobilier prevu------------------------------>
-
-                        <!------------------------Debut attachement mobilier prevu------------------------------>               
-                              <!--md-tab ng-click="vm.step_attachement_batiment_prevu()">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">
-                                      <span class="ms-form-wizard-step-text">Batiment</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body>
-                                   <div style="margin-top: 40px; margin-right: 1px; margin-left: 1px">        
-                                    <kendo-grid options="vm.attachement_batimentgrid">
-                                      <div k-detail-template id="griddetailbat">
-                                        <kendo-grid k-options="vm.attachement_batiment_prevugrid({{dataItem}})">
-                                        </kendo-grid>
-                                      </div>
-                                    </kendo-grid> 
-                                  </div>
-                                  </md-tab-body>
-                                </md-tab>                 
-                              <md-tab ng-click="vm.step_attachement_latrine_prevu()">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">
-                                      <span class="ms-form-wizard-step-text">Latrine</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body>
-                                   <div style="margin-top: 40px; margin-right: 1px; margin-left: 1px">        
-                                    <kendo-grid options="vm.attachement_latrinegrid">
-                                      <div k-detail-template id="detai_latrine">
-                                        <kendo-grid k-options="vm.attachement_latrine_prevugrid({{dataItem.id}})">
-                                        </kendo-grid>
-                                      </div>
-                                    </kendo-grid> 
-                                  </div>
-                                  </md-tab-body>
-                                </md-tab>
-
-                              <md-tab ng-click="vm.step_attachement_mobilier_prevu()">
-                                <md-tab-label>
-                                  <span class="ms-form-wizard-step-label">
-                                      <span class="ms-form-wizard-step-text">Mobilier</span>
-                                  </span>
-                                 
-                                </md-tab-label>
-                                
-                                <md-tab-body>
-                                   <div style="margin-top: 40px; margin-right: 1px; margin-left: 1px">        
-                                    <kendo-grid options="vm.attachement_mobiliergrid">
-                                      <div k-detail-template>
-                                        <kendo-grid k-options="vm.attachement_mobilier_prevugrid({{dataItem.id}})">
-                                        </kendo-grid>
-                                      </div>
-                                    </kendo-grid> 
-                                  </div>
-                                  </md-tab-body>
-                                </md-tab-->  
+                        <!------------------------Fin attachement mobilier prevu------------------------------> 
                             </md-tabs> 
                           </ms-form-wizard>
                       </md-tab-body>

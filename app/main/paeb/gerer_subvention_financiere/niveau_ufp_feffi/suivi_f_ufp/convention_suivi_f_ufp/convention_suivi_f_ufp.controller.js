@@ -317,9 +317,9 @@
       vm.demande_realimentation_column = [                
         {titre:"Tranche"},
         {titre:"Prévu"},
-        {titre:"Cumul"},
         {titre:"Antérieur"},
-        {titre:"Periode"},
+        {titre:"Cumul"},
+        {titre:"Calendrier de paiement"},
         {titre:"Pourcentage"},
         {titre:"Reste à décaisser"},
         {titre:"Nom banque"},
@@ -946,6 +946,28 @@ console.log(vm.validation_transfert_ufp);
           }
           return affiche;
         };
+        
+
+        vm.formatMillier = function (nombre) 
+      {   //var nbr = nombre.toFixed(0);
+        var nbr=parseFloat(nombre);
+        var n = nbr.toFixed(2);
+        var spl= n.split('.');
+        var apre_virgule = spl[1];
+        var avan_virgule = spl[0];
+
+          if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+              avan_virgule += '';
+              var sep = ' ';
+              var reg = /(\d+)(\d{3})/;
+              while (reg.test(avan_virgule)) {
+                  avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+              }
+              return avan_virgule+","+apre_virgule;
+          } else {
+              return "0,00";
+          }
+      }
  
     }
 })();

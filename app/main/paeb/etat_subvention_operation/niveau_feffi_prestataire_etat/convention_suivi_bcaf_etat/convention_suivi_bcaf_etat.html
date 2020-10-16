@@ -27,13 +27,6 @@
     <!-- CONTENT -->
     <div class="content" layout="column">
       <div class="form-wrapper md-whiteframe-1dp acc_menu" >
-        <div style="clear:both;"></div>            
-            <div style="float: top !important">
-              <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
-              <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
-                      Chargement,veuillez patienter s'il vous plait ...
-              </div>
-            </div>
 <!--------------------------------------DEBUT TABS MERE--------------------------------------------------------->
          <ms-form-wizard flex>
           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
@@ -190,6 +183,13 @@
                         </md-button> 
                       </div>
                   </div>
+                             
+                  <div style="float: top !important">
+                    <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                    <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                            Chargement,veuillez patienter s'il vous plait ...
+                    </div>
+                  </div>
                         <div>        
                           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                               <thead>
@@ -233,11 +233,11 @@
                                   </td>
 
                                   <td>                          
-                                    <span>{{convention_entete.montant_total}}</span>
+                                    <span>{{vm.formatMillier(convention_entete.montant_total)}} Ar</span>
                                   </td>
 
                                   <td>                          
-                                    <span>{{convention_entete.avancement}} %</span>
+                                    <span>{{vm.formatMillier(convention_entete.avancement)}} %</span>
                                   </td>
 
                                   <td>                          
@@ -284,7 +284,7 @@
                                       </td>
                                                 
                                       <td>                                                  
-                                        <span>{{avenant_convention.montant}}</span>
+                                        <span>{{vm.formatMillier(avenant_convention.montant)}} Ar</span>
                                       </td>
 
                                       <td>                         
@@ -510,7 +510,7 @@
                               </td>
                                         
                               <td>                                          
-                                <span>{{contrat_partenaire_relai.montant_contrat}}</span>
+                                <span>{{vm.formatMillier(contrat_partenaire_relai.montant_contrat)}} Ar</span>
                               </td>
 
                               <td>                        
@@ -1546,7 +1546,7 @@
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_moe.montant_contrat}}</span>
+                                  <span>{{vm.formatMillier(contrat_moe.montant_contrat)}} Ar</span>
                                 </td>
                                 <td>                        
                                   <span>{{vm.formatDate(contrat_moe.passation.notification_intention)}}</span>
@@ -1612,7 +1612,7 @@
                                           <span>{{rubrique_calendrier_paie_moe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_calendrier_paie_moe.montant_prevu | number: 2}} Ar</span>
+                                          <span>{{vm.formatMillier(rubrique_calendrier_paie_moe.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
 
@@ -1660,7 +1660,7 @@
                                           <span>{{sousrubrique_calendrier_paie_moe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{sousrubrique_calendrier_paie_moe.montant_prevu | number: 2}} Ar</span>
+                                          <span>{{vm.formatMillier(sousrubrique_calendrier_paie_moe.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
 
@@ -1710,10 +1710,10 @@
                                           <span>{{calendrier_paie_moe_prevu.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{calendrier_paie_moe_prevu.pourcentage}}</span>
+                                          <span>{{vm.formatMillier(calendrier_paie_moe_prevu.pourcentage)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{calendrier_paie_moe_prevu.montant_prevu | number: 2}} Ar</span>
+                                          <span>{{vm.formatMillier(calendrier_paie_moe_prevu.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
                                     </table>
@@ -2095,7 +2095,7 @@
                                       </td>
                                                 
                                       <td>                                                  
-                                        <span>{{avenant_moe.montant}}</span>
+                                        <span>{{vm.formatMillier(avenant_moe.montant)}} Ar</span>
                                       </td>
 
                                       <td>                         
@@ -2266,7 +2266,7 @@
                                 </td>
                                           
                                 <td>                                           
-                                  <span>{{passation_marches.montant_moin_chere}}</span>
+                                  <span>{{vm.formatMillier(passation_marches.montant_moin_chere)}} Ar</span>
                                 </td>
 
                                 <td>                          
@@ -2391,23 +2391,23 @@
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.cout_batiment}} Ar</span>
+                                  <span>{{vm.formatMillier(contrat_prestataire.cout_batiment)}} Ar</span>
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.cout_latrine}} Ar</span>
+                                  <span>{{vm.formatMillier(contrat_prestataire.cout_latrine)}} Ar</span>
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.cout_mobilier}} Ar</span>
+                                  <span>{{vm.formatMillier(contrat_prestataire.cout_mobilier)}} Ar</span>
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.montant_total_ht}} Ar</span>
+                                  <span>{{vm.formatMillier(contrat_prestataire.montant_total_ht)}} Ar</span>
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.montant_total_ttc}} Ar</span>
+                                  <span>{{vm.formatMillier(contrat_prestataire.montant_total_ttc)}} Ar</span>
                                 </td>
 
                                 <td>                         
@@ -2479,7 +2479,7 @@
                                           <span>{{rubrique_attachement_batiment_mpe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_batiment_mpe.montant_prevu | number: 2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_batiment_mpe.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
 
@@ -2536,16 +2536,16 @@
                                         </td>
 
                                         <td>                                                    
-                                          <span>{{divers_attachement_batiment_prevu.quantite_prevu | number: 2}}</span>
+                                          <span>{{vm.formatMillier(divers_attachement_batiment_prevu.quantite_prevu)}} Ar</span>
                                         </td>
 
                                         <td>                                                    
-                                          <span>{{divers_attachement_batiment_prevu.prix_unitaire | number: 2}}</span>
+                                          <span>{{vm.formatMillier(divers_attachement_batiment_prevu.prix_unitaire)}} Ar</span>
                                         </td>
 
                                         <td>
                                                     
-                                          <span>{{divers_attachement_batiment_prevu.montant_prevu | number: 2}}</span>
+                                          <span>{{vm.formatMillier(divers_attachement_batiment_prevu.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
                                     </table>
@@ -2589,7 +2589,7 @@
                                           <span>{{rubrique_attachement_latrine_mpe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_latrine_mpe.montant_prevu | number: 2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_latrine_mpe.montant_prevu )}} Ar</span>
                                         </td>
                                       </tbody>
 
@@ -2650,11 +2650,11 @@
                                         </td>
 
                                         <td>                                                    
-                                          <span>{{divers_attachement_latrine_prevu.prix_unitaire | number: 2}}</span>
+                                          <span>{{vm.formatMillier(divers_attachement_latrine_prevu.prix_unitaire)}} Ar</span>
                                         </td>
 
                                         <td>                                                    
-                                          <span>{{divers_attachement_latrine_prevu.montant_prevu | number: 2}}</span>
+                                          <span>{{vm.formatMillier(divers_attachement_latrine_prevu.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
                                     </table>
@@ -2698,7 +2698,7 @@
                                           <span>{{rubrique_attachement_mobilier_mpe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_mobilier_mpe.montant_prevu | number: 2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_mobilier_mpe.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
 
@@ -2757,17 +2757,17 @@
 
                                         <td>
                                                     
-                                          <span>{{divers_attachement_mobilier_prevu.quantite_prevu | number: 2}}</span>
+                                          <span>{{vm.formatMillier(divers_attachement_mobilier_prevu.quantite_prevu)}}</span>
                                         </td>
 
                                         <td>
                                                     
-                                          <span>{{divers_attachement_mobilier_prevu.prix_unitaire | number: 2}}</span>
+                                          <span>{{vm.formatMillier(divers_attachement_mobilier_prevu.prix_unitaire)}} Ar</span>
                                         </td>
 
                                         <td>
                                                     
-                                          <span>{{divers_attachement_mobilier_prevu.montant_prevu | number: 2}}</span>
+                                          <span>{{vm.formatMillier(divers_attachement_mobilier_prevu.montant_prevu)}} Ar</span>
                                         </td>
                                       </tbody>
                                     </table>
@@ -2988,7 +2988,7 @@
                                           </td>
                                                     
                                           <td>                                                      
-                                            <span>{{avancement_batiment.pourcentage}}</span>
+                                            <span>{{vm.formatMillier(avancement_batiment.pourcentage)}} %</span>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -3035,7 +3035,7 @@
                                           </td>
                                                     
                                           <td>                                                      
-                                            <span>{{avancement_latrine.pourcentage}}</span>
+                                            <span>{{vm.formatMillier(avancement_latrine.pourcentage)}} %</span>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -3082,7 +3082,7 @@
                                           </td>
                                                     
                                           <td>                                                      
-                                            <span>{{avancement_mobilier.pourcentage}}</span>
+                                            <span>{{vm.formatMillier(avancement_mobilier.pourcentage)}} %</span>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -3131,23 +3131,23 @@
                                       </td>
                                                 
                                       <td>                                                  
-                                        <span>{{avenant_mpe.cout_batiment}}</span>
+                                        <span>{{vm.formatMillier(avenant_mpe.cout_batiment)}} Ar</span>
                                       </td>
                                                 
                                       <td>                                                  
-                                        <span>{{avenant_mpe.cout_latrine}}</span>
+                                        <span>{{vm.formatMillier(avenant_mpe.cout_latrine)}} Ar</span>
                                       </td>
                                                 
                                       <td>                                                  
-                                        <span>{{avenant_mpe.cout_mobilier}}</span>
+                                        <span>{{vm.formatMillier(avenant_mpe.cout_mobilier)}} Ar</span>
                                       </td>
                                                 
                                       <td>                                                  
-                                        <span>{{avenant_mpe.cout_total_ht}}</span>
+                                        <span>{{vm.formatMillier(avenant_mpe.cout_total_ht)}} Ar</span>
                                       </td>
                                                 
                                       <td>                                                  
-                                        <span>{{avenant_mpe.cout_total_ttc}}</span>
+                                        <span>{{vm.formatMillier(avenant_mpe.cout_total_ttc)}} Ar</span>
                                       </td>
 
                                       <td>                         

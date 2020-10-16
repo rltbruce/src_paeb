@@ -231,7 +231,7 @@
                                   </td>
 
                                   <td>                          
-                                    <span>{{convention_entete.montant_total}}</span>
+                                    <span>{{vm.formatMillier(convention_entete.montant_total)}}</span>
                                   </td>
 
                                   <td>                          
@@ -505,7 +505,7 @@
                                   </md-input-container>   
                                 </span>
                                           
-                                <span ng-if="!contrat_partenaire_relai.$edit">{{contrat_partenaire_relai.montant_contrat}} Ar</span>
+                                <span ng-if="!contrat_partenaire_relai.$edit">{{vm.formatMillier(contrat_partenaire_relai.montant_contrat)}} Ar</span>
                               </td>
 
                               <td>
@@ -604,7 +604,7 @@
                                           </md-input-container>   
                                         </span>
                                                   
-                                        <span ng-if="!avenant_partenaire.$edit">{{avenant_partenaire.montant}} Ar</span>
+                                        <span ng-if="!avenant_partenaire.$edit">{{vm.formatMillier(avenant_partenaire.montant)}} Ar</span>
                                       </td>
 
                                       <td>

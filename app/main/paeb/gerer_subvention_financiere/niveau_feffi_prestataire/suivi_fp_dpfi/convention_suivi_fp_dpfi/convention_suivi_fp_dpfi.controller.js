@@ -654,7 +654,24 @@
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            return total_prevu.toFixed(2);
+            
+            var nbr=parseFloat(total_prevu);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_pource_rubrique_moe = function()
@@ -667,7 +684,24 @@
                     total_prevu += parseFloat(product.pourcentage);
                 }
             }
-            return total_prevu.toFixed(2);
+            
+            var nbr=parseFloat(total_prevu);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_pourcecumul_rubrique_moe = function()
@@ -682,7 +716,25 @@
                     total_prevuc += parseFloat(product.montant_prevu);
                 }
             }
-            return ((total_cumulc*100)/total_prevuc).toFixed(2);
+            var tot=((total_cumulc*100)/total_prevuc);
+
+            var nbr=parseFloat(tot);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_pourceanterieur_rubrique_moe = function()
@@ -697,7 +749,25 @@
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            return ((total_anterieur*100)/total_prevu).toFixed(2);
+            var tot= ((total_anterieur*100)/total_prevu);
+
+            var nbr=parseFloat(tot);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_pourceperiode_rubrique_moe = function()
@@ -712,7 +782,25 @@
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            return ((total_periode*100)/total_prevu).toFixed(2);
+            var tot= ((total_periode*100)/total_prevu);
+
+            var nbr=parseFloat(tot);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_montantcumul_rubrique_moe = function()
@@ -725,7 +813,24 @@
                     total_prevu += parseFloat(product.montant_cumul);
                 }
             }
-            return total_prevu.toFixed(2);
+            
+            var nbr=parseFloat(total_prevu);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_montantanterieur_rubrique_moe = function()
@@ -738,7 +843,24 @@
                     total_prevu += parseFloat(product.montant_anterieur);
                 }
             }
-            return total_prevu.toFixed(2);
+            
+            var nbr=parseFloat(total_prevu);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_montantperiode_rubrique_moe = function()
@@ -751,7 +873,24 @@
                     total_prevu += parseFloat(product.montant_periode);
                 }
             }
-            return total_prevu.toFixed(2);
+            
+            var nbr=parseFloat(total_prevu);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
     /**************************************fin facture moe detail*********************************************/
@@ -1401,7 +1540,23 @@
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            return total_prevu;
+            var nbr=parseFloat(total_prevu);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_periode = function(){
@@ -1413,7 +1568,24 @@
                     total_periode += parseFloat(product.montant_periode);
                 }
             }
-            return total_periode;
+            
+            var nbr=parseFloat(total_periode);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_anterieur = function(){
@@ -1425,7 +1597,24 @@
                     total_anterieur += parseFloat(product.montant_anterieur);
                 }
             }
-            return total_anterieur;
+            
+            var nbr=parseFloat(total_anterieur);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_cumul = function(){
@@ -1437,11 +1626,29 @@
                     total_cumul += parseFloat(product.montant_cumul);
                 }
             }
-            return total_cumul;
+            
+            var nbr=parseFloat(total_cumul);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
-        vm.Total_pourcentage = function(){
-            var total_pourcentage = 0;
+
+        vm.Periode_pourcentage_mpe = function(){
+            var periode_pourcentage = 0;
             var total_prevu = 0;
             var total_periode = 0;
             if (vm.allrubrique_attachement_batiment_mpe.length!=0)
@@ -1452,10 +1659,97 @@
                     total_periode += parseFloat(product.montant_periode);
                     
                 }
-                total_pourcentage = (total_periode*100)/ total_prevu;
+                periode_pourcentage = (total_periode*100)/ total_prevu;
             }
 
-            return total_pourcentage.toFixed(2);
+            
+            var nbr=parseFloat(periode_pourcentage);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+        }
+
+        vm.Anterieur_pourcentage_mpe = function(){
+            var anterieur_pourcentage = 0;
+            var total_prevu = 0;
+            var total_anterieur = 0;
+            if (vm.allrubrique_attachement_batiment_mpe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_attachement_batiment_mpe.length; i++){
+                    var product = vm.allrubrique_attachement_batiment_mpe[i];
+                    total_prevu += parseFloat(product.montant_prevu);
+                    total_anterieur += parseFloat(product.montant_anterieur);
+                    
+                }
+                anterieur_pourcentage = (total_anterieur*100)/ total_prevu;
+            }
+
+            
+            var nbr=parseFloat(anterieur_pourcentage);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+        }
+
+        vm.Total_pourcentage = function(){
+            var total_pourcentage = 0;
+            var total_prevu = 0;
+            var total_cumul = 0;
+            if (vm.allrubrique_attachement_batiment_mpe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_attachement_batiment_mpe.length; i++){
+                    var product = vm.allrubrique_attachement_batiment_mpe[i];
+                    total_prevu += parseFloat(product.montant_prevu);
+                    total_cumul += parseFloat(product.montant_cumul);
+                    
+                }
+                total_pourcentage = (total_cumul*100)/ total_prevu;
+            }
+
+            
+            var nbr=parseFloat(total_pourcentage);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 /************************************************fin rubrique attachement batiment_mpe***************************************************/
 
@@ -1596,8 +1890,7 @@
              });
              vm.selectedItemRubrique_attachement_latrine_mpe.$selected = true;
         });
-
-        vm.Total_prevu_latrine_mpe = function(){
+vm.Total_prevu_latrine_mpe = function(){
             var total_prevu = 0;
             if (vm.allrubrique_attachement_latrine_mpe.length!=0)
             {                
@@ -1606,7 +1899,23 @@
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            return total_prevu;
+            var nbr=parseFloat(total_prevu);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_periode_latrine_mpe = function(){
@@ -1618,7 +1927,24 @@
                     total_periode += parseFloat(product.montant_periode);
                 }
             }
-            return total_periode;
+            
+            var nbr=parseFloat(total_periode);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_anterieur_latrine_mpe = function(){
@@ -1630,7 +1956,24 @@
                     total_anterieur += parseFloat(product.montant_anterieur);
                 }
             }
-            return total_anterieur;
+            
+            var nbr=parseFloat(total_anterieur);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_cumul_latrine_mpe = function(){
@@ -1642,11 +1985,28 @@
                     total_cumul += parseFloat(product.montant_cumul);
                 }
             }
-            return total_cumul;
+            
+            var nbr=parseFloat(total_cumul);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
-        vm.Total_pourcentage_latrine_mpe = function(){
-            var total_pourcentage = 0;
+        vm.Periode_pourcentage_latrine_mpe = function(){
+            var periode_pourcentage = 0;
             var total_prevu = 0;
             var total_periode = 0;
             if (vm.allrubrique_attachement_latrine_mpe.length!=0)
@@ -1657,10 +2017,95 @@
                     total_periode += parseFloat(product.montant_periode);
                     
                 }
-                total_pourcentage = (total_periode*100)/ total_prevu;
+                periode_pourcentage = (total_periode*100)/ total_prevu;
             }
 
-            return total_pourcentage.toFixed(2);
+            var nbr=parseFloat(periode_pourcentage);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+        }
+
+        vm.Anterieur_pourcentage_latrine_mpe = function(){
+            var anterieur_pourcentage = 0;
+            var total_prevu = 0;
+            var total_anterieur = 0;
+            if (vm.allrubrique_attachement_latrine_mpe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_attachement_latrine_mpe.length; i++){
+                    var product = vm.allrubrique_attachement_latrine_mpe[i];
+                    total_prevu += parseFloat(product.montant_prevu);
+                    total_anterieur += parseFloat(product.montant_anterieur);
+                    
+                }
+                anterieur_pourcentage = (total_anterieur*100)/ total_prevu;
+            }
+
+            var nbr=parseFloat(anterieur_pourcentage);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+        }
+
+        vm.Total_pourcentage_latrine_mpe = function(){
+            var total_pourcentage = 0;
+            var total_prevu = 0;
+            var total_cumul = 0;
+            if (vm.allrubrique_attachement_latrine_mpe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_attachement_latrine_mpe.length; i++){
+                    var product = vm.allrubrique_attachement_latrine_mpe[i];
+                    total_prevu += parseFloat(product.montant_prevu);
+                    total_cumul += parseFloat(product.montant_cumul);
+                    
+                }
+                total_pourcentage = (total_cumul*100)/ total_prevu;
+            }
+
+           
+            var nbr=parseFloat(total_pourcentage);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 /************************************************fin rubrique attachement latrine_mpe***************************************************/
 
@@ -1812,7 +2257,23 @@
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            return total_prevu;
+            var nbr=parseFloat(total_prevu);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_periode_mobilier_mpe = function(){
@@ -1824,7 +2285,24 @@
                     total_periode += parseFloat(product.montant_periode);
                 }
             }
-            return total_periode;
+            
+            var nbr=parseFloat(total_periode);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_anterieur_mobilier_mpe = function(){
@@ -1836,7 +2314,24 @@
                     total_anterieur += parseFloat(product.montant_anterieur);
                 }
             }
-            return total_anterieur;
+            
+            var nbr=parseFloat(total_anterieur);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
         vm.Total_cumul_mobilier_mpe = function(){
@@ -1848,11 +2343,28 @@
                     total_cumul += parseFloat(product.montant_cumul);
                 }
             }
-            return total_cumul;
+            
+            var nbr=parseFloat(total_cumul);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
-        vm.Total_pourcentage_mobilier_mpe = function(){
-            var total_pourcentage = 0;
+        vm.Periode_pourcentage_mobilier_mpe = function(){
+            var periode_pourcentage = 0;
             var total_prevu = 0;
             var total_periode = 0;
             if (vm.allrubrique_attachement_mobilier_mpe.length!=0)
@@ -1863,10 +2375,95 @@
                     total_periode += parseFloat(product.montant_periode);
                     
                 }
-                total_pourcentage = (total_periode*100)/ total_prevu;
+                periode_pourcentage = (total_periode*100)/ total_prevu;
             }
 
-            return total_pourcentage.toFixed(2);
+            
+            var nbr=parseFloat(periode_pourcentage);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+        }
+
+        vm.Anterieur_pourcentage_mobilier_mpe = function(){
+            var anterieur_pourcentage = 0;
+            var total_prevu = 0;
+            var total_anterieur = 0;
+            if (vm.allrubrique_attachement_mobilier_mpe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_attachement_mobilier_mpe.length; i++){
+                    var product = vm.allrubrique_attachement_mobilier_mpe[i];
+                    total_prevu += parseFloat(product.montant_prevu);
+                    total_anterieur += parseFloat(product.montant_anterieur);
+                    
+                }
+                anterieur_pourcentage = (total_anterieur*100)/ total_prevu;
+            }
+
+            var nbr=parseFloat(anterieur_pourcentage);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+        }
+
+        vm.Total_pourcentage_mobilier_mpe = function(){
+            var total_pourcentage = 0;
+            var total_prevu = 0;
+            var total_cumul = 0;
+            if (vm.allrubrique_attachement_mobilier_mpe.length!=0)
+            {                
+                for(var i = 0; i < vm.allrubrique_attachement_mobilier_mpe.length; i++){
+                    var product = vm.allrubrique_attachement_mobilier_mpe[i];
+                    total_prevu += parseFloat(product.montant_prevu);
+                    total_cumul += parseFloat(product.montant_cumul);
+                    
+                }
+                total_pourcentage = (total_cumul*100)/ total_prevu;
+            }
+
+            var nbr=parseFloat(total_pourcentage);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 /************************************************fin rubrique attachement mobilier_mpe***************************************************/
 
@@ -1989,6 +2586,27 @@
           }
           return affiche;
         };
+        
+          vm.formatMillier = function (nombre) 
+          {   //var nbr = nombre.toFixed(0);
+            var nbr=parseFloat(nombre);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+          }
  
     }
 })();

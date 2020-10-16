@@ -9,11 +9,10 @@
     /** @ngInject */
     function AccueilController($cookieStore,apiFactory)
     {
-        var vm = this;
-
-         vm.showracourci_obcaf = false;
+        var vm = this;        
+          vm.showracourci_obcaf = false;
          vm.showracourci_bcaf  = false;
-         vm.showracourci_acc = false; 
+         vm.showracourci_acc = false;
         var id_user = $cookieStore.get('id');
        
         if (id_user > 0) 
@@ -25,27 +24,31 @@
                   switch (vm.roles[0])
                     {
                       case 'ACC': 
-                            vm.showracourci_acc = true;
-
-                          break;
+                            {
+                              vm.showracourci_acc = true;
+                              break;
+                            }
 
                         case 'OBCAF': 
-                            vm.showracourci_obcaf  = true;
-                          break;
+                              {
+                                vm.showracourci_obcaf  = true;
+                                break;
+                              }
 
                         case 'BCAF': 
-                            vm.showracourci_bcaf  = true;
-
-                          break;
+                              {                                
+                                vm.showracourci_bcaf  = true;
+                                break;
+                              }
 
                       case 'ADMIN':
                               {
                                 vm.showracourci_obcaf = true;
                                 vm.showracourci_bcaf  = true;
                                 vm.showracourci_acc = true; 
+                                break;
                               } 
 
-                          break;
                       default:
                           break;
                   
@@ -53,6 +56,5 @@
 
              });
         }
-      
     }
 })();

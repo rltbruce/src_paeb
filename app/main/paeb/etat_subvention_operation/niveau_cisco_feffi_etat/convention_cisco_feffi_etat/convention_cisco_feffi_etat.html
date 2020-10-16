@@ -209,11 +209,11 @@
                         </td>
 
                         <td>                         
-                          <span>{{convention_cife_tete.montant_total}}</span>
+                          <span>{{vm.formatMillier(convention_cife_tete.montant_total)}} Ar</span>
                         </td>
 
                         <td>                         
-                          <span>{{convention_cife_tete.avancement}}</span>
+                          <span>{{vm.formatMillier(convention_cife_tete.avancement)}} %</span>
                         </td>
 
                         <td>                         
@@ -409,7 +409,7 @@
                   </td>
 
                   <td>                         
-                    <span>{{batiment_construction.cout_unitaire}}</span>
+                    <span>{{vm.formatMillier(batiment_construction.cout_unitaire)}} Ar</span>
                   </td>
                 </tr>
               </tbody>
@@ -460,7 +460,7 @@
                   </td>
 
                   <td>                          
-                    <span>{{latrine_construction.cout_unitaire}}</span>
+                    <span>{{vm.formatMillier(latrine_construction.cout_unitaire)}} Ar</span>
                   </td> 
                 </tr>
               </tbody>
@@ -515,7 +515,7 @@
                   </td>
 
                   <td>                         
-                    <span>{{mobilier_construction.cout_unitaire}}</span>
+                    <span>{{vm.formatMillier(mobilier_construction.cout_unitaire)}} Ar</span>
                   </td>
                 </tr>
               </tbody>

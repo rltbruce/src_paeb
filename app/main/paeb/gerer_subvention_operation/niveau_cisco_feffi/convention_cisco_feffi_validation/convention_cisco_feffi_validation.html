@@ -308,7 +308,7 @@
                               <input name="montant_total" type="number" ng-model="convention_cife_tete.montant_total" disabled/>
                             </md-input-container>
                           </span>                          
-                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.montant_total}}</span>
+                          <span ng-if="!convention_cife_tete.$edit">{{vm.formatMillier(convention_cife_tete.montant_total)}} Ar</span>
                         </td>
 
                         <!--td>
@@ -714,7 +714,7 @@
                         <input name="cout_unitaire" type="number" ng-model="batiment_construction.cout_unitaire" disabled />
                       </md-input-container>
                     </span>                          
-                    <span ng-if="!batiment_construction.$edit">{{batiment_construction.cout_unitaire}}</span>
+                    <span ng-if="!batiment_construction.$edit">{{vm.formatMillier(batiment_construction.cout_unitaire)}} Ar</span>
                   </td>
                                                
                   <td>  
@@ -813,7 +813,7 @@
                         <input name="cout_unitaire" type="number" ng-model="latrine_construction.cout_unitaire" disabled />
                       </md-input-container>
                     </span>                          
-                    <span ng-if="!latrine_construction.$edit">{{latrine_construction.cout_unitaire}}</span>
+                    <span ng-if="!latrine_construction.$edit">{{vm.formatMillier(latrine_construction.cout_unitaire)}} Ar</span>
                   </td>                                              
                   <td>  
                     <a ng-if="!latrine_construction.$edit && vm.validation_item==0" ng-click="vm.modifierLatrine_construction(latrine_construction)" title="Modifier" >
@@ -920,7 +920,7 @@
                         <input name="cout_unitaire" type="number" ng-model="mobilier_construction.cout_unitaire" disabled />
                       </md-input-container>
                     </span>                          
-                    <span ng-if="!mobilier_construction.$edit">{{mobilier_construction.cout_unitaire}}</span>
+                    <span ng-if="!mobilier_construction.$edit">{{vm.formatMillier(mobilier_construction.cout_unitaire)}} Ar</span>
                   </td>
                                                
                   <td>  

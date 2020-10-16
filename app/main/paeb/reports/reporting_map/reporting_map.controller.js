@@ -9,20 +9,13 @@
     function Reporting_mapController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,apiUrlexcel)
     { 
         var vm = this;  
+        vm.regions = [];
+        vm.affiche_load = false;
 
-        vm.showbuttonfiltre=true;
-        vm.showfiltre=false;
-
-        vm.showformfiltre = function()
+        apiFactory.getAll("region/index").then(function success(response)
         {
-          vm.showbuttonfiltre=!vm.showbuttonfiltre;
-          vm.showfiltre=!vm.showfiltre;
-          console.log('mande');
-        }
-        vm.annulerfiltre = function()
-        {
-            vm.filtre = {};
-        }
+           vm.regions=response.data.response;
+        });
             vm.polylines = [];
             vm.parameters =[];
             vm.ecolevueMap = {
@@ -33,76 +26,160 @@
                         zoom  : 6,
                         marker: vm.liste
                     };
-        vm.showmap = false;
-        //vm.showwindow = true;
-           apiFactory.getAPIgeneraliserREST("district/index","menu",'reportingvuecarte2').then(function(result)
+        vm.recherchefiltre = function(item_region)
+        {   
+            vm.affiche_load= true;
+            var region_exist = false;
+            apiFactory.getAPIgeneraliserREST("district/index","menu",'reportingvuecarte2','id_region',item_region.id_region).then(function(result)
             {
-                vm.districts = result.data.response;
-                console.log(vm.districts);
+                vm.district_reports = result.data.response;
+                console.log(vm.district_reports);
+                var boucle = 0;
+                angular.forEach(vm.district_reports, function(data)
+                { 
+                  if (vm.polylines.length!=0) 
+                  {
 
-                angular.forEach(vm.districts, function(data)
-                {
-
-                    var item = 
+                    var district_exist = vm.polylines.filter(function(obj)
                     {
-                      id: data.id ,
-                      id_marker: "marker"+data.id ,
-                      id_window: "window"+data.id ,
-                      path:data.coordonnees,
-                      nom_district:data.nom,
-                      marker_coord:vm.get_center_poly(data.coordonnees),
-                      reporting:data.reporting,
-                      //marker_option:{
-                      //  icon:'assets/images/logos/mapmarker.png'
-                      //},                     
-                      stroke: {
-                          color: '#777777',
-                          weight: 1
-                      },                  
-                      fill: {                          
-                          opacity: 0                           
-                      },
-                      events: { 
-                        click: function(event)
-                        { 
-                          console.log(event);
-                          vm.data_dialogs = data;
-                          vm.showreportingDialog();
-                        },
-                        mouseover: function(gPoly, eventName, polyModel, latLngArgs)
+                       return obj.id == data.id;
+                    });
+                    if (district_exist.length!=0)
+                    {                      
+                      region_exist = true;
+                    }
+                    else
+                    {
+                        var item = 
                         {
-                          polyModel.fill.opacity = '0.5';
-                          console.log("mouseover ok");
-                          vm.showwindow = "window"+data.id;
-                        },
-                        mouseout: function(gPoly, eventName, polyModel, latLngArgs)
+                          id: data.id ,
+                          id_marker: "marker"+data.id ,
+                          id_window: "window"+data.id ,
+                          path:data.coordonnees,
+                          nom_district:data.nom,
+                          marker_coord:vm.get_center_poly(data.coordonnees),
+                          //reporting:data.reporting,
+                          //marker_option:{
+                          //  icon:'assets/images/logos/mapmarker.png'
+                          //},                     
+                          stroke: {
+                              color: '#777777',
+                              weight: 1
+                          },                  
+                          fill: {                          
+                              opacity: 0                           
+                          },
+                          events: { 
+                            click: function(event)
+                            { 
+                              console.log(event);
+                              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu",'reportingvuecarte','id_district',data.id).then(function(result)
+                              {
+                                  vm.data_dialogs = result.data.response;
+                                vm.showreportingDialog();
+                              });
+                              vm.district_nom=data.nom;
+                              
+                            },
+                            mouseover: function(gPoly, eventName, polyModel, latLngArgs)
+                            {
+                              polyModel.fill.opacity = '0.5';
+                              console.log("mouseover ok");
+                              vm.showwindow = "window"+data.id;
+                            },
+                            mouseout: function(gPoly, eventName, polyModel, latLngArgs)
+                            {
+                              polyModel.fill.opacity = '0';
+                              vm.showwindow = "window"+0;
+                              console.log("mouseout ok");
+                             // $mdDialog.cancel();
+                            }
+                          }
+                        };
+                        vm.polylines.push(item);
+                    }
+                    
+                  }
+                  else
+                  {
+                    var item = 
                         {
-                          polyModel.fill.opacity = '0';
-                          vm.showwindow = "window"+0;
-                          console.log("mouseout ok");
-                         // $mdDialog.cancel();
-                        }
-                      }
-                    }; 
-
-                      vm.polylines.push(item);
-                      if (vm.polylines.length == 111)
-                     {
-                        vm.showmap = true;
-                        console.log(vm.showmap);
-                     };
-
-                   /// if (data.id==1) {
-                     //  vm.polylines.push(item);
-                     // if (vm.polylines.length == 1)
-                    // {
-                    //    vm.showmap = true;
-                    //    console.log(vm.showmap);
-                    // }
-                      
-                   // }                     
+                          id: data.id ,
+                          id_marker: "marker"+data.id ,
+                          id_window: "window"+data.id ,
+                          path:data.coordonnees,
+                          nom_district:data.nom,
+                          marker_coord:vm.get_center_poly(data.coordonnees),
+                          //reporting:data.reporting,
+                          //marker_option:{
+                          //  icon:'assets/images/logos/mapmarker.png'
+                          //},                     
+                          stroke: {
+                              color: '#777777',
+                              weight: 1
+                          },                  
+                          fill: {                          
+                              opacity: 0                           
+                          },
+                          events: { 
+                            click: function(event)
+                            { 
+                              console.log(event);
+                              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu",'reportingvuecarte','id_district',data.id).then(function(result)
+                              {
+                                  vm.data_dialogs = result.data.response;
+                                vm.showreportingDialog();
+                              });
+                              vm.district_nom=data.nom;
+                            },
+                            mouseover: function(gPoly, eventName, polyModel, latLngArgs)
+                            {
+                              polyModel.fill.opacity = '0.5';
+                              console.log("mouseover ok");
+                              vm.showwindow = "window"+data.id;
+                            },
+                            mouseout: function(gPoly, eventName, polyModel, latLngArgs)
+                            {
+                              polyModel.fill.opacity = '0';
+                              vm.showwindow = "window"+0;
+                              console.log("mouseout ok");
+                             // $mdDialog.cancel();
+                            }
+                          }
+                        };
+                        vm.polylines.push(item);
+                  } 
+                  boucle = boucle +1;                   
                 });
+                  
+                  if (vm.district_reports.length == boucle)
+                  {                    
+                    if (region_exist==true) 
+                    {
+                      vm.showAlert('Affichage refusé','Les districts de cette region sont déjà affichées');
+                      region_exist = false;
+                    }
+                    vm.affiche_load = false;
+                  }
+                  console.log(vm.district_reports.length);
+                  console.log(boucle);
             });
+        }
+           //Alert
+        vm.showAlert = function(titre,content)
+        {
+          $mdDialog.show(
+            $mdDialog.alert()
+            .parent(angular.element(document.querySelector('#popupContainer')))
+            .clickOutsideToClose(false)
+            .parent(angular.element(document.body))
+            .title(titre)
+            .textContent(content)
+            .ariaLabel('Alert')
+            .ok('Fermer')
+            .targetEvent()
+          );
+        }
 
             vm.get_center_poly = function(path)
             {
@@ -156,6 +233,7 @@
                 var dg=$scope;
                 console.log(vm.data_dialogs);
                 dg.data_dialog = vm.data_dialogs;
+                dg.district_nom = vm.district_nom;
                 dg.tOptions = {
                   dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
                   pagingType: 'simple',

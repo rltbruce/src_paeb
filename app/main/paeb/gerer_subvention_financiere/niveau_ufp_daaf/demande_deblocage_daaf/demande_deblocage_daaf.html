@@ -122,15 +122,15 @@
                     </td>
 
                     <td>                          
-                      <span >{{convention_ufp_daaf_entete.montant_trans_comm}}</span>
+                      <span >{{vm.formatMillier(convention_ufp_daaf_entete.montant_trans_comm)}} Ar</span>
                     </td>
 
                     <td>         
-                      <span>{{convention_ufp_daaf_entete.frais_bancaire}}</span>
+                      <span>{{vm.formatMillier(convention_ufp_daaf_entete.frais_bancaire)}} Ar</span>
                     </td>                
 
                     <td>                                    
-                      <span>{{convention_ufp_daaf_entete.montant_convention}}</span>
+                      <span>{{vm.formatMillier(convention_ufp_daaf_entete.montant_convention)}} Ar</span>
                     </td>                
 
                     <td>                                    
@@ -167,9 +167,81 @@
               <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                 <thead>
                   <tr>
-                    <th class="secondary-text" ng-repeat="cisc in ::vm.demande_deblocage_daaf_column">
+                    <!--th class="secondary-text" ng-repeat="cisc in ::vm.demande_deblocage_daaf_column">
                       <div class="table-header">
                         <span class="column-title">{{cisc.titre}}</span>
+                      </div>
+                    </th-->
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">Réference demande
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">&nbsp &nbsp &nbsp &nbsp &nbsp Objet &nbsp &nbsp &nbsp &nbsp &nbsp
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">&nbsp &nbsp &nbsp &nbsp &nbsp Tranche &nbsp &nbsp &nbsp &nbsp &nbsp
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">&nbsp &nbsp &nbsp &nbsp &nbsp Période &nbsp &nbsp &nbsp &nbsp &nbsp
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">&nbsp &nbsp &nbsp &nbsp &nbsp Antérieur &nbsp &nbsp &nbsp &nbsp &nbsp
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">&nbsp &nbsp &nbsp &nbsp &nbsp Cumul &nbsp &nbsp &nbsp &nbsp &nbsp
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">Calendrier de paiement
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">Pourcentage
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">Reste à décaisser
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">Libelle compte banqueire
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">&nbsp &nbsp &nbsp &nbsp &nbsp Date &nbsp &nbsp &nbsp &nbsp &nbsp
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">Action
+                        </span>
                       </div>
                     </th>
                   </tr>
@@ -189,7 +261,7 @@
                     <td>
                       <span ng-if="demande_deblocage_daaf.$edit">
                         <md-input-container style="width:100%;display: flex !important;">
-                          <label>Objet</label>
+                          <label>&nbsp &nbsp &nbsp &nbsp &nbsp Objet &nbsp &nbsp &nbsp &nbsp &nbsp</label>
                           <input name="objet" type="text" ng-model="demande_deblocage_daaf.objet"/>
                         </md-input-container>  
                       </span>
@@ -214,37 +286,37 @@
                     <td>
                       <span ng-if="demande_deblocage_daaf.$edit">
                         <md-input-container style="width:100%;display: flex !important;">
-                          <label>Prévu</label>
+                          <label>&nbsp &nbsp &nbsp &nbsp &nbsp Prévu &nbsp &nbsp &nbsp &nbsp &nbsp</label>
                           <input name="prevu" type="text" ng-model="demande_deblocage_daaf.prevu" disabled/>
                         </md-input-container>  
                       </span>
-                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.prevu}}</span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{vm.formatMillier(demande_deblocage_daaf.prevu)}} Ar</span>
                     </td>
 
                     <td>
                       <span ng-if="demande_deblocage_daaf.$edit">
                         <md-input-container style="width:100%;display: flex !important;">
-                          <label>Cumul</label>
-                          <input name="cumul" type="text" ng-model="demande_deblocage_daaf.cumul" disabled/>
-                        </md-input-container>  
-                      </span>
-                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.cumul}}</span>
-                    </td>
-
-                    <td>
-                      <span ng-if="demande_deblocage_daaf.$edit">
-                        <md-input-container style="width:100%;display: flex !important;">
-                          <label>Anterieur</label>
+                          <label>&nbsp &nbsp &nbsp &nbsp &nbsp Anterieur &nbsp &nbsp &nbsp &nbsp &nbsp</label>
                           <input name="anterieur" type="text" ng-model="demande_deblocage_daaf.anterieur" disabled/>
                         </md-input-container>  
                       </span>
-                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.anterieur}}</span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{vm.formatMillier(demande_deblocage_daaf.anterieur)}} Ar</span>
                     </td>
 
                     <td>
                       <span ng-if="demande_deblocage_daaf.$edit">
                         <md-input-container style="width:100%;display: flex !important;">
-                          <label>Periode</label>
+                          <label>&nbsp &nbsp &nbsp &nbsp &nbsp Cumul &nbsp &nbsp &nbsp &nbsp &nbsp</label>
+                          <input name="cumul" type="text" ng-model="demande_deblocage_daaf.cumul" disabled/>
+                        </md-input-container>  
+                      </span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{vm.formatMillier(demande_deblocage_daaf.cumul)}} Ar</span>
+                    </td>
+
+                    <td>
+                      <span ng-if="demande_deblocage_daaf.$edit">
+                        <md-input-container style="width:100%;display: flex !important;">
+                          <label>Calendrier de paiement</label>
                           <input name="periode" type="text" ng-model="demande_deblocage_daaf.periode"disabled/>
                         </md-input-container>  
                       </span>
@@ -258,7 +330,7 @@
                           <input name="pourcentage" type="text" ng-model="demande_deblocage_daaf.pourcentage" disabled/>
                         </md-input-container>  
                       </span>
-                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.tranche.pourcentage}}</span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{vm.formatMillier(demande_deblocage_daaf.tranche.pourcentage)}} %</span>
                     </td>
 
                     <td>
@@ -268,7 +340,7 @@
                           <input name="reste" type="text" ng-model="demande_deblocage_daaf.reste" disabled/>
                         </md-input-container>  
                       </span>
-                      <span ng-if="!demande_deblocage_daaf.$edit">{{demande_deblocage_daaf.reste}}</span>
+                      <span ng-if="!demande_deblocage_daaf.$edit">{{vm.formatMillier(demande_deblocage_daaf.reste)}} Ar</span>
                     </td>
 
                     <td>

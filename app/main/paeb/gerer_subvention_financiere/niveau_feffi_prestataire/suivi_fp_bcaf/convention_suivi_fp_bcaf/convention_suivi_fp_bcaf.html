@@ -214,7 +214,7 @@
                          <span>{{convention_entete.ref_financement}}</span>
                       </td>
                       <td>                          
-                        <span>{{convention_entete.montant_total}}</span>
+                        <span>{{vm.formatMillier(convention_entete.montant_total)}} Ar</span>
                       </td>
 
                       <!--td>                          
@@ -290,7 +290,7 @@
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_moe.montant_contrat | number:2}}</span>
+                                  <span>{{vm.formatMillier(contrat_moe.montant_contrat)}} Ar</span>
                                 </td>
                                 <td>                        
                                   <span>{{vm.formatDate(contrat_moe.passation.notification_intention)}}</span>
@@ -433,28 +433,28 @@
                                           <span>{{rubrique_calendrier_paie_moe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_calendrier_paie_moe.pourcentage | number: 2}} %</span>
+                                          <span>{{vm.formatMillier(rubrique_calendrier_paie_moe.pourcentage)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_calendrier_paie_moe.montant_prevu | number: 2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_calendrier_paie_moe.montant_prevu)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_calendrier_paie_moe.pourcentage_periode | number: 2}} %</span>
+                                          <span>{{vm.formatMillier(rubrique_calendrier_paie_moe.pourcentage_periode)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_calendrier_paie_moe.pourcentage_anterieur | number: 2}} %</span>
+                                          <span>{{vm.formatMillier(rubrique_calendrier_paie_moe.pourcentage_anterieur)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_calendrier_paie_moe.pourcentage_cumul | number: 2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_calendrier_paie_moe.pourcentage_cumul)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_calendrier_paie_moe.montant_periode | number: 2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_calendrier_paie_moe.montant_periode)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_calendrier_paie_moe.montant_anterieur | number: 2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_calendrier_paie_moe.montant_anterieur)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_calendrier_paie_moe.montant_cumul | number: 2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_calendrier_paie_moe.montant_cumul)}} Ar</span>
                                         </td>
                                       </tbody>
 
@@ -510,28 +510,28 @@
                                           <span>{{sousrubrique_calendrier_paie_moe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{sousrubrique_calendrier_paie_moe.pourcentage | number: 2}} %</span>
+                                          <span>{{vm.formatMillier(sousrubrique_calendrier_paie_moe.pourcentage)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{sousrubrique_calendrier_paie_moe.montant_prevu | number: 2}}</span>
+                                          <span>{{vm.formatMillier(sousrubrique_calendrier_paie_moe.montant_prevu)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{sousrubrique_calendrier_paie_moe.pourcentage_periode | number: 2}} %</span>
+                                          <span>{{vm.formatMillier(sousrubrique_calendrier_paie_moe.pourcentage_periode)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{sousrubrique_calendrier_paie_moe.pourcentage_anterieur | number: 2}} %</span>
+                                          <span>{{vm.formatMillier(sousrubrique_calendrier_paie_moe.pourcentage_anterieur)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{sousrubrique_calendrier_paie_moe.pourcentage_cumul | number: 2}}</span>
+                                          <span>{{vm.formatMillier(sousrubrique_calendrier_paie_moe.pourcentage_cumul)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{sousrubrique_calendrier_paie_moe.montant_periode | number: 2}}</span>
+                                          <span>{{vm.formatMillier(sousrubrique_calendrier_paie_moe.montant_periode)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{sousrubrique_calendrier_paie_moe.montant_anterieur | number: 2}}</span>
+                                          <span>{{vm.formatMillier(sousrubrique_calendrier_paie_moe.montant_anterieur)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{sousrubrique_calendrier_paie_moe.montant_cumul | number: 2}}</span>
+                                          <span>{{vm.formatMillier(sousrubrique_calendrier_paie_moe.montant_cumul)}} Ar</span>
                                         </td>
                                       </tbody>
                                     </table>
@@ -624,10 +624,10 @@
                                           <span>{{facture_moe_detail.libelle}}</span>
                                         </td> 
                                           <td>                                                      
-                                            <span>{{facture_moe_detail.pourcentage}}</span>
+                                            <span>{{vm.formatMillier(facture_moe_detail.pourcentage)}} %</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{facture_moe_detail.montant_prevu_detail}}</span>
+                                            <span>{{vm.formatMillier(facture_moe_detail.montant_prevu_detail)}} Ar</span>
                                           </td>
                                           <td>
                                             <span ng-if="facture_moe_detail.$edit">
@@ -637,24 +637,24 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!facture_moe_detail.$edit">{{facture_moe_detail.montant_periode}}</span>
+                                            <span ng-if="!facture_moe_detail.$edit">{{vm.formatMillier(facture_moe_detail.montant_periode)}} Ar</span>
                                           </td> 
                                           <td>                                                      
-                                            <span>{{facture_moe_detail.montant_anterieur | number:2}}</span>
+                                            <span>{{vm.formatMillier(facture_moe_detail.montant_anterieur)}} Ar</span>
                                           </td>
                                           
                                           <td>
-                                            <span>{{facture_moe_detail.montant_cumul | number:2}}</span>
+                                            <span>{{vm.formatMillier(facture_moe_detail.montant_cumul)}} Ar</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{facture_moe_detail.pourcentage_periode | number:2}}</span>
+                                            <span>{{vm.formatMillier(facture_moe_detail.pourcentage_periode)}} %</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{facture_moe_detail.pourcentage_anterieur | number:2}}</span>
+                                            <span>{{vm.formatMillier(facture_moe_detail.pourcentage_anterieur)}} %</span>
                                           </td>
 
                                           <td>                                                      
-                                            <span>{{facture_moe_detail.pourcentage_cumul | number:2}}</span>
+                                            <span>{{vm.formatMillier(facture_moe_detail.pourcentage_cumul)}} %</span>
                                           </td>
 
                                           <td>
@@ -871,23 +871,23 @@
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.cout_batiment | number:2}} Ar</span>
+                                  <span>{{vm.formatMillier(contrat_prestataire.cout_batiment)}} Ar</span>
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.cout_latrine | number:2}} Ar</span>
+                                  <span>{{vm.formatMillier(contrat_prestataire.cout_latrine)}} Ar</span>
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.cout_mobilier | number:2}} Ar</span>
+                                  <span>{{vm.formatMillier(contrat_prestataire.cout_mobilier)}} Ar</span>
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.montant_total_ht | number:2}} Ar</span>
+                                  <span>{{vm.formatMillier(contrat_prestataire.montant_total_ht)}} Ar</span>
                                 </td>
                                           
                                 <td>                                            
-                                  <span>{{contrat_prestataire.montant_total_ttc | number:2}} Ar</span>
+                                  <span>{{vm.formatMillier(contrat_prestataire.montant_total_ttc)}} Ar</span>
                                 </td>
 
                                 <td>                         
@@ -975,7 +975,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!avance_demarrage.$edit">{{avance_demarrage.montant_avance}}</span>
+                                            <span ng-if="!avance_demarrage.$edit">{{vm.formatMillier(avance_demarrage.montant_avance)}} Ar</span>
                                           </td> 
                                                     
                                           <td>
@@ -986,7 +986,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!avance_demarrage.$edit">{{avance_demarrage.pourcentage_rabais}}</span>
+                                            <span ng-if="!avance_demarrage.$edit">{{vm.formatMillier(avance_demarrage.pourcentage_rabais)}} %</span>
                                           </td>
                                                     
                                           <td>
@@ -997,7 +997,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!avance_demarrage.$edit">{{avance_demarrage.montant_rabais}}</span>
+                                            <span ng-if="!avance_demarrage.$edit">{{vm.formatMillier(avance_demarrage.montant_rabais)}} Ar</span>
                                           </td>
 
                                         <td>
@@ -1007,7 +1007,7 @@
                                               <input name="net_payer" type="number" ng-model="avance_demarrage.net_payer" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!avance_demarrage.$edit">{{avance_demarrage.net_payer}}</span>
+                                          <span ng-if="!avance_demarrage.$edit">{{vm.formatMillier(avance_demarrage.net_payer}}</span>
                                         </td>
                                                     
                                           <td>                                            
@@ -1120,7 +1120,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!attachement_travaux.$edit">{{attachement_travaux.total_prevu | number:2}}</span>
+                                            <span ng-if="!attachement_travaux.$edit">{{vm.formatMillier(attachement_travaux.total_prevu)}} Ar</span>
                                           </td>
 
                                         <td>
@@ -1130,7 +1130,7 @@
                                               <input name="total_cumul" type="text" ng-model="attachement_travaux.total_cumul" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!attachement_travaux.$edit">{{attachement_travaux.total_cumul | number:2}}</span>
+                                          <span ng-if="!attachement_travaux.$edit">{{vm.formatMillier(attachement_travaux.total_cumul)}} Ar</span>
                                         </td>
 
                                         <td>
@@ -1140,7 +1140,7 @@
                                               <input name="total_anterieur" type="text" ng-model="attachement_travaux.total_anterieur" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!attachement_travaux.$edit">{{attachement_travaux.total_anterieur | number:2}}</span>
+                                          <span ng-if="!attachement_travaux.$edit">{{vm.formatMillier(attachement_travaux.total_anterieur)}} Ar</span>
                                         </td>
 
                                         <td>
@@ -1150,7 +1150,7 @@
                                               <input name="total_periode" type="text" ng-model="attachement_travaux.total_periode"disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!attachement_travaux.$edit">{{attachement_travaux.total_periode | number:2}}</span>
+                                          <span ng-if="!attachement_travaux.$edit">{{vm.formatMillier(attachement_travaux.total_periode)}} Ar</span>
                                         </td>
                                                                        
                                           <td>
@@ -1233,7 +1233,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!demande_batiment_mpe.$edit">{{demande_batiment_mpe.montant | number:2}}</span>
+                                            <span ng-if="!demande_batiment_mpe.$edit">{{vm.formatMillier(demande_batiment_mpe.montant)}} Ar</span>
                                           </td>
 
                                         <td>
@@ -1243,7 +1243,7 @@
                                               <input name="cumul" type="text" ng-model="demande_batiment_mpe.cumul" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!demande_batiment_mpe.$edit">{{demande_batiment_mpe.cumul | number:2}}</span>
+                                          <span ng-if="!demande_batiment_mpe.$edit">{{vm.formatMillier(demande_batiment_mpe.cumul)}} Ar</span>
                                         </td>
 
                                         <td>
@@ -1253,7 +1253,7 @@
                                               <input name="anterieur" type="text" ng-model="demande_batiment_mpe.anterieur" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!demande_batiment_mpe.$edit">{{demande_batiment_mpe.anterieur | number:2}}</span>
+                                          <span ng-if="!demande_batiment_mpe.$edit">{{vm.formatMillier(demande_batiment_mpe.anterieur)}} Ar</span>
                                         </td>
 
                                         <td>
@@ -1273,7 +1273,7 @@
                                               <input name="pourcentage" type="text" ng-model="demande_batiment_mpe.pourcentage" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!demande_batiment_mpe.$edit">{{demande_batiment_mpe.tranche.pourcentage | number:2}}</span>
+                                          <span ng-if="!demande_batiment_mpe.$edit">{{vm.formatMillier(demande_batiment_mpe.tranche.pourcentage)}} %</span>
                                         </td>
 
                                         <td>
@@ -1283,7 +1283,7 @@
                                               <input name="reste" type="text" ng-model="demande_batiment_mpe.reste" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!demande_batiment_mpe.$edit">{{demande_batiment_mpe.reste | number:2}}</span>
+                                          <span ng-if="!demande_batiment_mpe.$edit">{{vm.formatMillier(demande_batiment_mpe.reste)}} Ar</span>
                                         </td>
                                                                        
                                           <td>
@@ -1348,25 +1348,25 @@
                                           <span>{{rubrique_attachement_batiment_mpe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_batiment_mpe.montant_prevu | number:2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_batiment_mpe.montant_prevu)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_batiment_mpe.montant_periode | number:2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_batiment_mpe.montant_periode)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_batiment_mpe.montant_anterieur | number:2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_batiment_mpe.montant_anterieur)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_batiment_mpe.montant_cumul | number:2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_batiment_mpe.montant_cumul)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_batiment_mpe.pourcentage_periode | number:2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_batiment_mpe.pourcentage_periode)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_batiment_mpe.pourcentage_anterieur | number:2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_batiment_mpe.pourcentage_anterieur)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_batiment_mpe.pourcentage | number:2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_batiment_mpe.pourcentage)}} %</span>
                                         </td>
                                       </tbody>
 
@@ -1523,30 +1523,30 @@
                                             <span>{{divers_attachement_batiment_travaux.quantite_cumul}}</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.prix_unitaire | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_batiment_travaux.prix_unitaire)}} Ar</span>
                                           </td>                                          
                                           <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.montant_prevu | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_batiment_travaux.montant_prevu)}} Ar</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.montant_periode | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_batiment_travaux.montant_periode)}} Ar</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.montant_anterieur | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_batiment_travaux.montant_anterieur)}} Ar</span>
                                           </td>
                                           
                                           <td>
-                                            <span>{{divers_attachement_batiment_travaux.montant_cumul | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_batiment_travaux.montant_cumul)}} Ar</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.pourcentage_periode | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_batiment_travaux.pourcentage_periode)}} %</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.pourcentage_anterieur | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_batiment_travaux.pourcentage_anterieur)}} %</span>
                                           </td>
 
                                           <td>                                                      
-                                            <span>{{divers_attachement_batiment_travaux.pourcentage_cumul | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_batiment_travaux.pourcentage_cumul)}} %</span>
                                           </td>
 
                                           <td>
@@ -1627,7 +1627,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!demande_latrine_mpe.$edit">{{demande_latrine_mpe.montant | number:2}}</span>
+                                            <span ng-if="!demande_latrine_mpe.$edit">{{vm.formatMillier(demande_latrine_mpe.montant)}} Ar</span>
                                           </td>
 
                                         <td>
@@ -1637,7 +1637,7 @@
                                               <input name="cumul" type="text" ng-model="demande_latrine_mpe.cumul" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!demande_latrine_mpe.$edit">{{demande_latrine_mpe.cumul | number:2}}</span>
+                                          <span ng-if="!demande_latrine_mpe.$edit">{{vm.formatMillier(demande_latrine_mpe.cumul)}} Ar</span>
                                         </td>
 
                                         <td>
@@ -1647,7 +1647,7 @@
                                               <input name="anterieur" type="text" ng-model="demande_latrine_mpe.anterieur" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!demande_latrine_mpe.$edit">{{demande_latrine_mpe.anterieur | number:2}}</span>
+                                          <span ng-if="!demande_latrine_mpe.$edit">{{vm.formatMillier(demande_latrine_mpe.anterieur)}} Ar</span>
                                         </td>
 
                                         <td>
@@ -1667,7 +1667,7 @@
                                               <input name="pourcentage" type="text" ng-model="demande_latrine_mpe.pourcentage" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!demande_latrine_mpe.$edit">{{demande_latrine_mpe.tranche.pourcentage | number:2}}</span>
+                                          <span ng-if="!demande_latrine_mpe.$edit">{{vm.formatMillier(demande_latrine_mpe.tranche.pourcentage)}} %</span>
                                         </td>
 
                                         <td>
@@ -1677,7 +1677,7 @@
                                               <input name="reste" type="text" ng-model="demande_latrine_mpe.reste" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!demande_latrine_mpe.$edit">{{demande_latrine_mpe.reste | number:2}}</span>
+                                          <span ng-if="!demande_latrine_mpe.$edit">{{vm.formatMillier(demande_latrine_mpe.reste)}} Ar</span>
                                         </td>
                                                                        
                                           <td>
@@ -1742,25 +1742,25 @@
                                           <span>{{rubrique_attachement_latrine_mpe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_latrine_mpe.montant_prevu | number:2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_latrine_mpe.montant_prevu)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_latrine_mpe.montant_periode | number:2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_latrine_mpe.montant_periode)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_latrine_mpe.montant_anterieur | number:2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_latrine_mpe.montant_anterieur)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_latrine_mpe.montant_cumul | number:2}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_latrine_mpe.montant_cumul)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{vm.chiffrevirgule(rubrique_attachement_latrine_mpe.pourcentage_periode)}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_latrine_mpe.pourcentage_periode)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{vm.chiffrevirgule(rubrique_attachement_latrine_mpe.pourcentage_anterieur)}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_latrine_mpe.pourcentage_anterieur)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{vm.chiffrevirgule(rubrique_attachement_latrine_mpe.pourcentage)}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_latrine_mpe.pourcentage)}} %</span>
                                         </td>
                                       </tbody>
 
@@ -1908,30 +1908,30 @@
                                             <span>{{divers_attachement_latrine_travaux.quantite_cumul}}</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.prix_unitaire | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_latrine_travaux.prix_unitaire)}} Ar</span>
                                           </td>                                          
                                           <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.montant_prevu | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_latrine_travaux.montant_prevu)}} Ar</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.montant_periode | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_latrine_travaux.montant_periode)}} Ar</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.montant_anterieur | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_latrine_travaux.montant_anterieur)}} Ar</span>
                                           </td>
                                           
                                           <td>
-                                            <span>{{divers_attachement_latrine_travaux.montant_cumul | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_latrine_travaux.montant_cumul)}} Ar</span>
                                           </td>
 
                                           <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.pourcentage_periode | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_latrine_travaux.pourcentage_periode)}} %</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.pourcentage_anterieur | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_latrine_travaux.pourcentage_anterieur)}} %</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_latrine_travaux.pourcentage_cumul | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_latrine_travaux.pourcentage_cumul)}} %</span>
                                           </td>
 
                                           <td>
@@ -2012,7 +2012,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!demande_mobilier_mpe.$edit">{{demande_mobilier_mpe.montant | number:2}}</span>
+                                            <span ng-if="!demande_mobilier_mpe.$edit">{{vm.formatMillier(demande_mobilier_mpe.montant)}} Ar</span>
                                           </td>
 
                                         <td>
@@ -2022,7 +2022,7 @@
                                               <input name="cumul" type="text" ng-model="demande_mobilier_mpe.cumul" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!demande_mobilier_mpe.$edit">{{demande_mobilier_mpe.cumul | number:2}}</span>
+                                          <span ng-if="!demande_mobilier_mpe.$edit">{{vm.formatMillier(demande_mobilier_mpe.cumul)}} Ar</span>
                                         </td>
 
                                         <td>
@@ -2032,7 +2032,7 @@
                                               <input name="anterieur" type="text" ng-model="demande_mobilier_mpe.anterieur" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!demande_mobilier_mpe.$edit">{{demande_mobilier_mpe.anterieur | number:2}}</span>
+                                          <span ng-if="!demande_mobilier_mpe.$edit">{{vm.formatMillier(demande_mobilier_mpe.anterieur)}} Ar</span>
                                         </td>
 
                                         <td>
@@ -2052,7 +2052,7 @@
                                               <input name="pourcentage" type="text" ng-model="demande_mobilier_mpe.pourcentage" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!demande_mobilier_mpe.$edit">{{demande_mobilier_mpe.tranche.pourcentage | number:2}}</span>
+                                          <span ng-if="!demande_mobilier_mpe.$edit">{{vm.formatMillier(demande_mobilier_mpe.tranche.pourcentage)}} %</span>
                                         </td>
 
                                         <td>
@@ -2062,7 +2062,7 @@
                                               <input name="reste" type="text" ng-model="demande_mobilier_mpe.reste" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!demande_mobilier_mpe.$edit">{{demande_mobilier_mpe.reste | number:2}}</span>
+                                          <span ng-if="!demande_mobilier_mpe.$edit">{{vm.formatMillier(demande_mobilier_mpe.reste)}} Ar</span>
                                         </td>
                                                                        
                                           <td>
@@ -2127,25 +2127,25 @@
                                           <span>{{rubrique_attachement_mobilier_mpe.libelle}}</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_mobilier_mpe.montant_prevu}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_mobilier_mpe.montant_prevu)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_mobilier_mpe.montant_periode}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_mobilier_mpe.montant_periode)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_mobilier_mpe.montant_anterieur}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_mobilier_mpe.montant_anterieur)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{rubrique_attachement_mobilier_mpe.montant_cumul}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_mobilier_mpe.montant_cumul)}} Ar</span>
                                         </td>
                                         <td>
-                                          <span>{{vm.chiffrevirgule(rubrique_attachement_mobilier_mpe.pourcentage_periode)}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_mobilier_mpe.pourcentage_periode)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{vm.chiffrevirgule(rubrique_attachement_mobilier_mpe.pourcentage_anterieur)}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_mobilier_mpe.pourcentage_anterieur)}} %</span>
                                         </td>
                                         <td>
-                                          <span>{{vm.chiffrevirgule(rubrique_attachement_mobilier_mpe.pourcentage)}}</span>
+                                          <span>{{vm.formatMillier(rubrique_attachement_mobilier_mpe.pourcentage)}} %</span>
                                         </td>
                                       </tbody>
 
@@ -2292,30 +2292,30 @@
                                             <span>{{divers_attachement_mobilier_travaux.quantite_cumul}}</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.prix_unitaire | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_mobilier_travaux.prix_unitaire)}} Ar</span>
                                           </td>                                          
                                           <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.montant_prevu | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_mobilier_travaux.montant_prevu)}} Ar</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.montant_periode | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_mobilier_travaux.montant_periode)}} Ar</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.montant_anterieur | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_mobilier_travaux.montant_anterieur)}} Ar</span>
                                           </td>
                                           
                                           <td>
-                                            <span>{{divers_attachement_mobilier_travaux.montant_cumul | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_mobilier_travaux.montant_cumul)}} Ar</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.pourcentage_periode | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_mobilier_travaux.pourcentage_periode)}} %</span>
                                           </td>
                                           <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.pourcentage_anterieur | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_mobilier_travaux.pourcentage_anterieur)}} %</span>
                                           </td>
 
                                           <td>                                                      
-                                            <span>{{divers_attachement_mobilier_travaux.pourcentage_cumul | number:2}}</span>
+                                            <span>{{vm.formatMillier(divers_attachement_mobilier_travaux.pourcentage_cumul)}} %</span>
                                           </td>
 
                                           <td>
@@ -2397,7 +2397,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.facture_mpe.montant_travaux | number:2}}</span>
+                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.formatMillier(vm.facture_mpe.montant_travaux)}} Ar</span>
                                           </td> 
                                         </tr> 
 
@@ -2414,7 +2414,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.facture_mpe.pourcentage_rabais | number:2}}</span>
+                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.formatMillier(vm.facture_mpe.pourcentage_rabais)}} %</span>
                                           </td>
                                         </tr>
                                                                                 
@@ -2431,7 +2431,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.facture_mpe.montant_rabais | number:2}}</span>
+                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.formatMillier(vm.facture_mpe.montant_rabais)}} Ar</span>
                                           </td>
                                         </tr>
                                                                                 
@@ -2448,7 +2448,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.facture_mpe.montant_ht | number:2}}</span>
+                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.formatMillier(vm.facture_mpe.montant_ht)}} Ar</span>
                                           </td>
                                         </tr>
                                                                                 
@@ -2465,7 +2465,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.facture_mpe.montant_ttc | number:2}}</span>
+                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.formatMillier(vm.facture_mpe.montant_ttc)}} Ar</span>
                                           </td>
                                                                                 
                                         <tr>                                                   
@@ -2487,7 +2487,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.facture_mpe.remboursement_acompte | number:2}}</span>
+                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.formatMillier(vm.facture_mpe.remboursement_acompte)}} Ar</span>
                                           </td>
                                         </tr>
                                                                                 
@@ -2504,7 +2504,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.facture_mpe.penalite_retard | number:2}}</span>
+                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.formatMillier(vm.facture_mpe.penalite_retard)}} Ar</span>
                                           </td>
                                         </tr>
                                                                                 
@@ -2521,7 +2521,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.facture_mpe.retenue_garantie | number:2}}</span>
+                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.formatMillier(vm.facture_mpe.retenue_garantie)}} Ar</span>
                                           </td>
                                         </tr>
                                                                                 
@@ -2538,7 +2538,7 @@
                                               </md-input-container>   
                                             </span>
                                                       
-                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.facture_mpe.remboursement_plaque | number:2}}</span>
+                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.formatMillier(vm.facture_mpe.remboursement_plaque)}} Ar</span>
                                           </td>
                                         </tr>
                                                                                 
@@ -2554,7 +2554,7 @@
                                               <input name="net_payer" type="number" ng-model="vm.facture_mpe.net_payer" disabled/>
                                             </md-input-container>  
                                           </span>
-                                          <span ng-if="!vm.facture_mpe.$edit">{{vm.facture_mpe.net_payer | number:2}}</span>
+                                          <span ng-if="!vm.facture_mpe.$edit">{{vm.formatMillier(vm.facture_mpe.net_payer)}} Ar</span>
                                         </td>
                                         </tr>
                                                                                 
@@ -2637,49 +2637,49 @@
                                   <tr>          
                                     
                                     <td><span>Montant travaux</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_travaux_to | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_travaux_ante | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_travaux_pe | number:2}}</span></td>                      
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_travaux_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_travaux_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_travaux_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                   <tr>          
                                     
                                     <td><span>Montant après rabais</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_rabais_to | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_rabais_ante | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_rabais_pe | number:2}}</span></td>                      
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_rabais_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_rabais_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_rabais_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                   <tr>          
                                     
                                     <td><span>Montant HT</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_ht_to | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_ht_ante | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_ht_pe | number:2}}</span></td>                      
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_ht_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_ht_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_ht_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                   <tr>          
                                     
                                     <td><span>TVA</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_tva_to | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_tva_ante | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_tva_pe | number:2}}</span></td>                      
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_tva_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_tva_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_tva_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                   <tr>          
                                     
                                     <td><span>Montant ttc</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_ttc_to | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_ttc_ante | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.montant_ttc_pe | number:2}}</span></td>                      
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_ttc_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_ttc_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.montant_ttc_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                   <tr>          
                                     
                                     <td><span>Acompte sur approvisionnement</span></td>
-                                    <td><span>{{vm.decompte_mpes.net_payer_avanc_to | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.net_payer_avanc_ante | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.net_payer_avanc_pe | number:2}}</span></td>                      
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.net_payer_avanc_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.net_payer_avanc_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.net_payer_avanc_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                   <tr>
@@ -2688,33 +2688,33 @@
                                   <tr>          
                                     
                                     <td><span>Remboursement Acompte sur appro</span></td>
-                                    <td><span>{{vm.decompte_mpes.remboursement_acompte_to | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.remboursement_acompte_ante | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.remboursement_acompte_pe | number:2}}</span></td>                      
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_acompte_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_acompte_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_acompte_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                   <tr>          
                                     
                                     <td><span>Pénalité de retard</span></td>
-                                    <td><span>{{vm.decompte_mpes.penalite_retard_to | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.penalite_retard_ante | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.penalite_retard_pe | number:2}}</span></td>                      
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.penalite_retard_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.penalite_retard_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.penalite_retard_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                   <tr>          
                                     
                                     <td><span>Retenue de garantie (5%)</span></td>
-                                    <td><span>{{vm.decompte_mpes.retenue_garantie_to | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.retenue_garantie_ante | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.retenue_garantie_pe | number:2}}</span></td>                      
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.retenue_garantie_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.retenue_garantie_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.retenue_garantie_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                   <tr>          
                                     
                                     <td><span>Remboursement plaque en marbre</span></td>
-                                    <td><span>{{vm.decompte_mpes.remboursement_plaque_to | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.remboursement_plaque_ante | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.remboursement_plaque_pe | number:2}}</span></td>                      
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_plaque_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_plaque_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_plaque_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                 </tbody>
@@ -2722,9 +2722,9 @@
                                   <tr>          
                                     
                                     <td><span>NET A PAYER</span></td>
-                                    <td><span>{{vm.decompte_mpes.net_payer_to | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.net_payer_ante | number:2}}</span></td>
-                                    <td><span>{{vm.decompte_mpes.net_payer_pe | number:2}}</span></td>                      
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.net_payer_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.net_payer_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.net_payer_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                 </tfoot>

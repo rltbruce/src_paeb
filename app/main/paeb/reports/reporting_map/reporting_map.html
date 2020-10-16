@@ -1,81 +1,52 @@
   <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
 
     <!-- HEADER -->
-    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+    <!--div class="header md-accent-bg" layout="row" layout-align="space-between">
         <div layout="column" layout-align="space-between">
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
                 <span class="parent">Reporting</span>                
             </div>
-
-            <!--div class="title">Note agence d'accompagnement</div-->
         </div>
-    </div>
+    </div-->
     <!-- / HEADER -->
     
     <!-- CONTENT -->
-    <div class="content" layout="column" layout-align="center end">
+    <div class="content" layout="row" layout-align="center end">
 
 
 
       <!-- Convention -->
-      <div class="form-wrapper md-whiteframe-1dp" ng-if="vm.showmap">
+      <div class="form-wrapper md-whiteframe-1dp">
         
-        <!--div style="margin-top: 1px;">
-          <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
+        
+      <div id="forme" >
           <form name="filtreform" class="md-inline-form" novalidate >
-                <br>
-            <div style="margin: 0px 15px 10px 15px;">
-                  <md-input-container flex="100" flex-gt-xs="90">
-                    <label>Région</label>
-                    <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)">
-                      <md-option  value="*">*</md-option>
-                      <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
-                    </md-select>
-                    <div ng-messages="filtreform.region.$error" role="alert">
-                      <div ng-message="required"><span>Région</span></div>
-                    </div>
-                  </md-input-container>
-                                  
-                  <md-input-container flex="100" flex-gt-xs="90">
-                    <label>Cisco</label>
-                    <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
-                      <md-option  value="*">*</md-option>
-                      <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
-                                                  
+                          
+              <div layout="column" layout-gt-xs="row">
+                    <md-input-container>
+                      <label>&nbsp &nbsp &nbsp &nbsp &nbsp Région &nbsp &nbsp &nbsp &nbsp &nbsp</label>
+                      <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)" required>
+                        <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
                       </md-select>
-                      <div ng-messages="filtreform.cisco.$error" role="alert">
-                      <div ng-message="required"><span>Cisco</span></div>
-                    </div>
-                  </md-input-container>
-              </div>  
-              <div class="footer-animate-show-hide">
-                  <md-button class="md-raised boutonfixe" disabled>
-                  </md-button>
-                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
-                                            Réinitialise
-                  </md-button>
-                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
-                                                Recherche
-                  </md-button>
-              </div>
+                      <div ng-messages="filtreform.region.$error" role="alert">
+                        <div ng-message="required"><span>Région</span></div>
+                      </div>
+                    </md-input-container>              
+                  <span style="margin: auto !important;">                    
+                      <md-button type="submit" class="md-raised md-primary" aria-label="Enregistrer" ng-disabled="filtreform.$invalid || vm.affiche_load" ng-click="vm.recherchefiltre(vm.filtre)">
+                                                  Afficher
+                    </md-button>
+                  </span>
+                  <span style="margin: auto !important;">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="38"></md-progress-circular>
+                  </span>
+                </div>
+           
           </form>
-        </div>
-                                   
-        <div class="bouton-animate-show-hide">
-
-          <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()">
-           <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
-           </md-icon>                           
-            <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
-          </md-icon>
-          <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
-          </md-icon>
-          <md-tooltip><span>Bouton filtre</span></md-tooltip>
-          </md-button> 
-        </div>
-      </div-->       
+      </div>  
+      <div>     
           <ui-gmap-google-map center="vm.ecolevueMap.center" zoom="vm.ecolevueMap.zoom" draggable="true" options="options" bounds="" >
             <ui-gmap-polygon ng-repeat="p in vm.polylines" path="p.path" stroke="p.stroke" visible='p.visible'
                   geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" clickable='true' icons='p.icons' events="p.events" fill="p.fill">
@@ -87,6 +58,8 @@
               <!--/ui-gmap-marker-->      
             </ui-gmap-polygon>
         </ui-gmap-google-map>
+        
+      </div>
           
                  
       </div>

@@ -216,7 +216,7 @@
                          <span>{{convention_entete.ref_financement}}</span>
                       </td>
                       <td>                          
-                        <span>{{convention_entete.montant_total}}</span>
+                        <span>{{vm.formatMillier(convention_entete.montant_total)}} Ar</span>
                       </td>
 
                        <td>                          
@@ -276,7 +276,7 @@
                                   <tr ng-repeat="decaiss_fonct_feffi in vm.alldecaiss_fonct_feffi"  ng-class="{selected: decaiss_fonct_feffi.$selected}" ng-click="vm.selectionDecaiss_fonct_feffi(decaiss_fonct_feffi)">
 
                                     <td>                                                
-                                      <span>{{decaiss_fonct_feffi.montant}}</span>
+                                      <span>{{vm.formatMillier(decaiss_fonct_feffi.montant)}} Ar</span>
                                     </td>
 
                                     <td>                          
@@ -295,6 +295,59 @@
                             </div>
                             </md-tab-body>
                           </md-tab>
+
+                    <md-tab ng-disabled="!vm.stepjusti_decais">
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Justification</span>
+                        </span>
+                       
+                      </md-tab-label>                       
+                      
+                      <md-tab-body><br>
+                       <div>        
+                        <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                          <thead>
+                            <tr>
+                              <th class="secondary-text">
+                                <div class="table-header">
+                                  <span class="column-title">Description</span>
+                                </div>
+                              </th>
+                              <th class="secondary-text">
+                                <div class="table-header">
+                                  <span class="column-title">Fichier</span>
+                                </div>
+                              </th>
+                              <th class="secondary-text">
+                                <div class="table-header">
+                                  <span class="column-title">Action</span>
+                                </div>
+                              </th>
+                            </tr>
+                          </thead>
+                                   
+                          <tbody>
+                            <tr ng-repeat="justificatif_decaiss_fonct_feffi in vm.alljustificatif_decaiss_fonct_feffi"  ng-class="{selected: justificatif_decaiss_fonct_feffi.$selected}" ng-click="vm.selectionJustificatif_decaiss_fonct_feffi(justificatif_decaiss_fonct_feffi)">
+                                       
+                              <td>                                          
+                                <span>{{justificatif_decaiss_fonct_feffi.description}}</span>
+                              </td>
+                                        
+                              <td>                                          
+                                <span>{{justificatif_decaiss_fonct_feffi.fichier}}</span>
+                              </td>                      
+                              <td>
+                                <a ng-click="vm.download_decaiss_fonct_feffi(justificatif_decaiss_fonct_feffi)" title="Telecharger">
+                                    <span class="icon-box-download"></span>
+                                </a> 
+                              </td> 
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      </md-tab-body>
+                    </md-tab>
             
           </md-tabs>
         </ms-form-wizard> 

@@ -26,13 +26,6 @@
     <!-- CONTENT -->
     <div class="content" layout="column">
       <div class="form-wrapper md-whiteframe-1dp acc_menu" >
-        <div style="clear:both;"></div>            
-            <div style="float: top !important">
-              <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
-              <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
-                      Chargement,veuillez patienter s'il vous plait ...
-              </div>
-            </div>
 <!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
          <ms-form-wizard flex>
           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="">
@@ -173,6 +166,12 @@
                       </div>
                   </div>
 
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
                         <div>        
                           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                               <thead>
@@ -212,11 +211,11 @@
                                   </td>
 
                                   <td>                          
-                                    <span>{{convention_entete.montant_total}}</span>
+                                    <span>{{vm.formatMillier(convention_entete.montant_total)}} Ar</span>
                                   </td>
 
                                   <td>                          
-                                    <span>{{vm.affichage_avancement_financ(convention_entete.avancement_financ)}}</span>
+                                    <span>{{vm.formatMillier(convention_entete.avancement_financ)}} %</span>
                                   </td>
 
                                   <td>                          
@@ -235,14 +234,7 @@
                   <md-tab ng-disabled="vm.stepMenu_feffi==false" ng-if="vm.session!='ODPFI'">
                     <md-tab-label >
                       <span class="ms-form-wizard-step-label">
-                          
-                          <!--span class="ms-form-wizard-step-number md-accent-bg" style="">
-                            <i class="icon-currency-eur s20"></i>
-                          </span-->
                           <span class="ms-form-wizard-step-text">Suivi financier FEFFI</span>
-                          <span class="ms-form-wizard-step-number md-accent-bg notification" ng-show="vm.nbr_demande_feffi_creer>0">{{+vm.nbr_demande_feffi_creer+ +vm.nbr_decaiss_feffi}}</span>
-                          <span class="ms-form-wizard-step-number md-accent-bg notification" ng-show="vm.nbr_demande_feffi_emidaaf+vm.nbr_demande_feffi_encourdaaf>0">{{+vm.nbr_demande_feffi_emidaaf+ +vm.nbr_demande_feffi_encourdaaf+ +vm.nbr_decaiss_feffi}}</span>
-                          <span class="ms-form-wizard-step-number md-accent-bg notification" ng-show="(vm.nbr_demande_feffi_emidpfi+vm.nbr_demande_feffi_encourdpfi)>0">{{+vm.nbr_demande_feffi_emidpfi+ +vm.nbr_demande_feffi_encourdpfi}}</span>
                       </span>
                      
                     </md-tab-label>
@@ -281,15 +273,15 @@
                                     </td>
 
                                     <td>
-                                      <span>{{demande_realimentation.prevu}}</span>
+                                      <span>{{vm.formatMillier(demande_realimentation.prevu)}} Ar</span>
                                     </td>
 
                                     <td>
-                                      <span>{{demande_realimentation.cumul}}</span>
+                                      <span>{{vm.formatMillier(demande_realimentation.cumul)}} Ar</span>
                                     </td>
 
                                     <td>
-                                      <span>{{demande_realimentation.anterieur}}</span>
+                                      <span>{{vm.formatMillier(demande_realimentation.anterieur)}} Ar</span>
                                     </td>
 
                                     <td>
@@ -297,14 +289,14 @@
                                     </td>
 
                                     <td>
-                                      <span>{{demande_realimentation.tranche.pourcentage}}</span>
+                                      <span>{{vm.formatMillier(demande_realimentation.tranche.pourcentage)}} %</span>
                                     </td>
 
                                     <td>
-                                      <span>{{demande_realimentation.reste}}</span>
+                                      <span>{{vm.formatMillier(demande_realimentation.reste)}} Ar</span>
                                     </td>
                                     <td>
-                                      <span>{{demande_realimentation.compte_feffi.numero_compte}}</span>
+                                      <span>{{demande_realimentation.compte_feffi.nom_banque}}</span>
                                     </td>
                                     <td>
                                       <span>{{demande_realimentation.compte_feffi.numero_compte}}</span>
@@ -357,7 +349,7 @@
                              <tr ng-repeat="piece_justificatif_feffi in vm.allpiece_justificatif_feffi"  ng-class="{selected: piece_justificatif_feffi.$selected}" ng-click="vm.selectionPiece_justificatif_feffi(piece_justificatif_feffi)">
 
                                 <td>
-                                  <span>{{piece_justificatif_feffi.description}}</span>
+                                  <span>{{piece_justificatif_feffi.intitule}}</span>
                                 </td>
 
                                 <td>                                            
@@ -414,15 +406,15 @@
                             <tr ng-repeat="transfert_daaf in vm.alltransfert_daaf"  ng-class="{selected: transfert_daaf.$selected}" ng-click="vm.selectionTransfert_daaf(transfert_daaf)">
                                               
                                     <td>                                                
-                                      <span>{{transfert_daaf.montant_transfert}}</span>
+                                      <span>{{vm.formatMillier(transfert_daaf.montant_transfert)}} Ar</span>
                                     </td>
                                               
                                     <td>                                                
-                                      <span>{{transfert_daaf.frais_bancaire}}</span>
+                                      <span>{{vm.formatMillier(transfert_daaf.frais_bancaire)}} Ar</span>
                                     </td>
                                               
                                     <td>                                                
-                                      <span>{{transfert_daaf.montant_total}}</span>
+                                      <span>{{vm.formatMillier(transfert_daaf.montant_total)}} Ar</span>
                                     </td>
 
                                      <td>                          

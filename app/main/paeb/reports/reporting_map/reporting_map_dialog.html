@@ -2,13 +2,14 @@
 
   <md-dialog ng-cloak aria-label="dialog_type_effort" class="price-table">
       <md-subheader style="background-color: rgb(245,245,245)">
-        <div class="package-type md-accent-fg">{{to_upper(data_dialog.nom)}}</div>
+        <div class="package-type md-accent-fg">{{to_upper(
+                              district_nom)}}</div>
           <!--h2 mat-dialog-title  style="margin:0px">{{data_dialog.nom}}</h2-->
       </md-subheader>
 
       <md-dialog-content>
 
-          <div ng-repeat="reports in data_dialog.reporting">
+          <div ng-repeat="reports in data_dialog">
             <div class="period"><span class="text-bold">Référance convention:</span> {{reports.ref_convention}}</div>
 
             <div class="terms" layout="column" layout-align="start center"style="margin: 0;padding: 0">

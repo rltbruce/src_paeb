@@ -434,13 +434,14 @@
         vm.recherchefiltre = function(filtre)
         {
             var date_debut = convertionDate(filtre.date_debut);
-            var date_fin = convertionDate(filtre.date_fin);
-            
+            var date_fin = convertionDate(filtre.date_fin);            
+
+            vm.affiche_load= true;
             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
             {
                 vm.allconvention_entete = result.data.response;
-                console.log(vm.allconvention_entete);
+                vm.affiche_load= false;
             });
                 console.log(filtre);
         }
@@ -1539,6 +1540,7 @@
              vm.selectedItemRubrique_calendrier_paie_moe.$selected = true;
         });
 
+        
         vm.Total_prevu_rubrique_moe = function()
         {
             var total_prevu = 0;
@@ -1549,7 +1551,23 @@
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            return total_prevu.toFixed(2);
+            var nbr=parseFloat(total_prevu);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
 /************************************************fin rubrique attachement batiment_mpe***************************************************/
@@ -1601,7 +1619,23 @@
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            return total_prevu.toFixed(2);
+            var nbr=parseFloat(total_prevu);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
 /************************************************fin rubrique attachement batiment_mpe***************************************************/
@@ -2087,7 +2121,24 @@
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            return total_prevu.toFixed(2);
+            
+            var nbr=parseFloat(total_prevu);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
 /************************************************fin rubrique attachement batiment_mpe***************************************************/
@@ -2291,7 +2342,24 @@
                     total_prevu += parseFloat(product.montant_prevu);
                 }
             }
-            return total_prevu.toFixed(2);
+             
+            var nbr=parseFloat(total_prevu);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
         }
 
 /************************************************fin rubrique attachement mobilier_mpe***************************************************/
@@ -2742,6 +2810,28 @@
           }
           return affiche;
         };
+
+
+        vm.formatMillier = function (nombre) 
+          {   //var nbr = nombre.toFixed(0);
+            var nbr=parseFloat(nombre);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+          }
  
     }
 })();

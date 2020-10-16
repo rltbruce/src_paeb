@@ -20,6 +20,8 @@
         vm.steptransdaaf=false;
 
         vm.session = '';
+        vm.affiche_load =false;
+        vm.datenow= new Date();
 
 /*******************************Debut initialisation suivi financement feffi******************************/ 
         
@@ -181,11 +183,13 @@
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
+            vm.affiche_load =true;
+
             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufp_avancement_financBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
             {
-                vm.allconvention_entete = result.data.response;
-                console.log(vm.allconvention_entete);
+                vm.allconvention_entete = result.data.response;                
+                vm.affiche_load =false;
             });
                 console.log(filtre);
         }
@@ -266,7 +270,7 @@
                 apiFactory.getAPIgeneraliserREST("piece_justificatif_feffi/index",'id_demande_rea_feffi',item.id,'id_tranche',item.tranche.id).then(function(result)
                 {
                     vm.allpiece_justificatif_feffi = result.data.response;
-                    
+                    console.log(vm.allpiece_justificatif_feffi);
                 });
                
                 apiFactory.getAPIgeneraliserREST("transfert_daaf/index",'menu','gettransferBydemande','id_demande_rea_feffi',item.id).then(function(result)
@@ -521,6 +525,28 @@ console.log(vm.validation_transfert_daaf);
           }
           return affiche;
         };
+
+
+        vm.formatMillier = function (nombre) 
+          {   //var nbr = nombre.toFixed(0);
+            var nbr=parseFloat(nombre);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+          }
  
     }
 })();

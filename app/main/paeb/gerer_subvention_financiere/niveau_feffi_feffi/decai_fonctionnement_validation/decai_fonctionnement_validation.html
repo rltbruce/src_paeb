@@ -215,7 +215,7 @@
                          <span>{{convention_entete.ref_financement}}</span>
                       </td>
                       <td>                          
-                        <span>{{convention_entete.montant_total}}</span>
+                        <span>{{vm.formatMillier(convention_entete.montant_total)}} Ar</span>
                       </td>
 
                        <td>                          
@@ -292,12 +292,12 @@
                                         </md-input-container>   
                                       </span>
                                                 
-                                      <span ng-if="!decaiss_fonct_feffi.$edit">{{decaiss_fonct_feffi.montant}}</span>
+                                      <span ng-if="!decaiss_fonct_feffi.$edit">{{vm.formatMillier(decaiss_fonct_feffi.montant)}} Ar</span>
                                     </td>
 
                                     <td>
                                       <span ng-if="decaiss_fonct_feffi.$edit">
-                                        <md-datepicker ng-model="decaiss_fonct_feffi.date_decaissement" md-placeholder="Date de decaissement" md-max-date="vm.datenow" required>                       
+                                        <md-datepicker ng-model="decaiss_fonct_feffi.date_decaissement" md-placeholder="Date de decaissement" required>                       
                                         </md-datepicker>
                                       </span>                          
                                       <span ng-if="!decaiss_fonct_feffi.$edit">{{vm.formatDate(decaiss_fonct_feffi.date_decaissement)}}</span>
@@ -342,6 +342,95 @@
                           </md-tab>
 
                    <!---------------------------FIN DECAISSEMENT FONCTIONNEMENT FEFFI-------------------------------------->
+
+                   <md-tab ng-disabled="!vm.stepjusti_decais">
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Justification</span>
+                        </span>
+                       
+                      </md-tab-label>                       
+                      
+                      <md-tab-body>
+                        <div style="widht:100%;"> <br>
+                       <div>        
+                        <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                          <thead>
+                            <tr>
+                              <th class="secondary-text">
+                                <div class="table-header">
+                                  <span class="column-title">Description</span>
+                                </div>
+                              </th>
+                              <th class="secondary-text">
+                                <div class="table-header">
+                                  <span class="column-title">Fichier</span>
+                                </div>
+                              </th>
+                              <th class="secondary-text">
+                                <div class="table-header">
+                                  <span class="column-title">Action</span>
+                                </div>
+                              </th>
+                            </tr>
+                          </thead>
+                                   
+                          <tbody>
+                            <tr ng-repeat="justificatif_decaiss_fonct_feffi in vm.alljustificatif_decaiss_fonct_feffi"  ng-class="{selected: justificatif_decaiss_fonct_feffi.$selected}" ng-click="vm.selectionJustificatif_decaiss_fonct_feffi(justificatif_decaiss_fonct_feffi)">
+                                       
+                              <td>
+                                <span ng-if="justificatif_decaiss_fonct_feffi.$edit">
+                                  <md-input-container style="width:100%;display: flex !important;">
+                                    <label>Description</label>
+                                    <input name="description" type="text" ng-model="justificatif_decaiss_fonct_feffi.description"/>
+                                  </md-input-container>   
+                                </span>
+                                          
+                                <span ng-if="!justificatif_decaiss_fonct_feffi.$edit">{{justificatif_decaiss_fonct_feffi.description}}</span>
+                              </td>
+                                        
+                              <td>
+                                <span ng-if="justificatif_decaiss_fonct_feffi.$edit" style="display: inline-block !important;">
+                                  <md-input-container style="width:100%;display: flex !important;">
+                                    <label>Fichier</label>
+                                    <input name="fichier" type="text" ng-model="justificatif_decaiss_fonct_feffi.fichier" disabled/>
+                                  </md-input-container>   
+                                </span>
+
+                                <span ng-if="justificatif_decaiss_fonct_feffi.$edit" style="display: inline-block !important;">
+                                  <md-input-container style="width:100%;display: flex !important;">
+                                    <label>Fichier</label>
+                                  <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFiledecaiss_fonct_feffi"  ng-model="fichier" id="fileid"/>
+                                  </md-input-container>   
+                                </span>
+                                          
+                                <span ng-if="!justificatif_decaiss_fonct_feffi.$edit">{{justificatif_decaiss_fonct_feffi.fichier}}</span>
+                              </td>                       
+                              <td>
+                                <a ng-if="!justificatif_decaiss_fonct_feffi.$edit && vm.validation_decais_fef==0" ng-click="vm.modifierJustificatif_decaiss_fonct_feffi(justificatif_decaiss_fonct_feffi)" title="Modifier">
+                                  <span class="icon-table-edit"></span>
+                                </a>
+                                          
+                                <a ng-if="!justificatif_decaiss_fonct_feffi.$edit && vm.validation_decais_fef==0" ng-click="vm.supprimerJustificatif_decaiss_fonct_feffi(justificatif_decaiss_fonct_feffi)" title="Supprimer">
+                                  <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
+                                </a>
+                                <a ng-if="!justificatif_decaiss_fonct_feffi.$edit" ng-click="vm.download_decaiss_fonct_feffi(justificatif_decaiss_fonct_feffi)" title="Telecharger">
+                                    <span class="icon-box-download"></span>
+                                </a>          
+                                <a ng-if="justificatif_decaiss_fonct_feffi.$edit" ng-click="vm.annulerJustificatif_decaiss_fonct_feffi(justificatif_decaiss_fonct_feffi)" title="Annuler modification">
+                                  <span class="icon-cancel"></span>
+                                </a>
+                                          
+                                <a ng-if="justificatif_decaiss_fonct_feffi.$edit && justificatif_decaiss_fonct_feffi.description && justificatif_decaiss_fonct_feffi.fichier>''" ng-click="vm.ajoutJustificatif_decaiss_fonct_feffi(justificatif_decaiss_fonct_feffi,0)" title="Sauvegarder">
+                                  <span class="icon-content-save"></span>
+                                </a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      </md-tab-body>
+                    </md-tab>
             
           </md-tabs>
         </ms-form-wizard> 

@@ -15,6 +15,7 @@
         vm.allconvention_entete = [] ;
       
         vm.stepDecaiss=false;
+        vm.stepjusti_decais = false;
 
         vm.session = '';
         vm.ciscos=[];
@@ -28,7 +29,11 @@
 
         //initialisation decaissement fonctionnement feffi
         vm.selectedItemDecaiss_fonct_feffi = {} ;
-        vm.alldecaiss_fonct_feffi = [] ;    
+        vm.alldecaiss_fonct_feffi = [] ; 
+
+        vm.selectedItemJustificatif_decaiss_fonct_feffi = {} ;
+        vm.alljustificatif_decaiss_fonct_feffi = [] ;
+        vm.stepjusti_decais = false;    
 
 /*******************************Fin initialisation suivi financement feffi******************************/
 
@@ -234,7 +239,6 @@
               vm.steptransdaaf=false;
               vm.nbr_decaiss_feffi = item.nbr_decaiss_feffi;
               //console.log(vm.nbr_demande_feffi);
-                         
 
         };
         $scope.$watch('vm.selectedItemConvention_entete', function()
@@ -292,6 +296,11 @@
         {
             vm.selectedItemDecaiss_fonct_feffi = item;
             vm.validation_decais_fef=item.validation;
+            apiFactory.getAPIgeneraliserREST("justificatif_decaiss_fonct_feffi/index",'id_decaiss_fonct_feffi',item.id).then(function(result)
+            {
+                vm.alljustificatif_decaiss_fonct_feffi = result.data.response;
+                vm.stepjusti_decais = true;
+            }); 
             
         };
         $scope.$watch('vm.selectedItemDecaiss_fonct_feffi', function()
@@ -307,7 +316,27 @@
                 
 
     /*********************************************Fin justificatif reliquat************************************************/
+      //fonction selection item justificatif decaiss_fonct_feffi
+        vm.selectionJustificatif_decaiss_fonct_feffi= function (item)
+        {
+            vm.selectedItemJustificatif_decaiss_fonct_feffi = item;
+            
+        };
+        $scope.$watch('vm.selectedItemJustificatif_decaiss_fonct_feffi', function()
+        {
+             if (!vm.alljustificatif_decaiss_fonct_feffi) return;
+             vm.alljustificatif_decaiss_fonct_feffi.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemJustificatif_decaiss_fonct_feffi.$selected = true;
+        });
 
+        
+        vm.download_decaiss_fonct_feffi = function(item)
+        {
+            window.location = apiUrlFile+item.fichier ;
+        }
   /******************************************fin maitrise d'oeuvre*******************************************************/
         vm.showAlert = function(titre,content)
         {
@@ -365,6 +394,27 @@
           }
           return affiche;
         };
+        
+        vm.formatMillier = function (nombre) 
+          {   //var nbr = nombre.toFixed(0);
+            var nbr=parseFloat(nombre);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+          }
  
     }
 })();

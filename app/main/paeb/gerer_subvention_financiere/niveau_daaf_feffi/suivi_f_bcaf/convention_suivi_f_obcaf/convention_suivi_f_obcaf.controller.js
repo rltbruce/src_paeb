@@ -79,14 +79,6 @@
         vm.selectedItemJustificatif_feffi = {} ;
         vm.alljustificatif_feffi = [] ;
         vm.myFile={};
-
-        //initialisation decaissement fonctionnement feffi
-        vm.ajoutDecaiss_fonct_feffi = ajoutDecaiss_fonct_feffi;
-        var NouvelItemDecaiss_fonct_feffi=false;
-        var currentItemDecaiss_fonct_feffi;
-        vm.selectedItemDecaiss_fonct_feffi = {} ;
-        vm.alldecaiss_fonct_feffi = [] ;            
-
         vm.nbr_decaiss_feffi=0;     
 
 /*******************************Fin initialisation suivi financement feffi******************************/
@@ -472,9 +464,9 @@
       vm.demande_realimentation_column = [                
         {titre:"Tranche"},
         {titre:"Prévu"},
-        {titre:"Cumul"},
         {titre:"Antérieur"},
-        {titre:"Periode"},
+        {titre:"Cumul"},
+        {titre:"Calendrier de paiement"},
         {titre:"Pourcentage"},
         {titre:"Reste à décaisser"},
         {titre:"Nom banque"},
@@ -1250,236 +1242,6 @@
     /******************************************debut justicatif feffi***********************************************/
 
 
-  /**********************************fin decaissement fonctionnement feffi******************************/
-
-
-        //Masque de saisi ajout
-        vm.ajouterDecaiss_fonct_feffi= function ()
-        { 
-          
-          if (NouvelItemDecaiss_fonct_feffi == false)
-          {
-            var items = {
-              $edit: true,
-              $selected: true,
-              id: '0',
-              montant: '',
-              date_decaissement: '',
-              observation: ''
-            };
-        
-            vm.alldecaiss_fonct_feffi.push(items);
-            vm.alldecaiss_fonct_feffi.forEach(function(mem)
-            {
-              if(mem.$selected==true)
-              {
-                vm.selectedItemDecaiss_fonct_feffi = mem;
-              }
-            });
-
-            NouvelItemDecaiss_fonct_feffi = true ;
-            //vm.showThParcourir = true;
-          }else
-          {
-            vm.showAlert('Ajout decaiss_fonct_feffi','Un formulaire d\'ajout est déjà ouvert!!!');
-          }                
-                      
-        };
-
-        //fonction ajout dans bdd
-        function ajoutDecaiss_fonct_feffi(decaiss_fonct_feffi,suppression)
-        {
-            if (NouvelItemDecaiss_fonct_feffi==false)
-            {
-                test_existanceDecaiss_fonct_feffi (decaiss_fonct_feffi,suppression); 
-            } 
-            else
-            {
-                insert_in_baseDecaiss_fonct_feffi(decaiss_fonct_feffi,suppression);
-            }
-        }
-
-        //fonction de bouton d'annulation decaiss_fonct_feffi
-        vm.annulerDecaiss_fonct_feffi = function(item)
-        {
-          if (NouvelItemDecaiss_fonct_feffi == false)
-          {
-            item.$edit = false;
-            item.$selected = false;
-            item.montant   = currentItemDecaiss_fonct_feffi.montant ;
-            item.date_decaissement   = currentItemDecaiss_fonct_feffi.date_decaissement ;
-            item.observation   = currentItemDecaiss_fonct_feffi.observation ;
-          }else
-          {
-            vm.alldecaiss_fonct_feffi = vm.alldecaiss_fonct_feffi.filter(function(obj)
-            {
-                return obj.id !== vm.selectedItemDecaiss_fonct_feffi.id;
-            });
-          }
-
-          vm.selectedItemDecaiss_fonct_feffi = {} ;
-          NouvelItemDecaiss_fonct_feffi      = false;
-          
-        };
-
-        //fonction selection item justificatif batiment
-        vm.selectionDecaiss_fonct_feffi= function (item)
-        {
-            vm.selectedItemDecaiss_fonct_feffi = item;
-            if (item.$edit==false || item.$edit==undefined)
-            {
-              currentItemDecaiss_fonct_feffi    = JSON.parse(JSON.stringify(vm.selectedItemDecaiss_fonct_feffi));
-            }
-            vm.validation_decais_fef=item.validation;
-            
-        };
-        $scope.$watch('vm.selectedItemDecaiss_fonct_feffi', function()
-        {
-             if (!vm.alldecaiss_fonct_feffi) return;
-             vm.alldecaiss_fonct_feffi.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemDecaiss_fonct_feffi.$selected = true;
-        });
-
-        //fonction masque de saisie modification item feffi
-        vm.modifierDecaiss_fonct_feffi = function(item)
-        {
-            NouvelItemDecaiss_fonct_feffi = false ;
-            vm.selectedItemDecaiss_fonct_feffi = item;
-            currentItemDecaiss_fonct_feffi = angular.copy(vm.selectedItemDecaiss_fonct_feffi);
-            $scope.vm.alldecaiss_fonct_feffi.forEach(function(jus) {
-              jus.$edit = false;
-            });
-
-            item.$edit = true;
-            item.$selected = true;
-            item.montant   = parseFloat(vm.selectedItemDecaiss_fonct_feffi.montant);
-            item.date_decaissement   = new Date(vm.selectedItemDecaiss_fonct_feffi.date_decaissement) ;
-            item.observation   = vm.selectedItemDecaiss_fonct_feffi.observation ;
-        };
-
-        //fonction bouton suppression item decaiss_fonct_feffi
-        vm.supprimerDecaiss_fonct_feffi = function()
-        {
-            var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-              $mdDialog.show(confirm).then(function() {
-                vm.ajoutDecaiss_fonct_feffi(vm.selectedItemDecaiss_fonct_feffi,1);
-              }, function() {
-                //alert('rien');
-              });
-        };
-
-        //function teste s'il existe une modification item feffi
-        function test_existanceDecaiss_fonct_feffi (item,suppression)
-        {          
-            if (suppression!=1)
-            {
-               var mem = vm.alldecaiss_fonct_feffi.filter(function(obj)
-                {
-                   return obj.id == currentItemDecaiss_fonct_feffi.id;
-                });
-                if(mem[0])
-                {
-                   if((mem[0].montant   != currentItemDecaiss_fonct_feffi.montant )
-                    ||(mem[0].date_decaissement   != currentItemDecaiss_fonct_feffi.date_decaissement )
-                    ||(mem[0].observation   != currentItemDecaiss_fonct_feffi.observation ))                   
-                      { 
-                         insert_in_baseDecaiss_fonct_feffi(item,suppression);
-                      }
-                      else
-                      {  
-                        item.$selected = true;
-                        item.$edit = false;
-                      }
-                }
-            } else
-                  insert_in_baseDecaiss_fonct_feffi(item,suppression);
-        }
-
-        //insertion ou mise a jours ou suppression item dans bdd decaiss_fonct_feffi
-        function insert_in_baseDecaiss_fonct_feffi(decaiss_fonct_feffi,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemDecaiss_fonct_feffi==false)
-            {
-                getId = vm.selectedItemDecaiss_fonct_feffi.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,
-                    montant: decaiss_fonct_feffi.montant,
-                    date_decaissement: convertionDate(new Date(decaiss_fonct_feffi.date_decaissement)),
-                    observation: decaiss_fonct_feffi.observation,
-                    id_convention_entete: vm.selectedItemConvention_entete.id,
-                    validation:0               
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("decaiss_fonct_feffi/index",datas, config).success(function (data)
-            {   
-              var conv= vm.allconvention_entete.filter(function(obj)
-                {
-                    return obj.id == decaiss_fonct_feffi.id_convention_entete;
-                });
-
-              if (NouvelItemDecaiss_fonct_feffi == false)
-              {
-                    // Update_paiement or delete: id exclu                 
-                    if(suppression==0)
-                    {                        
-                        vm.selectedItemDecaiss_fonct_feffi.convention_entete = conv[0];
-                        vm.selectedItemDecaiss_fonct_feffi.$selected  = false;
-                        vm.selectedItemDecaiss_fonct_feffi.$edit      = false;
-                        vm.selectedItemDecaiss_fonct_feffi ={};
-                        vm.showbuttonValidation_dec_feffi = false;
-                    }
-                    else 
-                    {    
-                      vm.alldecaiss_fonct_feffi = vm.alldecaiss_fonct_feffi.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemDecaiss_fonct_feffi.id;
-                      });
-                      vm.showbuttonValidation_dec_feffi = false;
-
-              vm.nbr_decaiss_feffi = parseInt(vm.nbr_decaiss_feffi)-1;
-                    }
-              }
-              else
-              {   
-                  decaiss_fonct_feffi.convention_entete = conv[0];
-                  decaiss_fonct_feffi.id  =   String(data.response);              
-                  NouvelItemDecaiss_fonct_feffi = false;
-                  decaiss_fonct_feffi.validation = 0;
-              vm.nbr_decaiss_feffi = parseInt(vm.nbr_decaiss_feffi)+1;
-                                        
-               }
-              
-              decaiss_fonct_feffi.$selected = false;
-              decaiss_fonct_feffi.$edit = false;
-              vm.selectedItemDecaiss_fonct_feffi = {};
-
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
-
-  /**************************************fin decaissement fonctionnement feffi****************************************/
-
         /**************************************Debut transfert reliquat*********************************************/
          vm.transfert_reliquat_column = [        
         {titre:"Montant"
@@ -1597,7 +1359,7 @@
         vm.selectionTransfert_reliquat = function (item)
         {
             vm.selectedItemTransfert_reliquat = item;
-            if(item.$selected==false)
+            if(item.$edit==false || item.$edit==undefined)
             {
               currentItemTransfert_reliquat     = JSON.parse(JSON.stringify(vm.selectedItemTransfert_reliquat));
             }
@@ -2234,6 +1996,26 @@
           }
           return affiche;
         };
+        vm.formatMillier = function (nombre) 
+        {   //var nbr = nombre.toFixed(0);
+          var nbr=parseFloat(nombre);
+          var n = nbr.toFixed(2);
+          var spl= n.split('.');
+          var apre_virgule = spl[1];
+          var avan_virgule = spl[0];
+
+            if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                avan_virgule += '';
+                var sep = ' ';
+                var reg = /(\d+)(\d{3})/;
+                while (reg.test(avan_virgule)) {
+                    avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                }
+                return avan_virgule+","+apre_virgule;
+            } else {
+                return "0,00";
+            }
+        }
  
     }
 })();

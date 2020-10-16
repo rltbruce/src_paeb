@@ -218,7 +218,7 @@
                                   </td>
 
                                   <td>                          
-                                    <span>{{convention_entete.montant_total}}</span>
+                                    <span>{{vm.formatMillier(convention_entete.montant_total)}} Ar</span>
                                   </td>
 
                                   <!--td>                          
@@ -283,44 +283,44 @@
                                  <tr ng-repeat="demande_realimentation in vm.alldemande_realimentation_invalide"  ng-class="{selected: demande_realimentation.$selected}" ng-click="vm.selectionDemande_realimentation(demande_realimentation)">                             
 
                                     <td>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.tranche.libelle}}</span>
+                                      <span>{{demande_realimentation.tranche.libelle}}</span>
                                     </td>
 
                                     <td>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.prevu}}</span>
+                                      <span>{{vm.formatMillier(demande_realimentation.prevu)}} Ar</span>
                                     </td>
 
                                     <td>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.cumul}}</span>
+                                      <span>{{vm.formatMillier(demande_realimentation.anterieur)}} Ar</span>
                                     </td>
 
                                     <td>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.anterieur}}</span>
+                                      <span>{{vm.formatMillier(demande_realimentation.cumul)}} Ar</span>
                                     </td>
 
                                     <td>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.tranche.periode}}</span>
+                                      <span>{{demande_realimentation.tranche.periode}}</span>
                                     </td>
 
                                     <td>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.tranche.pourcentage}}</span>
+                                      <span>{{vm.formatMillier(demande_realimentation.tranche.pourcentage)}} %</span>
                                     </td>
 
                                     <td>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.reste}}</span>
+                                      <span>{vm.formatMillier(demande_realimentation.reste)}} Ar</span>
                                     </td>
                                     <td>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.compte_feffi.numero_compte}}</span>
+                                      <span>{{demande_realimentation.compte_feffi.nom_banque}}</span>
                                     </td>
                                     <td>
-                                      <span ng-if="!demande_realimentation.$edit">{{demande_realimentation.compte_feffi.numero_compte}}</span>
+                                      <span>{{demande_realimentation.compte_feffi.numero_compte}}</span>
                                     </td>
 
                                     <td>
-                                      <span ng-if="!demande_realimentation.$edit">{{vm.formatDate(demande_realimentation.date)}}</span>
+                                      <span>{{vm.formatDate(demande_realimentation.date)}}</span>
                                     </td>
                                     <td>
-                                      <span >{{vm.situationdemande(demande_realimentation.validation)}}</span>
+                                      <span>{{vm.situationdemande(demande_realimentation.validation)}}</span>
                                     </td>
                                   </tr>
                                 </tbody>
@@ -427,7 +427,7 @@
                                         </md-input-container>   
                                       </span>
                                                 
-                                      <span ng-if="!transfert_ufp.$edit">{{transfert_ufp.montant_transfert}}</span>
+                                      <span ng-if="!transfert_ufp.$edit">{{vm.formatMillier(transfert_ufp.montant_transfert)}} Ar</span>
                                     </td>
                                               
                                     <td>
@@ -438,7 +438,7 @@
                                         </md-input-container>   
                                       </span>
                                                 
-                                      <span ng-if="!transfert_ufp.$edit">{{transfert_ufp.frais_bancaire}}</span>
+                                      <span ng-if="!transfert_ufp.$edit">{{vm.formatMillier(transfert_ufp.frais_bancaire)}} Ar</span>
                                     </td>
                                               
                                     <td>
@@ -449,7 +449,7 @@
                                         </md-input-container>   
                                       </span>
                                                 
-                                      <span ng-if="!transfert_ufp.$edit">{{transfert_ufp.montant_total}}</span>
+                                      <span ng-if="!transfert_ufp.$edit">{{vm.formatMillier(transfert_ufp.montant_total)}} Ar</span>
                                     </td>
 
                                      <td>

@@ -119,15 +119,15 @@
                     </td>
 
                     <td>                          
-                      <span >{{convention_ufp_daaf_entete.montant_trans_comm}}</span>
+                      <span >{{vm.formatMillier(convention_ufp_daaf_entete.montant_trans_comm)}} Ar</span>
                     </td>
 
                     <td>         
-                      <span>{{convention_ufp_daaf_entete.frais_bancaire}}</span>
+                      <span>{{vm.formatMillier(convention_ufp_daaf_entete.frais_bancaire)}} Ar</span>
                     </td>                
 
                     <td>                                    
-                      <span>{{convention_ufp_daaf_entete.montant_convention}}</span>
+                      <span>{{vm.formatMillier(convention_ufp_daaf_entete.montant_convention)}} Ar</span>
                     </td>                
 
                     <td>                                    
@@ -171,9 +171,78 @@
               <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                 <thead>
                   <tr>
-                    <th class="secondary-text" ng-repeat="cisc in ::vm.demande_deblocage_daaf_validation_ufp_column">
+                    
+                    
+                    <th class="secondary-text">
                       <div class="table-header">
-                        <span class="column-title">{{cisc.titre}}</span>
+                        <span class="column-title">Réference demande
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">&nbsp &nbsp &nbsp &nbsp &nbsp Objet &nbsp &nbsp &nbsp &nbsp &nbsp
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">&nbsp &nbsp &nbsp &nbsp &nbsp Tranche &nbsp &nbsp &nbsp &nbsp &nbsp
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">&nbsp &nbsp &nbsp &nbsp &nbsp Période &nbsp &nbsp &nbsp &nbsp &nbsp
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">&nbsp &nbsp &nbsp &nbsp &nbsp Antérieur &nbsp &nbsp &nbsp &nbsp &nbsp
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">&nbsp &nbsp &nbsp &nbsp &nbsp Cumul &nbsp &nbsp &nbsp &nbsp &nbsp
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">Calendrier de paiement
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">Pourcentage
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">Reste à décaisser
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">Libelle compte banqueire
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">&nbsp &nbsp &nbsp &nbsp &nbsp Date &nbsp &nbsp &nbsp &nbsp &nbsp
+                        </span>
+                      </div>
+                    </th>
+                    <th class="secondary-text">
+                      <div class="table-header">
+                        <span class="column-title">Action
+                        </span>
                       </div>
                     </th>
                   </tr>
@@ -194,15 +263,15 @@
                     </td>
 
                     <td>
-                      <span >{{demande_deblocage_daaf_validation_ufp.prevu}}</span>
+                      <span >{{vm.formatMillier(demande_deblocage_daaf_validation_ufp.prevu)}} Ar</span>
                     </td>
 
                     <td>
-                      <span >{{demande_deblocage_daaf_validation_ufp.cumul}}</span>
+                      <span >{{vm.formatMillier(demande_deblocage_daaf_validation_ufp.anterieur)}} Ar</span>
                     </td>
 
                     <td>
-                      <span >{{demande_deblocage_daaf_validation_ufp.anterieur}}</span>
+                      <span >{{vm.formatMillier(demande_deblocage_daaf_validation_ufp.cumul)}} Ar</span>
                     </td>
 
                     <td>
@@ -210,7 +279,7 @@
                     </td>
 
                     <td>
-                      <span >{{demande_deblocage_daaf_validation_ufp.tranche.pourcentage}}</span>
+                      <span >{{vm.formatMillier(demande_deblocage_daaf_validation_ufp.tranche.pourcentage)}} %</span>
                     </td>
 
                     <td>
@@ -325,7 +394,7 @@
                           </md-input-container>   
                         </span>
                                   
-                        <span ng-if="!transfert_ufp.$edit">{{transfert_ufp.montant_transfert}}</span>
+                        <span ng-if="!transfert_ufp.$edit">{{vm.formatMillier(transfert_ufp.montant_transfert)}} Ar</span>
                       </td>
                                 
                       <td>
@@ -336,7 +405,7 @@
                           </md-input-container>   
                         </span>
                                   
-                        <span ng-if="!transfert_ufp.$edit">{{transfert_ufp.frais_bancaire}}</span>
+                        <span ng-if="!transfert_ufp.$edit">{{vm.formatMillier(transfert_ufp.frais_bancaire)}} Ar</span>
                       </td>
                                 
                       <td>
@@ -347,7 +416,7 @@
                           </md-input-container>   
                         </span>
                                   
-                        <span ng-if="!transfert_ufp.$edit">{{transfert_ufp.montant_total}}</span>
+                        <span ng-if="!transfert_ufp.$edit">{{vm.formatMillier(transfert_ufp.montant_total)}} Ar</span>
                       </td>
 
                        <td>

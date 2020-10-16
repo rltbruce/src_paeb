@@ -118,11 +118,11 @@
                     </td>
                     
                     <td>                         
-                      <span>{{convention_ufp_daaf_entete.montant_trans_comm}}</span>
+                      <span>{{vm.formatMillier(convention_ufp_daaf_entete.montant_trans_comm)}} Ar</span>
                     </td>
                               
                     <td>
-                      <span>{{convention_ufp_daaf_entete.frais_bancaire}}</span>
+                      <span>{{vm.formatMillier(convention_ufp_daaf_entete.frais_bancaire)}} Ar</span>
                     </td>
 
                      <td>
@@ -131,12 +131,12 @@
 
                      <td>
                                 
-                      <span>{{convention_ufp_daaf_entete.montant_convention}}</span>
+                      <span>{{vm.formatMillier(convention_ufp_daaf_entete.montant_convention)}} Ar</span>
                     </td>
 
                      <td>
                                 
-                      <span>{{vm.affichage_avancement_physi(convention_ufp_daaf_entete.avancement_physi)}}</span>
+                      <span>{{vm.formatMillier(convention_ufp_daaf_entete.avancement_physi)}} %</span>
                     </td>
                   </tr>
                 </tbody>
@@ -319,11 +319,11 @@
                         </td>
 
                         <td>                          
-                          <span>{{convention_cisco_feffi_entete.montant_total}}</span>
+                          <span>{{vm.formatMillier(convention_cisco_feffi_entete.montant_total)}} Ar</span>
                         </td>
 
                         <td>                          
-                          <span>{{convention_cisco_feffi_entete.avancement}} %</span>
+                          <span>{{vm.formatMillier(convention_cisco_feffi_entete.avancement)}} %</span>
                         </td>
 
                         <td>                          
