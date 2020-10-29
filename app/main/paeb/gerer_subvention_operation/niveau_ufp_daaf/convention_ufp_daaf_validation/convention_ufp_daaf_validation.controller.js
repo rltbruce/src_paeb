@@ -200,13 +200,7 @@
                     vm.showbuttonNouvDetail = false;
                   } 
                   ////console.log(result.data.response);                 
-              });
-
-              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'id_convention_ufpdaaf',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
-              {
-                  vm.allconvention_cisco_feffi_entete = result.data.response; 
-                  //console.log(vm.allconvention_cisco_feffi_entete);                
-              });
+              });              
 
               vm.stepOne           = true;
               vm.stepTwo           = false;
@@ -699,6 +693,17 @@
 
 
   /*****************Debut StepTwo convention***************/
+
+      vm.click_step_convention_cisco_feffi = function()
+      {   
+          vm.affiche_load = true;
+          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'id_convention_ufpdaaf',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
+              {
+                  vm.allconvention_cisco_feffi_entete = result.data.response; 
+              vm.affiche_load = false; 
+                  //console.log(vm.allconvention_cisco_feffi_entete);                
+              });
+      }
 
         //col table
         vm.convention_cisco_feffi_entete_column = [

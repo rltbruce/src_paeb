@@ -134,9 +134,9 @@
          apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
               vm.roles = result.data.response.roles;
-              switch (vm.roles[0])
-                {
-                  case 'OBCAF': 
+              var utilisateur = result.data.response;
+            if (utilisateur.roles.indexOf("OBCAF")!= -1)
+            { 
                             vm.usercisco = result.data.response.cisco;
                             apiFactory.getAPIgeneraliserREST("region/index","menu","getregionbycisco",'id_cisco',vm.usercisco.id).then(function(result)
                             {
@@ -147,20 +147,17 @@
                             vm.showbuttonNeauveaudemandefeffi=true;                            
                             vm.session = 'OBCAF';
 
-                      break;
-
-                  case 'ADMIN':                            
+            }
+            else
+            {                           
                             vm.showbuttonNeauveaudemandefeffi=true;
                              apiFactory.getAll("region/index").then(function success(response)
                             {
                               vm.regions = response.data.response;
                             }, function error(response){ alert('something went wrong')});
-                            vm.session = 'ADMIN';                  
-                      break;
-                  default:
-                      break;
+                            vm.session = 'ADMIN'; 
               
-                }                  
+            }                  
 
          });
 

@@ -4,7 +4,7 @@
 
     angular
         .module('app.paeb.ddb.tranche_demande', [
-            'app.paeb.ddb.tranche_demande.tranche_d_debut_travaux_pr',
+            //'app.paeb.ddb.tranche_demande.tranche_d_debut_travaux_pr',
             'app.paeb.ddb.tranche_demande.tranche_deblocage_daaf',
             'app.paeb.ddb.tranche_demande.tranche_deblocage_feffi',
             //'app.paeb.ddb.tranche_demande.tranche_moe',

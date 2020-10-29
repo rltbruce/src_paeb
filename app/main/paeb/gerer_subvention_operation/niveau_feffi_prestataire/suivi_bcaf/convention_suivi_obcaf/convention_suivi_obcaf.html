@@ -2815,7 +2815,15 @@
                               <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_passation_moe()" style="width:10%;" ng-show="vm.showbuttonimporter_passation_moe">
                                     Importer
                             </md-button>
-                          </div><br>
+                          </div>
+                              
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>
                           <div ng-show="vm.showformimporter_passation_moe">
                             <form name="formimporter_passation_moe" class="md-inline-form" novalidate >
                                   <br>
@@ -3009,7 +3017,7 @@
 
                       </md-tab-body>
                     </md-tab>
-                    <md-tab ng-click="vm.step_contrat_moe()">
+                    <md-tab ng-click="vm.step_contrat_moe()" ng-disabled="!vm.step_contrat_moe_onglet">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
@@ -3029,7 +3037,16 @@
                               <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_moe()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_moe">
                                     Importer
                             </md-button>
-                          </div><br>
+                          </div>
+
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>
+
                           <div ng-show="vm.showformimporter_contrat_moe">
                             <form name="formimporter_contrat_moe" class="md-inline-form" novalidate >
                                   <br>
@@ -3194,7 +3211,15 @@
                                  
                                 </md-tab-label>
                                 
-                                <md-tab-body><br>                                   
+                                <md-tab-body>
+                              
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>                                   
                                    <div>        
                                     <table class="dataTable row-border hover cell-border" dt-options="vm.dtOptions" ms-responsive-table><br>
                                       <thead>
@@ -3242,7 +3267,15 @@
                                  
                                 </md-tab-label>
                                 
-                                <md-tab-body><br>                                   
+                                <md-tab-body>
+                              
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>                                   
                                    <div>        
                                     <table class="dataTable row-border hover cell-border" dt-options="vm.dtOptions" ms-responsive-table><br>
                                       <thead>
@@ -3292,7 +3325,15 @@
                                  
                                 </md-tab-label>
                                 
-                                <md-tab-body><br>                                   
+                                <md-tab-body>
+                              
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>                                   
                                    <div>        
                                     <table class="dataTable row-border hover cell-border" dt-options="vm.dtOptions" ms-responsive-table><br>
                                       <thead>
@@ -3368,7 +3409,15 @@
                               <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_memoire_technique()" style="width:10%;" ng-show="vm.showbuttonimporter_memoire_technique">
                                     Importer
                             </md-button>
-                          </div><br>
+                          </div>
+                              
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>
                           <div ng-show="vm.showformimporter_memoire_technique">
                             <form name="formimporter_memoire_technique" class="md-inline-form" novalidate >
                                   <br>
@@ -3509,7 +3558,15 @@
                                           <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_appel_offre()" style="width:10%;" ng-show="vm.showbuttonimporter_appel_offre">
                                                 Importer
                                         </md-button>
-                                      </div><br>
+                                      </div>
+                              
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>
                                       <div ng-show="vm.showformimporter_appel_offre">
                                         <form name="formimporter_appel_offre" class="md-inline-form" novalidate >
                                               <br>
@@ -3681,6 +3738,15 @@
                                         </form>
                                         <md-divider></md-divider><br>
                                       </div>
+
+                              
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
                                    <div>        
                                     <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                       <thead>
@@ -3833,6 +3899,15 @@
                                         </form>
                                         <md-divider></md-divider><br>
                                       </div>
+                                      
+                              
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
                                      <div>        
                                       <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                         <thead>
@@ -3966,6 +4041,14 @@
                                         </form>
                                         <md-divider></md-divider><br>
                                       </div>
+                              
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
                                <div>        
                                 <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                   <thead>
@@ -4076,6 +4159,14 @@
                                       Nouveau
                                     </md-button><br>
                                 </div>
+
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>   
                                <div>        
                                 <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                   <thead>
@@ -4163,7 +4254,15 @@
                           </span>
                         </md-tab-label>
                         
-                        <md-tab-body><br>
+                        <md-tab-body>
+
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>
                          <div>        
                           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                             <thead>
@@ -4359,6 +4458,14 @@
                             </form>
                             <md-divider></md-divider><br>
                           </div>
+
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
                          <div>        
                           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                             <thead>
@@ -4459,7 +4566,7 @@
                                     <md-datepicker ng-model="passation_marches.date_signature_contrat" md-placeholder="Date de signature" md-min-date="passation_marches.date_notification_attribution" md-max-date="vm.datenow" required ng-disabled="!passation_marches.date_notification_attribution">                       
                                     </md-datepicker>
                                   </span>                          
-                                  <span ng-if="!passation_marches.$edit">{{vm.formatDate(passation_marches.date_notification_attribution)}}</span>
+                                  <span ng-if="!passation_marches.$edit">{{vm.formatDate(passation_marches.date_signature_contrat)}}</span>
                                 </td>
 
                                 <td>
@@ -4646,7 +4753,15 @@
                               <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_mpe()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_mpe">
                                     Importer
                             </md-button>
-                          </div><br>
+                          </div>
+
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>
                           <div ng-show="vm.showformimporter_contrat_mpe">
                             <form name="formimporter_contrat_mpe" class="md-inline-form" novalidate >
                                   <br>
@@ -4834,7 +4949,7 @@
                         <md-tab-body>
                           <ms-form-wizard flex id="sousmenu"> 
                           <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu" class="kendogrid"--> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" class="kendogrid">
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" class="kendogrid" id="acc_sous_menu">
                           <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
                               <md-tab ng-click="vm.click_rubrique_attachement_batiment_mpe()">
                                 <md-tab-label>
@@ -4845,7 +4960,15 @@
                                  
                                 </md-tab-label>
                                 
-                                <md-tab-body><br>                                   
+                                <md-tab-body>
+
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>                                   
                                    <div>        
                                     <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                       <thead>
@@ -4897,7 +5020,15 @@
                                  
                                 </md-tab-label>
                                 
-                                <md-tab-body><br>                                   
+                                <md-tab-body>
+
+                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>                                   
                                    <div>        
                                     <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                       <thead>
@@ -4992,7 +5123,7 @@
                         <!------------------------Debut attachement batiment prevu------------------------------>  
 
                         <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
-                              <md-tab ng-click="vm.click_rubrique_attachement_latrine_mpe()" ng-disabled="!vm.steprubriquetachement_latrine">
+                              <md-tab ng-click="vm.click_rubrique_attachement_latrine_mpe()" ng-disabled="!vm.steprubriquetachement_latrine" >
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">                        
                                       
@@ -5001,7 +5132,14 @@
                                  
                                 </md-tab-label>
                                 
-                                <md-tab-body><br>                                   
+                                <md-tab-body>
+                                  <div style="clear:both;"></div>            
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>                                   
                                    <div>        
                                     <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                       <thead>
@@ -5052,7 +5190,13 @@
                                  
                                 </md-tab-label>
                                 
-                                <md-tab-body><br>                                   
+                                <md-tab-body>
+                                  <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>                                   
                                    <div>        
                                     <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                       <thead>
@@ -5155,7 +5299,13 @@
                                  
                                 </md-tab-label>
                                 
-                                <md-tab-body><br>                                   
+                                <md-tab-body>
+                                 <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>                                   
                                    <div>        
                                     <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                       <thead>
@@ -5206,7 +5356,13 @@
                                  
                                 </md-tab-label>
                                 
-                                <md-tab-body><br>                                   
+                                <md-tab-body>
+                                  <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>                                   
                                    <div>        
                                     <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                       <thead>
@@ -5333,6 +5489,12 @@
                                           Nouveau
                                         </md-button><br>
                                     </div>
+                                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
                                    <div>        
                                     <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                       <thead>
@@ -5509,6 +5671,12 @@
                                           Nouveau
                                         </md-button><br>
                                     </div>
+                                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
                                       <div>        
                                       <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                         <thead>
@@ -5653,6 +5821,12 @@
                                       Nouveau
                                     </md-button><br>
                                 </div>
+                                <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
                                <div>        
                                 <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                   <thead>
@@ -5784,7 +5958,13 @@
                           </span>
                         </md-tab-label>
                         
-                        <md-tab-body><br>
+                        <md-tab-body>
+                          <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>
                          <div>        
                           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                             <thead>
@@ -5931,9 +6111,14 @@
                 <div style="widht:100%;">  
                               <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterIndicateur()" style="width:10%;" ng-disabled="!vm.showbuttonNouvIndicateur">
                                 Nouveau
-                              </md-button><br>
+                              </md-button>
                           </div>
-
+<div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div><br>
                           <div>        
                             <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                               <thead>

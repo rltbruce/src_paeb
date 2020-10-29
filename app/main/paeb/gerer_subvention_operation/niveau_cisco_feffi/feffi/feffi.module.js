@@ -12,7 +12,7 @@ var vs;
     {
         // State
         $stateProvider.state('app.paeb_gerer_subvention_operation_niveau_cisco_feffi_feffi', {
-            url      : '/donnees-de-base/feffi',
+            url      : '/donnees-de-base/gerer_subvention_operation/niveau_cisco_feffi/feffi',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_cisco_feffi/feffi/feffi.html',
@@ -22,8 +22,8 @@ var vs;
             bodyClass: 'feffi',
             data : {
               authorizer : true,
-              permitted : ["ACC","ADMIN"],
-              page: "feffi"
+              permitted : ["AAC","ADMIN"],
+              page: "FEFFI"
             }
         });
 

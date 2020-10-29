@@ -151,112 +151,86 @@
             z-index: 8;
             }
         }
-
-        #acc_sous_menu
-        {
-            md-tabs-wrapper
+ #acc_sous_menu
+        {          
+            
+           /* .md-tab:first-child
             {
-                height:48px !important;
-                //background-color: rgb(56,110,148) !important ; 
-              // background-color: rgba(30,128,174,1) !important ; 
-               //background-color: rgb(71,91,120) !important ; 
-                background-image: url('/assets/images/backgrounds/header-bg.png');      
-               background-color: rgb(59,88,130) !important ;
-               background-size: cover;
-               md-icon.md-default-theme, md-icon {
-                    color: rgba(1,161,245,0.5) !important;
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(124,179,66) !important;
                 }
-
-            }
-
-            md-tabs-canvas
+            } */
+            .md-tab:nth-child(2)
             {
-                height:48px !important;
-                background-color: transparent !important;
-            
-
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(124,179,66) !important;
+                }
             }
-            
-            md-pagination-wrapper
+            .md-tab:nth-child(3)
             {
-               height:48px !important;
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(124,179,66) !important;
+                }
             }
-            .ms-form-wizard md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item
-            {    
-              
-            }
-            md-tab-item.md-tab.ng-scope.ng-isolate-scope.md-ink-ripple.md-active
-            {        
-               
-               // background-color: rgba(63,183,248,1) !important;
-               background-color: rgba(0,0,51,0.3) !important;
-                border-bottom: none !important;
-
-            }
-            md-tab-item.md-tab.ng-scope.ng-isolate-scope.md-ink-ripple.md-disabled {
-                
-                   opacity: 0.5 !important;
-                   .notification {
-                   background-color: rgb(89,89,89) !important;
-                   }
-
-            }
-
-         
-            md-tab-item
+            .md-tab:nth-child(4)
             {
-                color: rgba(230,232,236,1) !important;
-                font-weight:none !important;
-            
-                padding:12px 24px 12px 24px !important;
-                font-size: 13px;
-
-           
-            }
-            
-            .ms-form-wizard-step-label 
-            { 
-                background: transparent !important;
-                width: 160px !important;
-                text-align: center !important;
-                margin:auto !important;
-            }
-            .ms-form-wizard .ms-form-wizard-step-label .ms-form-wizard-step-number.notification {
-
-            width: 16px !important;
-            height: 16px !important;
-            line-height: 17px !important;
-            font-size: 11px !important;
-            margin-right: 12px !important;
-    
-            color: #FFFFFF !important;
-            background: rgb(170,0,0) !important;
-         
-        }
-           
-            .ms-form-wizard md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item:after
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(124,179,66) !important;
+                }
+            } 
+            .md-tab:nth-child(5)
+            {                
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(33,150,243) !important;
+                }
+            } 
+            .md-tab:nth-child(6)
+            {                
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(33,150,243) !important;
+                }
+            } 
+            .md-tab:nth-child(7)
+            {                
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(33,150,243) !important;
+                }
+            } 
+            .md-tab:nth-child(8)
             {
-                content: '';
-                display: block;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                right: 0;
-                border-bottom: 1px solid transparent !important;
-                z-index: 8;
-            }
-
-            .ms-form-wizard md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item:before
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(0,150,136) !important;
+                }
+            } 
+            .md-tab:nth-child(8)
             {
-            content: '';
-            display: block;
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 50%;
-            border-bottom: 1px solid transparent !important;
-            z-index: 8;
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(0,150,136) !important;
+                }
+            } 
+            .md-tab:nth-child(9)
+            {
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(0,150,136) !important;
+                }
             }
+            .md-tab:nth-child(10)
+            {
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(0,150,136) !important;
+                }
+            } 
         }
 
         .form-wrapper {

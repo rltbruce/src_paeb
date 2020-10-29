@@ -149,21 +149,16 @@
          apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
               vm.roles = result.data.response.roles;
-              switch (vm.roles[0])
-                {
-                  case 'DPFI':
+              var utilisateur = result.data.response;
+            if (utilisateur.roles.indexOf("DPFI")!= -1)
+            {
                             
-                            vm.session = 'DPFI';
-                      
-                      break;
-
-                  case 'ADMIN':
-                            vm.session = 'ADMIN';                  
-                      break;
-                  default:
-                      break;
+                vm.session = 'DPFI';
+            }else
+            {
+                vm.session = 'ADMIN'; 
               
-                }                  
+            }                  
 
          });
 

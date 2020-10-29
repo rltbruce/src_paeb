@@ -174,6 +174,88 @@
         }
 
         #acc_sous_menu
+        {          
+            
+           /* .md-tab:first-child
+            {
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(124,179,66) !important;
+                }
+            } */
+            .md-tab:nth-child(2)
+            {
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(124,179,66) !important;
+                }
+            }
+            .md-tab:nth-child(3)
+            {
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(124,179,66) !important;
+                }
+            }
+            .md-tab:nth-child(4)
+            {
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(124,179,66) !important;
+                }
+            } 
+            .md-tab:nth-child(5)
+            {                
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(33,150,243) !important;
+                }
+            } 
+            .md-tab:nth-child(6)
+            {                
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(33,150,243) !important;
+                }
+            } 
+            .md-tab:nth-child(7)
+            {                
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(33,150,243) !important;
+                }
+            } 
+            .md-tab:nth-child(8)
+            {
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(0,150,136) !important;
+                }
+            } 
+            .md-tab:nth-child(8)
+            {
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(0,150,136) !important;
+                }
+            } 
+            .md-tab:nth-child(9)
+            {
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(0,150,136) !important;
+                }
+            }
+            .md-tab:nth-child(10)
+            {
+                .ms-form-wizard-step-label 
+                { 
+                    color: rgb(0,150,136) !important;
+                }
+            } 
+        }
+
+       /* #acc_sous_menu
         {
             md-tabs-wrapper
             {
@@ -278,7 +360,7 @@
             border-bottom: 1px solid transparent !important;
             z-index: 8;
             }
-        }
+        }*/
 
         .form-wrapper {
 

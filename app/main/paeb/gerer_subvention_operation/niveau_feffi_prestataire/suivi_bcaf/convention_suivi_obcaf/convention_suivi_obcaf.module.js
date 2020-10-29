@@ -12,7 +12,7 @@
     {
         // State
         $stateProvider.state('app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_suivi_bcaf_convention_suivi_obcaf', {
-            url      : '/donnees-de-base/convention_suivi_obcaf',
+            url      : '/donnees-de-base/gerer_subvention_operation/niveau_feffi_prestataire/suivi_bcaf/convention_suivi_obcaf',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_feffi_prestataire/suivi_bcaf/convention_suivi_obcaf/convention_suivi_obcaf.html',
@@ -54,7 +54,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["ACC","ADMIN"];
+                var permissions = ["AAC","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

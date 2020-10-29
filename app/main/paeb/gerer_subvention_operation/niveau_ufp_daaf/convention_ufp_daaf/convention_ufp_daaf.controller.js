@@ -10,7 +10,7 @@
     function Convention_ufp_daafController($mdDialog, $scope, apiFactory, $state,$cookieStore,loginService,$timeout)
     {
 		    var vm = this;
-        vm.affiche_load = false;
+        vm.affiche_load = true;
     //initialisation convetion ufp/daaf entete 
         vm.ajoutConvention_ufp_daaf_entete = ajoutConvention_ufp_daaf_entete ;
         var NouvelItemConvention_ufp_daaf_entete = false;
@@ -112,6 +112,8 @@
         apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_creerinvalide_now","annee",annee).then(function(result)
         {
             vm.allconvention_ufp_daaf_entete = result.data.response;
+
+          vm.affiche_load = false;
         });
 
         vm.recherchefiltre = function(filtre)
@@ -405,11 +407,13 @@
                 }
                 else
                 {
-                  convention_ufp_daaf_entete.id = String(data.response);              
+                  convention_ufp_daaf_entete.id = String(data.response); 
+                  convention_ufp_daaf_entete.validation = validation;              
                   NouvelItemConvention_ufp_daaf_entete = false;
 
-            }
-            vm.validation_item = validation;
+                }
+            vm.validation_item = parseInt(validation);
+            console.log(vm.validation_item);
               convention_ufp_daaf_entete.$selected = false;
               convention_ufp_daaf_entete.$edit = false;
               vm.selectedItemConvention_ufp_daaf_entete = {};
@@ -581,14 +585,6 @@
             
             vm.stepTwo = false;
             vm.stepThree = false;
-           if (vm.selectedItemConvention_ufp_daaf_detail.id!=0)
-           {
-              //recuperation donnée convention
-              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'id_convention_ufpdaaf',vm.selectedItemConvention_ufp_daaf_detail.id).then(function(result)
-              {
-                  vm.allconvention_cisco_feffi = result.data.response;                  
-              });
-           }
         };
         $scope.$watch('vm.selectedItemConvention_ufp_daaf_detail', function()
         {
@@ -749,6 +745,16 @@
 
   /*****************Debut StepTwo convention***************/
 
+      vm.click_step_convention_cisco_feffi = function()
+      {   
+          vm.affiche_load = true;
+
+          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'id_convention_ufpdaaf',vm.selectedItemConvention_ufp_daaf_detail.id).then(function(result)
+          {
+              vm.allconvention_cisco_feffi = result.data.response;
+              vm.affiche_load = false;                  
+          });
+      }
         //col table
         vm.convention_cisco_feffi_entete_column = [
         {titre:"CISCO"
@@ -1076,6 +1082,7 @@
     function ConventionDialogController($mdDialog, $scope, apiFactory, $state)
     { 
         var dg=$scope;
+        dg.affiche_load = true;
         dg.affichebuttonAjouter = false;
         dg.selectedItemConventionDialog = {};
         var currentItemConventionDialog;
@@ -1115,8 +1122,11 @@
         };
 
         apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalidedaaf').then(function(result)
-        {dg.allconventionDialog = result.data.response;
-console.log(dg.allconventionDialog);
+        {
+          dg.allconventionDialog = result.data.response;
+
+          dg.affiche_load = false;
+          console.log(dg.allconventionDialog);
         });
 
         dg.cancel = function()

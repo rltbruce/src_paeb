@@ -716,24 +716,18 @@
         var id_user = $cookieStore.get('id');
          apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
-              vm.roles = result.data.response.roles;
-              switch (vm.roles[0])
-                {
-                  case 'ACC': 
-                            //vm.usercisco = result.data.response.cisco;
-                            vm.showbuttonNeauveaudemandefeffi=true;                            
-                            vm.session = 'ACC';
-
-                      break;
-
-                  case 'ADMIN':                            
-                            vm.showbuttonNeauveaudemandefeffi=true;
-                            vm.session = 'ADMIN';                  
-                      break;
-                  default:
-                      break;
-              
-                }                  
+              vm.roles = result.data.response.roles;              
+              var utilisateur = result.data.response;
+            if (utilisateur.roles.indexOf("AAC")!= -1)
+            {
+                vm.showbuttonNeauveaudemandefeffi=true;                            
+                vm.session = 'AAC';
+            }
+            if (utilisateur.roles.indexOf("ADMIN")!= -1)
+            {
+                vm.showbuttonNeauveaudemandefeffi=true;                            
+                vm.session = 'ADMIN';
+            }                 
 
          });
 
@@ -795,7 +789,7 @@
             
             switch (vm.session)
                 {
-                  case 'ACC': 
+                  case 'AAC': 
                             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydateutilisateur','id_utilisateur',id_user,'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
@@ -908,21 +902,17 @@
         
         }
         vm.step_importerdocument_feffi= function ()
-        {
-            return new Promise(function (resolve, reject) 
-            {
+        {vm.affiche_load = true;
                 apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentinvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
-                    vm.alldocument_feffi_scan = result.data.response;
-                return resolve('ok');                                         
-                });          
-            });
+                    vm.alldocument_feffi_scan = result.data.response; 
+                    vm.affiche_load = false;                                       
+                });
         
         }
         vm.step_menu_mpe = function ()
         {   vm.tabentreprise = true;
-            return new Promise(function (resolve, reject)
-            {
+            vm.affiche_load = true;
                 apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.allpassation_marches = result.data.response.filter(function(obj)
@@ -934,17 +924,15 @@
                        vm.showbuttonNouvPassation=false;
                     }
                     console.log(vm.allpassation_marches);
-                    return resolve('ok');
+                    vm.affiche_load = false;
                 });
                  vm.styleTabfils = "acc_sous_menu";
-            });
            
         }
 
         vm.step_menu_indicateur= function ()
         {vm.showbuttonNouvIndicateur=true;
-            return new Promise(function (resolve, reject)
-            {
+            vm.affiche_load = true;
                 apiFactory.getAPIgeneraliserREST("indicateur/index",'menu','getindicateurByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.allindicateur = result.data.response.filter(function(obj)
@@ -955,9 +943,8 @@
                     {
                       vm.showbuttonNouvIndicateur=false;
                     }
-                    return resolve('ok');
-                });             
-            });
+                    vm.affiche_load = false;
+                }); 
         }
 
   /**********************************************Debut Dossier feffi***************************************************/
@@ -1136,7 +1123,7 @@
                     supprimer: suppression,
                     id:        getId,
                     fichier: document_feffi_scan.fichier,
-                    date_elaboration: convertionDate(new Date(document_feffi_scan.date_elaboration)),
+                    date_elaboration: convertionDate(document_feffi_scan.date_elaboration),
                     observation: document_feffi_scan.observation,
                     id_convention_entete: vm.selectedItemConvention_entete.id,
                     id_document_feffi: document_feffi_scan.id,
@@ -1184,7 +1171,7 @@
                                                       supprimer: suppression,
                                                       id:        getIdFile,
                                                       fichier: document_feffi_scan.fichier,
-                                                      date_elaboration: convertionDate(new Date(document_feffi_scan.date_elaboration)),
+                                                      date_elaboration: convertionDate(document_feffi_scan.date_elaboration),
                                                       observation: document_feffi_scan.observation,
                                                       id_convention_entete: document_feffi_scan.id_convention_entete,
                                                       id_document_feffi: document_feffi_scan.id,
@@ -1207,7 +1194,7 @@
                                         supprimer: suppression,
                                         id:        getIdFile,
                                         fichier: document_feffi_scan.fichier,
-                                        date_elaboration: convertionDate(new Date(document_feffi_scan.date_elaboration)),
+                                        date_elaboration: convertionDate(document_feffi_scan.date_elaboration),
                                         observation: document_feffi_scan.observation,
                                         id_convention_entete: document_feffi_scan.id_convention_entete,
                                         id_document_feffi: document_feffi_scan.id,
@@ -1301,7 +1288,7 @@
                                                 supprimer: 1,
                                                 id:        getIdFile,
                                                 fichier: document_feffi_scan.fichier,
-                                                date_elaboration: convertionDate(new Date(document_feffi_scan.date_elaboration)),
+                                                date_elaboration: convertionDate(document_feffi_scan.date_elaboration),
                                                 observation: document_feffi_scan.observation,
                                                 id_convention_entete: document_feffi_scan.id_convention_entete,
                                                 id_document_feffi: document_feffi_scan.id,
@@ -1323,7 +1310,7 @@
                                   supprimer: suppression,
                                   id:        getIdFile,
                                   fichier: document_feffi_scan.fichier,
-                                  date_elaboration: convertionDate(new Date(document_feffi_scan.date_elaboration)),
+                                  date_elaboration: convertionDate(document_feffi_scan.date_elaboration),
                                   observation: document_feffi_scan.observation,
                                   id_convention_entete: document_feffi_scan.id_convention_entete,
                                   id_document_feffi: document_feffi_scan.id,
@@ -1635,7 +1622,7 @@
                     ref_avenant: avenant_convention.ref_avenant,
                     description: avenant_convention.description,
                     montant: avenant_convention.montant,
-                    date_signature:convertionDate(new Date(avenant_convention.date_signature)),
+                    date_signature:convertionDate(avenant_convention.date_signature),
                     id_convention_entete: vm.selectedItemConvention_entete.id,
                     validation:0               
                 });
@@ -2020,7 +2007,7 @@
                     supprimer: suppression,
                     id:        getId,
                     fichier: document_pr_scan.fichier,
-                    date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
+                    date_elaboration: convertionDate(document_pr_scan.date_elaboration),
                     observation: document_pr_scan.observation,
                     id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
                     id_document_pr: document_pr_scan.id,
@@ -2068,7 +2055,7 @@
                                                       supprimer: suppression,
                                                       id:        getIdFile,
                                                       fichier: document_pr_scan.fichier,
-                                                      date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
+                                                      date_elaboration: convertionDate(document_pr_scan.date_elaboration),
                                                       observation: document_pr_scan.observation,
                                                       id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
                                                       id_document_pr: document_pr_scan.id,
@@ -2091,7 +2078,7 @@
                                         supprimer: suppression,
                                         id:        getIdFile,
                                         fichier: document_pr_scan.fichier,
-                                        date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
+                                        date_elaboration: convertionDate(document_pr_scan.date_elaboration),
                                         observation: document_pr_scan.observation,
                                         id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
                                         id_document_pr: document_pr_scan.id,
@@ -2185,7 +2172,7 @@
                                                 supprimer: 1,
                                                 id:        getIdFile,
                                                 fichier: document_pr_scan.fichier,
-                                                date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
+                                                date_elaboration: convertionDate(document_pr_scan.date_elaboration),
                                                 observation: document_pr_scan.observation,
                                                 id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
                                                 id_document_pr: document_pr_scan.id,
@@ -2207,7 +2194,7 @@
                                   supprimer: suppression,
                                   id:        getIdFile,
                                   fichier: document_pr_scan.fichier,
-                                  date_elaboration: convertionDate(new Date(document_pr_scan.date_elaboration)),
+                                  date_elaboration: convertionDate(document_pr_scan.date_elaboration),
                                   observation: document_pr_scan.observation,
                                   id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
                                   id_document_pr: document_pr_scan.id,
@@ -2569,14 +2556,14 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    date_previ_resti: convertionDate(new Date(module_dpp.date_previ_resti)),
-                    date_debut_reel_form: convertionDate(new Date(module_dpp.date_debut_reel_form)),
-                    date_fin_reel_form: convertionDate(new Date(module_dpp.date_fin_reel_form)),
-                    date_reel_resti:convertionDate(new Date(module_dpp.date_reel_resti)),
+                    date_previ_resti: convertionDate(module_dpp.date_previ_resti),
+                    date_debut_reel_form: convertionDate(module_dpp.date_debut_reel_form),
+                    date_fin_reel_form: convertionDate(module_dpp.date_fin_reel_form),
+                    date_reel_resti:convertionDate(module_dpp.date_reel_resti),
                     nbr_previ_parti: module_dpp.nbr_previ_parti,
                     nbr_previ_fem_parti: module_dpp.nbr_previ_fem_parti,
-                    date_debut_previ_form: convertionDate(new Date(module_dpp.date_debut_previ_form)),
-                    date_fin_previ_form: convertionDate(new Date(module_dpp.date_fin_previ_form)),
+                    date_debut_previ_form: convertionDate(module_dpp.date_debut_previ_form),
+                    date_fin_previ_form: convertionDate(module_dpp.date_fin_previ_form),
                     id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
                     lieu_formation: module_dpp.lieu_formation,
                     observation:module_dpp.observation,
@@ -3283,14 +3270,14 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    date_previ_resti: convertionDate(new Date(module_odc.date_previ_resti)),
-                    date_debut_reel_form: convertionDate(new Date(module_odc.date_debut_reel_form)),
-                    date_fin_reel_form: convertionDate(new Date(module_odc.date_fin_reel_form)),
-                    date_reel_resti:convertionDate(new Date(module_odc.date_reel_resti)),
+                    date_previ_resti: convertionDate(module_odc.date_previ_resti),
+                    date_debut_reel_form: convertionDate(module_odc.date_debut_reel_form),
+                    date_fin_reel_form: convertionDate(module_odc.date_fin_reel_form),
+                    date_reel_resti:convertionDate(module_odc.date_reel_resti),
                     nbr_previ_parti: module_odc.nbr_previ_parti,
                     nbr_previ_fem_parti: module_odc.nbr_previ_fem_parti,
-                    date_debut_previ_form: convertionDate(new Date(module_odc.date_debut_previ_form)),
-                    date_fin_previ_form: convertionDate(new Date(module_odc.date_fin_previ_form)),
+                    date_debut_previ_form: convertionDate(module_odc.date_debut_previ_form),
+                    date_fin_previ_form: convertionDate(module_odc.date_fin_previ_form),
                     id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
                     lieu_formation: module_odc.lieu_formation,
                     observation:module_odc.observation,
@@ -3996,14 +3983,14 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    date_previ_resti: convertionDate(new Date(module_emies.date_previ_resti)),
-                    date_debut_reel_form: convertionDate(new Date(module_emies.date_debut_reel_form)),
-                    date_fin_reel_form: convertionDate(new Date(module_emies.date_fin_reel_form)),
-                    date_reel_resti:convertionDate(new Date(module_emies.date_reel_resti)),
+                    date_previ_resti: convertionDate(module_emies.date_previ_resti),
+                    date_debut_reel_form: convertionDate(module_emies.date_debut_reel_form),
+                    date_fin_reel_form: convertionDate(module_emies.date_fin_reel_form),
+                    date_reel_resti:convertionDate(module_emies.date_reel_resti),
                     nbr_previ_parti: module_emies.nbr_previ_parti,
                     nbr_previ_fem_parti: module_emies.nbr_previ_fem_parti,
-                    date_debut_previ_form: convertionDate(new Date(module_emies.date_debut_previ_form)),
-                    date_fin_previ_form: convertionDate(new Date(module_emies.date_fin_previ_form)),
+                    date_debut_previ_form: convertionDate(module_emies.date_debut_previ_form),
+                    date_fin_previ_form: convertionDate(module_emies.date_fin_previ_form),
                     id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
                     lieu_formation: module_emies.lieu_formation,
                     observation:module_emies.observation,
@@ -4710,14 +4697,14 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    date_previ_resti: convertionDate(new Date(module_gfpc.date_previ_resti)),
-                    date_debut_reel_form: convertionDate(new Date(module_gfpc.date_debut_reel_form)),
-                    date_fin_reel_form: convertionDate(new Date(module_gfpc.date_fin_reel_form)),
-                    date_reel_resti:convertionDate(new Date(module_gfpc.date_reel_resti)),
+                    date_previ_resti: convertionDate(module_gfpc.date_previ_resti),
+                    date_debut_reel_form: convertionDate(module_gfpc.date_debut_reel_form),
+                    date_fin_reel_form: convertionDate(module_gfpc.date_fin_reel_form),
+                    date_reel_resti:convertionDate(module_gfpc.date_reel_resti),
                     nbr_previ_parti: module_gfpc.nbr_previ_parti,
                     nbr_previ_fem_parti: module_gfpc.nbr_previ_fem_parti,
-                    date_debut_previ_form: convertionDate(new Date(module_gfpc.date_debut_previ_form)),
-                    date_fin_previ_form: convertionDate(new Date(module_gfpc.date_fin_previ_form)),
+                    date_debut_previ_form: convertionDate(module_gfpc.date_debut_previ_form),
+                    date_fin_previ_form: convertionDate(module_gfpc.date_fin_previ_form),
                     id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
                     lieu_formation: module_gfpc.lieu_formation,
                     observation:module_gfpc.observation,
@@ -5422,14 +5409,14 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    date_previ_resti: convertionDate(new Date(module_pmc.date_previ_resti)),
-                    date_debut_reel_form: convertionDate(new Date(module_pmc.date_debut_reel_form)),
-                    date_fin_reel_form: convertionDate(new Date(module_pmc.date_fin_reel_form)),
-                    date_reel_resti:convertionDate(new Date(module_pmc.date_reel_resti)),
+                    date_previ_resti: convertionDate(module_pmc.date_previ_resti),
+                    date_debut_reel_form: convertionDate(module_pmc.date_debut_reel_form),
+                    date_fin_reel_form: convertionDate(module_pmc.date_fin_reel_form),
+                    date_reel_resti:convertionDate(module_pmc.date_reel_resti),
                     nbr_previ_parti: module_pmc.nbr_previ_parti,
                     nbr_previ_fem_parti: module_pmc.nbr_previ_fem_parti,
-                    date_debut_previ_form: convertionDate(new Date(module_pmc.date_debut_previ_form)),
-                    date_fin_previ_form: convertionDate(new Date(module_pmc.date_fin_previ_form)),
+                    date_debut_previ_form: convertionDate(module_pmc.date_debut_previ_form),
+                    date_fin_previ_form: convertionDate(module_pmc.date_fin_previ_form),
                     id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
                     lieu_formation: module_pmc.lieu_formation,
                     observation:module_pmc.observation,
@@ -6132,14 +6119,14 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    date_previ_resti: convertionDate(new Date(module_sep.date_previ_resti)),
-                    date_debut_reel_form: convertionDate(new Date(module_sep.date_debut_reel_form)),
-                    date_fin_reel_form: convertionDate(new Date(module_sep.date_fin_reel_form)),
-                    date_reel_resti:convertionDate(new Date(module_sep.date_reel_resti)),
+                    date_previ_resti: convertionDate(module_sep.date_previ_resti),
+                    date_debut_reel_form: convertionDate(module_sep.date_debut_reel_form),
+                    date_fin_reel_form: convertionDate(module_sep.date_fin_reel_form),
+                    date_reel_resti:convertionDate(module_sep.date_reel_resti),
                     nbr_previ_parti: module_sep.nbr_previ_parti,
                     nbr_previ_fem_parti: module_sep.nbr_previ_fem_parti,
-                    date_debut_previ_form: convertionDate(new Date(module_sep.date_debut_previ_form)),
-                    date_fin_previ_form: convertionDate(new Date(module_sep.date_fin_previ_form)),
+                    date_debut_previ_form: convertionDate(module_sep.date_debut_previ_form),
+                    date_fin_previ_form: convertionDate(module_sep.date_fin_previ_form),
                     id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
                     lieu_formation: module_sep.lieu_formation,
                     observation:module_sep.observation,
@@ -6611,8 +6598,8 @@
             vm.showbuttonNouvPassation_moe=true;            
             vm.stepprestation_moe = false;
             vm.stepdoc_moe=false;
-            return new Promise(function (resolve, reject) 
-            {
+            vm.step_contrat_moe_onglet = false;
+            vm.affiche_load = true;
                 apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.allpassation_marches_moe = result.data.response; console.log(vm.allpassation_marches_moe);
@@ -6620,12 +6607,11 @@
                     {
                         vm.showbuttonNouvPassation_moe=false;
                     }
-                    
-                        return resolve('ok');
+                    vm.step_contrat_moe_onglet = true;
+                    vm.affiche_load = false;
                                 
                 });
-                 vm.styleTabfils = "acc_sous_menu";              
-            });
+                 vm.styleTabfils = "acc_sous_menu"; 
             
         }
 
@@ -6637,9 +6623,7 @@
             vm.stepcalendrier_paie_moe=false;
             vm.sousrubrique_calendrier=false;
             vm.calendrier_prevu=false;
-            return new Promise(function (resolve, reject) 
-            {
-                
+            vm.affiche_load = true;                
                 apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                         vm.allcontrat_moe = result.data.response;
@@ -6648,8 +6632,7 @@
                     {
                         vm.showbuttonNouvcontrat_moe=false;
                     }
-                    return resolve('ok');
-                });
+                    vm.affiche_load = false;
                 vm.styleTabfils = "acc_sous_menu";
                                
             });
@@ -6915,19 +6898,19 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    date_lancement_dp: convertionDate(new Date(passation_marches_moe.date_lancement_dp)),
-                    date_os: convertionDate(new Date(passation_marches_moe.date_os)),
-                    date_remise: convertionDate(new Date(passation_marches_moe.date_remise)),
+                    date_lancement_dp: convertionDate(passation_marches_moe.date_lancement_dp),
+                    date_os: convertionDate(passation_marches_moe.date_os),
+                    date_remise: convertionDate(passation_marches_moe.date_remise),
                     nbr_offre_recu: passation_marches_moe.nbr_offre_recu,
-                    date_rapport_evaluation:convertionDate(new Date(passation_marches_moe.date_rapport_evaluation)),
-                    date_demande_ano_dpfi: convertionDate(new Date(passation_marches_moe.date_demande_ano_dpfi)),
-                    date_ano_dpfi: convertionDate(new Date(passation_marches_moe.date_ano_dpfi)),
-                    notification_intention: convertionDate(new Date(passation_marches_moe.notification_intention)),
-                    date_notification_attribution: convertionDate(new Date(passation_marches_moe.date_notification_attribution)),
-                    date_signature_contrat: convertionDate(new Date(passation_marches_moe.date_signature_contrat)),
+                    date_rapport_evaluation:convertionDate(passation_marches_moe.date_rapport_evaluation),
+                    date_demande_ano_dpfi: convertionDate(passation_marches_moe.date_demande_ano_dpfi),
+                    date_ano_dpfi: convertionDate(passation_marches_moe.date_ano_dpfi),
+                    notification_intention: convertionDate(passation_marches_moe.notification_intention),
+                    date_notification_attribution: convertionDate(passation_marches_moe.date_notification_attribution),
+                    date_signature_contrat: convertionDate(passation_marches_moe.date_signature_contrat),
                     id_bureau_etude: passation_marches_moe.id_bureau_etude,
-                    date_shortlist: convertionDate(new Date(passation_marches_moe.date_shortlist)),
-                    date_manifestation: convertionDate(new Date(passation_marches_moe.date_manifestation)),
+                    date_shortlist: convertionDate(passation_marches_moe.date_shortlist),
+                    date_manifestation: convertionDate(passation_marches_moe.date_manifestation),
                     statut: passation_marches_moe.statut,
                     observation:passation_marches_moe.observation,
                     id_convention_entete: vm.selectedItemConvention_entete.id,
@@ -7229,7 +7212,8 @@
         });
 
          vm.step_prestation_moe = function()
-        {
+        {            
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
             {
                 vm.allmemoire_technique = result.data.response.filter(function(obj)
@@ -7239,13 +7223,17 @@
                 if (result.data.response.length>0)
                 {
                     vm.showbuttonNouvMemoire_technique = false;
-                }                           
+                }
+
+                vm.affiche_load = false;                           
             });
             vm.styleTabfils = "acc_menu";
         }
 
         vm.step_memoire_technique = function()
         {
+            
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
             {
                 vm.allmemoire_technique = result.data.response.filter(function(obj)
@@ -7255,12 +7243,16 @@
                 if (result.data.response.length>0)
                 {
                     vm.showbuttonNouvMemoire_technique = false;
-                }                           
+                }
+
+                vm.affiche_load = false;                           
             });
         }
 
         vm.step_appel_offre = function()
         {
+            
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("appel_offre/index",'menu','getappelBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
             {
                 vm.allappel_offre = result.data.response.filter(function(obj)
@@ -7270,12 +7262,16 @@
                 if (result.data.response.length>0)
                 {
                      vm.showbuttonNouvAppel_offre = false;
-                }                          
+                } 
+
+                vm.affiche_load = false;                         
             });
         }
 
         vm.step_rapport_mensuel = function()
         {
+            
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
             {
                 vm.allrapport_mensuel = result.data.response.filter(function(obj)
@@ -7285,12 +7281,16 @@
                 if (result.data.response.length==4)
                 {
                     vm.showbuttonNouvRapport_mensuel = false;
-                }                           
+                }
+
+                vm.affiche_load = false;                           
             });
         }
 
         vm.step_manuel_gestion = function()
         {
+            
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
             {
                 vm.allmanuel_gestion = result.data.response.filter(function(obj)
@@ -7300,13 +7300,17 @@
                 if (result.data.response.length>0)
                 {
                      vm.showbuttonNouvManuel_gestion = false;
-                }                          
+                }
+
+                vm.affiche_load = false;                          
             });
         }
 
         vm.step_police_assurance = function()
         {
-             apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpoliceBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            
+            vm.affiche_load = true;
+            apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpoliceBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
             {
                 vm.allpolice_assurance = result.data.response.filter(function(obj)
                 {
@@ -7315,27 +7319,35 @@
                 if (result.data.response.length>0)
                 {
                  vm.showbuttonNouvPolice_assurance = false;
-                }                                                   
+                }
+
+                vm.affiche_load = false;                                                   
             });
         }
 
         vm.step_avenant_moe = function()
         {
+            
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantinvalideBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
             {
                  vm.allavenant_moe = result.data.response;
                  vm.showbuttonNouvavenant_moe = true;
                  console.log(vm.allavenant_moe);
+
+                vm.affiche_load = false;
             });
             vm.styleTabfils = "acc_sous_menu";
         }
 
         vm.step_importerdocument_moe = function()
         {
+            
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentinvalideBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
             {
-                vm.alldocument_moe_scan = result.data.response;
-                                        
+                vm.alldocument_moe_scan = result.data.response;                 
+                vm.affiche_load = false;                       
             });
             vm.styleTabfils = "acc_sous_menu";
         }
@@ -7432,7 +7444,7 @@
                     intitule: contrat_moe.intitule,
                     ref_contrat: contrat_moe.ref_contrat,
                     montant_contrat: contrat_moe.montant_contrat,
-                    date_signature:convertionDate(new Date(contrat_moe.date_signature)),
+                    date_signature:convertionDate(contrat_moe.date_signature),
                     id_bureau_etude:contrat_moe.id_moe,
                     id_convention_entete: vm.selectedItemConvention_entete.id,
                     validation : 0               
@@ -7494,9 +7506,11 @@
 
             vm.sousrubrique_calendrier= false;
             vm.calendrier_prevu= false;
+            vm.affiche_load = true;
              apiFactory.getAPIgeneraliserREST("divers_rubrique_calendrier_paie_moe/index","menu","getrubriquewithmontant_prevubycontrat","id_contrat_bureau_etude",vm.selectedItemContrat_moe.id).then(function(result)
             {   
                 vm.allrubrique_calendrier_paie_moe= result.data.response;
+                vm.affiche_load = false;
                 //vm.stepattachement_batiment_detail = false;
                 //vm.stepattachement_latrine_detail = false;
                 //vm.stepattachement_mobilier_detail = false;
@@ -7518,11 +7532,13 @@
 
         vm.click_rubrique_calendrier_paie_moe = function()
         {
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("divers_rubrique_calendrier_paie_moe/index","menu","getrubriquewithmontant_prevubycontrat","id_contrat_bureau_etude",vm.selectedItemContrat_moe.id).then(function(result)
             {   
                 vm.allrubrique_calendrier_paie_moe= result.data.response;                
                 vm.sousrubrique_calendrier= false;
                 vm.calendrier_prevu= false;
+            vm.affiche_load = false;
 
                 console.log(vm.allrubrique_calendrier_paie_moe);
             });
@@ -7590,9 +7606,11 @@
 
         vm.click_sousrubrique_calendrier_paie_moe = function()
         {
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("divers_sousrubrique_calendrier_paie_moe/index","menu","getsousrubriquewithmontant_prevubycontrat","id_contrat_bureau_etude",vm.selectedItemContrat_moe.id,"id_rubrique",vm.selectedItemRubrique_calendrier_paie_moe.id).then(function(result)
             {   
                 vm.allsousrubrique_calendrier_paie_moe= result.data.response;
+            vm.affiche_load = false;
                 //vm.stepattachement_batiment_detail = false;
 
                 console.log(vm.allsousrubrique_calendrier_paie_moe);
@@ -7662,9 +7680,11 @@
 
         vm.click_calendrier_paie_moe_prevu = function()
         {
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("divers_calendrier_paie_moe_prevu/index","menu","getcalendrier_paie_moe_prevuwithdetailbycontrat","id_contrat_bureau_etude",vm.selectedItemContrat_moe.id,"id_sousrubrique",vm.selectedItemSousrubrique_calendrier_paie_moe.id).then(function(result)
             {   
                 vm.allcalendrier_paie_moe_prevu= result.data.response;
+            vm.affiche_load = false;
                 //vm.stepattachement_batiment_detail = false;
 
                 console.log(vm.allcalendrier_paie_moe_prevu);
@@ -7851,7 +7871,7 @@
                     supprimer: suppression,
                     id:        getId,
                     fichier: document_moe_scan.fichier,
-                    date_elaboration: convertionDate(new Date(document_moe_scan.date_elaboration)),
+                    date_elaboration: convertionDate(document_moe_scan.date_elaboration),
                     observation: document_moe_scan.observation,
                     id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                     id_document_moe: document_moe_scan.id,
@@ -7899,7 +7919,7 @@
                                                       supprimer: suppression,
                                                       id:        getIdFile,
                                                       fichier: document_moe_scan.fichier,
-                                                      date_elaboration: convertionDate(new Date(document_moe_scan.date_elaboration)),
+                                                      date_elaboration: convertionDate(document_moe_scan.date_elaboration),
                                                       observation: document_moe_scan.observation,
                                                       id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                                                       id_document_moe: document_moe_scan.id,
@@ -7922,7 +7942,7 @@
                                         supprimer: suppression,
                                         id:        getIdFile,
                                         fichier: document_moe_scan.fichier,
-                                        date_elaboration: convertionDate(new Date(document_moe_scan.date_elaboration)),
+                                        date_elaboration: convertionDate(document_moe_scan.date_elaboration),
                                         observation: document_moe_scan.observation,
                                         id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                                         id_document_moe: document_moe_scan.id,
@@ -8016,7 +8036,7 @@
                                                 supprimer: 1,
                                                 id:        getIdFile,
                                                 fichier: document_moe_scan.fichier,
-                                                date_elaboration: convertionDate(new Date(document_moe_scan.date_elaboration)),
+                                                date_elaboration: convertionDate(document_moe_scan.date_elaboration),
                                                 observation: document_moe_scan.observation,
                                                 id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                                                 id_document_moe: document_moe_scan.id,
@@ -8038,7 +8058,7 @@
                                   supprimer: suppression,
                                   id:        getIdFile,
                                   fichier: document_moe_scan.fichier,
-                                  date_elaboration: convertionDate(new Date(document_moe_scan.date_elaboration)),
+                                  date_elaboration: convertionDate(document_moe_scan.date_elaboration),
                                   observation: document_moe_scan.observation,
                                   id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                                   id_document_moe: document_moe_scan.id,
@@ -8275,7 +8295,7 @@
                     description: avenant_moe.description,
                     montant: avenant_moe.montant,
                     ref_avenant: avenant_moe.ref_avenant,
-                    date_signature:convertionDate(new Date(avenant_moe.date_signature)),
+                    date_signature:convertionDate(avenant_moe.date_signature),
                     id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                     validation:0               
                 });
@@ -8589,8 +8609,8 @@
                     id:        getId,
                     description: memoire_technique.description,
                     //fichier: memoire_technique.fichier,
-                    date_livraison: convertionDate(new Date(memoire_technique.date_livraison)),
-                    date_approbation: convertionDate(new Date(memoire_technique.date_approbation)),
+                    date_livraison: convertionDate(memoire_technique.date_livraison),
+                    date_approbation: convertionDate(memoire_technique.date_approbation),
                     observation: memoire_technique.observation,
                     id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                     validation:0               
@@ -8903,8 +8923,8 @@
                     id:        getId,
                     description: appel_offre.description,
                     //fichier: appel_offre.fichier,
-                    date_livraison: convertionDate(new Date(appel_offre.date_livraison)),
-                    date_approbation: convertionDate(new Date(appel_offre.date_approbation)),
+                    date_livraison: convertionDate(appel_offre.date_livraison),
+                    date_approbation: convertionDate(appel_offre.date_approbation),
                     observation: appel_offre.observation,
                     id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                     validation:0               
@@ -9271,7 +9291,7 @@
                     id:        getId,
                     description: rapport_mensuel.description,
                     numero: rapport_mensuel.numero,
-                    date_livraison: convertionDate(new Date(rapport_mensuel.date_livraison)),
+                    date_livraison: convertionDate(rapport_mensuel.date_livraison),
                     observation: rapport_mensuel.observation,
                     id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                     validation:0               
@@ -9579,7 +9599,7 @@
                     id:        getId,
                     description: manuel_gestion.description,
                     //fichier: manuel_gestion.fichier,
-                    date_livraison: convertionDate(new Date(manuel_gestion.date_livraison)),
+                    date_livraison: convertionDate(manuel_gestion.date_livraison),
                     observation: manuel_gestion.observation,
                     id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                     validation:0               
@@ -9889,7 +9909,7 @@
                     id:        getId,
                     description: police_assurance.description,
                     //fichier: police_assurance.fichier,
-                    date_expiration: convertionDate(new Date(police_assurance.date_expiration)),
+                    date_expiration: convertionDate(police_assurance.date_expiration),
                     observation: police_assurance.observation,
                     id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                     validation:0               
@@ -10271,16 +10291,16 @@ vm.steppassation_marches = function()
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    date_lancement: convertionDate(new Date(passation_marches.date_lancement)),
-                    date_os: convertionDate(new Date(passation_marches.date_os)),
-                    date_remise: convertionDate(new Date(passation_marches.date_remise)),
+                    date_lancement: convertionDate(passation_marches.date_lancement),
+                    date_os: convertionDate(passation_marches.date_os),
+                    date_remise: convertionDate(passation_marches.date_remise),
                     montant_moin_chere:passation_marches.montant_moin_chere,
-                    date_rapport_evaluation:convertionDate(new Date(passation_marches.date_rapport_evaluation)),
-                    date_demande_ano_dpfi: convertionDate(new Date(passation_marches.date_demande_ano_dpfi)),
-                    date_ano_dpfi: convertionDate(new Date(passation_marches.date_ano_dpfi)),
-                    notification_intention: convertionDate(new Date(passation_marches.notification_intention)),
-                    date_notification_attribution: convertionDate(new Date(passation_marches.date_notification_attribution)), 
-                    date_signature_contrat: convertionDate(new Date(passation_marches.date_signature_contrat)),                    
+                    date_rapport_evaluation:convertionDate(passation_marches.date_rapport_evaluation),
+                    date_demande_ano_dpfi: convertionDate(passation_marches.date_demande_ano_dpfi),
+                    date_ano_dpfi: convertionDate(passation_marches.date_ano_dpfi),
+                    notification_intention: convertionDate(passation_marches.notification_intention),
+                    date_notification_attribution: convertionDate(passation_marches.date_notification_attribution), 
+                    date_signature_contrat: convertionDate(passation_marches.date_signature_contrat),                    
                     observation:passation_marches.observation,
                     id_convention_entete: vm.selectedItemConvention_entete.id,
                     validation:0,               
@@ -10723,8 +10743,7 @@ vm.steppassation_marches = function()
        vm.step_contrat_mpe = function ()
         { 
             vm.showbuttonNouvContrat_prestataire=true;
-            return new Promise(function (resolve, reject)
-            {
+            vm.affiche_load = true;
                  apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.allcontrat_prestataire = result.data.response;
@@ -10734,10 +10753,10 @@ vm.steppassation_marches = function()
                     {
                         vm.showbuttonNouvContrat_prestataire=false;
                     }
-                    return resolve('ok');
+                    vm.affiche_load = false;
                 });
                vm.styleTabfils = "acc_sous_menu";        
-            });
+            
             
         }
         
@@ -10901,10 +10920,11 @@ vm.steppassation_marches = function()
         });
 
         vm.step_suivitravaux = function()
-        {
+        {   vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("delai_travaux/index",'menu','getdelai_travauxBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                  vm.alldelai_travaux = result.data.response;
+                 vm.affiche_load = false;
 
                 if (result.data.response.length!=0)
                 {
@@ -10914,10 +10934,11 @@ vm.steppassation_marches = function()
             vm.styleTabfils = "acc_menu";
         }
         vm.step_delai_execution = function()
-        {
+        {   vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("delai_travaux/index",'menu','getdelai_travauxBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                  vm.alldelai_travaux = result.data.response;
+                 vm.affiche_load = false;
 
                 if (result.data.response.length!=0)
                 {
@@ -10926,10 +10947,11 @@ vm.steppassation_marches = function()
              });
         }
         vm.step_reception_mpe = function()
-        {
+        {   vm.affiche_load = true;
              apiFactory.getAPIgeneraliserREST("reception_mpe/index",'menu','getreception_mpeBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.allreception_mpe = result.data.response;
+                vm.affiche_load = false;
 
                 if (result.data.response.length!=0)
                 {
@@ -10938,19 +10960,21 @@ vm.steppassation_marches = function()
             });
         }
         vm.step_avenant_mpe = function()
-        {
+        {   vm.affiche_load = true;
            apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantinvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.allavenant_mpe = result.data.response;
+                vm.affiche_load = false;
                 vm.showbuttonNouvavenant_mpe = true;
             });
            vm.styleTabfils = "acc_sous_menu";
         }
         vm.step_importerdocument_mpe = function()
-        {
+        {   vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("dossier_prestataire/index",'menu','getdocumentinvalideBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.alldocument_prestataire_scan = result.data.response;
+                vm.affiche_load = false;
                                         
             });
             vm.styleTabfils = "acc_sous_menu";
@@ -11055,7 +11079,7 @@ vm.steppassation_marches = function()
                     cout_batiment: contrat_prestataire.cout_batiment,
                     cout_latrine: contrat_prestataire.cout_latrine,
                     cout_mobilier:contrat_prestataire.cout_mobilier,
-                    date_signature:convertionDate(new Date(contrat_prestataire.date_signature)),
+                    date_signature:convertionDate(contrat_prestataire.date_signature),
                     id_prestataire:contrat_prestataire.id_prestataire,
                     paiement_recu: 0,
                     id_convention_entete: vm.selectedItemConvention_entete.id,
@@ -11128,6 +11152,7 @@ vm.steppassation_marches = function()
 
                 vm.steprubriquetachement_latrine = false;
                 vm.steprubriquetachement_mobilier = false;
+                vm.affiche_load = true;
              apiFactory.getAPIgeneraliserREST("divers_attachement_batiment/index","menu","getrubrique_attachement_withmontant_prevu","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
             {   
                 vm.allrubrique_attachement_batiment_mpe= result.data.response;
@@ -11137,6 +11162,7 @@ vm.steppassation_marches = function()
 
                 vm.steprubriquetachement_latrine = true;
                 vm.steprubriquetachement_mobilier = true;
+                vm.affiche_load = false;
 
                 console.log(vm.allrubrique_attachement_batiment_mpe);
             });
@@ -11153,11 +11179,12 @@ vm.steppassation_marches = function()
         }];
 
         vm.click_rubrique_attachement_batiment_mpe = function()
-        {
+        {   vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("divers_attachement_batiment/index","menu","getrubrique_attachement_withmontant_prevu","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
             {   
                 vm.allrubrique_attachement_batiment_mpe= result.data.response;
                 vm.stepattachement_batiment_detail = false;
+                vm.affiche_load = false;
 
                 console.log(vm.allrubrique_attachement_batiment_mpe);
             });
@@ -11248,12 +11275,13 @@ vm.steppassation_marches = function()
 /**********************************************debut attachement batiment travauxe***************************************************/
         vm.click_tab_attachement_batiment_prevu = function()
         {
-            
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("divers_attachement_batiment_prevu/index","menu","getattachement_batiment_prevuwithdetailbyrubrique",
                     "id_attachement_batiment",vm.selectedItemRubrique_attachement_batiment_mpe.id,
                     "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.alldivers_attachement_batiment_prevu = result.data.response;
+                vm.affiche_load = false;
                 console.log(vm.alldivers_attachement_batiment_prevu);
             });
            /* apiFactory.getAPIgeneraliserREST("divers_attachement_batiment_prevu/index","menu","getdivers_attachement_prevuBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
@@ -11498,7 +11526,7 @@ vm.steppassation_marches = function()
                         vm.selectedItemDivers_attachement_batiment_prevu ={};
                         vm.showbuttonValidation = false;
                         //var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu)+((parseFloat(divers_attachement_batiment_prevu.montant_prevu)*20)/100) -parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)*20)/100);
-                        var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu);
+                        var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu) - parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu);
                         console.log(cout_batiment);
                         maj_insertion_contrat_in_base(cout_batiment);
                     }
@@ -11561,7 +11589,7 @@ vm.steppassation_marches = function()
                     cout_batiment: cout_batiment,
                     cout_latrine: vm.selectedItemContrat_prestataire.cout_latrine,
                     cout_mobilier:vm.selectedItemContrat_prestataire.cout_mobilier,
-                    date_signature:convertionDate(new Date(vm.selectedItemContrat_prestataire.date_signature)),
+                    date_signature:convertionDate(vm.selectedItemContrat_prestataire.date_signature),
                     id_prestataire:vm.selectedItemContrat_prestataire.prestataire.id,
                     paiement_recu: 0,
                     id_convention_entete: vm.selectedItemConvention_entete.id,
@@ -11592,7 +11620,7 @@ vm.steppassation_marches = function()
                     cout_batiment: vm.selectedItemContrat_prestataire.cout_batiment,
                     cout_latrine: cout_latrine,
                     cout_mobilier:vm.selectedItemContrat_prestataire.cout_mobilier,
-                    date_signature:convertionDate(new Date(vm.selectedItemContrat_prestataire.date_signature)),
+                    date_signature:convertionDate(vm.selectedItemContrat_prestataire.date_signature),
                     id_prestataire:vm.selectedItemContrat_prestataire.prestataire.id,
                     paiement_recu: 0,
                     id_convention_entete: vm.selectedItemConvention_entete.id,
@@ -11624,7 +11652,7 @@ vm.steppassation_marches = function()
                     cout_batiment: vm.selectedItemContrat_prestataire.cout_batiment,
                     cout_latrine: vm.selectedItemContrat_prestataire.cout_latrine,
                     cout_mobilier: cout_mobilier,
-                    date_signature:convertionDate(new Date(vm.selectedItemContrat_prestataire.date_signature)),
+                    date_signature:convertionDate(vm.selectedItemContrat_prestataire.date_signature),
                     id_prestataire:vm.selectedItemContrat_prestataire.prestataire.id,
                     paiement_recu: 0,
                     id_convention_entete: vm.selectedItemConvention_entete.id,
@@ -11653,12 +11681,12 @@ vm.steppassation_marches = function()
         }];
 
         vm.click_rubrique_attachement_latrine_mpe = function()
-        {
+        {   vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("divers_attachement_latrine/index","menu","getrubrique_attachement_withmontant_prevu","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
             {   
                 vm.allrubrique_attachement_latrine_mpe= result.data.response;
                 vm.stepattachement_latrine_detail = false;
-
+                vm.affiche_load = false;
                 console.log(vm.allrubrique_attachement_latrine_mpe);
             });
         }
@@ -11748,12 +11776,13 @@ vm.steppassation_marches = function()
 /**********************************************debut attachement latrine travauxe***************************************************/
         vm.click_tab_attachement_latrine_prevu = function()
         {
-            
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("divers_attachement_latrine_prevu/index","menu","getattachement_latrine_prevuwithdetailbyrubrique",
                     "id_attachement_latrine",vm.selectedItemRubrique_attachement_latrine_mpe.id,
                     "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.alldivers_attachement_latrine_prevu = result.data.response;
+                vm.affiche_load = false;
                 console.log(vm.alldivers_attachement_latrine_prevu);
             });
            /* apiFactory.getAPIgeneraliserREST("divers_attachement_latrine_prevu/index","menu","getdivers_attachement_prevuBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
@@ -12004,7 +12033,7 @@ vm.steppassation_marches = function()
                         //vm.selectedItemDivers_attachement_latrine_prevu.attachement_latrine_prevu  = bat_prevu[0];
                         //var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) + parseFloat(divers_attachement_latrine_prevu.montant_prevu)+((parseFloat(divers_attachement_latrine_prevu.montant_prevu)*20)/100) -parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)*20)/100);                        
                         
-                        var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) + parseFloat(divers_attachement_latrine_prevu.montant_prevu);                        
+                        var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) - parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu) + parseFloat(divers_attachement_latrine_prevu.montant_prevu);                        
                         maj_insertion_contrat_in_base_latrine(cout_latrine);
                         vm.selectedItemDivers_attachement_latrine_prevu.$selected  = false;
                         vm.selectedItemDivers_attachement_latrine_prevu.$edit      = false;
@@ -12067,12 +12096,12 @@ vm.steppassation_marches = function()
         }];
 
         vm.click_rubrique_attachement_mobilier_mpe = function()
-        {
+        {   vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier/index","menu","getrubrique_attachement_withmontant_prevu","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
             {   
                 vm.allrubrique_attachement_mobilier_mpe= result.data.response;
                 vm.stepattachement_mobilier_detail = false;
-
+                vm.affiche_load = false;
                 console.log(vm.allrubrique_attachement_mobilier_mpe);
             });
         }
@@ -12163,12 +12192,13 @@ vm.steppassation_marches = function()
 /**********************************************debut attachement mobilier travauxe***************************************************/
         vm.click_tab_attachement_mobilier_prevu = function()
         {
-            
+            vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier_prevu/index","menu","getattachement_mobilier_prevuwithdetailbyrubrique",
                     "id_attachement_mobilier",vm.selectedItemRubrique_attachement_mobilier_mpe.id,
                     "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.alldivers_attachement_mobilier_prevu = result.data.response;
+                vm.affiche_load = false;
                 console.log(vm.alldivers_attachement_mobilier_prevu);
             });
            /* apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier_prevu/index","menu","getdivers_attachement_prevuBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
@@ -12691,7 +12721,7 @@ vm.steppassation_marches = function()
                     cout_latrine: avenant_mpe.cout_latrine,
                     cout_mobilier: avenant_mpe.cout_mobilier,
                     ref_avenant: avenant_mpe.ref_avenant,
-                    date_signature:convertionDate(new Date(avenant_mpe.date_signature)),
+                    date_signature:convertionDate(avenant_mpe.date_signature),
                     id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
                     validation:0               
                 });
@@ -12921,7 +12951,7 @@ vm.steppassation_marches = function()
                     supprimer: suppression,
                     id:        getId,
                     fichier: document_prestataire_scan.fichier,
-                    date_elaboration: convertionDate(new Date(document_prestataire_scan.date_elaboration)),
+                    date_elaboration: convertionDate(document_prestataire_scan.date_elaboration),
                     observation: document_prestataire_scan.observation,
                     id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
                     id_document_prestataire: document_prestataire_scan.id,
@@ -12969,7 +12999,7 @@ vm.steppassation_marches = function()
                                                       supprimer: suppression,
                                                       id:        getIdFile,
                                                       fichier: document_prestataire_scan.fichier,
-                                                      date_elaboration: convertionDate(new Date(document_prestataire_scan.date_elaboration)),
+                                                      date_elaboration: convertionDate(document_prestataire_scan.date_elaboration),
                                                       observation: document_prestataire_scan.observation,
                                                       id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
                                                       id_document_prestataire: document_prestataire_scan.id,
@@ -12992,7 +13022,7 @@ vm.steppassation_marches = function()
                                         supprimer: suppression,
                                         id:        getIdFile,
                                         fichier: document_prestataire_scan.fichier,
-                                        date_elaboration: convertionDate(new Date(document_prestataire_scan.date_elaboration)),
+                                        date_elaboration: convertionDate(document_prestataire_scan.date_elaboration),
                                         observation: document_prestataire_scan.observation,
                                         id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
                                         id_document_prestataire: document_prestataire_scan.id,
@@ -13085,7 +13115,7 @@ vm.steppassation_marches = function()
                                                 supprimer: 1,
                                                 id:        getIdFile,
                                                 fichier: document_prestataire_scan.fichier,
-                                                date_elaboration: convertionDate(new Date(document_prestataire_scan.date_elaboration)),
+                                                date_elaboration: convertionDate(document_prestataire_scan.date_elaboration),
                                                 observation: document_prestataire_scan.observation,
                                                 id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
                                                 id_document_prestataire: document_prestataire_scan.id,
@@ -13107,7 +13137,7 @@ vm.steppassation_marches = function()
                                   supprimer: suppression,
                                   id:        getIdFile,
                                   fichier: document_prestataire_scan.fichier,
-                                  date_elaboration: convertionDate(new Date(document_prestataire_scan.date_elaboration)),
+                                  date_elaboration: convertionDate(document_prestataire_scan.date_elaboration),
                                   observation: document_prestataire_scan.observation,
                                   id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
                                   id_document_prestataire: document_prestataire_scan.id,
@@ -13382,9 +13412,9 @@ vm.steppassation_marches = function()
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    date_prev_debu_travau: convertionDate(new Date(delai_travaux.date_prev_debu_travau)),
-                    date_reel_debu_travau: convertionDate(new Date(delai_travaux.date_reel_debu_travau)),
-                    date_expiration_police: convertionDate(new Date(delai_travaux.date_expiration_police)),
+                    date_prev_debu_travau: convertionDate(delai_travaux.date_prev_debu_travau),
+                    date_reel_debu_travau: convertionDate(delai_travaux.date_reel_debu_travau),
+                    date_expiration_police: convertionDate(delai_travaux.date_expiration_police),
                     delai_execution: delai_travaux.delai_execution,
                     id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
                     validation : 0               
@@ -13641,7 +13671,7 @@ vm.steppassation_marches = function()
                     supprimer: suppression,
                     id:        getId,                    
                     id_etape_sousprojet:phase_sous_projet.id_etape_sousprojet,                    
-                    date_travaux: convertionDate(new Date(phase_sous_projet.date_travaux)),
+                    date_travaux: convertionDate(phase_sous_projet.date_travaux),
                     id_delai_travaux: vm.selectedItemDelai_travaux.id,
                     validation:0,               
                 });
@@ -13925,15 +13955,15 @@ vm.steppassation_marches = function()
                     supprimer: suppression,
                     id:        getId,
                     observation              : reception_mpe.observation,
-                    date_previ_recep_tech    : convertionDate(new Date(reception_mpe.date_previ_recep_tech )),
-                    date_reel_tech           : convertionDate(new Date(reception_mpe.date_reel_tech )),
-                    date_leve_recep_tech     : convertionDate(new Date(reception_mpe.date_leve_recep_tech )),
-                    date_previ_recep_prov    : convertionDate(new Date(reception_mpe.date_previ_recep_prov)),
-                    date_reel_recep_prov     : convertionDate(new Date(reception_mpe.date_reel_recep_prov )), 
-                    date_previ_leve          : convertionDate(new Date(reception_mpe.date_previ_leve )), 
-                    date_reel_lev_ava_rd     : convertionDate(new Date(reception_mpe.date_reel_lev_ava_rd )),
-                    date_previ_recep_defi    : convertionDate(new Date(reception_mpe.date_previ_recep_defi )),
-                    date_reel_recep_defi     : convertionDate(new Date(reception_mpe.date_reel_recep_defi )),
+                    date_previ_recep_tech    : convertionDate(reception_mpe.date_previ_recep_tech ),
+                    date_reel_tech           : convertionDate(reception_mpe.date_reel_tech ),
+                    date_leve_recep_tech     : convertionDate(reception_mpe.date_leve_recep_tech ),
+                    date_previ_recep_prov    : convertionDate(reception_mpe.date_previ_recep_prov),
+                    date_reel_recep_prov     : convertionDate(reception_mpe.date_reel_recep_prov ), 
+                    date_previ_leve          : convertionDate(reception_mpe.date_previ_leve ), 
+                    date_reel_lev_ava_rd     : convertionDate(reception_mpe.date_reel_lev_ava_rd ),
+                    date_previ_recep_defi    : convertionDate(reception_mpe.date_previ_recep_defi ),
+                    date_reel_recep_defi     : convertionDate(reception_mpe.date_reel_recep_defi ),
                     id_contrat_prestataire    :vm.selectedItemContrat_prestataire.id,
                     validation    :0
                       
@@ -14282,7 +14312,7 @@ vm.steppassation_marches = function()
         function convertionDate(daty)
         { 
             var date_final = null;  
-            if(daty!='Invalid Date')
+            if(daty!='Invalid Date' && daty!='' && daty!=null)
             {
                 console.log(daty);
                 var date     = new Date(daty);
@@ -14294,8 +14324,8 @@ vm.steppassation_marches = function()
                     mois = '0' + mois;
                 }
                 date_final= annee+"-"+mois+"-"+jour;
-                return date_final;
-            }      
+            }
+            return date_final;      
         }
         //format date affichage sur datatable
         vm.formatDate = function (daty)

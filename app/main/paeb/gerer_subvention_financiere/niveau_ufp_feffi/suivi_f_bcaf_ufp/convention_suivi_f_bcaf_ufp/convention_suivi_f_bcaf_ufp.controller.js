@@ -201,19 +201,25 @@
             }
         }
         var id_user = $cookieStore.get('id');
+        vm.filtre = {
+                id_cisco: null,
+                id_region: null
+              }
          apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
               vm.roles = result.data.response.roles;
-              switch (vm.roles[0])
-                {
-                 case 'BCAF':                           
+              var utilisateur = result.data.response;
+            if (utilisateur.roles.indexOf("BCAF")!= -1)
+            {                          
 
                             vm.usercisco = result.data.response.cisco;
-                            vm.ciscos.push(vm.usercisco);
+                            vm.ciscos.push(vm.usercisco);                                                     
+                            vm.filtre.id_cisco=result.data.response.cisco.id;
                             console.log(vm.ciscos);
-                            apiFactory.getAPIgeneraliserREST("region/index","menu","getregionbycisco",'id_cisco',vm.usercisco.id).then(function(result)
+                            apiFactory.getAPIgeneraliserREST("region/index","menu","getregionBycisco",'id_cisco',vm.usercisco.id).then(function(result)
                             {
                                 vm.regions = result.data.response;
+                                vm.filtre.id_region=result.data.response[0].id;
                                 console.log(vm.regions);
                             }, function error(result){ alert('something went wrong')});
                              
@@ -224,9 +230,9 @@
                             });
                             vm.session = 'BCAF';
                       
-                      break;
-
-                  case 'ADMIN': 
+            }
+            else
+            {
                             apiFactory.getAll("region/index").then(function success(response)
                             {
                               vm.regions = response.data.response;
@@ -237,12 +243,9 @@
                                 vm.allconvention_entete = result.data.response;
                                 vm.affiche_load =false;
                             });                          
-                            vm.session = 'ADMIN';                  
-                      break;
-                  default:
-                      break;
+                            vm.session = 'ADMIN'; 
               
-                }                  
+            }                  
 
          });
 

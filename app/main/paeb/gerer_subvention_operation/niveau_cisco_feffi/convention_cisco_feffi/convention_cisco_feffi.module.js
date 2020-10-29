@@ -12,7 +12,7 @@ var vs;
     {
         // State
         $stateProvider.state('app.paeb_gerer_subvention_operation_niveau_cisco_feffi_convention_cisco_feffi', {
-            url      : '/donnees-de-base/convention_cisco_feffi',
+            url      : '/donnees-de-base/gerer_subvention_operation/niveau_cisco_feffi/convention_cisco_feffi',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_cisco_feffi/convention_cisco_feffi/convention_cisco_feffi.html',
@@ -22,8 +22,8 @@ var vs;
             bodyClass: 'convention_cisco_feffi',
             data : {
               authorizer : true,
-              permitted : ["ACC","ADMIN"],
-              page: "Convention_cisco_feffi"
+              permitted : ["AAC","ADMIN"],
+              page: "convention_cisco_feffi"
             }
         });
 
@@ -56,7 +56,7 @@ var vs;
                
 
                 var permission = user.roles;
-                var permissions = ["ACC","ADMIN"];
+                var permissions = ["AAC","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

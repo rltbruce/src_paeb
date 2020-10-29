@@ -193,9 +193,10 @@
          apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
               vm.roles = result.data.response.roles;
-              switch (vm.roles[0])
-                {
-                  case 'DPFI':
+
+              var utilisateur = result.data.response;
+            if (utilisateur.roles.indexOf("DPFI")!= -1)
+            {
                             vm.permissionboutonvaliderpassation_pr = true;
                             vm.permissionboutonvalidercontrat_pr = true;
 
@@ -203,18 +204,14 @@
                             
                             vm.session = 'DPFI';
                       
-                      break;
-
-                  case 'ADMIN':
+            }else
+            {
                             vm.permissionboutonvaliderpassation_pr = true;
                             vm.permissionboutonvalidercontrat_pr = true;
 
-                            vm.session = 'ADMIN';                  
-                      break;
-                  default:
-                      break;
+                            vm.session = 'ADMIN';
               
-                }                  
+            }                  
 
          });
 

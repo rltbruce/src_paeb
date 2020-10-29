@@ -147,9 +147,9 @@
          apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
               vm.roles = result.data.response.roles;
-              switch (vm.roles[0])
-                {                                    
-                  case 'UFP':
+              var utilisateur = result.data.response;
+            if (utilisateur.roles.indexOf("UFP")!= -1)
+            {
                             vm.usercisco = result.data.response.cisco; 
                             vm.permissionboutonencourufp = true;
                             vm.permissionboutonenrejeufp = true;
@@ -157,21 +157,18 @@
                             vm.permissionboutonvalidertrans_ufp = true;                            
                             
                             vm.session = 'UFP'; 
-                      break;                                    
-                  case 'ADMIN':
+            }
+            else
+            {
                             vm.usercisco = result.data.response.cisco; 
                             vm.permissionboutonencourufp = true;
                             vm.permissionboutonenrejeufp = true;
                             vm.permissionboutonvaliderufp = true;
                             vm.permissionboutonvalidertrans_ufp = true;                            
                             
-                            vm.session = 'ADMIN'; 
-                      break;
-                  
-                  default:
-                      break;
+                            vm.session = 'ADMIN';
               
-                }                  
+            }                  
 
          });
 

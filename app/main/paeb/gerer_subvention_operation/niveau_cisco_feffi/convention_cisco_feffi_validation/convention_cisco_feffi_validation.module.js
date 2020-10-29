@@ -14,7 +14,7 @@
     {
         // State
         $stateProvider.state('app.paeb_gerer_subvention_operation_niveau_cisco_feffi_convention_cisco_feffi_validation', {
-            url      : '/donnees-de-base/convention_cisco_feffi_validation',
+            url      : '/donnees-de-base/gerer_subvention_operation/niveau_cisco_feffi/convention_cisco_feffi_validation',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_cisco_feffi/convention_cisco_feffi_validation/convention_cisco_feffi_validation.html',

@@ -12,7 +12,7 @@
     {
         // State
         $stateProvider.state('app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_suivi_dpfi_convention_suivi_odpfi', {
-            url      : '/donnees-de-base/convention_suivi_odpfi',
+            url      : '/donnees-de-base/gerer_subvention_operation/niveau_feffi_prestataire/suivi_dpfi/convention_suivi_odpfi',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_feffi_prestataire/suivi_dpfi/convention_suivi_odpfi/convention_suivi_odpfi.html',

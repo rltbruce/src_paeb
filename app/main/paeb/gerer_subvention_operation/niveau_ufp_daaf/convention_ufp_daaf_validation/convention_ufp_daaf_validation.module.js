@@ -12,7 +12,7 @@ var vs;
     {
         // State
         $stateProvider.state('app.paeb_gerer_subvention_operation_niveau_ufp_daaf_convention_ufp_daaf_validation', {
-            url      : '/donnees-de-base/convention_ufp_daaf_validation',
+            url      : '/donnees-de-base/gerer_subvention_operation/niveau_ufp_daaf/convention_ufp_daaf_validation',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_ufp_daaf/convention_ufp_daaf_validation/convention_ufp_daaf_validation.html',

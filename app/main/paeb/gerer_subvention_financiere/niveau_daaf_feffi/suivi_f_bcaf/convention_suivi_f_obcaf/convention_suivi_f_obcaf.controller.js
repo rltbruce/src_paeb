@@ -197,36 +197,38 @@
             }
         }
         var id_user = $cookieStore.get('id');
+        vm.filtre = {
+                id_cisco: null,
+                id_region: null
+              }
          apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
               vm.roles = result.data.response.roles;
-              switch (vm.roles[0])
-                {
-                  case 'OBCAF': 
-                            vm.usercisco = result.data.response.cisco;
-                            apiFactory.getAPIgeneraliserREST("region/index","menu","getregionbycisco",'id_cisco',vm.usercisco.id).then(function(result)
+              var utilisateur = result.data.response;
+            if (utilisateur.roles.indexOf("OBCAF")!= -1)
+            {
+                            vm.usercisco = result.data.response.cisco;                                                       
+                            vm.filtre.id_cisco=result.data.response.cisco.id;
+                            apiFactory.getAPIgeneraliserREST("region/index","menu","getregionBycisco",'id_cisco',vm.usercisco.id).then(function(result)
                             {
                                 vm.regions = result.data.response;
+                                vm.filtre.id_region=result.data.response[0].id;
                                 console.log(vm.regions);
                             }, function error(result){ alert('something went wrong')});
                             vm.ciscos.push(vm.usercisco);
                             vm.showbuttonNeauveaudemandefeffi=true;                            
                             vm.session = 'OBCAF';
 
-                      break;
-
-                  case 'ADMIN':                            
+             }else
+             {                           
                             vm.showbuttonNeauveaudemandefeffi=true;
                              apiFactory.getAll("region/index").then(function success(response)
                             {
                               vm.regions = response.data.response;
                             }, function error(response){ alert('something went wrong')});
-                            vm.session = 'ADMIN';                  
-                      break;
-                  default:
-                      break;
+                            vm.session = 'ADMIN'; 
               
-                }                  
+              }                  
 
          });
 

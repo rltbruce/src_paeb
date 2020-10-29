@@ -13,7 +13,7 @@
     {
         // State
         $stateProvider.state('app.paeb_gerer_subvention_operation_niveau_ufp_daaf_compte_daaf', {
-            url      : '/donnees-de-base/compte_daaf',
+            url      : '/donnees-de-base/gerer_subvention_operation/niveau_ufp_daaf/compte_daaf',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_ufp_daaf/compte_daaf/compte_daaf.html',

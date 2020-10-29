@@ -160,7 +160,11 @@
                         <fieldset class="standard" >
                               <legend><code>Privilèges</code></legend>
 
-                                    <md-checkbox ng-model="vm.user.acc" aria-label="Checkbox 1"  style="margin: 4px;" ng-change="vm.change_acc(vm.user)">
+                                    <md-checkbox ng-disabled="true" ng-model="vm.user.user" value="true" aria-label="Checkbox 1"  style="margin: 4px;">
+                                       Simple utilisateur
+                                    </md-checkbox>
+
+                                    <md-checkbox ng-model="vm.user.aac" aria-label="Checkbox 1"  style="margin: 4px;" ng-change="vm.change_aac(vm.user)">
                                         AAC
                                     </md-checkbox>
 

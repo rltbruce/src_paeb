@@ -145,9 +145,9 @@
          apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
               vm.roles = result.data.response.roles;
-              switch (vm.roles[0])
-                {                                    
-                  case 'DAAF':
+              var utilisateur = result.data.response;
+            if (utilisateur.roles.indexOf("DAAF")!= -1)
+            {
                             vm.usercisco = result.data.response.cisco; 
                             vm.permissionboutonencourdaaf = true;
                             vm.permissionboutonenrejedaaf = true;
@@ -155,21 +155,17 @@
                             vm.permissionboutonvalidertrans_daaf = true;                            
                             
                             vm.session = 'DAAF'; 
-                      break;                                    
-                  case 'ADMIN':
+            }else
+            {
                             vm.usercisco = result.data.response.cisco; 
                             vm.permissionboutonencourdaaf = true;
                             vm.permissionboutonenrejedaaf = true;
                             vm.permissionboutonvaliderdaaf = true;
                             vm.permissionboutonvalidertrans_daaf = true;                            
                             
-                            vm.session = 'ADMIN'; 
-                      break;
-                  
-                  default:
-                      break;
+                            vm.session = 'ADMIN';
               
-                }                  
+            }                  
 
          });
 

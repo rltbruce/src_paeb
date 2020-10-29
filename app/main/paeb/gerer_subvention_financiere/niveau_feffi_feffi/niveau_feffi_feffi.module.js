@@ -5,7 +5,9 @@
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_feffi_feffi', [			
             'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.decai_fonctionnement',         
-            'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.decai_fonctionnement_validation'
+            'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.decai_fonctionnement_validation',         
+            'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.transfert_reliquat_obcaf',         
+            'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.transfert_reliquat_bcaf'
             ]) 
         .run(testPermission)       
         .config(config);

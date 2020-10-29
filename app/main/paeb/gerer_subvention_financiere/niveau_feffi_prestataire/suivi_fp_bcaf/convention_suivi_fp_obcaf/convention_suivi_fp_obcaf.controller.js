@@ -375,36 +375,38 @@
             }
         }
         var id_user = $cookieStore.get('id');
+        vm.filtre = {
+                id_cisco: null,
+                id_region: null
+              }
          apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
               vm.roles = result.data.response.roles;
-              switch (vm.roles[0])
-                {
-                  case 'OBCAF': 
+              var utilisateur = result.data.response;
+
+            if (utilisateur.roles.indexOf("OBCAF")!= -1)
+            { 
                             vm.usercisco = result.data.response.cisco;
                             vm.ciscos.push(vm.usercisco);
-                            console.log(vm.ciscos);
-                            apiFactory.getAPIgeneraliserREST("region/index","menu","getregionbycisco",'id_cisco',vm.usercisco.id).then(function(result)
+                            vm.filtre.id_cisco=result.data.response.cisco.id;
+                            apiFactory.getAPIgeneraliserREST("region/index","menu","getregionBycisco",'id_cisco',vm.usercisco.id).then(function(resu)
                             {
-                                vm.regions = result.data.response;
-                                console.log(vm.regions);
-                            }, function error(result){ alert('something went wrong')});
+                                vm.regions = resu.data.response;
+                                vm.filtre.id_region=resu.data.response[0].id;
+                            }, function error(resu){ alert('something went wrong')});
                             vm.showbuttonNeauveaudemandefeffi=true;                            
                             vm.session = 'OBCAF';
 
-                      break;
-
-                  case 'ADMIN':                            
+            }
+            else
+            {                            
                             vm.showbuttonNeauveaudemandefeffi=true;
                             
                             apiFactory.getAll("region/index").then(function success(response)
                             {
                               vm.regions = response.data.response;
                             }, function error(response){ alert('something went wrong')});
-                            vm.session = 'ADMIN';                  
-                      break;
-                  default:
-                      break;
+                            vm.session = 'ADMIN'; 
               
                 }                  
 
@@ -544,36 +546,29 @@
         { 
                 vm.styleTabfils = "acc_sous_menu";                            
                 vm.stepsuivi_paiement_moe = false;
-            return new Promise(function (resolve, reject) 
-            {
+                vm.affiche_load =true;
                 apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.allcontrat_moe = result.data.response;
-                    return resolve('ok'); 
+                    vm.affiche_load =false;
                 });
-            });
         }        
         
          vm.step_menu_mpe = function()
         {   
             vm.styleTabfils = "acc_sous_menu";
             vm.stepsuivi_paiement_mpe = false;
-            return new Promise(function (resolve, reject)
-            {
+            vm.affiche_load =true;
                 apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.allcontrat_prestataire = result.data.response;
-                    return resolve('ok');
+                    vm.affiche_load =false;
                 });
-                  
-                
-            });
         }
 
         vm.step_menu_reliquat=function()
-        {
-            return new Promise(function (resolve, reject)
-            {
+        {       
+                vm.affiche_load =true;
                 apiFactory.getAPIgeneraliserREST("transfert_reliquat/index",'menu','gettransfertByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.alltransfert_reliquat = result.data.response.filter(function(obj)
@@ -585,9 +580,8 @@
                     {
                     vm.showbuttonNouvTransfert_reliquat=false;
                     }
-                    return resolve('ok');
-                });            
-            });
+                    vm.affiche_load =false;
+                });
         }
 
 
@@ -650,10 +644,12 @@
 
     /**************************************debut facture moe entete*********************************************/
       vm.click_step_suivi_paiement_moe = function()
-      {
+      { 
+        vm.affiche_load =true;
         apiFactory.getAPIgeneraliserREST("facture_moe_entete/index","menu","getfacture_moe_enteteinvalideBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
         {
             vm.allfacture_moe_entete = result.data.response;
+            vm.affiche_load =false;
         });        
 
         vm.steprubriquecalendrier = false;
@@ -968,10 +964,12 @@
     /**************************************debut facture moe detail*********************************************/
 
       vm.click_step_rubrique_calendrier_paie_moe = function()
-      {
+      { 
+        vm.affiche_load =true;
         apiFactory.getAPIgeneraliserREST("divers_rubrique_calendrier_paie_moe/index","menu","getrubrique_calendrier_moewithmontantByentetecontrat",'id_facture_moe_entete',vm.selectedItemFacture_moe_entete.id,'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
         {
             vm.allrubrique_calendrier_paie_moe = result.data.response;
+            vm.affiche_load =false;
             console.log(vm.allrubrique_calendrier_paie_moe);
         });
 
@@ -1270,10 +1268,12 @@
 /**************************************debut facture moe detail*********************************************/
 
       vm.click_step_sousrubrique_calendrier_paie_moe = function()
-      {
+      { 
+        vm.affiche_load =true;
         apiFactory.getAPIgeneraliserREST("divers_sousrubrique_calendrier_paie_moe/index","menu","getsousrubrique_calendrier_moewithmontantByentetecontrat",'id_facture_moe_entete',vm.selectedItemFacture_moe_entete.id,'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'id_rubrique',vm.selectedItemRubrique_calendrier_paie_moe.id).then(function(result)
         {
             vm.allsousrubrique_calendrier_paie_moe = result.data.response;
+            vm.affiche_load =false;
             console.log(vm.allsousrubrique_calendrier_paie_moe);
         });
 
@@ -1319,12 +1319,13 @@
     /**************************************fin facture moe detail*********************************************/
     /**********************************************debut attachement batiment travauxe***************************************************/
         vm.click_step_facture_moe_detail = function()
-        {
+        {   vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("facture_moe_detail/index","menu","getfacture_moe_detailwithcalendrier_detailbyentete",
                     "id_facture_moe_entete",vm.selectedItemFacture_moe_entete.id,"id_sousrubrique",vm.selectedItemSousrubrique_calendrier_paie_moe.id,
                     "id_contrat_bureau_etude",vm.selectedItemContrat_moe.id).then(function(result)
             {
                 vm.allfacture_moe_detail = result.data.response;
+                vm.affiche_load =false;
                 console.log(vm.allfacture_moe_detail);
             });
         }
@@ -1424,7 +1425,25 @@
 
         //fonction masque de saisie modification item feffi
         vm.modifierFacture_moe_detail = function(item)
-        {
+        {   
+            if (item.code=='p1')
+            {
+                vm.selectedItemFacture_moe_detail = item;
+                            currentItemFacture_moe_detail = angular.copy(vm.selectedItemFacture_moe_detail);
+                            $scope.vm.allfacture_moe_detail.forEach(function(jus) {
+                              jus.$edit = false;
+                            });
+                            item.$edit = true;
+                            item.$selected = true;
+                            
+                            item.montant_periode   = parseFloat(item.montant_periode) ;
+                            item.observation   = parseFloat(item.observation) ;
+                            NouvelItemFacture_moe_detail = true ;
+                            if (parseInt(item.id)>0)
+                            {   
+                                NouvelItemFacture_moe_detail = false ;
+                            }
+            }
             if (item.code=='p2' || item.code=='p5')
             {
                 apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getmontant_anterieurbycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'code_pai','p1').then(function(result)
@@ -2016,10 +2035,12 @@
 
 /**********************************fin justificatif attachement****************************************/
     vm.click_step_justi_facture_moe = function()
-    {
+    {   
+        vm.affiche_load =true;
         apiFactory.getAPIgeneraliserREST("justificatif_facture_moe/index",'id_facture_moe_entete',vm.selectedItemFacture_moe_entete.id).then(function(result)
         {
             vm.alljustificatif_facture_moe = result.data.response;
+            vm.affiche_load =false;
             console.log(vm.alljustificatif_facture_moe);
         });
     }
@@ -2473,6 +2494,7 @@
         vm.click_tabs_suivi_paiement = function()
         {   
             vm.stepattachement_mpe = false;
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("avance_demarrage/index","menu","getavance_demarrageBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.allavance_demarrage = result.data.response.filter(function(obj)
@@ -2484,6 +2506,7 @@
                     vm.showbuttonNouvAvance_demarrage = false;
                 }
                 vm.stepattachement_mpe = true;
+                vm.affiche_load =false;
             });
             vm.styleTabfils = "acc_menu";            
             vm.styleTabfils2 = "acc_sous_menu";
@@ -2760,6 +2783,7 @@
         vm.click_tab_facture_mpe = function()
         {
             vm.styleTabfils2 = "acc_sous_menu";
+            vm.affiche_load =true;
 
             apiFactory.getAPIgeneraliserREST("facture_mpe/index","menu","getfacture_mpeByattachement",'id_attachement_travaux',vm.selectedItemAttachement_travaux.id).then(function(result)
             {
@@ -2774,6 +2798,7 @@
                         vm.showbuttonNouvFacture_mpe = true;
                         vm.id_facture_mpe = 0;
                     }
+                    vm.affiche_load =false;
             });
         }
         vm.facture_mpe_column = [        
@@ -3131,7 +3156,8 @@
 /************************************************debut attachement*************************************************/
        
         vm.click_tabs_attachement_travaux = function()
-        {
+        {   
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("attachement_travaux/index","menu","getattachement_travauxinvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.allattachement_travaux = result.data.response.filter(function(obj)
@@ -3155,6 +3181,7 @@
                 vm.stepattachement_batiment_travaux = false;
                 vm.stepattachement_latrine_travaux = false;
                 vm.stepattachement_mobilier_travaux = false;
+                vm.affiche_load =false;
             });
                         
             vm.styleTabfils2 = "acc_menu";
@@ -3540,7 +3567,7 @@
 
 /************************************************debut batiment_mpe*************************************************/
     vm.click_tab_tranche_batiment = function()
-        {   
+        {   vm.affiche_load =true;
             vm.showbuttonNouvDemande_batiment_mpe_creer = true;
             apiFactory.getAPIgeneraliserREST("demande_batiment_prestataire/index","menu","getdemandeByattachement",'id_attachement_travaux',vm.selectedItemAttachement_travaux.id).then(function(result)
             {
@@ -3549,6 +3576,7 @@
                 {
                     vm.showbuttonNouvDemande_batiment_mpe_creer = false;
                 }
+                vm.affiche_load =false;
             });
 
             vm.steprubriquebatiment_mpe = false;
@@ -4116,12 +4144,13 @@
         }];
 
         vm.click_rubrique_attachement_batiment_mpe = function()
-        {
+        {   
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("divers_attachement_batiment/index","menu","getrubrique_attachement_withmontantbycontrat","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_demande_batiment_mpe",vm.selectedItemDemande_batiment_mpe.id).then(function(result)
             {   
                 vm.allrubrique_attachement_batiment_mpe= result.data.response;
                 vm.stepattachement_batiment_travaux = false;
-
+                vm.affiche_load =false;
                 console.log(vm.allrubrique_attachement_batiment_mpe);
             });
         }
@@ -4375,12 +4404,14 @@
         
 /**********************************************debut attachement batiment travauxe***************************************************/
         vm.click_tab_attachement_batiment_travaux = function()
-        {
+        {   
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("divers_attachement_batiment_travaux/index","menu","getattachement_batimenttravauxbydemande",
                     "id_demande_batiment_mpe",vm.selectedItemDemande_batiment_mpe.id,"id_attachement_batiment",vm.selectedItemRubrique_attachement_batiment_mpe.id,
                     "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.alldivers_attachement_batiment_travaux = result.data.response;
+                vm.affiche_load =false;
                 console.log(vm.alldivers_attachement_batiment_travaux);
             });
         }
@@ -4391,20 +4422,45 @@
             var pourcentage_periode =   0;
             var pourcentage_anterieur =   0;
             var pourcentage_cumul =   0;
+            var curren_quantite_cumul = 0;
+            var curren_quantite_periode = 0;
+
+            var curren_montant_cumul = 0;
+            var curren_montant_periode = 0;
+            if (currentItemDivers_attachement_batiment_travaux.quantite_cumul!=null)
+            {
+                curren_quantite_cumul = currentItemDivers_attachement_batiment_travaux.quantite_cumul;
+            }
+
+            if (currentItemDivers_attachement_batiment_travaux.quantite_periode!=null)
+            {
+                curren_quantite_periode = currentItemDivers_attachement_batiment_travaux.quantite_periode;
+            }
+
+
+            if (currentItemDivers_attachement_batiment_travaux.montant_periode!=null)
+            {
+                curren_montant_periode = currentItemDivers_attachement_batiment_travaux.montant_periode;
+            }
+
+            if (currentItemDivers_attachement_batiment_travaux.quantite_cumul!=null)
+            {
+                curren_montant_cumul = currentItemDivers_attachement_batiment_travaux.montant_cumul;
+            }
             var montant_current =   parseFloat(item.quantite_periode)* parseFloat(item.prix_unitaire);
 
-            cumul_quatite           =   parseFloat(currentItemDivers_attachement_batiment_travaux.quantite_cumul)-parseFloat(currentItemDivers_attachement_batiment_travaux.quantite_periode) + parseFloat(item.quantite_periode) ;
+            cumul_quatite           =   parseFloat(curren_quantite_cumul)-parseFloat(curren_quantite_periode) + parseFloat(item.quantite_periode) ;
             item.quantite_cumul     =   cumul_quatite;
 
             item.montant_periode    =   montant_current;
             pourcentage_periode     =   (parseFloat(montant_current) * 100)/item.montant_prevu;
             item.pourcentage_periode  =   pourcentage_periode.toFixed(3);
 
-            cumul_montant           =   parseFloat(currentItemDivers_attachement_batiment_travaux.montant_cumul)-parseFloat(currentItemDivers_attachement_batiment_travaux.montant_periode) + parseFloat(montant_current) ;
+            cumul_montant           =   parseFloat(curren_montant_cumul)-parseFloat(curren_montant_periode) + parseFloat(montant_current) ;
             pourcentage_cumul       =   (parseFloat(cumul_montant) * 100)/item.montant_prevu;
             item.montant_cumul      =   cumul_montant;
             item.pourcentage_cumul  =   pourcentage_cumul.toFixed(3);
-            
+            console.log(currentItemDivers_attachement_batiment_travaux);
             if (item.quantite_prevu<item.quantite_cumul)
             {
                 item.quantite_periode = 0;
@@ -4622,6 +4678,7 @@
 /************************************************debut latrine_mpe*************************************************/
     vm.click_tab_tranche_latrine = function()
         {   
+            vm.affiche_load =true;
             vm.showbuttonNouvDemande_latrine_mpe_creer = true;
             apiFactory.getAPIgeneraliserREST("demande_latrine_prestataire/index","menu","getdemandeByattachement",'id_attachement_travaux',vm.selectedItemAttachement_travaux.id).then(function(result)
             {
@@ -4630,6 +4687,7 @@
                 {
                     vm.showbuttonNouvDemande_latrine_mpe_creer = false;
                 }
+                vm.affiche_load =false;
             });
             
             vm.steprubriquebatiment_mpe = false;
@@ -5083,13 +5141,14 @@
         }];
 
         vm.click_rubrique_attachement_latrine_mpe = function()
-        {console.log(vm.selectedItemContrat_prestataire.id);
-            console.log(vm.selectedItemDemande_latrine_mpe.id);
+        {   
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("divers_attachement_latrine/index","menu","getrubrique_attachement_withmontantbycontrat","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_demande_latrine_mpe",vm.selectedItemDemande_latrine_mpe.id).then(function(result)
             {   
                 vm.allrubrique_attachement_latrine_mpe= result.data.response;
                 console.log(vm.allrubrique_attachement_latrine_mpe);
                 vm.stepattachement_latrine_travaux = false;
+                vm.affiche_load =false;
             });
         }
  //fonction selection item rubrique attachement latrine mpe
@@ -5340,13 +5399,15 @@
 
 /**********************************************debut attachement latrine travauxe***************************************************/
        vm.click_tab_attachement_latrine_travaux = function()
-        {
+        {   
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("divers_attachement_latrine_travaux/index","menu","getattachement_latrinetravauxbydemande",
                     "id_demande_latrine_mpe",vm.selectedItemDemande_latrine_mpe.id,"id_attachement_latrine",vm.selectedItemRubrique_attachement_latrine_mpe.id,
                     "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.alldivers_attachement_latrine_travaux = result.data.response;
                 console.log(vm.alldivers_attachement_latrine_travaux);
+                vm.affiche_load =false;
             });
         }
         vm.change_quantite_periode_latrine = function(item)
@@ -5356,16 +5417,43 @@
             var pourcentage_periode =   0;
             var pourcentage_anterieur =   0;
             var pourcentage_cumul =   0;
+
+
+            var curren_quantite_cumul = 0;
+            var curren_quantite_periode = 0;
+
+            var curren_montant_cumul = 0;
+            var curren_montant_periode = 0;
+            if (currentItemDivers_attachement_latrine_travaux.quantite_cumul!=null)
+            {
+                curren_quantite_cumul = currentItemDivers_attachement_latrine_travaux.quantite_cumul;
+            }
+
+            if (currentItemDivers_attachement_latrine_travaux.quantite_periode!=null)
+            {
+                curren_quantite_periode = currentItemDivers_attachement_latrine_travaux.quantite_periode;
+            }
+
+
+            if (currentItemDivers_attachement_latrine_travaux.montant_periode!=null)
+            {
+                curren_montant_periode = currentItemDivers_attachement_latrine_travaux.montant_periode;
+            }
+
+            if (currentItemDivers_attachement_latrine_travaux.quantite_cumul!=null)
+            {
+                curren_montant_cumul = currentItemDivers_attachement_latrine_travaux.montant_cumul;
+            }
             var montant_current =   parseFloat(item.quantite_periode)* parseFloat(item.prix_unitaire);
 
-            cumul_quatite           =   parseFloat(currentItemDivers_attachement_latrine_travaux.quantite_cumul)-parseFloat(currentItemDivers_attachement_latrine_travaux.quantite_periode) + parseFloat(item.quantite_periode) ;
+            cumul_quatite           =   parseFloat(curren_quantite_cumul)-parseFloat(curren_quantite_periode) + parseFloat(item.quantite_periode) ;
             item.quantite_cumul     =   cumul_quatite;
 
             item.montant_periode    =   montant_current;
             pourcentage_periode     =   (parseFloat(montant_current) * 100)/item.montant_prevu;
             item.pourcentage_periode  =   pourcentage_periode.toFixed(3);
 
-            cumul_montant           =   parseFloat(currentItemDivers_attachement_latrine_travaux.montant_cumul)-parseFloat(currentItemDivers_attachement_latrine_travaux.montant_periode) + parseFloat(montant_current) ;
+            cumul_montant           =   parseFloat(curren_montant_cumul)-parseFloat(curren_montant_periode) + parseFloat(montant_current) ;
             pourcentage_cumul       =   (parseFloat(cumul_montant) * 100)/item.montant_prevu;
             item.montant_cumul      =   cumul_montant;
             item.pourcentage_cumul  =   pourcentage_cumul.toFixed(3);
@@ -5589,6 +5677,7 @@
 /************************************************debut mobilier_mpe*************************************************/
     vm.click_tab_tranche_mobilier = function()
         {   
+            vm.affiche_load =true;
             vm.showbuttonNouvDemande_mobilier_mpe_creer = true;
             apiFactory.getAPIgeneraliserREST("demande_mobilier_prestataire/index","menu","getdemandeByattachement",'id_attachement_travaux',vm.selectedItemAttachement_travaux.id).then(function(result)
             {
@@ -5597,6 +5686,7 @@
                 {
                     vm.showbuttonNouvDemande_mobilier_mpe_creer = false;
                 }
+                vm.affiche_load =false;
             });
             
             vm.steprubriquebatiment_mpe = false;
@@ -6053,13 +6143,14 @@
         }];
 
         vm.click_rubrique_attachement_mobilier_mpe = function()
-        {console.log(vm.selectedItemContrat_prestataire.id);
-            console.log(vm.selectedItemDemande_mobilier_mpe.id);
+        {
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier/index","menu","getrubrique_attachement_withmontantbycontrat","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_demande_mobilier_mpe",vm.selectedItemDemande_mobilier_mpe.id).then(function(result)
             {   
                 vm.allrubrique_attachement_mobilier_mpe= result.data.response;
                 console.log(vm.allrubrique_attachement_mobilier_mpe);
                 vm.stepattachement_mobilier_travaux = false;
+                vm.affiche_load =false;
             });
         }
  //fonction selection item rubrique attachement mobilier mpe
@@ -6309,13 +6400,15 @@
 
 /**********************************************debut attachement mobilier travauxe***************************************************/
         vm.click_tab_attachement_mobilier_travaux = function()
-        {
+        {   
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier_travaux/index","menu","getattachement_mobiliertravauxbydemande",
                     "id_demande_mobilier_mpe",vm.selectedItemDemande_mobilier_mpe.id,"id_attachement_mobilier",vm.selectedItemRubrique_attachement_mobilier_mpe.id,
                     "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.alldivers_attachement_mobilier_travaux = result.data.response;
                 console.log(vm.alldivers_attachement_mobilier_travaux);
+                vm.affiche_load =false;
             });
         }
         vm.change_quantite_periode_mobilier = function(item)
@@ -6325,16 +6418,42 @@
             var pourcentage_periode =   0;
             var pourcentage_anterieur =   0;
             var pourcentage_cumul =   0;
+
+            var curren_quantite_cumul = 0;
+            var curren_quantite_periode = 0;
+
+            var curren_montant_cumul = 0;
+            var curren_montant_periode = 0;
+            if (currentItemDivers_attachement_mobilier_travaux.quantite_cumul!=null)
+            {
+                curren_quantite_cumul = currentItemDivers_attachement_mobilier_travaux.quantite_cumul;
+            }
+
+            if (currentItemDivers_attachement_mobilier_travaux.quantite_periode!=null)
+            {
+                curren_quantite_periode = currentItemDivers_attachement_mobilier_travaux.quantite_periode;
+            }
+
+
+            if (currentItemDivers_attachement_mobilier_travaux.montant_periode!=null)
+            {
+                curren_montant_periode = currentItemDivers_attachement_mobilier_travaux.montant_periode;
+            }
+
+            if (currentItemDivers_attachement_mobilier_travaux.quantite_cumul!=null)
+            {
+                curren_montant_cumul = currentItemDivers_attachement_mobilier_travaux.montant_cumul;
+            }
             var montant_current =   parseFloat(item.quantite_periode)* parseFloat(item.prix_unitaire);
 
-            cumul_quatite           =   parseFloat(currentItemDivers_attachement_mobilier_travaux.quantite_cumul)-parseFloat(currentItemDivers_attachement_mobilier_travaux.quantite_periode) + parseFloat(item.quantite_periode) ;
+            cumul_quatite           =   parseFloat(curren_quantite_cumul)-parseFloat(curren_quantite_periode) + parseFloat(item.quantite_periode) ;
             item.quantite_cumul     =   cumul_quatite;
 
             item.montant_periode    =   montant_current;
             pourcentage_periode     =   (parseFloat(montant_current) * 100)/item.montant_prevu;
             item.pourcentage_periode  =   pourcentage_periode.toFixed(3);
 
-            cumul_montant           =   parseFloat(currentItemDivers_attachement_mobilier_travaux.montant_cumul)-parseFloat(currentItemDivers_attachement_mobilier_travaux.montant_periode) + parseFloat(montant_current) ;
+            cumul_montant           =   parseFloat(curren_montant_cumul)-parseFloat(curren_montant_periode) + parseFloat(montant_current) ;
             pourcentage_cumul       =   (parseFloat(cumul_montant) * 100)/item.montant_prevu;
             item.montant_cumul      =   cumul_montant;
             item.pourcentage_cumul  =   pourcentage_cumul.toFixed(3);
@@ -6554,11 +6673,12 @@
         /************************************************debut Decompte*************************************************/
         vm.click_tab_decompte_mpe = function()
         {   
-
+            vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("facture_mpe/index","menu","getdecompte_mpeBycontratandfacture",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id,'id_facture_mpe',vm.id_facture_mpe).then(function(result)
             {
                 vm.decompte_mpes = result.data.response[0];
                 console.log(vm.decompte_mpes);
+                vm.affiche_load =false;
             });
         }
         vm.decompte_mpe_column = [        

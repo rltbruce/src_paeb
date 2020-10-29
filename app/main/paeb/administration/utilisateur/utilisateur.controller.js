@@ -281,11 +281,11 @@ console.log(vm.ciscos);
             
               switch(value)
               {
-                 /* case 'USER':
+                  case 'USER':
                   {
                       vm.user.user = true ;
                       break ;
-                  }*/
+                  }
 
                  /* case 'DDB':
                   {
@@ -341,9 +341,9 @@ console.log(vm.ciscos);
                       break;
                   }
 
-                  case 'ACC':
+                  case 'AAC':
                   {
-                      vm.user.acc = true ;
+                      vm.user.aac = true ;
                       break;
                   }
 
@@ -381,8 +381,8 @@ console.log(vm.ciscos);
           angular.forEach(user, function(value, key)
           {
         
-              /*if(key == 'user' && value == true)
-                  tab.push(key.toUpperCase());*/
+              if(key == 'user' && value == true)
+                  tab.push(key.toUpperCase());
               /*if(key == 'ddb' && value == true)
                 tab.push(key.toUpperCase());*/
               if(key == 'admin' && value == true)
@@ -401,7 +401,7 @@ console.log(vm.ciscos);
                   tab.push(key.toUpperCase());
               if(key == 'odpfi' && value == true)
                   tab.push(key.toUpperCase());
-              if(key == 'acc' && value == true)
+              if(key == 'aac' && value == true)
                   tab.push(key.toUpperCase());  
           });
 
@@ -551,9 +551,9 @@ console.log(datas);
           vm.user = {} ;
           vm.affichageMasque = 0 ;
       }
-      vm.change_acc = function(item)
+      vm.change_aac = function(item)
       {
-        if (item.acc==true) 
+        if (item.aac==true) 
         {
           item.obcaf = false;
           item.bcaf = false;
@@ -569,7 +569,7 @@ console.log(datas);
       {
         if (item.obcaf==true) 
         {
-          item.acc = false;
+          item.aac = false;
           item.bcaf = false;
           item.odaaf = false;
           item.daaf = false;
@@ -584,7 +584,7 @@ console.log(datas);
         if (item.bcaf==true) 
         {
           item.obcaf = false;
-          item.acc = false;
+          item.aac = false;
           item.odaaf = false;
           item.daaf = false;
           item.odpfi = false;
@@ -599,7 +599,7 @@ console.log(datas);
         {
           item.obcaf = false;
           item.bcaf = false;
-          item.acc = false;
+          item.aac = false;
           item.daaf = false;
           item.odpfi = false;
           item.dpfi = false;
@@ -614,7 +614,7 @@ console.log(datas);
           item.obcaf = false;
           item.bcaf = false;
           item.odaaf = false;
-          item.acc = false;
+          item.aac = false;
           item.odpfi = false;
           item.dpfi = false;
           item.ufp = false;
@@ -629,7 +629,7 @@ console.log(datas);
           item.bcaf = false;
           item.odaaf = false;
           item.daaf = false;
-          item.acc = false;
+          item.aac = false;
           item.dpfi = false;
           item.ufp = false;
           item.admin = false;
@@ -644,7 +644,7 @@ console.log(datas);
           item.odaaf = false;
           item.daaf = false;
           item.odpfi = false;
-          item.acc = false;
+          item.aac = false;
           item.ufp = false;
           item.admin = false;
         }
@@ -659,7 +659,7 @@ console.log(datas);
           item.daaf = false;
           item.odpfi = false;
           item.dpfi = false;
-          item.acc = false;
+          item.aac = false;
           item.admin = false;
         }
       }
@@ -674,7 +674,7 @@ console.log(datas);
           item.odpfi = false;
           item.dpfi = false;
           item.ufp = false;
-          item.acc = false;
+          item.aac = false;
         }
       }    
     }

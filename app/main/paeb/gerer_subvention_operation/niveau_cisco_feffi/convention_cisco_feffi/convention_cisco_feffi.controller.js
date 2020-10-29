@@ -153,80 +153,77 @@
         apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
             vm.user = result.data.response;
-            vm.roles = result.data.response.roles;
 
-            switch (vm.roles[0])
-                {
-                  case 'OBCAF': 
-                            var usercisco = result.data.response.cisco;
-                            vm.ciscos=[];
-                            vm.allcisco.push(usercisco);
-                            if (usercisco.id!=undefined)
-                            {
+            if (vm.user.roles.indexOf("OBCAF")!= -1)
+            {
+              var usercisco = result.data.response.cisco;
+              vm.ciscos=[];
+              vm.allcisco.push(usercisco);
+              if (usercisco.id!=undefined)
+              {
                                 /*apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioninvalideBycisconow','id_cisco',usercisco.id,'annee',annee).then(function(result)
                                 {
                                     vm.allconvention_cife_tete = result.data.response; 
                                     console.log(vm.allconvention_cife_tete);
                                 });*/
-                                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalideByutilisateurnow','id_utilisateur',id_user,'annee',annee).then(function(result)
-                                {
-                                    vm.allconvention_cife_tete = result.data.response; 
-                                    vm.affiche_load =false;
-                                });
-                                vm.session='OBCAF';
-                                vm.id_cisco = result.data.response.cisco.id;
-                                vm.ciscos.push(result.data.response.cisco);
-                                vm.filtre.id_cisco = result.data.response.cisco.id;
-                                apiFactory.getAPIgeneraliserREST("region/index",'menu','getregionBycisco','id_cisco',vm.id_cisco).then(function(result)
-                                {
-                                    vm.regions = result.data.response;
-                                    vm.filtre.id_region= vm.regions[0].id;
-                                });
-                                apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",vm.id_cisco).then(function(result)
-                                {
-                                  vm.communes = result.data.response;
-                                });
-                            }
+                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalideByutilisateurnow','id_utilisateur',id_user,'annee',annee).then(function(result)
+                  {
+                      vm.allconvention_cife_tete = result.data.response; 
+                      vm.affiche_load =false;
+                  });
+                  vm.session='OBCAF';
+                  vm.id_cisco = result.data.response.cisco.id;
+                  vm.ciscos.push(result.data.response.cisco);
+                  vm.filtre.id_cisco = result.data.response.cisco.id;
+                  apiFactory.getAPIgeneraliserREST("region/index",'menu','getregionBycisco','id_cisco',vm.id_cisco).then(function(result)
+                  {
+                      vm.regions = result.data.response;
+                      vm.filtre.id_region= vm.regions[0].id;
+                  });
+                  apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",vm.id_cisco).then(function(result)
+                  {
+                    vm.communes = result.data.response;
+                  });
+              }
+            } 
 
-                      break;
+            if (vm.user.roles.indexOf("AAC")!= -1)
+            {                           
+              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalideByutilisateurnow','id_utilisateur',id_user,'annee',annee).then(function(result)
+              {
+                  vm.allconvention_cife_tete = result.data.response; 
+                  vm.affiche_load =false;
+              });
+              apiFactory.getAll("cisco/index").then(function success(response)
+              {
+                vm.allcisco = response.data.response;
+              });
+              apiFactory.getAll("region/index").then(function success(response)
+              {
+                vm.regions = response.data.response;
+              });
+               vm.session='AAC';                  
+            }
 
-                  case 'ACC':                            
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalideByutilisateurnow','id_utilisateur',id_user,'annee',annee).then(function(result)
-                            {
-                                vm.allconvention_cife_tete = result.data.response; 
-                                vm.affiche_load =false;
-                            });
-                            apiFactory.getAll("cisco/index").then(function success(response)
-                            {
-                              vm.allcisco = response.data.response;
-                            });
-                            apiFactory.getAll("region/index").then(function success(response)
-                            {
-                              vm.regions = response.data.response;
-                            });
-                            vm.session='ACC';                  
-                      break;
-
-                  case 'ADMIN':                            
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalidenow','annee',annee).then(function(result)
-                            {
-                                vm.allconvention_cife_tete = result.data.response; 
-                                vm.affiche_load =false;
-                            });
-                            apiFactory.getAll("cisco/index").then(function success(response)
-                            {
-                              vm.allcisco = response.data.response;
-                            });
-                            apiFactory.getAll("region/index").then(function success(response)
-                            {
-                              vm.regions = response.data.response;
-                            });
-                            vm.session='ADMIN';                  
-                      break;
-                  default:
-                      break;
+            if (vm.user.roles.indexOf("ADMIN")!= -1)
+            {                            
+                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalidenow','annee',annee).then(function(result)
+                {
+                    vm.allconvention_cife_tete = result.data.response; 
+                    vm.affiche_load =false;
+                });
+                apiFactory.getAll("cisco/index").then(function success(response)
+                {
+                  vm.allcisco = response.data.response;
+                });
+                apiFactory.getAll("region/index").then(function success(response)
+                {
+                  vm.regions = response.data.response;
+                });
+                vm.session='ADMIN';                  
+           
               
-                }
+            }
 
             
         });
@@ -331,7 +328,7 @@
 
                       break;
 
-                  case 'ACC':                            
+                  case 'AAC':                            
                             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalideByutilisateurfiltre','id_utilisateur',id_user,
                             'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
                               filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',

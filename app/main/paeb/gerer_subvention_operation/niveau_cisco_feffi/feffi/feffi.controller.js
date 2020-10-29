@@ -11,7 +11,8 @@
 		    var vm = this;
 
         vm.selectedItemecole = {} ;
-        vm.allecole = [] ;
+        vm.allecole = [] ; 
+        vm.affiche_load = true;
 
         vm.ajout = ajout ;
         var NouvelItem=false;
@@ -154,39 +155,43 @@
         apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
           var usercisco = result.data.response.cisco;
+          var utilisateur = result.data.response;
+
+          if (utilisateur.roles.indexOf("BCAF")!= -1)
+          { 
+            if (usercisco.id!=undefined)
+            {
+              apiFactory.getAPIgeneraliserREST("ecole/index",'menus','getecoleBycisco','id_cisco',usercisco.id).then(function(result)
+              {
+                  vm.allecole = result.data.response; 
+                  console.log(vm.allecole);
+                  vm.affiche_load = false;
+
+              });
+            }
+
+            vm.session = 'BCAF';
+          }
           
-          switch (result.data.response.roles[0])
+          if (utilisateur.roles.indexOf("OBCAF")!= -1)
+          {
+              if (usercisco.id!=undefined)
+              { 
+                apiFactory.getAPIgeneraliserREST("ecole/index",'menus','getecoleBycisco','id_cisco',usercisco.id).then(function(result)
                 {
-                 case 'BCAF':
-                            if (usercisco.id!=undefined)
-                            {
-                              apiFactory.getAPIgeneraliserREST("ecole/index",'menus','getecoleBycisco','id_cisco',usercisco.id).then(function(result)
-                              {
-                                  vm.allecole = result.data.response; 
-                                  console.log(vm.allecole);
-
-                              });
-                            }
-
-                            vm.session = 'BCAF';
-                      
-                      break;
-
-                  case 'OBCAF':
-                            if (usercisco.id!=undefined)
-                            {
-                              apiFactory.getAPIgeneraliserREST("ecole/index",'menus','getecoleBycisco','id_cisco',usercisco.id).then(function(result)
-                              {
-                                  vm.allecole = result.data.response; 
-                                  console.log(vm.allecole);
-                              });
-                            }
-                            vm.session = 'OBCAF';                  
-                      break;
-                  default:
-                      break;
+                    vm.allecole = result.data.response; 
+                    console.log(vm.allecole);
+                    vm.affiche_load = false;
+                });
+              }
+               vm.session = 'OBCAF'; 
               
-                } 
+          } 
+          
+          if (utilisateur.roles.indexOf("ADMIN")!= -1)
+          {
+            vm.affiche_load = false;
+          }
 
         });
 
