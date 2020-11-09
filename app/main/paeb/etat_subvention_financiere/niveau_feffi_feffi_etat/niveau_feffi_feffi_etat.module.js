@@ -4,7 +4,8 @@
 
     angular
         .module('app.paeb.etat_subvention_financiere.niveau_feffi_feffi_etat', [			
-            'app.paeb.etat_subvention_financiere.niveau_feffi_feffi_etat.decai_fonctionnement_etat'
+            'app.paeb.etat_subvention_financiere.niveau_feffi_feffi_etat.decai_fonctionnement_etat',            
+            'app.paeb.etat_subvention_financiere.niveau_feffi_feffi_etat.transfert_reliquat_etat'
             ])        
         .config(config);
         var vs ;

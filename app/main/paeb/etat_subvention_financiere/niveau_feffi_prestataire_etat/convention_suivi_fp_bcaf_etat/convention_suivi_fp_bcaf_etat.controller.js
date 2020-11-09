@@ -51,7 +51,6 @@
         vm.stepsuivi_paiement_moe = false;
         vm.stepsuivi_paiement_mpe = false;
         vm.stepprestation_moe = false;
-        vm.stepMenu_reliquat =false; 
 
         vm.stepjusti_d_tra_moe = false;
         vm.stepjusti_batiment_moe = false;
@@ -73,12 +72,12 @@
         vm.steprubriquebatiment_mpe = false;
         vm.steprubriquelatrine_mpe = false;
         vm.steprubriquemobilier_mpe = false;
-        vm.stepdecompte =false;
+       // vm.stepdecompte =false;
         vm.stepjusti_attachement_mpe = false;
         vm.stepsuivi_marche = false;
         vm.show_avance_dem = false;
         vm.show_facture_mpe = false;
-
+        vm.id_facture_mpe = 0;
         vm.session = '';
 
 
@@ -344,20 +343,8 @@
         vm.selectionConvention_entete = function (item)
         {
             vm.selectedItemConvention_entete = item;
-             
-            vm.stepMenu_reliquat =true;          
-            donnee_menu_moe(item,vm.session).then(function () 
-            {
-                    // On récupère le resultat de la requête dans la varible "response"                    
-                vm.stepMenu_moe=true;
-                console.log(vm.stepMenu_moe);  
-            });
-            donnee_menu_mpe(item,vm.session).then(function () 
-            {
-                // On récupère le resultat de la requête dans la varible "response"                    
-                vm.stepMenu_mpe=true;
-                console.log(vm.stepMenu_mpe);  
-            });
+            vm.stepMenu_mpe=true;
+            vm.stepMenu_moe=true;
               vm.stepprestaion_pr=false;
               vm.stepprestation_moe = false;
               vm.stepjusti_d_tra_moe = false;
@@ -373,7 +360,7 @@
              });
              vm.selectedItemConvention_entete.$selected = true;
         });
-        function donnee_menu_moe(item,session)
+      /*  function donnee_menu_moe(item,session)
         {   vm.showbuttonNouvcontrat_moe=true;
             return new Promise(function (resolve, reject) 
             {
@@ -396,36 +383,34 @@
                     return resolve('ok');
                 });             
             });
-        }
+        }*/
 
         vm.step_menu_mpe=function()
         {
             vm.styleTabfils = "acc_sous_menu";
             vm.stepsuivi_paiement_mpe = false;
             vm.stepsuivi_marche = false;
+            vm.affiche_load = true;
+            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getetatcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+            {
+                    vm.allcontrat_prestataire = result.data.response;
+                    vm.affiche_load = false;
+            }); 
         }
 
         vm.step_menu_moe=function()
         {
             vm.styleTabfils = "acc_sous_menu";
             vm.stepsuivi_paiement_moe = false;
-        }
-        vm.step_menu_reliquat=function()
-        {
-            return new Promise(function (resolve, reject)
+            vm.affiche_load = true;
+            apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getetatcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
             {
-                apiFactory.getAPIgeneraliserREST("transfert_reliquat/index",'menu','gettransfertByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
-                {
-                    vm.alltransfert_reliquat = result.data.response;
-                    return resolve('ok');
-                }); 
-                 vm.styleTabfils = "acc_sous_menu";
-                 vm.stepjusti_trans_reliqua = false;           
+                    vm.allcontrat_moe = result.data.response;
+                    console.log(vm.allcontrat_moe);
+
+                    vm.affiche_load = false; 
             });
-        }
-       
-  
-  
+        }    
 
   /******************************************debut maitrise d'oeuvre*****************************************************/
 
@@ -1171,6 +1156,8 @@
         },
         {titre:"Remboursement plaque"
         },
+        {titre:"Taxe sur les marchés publics"
+        },
         {titre:"Net à payer"
         },
         {titre:"Date signature"
@@ -1248,6 +1235,7 @@
                         
             vm.stepfacture_mpe = false;
             vm.stepjusti_attachement_mpe = false;
+            vm.id_facture_mpe = 0;
         }
         vm.attachement_travaux_column = [        
         {titre:"Numero"
@@ -2227,7 +2215,7 @@
         /************************************************debut Decompte*************************************************/
         vm.click_tab_decompte_mpe = function()
         {
-            apiFactory.getAPIgeneraliserREST("facture_mpe/index","menu","getdecompte_mpeBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id,'id_facture_mpe',vm.selectedItemFacture_mpe.id).then(function(result)
+            apiFactory.getAPIgeneraliserREST("facture_mpe/index","menu","getdecompte_mpeBycontratandfacture",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id,'id_facture_mpe',vm.id_facture_mpe).then(function(result)
             {
                 vm.decompte_mpes = result.data.response[0];
                 console.log(vm.decompte_mpes);
@@ -2518,6 +2506,36 @@
                   return "0,00";
               }
     }
+    vm.som_taxe_marche_public= function()
+    {
+        var total_cumul = 0;
+        if (vm.allsuivi_marche_facture_mpe.length!=0)
+        {                
+            for(var i = 0; i < vm.allsuivi_marche_facture_mpe.length; i++){
+                var product = vm.allsuivi_marche_facture_mpe[i];
+                total_cumul += parseFloat(product.taxe_marche_public);
+            }
+        }
+
+        
+            var nbr=parseFloat(total_cumul);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+    }
 
     vm.som_net_payer= function()
     {
@@ -2550,99 +2568,7 @@
               }
     }
 
-        /**************************************Debut transfert reliquat*********************************************/
-         vm.transfert_reliquat_column = [        
-        {titre:"Montant"
-        },
-        {titre:"Objet utilisation"
-        },
-        {titre:"Date transfert"
-        },
-        {titre:"Situation utilisation"
-        },
-        {titre:"Intitulé du compte"
-        },
-        {titre:"RIB SAE"
-        },
-        {titre:"Observation"
-        }];
-
-        vm.afficheobjet_utilisation = function(objet)
-        { 
-          var affiche = "Se procurer fourniture";
-          if (objet ==0 )
-          {
-            affiche = "Amelioration infrastructure";
-          }
-          return affiche;
-        }
         
-        //fonction selection item entete convention cisco/feffi
-        vm.selectionTransfert_reliquat = function (item)
-        {
-            vm.selectedItemTransfert_reliquat = item;
-            //recuperation donnée convention
-           if (vm.selectedItemTransfert_reliquat.id!=0)
-            {   
-                vm.validation_transfert_reliquat = item.validation;
-                 
-                apiFactory.getAPIgeneraliserREST("justificatif_transfert_reliquat/index",'id_transfert_reliquat',item.id).then(function(result)
-                {
-                    vm.alljustificatif_transfert_reliquat = result.data.response; 
-                    console.log(vm.alljustificatif_transfert_reliquat);
-                });
-              //Fin Récupération cout divers par convention
-              
-                vm.stepjusti_trans_reliqua = true;
-            };           
-
-        };
-        $scope.$watch('vm.selectedItemTransfert_reliquat', function()
-        {
-             if (!vm.alltransfert_reliquat) return;
-             vm.alltransfert_reliquat.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemTransfert_reliquat.$selected = true;
-        });
-
-       
-    /*********************************************Fin transfert reliquat************************************************/
-
-    /*********************************************Fin justificatif reliquat************************************************/
-
-    vm.justificatif_transfert_reliquat_column = [
-        {titre:"Description"
-        },
-        {titre:"Fichier"
-        },
-        {titre:"Action"
-        }];
-
-                //fonction selection item justificatif transfert_reliquat
-        vm.selectionJustificatif_transfert_reliquat= function (item)
-        {
-            vm.selectedItemJustificatif_transfert_reliquat = item;
-        };
-        $scope.$watch('vm.selectedItemJustificatif_transfert_reliquat', function()
-        {
-             if (!vm.alljustificatif_transfert_reliquat) return;
-             vm.alljustificatif_transfert_reliquat.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemJustificatif_transfert_reliquat.$selected = true;
-        });
-
-        
-        vm.download_transfert_reliquat = function(item)
-        {
-            window.location = apiUrlFile+item.fichier ;
-        }
-
-    /*********************************************Fin justificatif reliquat************************************************/
-
 
   /******************************************fin maitrise d'oeuvre*******************************************************/
         vm.showAlert = function(titre,content)

@@ -44,6 +44,10 @@
         vm.styleTabfils = "acc_sous_menu";
         vm.selectedItemConvention_entete = {} ;
         vm.allconvention_entete = [] ;
+        vm.header_ref_convention = null;
+        vm.header_cisco = null;
+        vm.header_feffi = null;
+        vm.header_class = null;
 
         vm.styleTabfils2 = "acc_sous_menu";
        
@@ -295,6 +299,11 @@
             vm.allmoe= result.data.response;
             console.log(vm.allmoe);
         });
+
+        apiFactory.getAll("taxe_marche_public/index").then(function(result)
+        {
+            vm.alltaxe_marche_public= result.data.response;
+        });
         
        /* vm.allannee =[{annee:"2017"},{annee:"2018"},{annee:"2019"}];
         var last_date = Math.max.apply(Math, vm.allannee.map(function(o){return o.annee;}));
@@ -508,7 +517,12 @@
             vm.showbuttonNouvContrat_prestataire=true;
             vm.stepMenu_moe=true;
             vm.stepMenu_mpe=true;
-            vm.stepMenu_reliquat =true;          
+            vm.stepMenu_reliquat =true; 
+
+            vm.header_ref_convention = item.ref_convention;
+            vm.header_cisco = item.cisco.code;
+            vm.header_feffi = item.feffi.denomination; 
+            vm.header_class = 'headerbig';        
             
            //console.log(vm.step_menu_moe());                      
               /*apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
@@ -2824,6 +2838,8 @@
         },
         {titre:"Remboursement plaque"
         },
+        {titre:"Taxe sur les marchés publics"
+        },
         {titre:"Net à payer"
         },
         {titre:"Date signature"
@@ -2846,14 +2862,15 @@
                         montant_travaux: parseFloat(vm.selectedItemAttachement_travaux.total_periode) ,
                         pourcentage_rabais: 0,
                         montant_rabais: 0,
-                        montant_ht: 0,
+                        montant_ht: parseFloat(vm.selectedItemAttachement_travaux.total_periode),
                         montant_tva: 0,   
-                        montant_ttc: 0, 
+                        montant_ttc: parseFloat(vm.selectedItemAttachement_travaux.total_periode), 
                         remboursement_acompte: 0,   
                         penalite_retard: 0, 
-                        retenue_garantie: 0, 
-                        remboursement_plaque: 0,    
-                        net_payer: 0,  
+                        retenue_garantie: (parseFloat(vm.selectedItemAttachement_travaux.total_periode)*5)/100, 
+                        remboursement_plaque: 0,
+                        taxe_marche_public : (parseFloat(vm.selectedItemAttachement_travaux.total_periode)*parseFloat(vm.alltaxe_marche_public[0].pourcentage))/100,     
+                        net_payer: parseFloat(vm.selectedItemAttachement_travaux.total_periode)-(((parseFloat(vm.selectedItemAttachement_travaux.total_periode)*parseFloat(vm.alltaxe_marche_public[0].pourcentage))/100)+((parseFloat(vm.selectedItemAttachement_travaux.total_periode)*5)/100)),  
                         date_signature: '',
                         validation: 0
                     };
@@ -2879,37 +2896,39 @@
         vm.change_pourcentage_rabais_mpe = function(facture_mpe)
         {    
             var montant_rabais = (facture_mpe.montant_travaux * facture_mpe.pourcentage_rabais)/100;
-            var montant_ht = montant_rabais + facture_mpe.montant_travaux;
+            var montant_ht =  facture_mpe.montant_travaux-montant_rabais;
             var montant_tva = 0;
+            var taxe_marche_public = (parseFloat(vm.alltaxe_marche_public[0].pourcentage)* (parseFloat(montant_ht)+parseFloat(montant_tva)))/100;
             vm.selectedItemFacture_mpe.montant_rabais = montant_rabais;
             vm.selectedItemFacture_mpe.montant_ht = montant_ht;
             vm.selectedItemFacture_mpe.montant_tva = montant_tva;
+            vm.selectedItemFacture_mpe.taxe_marche_public = taxe_marche_public;
 
             vm.selectedItemFacture_mpe.montant_ttc = montant_ht + montant_tva;
             vm.selectedItemFacture_mpe.net_payer = montant_ht + montant_tva - (facture_mpe.remboursement_acompte + 
-                facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque);
+                facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque + taxe_marche_public);
         }
         vm.change_penalite_retard_mpe = function(facture_mpe)
         {    
             vm.selectedItemFacture_mpe.net_payer = facture_mpe.montant_ht + facture_mpe.montant_tva - 
-            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque);
+            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque + facture_mpe.taxe_marche_public);
         }
         vm.change_retenue_garantie_mpe = function(facture_mpe)
         {    
             vm.selectedItemFacture_mpe.net_payer = facture_mpe.montant_ht + facture_mpe.montant_tva - 
-            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque);
+            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque + facture_mpe.taxe_marche_public);
         }
         vm.change_remboursement_acompte_mpe = function(facture_mpe)
         {    
             vm.selectedItemFacture_mpe.net_payer = (parseFloat(facture_mpe.montant_ht) + parseFloat(facture_mpe.montant_tva)) - 
-            (parseFloat(facture_mpe.remboursement_acompte )+ parseFloat(facture_mpe.retenue_garantie) + parseFloat(facture_mpe.penalite_retard) + parseFloat(facture_mpe.remboursement_plaque));
+            (parseFloat(facture_mpe.remboursement_acompte )+ parseFloat(facture_mpe.retenue_garantie) + parseFloat(facture_mpe.penalite_retard) + parseFloat(facture_mpe.remboursement_plaque) + parseFloat(facture_mpe.taxe_marche_public));
             console.log(vm.selectedItemFacture_mpe);
         }
 
         vm.change_remboursement_plaque_mpe = function(facture_mpe)
         {    
             vm.selectedItemFacture_mpe.net_payer = facture_mpe.montant_ht + facture_mpe.montant_tva - 
-            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque);
+            (facture_mpe.remboursement_acompte + facture_mpe.retenue_garantie + facture_mpe.penalite_retard + facture_mpe.remboursement_plaque + facture_mpe.taxe_marche_public);
         }
         //fonction ajout dans bdd
         function ajoutFacture_mpe(facture_mpe,suppression)
@@ -2943,6 +2962,7 @@
             item.penalite_retard   = currentItemFacture_mpe.penalite_retard ;
             item.retenue_garantie   = currentItemFacture_mpe.retenue_garantie ;
             item.remboursement_plaque = currentItemFacture_mpe.remboursement_plaque;
+            item.taxe_marche_public = currentItemFacture_mpe.taxe_marche_public;
             item.net_payer   = currentItemFacture_mpe.net_payer ;
             item.date_signature   = currentItemFacture_mpe.date_signature ;
           }
@@ -3008,6 +3028,7 @@
             item.penalite_retard = parseFloat(vm.selectedItemFacture_mpe.penalite_retard) ;
             item.retenue_garantie = parseFloat(vm.selectedItemFacture_mpe.retenue_garantie) ;
             item.remboursement_plaque = parseFloat(vm.selectedItemFacture_mpe.remboursement_plaque) ;
+            item.taxe_marche_public = parseFloat(vm.selectedItemFacture_mpe.taxe_marche_public) ;
             item.net_payer = parseFloat(vm.selectedItemFacture_mpe.net_payer) ;
             console.log(vm.selectedItemFacture_mpe);
         };
@@ -3062,6 +3083,7 @@
                     || (currentItemFacture_mpe.penalite_retard != item.penalite_retard )
                     || (currentItemFacture_mpe.retenue_garantie != item.retenue_garantie )
                     || (currentItemFacture_mpe.remboursement_plaque   != item.remboursement_plaque ) 
+                    || (currentItemFacture_mpe.taxe_marche_public   != item.taxe_marche_public ) 
                     || (currentItemFacture_mpe.net_payer   != item.net_payer )
                     || (currentItemFacture_mpe.date_signature   != item.date_signature ))                   
                       { 
@@ -3108,6 +3130,7 @@
                     penalite_retard: facture_mpe.penalite_retard,
                     retenue_garantie: facture_mpe.retenue_garantie,
                     remboursement_plaque: facture_mpe.remboursement_plaque ,
+                    taxe_marche_public: facture_mpe.taxe_marche_public ,
                     net_payer: facture_mpe.net_payer,
                     date_signature:convertionDate(new Date(facture_mpe.date_signature)) ,
                     id_attachement_travaux: vm.selectedItemAttachement_travaux.id,
@@ -3182,6 +3205,7 @@
                 vm.stepattachement_latrine_travaux = false;
                 vm.stepattachement_mobilier_travaux = false;
                 vm.affiche_load =false;
+                vm.id_facture_mpe = 0;
             });
                         
             vm.styleTabfils2 = "acc_menu";
@@ -3855,14 +3879,15 @@
                       {
                             var montant_trav = parseFloat(vm.allfacture_mpe[0].montant_travaux) - parseFloat(demande_batiment_mpe.montant);
                             var montant_rabais = (montant_trav * vm.allfacture_mpe[0].pourcentage_rabais)/100;
-                            var montant_ht = parseFloat(montant_rabais) + parseFloat(montant_trav);
+                            var montant_ht =  parseFloat(montant_trav)- parseFloat(montant_rabais);
                             //var montant_tva = (montant_ht *20)/100;
                              var montant_tva = 0;
 
                             var montant_ttc = montant_ht + montant_tva;
                             var retenu_garanti = (parseFloat(montant_ttc)*5)/100;
+                            var taxe_marche_public = (parseFloat(vm.alltaxe_marche_public[0].pourcentage)* parseFloat(montant_ttc))/100;
                             var net_payer = parseFloat(montant_ht) + parseFloat(montant_tva) - (parseFloat(vm.allfacture_mpe[0].remboursement_acompte) + 
-                            parseFloat(retenu_garanti) + parseFloat(vm.allfacture_mpe[0].penalite_retard) + parseFloat(vm.allfacture_mpe[0].remboursement_plaque));
+                            parseFloat(retenu_garanti) + parseFloat(vm.allfacture_mpe[0].penalite_retard) + parseFloat(vm.allfacture_mpe[0].remboursement_plaque)+parseFloat(taxe_marche_public));
                             var item_facture_mpe = {
                                       id: vm.allfacture_mpe[0].id,        
                                       id_attachement: vm.allfacture_mpe[0].id_attachement_travaux,        
@@ -3876,7 +3901,8 @@
                                       remboursement_acompte: vm.allfacture_mpe[0].remboursement_acompte,   
                                       penalite_retard: vm.allfacture_mpe[0].penalite_retard, 
                                       retenue_garantie: retenu_garanti, 
-                                      remboursement_plaque: vm.allfacture_mpe[0].remboursement_plaque,    
+                                      remboursement_plaque: vm.allfacture_mpe[0].remboursement_plaque,
+                                      taxe_marche_public: taxe_marche_public,     
                                       net_payer: net_payer,  
                                       date_signature: vm.allfacture_mpe[0].date_signature
                                     };
@@ -3908,13 +3934,14 @@
                   {
                         var montant_trav = parseFloat(vm.allfacture_mpe[0].montant_travaux) + parseFloat(demande_batiment_mpe.montant);
                         var montant_rabais = (montant_trav * vm.allfacture_mpe[0].pourcentage_rabais)/100;
-                        var montant_ht = parseFloat(montant_rabais) + parseFloat(montant_trav);
+                        var montant_ht = parseFloat(montant_trav)- parseFloat(montant_rabais);
                         var montant_tva = 0;
 
                         var montant_ttc = montant_ht + montant_tva;
                         var retenu_garanti = (parseFloat(montant_ttc)*5)/100;
+                        var taxe_marche_public = (parseFloat(vm.alltaxe_marche_public[0].pourcentage)* parseFloat(montant_ttc))/100;
                         var net_payer = parseFloat(montant_ht) + parseFloat(montant_tva) - (parseFloat(vm.allfacture_mpe[0].remboursement_acompte) + 
-                        parseFloat(retenu_garanti) + parseFloat(vm.allfacture_mpe[0].penalite_retard) + parseFloat(vm.allfacture_mpe[0].remboursement_plaque));
+                        parseFloat(retenu_garanti) + parseFloat(vm.allfacture_mpe[0].penalite_retard) + parseFloat(vm.allfacture_mpe[0].remboursement_plaque)+parseFloat(taxe_marche_public));
                         var item_facture_mpe = {
                                   id: vm.allfacture_mpe[0].id,        
                                   id_attachement: vm.allfacture_mpe[0].id_attachement_travaux,        
@@ -3945,7 +3972,8 @@
 
                         var montant_ttc = montant_ht + montant_tva;
                         var retenu_garanti = (parseFloat(montant_ttc)*5)/100;
-                        var net_payer = parseFloat(montant_ht) + parseFloat(montant_tva) - parseFloat(retenu_garanti);
+                        var taxe_marche_public = (parseFloat(vm.alltaxe_marche_public[0].pourcentage)* parseFloat(montant_ttc))/100;
+                        var net_payer = parseFloat(montant_ht) + parseFloat(montant_tva) - parseFloat(retenu_garanti)-parseFloat(taxe_marche_public);
                         var item_facture_mpe = {
                                   id: 0,        
                                   id_attachement: vm.selectedItemAttachement_travaux.id,        
@@ -3959,7 +3987,8 @@
                                   remboursement_acompte: 0,   
                                   penalite_retard: 0, 
                                   retenue_garantie: retenu_garanti, 
-                                  remboursement_plaque: 0,    
+                                  remboursement_plaque: 0,
+                                  taxe_marche_public: taxe_marche_public,    
                                   net_payer: net_payer,  
                                   date_signature: convertionDate(vm.datenow)
                                 };
@@ -4031,6 +4060,7 @@
                     penalite_retard: facture_mpe.penalite_retard,
                     retenue_garantie: facture_mpe.retenue_garantie,
                     remboursement_plaque: facture_mpe.remboursement_plaque ,
+                    taxe_marche_public: facture_mpe.taxe_marche_public,
                     net_payer: facture_mpe.net_payer,
                     date_signature:convertionDate(new Date(facture_mpe.date_signature)) ,
                     id_attachement_travaux: vm.selectedItemAttachement_travaux.id,
@@ -4056,6 +4086,7 @@
                                         penalite_retard: facture_mpe.penalite_retard,
                                         retenue_garantie: facture_mpe.retenue_garantie,
                                         remboursement_plaque: facture_mpe.remboursement_plaque ,
+                                        taxe_marche_public: facture_mpe.taxe_marche_public,
                                         net_payer: facture_mpe.net_payer,
                                         date_signature:convertionDate(new Date(facture_mpe.date_signature)) ,
                                         id_attachement_travaux: vm.selectedItemAttachement_travaux.id,
@@ -4077,6 +4108,7 @@
                                         penalite_retard: facture_mpe.penalite_retard,
                                         retenue_garantie: facture_mpe.retenue_garantie,
                                         remboursement_plaque: facture_mpe.remboursement_plaque ,
+                                        taxe_marche_public: facture_mpe.taxe_marche_public,
                                         net_payer: facture_mpe.net_payer,
                                         date_signature:convertionDate(new Date(facture_mpe.date_signature)) ,
                                         id_attachement_travaux: vm.selectedItemAttachement_travaux.id,
@@ -4959,13 +4991,14 @@
                         console.log('suulat'); 
                             var montant_trav = parseFloat(vm.allfacture_mpe[0].montant_travaux) - parseFloat(demande_latrine_mpe.montant);
                             var montant_rabais = (montant_trav * vm.allfacture_mpe[0].pourcentage_rabais)/100;
-                            var montant_ht = parseFloat(montant_rabais) + parseFloat(montant_trav);
+                            var montant_ht = parseFloat(montant_trav)- parseFloat(montant_rabais);
                             var montant_tva = 0;
 
                             var montant_ttc = montant_ht + montant_tva;
                             var retenu_garanti = (parseFloat(montant_ttc)*5)/100;
+                            var taxe_marche_public = (parseFloat(vm.alltaxe_marche_public[0].pourcentage)* parseFloat(montant_ttc))/100;
                             var net_payer = parseFloat(montant_ht) + parseFloat(montant_tva) - (parseFloat(vm.allfacture_mpe[0].remboursement_acompte) + 
-                            parseFloat(retenu_garanti) + parseFloat(vm.allfacture_mpe[0].penalite_retard) + parseFloat(vm.allfacture_mpe[0].remboursement_plaque));
+                            parseFloat(retenu_garanti) + parseFloat(vm.allfacture_mpe[0].penalite_retard) + parseFloat(vm.allfacture_mpe[0].remboursement_plaque)+parseFloat(taxe_marche_public));
                             var item_facture_mpe = {
                                       id: vm.allfacture_mpe[0].id,        
                                       id_attachement: vm.allfacture_mpe[0].id_attachement_travaux,        
@@ -4979,7 +5012,8 @@
                                       remboursement_acompte: vm.allfacture_mpe[0].remboursement_acompte,   
                                       penalite_retard: vm.allfacture_mpe[0].penalite_retard, 
                                       retenue_garantie: retenu_garanti, 
-                                      remboursement_plaque: vm.allfacture_mpe[0].remboursement_plaque,    
+                                      remboursement_plaque: vm.allfacture_mpe[0].remboursement_plaque,
+                                      taxe_marche_public: taxe_marche_public,    
                                       net_payer: net_payer,  
                                       date_signature: vm.allfacture_mpe[0].date_signature
                                     };
@@ -5014,13 +5048,14 @@
                   {
                         var montant_trav = parseFloat(vm.allfacture_mpe[0].montant_travaux) + parseFloat(demande_latrine_mpe.montant);
                         var montant_rabais = (montant_trav * vm.allfacture_mpe[0].pourcentage_rabais)/100;
-                        var montant_ht = parseFloat(montant_rabais) + parseFloat(montant_trav);
+                        var montant_ht = parseFloat(montant_trav)- parseFloat(montant_rabais);
                         var montant_tva = 0;
 
                         var montant_ttc = montant_ht + montant_tva;
                         var retenu_garanti = (parseFloat(montant_ttc)*5)/100;
+                        var taxe_marche_public = (parseFloat(vm.alltaxe_marche_public[0].pourcentage)* parseFloat(montant_ttc))/100;
                         var net_payer = parseFloat(montant_ht) + parseFloat(montant_tva) - (parseFloat(vm.allfacture_mpe[0].remboursement_acompte) + 
-                        parseFloat(retenu_garanti) + parseFloat(vm.allfacture_mpe[0].penalite_retard) + parseFloat(vm.allfacture_mpe[0].remboursement_plaque));
+                        parseFloat(retenu_garanti) + parseFloat(vm.allfacture_mpe[0].penalite_retard) + parseFloat(vm.allfacture_mpe[0].remboursement_plaque)+parseFloat(taxe_marche_public));
                         var item_facture_mpe = {
                                   id: vm.allfacture_mpe[0].id,        
                                   id_attachement: vm.allfacture_mpe[0].id_attachement_travaux,        
@@ -5034,7 +5069,8 @@
                                   remboursement_acompte: vm.allfacture_mpe[0].remboursement_acompte,   
                                   penalite_retard: vm.allfacture_mpe[0].penalite_retard, 
                                   retenue_garantie: retenu_garanti, 
-                                  remboursement_plaque: vm.allfacture_mpe[0].remboursement_plaque,    
+                                  remboursement_plaque: vm.allfacture_mpe[0].remboursement_plaque,
+                                    taxe_marche_public: taxe_marche_public,    
                                   net_payer: net_payer,  
                                   date_signature: vm.allfacture_mpe[0].date_signature
                                 };
@@ -5050,7 +5086,8 @@
 
                         var montant_ttc = montant_ht + montant_tva;
                         var retenu_garanti = (parseFloat(montant_ttc)*5)/100;
-                        var net_payer = parseFloat(montant_ht) + parseFloat(montant_tva) - parseFloat(retenu_garanti);
+                        var taxe_marche_public = (parseFloat(vm.alltaxe_marche_public[0].pourcentage)* parseFloat(montant_ttc))/100;
+                        var net_payer = parseFloat(montant_ht) + parseFloat(montant_tva) - parseFloat(retenu_garanti)-parseFloat(taxe_marche_public);
                         var item_facture_mpe = {
                                   id: 0,        
                                   id_attachement: vm.selectedItemAttachement_travaux.id,        
@@ -5063,7 +5100,8 @@
                                   montant_ttc: montant_ttc, 
                                   remboursement_acompte: 0,   
                                   penalite_retard: 0, 
-                                  retenue_garantie: retenu_garanti, 
+                                  retenue_garantie: retenu_garanti,
+                                taxe_marche_public: taxe_marche_public, 
                                   remboursement_plaque: 0,    
                                   net_payer: net_payer,  
                                   date_signature: convertionDate(vm.datenow)
@@ -5958,13 +5996,14 @@
                       {
                             var montant_trav = parseFloat(vm.allfacture_mpe[0].montant_travaux) - parseFloat(demande_mobilier_mpe.montant);
                             var montant_rabais = (montant_trav * vm.allfacture_mpe[0].pourcentage_rabais)/100;
-                            var montant_ht = parseFloat(montant_rabais) + parseFloat(montant_trav);
+                            var montant_ht = parseFloat(montant_trav)- parseFloat(montant_rabais);
                             var montant_tva = 0;
 
                             var montant_ttc = montant_ht + montant_tva;
                             var retenu_garanti = (parseFloat(montant_ttc)*5)/100;
+                            var taxe_marche_public = (parseFloat(vm.alltaxe_marche_public[0].pourcentage)* parseFloat(montant_ttc))/100;
                             var net_payer = parseFloat(montant_ht) + parseFloat(montant_tva) - (parseFloat(vm.allfacture_mpe[0].remboursement_acompte) + 
-                            parseFloat(retenu_garanti) + parseFloat(vm.allfacture_mpe[0].penalite_retard) + parseFloat(vm.allfacture_mpe[0].remboursement_plaque));
+                            parseFloat(retenu_garanti) + parseFloat(vm.allfacture_mpe[0].penalite_retard) + parseFloat(vm.allfacture_mpe[0].remboursement_plaque)+parseFloat(taxe_marche_public));
                             var item_facture_mpe = {
                                       id: vm.allfacture_mpe[0].id,        
                                       id_attachement: vm.allfacture_mpe[0].id_attachement_travaux,        
@@ -5978,7 +6017,8 @@
                                       remboursement_acompte: vm.allfacture_mpe[0].remboursement_acompte,   
                                       penalite_retard: vm.allfacture_mpe[0].penalite_retard, 
                                       retenue_garantie: retenu_garanti, 
-                                      remboursement_plaque: vm.allfacture_mpe[0].remboursement_plaque,    
+                                      remboursement_plaque: vm.allfacture_mpe[0].remboursement_plaque,
+                                      taxe_marche_public: taxe_marche_public,    
                                       net_payer: net_payer,  
                                       date_signature: vm.allfacture_mpe[0].date_signature
                                     };
@@ -6016,13 +6056,14 @@
                   {
                         var montant_trav = parseFloat(vm.allfacture_mpe[0].montant_travaux) + parseFloat(demande_mobilier_mpe.montant);
                         var montant_rabais = (montant_trav * vm.allfacture_mpe[0].pourcentage_rabais)/100;
-                        var montant_ht = parseFloat(montant_rabais) + parseFloat(montant_trav);
+                        var montant_ht = parseFloat(montant_trav)- parseFloat(montant_rabais);
                         var montant_tva = 0;
 
                         var montant_ttc = montant_ht + montant_tva;
                         var retenu_garanti = (parseFloat(montant_ttc)*5)/100;
+                        var taxe_marche_public = (parseFloat(vm.alltaxe_marche_public[0].pourcentage)* parseFloat(montant_ttc))/100;
                         var net_payer = parseFloat(montant_ht) + parseFloat(montant_tva) - (parseFloat(vm.allfacture_mpe[0].remboursement_acompte) + 
-                        parseFloat(retenu_garanti) + parseFloat(vm.allfacture_mpe[0].penalite_retard) + parseFloat(vm.allfacture_mpe[0].remboursement_plaque));
+                        parseFloat(retenu_garanti) + parseFloat(vm.allfacture_mpe[0].penalite_retard) + parseFloat(vm.allfacture_mpe[0].remboursement_plaque)+parseFloat(taxe_marche_public));
                         var item_facture_mpe = {
                                   id: vm.allfacture_mpe[0].id,        
                                   id_attachement: vm.allfacture_mpe[0].id_attachement_travaux,        
@@ -6036,7 +6077,8 @@
                                   remboursement_acompte: vm.allfacture_mpe[0].remboursement_acompte,   
                                   penalite_retard: vm.allfacture_mpe[0].penalite_retard, 
                                   retenue_garantie: retenu_garanti, 
-                                  remboursement_plaque: vm.allfacture_mpe[0].remboursement_plaque,    
+                                  remboursement_plaque: vm.allfacture_mpe[0].remboursement_plaque,
+                                taxe_marche_public: taxe_marche_public,     
                                   net_payer: net_payer,  
                                   date_signature: vm.allfacture_mpe[0].date_signature
                                 };
@@ -6052,7 +6094,8 @@
 
                         var montant_ttc = montant_ht + montant_tva;
                         var retenu_garanti = (parseFloat(montant_ttc)*5)/100;
-                        var net_payer = parseFloat(montant_ht) + parseFloat(montant_tva) - parseFloat(retenu_garanti);
+                        var taxe_marche_public = (parseFloat(vm.alltaxe_marche_public[0].pourcentage)* parseFloat(montant_ttc))/100;
+                        var net_payer = parseFloat(montant_ht) + parseFloat(montant_tva) - parseFloat(retenu_garanti)-parseFloat(taxe_marche_public);
                         var item_facture_mpe = {
                                   id: 0,        
                                   id_attachement: vm.selectedItemAttachement_travaux.id,        
@@ -6066,7 +6109,8 @@
                                   remboursement_acompte: 0,   
                                   penalite_retard: 0, 
                                   retenue_garantie: retenu_garanti, 
-                                  remboursement_plaque: 0,    
+                                  remboursement_plaque: 0,
+                                taxe_marche_public: taxe_marche_public,     
                                   net_payer: net_payer,  
                                   date_signature: convertionDate(vm.datenow)
                                 };

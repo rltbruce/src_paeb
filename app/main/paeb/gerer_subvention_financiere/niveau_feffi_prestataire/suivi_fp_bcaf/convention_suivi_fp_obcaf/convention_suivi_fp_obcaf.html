@@ -1,7 +1,7 @@
   <div id="formsobcaffiactivif_fp" class="page-layout simple fullwidth doc-page" layout="column" >
 
     <!-- HEADER -->
-    <div class="header md-accent-bg" layout="row" layout-align="space-between" >
+    <div class="header md-accent-bg {{vm.header_class}}" layout-align="space-between" >
         <div layout="column" layout-align="space-between" style="height: 10px !important;">
             <div class="breadcrumb" layout="row" layout-align="start center" >
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
@@ -15,11 +15,27 @@
                 <span class="parent" href="javascript:;"> Insertion activitée financière (O-BCAF)</span>
             </div>
 
-            <!--div class="title">Convention CISCO/FEFFI</div-->
-                                       
+            <!--div class="title">Convention CISCO/FEFFI</div-->  
+
+            <!--div layout="row" layout-align="center center" style="text-align: center; margin: auto; border:1px solid red">
+                <span>Gestion financière des activitées</span>
+                
+                <span> Niveau FEFFI/PRESTATAIRE</span>
+                
+                <span> Insertion activitée financière (O-BCAF)</span>
+            </div-->                                     
             
-        </div>
-        
+        </div><br>
+        <div style="text-align: center; margin: auto; float: bottom" ng-if="vm.header_ref_convention">
+                <span>Référence convention:</span>
+                <span style="margin-right: 20px; color: black;">{{vm.header_ref_convention}}</span>
+                
+                <span>CISCO:</span>                
+                <span style="margin-right: 20px; color: black;">{{vm.header_cisco}}</span>
+
+                <span>FEFFI:</span>
+                <span style="color: black;">{{vm.header_feffi}}</span>
+        </div> 
     </div>    
     
     <!-- / HEADER -->
@@ -567,7 +583,7 @@
                               <md-tab ng-click="vm.click_step_facture_moe_detail()" ng-disabled="!vm.stepfacture_detail">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
-                                      <span class="ms-form-wizard-step-text">Facture détail</span>
+                                      <span class="ms-form-wizard-step-text">Facture détaillée</span>
                                   </span>
                                  
                                 </md-tab-label>
@@ -2640,6 +2656,23 @@
                                                                                 
                                         <tr>                                                   
                                           <td>                                                      
+                                            <span>Taxe sur les marchés publics</span>
+                                          </td>
+                                                    
+                                          <td class="text-center">
+                                            <span ng-if="vm.facture_mpe.$edit">
+                                              <md-input-container style="width:100%;display: flex !important;">
+                                                <label>Taxe sur les marchés publics</label>
+                                                <input name="taxe_marche_public" type="number" ng-model="vm.facture_mpe.taxe_marche_public" ng-min="0" required />
+                                              </md-input-container>   
+                                            </span>
+                                                      
+                                            <span ng-if="!vm.facture_mpe.$edit">{{vm.formatMillier(vm.facture_mpe.taxe_marche_public)}} Ar</span>
+                                          </td>
+                                        </tr>
+                                                                                
+                                        <tr>                                                   
+                                          <td>                                                      
                                             <span>Net à payer</span>
                                           </td>
 
@@ -2675,9 +2708,9 @@
                                               Annuler
                                             </md-button>                                            
                                                                           
-                                            <md-button ng-if="!vm.facture_mpe.$edit && vm.facture_mpe.validation==0" type="submit" class="md-raised md-warn" aria-label="Supprimer" ng-click="vm.supprimerFacture_mpe(vm.facture_mpe)" style="float: right;">
+                                            <!--md-button ng-if="!vm.facture_mpe.$edit && vm.facture_mpe.validation==0" type="submit" class="md-raised md-warn" aria-label="Supprimer" ng-click="vm.supprimerFacture_mpe(vm.facture_mpe)" style="float: right;">
                                               Supprimer
-                                            </md-button>                                             
+                                            </md-button-->                                             
                                                                           
                                             <md-button ng-if="!vm.facture_mpe.$edit && vm.facture_mpe.validation==0" type="submit" class="md-raised md-accent" aria-label="Modifier" ng-click="vm.modifierFacture_mpe(vm.facture_mpe)" style="float: right;">
                                               Modifier
@@ -2815,6 +2848,14 @@
                                     <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_plaque_to)}} Ar</span></td>
                                     <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_plaque_ante)}} Ar</span></td>
                                     <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_plaque_pe)}} Ar</span></td>                      
+                                    
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>Taxe sur les marchés publics</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.taxe_marche_public_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.taxe_marche_public_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.taxe_marche_public_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                 </tbody>

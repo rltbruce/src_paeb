@@ -48,7 +48,7 @@
             </thead>
                      
             <tbody>
-              <div>
+              <!--div>
                   <form name="filtreformimporter" class="md-inline-form" novalidate >
                         <br>
                         <div layout="column" layout-gt-xs="row">
@@ -73,7 +73,7 @@
                         </div>
                   </form>
                   <md-divider></md-divider><br>
-                </div>
+                </div-->
               <tr ng-repeat="zap in vm.allzap"  ng-class="{selected: zap.$selected}" ng-click="vm.selection(zap)">           
                 <td>
                   <span ng-if="zap.$edit">
@@ -102,7 +102,7 @@
                   </a>
                             
                   <a ng-if="!zap.$edit" ng-click="vm.supprimer(zap)" title="Supprimer">
-                    <span class="icon-delete"></span>
+                    <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                   </a>
                             
                   <a ng-if="zap.$edit" ng-click="vm.annuler(zap)" title="Annuler modification">

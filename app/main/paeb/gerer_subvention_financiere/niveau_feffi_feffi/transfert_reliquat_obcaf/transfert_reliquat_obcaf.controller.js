@@ -392,30 +392,64 @@
         //Masque de saisi ajout
         vm.ajouterTransfert_reliquat = function ()
         { 
+          var decaiss = 0;
+          var paiement_mpe = 0;
+          var paiement_moe = 0;
+          var objet_utilisation=0;
+          var montant_reliquat = 0;
           if (NouvelItemTransfert_reliquat == false)
           {
-            var items = {
-              $edit: true,
-              $selected: true,
-              id: '0',
-              montant:'',
-              date_transfert: '',
-              objet_utilisation: '',
-              situation_utilisation: '',
-              intitule_compte: '',
-              rib: '',
-              observation: ''
-            };       
-            vm.alltransfert_reliquat.push(items);
-            vm.alltransfert_reliquat.forEach(function(trans)
-            {
-              if(trans.$selected==true)
-              {
-                vm.selectedItem = trans;
-              }
-            });
 
-            NouvelItemTransfert_reliquat = true ;
+            apiFactory.getAPIgeneraliserREST("transfert_reliquat/index",'menu','getmontantatransfererByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+            {
+                var paiement_detail = result.data.response;
+                if (paiement_detail.length!=0)
+                {
+                  if (paiement_detail[0].montant_decaiss_fonct_feffi !=null)
+                  {
+                    decaiss = paiement_detail[0].montant_decaiss_fonct_feffi;
+                  }
+
+                  if (paiement_detail[0].montant_paiement_mpe !=null)
+                  {
+                    paiement_mpe = paiement_detail[0].montant_paiement_mpe;
+                  }
+
+                  if (paiement_detail[0].montant_paiement_moe !=null)
+                  {
+                    paiement_moe = paiement_detail[0].montant_paiement_moe;
+                  }
+
+                }
+                montant_reliquat = parseFloat(vm.selectedItemConvention_entete.montant_total)-parseFloat(decaiss)-parseFloat(paiement_mpe)-parseFloat(paiement_moe)
+                if (montant_reliquat<=1000000)
+                {
+                  objet_utilisation=0;
+                }
+                            
+                var items = {
+                  $edit: true,
+                  $selected: true,
+                  id: '0',
+                  montant:parseFloat(vm.selectedItemConvention_entete.montant_total)-parseFloat(decaiss)-parseFloat(paiement_mpe)-parseFloat(paiement_moe),
+                  date_transfert: '',
+                  objet_utilisation: objet_utilisation,
+                  situation_utilisation: '',
+                  intitule_compte: '',
+                  rib: '',
+                  observation: ''
+                };       
+                vm.alltransfert_reliquat.push(items);
+                vm.alltransfert_reliquat.forEach(function(trans)
+                {
+                  if(trans.$selected==true)
+                  {
+                    vm.selectedItem = trans;
+                  }
+                });
+
+                NouvelItemTransfert_reliquat = true ;
+            });
           }else
           {
             vm.showAlert('Ajout entête convention','Un formulaire d\'ajout est déjà ouvert!!!');

@@ -241,7 +241,7 @@
                           <!--span class="ms-form-wizard-step-number md-accent-bg" style="">
                             <i class="icon-currency-eur s20"></i>
                           </span-->
-                          <span class="ms-form-wizard-step-text">Suivi financier FEFFI</span>
+                          <span class="ms-form-wizard-step-text">Demande de deblocage FEFFI</span>
                       </span>
                      
                     </md-tab-label>
@@ -249,7 +249,7 @@
                             <md-tab-body>
                               <div style="widht:100%;">                                    
 
-                                    <md-button type="submit" class="md-raised md-warn md-pink-900-bg" aria-label="Nouveau" ng-click="vm.valider_demandeemidaaf(5)" style="width:13%;" ng-if="vm.showbuttonValidationencourdaaf && vm.permissionboutonvaliderdaaf && vm.validation==4">
+                                    <md-button type="submit" class="md-raised md-warn md-pink-900-bg" aria-label="Nouveau" ng-click="vm.valider_demandeemidaaf(5)" style="width:15%;" ng-if="vm.showbuttonValidationencourdaaf && vm.permissionboutonvaliderdaaf && vm.validation==4">
                                      Mettre en-cours
                                     </md-button>
 
@@ -468,9 +468,9 @@
                                         <span class="icon-table-edit"></span>
                                       </a>
                                                 
-                                      <a ng-if="!transfert_daaf.$edit && transfert_daaf.validation==0" ng-click="vm.supprimerTransfert_daaf(transfert_daaf)" title="Supprimer">
+                                      <!--a ng-if="!transfert_daaf.$edit && transfert_daaf.validation==0" ng-click="vm.supprimerTransfert_daaf(transfert_daaf)" title="Supprimer">
                                         <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
-                                      </a>
+                                      </a-->
                                       <span ng-if=" transfert_daaf.validation==1">Aucune action disponible</span>        
                                       <a ng-if="transfert_daaf.$edit" ng-click="vm.annulerTransfert_daaf(transfert_daaf)" title="Annuler modification">
                                         <span class="icon-cancel"></span>

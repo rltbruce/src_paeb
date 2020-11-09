@@ -9,10 +9,8 @@
                 <span class="parent">Données de bases</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Cisco</span>
+                <span class="parent" href="javascript:;"> Taxe sur les marchés publics</span>
             </div>
-
-            <!--div class="title">Cisco</div-->
         </div>
     </div>
     <!-- / HEADER -->
@@ -20,84 +18,77 @@
     <!-- CONTENT -->
     <div class="content" layout="column">
 
-      <!-- Cisco -->
+      <!-- Categorie ouvrage -->
       <div class="form-wrapper md-whiteframe-1dp" >       
         <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
           <div layout="row" layout-align="start">
               <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
-                <span style="line-height: normal;"> Cisco</span>
+                <span style="line-height: normal;"> Taxe sur les marchés publics</span>
               </div>
               <div>
-                <md-button class="md-icon-button" aria-label="add cisco" ng-click="vm.ajouter()">
+                <md-button class="md-icon-button" aria-label="add type ouvrage" ng-click="vm.ajouter()" ng-disabled="!vm.boutonnouveau">
                   <md-icon md-font-icon="icon-plus"></md-icon>
-                  <md-tooltip><span>Ajout cisco</span></md-tooltip>
+                  <md-tooltip><span>Ajout Taxe</span></md-tooltip>
                 </md-button>
               </div>                      
           </div>
         </header>
+
+        <div style="float: top !important">
+          <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+          <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+          </div>
+        </div>
          <div>        
           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
             <thead>
               <tr>
-                <th class="secondary-text" ng-repeat="cisc in ::vm.cisco_column">
+                <th class="secondary-text" ng-repeat="acce in ::vm.taxe_marche_public_column">
                   <div class="table-header">
-                    <span class="column-title">{{cisc.titre}}</span>
+                    <span class="column-title">{{acce.titre}}</span>
                   </div>
                 </th>
               </tr>
             </thead>
                      
             <tbody>
-              <tr ng-repeat="cisco in vm.allcisco"  ng-class="{selected: cisco.$selected}" ng-click="vm.selection(cisco)">           
-                <td>
-                  <span ng-if="cisco.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Code</label>
-                      <input name="code" type="text" ng-model="cisco.code"/>
-                    </md-input-container>
-                  </span>                          
-                  <span ng-if="!cisco.$edit">{{cisco.code}}</span>
-                </td>
+              <tr ng-repeat="taxe_marche_public in vm.alltaxe_marche_public"  ng-class="{selected: taxe_marche_public.$selected}" ng-click="vm.selection(taxe_marche_public)">  
                           
                 <td>
-                  <span ng-if="cisco.$edit">
+                  <span ng-if="taxe_marche_public.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
                       <label>Description</label>
-                      <input name="Description" type="text" ng-model="cisco.description"/>
+                      <input name="Description" type="text" ng-model="taxe_marche_public.description"/>
                     </md-input-container>   
                   </span>
                             
-                  <span ng-if="!cisco.$edit">{{cisco.description}}</span>
-                </td>
-
+                  <span ng-if="!taxe_marche_public.$edit">{{taxe_marche_public.description}}</span>
+                </td>         
                 <td>
-                  <span ng-if="cisco.$edit">
+                  <span ng-if="taxe_marche_public.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
-                      <label>District</label>
-                      <md-select ng-model="cisco.id_district"style="overflow: hidden;text-overflow: ellipsis;">
-                        <md-option ng-repeat="district in vm.alldistrict" value="{{district.id}}">
-                                                            {{district.nom}}
-                        </md-option>
-                      </md-select>
-                    </md-input-container>  
-                  </span>
-                  <span ng-if="!cisco.$edit">{{cisco.district.nom}}</span>
+                      <label>Pourcentage</label>
+                      <input name="pourcentage" type="text" ng-model="taxe_marche_public.pourcentage"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!taxe_marche_public.$edit">{{taxe_marche_public.pourcentage}} %</span>
                 </td>
                                              
                 <td>
-                  <a ng-if="!cisco.$edit" ng-click="vm.modifier(cisco)" title="Modifier">
+                  <a ng-if="!taxe_marche_public.$edit" ng-click="vm.modifier(taxe_marche_public)" title="Modifier">
                     <span class="icon-table-edit"></span>
                   </a>
                             
-                  <a ng-if="!cisco.$edit" ng-click="vm.supprimer(cisco)" title="Supprimer">
-                    <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
+                  <a ng-if="!taxe_marche_public.$edit" ng-click="vm.supprimer(taxe_marche_public)" title="Supprimer">
+                    <span class="icon-delete" ></span>
                   </a>
                             
-                  <a ng-if="cisco.$edit" ng-click="vm.annuler(cisco)" title="Annuler modification">
+                  <a ng-if="taxe_marche_public.$edit" ng-click="vm.annuler(taxe_marche_public)" title="Annuler modification">
                     <span class="icon-cancel"></span>
                   </a>
                             
-                  <a ng-if="cisco.$edit && cisco.code && cisco.description && cisco.id_district>''" ng-click="vm.ajout(cisco,0)" title="Sauvegarder">
+                  <a ng-if="taxe_marche_public.$edit && taxe_marche_public.pourcentage && taxe_marche_public.description>''" ng-click="vm.ajout(taxe_marche_public,0)" title="Sauvegarder">
                     <span class="icon-content-save"></span>
                   </a>
                 </td>
@@ -106,7 +97,7 @@
           </table>
         </div>                   
       </div>
-      <!-- / Cisco -->
+      <!-- / taxe_marche_public -->
     </div>
     <!-- / CONTENT -->
   </div>

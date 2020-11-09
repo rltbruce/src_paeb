@@ -134,7 +134,7 @@
                   <span ng-if="note_agence_acc.$edit">
                     <md-input-container style="width:100%;display: flex !important;">
                       <label>Note</label>
-                      <input name="note" type="text" ng-model="note_agence_acc.note"/>
+                      <input name="note" type="number" ng-model="note_agence_acc.note" ng-min="0" required/>
                     </md-input-container>
                   </span>                          
                   <span ng-if="!note_agence_acc.$edit">{{note_agence_acc.note}}</span>
@@ -164,7 +164,7 @@
                     <span class="icon-cancel"></span>
                   </a>
                             
-                  <a ng-if="note_agence_acc.$edit && note_agence_acc.annee && note_agence_acc.id_agence_acc>''" ng-click="vm.ajout(note_agence_acc,0)" title="Sauvegarder">
+                  <a ng-if="note_agence_acc.$edit && note_agence_acc.annee && note_agence_acc.id_agence_acc && note_agence_acc.note>=0 >''" ng-click="vm.ajout(note_agence_acc,0)" title="Sauvegarder">
                     <span class="icon-content-save"></span>
                   </a>
                 </td>

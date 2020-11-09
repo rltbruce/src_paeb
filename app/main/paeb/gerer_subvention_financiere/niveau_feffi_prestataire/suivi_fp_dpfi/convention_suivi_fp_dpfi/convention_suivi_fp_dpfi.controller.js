@@ -43,6 +43,11 @@
         var vm    = this;
         vm.selectedItemConvention_entete = {} ;
         vm.allconvention_entete = [] ;
+        vm.header_ref_convention = null;
+        vm.header_cisco = null;
+        vm.header_feffi = null;
+        vm.header_class = null;
+
        
         vm.stepMenu_mpe=false;
         vm.stepMenu_moe=false;
@@ -372,6 +377,12 @@
             vm.showbuttonNouvContrat_prestataire=true;
             vm.stepMenu_moe=true;
             vm.stepMenu_mpe=true;
+             
+
+            vm.header_ref_convention = item.ref_convention;
+            vm.header_cisco = item.cisco.code;
+            vm.header_feffi = item.feffi.denomination; 
+            vm.header_class = 'headerbig';
 
            /* donnee_menu_moe(item,vm.session).then(function () 
             {

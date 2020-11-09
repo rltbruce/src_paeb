@@ -367,7 +367,7 @@
                     Nouveau
                   </md-button-->
 
-                  <md-button type="submit" class="md-raised md-light-green-500-bg" aria-label="Nouveau" ng-click="vm.validertransfert_ufp()" style="width:10%; color: white" ng-show="vm.validation_ufp==0">
+                  <md-button type="submit" class="md-raised md-warn md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validertransfert_ufp()" style="width:10%; color: white" ng-show="vm.validation_ufp==0">
                     Valider
                   </md-button>
               </div> <br>
@@ -443,9 +443,9 @@
                           <span class="icon-table-edit"></span>
                         </a>
                                   
-                        <a ng-if="!transfert_ufp.$edit && transfert_ufp.validation==0" ng-click="vm.supprimerTransfert_ufp(transfert_ufp)" title="Supprimer">
+                        <!--a ng-if="!transfert_ufp.$edit && transfert_ufp.validation==0" ng-click="vm.supprimerTransfert_ufp(transfert_ufp)" title="Supprimer">
                           <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
-                        </a>
+                        </a-->
                         <span ng-if="!transfert_ufp.$edit && transfert_ufp.validation==1"> Aucun action disponible</span>          
                         <a ng-if="transfert_ufp.$edit" ng-click="vm.annulerTransfert_ufp(transfert_ufp)" title="Annuler modification">
                           <span class="icon-cancel"></span>

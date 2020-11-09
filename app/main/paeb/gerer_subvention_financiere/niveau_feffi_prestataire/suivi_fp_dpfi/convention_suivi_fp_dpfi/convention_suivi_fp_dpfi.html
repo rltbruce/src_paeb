@@ -1,7 +1,7 @@
   <div id="formsdpfivactivif_fp" class="page-layout simple fullwidth doc-page" layout="column" >
 
     <!-- HEADER -->
-    <div class="header md-accent-bg" layout="row" layout-align="space-between" >
+    <div class="header md-accent-bg {{vm.header_class}}" layout-align="space-between" >
         <div layout="column" layout-align="space-between" style="height: 10px !important;">
             <div class="breadcrumb" layout="row" layout-align="start center" >
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
@@ -18,6 +18,16 @@
             <!--div class="title">Convention CISCO/FEFFI</div-->
                                        
             
+        </div><br>
+        <div style="text-align: center; margin: auto; float: bottom" ng-if="vm.header_ref_convention">
+                <span>Référence convention:</span>
+                <span style="margin-right: 20px; color: black;">{{vm.header_ref_convention}}</span>
+                
+                <span>CISCO:</span>                
+                <span style="margin-right: 20px; color: black;">{{vm.header_cisco}}</span>
+
+                <span>FEFFI:</span>
+                <span style="color: black;">{{vm.header_feffi}}</span>
         </div>
         
     </div>    
@@ -550,7 +560,7 @@
                               <md-tab ng-click="vm.click_step_facture_moe_detail()" ng-disabled="!vm.stepfacture_detail">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">
-                                      <span class="ms-form-wizard-step-text">Facture détail</span>
+                                      <span class="ms-form-wizard-step-text">Facture détaillée</span>
                                   </span>
                                  
                                 </md-tab-label>
@@ -1996,6 +2006,16 @@
                                                                                 
                                         <tr>                                                   
                                           <td>                                                      
+                                            <span>Taxe sur les marchés publics</span>
+                                          </td>
+                                                    
+                                          <td class="text-center">                                                      
+                                            <span>{{vm.formatMillier(vm.facture_mpe.taxe_marche_public)}} Ar</span>
+                                          </td>
+                                        </tr>
+                                                                                
+                                        <tr>                                                   
+                                          <td>                                                      
                                             <span>Net à payer</span>
                                           </td>
 
@@ -2153,6 +2173,14 @@
                                     <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_plaque_to)}} Ar</span></td>
                                     <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_plaque_ante)}} Ar</span></td>
                                     <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_plaque_pe)}} Ar</span></td>                      
+                                    
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>Taxe sur les marchés publics</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.taxe_marche_public_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.taxe_marche_public_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.taxe_marche_public_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                 </tbody>

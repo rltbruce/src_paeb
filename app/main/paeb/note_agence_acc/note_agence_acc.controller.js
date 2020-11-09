@@ -172,11 +172,11 @@
             item.$edit = true;
             item.$selected = true;            
             item.annee      = vm.selectedItem.annee ;
-            item.note      = vm.selectedItem.note ;
+            item.note      = parseFloat(vm.selectedItem.note) ;
             item.observation      = vm.selectedItem.observation ;
             item.id_agence_acc = vm.selectedItem.agence_acc.id;
 
-            vm.vm.showfiltre = false;
+            vm.showfiltre = false;
            
         };
 

@@ -233,7 +233,7 @@
     <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
 
             <!-----------------------DEBUT MAITRISE DOEUVRE------------------------------------>
-            <md-tab ng-disabled="vm.stepMenu_moe==false" ng-click="vm.step_menu_moe()">
+            <md-tab ng-disabled="!vm.stepMenu_moe" ng-click="vm.step_menu_moe()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -1877,6 +1877,16 @@
                                                                                 
                                         <tr>                                                   
                                           <td>                                                      
+                                            <span>Taxe sur les marchés publics</span>
+                                          </td>
+                                                    
+                                          <td class="text-center">                                                      
+                                            <span >{{vm.formatMillier(vm.facture_mpe.taxe_marche_public)}} Ar</span>
+                                          </td>
+                                        </tr>
+                                                                                
+                                        <tr>                                                   
+                                          <td>                                                      
                                             <span>Net à payer</span>
                                           </td>
 
@@ -1919,7 +1929,7 @@
                           </md-tab>
                         <!-------------------------------------FIN FACTURE-------------------------------------------->
                         <!-----------------------------------DEBUT DECOMPTE MPE------------------------------------------->
-                          <md-tab ng-click="vm.click_tab_decompte_mpe()" ng-disabled=" vm.id_facture_mpe ==0 || !vm.stepdecompte">
+                          <md-tab ng-click="vm.click_tab_decompte_mpe()" ng-disabled=" vm.id_facture_mpe ==0">
                             <md-tab-label>
                               <span class="ms-form-wizard-step-label">
                                   <span class="ms-form-wizard-step-text">DECOMPTE</span>
@@ -2028,6 +2038,14 @@
                                     <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_plaque_to)}} Ar</span></td>
                                     <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_plaque_ante)}} Ar</span></td>
                                     <td><span>{{vm.formatMillier(vm.decompte_mpes.remboursement_plaque_pe)}} Ar</span></td>                      
+                                    
+                                  </tr>
+                                  <tr>          
+                                    
+                                    <td><span>Taxe sur les marchés publics</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.taxe_marche_public_to)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.taxe_marche_public_ante)}} Ar</span></td>
+                                    <td><span>{{vm.formatMillier(vm.decompte_mpes.taxe_marche_public_pe)}} Ar</span></td>                      
                                     
                                   </tr>
                                 </tbody>
@@ -2184,7 +2202,7 @@
                                               <span class="column-title">Montant TTC</span>
                                             </div>
                                           </th>                                          
-                                          <th class="secondary-text" colspan="4" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
+                                          <th class="secondary-text" colspan="5" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
                                               <span class="column-title">MONTANT A DEDUIRE</span>
                                             </div>
@@ -2236,6 +2254,11 @@
                                               <span class="column-title">Pénalité retard</span>
                                             </div>
                                           </th> 
+                                          <th class="secondary-text" style="border-right: 1px solid rgb(170,170,170)">
+                                            <div class="table-header">
+                                              <span class="column-title">Taxe sur les marchés publics</span>
+                                            </div>
+                                          </th>
                                         </tr>
                                       </thead>
                                                
@@ -2354,6 +2377,10 @@
                                           </td>
 
                                           <td>                                                      
+                                            <span>{{vm.formatMillier(suivi_marche_facture_mpe.taxe_marche_public)}} Ar</span>
+                                          </td>
+
+                                          <td>                                                      
                                             <span>{{vm.formatMillier(suivi_marche_facture_mpe.net_payer)}} Ar</span>
                                           </td>
 
@@ -2370,7 +2397,7 @@
                                         </tr>
                                       </tbody>
                                       <tfoot>
-                                        <tr>
+                                        <tr style="text-align: center">
 
                                         <td colspan="2">
                                           <span>TOTAL</span>
@@ -2422,6 +2449,10 @@
                                           </td>
 
                                           <td>                                                      
+                                            <span>{{vm.som_taxe_marche_public()}}</span>
+                                          </td>
+
+                                          <td>                                                      
                                             <span>{{vm.som_net_payer()}}</span>
                                           </td>
 
@@ -2441,142 +2472,7 @@
               <!---------------------------------FILS DEBUT MAITRISE D'OEUVRE----------------------------------------------> 
               </md-tab-body> 
             </md-tab>
-          <!-------------------------------------------FIN ENTREPRISE-----------------------------------------------------> 
-
-          <!----------------------------------------------DEBUT RELIQUAT-------------------------------------------------->
-            <md-tab ng-disabled="vm.stepMenu_reliquat==false" ng-click="vm.step_menu_reliquat()">
-              <md-tab-label >
-                <span class="ms-form-wizard-step-label">
-                    <span class="ms-form-wizard-step-text">Reliquat</span>
-                </span>
-               
-              </md-tab-label>
-              
-              <md-tab-body>
-               <ms-form-wizard flex id="sousmenu"> 
-                <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu"--> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
-                    <md-tab>
-                      <md-tab-label>
-                        <span class="ms-form-wizard-step-label">
-                            <span class="ms-form-wizard-step-text">Reliquat</span>
-                        </span>
-                       
-                      </md-tab-label>
-                      
-                      <md-tab-body><br>
-
-                          <div>        
-                            <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                              <thead>
-                                <tr>
-                                  <th class="secondary-text" ng-repeat="ciscT in ::vm.transfert_reliquat_column">
-                                    <div class="table-header">
-                                      <span class="column-title">{{ciscT.titre}}</span>
-                                    </div>
-                                  </th>
-                                </tr>
-                              </thead>
-                                       
-                              <tbody>
-                                <tr ng-repeat="transfert_reliquat in vm.alltransfert_reliquat"  ng-class="{selected: transfert_reliquat.$selected}" ng-click="vm.selectionTransfert_reliquat(transfert_reliquat)">           
-                                  
-                                  <td>                         
-                                    <span>{{vm.formatMillier(transfert_reliquat.montant)}} Ar</span>
-                                  </td>
-                                  <td>                          
-                                    <span>{{vm.afficheobjet_utilisation(transfert_reliquat.objet_utilisation)}}</span>
-                                  </td>
-
-                                  <td>                         
-                                  <span>{{vm.formatDate(transfert_reliquat.date_transfert)}}</span>
-                                </td>
-
-                                  <td>                         
-                                    <span>{{transfert_reliquat.situation_utilisation}}</span>
-                                  </td>
-
-                                  <td>                         
-                                    <span>{{transfert_reliquat.intitule_compte}}</span>
-                                  </td>
-
-                                  <td>                                              
-                                    <span>{{transfert_reliquat.rib}}</span>
-                                  </td> 
-
-                                  <td>                                              
-                                    <span>{{transfert_reliquat.observation}}</span>
-                                  </td>                       
-                                  
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-
-                      </md-tab-body>
-                    </md-tab>
-                    <md-tab ng-disabled="!vm.stepjusti_trans_reliqua">
-                      <md-tab-label>
-                        <span class="ms-form-wizard-step-label">
-                            <span class="ms-form-wizard-step-text">Justification</span>
-                        </span>
-                       
-                      </md-tab-label>                       
-                      
-                      <md-tab-body><br>
-                       <div>        
-                        <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                          <thead>
-                            <tr>
-                              <th class="secondary-text">
-                                <div class="table-header">
-                                  <span class="column-title">Description</span>
-                                </div>
-                              </th>
-                              <th class="secondary-text">
-                                <div class="table-header">
-                                  <span class="column-title">Fichier</span>
-                                </div>
-                              </th>
-                              <th class="secondary-text">
-                                <div class="table-header">
-                                  <span class="column-title">Action</span>
-                                </div>
-                              </th>
-                            </tr>
-                          </thead>
-                                   
-                          <tbody>
-                            <tr ng-repeat="justificatif_transfert_reliquat in vm.alljustificatif_transfert_reliquat"  ng-class="{selected: justificatif_transfert_reliquat.$selected}" ng-click="vm.selectionJustificatif_transfert_reliquat(justificatif_transfert_reliquat)">
-                                       
-                              <td>                                          
-                                <span>{{justificatif_transfert_reliquat.description}}</span>
-                              </td>
-                                        
-                              <td>                                          
-                                <span>{{justificatif_transfert_reliquat.fichier}}</span>
-                              </td>                       
-                              <td>
-                                <a ng-click="vm.download_transfert_reliquat(justificatif_transfert_reliquat)" title="Telecharger">
-                                    <span class="icon-box-download"></span>
-                                </a>         
-                                
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      </md-tab-body>
-                    </md-tab>
-                                       
-                    <md-tab>
-                    </md-tab>            
-                  </md-tabs> 
-                </ms-form-wizard>               
-              </md-tab-body>
-            </md-tab>
-            <!------------------------------------------------FIN RELIQUAT------------------------------------------------>
-                        
+          <!-------------------------------------------FIN ENTREPRISE----------------------------------------------------->                         
           </md-tabs>
         </ms-form-wizard> 
 <!------------------------------------FIN TABS MERE--------------------------------------------------->    

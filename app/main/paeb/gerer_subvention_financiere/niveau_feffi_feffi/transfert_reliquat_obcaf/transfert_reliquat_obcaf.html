@@ -264,7 +264,7 @@
                                     <span ng-if="transfert_reliquat.$edit">
                                       <md-input-container style="width:100%;display: flex !important;">
                                         <label>Montant</label>
-                                        <input name="montant" type="number" ng-model="transfert_reliquat.montant" ng-change="vm.change_montant(transfert_reliquat)" ng-min="1"/>
+                                        <input name="montant" type="number" ng-model="transfert_reliquat.montant" ng-change="vm.change_montant(transfert_reliquat)" ng-min="1" disabled/>
                                       </md-input-container>
                                     </span>                          
                                     <span ng-if="!transfert_reliquat.$edit">{{vm.formatMillier(transfert_reliquat.montant)}} Ar</span>

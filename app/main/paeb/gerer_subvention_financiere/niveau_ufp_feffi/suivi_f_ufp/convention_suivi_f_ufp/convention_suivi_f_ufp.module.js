@@ -30,7 +30,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_ufp_feffi.suivi_f_ufp.convention_suivi_f_ufp', {
-            title: 'Validation et transfert (ufp)',
+            title: 'Validation et transfert (UFP)',
             icon  : 'icon-rotate-3d',
             state: 'app.paeb_gerer_subvention_financiere_niveau_ufp_feffi_suivi_f_ufp_convention_suivi_f_ufp',
             weight: 1,

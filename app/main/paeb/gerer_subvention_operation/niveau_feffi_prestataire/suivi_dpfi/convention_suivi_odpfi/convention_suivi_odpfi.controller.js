@@ -607,13 +607,13 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
-                    date_lancement_dp: convertionDate(new Date(passation_marches_pr.date_lancement_dp)),
-                    date_os: convertionDate(new Date(passation_marches_pr.date_os)),
-                    date_remise: convertionDate(new Date(passation_marches_pr.date_remise)),
+                    date_lancement_dp: convertionDate(passation_marches_pr.date_lancement_dp),
+                    date_os: convertionDate(passation_marches_pr.date_os),
+                    date_remise: convertionDate(passation_marches_pr.date_remise),
                     nbr_offre_recu: passation_marches_pr.nbr_offre_recu,                    
                     id_partenaire_relai: passation_marches_pr.id_partenaire_relai,
-                    date_manifestation: convertionDate(new Date(passation_marches_pr.date_manifestation)),
-                    date_signature_contrat: convertionDate(new Date(passation_marches_pr.date_signature_contrat)),
+                    date_manifestation: convertionDate(passation_marches_pr.date_manifestation),
+                    date_signature_contrat: convertionDate(passation_marches_pr.date_signature_contrat),
                     id_convention_entete: vm.selectedItemConvention_entete.id,
                     validation:0              
                 });
@@ -780,7 +780,7 @@
                               intitule: '',
                               ref_contrat: '',
                               montant_contrat: 0,
-                              date_signature : passation[0].date_signature_contrat,
+                              date_signature : new Date(passation[0].date_signature_contrat),
                               id_partenaire_relai:''
                             };         
                             vm.allcontrat_partenaire_relai.push(items);
@@ -983,7 +983,7 @@
                     intitule: contrat_partenaire_relai.intitule,
                     ref_contrat: contrat_partenaire_relai.ref_contrat,
                     montant_contrat: contrat_partenaire_relai.montant_contrat,
-                    date_signature:convertionDate(new Date(contrat_partenaire_relai.date_signature)),
+                    date_signature:convertionDate(contrat_partenaire_relai.date_signature),
                     id_partenaire_relai:contrat_partenaire_relai.id_partenaire_relai,
                     id_convention_entete: vm.selectedItemConvention_entete.id,
                     validation : 0               
@@ -1238,7 +1238,7 @@
                     description: avenant_partenaire.description,
                     montant: avenant_partenaire.montant,
                     ref_avenant: avenant_partenaire.ref_avenant,
-                    date_signature:convertionDate(new Date(avenant_partenaire.date_signature)),
+                    date_signature:convertionDate(avenant_partenaire.date_signature),
                     id_contrat_partenaire_relai: vm.selectedItemContrat_partenaire_relai.id,
                     validation:0               
                 });
@@ -1305,9 +1305,11 @@
           );
         }
         function convertionDate(daty)
-        {   
-          if(daty)
+        { 
+            var date_final = null;  
+            if(daty!='Invalid Date' && daty!='' && daty!=null)
             {
+                console.log(daty);
                 var date     = new Date(daty);
                 var jour  = date.getDate();
                 var mois  = date.getMonth()+1;
@@ -1316,9 +1318,9 @@
                 {
                     mois = '0' + mois;
                 }
-                var date_final= annee+"-"+mois+"-"+jour;
-                return date_final
-            }      
+                date_final= annee+"-"+mois+"-"+jour;
+            }
+            return date_final;      
         }
         //format date affichage sur datatable
         vm.formatDate = function (daty)
@@ -1353,6 +1355,17 @@
               return "0,00";
           }
       }
+
+        vm.injectDateinInput = function (daty)
+        { 
+            var date  ='';
+            if (daty!=null) 
+            {
+                date  = new Date(daty);
+            }            
+
+            return date;
+        }
  
     }
 })();

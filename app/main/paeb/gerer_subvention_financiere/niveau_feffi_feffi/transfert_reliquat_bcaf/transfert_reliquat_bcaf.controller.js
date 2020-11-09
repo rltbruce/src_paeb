@@ -506,7 +506,7 @@
                     .ok('ok')
                     .cancel('annuler');
               $mdDialog.show(confirm).then(function() {
-                vm.ajout(vm.selectedItemTransfert_reliquat,1);
+                vm.ajoutTransfert_reliquat(vm.selectedItemTransfert_reliquat,1);
                 vm.showbuttonSauvegarde = true;
                 vm.afficherboutonValider = false;
               }, function() {
