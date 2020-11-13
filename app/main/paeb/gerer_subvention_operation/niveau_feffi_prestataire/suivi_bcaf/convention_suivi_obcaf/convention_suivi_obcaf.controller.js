@@ -44,6 +44,10 @@
         vm.styleTabfils = "acc_sous_menu";
         vm.selectedItemConvention_entete = {} ;
         vm.allconvention_entete = [] ;
+        vm.header_ref_convention = null;
+        vm.header_cisco = null;
+        vm.header_feffi = null;
+        vm.header_class = null;
 
         vm.affiche_load =false;
        
@@ -832,6 +836,11 @@
             vm.stepMenu_mpe=true;                    
             vm.stepMenu_feffi=true;                   
             vm.stepMenu_indicateur=true;
+
+            vm.header_ref_convention = item.ref_convention;
+            vm.header_cisco = item.cisco.code;
+            vm.header_feffi = item.feffi.denomination; 
+            vm.header_class = 'headerbig';
 
             /* apiFactory.getAPIgeneraliserREST("latrine_construction/index",'id_convention_entete',item.id).then(function(result)
               {

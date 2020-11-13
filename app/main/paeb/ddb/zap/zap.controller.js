@@ -43,6 +43,7 @@
         var currentItem;
         vm.selectedItem = {} ;
         vm.allzap = [] ;
+        vm.affiche_load = true;
         //style
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
@@ -265,9 +266,10 @@
         
         //recuperation donnée zap
         apiFactory.getAll("zap/index").then(function(result)
-        {
+        { 
             vm.allzap = result.data.response; 
             //console.log(vm.allzap);
+            vm.affiche_load = false;
         });
 
         //Masque de saisi ajout

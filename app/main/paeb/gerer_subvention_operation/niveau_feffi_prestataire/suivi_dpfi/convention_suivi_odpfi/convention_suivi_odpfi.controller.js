@@ -14,6 +14,10 @@
         var vm    = this;
         vm.selectedItemConvention_entete = {} ;
         vm.allconvention_entete = [] ;
+        vm.header_ref_convention = null;
+        vm.header_cisco = null;
+        vm.header_feffi = null;
+        vm.header_class = null;
        
         vm.stepMenu_pr=false;
 
@@ -283,6 +287,11 @@
             vm.showbuttonNouvcontrat_pr=true;
             vm.showbuttonNouvPassation_pr=true;
             vm.stepMenu_pr = false;
+
+            vm.header_ref_convention = item.ref_convention;
+            vm.header_cisco = item.cisco.code;
+            vm.header_feffi = item.feffi.denomination; 
+            vm.header_class = 'headerbig';
             donnee_menu_pr(item,vm.session).then(function (result) 
             {
                     // On récupère le resultat de la requête dans la varible "response"                    

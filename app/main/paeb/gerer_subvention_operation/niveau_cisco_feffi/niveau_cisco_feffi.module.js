@@ -4,6 +4,8 @@
 
     angular
         .module('app.paeb.gerer_subvention_operation.niveau_cisco_feffi', [
+            'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.site',
+            'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.site_validation',
             'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.convention_cisco_feffi',
             'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.convention_cisco_feffi_validation',
             'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.feffi'

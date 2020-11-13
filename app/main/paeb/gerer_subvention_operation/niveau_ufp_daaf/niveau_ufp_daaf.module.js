@@ -4,8 +4,6 @@
 
     angular
         .module('app.paeb.gerer_subvention_operation.niveau_ufp_daaf', [
-            'app.paeb.gerer_subvention_operation.niveau_ufp_daaf.site',
-            'app.paeb.gerer_subvention_operation.niveau_ufp_daaf.site_validation',
             'app.paeb.gerer_subvention_operation.niveau_ufp_daaf.convention_ufp_daaf',
             'app.paeb.gerer_subvention_operation.niveau_ufp_daaf.convention_ufp_daaf_validation',            
             'app.paeb.gerer_subvention_operation.niveau_ufp_daaf.compte_daaf'

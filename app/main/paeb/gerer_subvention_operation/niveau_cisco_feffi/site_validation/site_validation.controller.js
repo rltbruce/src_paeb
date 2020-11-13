@@ -3,10 +3,10 @@
     'use strict';
 
     angular
-        .module('app.paeb.gerer_subvention_operation.niveau_ufp_daaf.site')
-        .controller('SiteController', SiteController);
+        .module('app.paeb.gerer_subvention_operation.niveau_cisco_feffi.site_validation')
+        .controller('Site_validationController', Site_validationController);
     /** @ngInject */
-    function SiteController($mdDialog, $scope, apiFactory, $state,$cookieStore,loginService)
+    function Site_validationController($mdDialog, $scope, apiFactory, $state,$cookieStore,loginService)
     {
 		    var vm = this;
         vm.ajout = ajout ;
@@ -22,29 +22,17 @@
         vm.zaps =[];
         vm.ecoles =[];
 
+        vm.showbuttonvalidation = false;
         vm.showbuttonfiltre=true;
         vm.showfiltre=false;
-
-        vm.simulateQuery = false;
-        vm.isDisabled    = false;
-        vm.querySearch   = querySearch;
-        vm.selectedItemChange = selectedItemChange;
-        vm.searchTextChange   = searchTextChange;
-        vm.match = true;
         vm.affiche_load =true;
 
         //style
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
-          autoWidth: false ,
-          //scrollX: true,
-         /* columnDefs: [
-        {  Width: 50, targets: [0, 1] }
-      ] */       
-        };
-
-         
+          autoWidth: false         
+        }; 
 
         vm.showformfiltre = function()
         {
@@ -67,7 +55,7 @@
         },
         {titre:"EPP"
         },
-        {titre:"Accés"
+        {titre:"Acces"
         },
         {titre:"Code sous projet"
         },
@@ -93,31 +81,12 @@
         {
           vm.allsite = result.data.response;
 
-          vm.affiche_load =false;
+        vm.affiche_load =false;
         });
-
-        /*apiFactory.getAPIgeneraliserREST("site/index",'menu',
-         'getsiteByfiltre','lot',filtre.lot,'id_region',filtre.id_region ,
-         'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole).then(function(result)
-        {
-          vm.allconvention_entete = result.data.response;
-        });*/
-        /*apiFactory.getAll("site/index").then(function(result)
-        {
-            vm.allsite = result.data.response;
-        });*/
         apiFactory.getAll("classification_site/index").then(function(result)
         {
             vm.allclassification_site = result.data.response;
         });
-
-
-        //recuperation donnée fokontany
-       /* apiFactory.getAll("ecole/index").then(function(result)
-        {
-          vm.allecole= result.data.response;
-          console.log(vm.allecole);
-        });*/
         apiFactory.getAll("agence_acc/index").then(function(result)
         {
           vm.allagence_acc= result.data.response;
@@ -137,23 +106,6 @@
           } else {
             return results;
           }
-        }
-        function searchTextChange(text) {
-         // $log.info('Text changed to ' + text);
-          console.log('Text changed to ' + text);
-        }
-        function selectedItemChange(item) {
-         // $log.info('Item changed to ' + JSON.stringify(item));
-          console.log('Item changed to ' + JSON.stringify(item));
-          vm.selectedItem.agence = item;
-          console.log(item);
-        }
-        function createFilterFor(query) {
-          var lowercaseQuery = angular.lowercase(query);
-
-          return function filterFn(state) {
-            return (state.nom.toLowerCase().indexOf(lowercaseQuery) === 0);
-          };
         } 
 
          vm.filtre_change_region = function(item)
@@ -225,11 +177,12 @@
 
             vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("site/index",'menu',
-              'getsiteByenpreparationinvalide','lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
+              'getsiteByfiltre','lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
               filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
               {
                   vm.allsite = result.data.response;
-                  vm.affiche_load =false;
+                  
+        vm.affiche_load =false;
               });
         }
 
@@ -271,7 +224,6 @@
                 apiFactory.getAPIgeneraliserREST("zap_commune/index",'menu',"getzapBycommune","id_commune",item.id_commune).then(function(result)
               {
                 vm.zaps = result.data.response;
-                console.log(vm.zaps);
               });
             }
             else
@@ -296,49 +248,6 @@
             }
           
         }
-
-        //Masque de saisi ajout
-        vm.ajouter = function ()
-        { 
-          if (NouvelItem == false)
-          {
-            var items = {
-              $edit: true,
-              $selected: true,
-              id: '0',         
-              code_sous_projet: '',
-              objet_sous_projet: '',
-              //denomination_epp: '',         
-              observation: '',
-              id_agence_acc: '',
-              statu_convention: 0,
-              id_ecole:'',
-              id_region:'',
-              id_cisco:'',
-              id_commune:'',
-              id_zap:'',
-              acces:'',
-              id_classification_site:'',
-              lot:'',
-              validation:'0'
-            };         
-            vm.allsite.push(items);
-            vm.allsite.forEach(function(cis)
-            {
-              if(cis.$selected==true)
-              {
-                vm.selectedItem = cis;
-              }
-            });
-
-            NouvelItem = true ;
-          }else
-          {
-            vm.showAlert('Ajout site','Un formulaire d\'ajout est déjà ouvert!!!');
-          }                
-                      
-        };
-
         //fonction ajout dans bdd
         function ajout(site,suppression)
         {
@@ -392,32 +301,33 @@
             vm.selectedItem = item;
             if (item.$edit==false || item.$edit==undefined)
             {
-              vm.validation_item = item.validation;
-              currentItem     = JSON.parse(JSON.stringify(vm.selectedItem));
-              var zp = vm.zaps.filter(function(obj)
-              {
-                  return obj.id == item.zap.id;
-              });
-              if (zp.length==0)
-              {                
-                vm.zaps.push(item.zap);
-              }
-              var cm = vm.communes.filter(function(obj)
-              {
-                  return obj.id == item.commune.id;
-              });
-              if (cm.length==0)
-              {
-                vm.communes.push(item.commune);
-              }
-              var ec = vm.ecoles.filter(function(obj)
-              {
-                  return obj.id == item.ecole.id;
-              });
-              if (ec.length==0)
-              {
-                vm.ecoles.push(item.ecole);
-              }
+                vm.validation_item = item.validation;
+                vm.showbuttonvalidation = true;
+                currentItem     = JSON.parse(JSON.stringify(vm.selectedItem));
+                var zp = vm.zaps.filter(function(obj)
+                  {
+                      return obj.id == item.zap.id;
+                  });
+                  if (zp.length==0)
+                  {                
+                    vm.zaps.push(item.zap);
+                  }
+                  var cm = vm.communes.filter(function(obj)
+                  {
+                      return obj.id == item.commune.id;
+                  });
+                  if (cm.length==0)
+                  {
+                    vm.communes.push(item.commune);
+                  }
+                  var ec = vm.ecoles.filter(function(obj)
+                  {
+                      return obj.id == item.ecole.id;
+                  });
+                  if (ec.length==0)
+                  {
+                    vm.ecoles.push(item.ecole);
+                  }
             }
            // vm.allsite= [] ;
            //console.log(item); 
@@ -473,8 +383,9 @@
             item.id_commune = vm.selectedItem.commune.id ;
             item.id_zap = vm.selectedItem.zap.id ;
             item.id_ecole = vm.selectedItem.ecole.id ;
-            item.acces = vm.selectedItem.acces ;
+            item.acces      = vm.selectedItem.acces ;
             item.id_classification_site = vm.selectedItem.classification_site.id ; 
+            vm.showbuttonvalidation = false;
         };
 
         //fonction bouton suppression item site
@@ -589,9 +500,7 @@
                 {
                     return obj.id == site.id_zap;
                 });
-                console.log(vm.zaps);
-                console.log(site);
-                console.log(za);
+
                 var ecol = vm.allecole.filter(function(obj)
                 {
                     return obj.id == site.id_ecole;
@@ -649,15 +558,6 @@
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
-        vm.change_ecole = function(site)
-        {
-          console.log(vm.allecole);
-          var ecol = vm.allecole.filter(function(obj)
-          {
-              return obj.id == site.id_ecole;
-          });
-          site.acces = ecol[0].zone_subvention.libelle+ecol[0].acces_zone.libelle;
-        }
 
         function maj_insertioninbase(site,suppression,validation)
         {
@@ -680,8 +580,8 @@
                     id_cisco: site.cisco.id,
                     id_commune: site.commune.id,
                     id_zap: site.zap.id,
-                    id_ecole: site.ecole.id,
-                    acces: site.acces,
+                    id_ecole: site.ecole.id,   
+                    acces:    site.acces,
                     id_classification_site: site.classification_site.id,
                     validation:validation                 
                 });
@@ -701,6 +601,17 @@
         vm.validation = function()
         {
           maj_insertioninbase(vm.selectedItem,0,1);
+        }
+
+        
+        vm.change_ecole = function(site)
+        {
+          console.log(vm.allecole);
+          var ecol = vm.allecole.filter(function(obj)
+          {
+              return obj.id == site.id_ecole;
+          });
+          site.acces = ecol[0].zone_subvention.libelle+ecol[0].acces_zone.libelle;
         }
 
         //Alert

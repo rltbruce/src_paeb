@@ -1,7 +1,7 @@
   <div id="formsodpfi_fepr" class="page-layout simple fullwidth doc-page" layout="column" >
 
     <!-- HEADER -->
-    <div class="header md-accent-bg" layout="row" layout-align="space-between" >
+    <div class="header md-accent-bg {{vm.header_class}}" layout="row" layout-align="space-between" >
         <div layout="column" layout-align="space-between" style="height: 10px !important;">
             <div class="breadcrumb" layout="row" layout-align="start center" >
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
@@ -18,7 +18,17 @@
             <!--div class="title">Convention CISCO/FEFFI</div-->
                                        
             
-        </div>
+        </div><br>
+        <div style="text-align: center; margin: auto; float: bottom" ng-if="vm.header_ref_convention">
+                <span>Référence convention:</span>
+                <span style="margin-right: 20px; color: black;">{{vm.header_ref_convention}}</span>
+                
+                <span>CISCO:</span>                
+                <span style="margin-right: 20px; color: black;">{{vm.header_cisco}}</span>
+
+                <span>FEFFI:</span>
+                <span style="color: black;">{{vm.header_feffi}}</span>
+        </div> 
         
     </div>    
     
