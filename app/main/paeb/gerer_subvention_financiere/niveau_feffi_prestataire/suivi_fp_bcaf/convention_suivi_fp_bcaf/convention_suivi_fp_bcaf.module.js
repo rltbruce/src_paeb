@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire.suivi_fp_bcaf.convention_suivi_fp_bcaf', [])
+        .module('app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire.suivi_fb_bcaf.convention_suivi_fp_bcaf', [])
         .run(testPermission)
         .config(config);
         var vs ;
@@ -11,11 +11,11 @@
     function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
     {
         // State
-        $stateProvider.state('app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_suivi_fp_bcaf_convention_suivi_fp_bcaf', {
-            url      : '/donnees-de-base/gerer_subvention_financiere/niveau_feffi_prestataire/suivi_fp_bcaf/convention_suivi_fp_bcaf',
+        $stateProvider.state('app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_suivi_fb_bcaf_convention_suivi_fp_bcaf', {
+            url      : '/donnees-de-base/gerer_subvention_financiere/niveau_feffi_prestataire/suivi_fb_bcaf/convention_suivi_fp_bcaf',
             views    : {
                 'content@app': {
-                    templateUrl: 'app/main/paeb/gerer_subvention_financiere/niveau_feffi_prestataire/suivi_fp_bcaf/convention_suivi_fp_bcaf/convention_suivi_fp_bcaf.html',
+                    templateUrl: 'app/main/paeb/gerer_subvention_financiere/niveau_feffi_prestataire/suivi_fb_bcaf/convention_suivi_fp_bcaf/convention_suivi_fp_bcaf.html',
                     controller : 'Convention_suivi_fp_bcafController as vm'
                 }
             },
@@ -28,10 +28,10 @@
         });
 
         // Navigation
-        msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_feffi_prestataire.suivi_fp_bcaf.convention_suivi_fp_bcaf', {
+        msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_feffi_prestataire.suivi_fb_bcaf.convention_suivi_fp_bcaf', {
             title: 'Validation activité financier (BCAF)',
             icon  : 'icon-rotate-3d',
-            state: 'app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_suivi_fp_bcaf_convention_suivi_fp_bcaf',
+            state: 'app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_suivi_fb_bcaf_convention_suivi_fp_bcaf',
             weight: 1,
             hidden: function()
             {

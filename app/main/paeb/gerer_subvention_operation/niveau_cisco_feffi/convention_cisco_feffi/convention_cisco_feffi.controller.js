@@ -133,14 +133,16 @@
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
-          autoWidth: true          
+          autoWidth: true ,
+          order:[]           
         };
 
         //style
         vm.dtOptionsperso = {
           dom: '<"top">rt<"bottom"<"left"<"length">><"right"<"info"><"pagination">>>',
           pagingType: 'simple',
-          autoWidth: false          
+          autoWidth: false ,
+          order:[]         
         };
         
         var id_user = $cookieStore.get('id');
@@ -154,18 +156,13 @@
         {
             vm.user = result.data.response;
 
-            if (vm.user.roles.indexOf("OBCAF")!= -1)
+          /*  if (vm.user.roles.indexOf("OBCAF")!= -1)
             {
               var usercisco = result.data.response.cisco;
               vm.ciscos=[];
               vm.allcisco.push(usercisco);
               if (usercisco.id!=undefined)
               {
-                                /*apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioninvalideBycisconow','id_cisco',usercisco.id,'annee',annee).then(function(result)
-                                {
-                                    vm.allconvention_cife_tete = result.data.response; 
-                                    console.log(vm.allconvention_cife_tete);
-                                });*/
                   apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalideByutilisateurnow','id_utilisateur',id_user,'annee',annee).then(function(result)
                   {
                       vm.allconvention_cife_tete = result.data.response; 
@@ -185,7 +182,7 @@
                     vm.communes = result.data.response;
                   });
               }
-            } 
+            } */
 
             if (vm.user.roles.indexOf("AAC")!= -1)
             {                           
@@ -194,10 +191,10 @@
                   vm.allconvention_cife_tete = result.data.response; 
                   vm.affiche_load =false;
               });
-              apiFactory.getAll("cisco/index").then(function success(response)
+             /* apiFactory.getAll("cisco/index").then(function success(response)
               {
                 vm.allcisco = response.data.response;
-              });
+              });*/
               apiFactory.getAll("region/index").then(function success(response)
               {
                 vm.regions = response.data.response;
@@ -212,15 +209,15 @@
                     vm.allconvention_cife_tete = result.data.response; 
                     vm.affiche_load =false;
                 });
-                apiFactory.getAll("cisco/index").then(function success(response)
+               /* apiFactory.getAll("cisco/index").then(function success(response)
                 {
                   vm.allcisco = response.data.response;
-                });
+                });*/
                 apiFactory.getAll("region/index").then(function success(response)
                 {
                   vm.regions = response.data.response;
                 });
-                vm.session='ADMIN';                  
+                vm.session='ADMIN';                
            
               
             }
@@ -316,7 +313,7 @@
             vm.affiche_load =true;
             switch (vm.session)
                 {
-                  case 'OBCAF': 
+                 /* case 'OBCAF': 
                             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalideByutilisateurfiltre','id_utilisateur',id_user,
                             'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
                               filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
@@ -326,7 +323,7 @@
                                 vm.affiche_load =false;
                             });
 
-                      break;
+                      break;*/
 
                   case 'AAC':                            
                             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalideByutilisateurfiltre','id_utilisateur',id_user,
@@ -440,6 +437,8 @@
 
         //col table
         vm.convention_cife_tete_column = [
+        {titre:"Région"
+        },
         {titre:"CISCO"
         },
         {titre:"FEFFI"
@@ -470,7 +469,7 @@
         //Masque de saisi ajout
         vm.ajouterTete = function ()
         { 
-
+          vm.selectedItemTete = {};
           var maxnum =1;
           if (NouvelItemTete == false)
           { 
@@ -490,6 +489,7 @@
                         $edit: true,
                         $selected: true,
                         id: '0',
+                        id_region:'',
                         id_cisco:'',
                         id_feffi:'',
                         id_site:'',
@@ -503,7 +503,7 @@
                         user_nom:vm.user.nom,
                         date_creation:vm.date_now
                       };       
-                      vm.allconvention_cife_tete.push(items);
+                      vm.allconvention_cife_tete.unshift(items);
                       vm.allconvention_cife_tete.forEach(function(conv)
                       {
                         if(conv.$selected==true)
@@ -527,8 +527,40 @@
         function ajoutTete(convention_cife_tete,suppression)
         {
             if (NouvelItemTete==false)
-            {
-                test_existanceTete (convention_cife_tete,suppression); 
+            {   
+                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',convention_cife_tete.id).then(function(result)
+                { 
+                  var convention_valide = result.data.response;
+                  if (convention_valide.length !=0)
+                  {
+                      var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    { 
+
+                      vm.stepOne           = false;
+                      vm.stepTwo           = false;
+                      vm.stepThree         = false;
+                      vm.stepFor           = false;                     
+                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                      {
+                          return obj.id !== convention_cife_tete.id;
+                      });
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                    test_existanceTete (convention_cife_tete,suppression);                    
+                  }
+                }); 
             } 
             else
             {
@@ -543,6 +575,7 @@
           {
               item.$edit = false;
               item.$selected = false;
+              item.id_region    = currentItemTete.id_region ;
               item.id_cisco    = currentItemTete.id_cisco ;
               item.id_feffi    = currentItemTete.id_feffi ;
               item.id_site    = currentItemTete.id_site ;
@@ -581,112 +614,8 @@
             { 
               if (item.$edit==false || item.$edit==undefined)
               {   
-                currentItemTete     = JSON.parse(JSON.stringify(vm.selectedItemTete));
-                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_detail/index",'id_convention_entete',item.id).then(function(result)
-                  {
-                      vm.allconvention_cife_detail = result.data.response;
+                currentItemTete     = JSON.parse(JSON.stringify(vm.selectedItemTete)); 
 
-                      if (vm.allconvention_cife_detail.length!=0)
-                      {
-                        vm.showbuttonNouvDetail=false;
-                      } 
-                      console.log(vm.selectedItemTete);
-                      console.log(vm.allconvention_cife_detail);
-                  });
-                  apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
-                  {
-                    vm.allcompte_feffi = result.data.response;
-                    console.log(vm.allcompte_feffi);
-                   
-                  });
-
-
-                  apiFactory.getAPIgeneraliserREST("cout_maitrise_construction/index",'id_convention_entete',item.id).then(function(result)
-                  {
-                    vm.allcout_maitrise_construction = result.data.response;
-                    if (vm.allcout_maitrise_construction.length >0)
-                      {                    
-                        vm.showbuttonNouvMaitrise=false;
-                      }
-                   
-                  });
-                  apiFactory.getAPIgeneraliserREST("cout_sousprojet_construction/index",'id_convention_entete',item.id).then(function(result)
-                  {
-                    vm.allcout_sousprojet_construction = result.data.response;
-                    if (vm.allcout_sousprojet_construction.length >0)
-                      {                    
-                        vm.showbuttonNouvSousprojet=false;
-                      }
-                   
-                  });
-               
-                  apiFactory.getAPIgeneraliserREST("batiment_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
-                  {
-                      vm.allbatiment_construction = result.data.response;
-
-                      if (vm.allbatiment_construction.length >0)
-                      {                    
-                        vm.showbuttonNouvBatiment=false;
-                      } 
-                      console.log(vm.allbatiment_construction);
-                  });
-
-                  apiFactory.getAPIgeneraliserREST("latrine_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
-                  {
-                      vm.alllatrine_construction = result.data.response;
-
-                      if (vm.alllatrine_construction.length >0)
-                      {                    
-                        vm.showbuttonNouvLatrine=false;
-                      } 
-                      console.log(vm.alllatrine_construction);
-                  });
-
-
-                  apiFactory.getAPIgeneraliserREST("mobilier_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
-                  {
-                      vm.allmobilier_construction = result.data.response;
-
-                      if (vm.allmobilier_construction.length >0)
-                      {                    
-                        vm.showbuttonNouvMobilier=false;
-                      } 
-                      console.log(vm.allmobilier_construction);
-                  });
-
-                  apiFactory.getAPIgeneraliserREST("type_batiment/index",'menu','getbatimentByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
-                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
-                  {
-                    vm.alltype_batiment = result.data.response;
-                    console.log(vm.alltype_batiment);
-                  });
-
-                  apiFactory.getAPIgeneraliserREST("type_latrine/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
-                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
-                  {
-                    vm.alltype_latrine = result.data.response;
-                    console.log(vm.alltype_latrine);
-                  });
-
-                  apiFactory.getAPIgeneraliserREST("type_mobilier/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
-                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
-                  {
-                    vm.alltype_mobilier = result.data.response;
-                    console.log(vm.alltype_mobilier);
-                  });
-
-                  apiFactory.getAPIgeneraliserREST("type_cout_maitrise/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
-                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
-                  {
-                    vm.alltype_cout_maitrise = result.data.response;
-                    console.log(vm.alltype_cout_maitrise);
-                  });
-                  apiFactory.getAPIgeneraliserREST("type_cout_sousprojet/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
-                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
-                  {
-                    vm.alltype_cout_sousprojet = result.data.response;
-                    console.log(vm.alltype_cout_sousprojet);
-                  });
 
                   vm.afficherboutonValider = true;
                   vm.stepOne = true;
@@ -720,6 +649,7 @@
             item.$edit = true;
             item.$selected = true;
 
+            item.id_region = vm.selectedItemTete.region.id ;
             item.id_cisco = vm.selectedItemTete.cisco.id ;
             item.id_feffi = vm.selectedItemTete.feffi.id ;
             item.id_site = vm.selectedItemTete.site.id ;
@@ -744,6 +674,10 @@
             vm.allsite.push(vm.selectedItemTete.site);
             console.log(vm.allsite);
           });
+          apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+            {
+                vm.allcisco = result.data.response;
+            });
 
         };
 
@@ -781,7 +715,7 @@
                 });
                 if(convT[0])
                 {
-                   if((convT[0].delai!=currentItemTete.delai)
+                   if((convT[0].id_region!=currentItemTete.id_region)
                     || (convT[0].id_cisco!=currentItemTete.id_cisco)
                     || (convT[0].id_feffi!=currentItemTete.id_feffi)
                     || (convT[0].id_site!=currentItemTete.id_site)
@@ -851,6 +785,7 @@
             var datas = $.param({
                     supprimer: suppression,
                     id:        getId,
+                    id_region: convention_cife_tete.id_region,
                     id_cisco: convention_cife_tete.id_cisco,
                     id_feffi: convention_cife_tete.id_feffi,
                     id_site: convention_cife_tete.id_site,
@@ -868,7 +803,10 @@
                 //factory
             apiFactory.add("convention_cisco_feffi_entete/index",datas, config).success(function (data)
             {
-                
+                var reg = vm.regions.filter(function(obj)
+                {
+                    return obj.id == convention_cife_tete.id_region;
+                });
                 var cis = vm.allcisco.filter(function(obj)
                 {
                     return obj.id == convention_cife_tete.id_cisco;
@@ -888,6 +826,7 @@
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
+                        vm.selectedItemTete.region   = reg[0];
                         vm.selectedItemTete.cisco   = cis[0];
                         vm.selectedItemTete.feffi = fef[0];
                         vm.selectedItemTete.site = sit[0];
@@ -950,6 +889,7 @@
                 else
                 {
                   
+                  convention_cife_tete.region = reg[0];
                   convention_cife_tete.cisco = cis[0];
                   convention_cife_tete.user = vm.user;
                   convention_cife_tete.feffi = fef[0];
@@ -978,6 +918,10 @@
               convention_cife_tete.$edit = false;
               vm.selectedItemTete = {};
               vm.afficherboutonValider = false;
+              vm.stepOne           = false;
+              vm.stepTwo           = false;
+              vm.stepThree         = false;
+              vm.stepFor           = false;
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
@@ -1069,6 +1013,15 @@ console.log(fef[0]);
                 }
               });
             }
+        }
+         vm.change_region = function(item)
+        {              
+            item.id_cisco = null;
+            apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+            {
+                vm.allcisco = result.data.response;
+            });
+            
         }
 
         vm.change_cisco = function(item)
@@ -1162,44 +1115,6 @@ console.log(fef[0]);
             }
 
             
-        }
-
-        vm.validerConvention = function()
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            }; 
-            
-            var datas = $.param({
-                    supprimer: 0,
-                    id:        vm.selectedItemTete.id,
-                    id_cisco: vm.selectedItemTete.cisco.id,
-                    id_feffi: vm.selectedItemTete.feffi.id,
-                    id_site: vm.selectedItemTete.site.id,
-                    type_convention: vm.selectedItemTete.type_convention,
-                    objet:    vm.selectedItemTete.objet,
-                    ref_financement:  vm.selectedItemTete.ref_financement,
-                    ref_convention:   vm.selectedItemTete.ref_convention,
-                    montant_total:    vm.selectedItemTete.montant_total,
-                    //avancement:    vm.selectedItemTete.avancement,
-                    id_user: vm.selectedItemTete.user.id,
-                    validation: 1               
-                });
-
-            //console.log(datas);
-                //factory
-            apiFactory.add("convention_cisco_feffi_entete/index",datas, config).success(function (data)
-            { 
-                vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
-                {
-                    return obj.id !== vm.selectedItemTete.id;
-                });
-
-                maj_site_in_base(vm.selectedItemTete.site,0,2,vm.selectedItemTete.ecole.id);
-                   
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
         }
 
         vm.affichage_type_convention = function(type_convention)
@@ -1411,543 +1326,27 @@ console.log(fef[0]);
 /****************************Fin insertion cout_sousprojet_construction initial******************************/
 
 
-/***************************************debut cout maitrise***********************************/
-
-      vm.cout_maitrise_construction_column = 
-      [
-        {
-          titre:"Maitrise d'oeuvre"
-        },
-        {
-          titre:"Coût"
-        },
-        {
-          titre:"Action"
-        }
-      ];
-
-      vm.ajoutercout_maitrise_construction = function()
-        {
-          console.log(NouvelItemcout_maitrise_construction);
-          if (NouvelItemcout_maitrise_construction == false) 
+/*********************************debut convention detail********************************/
+      vm.click_step_detail = function()
+      {   
+          vm.affiche_load = true;
+          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_detail/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
           {
-            NouvelItemcout_maitrise_construction = true ;
+              vm.allconvention_cife_detail = result.data.response;
 
-            var items = 
-            {
-              $edit: true,
-              $selected: true,
-              id: '0',
-              id_type_cout_maitrise:'',
-              cout:''
-            };   
-
-            vm.allcout_maitrise_construction.push(items);
-            vm.selectedItemcout_maitrise_construction = items ;
-          }
-          else
-            vm.showAlert("Ajout entête batiment construction','Un formulaire d'ajout est déjà ouvert!!!");
-            
-        }
-
-
-        vm.modifiercout_maitrise_construction = function(item)
-        {
-
-          NouvelItemcout_maitrise_construction == false;
-          vm.selectedItemcout_maitrise_construction = item ;
-          currentItemcout_maitrise_construction = angular.copy(item) ;
-          $scope.vm.allcout_maitrise_construction.forEach(function(cis) {
-          cis.$edit = false;
-            });
-
-          item.$edit = true;
-          item.$selected = true;
-
-          apiFactory.getAPIgeneraliserREST("type_cout_maitrise/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
-                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
-          {
-            vm.alltype_cout_maitrise = result.data.response;
-            console.log(vm.alltype_cout_maitrise);
-            item.id_type_cout_maitrise = vm.selectedItemcout_maitrise_construction.type_cout_maitrise.id ; 
+              if (vm.allconvention_cife_detail.length!=0)
+              {
+                vm.showbuttonNouvDetail=false;
+              }
+              vm.affiche_load = false; 
           });
-
-                     
-          item.description = vm.selectedItemcout_maitrise_construction.description ;
-          item.cout = parseFloat(item.cout) ;//(Number)(item.cout) ;
-          console.log(item);
-         
-        }
-
-
-        vm.ajoutcout_maitrise = function(cout_maitrise,suppression)
-        {
-          console.log(cout_maitrise);
-
-          insert_in_base_cout_maitrise(cout_maitrise,suppression) ;
-        }
-        //fonction ajout dans bdd
-        function ajoutcout_maitrise_construction(cout_maitrise_construction,suppression)
-        {
-            if (NouvelItemcout_maitrise_construction==false)
-            {
-                test_existancecout_maitrise_construction (cout_maitrise_construction,suppression); 
-            } 
-            else
-            {
-                insert_in_basecout_maitrise_construction(cout_maitrise_construction,suppression);
-            }
-        }
-
-        vm.supprimercout_maitrise_construction = function(item)
-        {
-          var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
-                    .textContent('Les données latrine et mobilier seront également supprimées')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-              $mdDialog.show(confirm).then(function() 
-              {
-                insert_in_basecout_maitrise_construction(vm.selectedItemcout_maitrise_construction,1);
-              }, 
-              function() 
-              {
-                //alert('rien');
-              });
-        }
-
-        function test_existancecout_maitrise_construction (item,suppression)
-        {          
-            if (suppression!=1)
-            {
-               var cout_mai = vm.allcout_maitrise_construction.filter(function(obj)
-                {
-                   return obj.id == currentItemcout_maitrise_construction.id;
-                });
-                if(cout_mai[0])
-                {
-                   if((cout_mai[0].id_type_cout_maitrise!=currentItemcout_maitrise_construction.id_type_cout_maitrise)
-                    || (cout_mai[0].cout!=currentItemcout_maitrise_construction.cout)
-                    )                    
-                      { 
-                        insert_in_basecout_maitrise_construction(item,suppression);
-                      }
-                      else
-                      {  
-                        item.$selected = true;
-                        item.$edit = false;
-                      }
-                }
-            } else
-                  insert_in_basecout_maitrise_construction(item,suppression);
-        }
-
-
-        function insert_in_basecout_maitrise_construction(cout_maitrise_construction,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemcout_maitrise_construction == false)
-            {
-                getId = vm.selectedItemcout_maitrise_construction.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id: getId,
-                    id_type_cout_maitrise: cout_maitrise_construction.id_type_cout_maitrise,
-                    cout: cout_maitrise_construction.cout,
-                    id_convention_entete: vm.selectedItemTete.id
-
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("cout_maitrise_construction/index",datas, config).success(function (data)
-            {
-                var type_mait = vm.alltype_cout_maitrise.filter(function(obj)
-                {
-                    return obj.id == cout_maitrise_construction.id_type_cout_maitrise;
-                });           
-
-              if (NouvelItemcout_maitrise_construction == false)
-              {
-                  // Update or delete: id exclu                 
-                  if(suppression == 0)
-                  {
-                      //update tsy miasa eto
-                      var cout_tot = parseFloat(vm.selectedItemTete.montant_total)- currentItemcout_maitrise_construction.cout + cout_maitrise_construction.cout ;
-
-                        vm.selectedItemTete.montant_total= cout_tot;
-                        vm.selectedItemcout_maitrise_construction.type_cout_maitrise= type_mait[0];
-
-                        vm.selectedItemcout_maitrise_construction.$selected  = false;
-                        vm.selectedItemcout_maitrise_construction.$edit      = false;
-                        vm.selectedItemcout_maitrise_construction ={};
-                  }
-                  else 
-                  {    
-                    vm.allcout_maitrise_construction = vm.allcout_maitrise_construction.filter(function(obj)
-                    {
-                       return obj.id !== cout_maitrise_construction.id;
-                    });
-                    vm.selectedItemTete.montant_total= parseFloat(vm.selectedItemTete.montant_total)-vm.selectedItemcout_maitrise_construction.cout;
-                    vm.showbuttonNouvMaitrise = true;
-                  }
-              }
-              else
-              {
-                
-                cout_maitrise_construction.id = String(data.response);
-                NouvelItemcout_maitrise_construction = false ;
-                vm.selectedItemTete.montant_total = parseFloat(vm.selectedItemTete.montant_total)+cout_maitrise_construction.cout;
-                cout_maitrise_construction.type_cout_maitrise= type_mait[0];
-                vm.showbuttonNouvMaitrise = false;
-              }              
-            cout_maitrise_construction.$selected = false;
-              cout_maitrise_construction.$edit = false;
-              vm.selectedItemcout_maitrise_construction = {};
-            })
-            .error
-            (
-              function (data)
-              {
-                vm.showAlert("Error","Erreur lors de l'insertion de donnée");
-              }
-            );
-
-
-        }
-
-        vm.annulercout_maitrise_construction = function(item)
-        {
-          if (NouvelItemcout_maitrise_construction == false)
+          apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',vm.selectedItemTete.feffi.id).then(function(result)
           {
-            item.$edit = false;
-            item.$selected = false;
-            
-            item.id_type_cout_maitrise = currentItemcout_maitrise_construction.type_cout_maitrise.id ;
-            item.cout = currentItemcout_maitrise_construction.cout ;
-          }
-          else
-          {
-            vm.allcout_maitrise_construction = vm.allcout_maitrise_construction.filter(function(obj)
-            {
-                return obj.id !== vm.selectedItemcout_maitrise_construction.id;
-            });
-          }
-          NouvelItemcout_maitrise_construction      = false;
-          vm.selectedItemcout_maitrise_construction = {} ;
-
-        }
-
-        vm.selectcout_maitrise_construction = function(item)
-        {
-          vm.selectedItemcout_maitrise_construction = item ;
-          console.log(vm.selectedItemcout_maitrise_construction);
-          if(item.$selected==false || item.$selected==undefined)
-          {
-              currentItemcout_maitrise_construction     = JSON.parse(JSON.stringify(vm.selectedItemcout_maitrise_construction));
-          }
-        }
-
-        $scope.$watch('vm.selectedItemcout_maitrise_construction', function()
-        {
-             if (!vm.allcout_maitrise_construction) return;
-             vm.allcout_maitrise_construction.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemcout_maitrise_construction.$selected = true;
-        });
-
-        vm.changetype_cout_maitrise = function(item)
-        { 
-            var typ_mai = vm.alltype_cout_maitrise.filter(function(obj)
-            {
-                return obj.id == item.id_type_cout_maitrise;
-            });
-            item.cout = parseFloat(typ_mai[0].cout_maitrise);
-            
-        };
-
-/*********************************fin cout maitrise*************************************/
-
-/********************************debut cout sousprojet*******************************/
-      vm.cout_sousprojet_construction_column = 
-      [
-        {
-          titre:"Sous projet"
-        },
-        {
-          titre:"Coût"
-        },
-        {
-          titre:"Action"
-        }
-      ];
-
-      vm.ajoutercout_sousprojet_construction = function()
-        {
-          console.log(NouvelItemcout_sousprojet_construction);
-          if (NouvelItemcout_sousprojet_construction == false) 
-          {
-            NouvelItemcout_sousprojet_construction = true ;
-
-            var items = 
-            {
-              $edit: true,
-              $selected: true,
-              id: '0',
-              id_type_cout_sousprojet:'',
-              cout:''
-            };   
-
-            vm.allcout_sousprojet_construction.push(items);
-            vm.selectedItemcout_sousprojet_construction = items ;
-          }
-          else
-            vm.showAlert("Ajout entête batiment construction','Un formulaire d'ajout est déjà ouvert!!!");
-            
-        }
-
-
-        vm.modifiercout_sousprojet_construction = function(item)
-        {
-
-          NouvelItemcout_sousprojet_construction == false;
-          vm.selectedItemcout_sousprojet_construction = item ;
-          currentItemcout_sousprojet_construction = angular.copy(item) ;
-          $scope.vm.allcout_sousprojet_construction.forEach(function(cis) {
-          cis.$edit = false;
-            });
-
-          item.$edit = true;
-          item.$selected = true;
-
-          apiFactory.getAPIgeneraliserREST("type_cout_sousprojet/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
-                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
-          {
-            vm.alltype_cout_sousprojet = result.data.response;
-            console.log(vm.alltype_cout_sousprojet);
+            vm.allcompte_feffi = result.data.response;
+            console.log(vm.allcompte_feffi);
+                   
           });
-
-          item.id_type_cout_sousprojet = vm.selectedItemcout_sousprojet_construction.type_cout_sousprojet.id ;            
-          item.description = vm.selectedItemcout_sousprojet_construction.description ;
-          item.cout =parseFloat(item.cout) ; //(Number)(item.cout) ;
-
-         
-        }
-
-
-        vm.ajoutcout_sousprojet = function(cout_sousprojet,suppression)
-        {
-          console.log(cout_sousprojet);
-
-          insert_in_base_cout_sousprojet(cout_sousprojet,suppression) ;
-        }
-        //fonction ajout dans bdd
-        function ajoutcout_sousprojet_construction(cout_sousprojet_construction,suppression)
-        {
-            if (NouvelItemcout_sousprojet_construction==false)
-            {
-                test_existancecout_sousprojet_construction (cout_sousprojet_construction,suppression); 
-            } 
-            else
-            {
-                insert_in_basecout_sousprojet_construction(cout_sousprojet_construction,suppression);
-            }
-        }
-
-        vm.supprimercout_sousprojet_construction = function(item)
-        {
-          var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
-                    .textContent('Les données latrine et mobilier seront également supprimées')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-              $mdDialog.show(confirm).then(function() 
-              {
-                insert_in_basecout_sousprojet_construction(vm.selectedItemcout_sousprojet_construction,1);
-              }, 
-              function() 
-              {
-                //alert('rien');
-              });
-        }
-
-        function test_existancecout_sousprojet_construction (item,suppression)
-        {          
-            if (suppression!=1)
-            {
-               var cout_mai = vm.allcout_sousprojet_construction.filter(function(obj)
-                {
-                   return obj.id == currentItemcout_sousprojet_construction.id;
-                });
-                if(cout_mai[0])
-                {
-                   if((cout_mai[0].id_type_cout_sousprojet!=currentItemcout_sousprojet_construction.id_type_cout_sousprojet)
-                    || (cout_mai[0].cout!=currentItemcout_sousprojet_construction.cout)
-                    )                    
-                      { 
-                        insert_in_basecout_sousprojet_construction(item,suppression);
-                      }
-                      else
-                      {  
-                        item.$selected = true;
-                        item.$edit = false;
-                      }
-                }
-            } else
-                  insert_in_basecout_sousprojet_construction(item,suppression);
-        }
-
-
-        function insert_in_basecout_sousprojet_construction(cout_sousprojet_construction,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemcout_sousprojet_construction == false)
-            {
-                getId = vm.selectedItemcout_sousprojet_construction.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id: getId,
-                    id_type_cout_sousprojet: cout_sousprojet_construction.id_type_cout_sousprojet,
-                    cout: cout_sousprojet_construction.cout,
-                    id_convention_entete: vm.selectedItemTete.id
-
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("cout_sousprojet_construction/index",datas, config).success(function (data)
-            {
-                var type_mait = vm.alltype_cout_sousprojet.filter(function(obj)
-                {
-                    return obj.id == cout_sousprojet_construction.id_type_cout_sousprojet;
-                });           
-
-              if (NouvelItemcout_sousprojet_construction == false)
-              {
-                  // Update or delete: id exclu                 
-                  if(suppression == 0)
-                  {
-                      //update tsy miasa eto
-                      var cout_tot = parseFloat(vm.selectedItemTete.montant_total)- currentItemcout_sousprojet_construction.cout + cout_sousprojet_construction.cout ;
-
-                        vm.selectedItemTete.montant_total= cout_tot;
-                        vm.selectedItemcout_sousprojet_construction.type_cout_sousprojet= type_mait[0];
-
-                        vm.selectedItemcout_sousprojet_construction.$selected  = false;
-                        vm.selectedItemcout_sousprojet_construction.$edit      = false;
-                        vm.selectedItemcout_sousprojet_construction ={};
-                  }
-                  else 
-                  {    
-                    vm.allcout_sousprojet_construction = vm.allcout_sousprojet_construction.filter(function(obj)
-                    {
-                       return obj.id !== cout_sousprojet_construction.id;
-                    });
-                    vm.selectedItemTete.montant_total= parseFloat(vm.selectedItemTete.montant_total)-vm.selectedItemcout_sousprojet_construction.cout;
-                    vm.showbuttonNouvSousprojet = true;
-                  }
-              }
-              else
-              {
-                
-                cout_sousprojet_construction.id = String(data.response);
-                NouvelItemcout_sousprojet_construction = false ;
-                vm.selectedItemTete.montant_total = parseFloat(vm.selectedItemTete.montant_total)+cout_sousprojet_construction.cout;
-                cout_sousprojet_construction.type_cout_sousprojet= type_mait[0];
-                vm.showbuttonNouvSousprojet = false;
-              }              
-            cout_sousprojet_construction.$selected = false;
-              cout_sousprojet_construction.$edit = false;
-              vm.selectedItemcout_sousprojet_construction = {};
-            })
-            .error
-            (
-              function (data)
-              {
-                vm.showAlert("Error","Erreur lors de l'insertion de donnée");
-              }
-            );
-
-
-        }
-
-        vm.annulercout_sousprojet_construction = function(item)
-        {
-          if (NouvelItemcout_sousprojet_construction == false)
-          {
-            item.$edit = false;
-            item.$selected = false;
-            
-            item.id_type_cout_sousprojet = currentItemcout_sousprojet_construction.type_cout_sousprojet.id ;
-            item.cout = currentItemcout_sousprojet_construction.cout ;
-          }
-          else
-          {
-            vm.allcout_sousprojet_construction = vm.allcout_sousprojet_construction.filter(function(obj)
-            {
-                return obj.id !== vm.selectedItemcout_sousprojet_construction.id;
-            });
-          }
-          NouvelItemcout_sousprojet_construction      = false;
-          vm.selectedItemcout_sousprojet_construction = {} ;
-
-        }
-
-        vm.selectcout_sousprojet_construction = function(item)
-        {
-          vm.selectedItemcout_sousprojet_construction = item ;
-          console.log(vm.selectedItemcout_sousprojet_construction);
-          if(item.$selected==false || item.$selected==undefined)
-          {
-              currentItemcout_sousprojet_construction     = JSON.parse(JSON.stringify(vm.selectedItemcout_sousprojet_construction));
-          }
-        }
-
-        $scope.$watch('vm.selectedItemcout_sousprojet_construction', function()
-        {
-             if (!vm.allcout_sousprojet_construction) return;
-             vm.allcout_sousprojet_construction.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemcout_sousprojet_construction.$selected = true;
-        });
-
-        vm.changetype_cout_sousprojet = function(item)
-        { 
-            var typ_mai = vm.alltype_cout_sousprojet.filter(function(obj)
-            {
-                return obj.id == item.id_type_cout_sousprojet;
-            });
-            item.cout = parseFloat(typ_mai[0].cout_sousprojet);
-            
-        };
-
-/***********************************fin cout sousprojet**************************************/
-
-      /*****************debut convention detail**************/
+      }
 
       //col table
         vm.convention_cife_detail_column1 = [
@@ -1955,7 +1354,7 @@ console.log(fef[0]);
           titre:"Intitule"
         },
         {
-          titre:"Delai (en jours)"
+          titre:"Delai (en mois)"
         },
         {
           titre:"Prévision bénéficiaire"
@@ -2021,8 +1420,41 @@ console.log(fef[0]);
         function ajoutDetail(convention_cife_detail,suppression)
         {
             if (NouvelItemDetail==false)
-            {
-                test_existanceDetail (convention_cife_detail,suppression); 
+            {                
+                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
+                { 
+                  var convention_valide = result.data.response;
+                  if (convention_valide.length !=0)
+                  {
+                      var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    { 
+
+                      vm.stepOne           = false;
+                      vm.stepTwo           = false;
+                      vm.stepThree         = false;
+                      vm.stepFor           = false;
+                      vm.allconvention_cife_detail = [];                     
+                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemTete.id;
+                      });
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                    test_existanceDetail (convention_cife_detail,suppression);                    
+                  }
+                }); 
             } 
             else
             {
@@ -2260,9 +1692,680 @@ console.log(fef[0]);
 
         }
        
-      /*****************fin convention detail****************/
+/*************************************fin convention detail****************************************/
 
-      /*****************debut batiment construction***************/
+
+/***************************************debut cout maitrise***********************************/
+
+  vm.click_step_cout_maitrise = function ()
+  {
+    vm.affiche_load = true;
+    apiFactory.getAPIgeneraliserREST("cout_maitrise_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+    {
+      vm.allcout_maitrise_construction = result.data.response;
+      if (vm.allcout_maitrise_construction.length >0)
+        {                    
+          vm.showbuttonNouvMaitrise=false;
+        }
+      vm.affiche_load = false;
+                   
+    });
+    apiFactory.getAPIgeneraliserREST("type_cout_maitrise/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
+                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
+    {
+      vm.alltype_cout_maitrise = result.data.response;
+      console.log(vm.alltype_cout_maitrise);
+    });
+  }
+
+
+      vm.cout_maitrise_construction_column = 
+      [
+        {
+          titre:"Maitrise d'oeuvre"
+        },
+        {
+          titre:"Coût"
+        },
+        {
+          titre:"Action"
+        }
+      ];
+
+      vm.ajoutercout_maitrise_construction = function()
+        {
+          console.log(NouvelItemcout_maitrise_construction);
+          if (NouvelItemcout_maitrise_construction == false) 
+          {
+            NouvelItemcout_maitrise_construction = true ;
+
+            var items = 
+            {
+              $edit: true,
+              $selected: true,
+              id: '0',
+              id_type_cout_maitrise:'',
+              cout:''
+            };   
+
+            vm.allcout_maitrise_construction.push(items);
+            vm.selectedItemcout_maitrise_construction = items ;
+          }
+          else
+            vm.showAlert("Ajout entête batiment construction','Un formulaire d'ajout est déjà ouvert!!!");
+            
+        }
+
+
+        vm.modifiercout_maitrise_construction = function(item)
+        {
+
+          NouvelItemcout_maitrise_construction == false;
+          vm.selectedItemcout_maitrise_construction = item ;
+          currentItemcout_maitrise_construction = angular.copy(item) ;
+          $scope.vm.allcout_maitrise_construction.forEach(function(cis) {
+          cis.$edit = false;
+            });
+
+          item.$edit = true;
+          item.$selected = true;
+
+          apiFactory.getAPIgeneraliserREST("type_cout_maitrise/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
+                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
+          {
+            vm.alltype_cout_maitrise = result.data.response;
+            console.log(vm.alltype_cout_maitrise);
+            item.id_type_cout_maitrise = vm.selectedItemcout_maitrise_construction.type_cout_maitrise.id ; 
+          });
+
+                     
+          item.description = vm.selectedItemcout_maitrise_construction.description ;
+          item.cout = parseFloat(item.cout) ;//(Number)(item.cout) ;
+          console.log(item);
+         
+        }
+
+
+        vm.ajoutcout_maitrise = function(cout_maitrise,suppression)
+        {
+          console.log(cout_maitrise);
+
+          insert_in_base_cout_maitrise(cout_maitrise,suppression) ;
+        }
+        //fonction ajout dans bdd
+        function ajoutcout_maitrise_construction(cout_maitrise_construction,suppression)
+        {
+            if (NouvelItemcout_maitrise_construction==false)
+            {
+                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
+                { 
+                  var convention_valide = result.data.response;
+                  if (convention_valide.length !=0)
+                  {
+                      var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    { 
+
+                      vm.stepOne           = false;
+                      vm.stepTwo           = false;
+                      vm.stepThree         = false;
+                      vm.stepFor           = false;
+                      vm.allconvention_cife_detail = [];                     
+                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemTete.id;
+                      });
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                    test_existancecout_maitrise_construction (cout_maitrise_construction,suppression);                  
+                  }
+                });  
+            } 
+            else
+            {
+                insert_in_basecout_maitrise_construction(cout_maitrise_construction,suppression);
+            }
+        }
+
+        vm.supprimercout_maitrise_construction = function(item)
+        {
+          var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
+                    .textContent('Les données latrine et mobilier seront également supprimées')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() 
+              {
+                insert_in_basecout_maitrise_construction(vm.selectedItemcout_maitrise_construction,1);
+              }, 
+              function() 
+              {
+                //alert('rien');
+              });
+        }
+
+        function test_existancecout_maitrise_construction (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var cout_mai = vm.allcout_maitrise_construction.filter(function(obj)
+                {
+                   return obj.id == currentItemcout_maitrise_construction.id;
+                });
+                if(cout_mai[0])
+                {
+                   if((cout_mai[0].id_type_cout_maitrise!=currentItemcout_maitrise_construction.id_type_cout_maitrise)
+                    || (cout_mai[0].cout!=currentItemcout_maitrise_construction.cout)
+                    )                    
+                      { 
+                        insert_in_basecout_maitrise_construction(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_basecout_maitrise_construction(item,suppression);
+        }
+
+
+        function insert_in_basecout_maitrise_construction(cout_maitrise_construction,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemcout_maitrise_construction == false)
+            {
+                getId = vm.selectedItemcout_maitrise_construction.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id: getId,
+                    id_type_cout_maitrise: cout_maitrise_construction.id_type_cout_maitrise,
+                    cout: cout_maitrise_construction.cout,
+                    id_convention_entete: vm.selectedItemTete.id
+
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("cout_maitrise_construction/index",datas, config).success(function (data)
+            {
+                var type_mait = vm.alltype_cout_maitrise.filter(function(obj)
+                {
+                    return obj.id == cout_maitrise_construction.id_type_cout_maitrise;
+                });           
+
+              if (NouvelItemcout_maitrise_construction == false)
+              {
+                  // Update or delete: id exclu                 
+                  if(suppression == 0)
+                  {
+                      //update tsy miasa eto
+                      var cout_tot = parseFloat(vm.selectedItemTete.montant_total)- currentItemcout_maitrise_construction.cout + cout_maitrise_construction.cout ;
+
+                        vm.selectedItemTete.montant_total= cout_tot;
+                        vm.selectedItemcout_maitrise_construction.type_cout_maitrise= type_mait[0];
+
+                        vm.selectedItemcout_maitrise_construction.$selected  = false;
+                        vm.selectedItemcout_maitrise_construction.$edit      = false;
+                        vm.selectedItemcout_maitrise_construction ={};
+                  }
+                  else 
+                  {    
+                    vm.allcout_maitrise_construction = vm.allcout_maitrise_construction.filter(function(obj)
+                    {
+                       return obj.id !== cout_maitrise_construction.id;
+                    });
+                    vm.selectedItemTete.montant_total= parseFloat(vm.selectedItemTete.montant_total)-vm.selectedItemcout_maitrise_construction.cout;
+                    vm.showbuttonNouvMaitrise = true;
+                  }
+              }
+              else
+              {
+                
+                cout_maitrise_construction.id = String(data.response);
+                NouvelItemcout_maitrise_construction = false ;
+                vm.selectedItemTete.montant_total = parseFloat(vm.selectedItemTete.montant_total)+cout_maitrise_construction.cout;
+                cout_maitrise_construction.type_cout_maitrise= type_mait[0];
+                vm.showbuttonNouvMaitrise = false;
+              }              
+            cout_maitrise_construction.$selected = false;
+              cout_maitrise_construction.$edit = false;
+              vm.selectedItemcout_maitrise_construction = {};
+            })
+            .error
+            (
+              function (data)
+              {
+                vm.showAlert("Error","Erreur lors de l'insertion de donnée");
+              }
+            );
+
+
+        }
+
+        vm.annulercout_maitrise_construction = function(item)
+        {
+          if (NouvelItemcout_maitrise_construction == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            
+            item.id_type_cout_maitrise = currentItemcout_maitrise_construction.type_cout_maitrise.id ;
+            item.cout = currentItemcout_maitrise_construction.cout ;
+          }
+          else
+          {
+            vm.allcout_maitrise_construction = vm.allcout_maitrise_construction.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemcout_maitrise_construction.id;
+            });
+          }
+          NouvelItemcout_maitrise_construction      = false;
+          vm.selectedItemcout_maitrise_construction = {} ;
+
+        }
+
+        vm.selectcout_maitrise_construction = function(item)
+        {
+          vm.selectedItemcout_maitrise_construction = item ;
+          console.log(vm.selectedItemcout_maitrise_construction);
+          if(item.$selected==false || item.$selected==undefined)
+          {
+              currentItemcout_maitrise_construction     = JSON.parse(JSON.stringify(vm.selectedItemcout_maitrise_construction));
+          }
+        }
+
+        $scope.$watch('vm.selectedItemcout_maitrise_construction', function()
+        {
+             if (!vm.allcout_maitrise_construction) return;
+             vm.allcout_maitrise_construction.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemcout_maitrise_construction.$selected = true;
+        });
+
+        vm.changetype_cout_maitrise = function(item)
+        { 
+            var typ_mai = vm.alltype_cout_maitrise.filter(function(obj)
+            {
+                return obj.id == item.id_type_cout_maitrise;
+            });
+            item.cout = parseFloat(typ_mai[0].cout_maitrise);
+            
+        };
+
+/*********************************fin cout maitrise*************************************/
+
+/********************************debut cout sousprojet*******************************/
+vm.click_step_cout_sousprojet = function()
+{
+    vm.affiche_load = true;
+    apiFactory.getAPIgeneraliserREST("cout_sousprojet_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+    {
+      vm.allcout_sousprojet_construction = result.data.response;
+      if (vm.allcout_sousprojet_construction.length >0)
+        {                    
+                        vm.showbuttonNouvSousprojet=false;
+        }
+       vm.affiche_load = false;
+                   
+    });
+
+    apiFactory.getAPIgeneraliserREST("type_cout_sousprojet/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
+                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
+    {
+      vm.alltype_cout_sousprojet = result.data.response;
+      console.log(vm.alltype_cout_sousprojet);
+    });
+}
+
+      vm.cout_sousprojet_construction_column = 
+      [
+        {
+          titre:"Sous projet"
+        },
+        {
+          titre:"Coût"
+        },
+        {
+          titre:"Action"
+        }
+      ];
+
+      vm.ajoutercout_sousprojet_construction = function()
+        {
+          console.log(NouvelItemcout_sousprojet_construction);
+          if (NouvelItemcout_sousprojet_construction == false) 
+          {
+            NouvelItemcout_sousprojet_construction = true ;
+
+            var items = 
+            {
+              $edit: true,
+              $selected: true,
+              id: '0',
+              id_type_cout_sousprojet:'',
+              cout:''
+            };   
+
+            vm.allcout_sousprojet_construction.push(items);
+            vm.selectedItemcout_sousprojet_construction = items ;
+          }
+          else
+            vm.showAlert("Ajout entête batiment construction','Un formulaire d'ajout est déjà ouvert!!!");
+            
+        }
+
+
+        vm.modifiercout_sousprojet_construction = function(item)
+        {
+
+          NouvelItemcout_sousprojet_construction == false;
+          vm.selectedItemcout_sousprojet_construction = item ;
+          currentItemcout_sousprojet_construction = angular.copy(item) ;
+          $scope.vm.allcout_sousprojet_construction.forEach(function(cis) {
+          cis.$edit = false;
+            });
+
+          item.$edit = true;
+          item.$selected = true;
+
+          apiFactory.getAPIgeneraliserREST("type_cout_sousprojet/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
+                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
+          {
+            vm.alltype_cout_sousprojet = result.data.response;
+            console.log(vm.alltype_cout_sousprojet);
+          });
+
+          item.id_type_cout_sousprojet = vm.selectedItemcout_sousprojet_construction.type_cout_sousprojet.id ;            
+          item.description = vm.selectedItemcout_sousprojet_construction.description ;
+          item.cout =parseFloat(item.cout) ; //(Number)(item.cout) ;
+
+         
+        }
+
+
+        vm.ajoutcout_sousprojet = function(cout_sousprojet,suppression)
+        {
+          console.log(cout_sousprojet);
+
+          insert_in_base_cout_sousprojet(cout_sousprojet,suppression) ;
+        }
+        //fonction ajout dans bdd
+        function ajoutcout_sousprojet_construction(cout_sousprojet_construction,suppression)
+        {
+            if (NouvelItemcout_sousprojet_construction==false)
+            {
+                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
+                { 
+                  var convention_valide = result.data.response;
+                  if (convention_valide.length !=0)
+                  {
+                      var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    { 
+
+                      vm.stepOne           = false;
+                      vm.stepTwo           = false;
+                      vm.stepThree         = false;
+                      vm.stepFor           = false;
+                      vm.allconvention_cife_detail = [];                     
+                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemTete.id;
+                      });
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                    test_existancecout_sousprojet_construction (cout_sousprojet_construction,suppression);                 
+                  }
+                }); 
+            } 
+            else
+            {
+                insert_in_basecout_sousprojet_construction(cout_sousprojet_construction,suppression);
+            }
+        }
+
+        vm.supprimercout_sousprojet_construction = function(item)
+        {
+          var confirm = $mdDialog.confirm()
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
+                    .textContent('Les données latrine et mobilier seront également supprimées')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+              $mdDialog.show(confirm).then(function() 
+              {
+                insert_in_basecout_sousprojet_construction(vm.selectedItemcout_sousprojet_construction,1);
+              }, 
+              function() 
+              {
+                //alert('rien');
+              });
+        }
+
+        function test_existancecout_sousprojet_construction (item,suppression)
+        {          
+            if (suppression!=1)
+            {
+               var cout_mai = vm.allcout_sousprojet_construction.filter(function(obj)
+                {
+                   return obj.id == currentItemcout_sousprojet_construction.id;
+                });
+                if(cout_mai[0])
+                {
+                   if((cout_mai[0].id_type_cout_sousprojet!=currentItemcout_sousprojet_construction.id_type_cout_sousprojet)
+                    || (cout_mai[0].cout!=currentItemcout_sousprojet_construction.cout)
+                    )                    
+                      { 
+                        insert_in_basecout_sousprojet_construction(item,suppression);
+                      }
+                      else
+                      {  
+                        item.$selected = true;
+                        item.$edit = false;
+                      }
+                }
+            } else
+                  insert_in_basecout_sousprojet_construction(item,suppression);
+        }
+
+
+        function insert_in_basecout_sousprojet_construction(cout_sousprojet_construction,suppression)
+        {
+            //add
+            var config =
+            {
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            
+            var getId = 0;
+            if (NouvelItemcout_sousprojet_construction == false)
+            {
+                getId = vm.selectedItemcout_sousprojet_construction.id; 
+            } 
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id: getId,
+                    id_type_cout_sousprojet: cout_sousprojet_construction.id_type_cout_sousprojet,
+                    cout: cout_sousprojet_construction.cout,
+                    id_convention_entete: vm.selectedItemTete.id
+
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("cout_sousprojet_construction/index",datas, config).success(function (data)
+            {
+                var type_mait = vm.alltype_cout_sousprojet.filter(function(obj)
+                {
+                    return obj.id == cout_sousprojet_construction.id_type_cout_sousprojet;
+                });           
+
+              if (NouvelItemcout_sousprojet_construction == false)
+              {
+                  // Update or delete: id exclu                 
+                  if(suppression == 0)
+                  {
+                      //update tsy miasa eto
+                      var cout_tot = parseFloat(vm.selectedItemTete.montant_total)- currentItemcout_sousprojet_construction.cout + cout_sousprojet_construction.cout ;
+
+                        vm.selectedItemTete.montant_total= cout_tot;
+                        vm.selectedItemcout_sousprojet_construction.type_cout_sousprojet= type_mait[0];
+
+                        vm.selectedItemcout_sousprojet_construction.$selected  = false;
+                        vm.selectedItemcout_sousprojet_construction.$edit      = false;
+                        vm.selectedItemcout_sousprojet_construction ={};
+                  }
+                  else 
+                  {    
+                    vm.allcout_sousprojet_construction = vm.allcout_sousprojet_construction.filter(function(obj)
+                    {
+                       return obj.id !== cout_sousprojet_construction.id;
+                    });
+                    vm.selectedItemTete.montant_total= parseFloat(vm.selectedItemTete.montant_total)-vm.selectedItemcout_sousprojet_construction.cout;
+                    vm.showbuttonNouvSousprojet = true;
+                  }
+              }
+              else
+              {
+                
+                cout_sousprojet_construction.id = String(data.response);
+                NouvelItemcout_sousprojet_construction = false ;
+                vm.selectedItemTete.montant_total = parseFloat(vm.selectedItemTete.montant_total)+cout_sousprojet_construction.cout;
+                cout_sousprojet_construction.type_cout_sousprojet= type_mait[0];
+                vm.showbuttonNouvSousprojet = false;
+              }              
+            cout_sousprojet_construction.$selected = false;
+              cout_sousprojet_construction.$edit = false;
+              vm.selectedItemcout_sousprojet_construction = {};
+            })
+            .error
+            (
+              function (data)
+              {
+                vm.showAlert("Error","Erreur lors de l'insertion de donnée");
+              }
+            );
+
+
+        }
+
+        vm.annulercout_sousprojet_construction = function(item)
+        {
+          if (NouvelItemcout_sousprojet_construction == false)
+          {
+            item.$edit = false;
+            item.$selected = false;
+            
+            item.id_type_cout_sousprojet = currentItemcout_sousprojet_construction.type_cout_sousprojet.id ;
+            item.cout = currentItemcout_sousprojet_construction.cout ;
+          }
+          else
+          {
+            vm.allcout_sousprojet_construction = vm.allcout_sousprojet_construction.filter(function(obj)
+            {
+                return obj.id !== vm.selectedItemcout_sousprojet_construction.id;
+            });
+          }
+          NouvelItemcout_sousprojet_construction      = false;
+          vm.selectedItemcout_sousprojet_construction = {} ;
+
+        }
+
+        vm.selectcout_sousprojet_construction = function(item)
+        {
+          vm.selectedItemcout_sousprojet_construction = item ;
+          console.log(vm.selectedItemcout_sousprojet_construction);
+          if(item.$selected==false || item.$selected==undefined)
+          {
+              currentItemcout_sousprojet_construction     = JSON.parse(JSON.stringify(vm.selectedItemcout_sousprojet_construction));
+          }
+        }
+
+        $scope.$watch('vm.selectedItemcout_sousprojet_construction', function()
+        {
+             if (!vm.allcout_sousprojet_construction) return;
+             vm.allcout_sousprojet_construction.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemcout_sousprojet_construction.$selected = true;
+        });
+
+        vm.changetype_cout_sousprojet = function(item)
+        { 
+            var typ_mai = vm.alltype_cout_sousprojet.filter(function(obj)
+            {
+                return obj.id == item.id_type_cout_sousprojet;
+            });
+            item.cout = parseFloat(typ_mai[0].cout_sousprojet);
+            
+        };
+
+/***********************************fin cout sousprojet**************************************/
+
+
+/*************************************debut batiment construction********************************************/
+
+    
+  vm.click_step_cout_batiment = function ()
+  {   
+       vm.affiche_load = true;        
+      apiFactory.getAPIgeneraliserREST("batiment_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+      {
+          vm.allbatiment_construction = result.data.response;
+
+          if (vm.allbatiment_construction.length >0)
+          {                    
+            vm.showbuttonNouvBatiment=false;
+          } 
+          vm.affiche_load = false;
+          console.log(vm.allbatiment_construction);
+      });
+      apiFactory.getAPIgeneraliserREST("type_batiment/index",'menu','getbatimentByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
+                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
+      {
+        vm.alltype_batiment = result.data.response;
+        console.log(vm.alltype_batiment);
+      });
+  }
       //col table
 
         vm.batiment_construction_column = [        
@@ -2319,7 +2422,40 @@ console.log(fef[0]);
         {
             if (NouvelItemBatiment_construction==false)
             {
-                test_existanceBatiment_construction (batiment_construction,suppression); 
+                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
+                { 
+                  var convention_valide = result.data.response;
+                  if (convention_valide.length !=0)
+                  {
+                      var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    { 
+
+                      vm.stepOne           = false;
+                      vm.stepTwo           = false;
+                      vm.stepThree         = false;
+                      vm.stepFor           = false;
+                      vm.allconvention_cife_detail = [];                     
+                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemTete.id;
+                      });
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                    test_existanceBatiment_construction (batiment_construction,suppression);                
+                  }
+                });  
             } 
             else
             {
@@ -2568,10 +2704,32 @@ console.log(fef[0]);
         };
 
 
-      /*****************fin batiment construction***************/
+  /************************************fin batiment construction********************************/
 
 
-       /*****************debut latrine construction***************/
+  /**************************************debut latrine construction*******************************/
+
+  vm.click_step_cout_latrine = function ()
+  { 
+      vm.affiche_load = true;
+      apiFactory.getAPIgeneraliserREST("latrine_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+      {
+          vm.alllatrine_construction = result.data.response;
+
+          if (vm.alllatrine_construction.length >0)
+          {                    
+            vm.showbuttonNouvLatrine=false;
+          } 
+          vm.affiche_load = false;
+          console.log(vm.alllatrine_construction);
+      });
+      apiFactory.getAPIgeneraliserREST("type_latrine/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
+                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
+      {
+        vm.alltype_latrine = result.data.response;
+        console.log(vm.alltype_latrine);
+      });
+  }
       //col table
         vm.latrine_construction_column1 = [        
         {
@@ -2626,7 +2784,41 @@ console.log(fef[0]);
         {
             if (NouvelItemLatrine_construction==false)
             {
-                test_existanceLatrine_construction (latrine_construction,suppression); 
+                
+                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
+                { 
+                  var convention_valide = result.data.response;
+                  if (convention_valide.length !=0)
+                  {
+                      var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    { 
+
+                      vm.stepOne           = false;
+                      vm.stepTwo           = false;
+                      vm.stepThree         = false;
+                      vm.stepFor           = false;
+                      vm.allconvention_cife_detail = [];                     
+                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemTete.id;
+                      });
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                    test_existanceLatrine_construction (latrine_construction,suppression);               
+                  }
+                }); 
             } 
             else
             {
@@ -2852,9 +3044,31 @@ console.log(fef[0]);
             item.nbr_box_latrine = parseInt(annel[0].nbr_box_latrine);
             item.nbr_point_eau = parseInt(annel[0].nbr_point_eau);
         };
-      /*****************fin latrine construction***************/
+  /*********************************fin latrine construction*******************************/
 
-      /*****************debut mobilier construction***************/
+  /***********************************debut mobilier construction*****************************/
+  vm.click_step_cout_mobilier = function ()
+  {    
+      vm.affiche_load = true;
+      apiFactory.getAPIgeneraliserREST("mobilier_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+      {
+          vm.allmobilier_construction = result.data.response;
+
+          if (vm.allmobilier_construction.length >0)
+          {                    
+            vm.showbuttonNouvMobilier=false;
+          } 
+          vm.affiche_load = false;
+          console.log(vm.allmobilier_construction);
+      });
+
+      apiFactory.getAPIgeneraliserREST("type_mobilier/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
+                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
+      {
+        vm.alltype_mobilier = result.data.response;
+        console.log(vm.alltype_mobilier);
+      });
+  }
        //col table
         vm.mobilier_construction_column = [        
         {
@@ -2913,7 +3127,41 @@ console.log(fef[0]);
         {
             if (NouvelItemMobilier_construction==false)
             {
-                test_existanceMobilier_construction (mobilier_construction,suppression); 
+                
+                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
+                { 
+                  var convention_valide = result.data.response;
+                  if (convention_valide.length !=0)
+                  {
+                      var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    { 
+
+                      vm.stepOne           = false;
+                      vm.stepTwo           = false;
+                      vm.stepThree         = false;
+                      vm.stepFor           = false;
+                      vm.allconvention_cife_detail = [];                     
+                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                      {
+                          return obj.id !== vm.selectedItemTete.id;
+                      });
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                    test_existanceMobilier_construction (mobilier_construction,suppression);              
+                  }
+                }); 
             } 
             else
             {

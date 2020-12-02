@@ -4,8 +4,11 @@
 
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_ufp_feffi', [			
-            'app.paeb.gerer_subvention_financiere.niveau_ufp_feffi.suivi_f_bcaf_ufp',          
-            'app.paeb.gerer_subvention_financiere.niveau_ufp_feffi.suivi_f_ufp'
+            //'app.paeb.gerer_subvention_financiere.niveau_ufp_feffi.suivi_f_bcaf_ufp',
+            'app.paeb.gerer_subvention_financiere.niveau_ufp_feffi.convention_suivi_f_bcaf_ufp',
+            'app.paeb.gerer_subvention_financiere.niveau_ufp_feffi.convention_suivi_f_obcaf_ufp',
+            'app.paeb.gerer_subvention_financiere.niveau_ufp_feffi.convention_suivi_f_ufp'         
+            //'app.paeb.gerer_subvention_financiere.niveau_ufp_feffi.suivi_f_ufp'
             ])
         .run(testPermission)        
         .config(config);
@@ -41,7 +44,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["ADMIN","OBCAF","BCAF","UFP"];
+                var permissions = ["ADMIN","AAC","DPFI","UFP"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

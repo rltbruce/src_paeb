@@ -632,6 +632,7 @@
         vm.affichestatuconvention = function(item)
         {
           var x = Number(item);
+          console.log(x);
           switch(x)
           {
               case 1:

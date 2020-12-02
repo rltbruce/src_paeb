@@ -73,7 +73,7 @@
                 apiFactory.getAll("count_avancement_travaux/index").then(function(result)
                 {
                     var allavan= result.data.response;
-                    console.log(allavan);
+                    //console.log(allavan);
                 });
                 
 
@@ -82,8 +82,8 @@
                         $interval(function(){apiFactory.getAll("count_avancement_travaux/index").then(function(result)
                         {
                             var allavan= result.data.response;
-                            console.log(allavan);
-                        });},15000) ;
+                            //console.log(allavan);
+                        });},30000) ;
                   
                     //**************************************************
 

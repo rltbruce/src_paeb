@@ -359,6 +359,9 @@
                                         <md-button type="submit" class="md-raised md-warn md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerFacture_moe_creer()" style="width:10%;" ng-show="vm.showbuttonValidationFacture_moe_creer &&  vm.validation_fact_moe ==0">
                                           Valider
                                         </md-button>
+                                        <md-button type="submit" class="md-raised md-red-500-bg" aria-label="Nouveau" ng-click="vm.rejeterFacture_moe_dpfi()" style="width:10%;color: white" ng-show="vm.showbuttonValidationFacture_moe_rejedpfi &&  vm.validation_fact_moe ==0">
+                                          Rejeter
+                                        </md-button>
                                     </div>
                                     <div >
                     <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="40"></md-progress-circular> 
@@ -801,7 +804,7 @@
                                               <span ng-if="justificatif_facture_moe.$edit" style="display: inline-block !important;">
                                                 <md-input-container style="width:100%;display: flex !important;">
                                                   <label>Fichier</label>
-                                                <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFile_justi_facture_moe"  ng-model="fichier" id="fileid"/>
+                                                <input type="file"name="myFile" aria-label="upload" custom-on-changepiecemoe="uploadFile_justi_facture_moe"  ng-model="fichier" id="fileid"/>
                                                 </md-input-container>   
                                               </span>
                                                         

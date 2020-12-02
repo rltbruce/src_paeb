@@ -230,7 +230,7 @@
             </md-tab>
     <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
     <!----------------------------DEBUT SUIVI FINANCIER FEFFI---------------------------------------->
-                  <md-tab ng-disabled="vm.stepMenu_feffi==false">
+                  <md-tab ng-disabled="vm.stepMenu_feffi==false" ng-click="vm.step_menu_demande()">
                             <md-tab-label>
                               <span class="ms-form-wizard-step-label">
                                   <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -395,7 +395,7 @@
                           </md-tab>
                     <!--------------------------FIN DEMANDE PAYEMENT------------------------------------------->
 
-                          <md-tab ng-disabled="vm.steppiecefeffi==false">
+                          <md-tab ng-disabled="vm.steppiecefeffi==false" ng-click="vm.step_justificatif()">
                             <md-tab-label>
                               <span class="ms-form-wizard-step-label">
                                   <span class="ms-form-wizard-step-text">Pièce jointe</span>

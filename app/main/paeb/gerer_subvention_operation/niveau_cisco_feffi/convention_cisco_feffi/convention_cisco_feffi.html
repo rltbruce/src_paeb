@@ -150,14 +150,13 @@
                                 </md-input-container>
                               </div>
                               </div>  
-                              <div class="footer-animate-show-hide">
-                                  <md-button class="md-raised boutonfixe" disabled>
+                              
+                              <div class="footer-animate-show-hide" layout="row" layout-align="end end">
+                                  <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                            Recherche
                                   </md-button>
                                   <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
-                                            Réinitialise
-                                  </md-button>
-                                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
-                                                Recherche
+                                                        Réinitialise
                                   </md-button>
                               </div>
                           </form>
@@ -230,6 +229,11 @@
                         </th-->
                         <th class="secondary-text">
                           <div class="table-header">
+                            <span class="column-title">Region &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp</span>
+                          </div>
+                        </th>
+                        <th class="secondary-text">
+                          <div class="table-header">
                             <span class="column-title">CISCO &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp</span>
                           </div>
                         </th>
@@ -294,6 +298,20 @@
                     <tbody>
                       <tr ng-repeat="convention_cife_tete in vm.allconvention_cife_tete"  ng-class="{selected: convention_cife_tete.$selected}" ng-click="vm.selectionTete(convention_cife_tete)">           
                         
+
+                        <td>
+                          <span ng-if="convention_cife_tete.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Region  &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp</label>
+                              <md-select ng-model="convention_cife_tete.id_region"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_region(convention_cife_tete)">
+                                <md-option ng-repeat="region in vm.regions" value="{{region.id}}">
+                                                                    {{region.nom}}
+                                </md-option>
+                              </md-select>
+                            </md-input-container>  
+                          </span>
+                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.region.nom}}</span>
+                        </td>
 
                         <td>
                           <span ng-if="convention_cife_tete.$edit">
@@ -451,7 +469,7 @@
     <!-----fin convention_cife_tete ------>
 
     <!-----debut convention_detail ------>
-            <md-tab ng-disabled="vm.stepOne==false">
+            <md-tab ng-disabled="vm.stepOne==false" ng-click="vm.click_step_detail()">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
 
@@ -469,6 +487,13 @@
                       Nouveau
                     </md-button>
                 </div>
+
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
               <fieldset class="standard" >
                 <legend><code>Detail</code></legend>
                 <div>        
@@ -665,7 +690,7 @@
             </md-tab>
 
     <!-----debut divers cout construction ********------>
-      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
+      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)" ng-click="vm.click_step_cout_maitrise()">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
 
@@ -685,6 +710,13 @@
                 Nouveau
               </md-button>
           </div>
+
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
 
           <div>
             <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
@@ -752,7 +784,7 @@
     <!-----fin divers cout construction ********------>
 
     <!-----debut batiment construction ------>
-      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
+      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)" ng-click="vm.click_step_cout_batiment()">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
 
@@ -770,7 +802,13 @@
                 Nouveau
               </md-button>
           </div>
-
+       
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
           <div>
             <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
               <thead>
@@ -847,7 +885,7 @@
     <!-----fin batiment construction ------>
 
     <!-----debut detail latrine ------>
-      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
+      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)" ng-click="vm.click_step_cout_latrine()">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
             <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">L</span>
@@ -864,6 +902,13 @@
                 Nouveau
               </md-button>
           </div>
+
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
           <div>
             <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
               <thead>
@@ -947,7 +992,7 @@
     <!-----debut detail latrine ------>
 
     <!-----debut detail mobilier ------>
-      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
+      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)" ng-click="vm.click_step_cout_mobilier()">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
             <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">M</span>
@@ -964,6 +1009,13 @@
                 Nouveau
               </md-button>
           </div>
+                 
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
           <div>
             <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
               <thead>
@@ -1059,7 +1111,7 @@
     <!-----debut detail mobilier ------>
 
         <!-----debut divers cout construction ********------>
-      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
+      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)" ng-click="vm.click_step_cout_sousprojet()">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
 
@@ -1079,7 +1131,13 @@
                 Nouveau
               </md-button>
           </div>
-
+       
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
           <div>
             <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
               <thead>

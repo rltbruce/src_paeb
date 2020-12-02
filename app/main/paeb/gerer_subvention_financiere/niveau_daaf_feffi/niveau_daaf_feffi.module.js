@@ -4,9 +4,10 @@
 
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_daaf_feffi', [			
-            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_bcaf',          
-            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_dpfi',          
-            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_daaf'
+            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.convention_suivi_f_bcaf',           
+            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.convention_suivi_f_obcaf',          
+            //'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_dpfi',          
+            'app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.convention_suivi_f_daaf'
             ])
         .run(testPermission)        
         .config(config);
@@ -25,8 +26,6 @@
             }
         });
 
-
-
     }
 
     function testPermission(loginService,$cookieStore,apiFactory)
@@ -42,7 +41,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["ADMIN","DPFI","DAAF","BCAF","OBCAF"];
+                var permissions = ["ADMIN","DPFI","DAAF","AAC"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

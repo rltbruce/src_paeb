@@ -113,7 +113,12 @@
         {titre:"Action"}];
       var annee = vm.date_now.getFullYear();
   //recuperation donnée programmation
-        apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_now","annee",annee).then(function(result)
+       /* apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_now","annee",annee).then(function(result)
+        {
+            vm.allconvention_ufp_daaf_entete = result.data.response;
+            vm.affiche_load =false;
+        });*/
+        apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_creerinvalide_now","annee",annee).then(function(result)
         {
             vm.allconvention_ufp_daaf_entete = result.data.response;
             vm.affiche_load =false;
@@ -124,7 +129,15 @@
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
             vm.affiche_load =true;
-            apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconventionByfiltre",'date_debut',
+            vm.afficherboutonValider = false;
+            /*apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconventionByfiltre",'date_debut',
+                                    date_debut,'date_fin',date_fin).then(function(result)
+            {
+                vm.allconvention_ufp_daaf_entete = result.data.response;
+                vm.affiche_load =false;
+            });*/
+
+            apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_creerinvalideByfiltre",'date_debut',
                                     date_debut,'date_fin',date_fin).then(function(result)
             {
                 vm.allconvention_ufp_daaf_entete = result.data.response;
@@ -190,17 +203,7 @@
            // vm.allconvention_ufp_daaf_entete= [] ;
             
            if (vm.selectedItemConvention_ufp_daaf_entete.id!=0)
-           {
-              //recuperation donnée convention
-              apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_detail/index",'id_convention_ufp_daaf_entete',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
-              {
-                  vm.allconvention_ufp_daaf_detail = result.data.response;
-                  if (vm.allconvention_ufp_daaf_detail.length>0)
-                  {
-                    vm.showbuttonNouvDetail = false;
-                  } 
-                  ////console.log(result.data.response);                 
-              });              
+           {                          
 
               vm.stepOne           = true;
               vm.stepTwo           = false;
@@ -391,10 +394,11 @@
                 //factory
             apiFactory.add("convention_ufp_daaf_entete/index",datas, config).success(function (data)
             {   
-              /*vm.allconvention_ufp_daaf_entete = vm.allconvention_ufp_daaf_entete.filter(function(obj)
+              vm.allconvention_ufp_daaf_entete = vm.allconvention_ufp_daaf_entete.filter(function(obj)
               {
                   return obj.id !== vm.selectedItemConvention_ufp_daaf_entete.id;
-              });*/
+              });
+              vm.stepOne = false;
               vm.afficherboutonValider = false;
               vm.selectedItemConvention_ufp_daaf_entete.validation = 1;
               vm.validation_item=1;
@@ -424,6 +428,17 @@
   /*****************Fin StepOne convention_ufp_daaf_entete****************/
 
   /*****************Debut StepOne convention_ufp_daaf_detail****************/
+
+  vm.click_step_detail = function()
+  {  
+      vm.affiche_load = true;
+      //recuperation donnée convention
+      apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_detail/index",'id_convention_ufp_daaf_entete',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
+      {
+          vm.allconvention_ufp_daaf_detail = result.data.response; 
+          vm.affiche_load = false;                 
+      }); 
+  }
 
   //col table
         vm.convention_ufp_daaf_detail_column = [        
@@ -697,7 +712,7 @@
       vm.click_step_convention_cisco_feffi = function()
       {   
           vm.affiche_load = true;
-          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'id_convention_ufpdaaf',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
+          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionFeffiByconvention_ufpdaaf",'id_convention_ufpdaaf',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
               {
                   vm.allconvention_cisco_feffi_entete = result.data.response; 
               vm.affiche_load = false; 
@@ -707,6 +722,8 @@
 
         //col table
         vm.convention_cisco_feffi_entete_column = [
+        {titre:"Région"
+        },
         {titre:"CISCO"
         },
         {titre:"FEFFI"
@@ -1017,6 +1034,8 @@
         var convention_a_anvoyer= [];
 
         dg.conventiondialog_column = [
+        {titre:"Région"
+        },
         {titre:"CISCO"
         },
         {titre:"FEFFI"

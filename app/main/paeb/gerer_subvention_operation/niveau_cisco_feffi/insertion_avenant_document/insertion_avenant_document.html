@@ -1,0 +1,534 @@
+  <div id="formsinsavenant" class="page-layout simple fullwidth doc-page" layout="column" >
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg {{vm.header_class}}" layout="row" layout-align="space-between" >
+        <div layout="column" layout-align="space-between" style="height: 10px !important;">
+            <div class="breadcrumb" layout="row" layout-align="start center" >
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Gestion technique des activitées</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Niveau CISCO/FEFFI</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Insertion avenant et document CISCO/FEFFI (AAC)</span>
+                
+            </div>                       
+            
+        </div><br>
+        <div style="text-align: center; margin: auto; float: bottom" ng-if="vm.header_ref_convention">
+                <span>Référence convention:</span>
+                <span style="margin-right: 20px; color: black;">{{vm.header_ref_convention}}</span>
+                
+                <span>CISCO:</span>                
+                <span style="margin-right: 20px; color: black;">{{vm.header_cisco}}</span>
+
+                <span>FEFFI:</span>
+                <span style="color: black;">{{vm.header_feffi}}</span>
+        </div> 
+        
+    </div>    
+    
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+      <div class="form-wrapper md-whiteframe-1dp acc_menu" >
+<!-----------------------------------------DEBUT TABS MERE----------------------------------------------------------->
+         <ms-form-wizard flex>
+          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" >
+
+    <!----------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
+            
+            <md-tab>
+              <md-tab-label >
+                <span class="ms-form-wizard-step-label">
+                    <!--span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-basket-fill s16"></i>
+                    </span-->
+                    <span class="ms-form-wizard-step-text">Convention</span>
+                </span>
+               
+              </md-tab-label>
+              
+              <md-tab-body>
+               <div style="margin-top: 1px;">
+                  <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
+                  <form name="filtreform" class="md-inline-form" novalidate >
+                        <br>
+                    <div style="margin: 0px 15px 10px 15px;">
+                      <div layout="column" layout-gt-xs="row">
+                          <md-input-container>
+                            <span style="font-size: 14.5px" class="text-semibold">Date signature convention du: &nbsp</span>
+                          </md-input-container>
+
+                          <md-datepicker ng-model="vm.filtre.date_debut" md-max-date="vm.datenow" required style="">                     
+                          </md-datepicker>
+
+                          <md-input-container>
+                                    <span style="font-size: 14.5px" class="text-semibold">&nbsp &nbsp jusqu'au &nbsp &nbsp</span>
+                          </md-input-container>
+
+                          <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
+                          </md-datepicker>
+                        </div>
+                        <div layout="column" layout-gt-xs="row">
+
+                        <md-input-container flex="100" flex-gt-xs="90">
+                          <label>Lot</label>
+                          <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                            <md-option value="*">*</md-option>
+                            <md-option value="1">Lot 1</md-option>
+                            <md-option value="2">Lot 2</md-option>
+                            <md-option value="3">Lot 3</md-option>
+                            <md-option value="4">Lot 4</md-option>
+                          </md-select>
+                          <div ng-messages="filtreform.lot.$error" role="alert">
+                            <div ng-message="required"><span>Lot</span></div>
+                          </div>
+                        </md-input-container>
+                        <md-input-container flex="100" flex-gt-xs="90">
+                          <label>Région</label>
+                          <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)">
+                            <md-option  value="*">*</md-option>
+                            <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
+                          </md-select>
+                          <div ng-messages="filtreform.region.$error" role="alert">
+                            <div ng-message="required"><span>Région</span></div>
+                          </div>
+                        </md-input-container>
+                                        
+                        <md-input-container flex="100" flex-gt-xs="90">
+                          <label>Cisco</label>
+                          <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
+                            <md-option  value="*">*</md-option>
+                            <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                                                        
+                            </md-select>
+                            <div ng-messages="filtreform.cisco.$error" role="alert">
+                            <div ng-message="required"><span>Cisco</span></div>
+                          </div>
+                        </md-input-container>
+                                        
+                        <md-input-container flex="100" flex-gt-xs="90">
+                          <label>Commune</label>
+                          <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
+                            <md-option  value="*">*</md-option>
+                            <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
+                          </md-select>
+                          <div ng-messages="filtreform.commune.$error" role="alert">
+                            <div ng-message="required"><span>Commune</span></div>
+                          </div>
+                          </md-input-container>                                 
+
+                        <md-input-container flex="100" flex-gt-xs="90">
+                          <label>Zap</label>
+                          <md-select ng-model="vm.filtre.id_zap" name="zap" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_zap(vm.filtre)">
+                            <md-option  value="*">*</md-option>
+                            <md-option ng-repeat="zaps in vm.zaps" value="{{zaps.id}}"> {{zaps.nom}}
+                            </md-option>
+                          </md-select>  
+                          <div ng-messages="filtreform.zap.$error" role="alert">
+                            <div ng-message="required"><span>Zap</span></div>
+                          </div>
+                        </md-input-container>
+                                        
+                        <md-input-container flex="100" flex-gt-xs="90">
+                          <label>Ecole</label>
+                          <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
+                            <md-option  value="*">*</md-option>
+                            <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
+                            </md-option>
+                          </md-select>
+                          <div ng-messages="filtreform.ecole.$error" role="alert">
+                            <div ng-message="required"><span>Ecole</span></div>
+                          </div>
+                        </md-input-container>
+                        <md-input-container flex="100" flex-gt-xs="90">
+                          <label>Convention</label>
+                          <md-select ng-model="vm.filtre.id_convention_entete" name="convention" ng-disabled="!vm.filtre.id_ecole">
+                            <md-option  value="*">*</md-option>
+                            <md-option ng-repeat="eco in vm.convention_cisco_feffi_entetes" value="{{eco.id}}"> {{eco.ref_convention}}
+                            </md-option>
+                          </md-select>  
+                          <div ng-messages="filtreform.convention_entete.$error" role="alert">
+                            <div ng-message="required"><span>Convention</span></div>
+                          </div>
+                        </md-input-container>
+                      </div>
+                      </div>  
+                      <div class="footer-animate-show-hide">
+                          <md-button class="md-raised boutonfixe" disabled>
+                          </md-button>
+                          <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                            Réinitialise
+                          </md-button>
+                             <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
+                          </md-button>
+                      </div>
+                  </form>
+              </div>
+                                   
+              <div class="bouton-animate-show-hide">
+
+                    <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+                      <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+                    </md-icon>                           
+                     <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+                    </md-icon>
+                    <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+                    </md-icon>
+                    <md-tooltip><span>Bouton filtre</span></md-tooltip>
+                    </md-button> 
+                </div>
+              </div>
+                  
+              <div style="clear:both;"></div>            
+              <div style="float: top !important">
+                 <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                 </div>
+              </div>
+
+              <div>        
+                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                    <thead>
+                      <tr>
+                        <th class="secondary-text" ng-repeat="conv_ente in ::vm.convention_entete_column">
+                          <div class="table-header">
+                              <span class="column-title">{{conv_ente.titre}}</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                                             
+                    <tbody>
+                      <tr ng-repeat="convention_entete in vm.allconvention_entete"  ng-class="{selected: convention_entete.$selected}" ng-click="vm.selectionConvention_entete(convention_entete)">           
+                        <td>
+                          <span>{{convention_entete.cisco.code}}</span>
+                        </td>
+
+                        <td>
+                            <span>{{convention_entete.feffi.denomination}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{convention_entete.site.code_sous_projet}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{convention_entete.site.acces}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{convention_entete.ref_convention}}</span>
+                        </td>
+
+                        <td>                         
+                          <span>{{convention_entete.objet}}</span>
+                        </td>
+
+                        <td>                                    
+                          <span>{{convention_entete.ref_financement}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{vm.formatMillier(convention_entete.montant_total)}} Ar</span>
+                        </td>
+                        <td>                          
+                          <span>{{convention_entete.user.nom}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </md-tab-body>
+            </md-tab>
+          
+            <!----------------------------DEBUT ESTIMATION CONVENTION-convention cisco/feffi---------------->
+
+                  <!---------------------------------------------DEBUT Avenant------------------------------------->
+                  <md-tab ng-disabled="!vm.stepOne" ng-click="vm.step_avenant_feffi()">                    
+                      <md-tab-label >
+                        <span class="ms-form-wizard-step-label">
+                              <span class="ms-form-wizard-step-number md-accent-bg">A</span>
+                            <span class="ms-form-wizard-step-text">Avenant</span>
+                        </span>
+                       
+                      </md-tab-label>
+
+                      <md-tab-body>
+                        <div style="widht:100%;">  
+                            <md-button type="submit" class="md-raised md-accent  md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterAvenant_convention()" style="width:10%;" ng-show="vm.showbuttonNouvavenant_convention">
+                                      Nouveau
+                            </md-button>
+
+                            <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_avenant_conv()" style="width:10%;" ng-show="vm.showbuttonimporter_avenant_conv">
+                                    Importer
+                            </md-button><br>
+                        </div>
+
+                <div ng-show="vm.showformimporter_avenant_conv">
+                  <form name="formimporter_avenant_conv" class="md-inline-form" novalidate >
+                        <br>
+                    <div layout="column" layout-gt-xs="row">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fichier</label>
+                            <input ng-model="vm.fichier_avenant_conv" name="fichier_avenant_conv" type="file" custom-on-change="uploadFile_avenant_conv"  ng-multiple="false" required />
+                            <div ng-messages="formimporter_avenant_conv.fichier_avenant_conv.$error" role="alert">
+                              <div ng-message="required"><span>Fichier</span></div>
+                            </div>
+                          </md-input-container>
+                        </div>
+
+                        <div>
+                         <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="formimporter_avenant_conv.$invalid" ng-click="vm.importer_avenant_conv()" style="width:10%;">
+                                      Importer
+                        </md-button>
+                        <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerimporter_avenant_conv()" style="width:10%;">
+                                  Annuler
+                        </md-button>
+                    </div>
+                  </form>
+                  <md-divider></md-divider><br>
+                </div>
+                           
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
+                               <div>        
+                                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                                  <thead>
+                                    <tr>
+                                      <th class="secondary-text" ng-repeat="mem in ::vm.avenant_convention_column">
+                                        <div class="table-header">
+                                          <span class="column-title">{{mem.titre}}</span>
+                                        </div>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                           
+                                  <tbody>
+                                    <tr ng-repeat="avenant_convention in vm.allavenant_convention"  ng-class="{selected: avenant_convention.$selected}" ng-click="vm.selectionAvenant_convention(avenant_convention)">
+                                      
+                                      <td>
+                                        <span ng-if="avenant_convention.$edit">
+                                          <md-input-container style="width:100%;display: flex !important;">
+                                            <label>Référence avenant</label>
+                                            <input name="ref_avenant" type="text" ng-model="avenant_convention.ref_avenant"/>
+                                          </md-input-container>   
+                                        </span>
+                                                  
+                                        <span ng-if="!avenant_convention.$edit">{{avenant_convention.ref_avenant}}</span>
+                                      </td>           
+                                      <td>
+                                        <span ng-if="avenant_convention.$edit">
+                                          <md-input-container style="width:100%;display: flex !important;">
+                                            <label>Descriprtion</label>
+                                            <input name="description" type="text" ng-model="avenant_convention.description"/>
+                                          </md-input-container>   
+                                        </span>
+                                                  
+                                        <span ng-if="!avenant_convention.$edit">{{avenant_convention.description}}</span>
+                                      </td>
+                                                
+                                      <td>
+                                        <span ng-if="avenant_convention.$edit">
+                                          <md-input-container style="width:100%;display: flex !important;">
+                                            <label>Montant</label>
+                                            <input name="montant" type="number" ng-model="avenant_convention.montant" ng-min="1"/>
+                                          </md-input-container>   
+                                        </span>
+                                                  
+                                        <span ng-if="!avenant_convention.$edit">{{vm.formatMillier(avenant_convention.montant)}} Ar</span>
+                                      </td>
+
+                                      <td>
+                                        <span ng-if="avenant_convention.$edit">
+                                          <md-datepicker ng-model="avenant_convention.date_signature" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
+                                          </md-datepicker>
+                                        </span>                          
+                                        <span ng-if="!avenant_convention.$edit">{{vm.formatDate(avenant_convention.date_signature)}}</span>
+                                      </td>                      
+                                      <td>
+                                        <a ng-if="!avenant_convention.$edit && avenant_convention.validation==0" ng-click="vm.modifierAvenant_convention(avenant_convention)" title="Modifier">
+                                          <span class="icon-table-edit"></span>
+                                        </a>
+                                                  
+                                        <a ng-if="!avenant_convention.$edit && avenant_convention.validation==0" ng-click="vm.supprimerAvenant_convention(avenant_convention)" title="Supprimer">
+                                          <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
+                                        </a>
+                                        <span ng-if="!avenant_convention.$edit && avenant_convention.validation==1">Aucune action disponible</span>          
+                                        <a ng-if="avenant_convention.$edit" ng-click="vm.annulerAvenant_convention(avenant_convention)" title="Annuler modification">
+                                          <span class="icon-cancel"></span>
+                                        </a>
+                                                  
+                                        <a ng-if="avenant_convention.$edit && avenant_convention.description &&  avenant_convention.montant &&  avenant_convention.date_signature>''" ng-click="vm.ajoutAvenant_convention(avenant_convention,0)" title="Sauvegarder">
+                                          <span class="icon-content-save"></span>
+                                        </a>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                      </md-tab-body>
+                  </md-tab>
+          <!---------------------------FIN CONVENTION CISCO/FEFFI------------------------------------------------->
+                          
+                          
+                    <!-------------------------------Debut document feffi -------------------------------------------->
+                    <md-tab ng-disabled="!vm.stepOne" ng-click="vm.step_importerdocument_feffi()">
+                        <md-tab-label>
+                          <span class="ms-form-wizard-step-label">
+                              <span class="ms-form-wizard-step-number md-accent-bg">D</span>
+                              <span class="ms-form-wizard-step-text">Importer document</span>
+                          </span>
+                        </md-tab-label>
+                        
+                        <md-tab-body><br>
+
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>
+                         <div>        
+                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                            <thead>
+                              <tr>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Code</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Intitule</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Existance</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Fichier</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Date Elaboration</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Observation</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text">
+                                  <div class="table-header">
+                                    <span class="column-title">Action</span>
+                                  </div>
+                                </th>
+                              </tr>
+                            </thead>
+                                     
+                            <tbody>
+                              <tr ng-repeat="document_feffi_scan in vm.alldocument_feffi_scan"  ng-class="{selected: document_feffi_scan.$selected}" ng-click="vm.selectionDocument_feffi_scan(document_feffi_scan)">
+
+                                <td>                                            
+                                  <span>{{document_feffi_scan.code}}</span>
+                                </td>
+
+                                <td>                                            
+                                  <span>{{document_feffi_scan.intitule}}</span>
+                                </td>
+                                
+                                <td>                                 
+                                   <md-checkbox ng-model="document_feffi_scan.existance" aria-label="Checkbox 1" disabled>
+                                  </md-checkbox>
+                                </td>
+                                          
+                                <td>
+                                  <span ng-if="document_feffi_scan.$edit" style="display: inline-block !important;">
+                                    <md-input-container style="width:100%;display: flex !important;">
+                                      <label>Fichier</label>
+                                      <input name="fichier" type="text" ng-model="document_feffi_scan.fichier" disabled/>
+                                    </md-input-container>   
+                                  </span>
+
+                                  <span ng-if="document_feffi_scan.$edit" style="display: inline-block !important;">
+                                    <md-input-container style="width:100%;display: flex !important;">
+                                      <label>Fichier</label>
+                                    <input type="file"name="myFile" aria-label="upload" custom-on-changefeffi="uploadFile_doc_feffi"  ng-model="fichier" id="fileid"/>
+                                    </md-input-container>   
+                                  </span>
+                                            
+                                  <span ng-if="!document_feffi_scan.$edit">{{document_feffi_scan.fichier}}</span>
+                                </td>
+
+                                <td>
+                                  <span ng-if="document_feffi_scan.$edit">
+                                    <md-datepicker ng-model="document_feffi_scan.date_elaboration" md-placeholder="Date de elaboration" md-max-date="vm.date_now" required>                       
+                                    </md-datepicker>
+                                  </span>                          
+                                  <span ng-if="!document_feffi_scan.$edit">{{vm.formatDate(document_feffi_scan.date_elaboration)}}</span>
+                                </td>
+
+                                <td>
+                                  <span ng-if="document_feffi_scan.$edit">
+                                    <md-input-container style="width:100%;display: flex !important;">
+                                      <label>Observation</label>
+                                      <input name="observation" type="text" ng-model="document_feffi_scan.observation"/>
+                                    </md-input-container>   
+                                  </span>
+                                            
+                                  <span ng-if="!document_feffi_scan.$edit">{{document_feffi_scan.observation}}</span>
+                                </td>
+
+                                <td>
+                                  <a ng-if="!document_feffi_scan.$edit && (document_feffi_scan.validation==0 || document_feffi_scan.validation==null)" ng-click="vm.modifierDocument_feffi_scan(document_feffi_scan)" title="Modifier">
+                                    <span class="icon-table-edit"></span>
+                                  </a>
+                                            
+                                  <a ng-if="!document_feffi_scan.$edit && document_feffi_scan.validation==0" ng-click="vm.supprimerDocument_feffi_scan(document_feffi_scan)" title="Supprimer">
+                                    <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
+                                  </a>                        
+                                            
+                                  <a ng-if="!document_feffi_scan.$edit && document_feffi_scan.existance" ng-click="vm.download_document_feffi_scan(document_feffi_scan)" title="Telecharger fichier">
+                                    <span class="icon-box-download"></span>
+                                  </a>
+                                            
+                                  <a ng-if="document_feffi_scan.$edit" ng-click="vm.annulerDocument_feffi_scan(document_feffi_scan)" title="Annuler modification">
+                                    <span class="icon-cancel"></span>
+                                  </a>
+                                            
+                                  <a ng-if="document_feffi_scan.$edit && document_feffi_scan.fichier && document_feffi_scan.date_elaboration >''" ng-click="vm.ajoutDocument_feffi_scan(document_feffi_scan,0)" title="Sauvegarder">
+                                    <span class="icon-content-save"></span>
+                                  </a>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </md-tab-body>
+                    </md-tab>
+                    <!----------------------------------FIN document moe -------------------------------------------->
+            
+          </md-tabs>
+        </ms-form-wizard> 
+<!------------------------------------FIN TABS MERE--------------------------------------------------->    
+       </div>
+      
+    </div>
+    <!-- / CONTENT -->
+  </div>

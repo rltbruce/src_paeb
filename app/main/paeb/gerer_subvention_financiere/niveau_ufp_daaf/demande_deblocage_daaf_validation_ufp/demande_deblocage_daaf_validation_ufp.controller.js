@@ -44,14 +44,16 @@
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
-          autoWidth: false          
+          autoWidth: false,
+          destroy: true,
+        searching: false         
         }; 
         
-        apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemande_deblocage_daaf_invalide","validation",1).then(function(result)
+        /*apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemande_deblocage_daaf_invalide","validation",1).then(function(result)
         {
             vm.alldemande_deblocage_daaf_valide_daaf = result.data.response;
             
-        });
+        });*/
 
         
         vm.showformfiltre = function()
@@ -110,11 +112,7 @@
             vm.stepThree = false;
 
            //recuperation donnée demande
-            apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemandedisponible","id_convention_ufp_daaf_entete",item.id).then(function(result)
-            {
-                vm.alldemande_deblocage_daaf_valide_daaf = result.data.response; 
-                console.log(vm.alldemande_deblocage_daaf_valide_daaf );
-            });
+            
            
         };
         $scope.$watch('vm.selectedItemConvention_ufp_daaf_entete', function()
@@ -143,6 +141,16 @@
   /*****************Fin StepOne convention_ufp_daaf_entete****************/
 
   /*****************Debut StepTwo demande_deblocage_daaf_validation_ufp****************/
+   vm.step_menu_demande_daaf = function()
+  { 
+    vm.affiche_load = true;
+    apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemandedisponible","id_convention_ufp_daaf_entete",vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
+    {
+        vm.alldemande_deblocage_daaf_valide_daaf = result.data.response;
+        vm.affiche_load = false;
+    });
+
+  }
 
       vm.demande_deblocage_daaf_validation_ufp_column = [
         {titre:"Réference demande"},
@@ -162,27 +170,10 @@
         vm.selectionDemande_deblocage_daaf_validation_ufp= function (item)
         {
             vm.selectedItemDemande_deblocage_daaf_validation_ufp = item;
-           //recuperation donnée demande_deblocage_daaf
-            apiFactory.getAPIgeneraliserREST("justificatif_daaf/index",'id_demande_deblocage_daaf',item.id,'id_tranche',item.tranche.id).then(function(result)
-            {
-                vm.alljustificatif_daaf = result.data.response;
-                
-            });
-            if (item.validation==3)
-            {
-              apiFactory.getAPIgeneraliserREST("transfert_ufp/index",'id_demande_deblocage_daaf',item.id).then(function(result)
-              {
-                  vm.alltransfert_ufp = result.data.response;
-                  if (vm.alltransfert_ufp.length >0)
-                  {
-                    vm.showbuttonNouvtransfert= false;
-                  }
-              });
-            }
             vm.stepTwo = true;
             vm.stepThree = false;
             vm.validation_item = item.validation;
-            vm.showbutton =true;
+            vm.showbuttonvalidation =true;
         };
         $scope.$watch('vm.selectedItemDemande_deblocage_daaf_validation_ufp', function()
         {
@@ -194,10 +185,10 @@
              vm.selectedItemDemande_deblocage_daaf_validation_ufp.$selected = true;
         });
 
-        vm.demande_deblocage_daaf_mettreencours = function()
+       /* vm.demande_deblocage_daaf_mettreencours = function()
         {
             insert_in_baseDemande_deblocage_daaf_validation_ufp(vm.selectedItemDemande_deblocage_daaf_validation_ufp,0,2);
-        }
+        }*/
 
         vm.demande_deblocage_daaf_finaliser = function()
         {   
@@ -205,7 +196,7 @@
         }
         vm.demande_deblocage_daaf_rejeter = function()
         { 
-            insert_in_baseDemande_deblocage_daaf_validation_ufp(vm.selectedItemDemande_deblocage_daaf_validation_ufp,0,4);
+            insert_in_baseDemande_deblocage_daaf_validation_ufp(vm.selectedItemDemande_deblocage_daaf_validation_ufp,0,2);
         }
 
 
@@ -222,7 +213,7 @@
                     supprimer: suppression,
                     id:        demande_deblocage_daaf_validation_ufp.id,
                     ref_demande: demande_deblocage_daaf_validation_ufp.ref_demande ,      
-                    id_compte_daaf: demande_deblocage_daaf_validation_ufp.id_compte_daaf ,
+                    id_compte_daaf: demande_deblocage_daaf_validation_ufp.compte_daaf.id ,
                     id_tranche_deblocage_daaf: demande_deblocage_daaf_validation_ufp.tranche.id ,
                     prevu: demande_deblocage_daaf_validation_ufp.prevu ,
                     cumul: demande_deblocage_daaf_validation_ufp.cumul ,
@@ -230,7 +221,7 @@
                     reste: demande_deblocage_daaf_validation_ufp.reste ,
                     objet: demande_deblocage_daaf_validation_ufp.objet ,
                     ref_demande: demande_deblocage_daaf_validation_ufp.ref_demande ,
-                    date: convertionDate(new Date(demande_deblocage_daaf_validation_ufp.date)) ,
+                    date: convertionDate(demande_deblocage_daaf_validation_ufp.date) ,
                     validation: validation,
                     id_convention_ufp_daaf_entete: vm.selectedItemConvention_ufp_daaf_entete.id              
                 });
@@ -243,13 +234,13 @@
               
               vm.stepTwo = false;
               vm.stepThree = false;
-              vm.showbutton = false;
+              vm.showbuttonvalidation = false;
               if(validation==3)
               {
                 var items = {
-                      montant_transfert: parseInt(demande_deblocage_daaf_validation_ufp.prevu),
+                      montant_transfert: parseFloat(demande_deblocage_daaf_validation_ufp.prevu),
                       frais_bancaire:0,
-                      montant_total:parseInt(demande_deblocage_daaf_validation_ufp.prevu),
+                      montant_total:parseFloat(demande_deblocage_daaf_validation_ufp.prevu),
                       date:convertionDate(new Date()),
                       observation:'',
                       validation:0
@@ -266,22 +257,22 @@
         {
             switch (parseInt(validation))
             {
+             
               case 1:
-                      return 'Emise';                  
-                  break;
-              
-              case 2:
+                      return 'En attente de validation';                  
+                  break; 
+              /*case 2:
                         return 'En cours de traitement'; 
+                  break;*/
+
+             case 2:
+                  
+                  return 'Rejetée'; 
                   break;
 
               case 3:
                   
                   return 'Finalisée'; 
-                  break;
-
-             case 4:
-                  
-                  return 'Rejeté'; 
                   break;
 
               default:
@@ -323,6 +314,19 @@
   /*****************Fin StepThree justificatif_daaf****************/
 
   /****************************Debut stepTwo Transfert ufp******************************/
+  vm.step_menu_transfert_ufp = function()
+    { 
+        vm.affiche_load = true;
+        apiFactory.getAPIgeneraliserREST("transfert_ufp/index",'id_demande_deblocage_daaf',vm.selectedItemDemande_deblocage_daaf_validation_ufp.id).then(function(result)
+        {
+            vm.alltransfert_ufp = result.data.response;
+            if (vm.alltransfert_ufp.length >0)
+            {
+              vm.showbuttonNouvtransfert= false;
+            }
+            vm.affiche_load = false;
+        }); 
+    }
 //col table
         vm.transfert_ufp_column = [        
         {titre:"Montant transféré"},        
@@ -341,7 +345,7 @@
               $edit: true,
               $selected: true,
               id: '0',
-              montant_transfert: parseInt(vm.selectedItemDemande_deblocage_daaf_validation_ufp.prevu),
+              montant_transfert: parseFloat(vm.selectedItemDemande_deblocage_daaf_validation_ufp.prevu),
               frais_bancaire:'',
               montant_total:'',
               date:'',
@@ -370,7 +374,35 @@
         {
             if (NouvelItemTransfert_ufp==false)
             {
-                test_existanceTransfert_ufp (transfert_ufp,suppression); 
+                apiFactory.getAPIgeneraliserREST("transfert_ufp/index",'menu',"gettransfert_ufpvalideById",'id_transfert_ufp',transfert_ufp.id).then(function(result)
+                    {
+                      var transfert_ufp_valide = result.data.response;
+                      
+                      if (transfert_ufp_valide.length !=0)
+                      {
+                          var confirm = $mdDialog.confirm()
+                        .title('cette modification n\'est pas autorisé.')
+                        .textContent(' Les données sont déjà validées!')
+                        .ariaLabel('Lucky day')
+                        .clickOutsideToClose(true)
+                        .parent(angular.element(document.body))
+                        .ok('Fermer')
+                        
+                        $mdDialog.show(confirm).then(function()
+                        { 
+                          vm.alltransfert_ufp = transfert_ufp_valide;
+                        vm.validation_ufp = false;
+                          //vm.selectedItemJustificatif_feffi = {} ;
+
+                        }, function() {
+                          //alert('rien');
+                        });
+                      }
+                      else
+                      {
+                        test_existanceTransfert_ufp (transfert_ufp,suppression);   
+                      }
+                    }); 
             } 
             else
             {
@@ -441,9 +473,9 @@
             item.$edit = true;
             item.$selected = true;
 
-            item.montant_transfert = parseInt(vm.selectedItemTransfert_ufp.montant_transfert) ;
-            item.frais_bancaire = parseInt(vm.selectedItemTransfert_ufp.frais_bancaire) ;
-            item.montant_total = parseInt(vm.selectedItemTransfert_ufp.montant_total );
+            item.montant_transfert = parseFloat(vm.selectedItemTransfert_ufp.montant_transfert) ;
+            item.frais_bancaire = parseFloat(vm.selectedItemTransfert_ufp.frais_bancaire) ;
+            item.montant_total = parseFloat(vm.selectedItemTransfert_ufp.montant_total );
             item.observation = vm.selectedItemTransfert_ufp.observation ;
             item.date = new Date(vm.selectedItemTransfert_ufp.date);
         };
@@ -517,7 +549,7 @@
                     frais_bancaire:    transfert_ufp.frais_bancaire,
                     montant_total: transfert_ufp.montant_total,
                     observation: transfert_ufp.observation,
-                    date: convertionDate(new Date(transfert_ufp.date)), 
+                    date: convertionDate(transfert_ufp.date), 
                     id_demande_deblocage_daaf: vm.selectedItemDemande_deblocage_daaf_validation_ufp.id,
                     validation: transfert_ufp.validation             
                 });
@@ -600,6 +632,15 @@
         }
 
   /*****************Fin StepThree Transfert ufp****************/ 
+   vm.step_menu_fustificatif = function()
+    { 
+        vm.affiche_load = true;
+        apiFactory.getAPIgeneraliserREST("justificatif_daaf/index",'id_demande_deblocage_daaf',vm.selectedItemDemande_deblocage_daaf_validation_ufp.id,'id_tranche',vm.selectedItemDemande_deblocage_daaf_validation_ufp.tranche.id).then(function(result)
+        {
+            vm.alljustificatif_daaf = result.data.response;
+            vm.affiche_load = false;    
+        }); 
+    }
 
   //col table
         vm.justificatif_daaf_column = [
@@ -629,7 +670,7 @@
 
         vm.DownloadJustificatif_daaf = function(item)
         {
-            window.location = apiUrlFile+item.fichier ;
+            window.open(apiUrlFile+item.fichier)
         }
 
   
@@ -669,9 +710,11 @@
 
         //convertion date au format AAAA-MM-JJ
         function convertionDate(daty)
-        {   
-          if(daty)
+        { 
+            var date_final = null;  
+            if(daty!='Invalid Date' && daty!='' && daty!=null)
             {
+                console.log(daty);
                 var date     = new Date(daty);
                 var jour  = date.getDate();
                 var mois  = date.getMonth()+1;
@@ -680,9 +723,9 @@
                 {
                     mois = '0' + mois;
                 }
-                var date_final= annee+"-"+mois+"-"+jour;
-                return date_final
-            }      
+                date_final= annee+"-"+mois+"-"+jour;
+            }
+            return date_final;      
         }
         
         

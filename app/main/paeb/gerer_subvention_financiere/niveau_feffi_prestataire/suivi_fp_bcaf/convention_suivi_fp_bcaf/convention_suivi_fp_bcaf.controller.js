@@ -4,37 +4,45 @@
     'use strict';
 
     angular
-        .module('app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire.suivi_fp_bcaf.convention_suivi_fp_bcaf')
-        .directive('customOnChange', function() {
+        .module('app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire.suivi_fb_bcaf.convention_suivi_fp_bcaf')
+        .directive('customOnChangepiecemoe', function($mdDialog) {
       return {
         restrict: 'A',
         require:'ngModel',
         link: function (scope, element, attrs,ngModel) {
-          var onChangeHandler = scope.$eval(attrs.customOnChange);
-          element.bind('change', onChangeHandler);
+          var onChangeHandler = scope.$eval(attrs.customOnChangepiecemoe);
+            element.bind('change', onChangeHandler);
           element.on("change", function(e) {
           var files = element[0].files;
-          ngModel.$setViewValue(files);
-        })
+          if((files[0].size/1024/1024)>20)
+            {
+                ngModel.$setViewValue(null);
+                var confirm = $mdDialog.confirm()
+                    .title('Cet action n\'est pas autorisé')
+                    .textContent('La taille doit être inferieur à 20MB')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    ngModel.$setViewValue(null);
+                    element.val(null);
+                    scope.justificatif_facture_moe.fichier = null;
+                  }, function() {
+                    //alert('rien');
+                  });
+            }
+            else
+            {                
+                ngModel.$setViewValue(files);
+                scope.justificatif_facture_moe.fichier = files[0].name;
+            } 
+        });
         }
       };
     })
-        .directive('fileModel', ['$parse', function ($parse) {
-      return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-          var model = $parse(attrs.fileModel);
-          var modelSetter = model.assign;        
-          element.bind('change', function(){
-            scope.$apply(function(){
-              //modelSetter(scope, element[0].files[0]);
-               //console.log(element[0].files[0]);
-
-            });
-          });
-        }
-      };
-    }])
     .service('fileUpload', ['$http', function ($http) {
       this.uploadFileToUrl = function(file, uploadUrl){
         var fd = new FormData();
@@ -65,6 +73,7 @@
         vm.header_cisco = null;
         vm.header_feffi = null;
         vm.header_class = null;
+        vm.myFile = [];
 
       
         vm.stepMenu_mpe=false;
@@ -368,7 +377,7 @@
               vm.roles = result.data.response.roles;
               
               var utilisateur = result.data.response;
-                if (utilisateur.roles.indexOf("BCAF")!= -1)
+               /* if (utilisateur.roles.indexOf("BCAF")!= -1)
                 {  
                              vm.usercisco = result.data.response.cisco;
                             vm.ciscos.push(vm.usercisco);                            
@@ -390,6 +399,21 @@
 
                             vm.session = 'BCAF';
                       
+                }*/
+                if (utilisateur.roles.indexOf("DPFI")!= -1)
+                {  
+                             apiFactory.getAll("region/index").then(function success(response)
+                            {
+                              vm.regions = response.data.response;
+                            });
+
+                          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionneedfacturevalidation").then(function(result)
+                          {
+                            vm.allconvention_entete = result.data.response;
+                            vm.affiche_load =false;
+                          });                            
+                            vm.session = 'DPFI';
+                      
                 }
                 else
                 {
@@ -397,13 +421,13 @@
                             apiFactory.getAll("region/index").then(function success(response)
                             {
                               vm.regions = response.data.response;
-                            }, function error(response){ alert('something went wrong')});
+                            });
 
                           apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionneedfacturevalidation").then(function(result)
                           {
                             vm.allconvention_entete = result.data.response;
                             vm.affiche_load =false;
-                          }, function error(result){ alert('something went wrong')});                            
+                          });                            
                             vm.session = 'ADMIN';
               
                 }                  
@@ -467,7 +491,13 @@
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
             vm.affiche_load =true;
-              switch (vm.session)
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+            {
+                vm.allconvention_entete = result.data.response;
+                vm.affiche_load =false;
+            });
+             /* switch (vm.session)
                 {
                  case 'BCAF':
                             if (vm.usercisco.id!=undefined)
@@ -493,10 +523,9 @@
                             });                 
                       break;
                   default:
-                      break;
+                      break;*/
               
-                }
-                console.log(filtre);
+
         }
         
         /***************fin convention cisco/feffi************/
@@ -532,10 +561,10 @@
                 console.log(vm.stepMenu_mpe);  
             }); */           
                           
-              apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
+              /*apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
               {
                   vm.allcompte_feffi= result.data.response;
-              });             
+              }); */            
               
               vm.stepprestaion_pr=false;
               vm.stepprestation_moe = false;
@@ -665,7 +694,39 @@
         {
             if (NouvelItemFacture_moe_entete==false)
             {
-                test_existanceFacture_moe_entete (facture_moe_entete,suppression); 
+                apiFactory.getAPIgeneraliserREST("facture_moe_entete/index",'menu',"getfacture_moevalideById",'id_facture_moe',facture_moe_entete.id).then(function(result)
+                {
+                  var facture_moe_entete_valide = result.data.response;
+                  if (facture_moe_entete_valide.length !=0)
+                  {
+                      var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé.')
+                    .textContent(' Les données sont déjà validées ou rejetée')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    {                      
+                      vm.allfacture_moe_entete = vm.allfacture_moe_entete.filter(function(obj)
+                      {
+                          return obj.id !== facture_moe_entete.id;
+                      });
+                      vm.steprubriquecalendrier=false;
+                      vm.stepsousrubriquecalendrier=false;
+                      vm.stepfacture_detail=false;
+                      vm.stepjusti_facture_moe=false;
+
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                        test_existanceFacture_moe_entete (facture_moe_entete,suppression);    
+                  }
+                }); 
             } 
             else
             {
@@ -853,6 +914,10 @@
 
         vm.validerFacture_moe_creer = function()
         {
+          maj_in_baseFacture_moe_entete(vm.selectedItemFacture_moe_entete,0,2);
+        }
+        vm.rejeterFacture_moe_dpfi = function()
+        {
           maj_in_baseFacture_moe_entete(vm.selectedItemFacture_moe_entete,0,1);
         }
          //insertion ou mise a jours ou suppression item dans bdd Facture_moe_entete
@@ -868,7 +933,7 @@
                     supprimer: suppression,
                     id:        facture_moe_entete.id,
                     numero: facture_moe_entete.numero,
-                    date_br:convertionDate(new Date(facture_moe_entete.date_br)),
+                    date_br:convertionDate(facture_moe_entete.date_br),
                     id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
                     validation: validation               
                 });
@@ -877,11 +942,20 @@
             apiFactory.add("facture_moe_entete/index",datas, config).success(function (data)
             {
               //vm.showboutonValider = false;
-              vm.showbuttonValidationDemande_facture_moe_creer = false;
-              facture_moe_entete.validation = validation;
+                vm.allfacture_moe_entete = vm.allfacture_moe_entete.filter(function(obj)
+                {
+                    return obj.id !== facture_moe_entete.id;
+                });
+                vm.showbuttonValidationDemande_facture_moe_creer = false;
+
+                vm.steprubriquecalendrier = false;
+                vm.stepsousrubriquecalendrier = false;
+                vm.stepjusti_facture_moe = false;
+                vm.stepfacture_detail = false;
+              /*facture_moe_entete.validation = validation;
               vm.validation_fact_moe = validation;
               facture_moe_entete.$selected = false;
-              facture_moe_entete.$edit = false;
+              facture_moe_entete.$edit = false;*/
               vm.selectedItemFacture_moe_entete = {};
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -899,7 +973,6 @@
         {
             vm.allrubrique_calendrier_paie_moe = result.data.response;
             vm.affiche_load =false;
-            console.log(vm.allrubrique_calendrier_paie_moe);
         });
 
         vm.stepsousrubriquecalendrier = false;
@@ -1273,7 +1346,7 @@
             pourcentage_cumul       =   (parseFloat(cumul_montant) * 100)/parseFloat(item.montant_prevu);
             item.montant_cumul      =   cumul_montant;
             item.pourcentage_cumul  =   pourcentage_cumul.toFixed(3);
-            apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getmontant_anterieurbycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'code_pai',item.code).then(function(result)
+            apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getmontant_anterieurbycontratbyid','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'code_pai',item.code,'id_facture_detail_moe',item.id).then(function(result)
             {   
                 var montant = result.data.response;
                 var monta_current = 0;
@@ -1297,7 +1370,35 @@
         {
             if (NouvelItemFacture_moe_detail==false)
             {
-                test_existanceFacture_moe_detail (facture_moe_detail,suppression); 
+                apiFactory.getAPIgeneraliserREST("facture_moe_entete/index",'menu',"getfacture_moevalideById",'id_facture_moe',vm.selectedItemFacture_moe_entete.id).then(function(result)
+                {
+                  var facture_moe_entete_valide = result.data.response;
+                  if (facture_moe_entete_valide.length !=0)
+                  {
+                      var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé.')
+                    .textContent(' Les données sont déjà validées ou rejetée')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    {
+                      vm.steprubriquecalendrier=false;
+                      vm.stepsousrubriquecalendrier=false;
+                      vm.stepfacture_detail=false;
+                      vm.stepjusti_facture_moe=false;
+
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                    test_existanceFacture_moe_detail (facture_moe_detail,suppression);  
+                  }
+                });
             } 
             else
             {
@@ -1456,7 +1557,7 @@
                 apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getmontant_anterieurbycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'code_pai','p3').then(function(result)
                 {
                     var montant = result.data.response;
-                    console.log(montant);
+                    
                     if (montant.length!=0)
                     {                        
                         if (parseFloat(montant[0].montant_periode)==parseFloat(montant[0].montant_prevu))
@@ -1495,7 +1596,7 @@
                 apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getmontant_anterieurbycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'code_pai','p5').then(function(result)
                 {
                     var montant = result.data.response;
-                    console.log(montant);
+                    
                     if (montant.length!=0)
                     {                        
                         if (parseFloat(montant[0].montant_periode)==parseFloat(montant[0].montant_prevu))
@@ -1534,7 +1635,7 @@
                 apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getmontant_anterieurbycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'code_pai','p6').then(function(result)
                 {
                     var montant = result.data.response;
-                    console.log(montant);
+                    
                     if (montant.length!=0)
                     {                        
                         if (parseFloat(montant[0].montant_periode)==parseFloat(montant[0].montant_prevu))
@@ -1573,7 +1674,7 @@
                 apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getmontant_anterieur_p8bycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
                 {
                     var montant = result.data.response;
-                    console.log(montant);
+                    
                     if (montant.length!=0)
                     {                        
                         if (parseFloat(montant[0].montant_periode)==parseFloat(montant[0].montant_prevu))
@@ -1970,7 +2071,6 @@
         {
             vm.alljustificatif_facture_moe = result.data.response;
             vm.affiche_load =false;
-            console.log(vm.alljustificatif_facture_moe);
         });
     }
 //col table
@@ -1987,8 +2087,8 @@
           console.dir(event);
           var files = event.target.files;
           vm.myFile = files;
-          vm.selectedItemJustificatif_facture_moe.fichier = vm.myFile[0].name;
-          console.log(vm.selectedItemJustificatif_facture_moe.fichier);
+          //vm.selectedItemJustificatif_facture_moe.fichier = vm.myFile[0].name;
+          //console.log(vm.selectedItemJustificatif_facture_moe.fichier);
         } 
 
         //Masque de saisi ajout
@@ -2027,7 +2127,35 @@
         {
             if (NouvelItemJustificatif_facture_moe==false)
             {
-                test_existanceJustificatif_facture_moe (justificatif_facture_moe,suppression); 
+                apiFactory.getAPIgeneraliserREST("facture_moe_entete/index",'menu',"getfacture_moevalideById",'id_facture_moe',vm.selectedItemFacture_moe_entete.id).then(function(result)
+                {
+                  var facture_moe_entete_valide = result.data.response;
+                  if (facture_moe_entete_valide.length !=0)
+                  {
+                      var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé.')
+                    .textContent(' Les données sont déjà validées ou rejetée')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    {
+                      vm.steprubriquecalendrier=false;
+                      vm.stepsousrubriquecalendrier=false;
+                      vm.stepfacture_detail=false;
+                      vm.stepjusti_facture_moe=false;
+
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                    test_existanceJustificatif_facture_moe (justificatif_facture_moe,suppression); 
+                  }
+                });
             } 
             else
             {
@@ -2061,7 +2189,10 @@
         vm.selectionJustificatif_facture_moe= function (item)
         {
             vm.selectedItemJustificatif_facture_moe = item;
-            currentItemJustificatif_facture_moe    = JSON.parse(JSON.stringify(vm.selectedItemJustificatif_facture_moe)); 
+            if (item.$edit==false || item.$edit==undefined)
+           {
+                currentItemJustificatif_facture_moe    = JSON.parse(JSON.stringify(vm.selectedItemJustificatif_facture_moe)); 
+            }
         };
         $scope.$watch('vm.selectedItemJustificatif_facture_moe', function()
         {
@@ -2167,15 +2298,15 @@
                     // Update_paiement or delete: id exclu                 
                     if(suppression==0)
                     {
-                         var file= vm.myFile[0];
+                         
                     
                           var repertoire = 'justificatif_facture_moe/';
                           var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
                           var getIdFile = vm.selectedItemJustificatif_facture_moe.id
                                               
-                          if(file)
+                          if(vm.myFile.length>0)
                           { 
-
+                            var file= vm.myFile[0];
                             var name_file = vm.selectedItemContrat_moe.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                             var fd = new FormData();
@@ -2198,8 +2329,8 @@
                                   var datas = $.param({
                                                       supprimer: suppression,
                                                       id:        getIdFile,
-                                                      description: justificatif_facture_moe.description,
-                                                      fichier: justificatif_facture_moe.fichier,
+                                                      description: currentItemJustificatif_facture_moe.description,
+                                                      fichier: currentItemJustificatif_facture_moe.fichier,
                                                         id_facture_moe_entete: vm.selectedItemFacture_moe_entete.id,
                                                       validation:0
                                         });
@@ -2208,6 +2339,7 @@
                                           vm.showbuttonNouvManuel = true;
                                           justificatif_facture_moe.$selected = false;
                                           justificatif_facture_moe.$edit = false;
+                                          justificatif_facture_moe.fichier=currentItemJustificatif_facture_moe.fichier;
                                           vm.selectedItemJustificatif_facture_moe = {};
                                       console.log('b');
                                       }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -2236,6 +2368,23 @@
                             }).error(function()
                             {
                               vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                              var datas = $.param({
+                                                      supprimer: suppression,
+                                                      id:        getIdFile,
+                                                      description: currentItemJustificatif_facture_moe.description,
+                                                      fichier: currentItemJustificatif_facture_moe.fichier,
+                                                        id_facture_moe_entete: vm.selectedItemFacture_moe_entete.id,
+                                                      validation:0
+                                        });
+                                      apiFactory.add("justificatif_facture_moe/index",datas, config).success(function (data)
+                                      {  
+                                          vm.showbuttonNouvManuel = true;
+                                          justificatif_facture_moe.$selected = false;
+                                          justificatif_facture_moe.$edit = false;
+                                          justificatif_facture_moe.fichier=currentItemJustificatif_facture_moe.fichier;
+                                          vm.selectedItemJustificatif_facture_moe = {};
+                                      
+                                      });
                             });
                           }
 
@@ -2276,15 +2425,15 @@
                   NouvelItemJustificatif_facture_moe = false;
 
                   vm.showbuttonNouvManuel = false;
-                    var file= vm.myFile[0];
+                    
                     
                     var repertoire = 'justificatif_facture_moe/';
                     var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
                     var getIdFile = String(data.response);
                                         
-                    if(file)
+                    if(vm.myFile.length>0)
                     { 
-
+                        var file= vm.myFile[0];
                       var name_file = vm.selectedItemContrat_moe.ref_contrat+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                       var fd = new FormData();
@@ -2307,8 +2456,8 @@
                             var datas = $.param({
                                                 supprimer: suppression,
                                                 id:        getIdFile,
-                                                description: justificatif_facture_moe.description,
-                                                fichier: justificatif_facture_moe.fichier,                                                
+                                                description: currentItemJustificatif_facture_moe.description,
+                                                fichier: currentItemJustificatif_facture_moe.fichier,                                                
                                                 id_facture_moe_entete: vm.selectedItemFacture_moe_entete.id,
                                                 
                                   });
@@ -2316,6 +2465,7 @@
                                 { 
                                     justificatif_facture_moe.$selected = false;
                                     justificatif_facture_moe.$edit = false;
+                                    justificatif_facture_moe.fichier=currentItemJustificatif_facture_moe.fichier;
                                     vm.selectedItemJustificatif_facture_moe = {};
                                
                                 }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -2344,19 +2494,36 @@
                       }).error(function()
                       {
                         vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                        var datas = $.param({
+                                                      supprimer: suppression,
+                                                      id:        getIdFile,
+                                                      description: currentItemJustificatif_facture_moe.description,
+                                                      fichier: currentItemJustificatif_facture_moe.fichier,
+                                                        id_facture_moe_entete: vm.selectedItemFacture_moe_entete.id,
+                                                      validation:0
+                                        });
+                                      apiFactory.add("justificatif_facture_moe/index",datas, config).success(function (data)
+                                      {  
+                                          vm.showbuttonNouvManuel = true;
+                                          justificatif_facture_moe.$selected = false;
+                                          justificatif_facture_moe.$edit = false;
+                                          justificatif_facture_moe.fichier=currentItemJustificatif_facture_moe.fichier;
+                                          vm.selectedItemJustificatif_facture_moe = {};
+                                      
+                                      });
                       });
                     }
               }
               justificatif_facture_moe.$selected = false;
               justificatif_facture_moe.$edit = false;
-              vm.selectedItemJustificatif_facture_moe = {};
+              //vm.selectedItemJustificatif_facture_moe = {};
 
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
         vm.download_piece_facture_moe = function(item)
         {
-            window.location = apiUrlFile+item.fichier ;
+            window.open(apiUrlFile+item.fichier);
         }
 /***************************************fin justificatif facture_moe**********************************************/
 

@@ -142,7 +142,7 @@
               </table>
             </md-tab-body>
           </md-tab>
-          <md-tab ng-disabled="vm.stepOne==false">
+          <md-tab ng-disabled="vm.stepOne==false" ng-click="vm.step_menu_demande_daaf()">
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
                 <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
@@ -155,15 +155,15 @@
             
             <md-tab-body>
                <div style="widht:100%;">  
-                  <md-button type="submit" class="md-raised md-warn md-pink-900-bg" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_mettreencours()" style="width:13%;" ng-disabled="vm.situation>1" ng-show="vm.showbutton && vm.validation_item==1">
+                  <!--md-button type="submit" class="md-raised md-warn md-pink-900-bg" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_mettreencours()" style="width:13%;" ng-disabled="vm.situation>1" ng-show="vm.showbutton && vm.validation_item==1">
                     Mettre en-cours
-                  </md-button>
+                  </md-button-->
 
-                  <md-button type="submit" class="md-raised  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_finaliser()" style="width:10%; color: white" ng-disabled="vm.situation>2" ng-show="vm.showbutton && vm.validation_item==2">
+                  <md-button type="submit" class="md-raised  md-pink-900-bg" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_finaliser()" style="width:10%; color: white" ng-show="vm.showbuttonvalidation && vm.validation_item==1">
                     Valider
                   </md-button>
 
-                  <md-button type="submit" class="md-raised md-red-500-bg" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_rejeter()" style="width:10%; color: white" ng-disabled="vm.situation>3" ng-show="vm.showbutton && vm.validation_item==2">
+                  <md-button type="submit" class="md-raised md-red-500-bg" aria-label="Nouveau" ng-click="vm.demande_deblocage_daaf_rejeter()" style="width:10%; color: white" ng-show="vm.showbuttonvalidation && vm.validation_item==1">
                     Rejeter
                   </md-button>
               </div> <br>
@@ -304,7 +304,7 @@
             </md-tab-body>
           </md-tab>                   
 
-          <md-tab ng-disabled="vm.stepTwo==false">
+          <md-tab ng-disabled="vm.stepTwo==false" ng-click="vm.step_menu_fustificatif()">
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
                 <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
@@ -350,7 +350,7 @@
             </md-tab-body>
           </md-tab>
 
-          <md-tab ng-disabled="vm.stepTwo==false || vm.validation_item!=3">
+          <md-tab ng-disabled="vm.stepTwo==false || vm.validation_item!=3" ng-click="vm.step_menu_transfert_ufp()">
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
                 <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>

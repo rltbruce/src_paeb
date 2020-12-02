@@ -4,8 +4,8 @@
 
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire', [
-            'app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire.suivi_fp_bcaf',
-            'app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire.suivi_fp_dpfi'
+            'app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire.convention_suivi_fp_bcaf',
+            'app.paeb.gerer_subvention_financiere.niveau_feffi_prestataire.convention_suivi_fp_obcaf'
             ]) 
         .run(testPermission)      
         .config(config);
@@ -39,7 +39,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["OBCAF","BCAF","DPFI","ADMIN"];
+                var permissions = ["AAC","DPFI","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

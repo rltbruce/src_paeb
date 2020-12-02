@@ -89,13 +89,13 @@
         {titre:"Action"}];
         
         //recuperation donnée site
-        apiFactory.getAPIgeneraliserREST("site/index",'menu',
+      /*  apiFactory.getAPIgeneraliserREST("site/index",'menu',
          'getsiteByenpreparationandinvalide').then(function(result)
         {
           vm.allsite = result.data.response;
 
           vm.affiche_load =false;
-        });
+        });*/
 
         apiFactory.getAll("classification_site/index").then(function(result)
         {
@@ -110,6 +110,7 @@
         apiFactory.getAll("region/index").then(function success(response)
         {
           vm.regions = response.data.response;
+          vm.affiche_load =false;
         }); 
 
        function querySearch (query) {
@@ -210,7 +211,7 @@
 
             vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("site/index",'menu',
-              'getsiteByenpreparationinvalide','lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
+              'getsiteByenpreparationandinvalide','lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
               filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
               {
                   vm.allsite = result.data.response;
@@ -285,6 +286,7 @@
         //Masque de saisi ajout
         vm.ajouter = function ()
         { 
+          vm.selectedItem = {};
           if (NouvelItem == false)
           {
             var items = {
@@ -328,8 +330,37 @@
         function ajout(site,suppression)
         {
             if (NouvelItem==false)
-            {
-                test_existance (site,suppression); 
+            {   
+                apiFactory.getAPIgeneraliserREST("site/index",'menu','testIfinvalide','id_site', site.id)
+                .then(function(result)
+                {
+                  var site_valide = result.data.response;
+                  console.log(site_valide);
+                  if (site_valide.length!=0)
+                  {
+                    var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                    .textContent('')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    {                      
+                      vm.allsite = vm.allsite.filter(function(obj)
+                      {
+                          return obj.id !== site.id;
+                      });
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                    test_existance (site,suppression)
+                  }
+                });
             } 
             else
             {
@@ -466,7 +497,7 @@
         vm.supprimer = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet ensiteistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -644,7 +675,7 @@
           site.acces = ecol[0].zone_subvention.libelle+ecol[0].acces_zone.libelle;
         }
 
-        function maj_insertioninbase(site,suppression,validation)
+      /*  function maj_insertioninbase(site,suppression,validation)
         {
             //add
             var config =
@@ -686,7 +717,7 @@
         vm.validation = function()
         {
           maj_insertioninbase(vm.selectedItem,0,1);
-        }
+        }*/
 
         //Alert
         vm.showAlert = function(titre,content)

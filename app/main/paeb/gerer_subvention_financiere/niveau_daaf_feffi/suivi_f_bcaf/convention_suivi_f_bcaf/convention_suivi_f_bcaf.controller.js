@@ -4,18 +4,42 @@
     'use strict';
 
     angular
-        .module('app.paeb.gerer_subvention_financiere.niveau_daaf_feffi.suivi_f_bcaf.convention_suivi_f_bcaf')
-        .directive('customOnChange', function() {
+        .module('app.paeb.gerer_subvention_financiere.niveau_ufp_feffi.convention_suivi_f_bcaf_ufp')
+        .directive('customOnChangepiecereafeffi', function($mdDialog) {
       return {
         restrict: 'A',
         require:'ngModel',
         link: function (scope, element, attrs,ngModel) {
-          var onChangeHandler = scope.$eval(attrs.customOnChange);
-          element.bind('change', onChangeHandler);
+          var onChangeHandler = scope.$eval(attrs.customOnChangepiecereafeffi);
+            element.bind('change', onChangeHandler);
           element.on("change", function(e) {
           var files = element[0].files;
-          ngModel.$setViewValue(files);
-        })
+          if((files[0].size/1024/1024)>20)
+            {
+                ngModel.$setViewValue(null);
+                var confirm = $mdDialog.confirm()
+                    .title('Cet action n\'est pas autorisé')
+                    .textContent('La taille doit être inferieur à 20MB')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    ngModel.$setViewValue(null);
+                    element.val(null);
+                    scope.justificatif_feffi.fichier = null;
+                  }, function() {
+                    //alert('rien');
+                  });
+            }
+            else
+            {                
+                ngModel.$setViewValue(files);
+                scope.justificatif_feffi.fichier = files[0].name;
+            } 
+        });
         }
       };
     })
@@ -34,11 +58,11 @@
         });
       }
     }])        
-        .controller('Convention_suivi_f_bcafController', Convention_suivi_f_bcafController);
+        .controller('Convention_suivi_f_bcaf_ufpController', Convention_suivi_f_bcaf_ufpController);
     /** @ngInject */
-    function Convention_suivi_f_bcafController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile,apiUrlexcel)
+    function Convention_suivi_f_bcaf_ufpController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile,apiUrlexcel)
     {
-		  /*****debut initialisation*****/
+      /*****debut initialisation*****/
 
         var vm    = this;
         vm.selectedItemConvention_entete = {} ;
@@ -50,7 +74,6 @@
         vm.session = '';
         vm.ciscos=[];
         vm.affiche_load =true;
-
 
 /*******************************Debut initialisation suivi financement feffi******************************/
 
@@ -99,7 +122,8 @@
           pagingType: 'simple',
           autoWidth: false          
         };
-        
+
+       
         vm.showbuttonfiltre=true;
         vm.showfiltre=false;
         vm.showformfiltre = function()
@@ -111,13 +135,12 @@
         {
             vm.filtre = {};
         }
-       
         vm.datenow = new Date();        
 
         vm.filtre_change_region = function(item)
         { 
             vm.filtre.id_cisco = null;
-            if (vm.session=='ADMIN')
+            if (vm.session=='ADMIN' || vm.session=='DPFI')
             {
               if (item.id_region != '*')
               {
@@ -189,11 +212,11 @@
         {
               vm.roles = result.data.response.roles;
               var utilisateur = result.data.response;
-            if (utilisateur.roles.indexOf("BCAF")!= -1)
+           /* if (utilisateur.roles.indexOf("BCAF")!= -1)
             {                          
 
                             vm.usercisco = result.data.response.cisco;
-                            vm.ciscos.push(vm.usercisco);                                                      
+                            vm.ciscos.push(vm.usercisco);                                                     
                             vm.filtre.id_cisco=result.data.response.cisco.id;
                             console.log(vm.ciscos);
                             apiFactory.getAPIgeneraliserREST("region/index","menu","getregionBycisco",'id_cisco',vm.usercisco.id).then(function(result)
@@ -202,32 +225,46 @@
                                 vm.filtre.id_region=result.data.response[0].id;
                                 console.log(vm.regions);
                             }, function error(result){ alert('something went wrong')});
-                            
-                            
+                             
                             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionNeeddemandefeffivalidationbcafwithcisco','id_cisco_user',vm.usercisco.id).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
                                 vm.affiche_load =false;
-
                             });
                             vm.session = 'BCAF';
                       
-              }else
-              {
-                            apiFactory.getAll("region/index").then(function success(response)
+            }*/
+            if (utilisateur.roles.indexOf("DPFI")!= -1)
+            {                          
+
+                           apiFactory.getAll("region/index").then(function success(response)
                             {
                               vm.regions = response.data.response;
-                            }, function error(response){ alert('something went wrong')});
+                            }, function error(response){ alert('something went wrong')}); 
 
                             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionNeeddemandefeffivalidationbcaf').then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
                                 vm.affiche_load =false;
+                            });                          
+                            vm.session = 'DPFI';
+                      
+            }
+            else
+            {
+                            apiFactory.getAll("region/index").then(function success(response)
+                            {
+                              vm.regions = response.data.response;
+                            }, function error(response){ alert('something went wrong')}); 
 
-                            });                           
-                            vm.session = 'ADMIN';
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionNeeddemandefeffivalidationbcaf').then(function(result)
+                            {
+                                vm.allconvention_entete = result.data.response;
+                                vm.affiche_load =false;
+                            });                          
+                            vm.session = 'ADMIN'; 
               
-              }                  
+            }                  
 
          });
 
@@ -249,6 +286,8 @@
         },
         {titre:"Cout éstimé"
         },
+        /*{titre:"Avancement"
+        },*/
         {titre:"Utilisateur"
         }]; 
 
@@ -286,8 +325,13 @@
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
             vm.affiche_load =true;
-
-              switch (vm.session)
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+              ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+            {
+              vm.allconvention_entete = result.data.response;
+              vm.affiche_load =false;
+            });
+              /*switch (vm.session)
                 {
                  case 'BCAF':
                             apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpByfiltrecisco','id_cisco_user',vm.usercisco.id,'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
@@ -295,7 +339,6 @@
                               {
                                   vm.allconvention_entete = result.data.response;
                                   vm.affiche_load =false;
-
                               });
                       
                       break;
@@ -307,13 +350,12 @@
                             {
                                 vm.allconvention_entete = result.data.response;
                                 vm.affiche_load =false;
-
                             });                 
                       break;
                   default:
                       break;
               
-                }
+                }*/
                 console.log(filtre);
         }
         
@@ -324,32 +366,13 @@
         {
             vm.selectedItemConvention_entete = item;
            // vm.allconvention= [] ;
-            
-            vm.showbuttonNouvContrat_prestataire=true;
-            donnee_sousmenu_feffi(item,vm.session).then(function () 
-            {
-                    // On récupère le resultat de la requête dans la varible "response"                    
-                vm.stepMenu_feffi=true;
-                console.log(vm.stepMenu_feffi);  
-            });
-            donnee_menu_reliquat(item,vm.session).then(function () 
-            {
-                    // On récupère le resultat de la requête dans la varible "response"                    
-                vm.stepMenu_reliquat=true;
-                console.log(vm.stepMenu_reliquat);  
-            });
+            vm.stepMenu_feffi=true;
                                       
               apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
               {
                   vm.allcompte_feffi= result.data.response;
               });
-               
-              
-              
               vm.steppiecefeffi=false;
-              
-              vm.nbr_decaiss_feffi = item.nbr_decaiss_feffi;
-              //console.log(vm.nbr_demande_feffi);
         };
         $scope.$watch('vm.selectedItemConvention_entete', function()
         {
@@ -359,81 +382,78 @@
                 item.$selected = false;
              });
              vm.selectedItemConvention_entete.$selected = true;
-        });
-        
-        function donnee_sousmenu_feffi(item,session)
-        {
-            return new Promise(function (resolve, reject) 
-            {
-                switch (session)
-                {
-                 case 'BCAF':
-
-                            apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandeByconvention",'id_convention_cife_entete',item.id).then(function(result)
-                            {
-                                vm.alldemande_realimentation_invalide = result.data.response.filter(function(obj)
-                                {
-                                    return obj.validation == 0 || obj.validation == 7;
-                                });
-                                apiFactory.getAPIgeneraliserREST("decaiss_fonct_feffi/index",'menu','getdecaissByconvention','id_convention_entete',item.id).then(function(result)
-                                {
-                                      vm.alldecaiss_fonct_feffi = result.data.response;
-
-                                    return resolve('ok');  
-                                });  
-                            });                         
-                                              
-                      break;
-                  case 'ADMIN':                            
-
-                            apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandeByconvention",'id_convention_cife_entete',item.id).then(function(result)
-                            {
-                                vm.alldemande_realimentation_invalide = result.data.response.filter(function(obj)
-                                {
-                                    return obj.validation == 0 || obj.validation == 7;
-                                });
-                                apiFactory.getAPIgeneraliserREST("decaiss_fonct_feffi/index",'menu','getdecaissByconvention','id_convention_entete',item.id).then(function(result)
-                                {
-                                      vm.alldecaiss_fonct_feffi = result.data.response;
-                                    return resolve('ok');  
-                                });  
-                            });
-                       
-                      break;
-                  default:
-                      break;
-              
-                }            
-            });
-        
-        }             
+        });         
 
 /*****************Debut StepTwo demande_realimentation_feffi****************/
 
+      vm.step_menu_demande = function()
+        {
+          vm.affiche_load =true;
+          vm.steppiecefeffi=false;
+          vm.showbuttonValidation = false;
+          apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandecreer2Byconvention",'id_convention_cife_entete',vm.selectedItemConvention_entete.id).then(function(result)
+          {
+              vm.alldemande_realimentation_invalide = result.data.response;
+                                 /* apiFactory.getAPIgeneraliserREST("decaiss_fonct_feffi/index",'menu','getdecaiss_invalideByconvention','id_convention_entete',item.id).then(function(result)
+                                  {
+                                      vm.alldecaiss_fonct_feffi = result.data.response; 
+                                  });*/
+            vm.affiche_load =false;
+          });
+        }
       vm.demande_realimentation_column = [                
         {titre:"Tranche"},
         {titre:"Prévu"},
-        {titre:"Antérieur"},
         {titre:"Cumul"},
-        {titre:"Calendrier de paiement"},
+        {titre:"Antérieur"},
+        {titre:"Periode"},
         {titre:"Pourcentage"},
         {titre:"Reste à décaisser"},
         {titre:"Nom banque"},
         {titre:"Numero compte"},
         {titre:"Date"},
         {titre:"Situation"},
-        {titre:"Action"}];     
-        
-        //fonction ajout dans bdd
+        {titre:"Action"}];  
+
+         //fonction ajout dans bdd
         function ajoutDemande_realimentation(demande_realimentation,suppression)
-        {console.log('at0');
+        {
             if (vm.NouvelItemDemande_realimentation==false)
-            {console.log('at1');
-                test_existanceDemande_realimentation (demande_realimentation,suppression); 
+            {
+                apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index",'menu',"getdemande_realimentationvalide2ById",'id_demande_realimentation',demande_realimentation.id).then(function(result)
+                {
+                  var demande_realimentation_valide = result.data.response;
+                  if (demande_realimentation_valide.length !=0)
+                  {
+                      var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé.')
+                    .textContent(' Les données sont déjà validées!')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    {                      
+                      vm.alldemande_realimentation_invalide = vm.alldemande_realimentation_invalide.filter(function(obj)
+                      {
+                          return obj.id !== demande_realimentation.id;
+                      });
+                      vm.steppiecefeffi=false;
+
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                    test_existanceDemande_realimentation (demande_realimentation,suppression);       
+                  }
+                }); 
             } 
             else
             {
-                insert_in_baseDemande_realimentation(demande_realimentation,suppression);console.log('at11');
+                insert_in_baseDemande_realimentation(demande_realimentation,suppression);
             }
         }
 
@@ -456,7 +476,7 @@
             item.date = currentItemDemande_realimentation.date ;
             item.validation = currentItemDemande_realimentation.validation;
             item.id_convention_cife_entete = currentItemDemande_realimentation.id_convention_cife_entete ;
-            vm.showbuttonValidation = false;
+            
             //item.date_approbation = currentItemDemande_realimentation.date_approbation ;
           }else
           {
@@ -476,20 +496,15 @@
         vm.selectionDemande_realimentation= function (item)
         {
             vm.selectedItemDemande_realimentation = item;
+            vm.showbuttonNouvtransfert_daaf = true;
             if (item.$edit ==false || item.$edit == undefined)
             {
                 currentItemDemande_realimentation     = JSON.parse(JSON.stringify(vm.selectedItemDemande_realimentation));
-               
-               //recuperation donnée demande_realimentation_feffi
-                apiFactory.getAPIgeneraliserREST("piece_justificatif_feffi/index",'id_demande_rea_feffi',item.id,'id_tranche',item.tranche.id).then(function(result)
-                {
-                    vm.alljustificatif_feffi = result.data.response;
-                    console.log(vm.alljustificatif_feffi);
-                });                
+                                              
                 vm.validation = item.validation;
-                vm.steppiecefeffi=true;
                 vm.showbuttonValidation = true;
             }
+            vm.steppiecefeffi=true;
         };
         $scope.$watch('vm.selectedItemDemande_realimentation', function()
         {
@@ -507,7 +522,7 @@
             vm.NouvelItemDemande_realimentation = false ;
             vm.selectedItemDemande_realimentation = item;
             currentItemDemande_realimentation = angular.copy(vm.selectedItemDemande_realimentation);
-            $scope.vm.alldemande_realimentation.forEach(function(dema) {
+            $scope.vm.alldemande_realimentation_invalide.forEach(function(dema) {
               dema.$edit = false;
             });
 
@@ -524,9 +539,8 @@
             item.reste = vm.selectedItemDemande_realimentation.reste ;
             item.date = new Date(vm.selectedItemDemande_realimentation.date) ;
             item.validation = vm.selectedItemDemande_realimentation.validation;
-            item.id_convention_cife_entete = vm.selectedItemDemande_realimentation.convention_cife_entete.id;
+            //item.id_convention_cife_entete = vm.selectedItemDemande_realimentation.convention_cife_entete.id;
             vm.modificationdemande = true;
-            vm.showbuttonValidation = false;
             //item.date_approbation = vm.selectedItemDemande_realimentation.date_approbation ;  
         };
 
@@ -551,10 +565,9 @@
 
         //function teste s'il existe une modification item convention_cisco_feffi_entete
         function test_existanceDemande_realimentation (item,suppression)
-        {          console.log('at2');
-        console.log(suppression);
+        {       console.log(suppression);   
             if (suppression!=1)
-            {console.log('at3');
+            {console.log('att');
                var dema = vm.alldemande_realimentation_invalide.filter(function(obj)
                 {
                    return obj.id == currentItemDemande_realimentation.id;
@@ -571,16 +584,17 @@
                     || (dema[0].reste != currentItemDemande_realimentation.reste )
                     || (dema[0].date != currentItemDemande_realimentation.date ))                    
                       { 
-                        insert_in_baseDemande_realimentation(item,suppression);
+                        insert_in_baseDemande_realimentation(item,suppression);console.log('at0');
                       }
                       else
                       {  
                         item.$selected = true;
-                        item.$edit = false;
+                        item.$edit = false;console.log('at1');
                       }
                 }
             } else
-                  insert_in_baseDemande_realimentation(item,suppression);
+              insert_in_baseDemande_realimentation(item,suppression);console.log('at3');
+                  
         }
 
         //insertion ou mise a jours ou suppression item dans bdd convention_cisco_feffi_entete
@@ -607,7 +621,7 @@
                     cumul: demande_realimentation.cumul ,
                     anterieur: demande_realimentation.anterieur ,
                     reste: demande_realimentation.reste ,
-                    date: convertionDate(new Date(demande_realimentation.date)) ,
+                    date: convertionDate(demande_realimentation.date) ,
                     validation: 0 ,
                     id_convention_cife_entete: vm.selectedItemConvention_entete.id              
                 });
@@ -623,12 +637,12 @@
 
                 var tran= vm.alltranche_deblocage_feffi.filter(function(obj)
                 {
-                    return obj.id == demande_realimentation.tranche.id;
+                    return obj.id == demande_realimentation.id_tranche_deblocage_feffi;
                 });
-                var conv= vm.allconvention_entete.filter(function(obj)
+                /*var conv= vm.allconvention_entete.filter(function(obj)
                 {
                     return obj.id == vm.selectedItemConvention_entete.id;
-                });
+                });*/
 
                 if (vm.NouvelItemDemande_realimentation == false)
                 {
@@ -637,7 +651,7 @@
                     {
                         vm.selectedItemDemande_realimentation.compte_feffi = comp[0];
                         vm.selectedItemDemande_realimentation.tranche = tran[0] ;
-                        vm.selectedItemDemande_realimentation.convention_cife_entete = conv[0] ;
+                        //vm.selectedItemDemande_realimentation.convention_cife_entete = conv[0] ;
                         vm.selectedItemDemande_realimentation.$selected  = false;
                         vm.selectedItemDemande_realimentation.$edit      = false;
                         vm.selectedItemDemande_realimentation ={};
@@ -649,25 +663,24 @@
                           return obj.id !== vm.selectedItemDemande_realimentation.id;
                       });
 
-                  vm.nbr_demande_feffi = parseInt(vm.nbr_demande_feffi)-1;
+                  //vm.nbr_demande_feffi = parseInt(vm.nbr_demande_feffi)-1;
                     }
                 }
                 else
                 {
                   demande_realimentation.tranche = tran[0] ;
                   demande_realimentation.compte_feffi = comp[0];
-                  demande_realimentation.convention_cife_entete = conv[0] ;
+                  //demande_realimentation.convention_cife_entete = conv[0] ;
 
                   demande_realimentation.id  =   String(data.response); 
                   //vm.alldemande_realimentation.push(demande_realimentation);             
                   vm.NouvelItemDemande_realimentation=false;
-                  vm.nbr_demande_feffi = parseInt(vm.nbr_demande_feffi)+1;
+                  //vm.nbr_demande_feffi = parseInt(vm.nbr_demande_feffi)+1;
             }
               demande_realimentation.$selected = false;
               demande_realimentation.$edit = false;
               vm.selectedItemDemande_realimentation = {};
               vm.modificationdemande = false;
-              vm.showbuttonValidation = false;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
@@ -682,24 +695,25 @@
 
           if (vm.allcurenttranche_deblocage_feffi[0].code =='tranche 1')
             {
-              prevu = parseFloat(vm.selectedItemConvention_entete.montant_divers)+((parseFloat(vm.selectedItemConvention_entete.montant_trav_mob) * parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100);
+              //prevu = parseInt(vm.allconvention_entete[0].montant_divers)+((parseInt(vm.allconvention_entete[0].montant_trav_mob) * parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100);
+              prevu = ((parseInt(vm.allconvention_entete[0].montant_divers) + parseInt(vm.allconvention_entete[0].montant_trav_mob)) * parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
             console.log(prevu);
             } 
             else 
             {
-              prevu = (parseFloat(vm.selectedItemConvention_entete.montant_trav_mob )* parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
+              //prevu = (parseInt(vm.allconvention_entete[0].montant_trav_mob )* parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
+            prevu = ((parseInt(vm.allconvention_entete[0].montant_divers) + parseInt(vm.allconvention_entete[0].montant_trav_mob)) * parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
             console.log(prevu);
             }
 
           cumul = prevu;
- console.log( vm.alldemande_realimentation) ;
           if (vm.alldemande_realimentation.length>0)
           {                 
               anterieur = vm.dataLastedemande[0].prevu; console.log( anterieur) ;         
-              cumul = prevu + parseFloat(vm.dataLastedemande[0].cumul);
+              cumul = prevu + parseInt(vm.dataLastedemande[0].cumul);
           }
 
-          reste= vm.selectedItemConvention_entete.montant_total - cumul;
+          reste= vm.allconvention_entete[0].montant_total - cumul;
 
           item.periode = vm.allcurenttranche_deblocage_feffi[0].periode;
           item.pourcentage = vm.allcurenttranche_deblocage_feffi[0].pourcentage;
@@ -718,6 +732,7 @@
           item.numero_compte = comp[0].numero_compte;
         }
 
+
         vm.valider_demandecreer = function(validation)
         {
             var count_justif_prevu = vm.alljustificatif_feffi.length;
@@ -731,20 +746,14 @@
              });
              if (parseInt(count_justif_prevu)==parseInt(count_justif_current))
              {
-              validation_in_baseDemande_realimentation(vm.selectedItemDemande_realimentation,0,validation);
-              //vm.nbr_demande_feffi_creer = parseInt(vm.nbr_demande_feffi_creer)-1;
-              //vm.nbr_demande_feffi_emidpfi = parseInt(vm.nbr_demande_feffi_emidpfi)+1;
-             }
+                validation_in_baseDemande_realimentation(vm.selectedItemDemande_realimentation,0,validation);
+              }
              else
              {
                 vm.showAlert("Validation interrompue","Pièce justificative incomplète");
              }
         }
 
-        vm.valider_demande = function(validation)
-        {console.log('ato');
-            validation_in_baseDemande_realimentation(vm.selectedItemDemande_realimentation,0,validation);
-        }
         //insertion ou mise a jours ou suppression item dans bdd convention_cisco_feffi_entete
         function validation_in_baseDemande_realimentation(demande_realimentation,suppression,validation)
         {
@@ -765,7 +774,7 @@
                     reste: demande_realimentation.reste ,
                     date: convertionDate(new Date(demande_realimentation.date)) ,
                     validation: validation ,
-                    id_convention_cife_entete: demande_realimentation.convention_cife_entete.id              
+                    id_convention_cife_entete: vm.selectedItemConvention_entete.id              
                 });
 
                 //factory
@@ -777,7 +786,7 @@
                 vm.selectedItemDemande_realimentation.$selected  = false;
                 vm.selectedItemDemande_realimentation.$edit      = false;
                 vm.validation = validation;
-                vm.nbr_demande_feffi = parseInt(vm.nbr_demande_feffi)-1;
+                //vm.nbr_demande_feffi = parseInt(vm.nbr_demande_feffi)-1;
                 vm.alldemande_realimentation_invalide = vm.alldemande_realimentation_invalide.filter(function(obj)
                 {
                     return obj.id !== demande_realimentation.id;
@@ -789,12 +798,44 @@
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
+        
         vm.situationdemande = function(validation)
         {
             switch (validation)
             {
               case '1':
-                      return 'Emise au DPFI';                  
+                      return 'Validée par DPFI';                  
+                  break;
+
+             case '2':
+                  
+                  return 'Rejetée par UFP'; 
+                  break;
+              case '3':                  
+                  return 'Validée par UFP'; 
+                  break;
+             
+             case '5':                  
+                  return 'Validée par DPFI'; 
+                  break;
+             case '6':                  
+                  return 'Rejetée par DAAF'; 
+                  break;
+              case '7':                  
+                  return 'Validée par DAAF'; 
+                  break;
+              
+              default:
+                  break;
+          
+            }
+        }
+       /* vm.situationdemande = function(validation)
+        {
+            switch (validation)
+            {
+              case '1':
+                      return 'Validée par DPFI';                  
                   break;
 
              case '2':
@@ -830,11 +871,21 @@
                   break;
           
             }
-        }
+        }*/
   
   /*************************Fin StepTwo demande_realimentation_feffi***************************************/
 
   /************************************Debut justicatif feffi*********************************************/
+     vm.step_justificatif = function()
+    { 
+      vm.affiche_load =true;
+      apiFactory.getAPIgeneraliserREST("piece_justificatif_feffi/index",'id_demande_rea_feffi',vm.selectedItemDemande_realimentation.id,'id_tranche',vm.selectedItemDemande_realimentation.tranche.id).then(function(result)
+      {
+          vm.alljustificatif_feffi = result.data.response;
+          vm.affiche_load =false;
+      });
+    }
+
     //vm.myFile = [];
         vm.justificatif_feffi_column = [
         {titre:"Description"
@@ -846,10 +897,9 @@
 
         $scope.uploadFile = function(event)
        {
-          console.dir(event);
           var files = event.target.files;
           vm.myFile = files;
-          vm.selectedItemJustificatif_feffi.fichier = vm.myFile[0].name;
+          //vm.selectedItemJustificatif_feffi.fichier = vm.myFile[0].name;
         } 
 
         //fonction ajout dans bdd
@@ -857,7 +907,33 @@
         {
             if (NouvelItemJustificatif_feffi==false)
             {
-                test_existanceJustificatif_feffi (justificatif_feffi,suppression); 
+                apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index",'menu',"getdemande_realimentationvalideById",'id_demande_realimentation',vm.selectedItemDemande_realimentation.id).then(function(result)
+                {
+                  var demande_realimentation_valide = result.data.response;
+                  if (demande_realimentation_valide.length !=0)
+                  {
+                      var confirm = $mdDialog.confirm()
+                    .title('cette modification n\'est pas autorisé.')
+                    .textContent(' Les données sont déjà validées!')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('Fermer')
+                    
+                    $mdDialog.show(confirm).then(function()
+                    { 
+                      vm.steppiecefeffi = false;
+                      vm.selectedItemJustificatif_feffi = {} ;
+
+                    }, function() {
+                      //alert('rien');
+                    });
+                  }
+                  else
+                  {
+                    test_existanceJustificatif_feffi (justificatif_feffi,suppression);      
+                  }
+                }); 
             } 
             else
             {
@@ -901,7 +977,6 @@
             {
               currentItemJustificatif_feffi    = JSON.parse(JSON.stringify(vm.selectedItemJustificatif_feffi));
             }
-            
         };
         $scope.$watch('vm.selectedItemJustificatif_feffi', function()
         {
@@ -1018,15 +1093,15 @@
                     // Update_paiement or delete: id exclu                 
                     if(suppression==0)
                     {
-                         var file= vm.myFile[0];
+                         
                     
                           var repertoire = 'justificatif_feffi/';
                           var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
                           var getIdFile = vm.selectedItemJustificatif_feffi.id
                                               
-                          if(file)
+                          if(vm.myFile.length>0)
                           { 
-
+                            var file= vm.myFile[0];
                             var name_file = vm.selectedItemConvention_entete.ref_convention+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                             var fd = new FormData();
@@ -1049,8 +1124,8 @@
                                   var datas = $.param({
                                                       supprimer: suppression,
                                                       id:        getIdFile,
-                                                      id_justificatif_prevu: justificatif_feffi.id_justificatif_prevu,
-                                                      fichier: justificatif_feffi.fichier,
+                                                      id_justificatif_prevu: currentItemJustificatif_feffi.id_justificatif_prevu,
+                                                      fichier: currentItemJustificatif_feffi.fichier,
                                                       id_demande_rea_feffi: vm.selectedItemDemande_realimentation.id,
                                                       //validation:0
                                         });
@@ -1059,6 +1134,7 @@
                                           vm.showbuttonNouvManuel = true;
                                           justificatif_feffi.$selected = false;
                                           justificatif_feffi.$edit = false;
+                                          justificatif_feffi.fichier=currentItemJustificatif_feffi.fichier;
                                           vm.selectedItemJustificatif_feffi = {};
                                       console.log('b');
                                       }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -1087,6 +1163,23 @@
                             }).error(function()
                             {
                               vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                              var datas = $.param({
+                                                      supprimer: suppression,
+                                                      id:        getIdFile,
+                                                      id_justificatif_prevu: currentItemJustificatif_feffi.id_justificatif_prevu,
+                                                      fichier: currentItemJustificatif_feffi.fichier,
+                                                      id_demande_rea_feffi: vm.selectedItemDemande_realimentation.id,
+                                                      //validation:0
+                                        });
+                                      apiFactory.add("piece_justificatif_feffi/index",datas, config).success(function (data)
+                                      {  
+                                          vm.showbuttonNouvManuel = true;
+                                          justificatif_feffi.$selected = false;
+                                          justificatif_feffi.$edit = false;
+                                          justificatif_feffi.fichier=currentItemJustificatif_feffi.fichier;
+                                          vm.selectedItemJustificatif_feffi = {};
+                                      console.log('b');
+                                      });
                             });
                           }
 
@@ -1116,14 +1209,12 @@
                          vm.selectedItemJustificatif_feffi.fichier = '';
 
                           vm.selectedItemJustificatif_feffi.id = 0;
-                          vm.selectedItemJustificatif_feffi = {};
-
-                      console.log(vm.selectedItemJustificatif_feffi);
+                          //vm.selectedItemJustificatif_feffi = {};
+console.log('aaaaaa');
                       }).error(function()
                       {
                           showDialog(event,chemin);
                       });
-                      console.log(vm.selectedItemJustificatif_feffi);
                     }
               }
               else
@@ -1132,15 +1223,15 @@
                   NouvelItemJustificatif_feffi = false;
 
                   vm.showbuttonNouvManuel = false;
-                    var file= vm.myFile[0];
+                    
                     
                     var repertoire = 'justificatif_feffi/';
                     var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
                     var getIdFile = String(data.response);
                                         
-                    if(file)
+                    if(vm.myFile.length>0)
                     { 
-
+                      var file= vm.myFile[0];
                       var name_file = vm.selectedItemConvention_entete.ref_convention+'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                       var fd = new FormData();
@@ -1163,8 +1254,8 @@
                             var datas = $.param({
                                                 supprimer: suppression,
                                                 id:        getIdFile,
-                                                id_justificatif_prevu: justificatif_feffi.id_justificatif_prevu,
-                                                fichier: justificatif_feffi.fichier,
+                                                id_justificatif_prevu: currentItemJustificatif_feffi.id_justificatif_prevu,
+                                                fichier: currentItemJustificatif_feffi.fichier,
                                                 id_demande_rea_feffi: vm.selectedItemDemande_realimentation.id
                                   });
                                 apiFactory.add("piece_justificatif_feffi/index",datas, config).success(function (data)
@@ -1172,6 +1263,7 @@
                                     vm.showbuttonNouvManuel = true;
                                     justificatif_feffi.$selected = false;
                                     justificatif_feffi.$edit = false;
+                                    justificatif_feffi.fichier=currentItemJustificatif_feffi.fichier;
                                     vm.selectedItemJustificatif_feffi = {};
                                 console.log('b');
                                 }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -1199,24 +1291,41 @@
                       }).error(function()
                       {
                         vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                        var datas = $.param({
+                                                      supprimer: suppression,
+                                                      id:        getIdFile,
+                                                      id_justificatif_prevu: currentItemJustificatif_feffi.id_justificatif_prevu,
+                                                      fichier: currentItemJustificatif_feffi.fichier,
+                                                      id_demande_rea_feffi: vm.selectedItemDemande_realimentation.id,
+                                                      //validation:0
+                                        });
+                                      apiFactory.add("piece_justificatif_feffi/index",datas, config).success(function (data)
+                                      {  
+                                          vm.showbuttonNouvManuel = true;
+                                          justificatif_feffi.$selected = false;
+                                          justificatif_feffi.$edit = false;
+                                          justificatif_feffi.fichier=currentItemJustificatif_feffi.fichier;
+                                          vm.selectedItemJustificatif_feffi = {};
+                                      
+                                      });
                       });
                     }
               }
               justificatif_feffi.$selected = false;
               justificatif_feffi.$edit = false;
-              //vm.selectedItemJustificatif_feffi = {};
-              vm.showbuttonValidation = false;
+             // vm.selectedItemJustificatif_feffi = {};
 
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
 
         vm.download_justificatif = function(item)
-        {//console.log(item.fichier);
-            window.location = apiUrlFile+item.fichier;
+        {
+           window.open(apiUrlFile+item.fichier);
         }
        
-    /******************************************debut justicatif feffi***********************************************/       
+    /******************************************debut justicatif feffi***********************************************/
+
    
   /******************************************fin maitrise d'oeuvre*******************************************************/
         vm.showAlert = function(titre,content)
@@ -1234,9 +1343,11 @@
           );
         }
         function convertionDate(daty)
-        {   
-          if(daty)
+        { 
+            var date_final = null;  
+            if(daty!='Invalid Date' && daty!='' && daty!=null)
             {
+                console.log(daty);
                 var date     = new Date(daty);
                 var jour  = date.getDate();
                 var mois  = date.getMonth()+1;
@@ -1245,9 +1356,9 @@
                 {
                     mois = '0' + mois;
                 }
-                var date_final= annee+"-"+mois+"-"+jour;
-                return date_final
-            }      
+                date_final= annee+"-"+mois+"-"+jour;
+            }
+            return date_final;      
         }
         //format date affichage sur datatable
         vm.formatDate = function (daty)
@@ -1275,28 +1386,28 @@
           }
           return affiche;
         };
-
+        
 
         vm.formatMillier = function (nombre) 
-          {   //var nbr = nombre.toFixed(0);
-            var nbr=parseFloat(nombre);
-            var n = nbr.toFixed(2);
-            var spl= n.split('.');
-            var apre_virgule = spl[1];
-            var avan_virgule = spl[0];
+      {   //var nbr = nombre.toFixed(0);
+        var nbr=parseFloat(nombre);
+        var n = nbr.toFixed(2);
+        var spl= n.split('.');
+        var apre_virgule = spl[1];
+        var avan_virgule = spl[0];
 
-              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
-                  avan_virgule += '';
-                  var sep = ' ';
-                  var reg = /(\d+)(\d{3})/;
-                  while (reg.test(avan_virgule)) {
-                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
-                  }
-                  return avan_virgule+","+apre_virgule;
-              } else {
-                  return "0,00";
+          if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+              avan_virgule += '';
+              var sep = ' ';
+              var reg = /(\d+)(\d{3})/;
+              while (reg.test(avan_virgule)) {
+                  avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
               }
+              return avan_virgule+","+apre_virgule;
+          } else {
+              return "0,00";
           }
+      }
  
     }
 })();

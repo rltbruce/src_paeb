@@ -29,6 +29,9 @@
             <tbody>
               <tr ng-repeat="conventionDialog in allconventionDialog"  ng-class="{selected: conventionDialog.$selected}" ng-click="selectionConventionDialog(conventionDialog)">
                         <td>
+                          <span>{{conventionDialog.region.nom}}</span>
+                        </td>
+                        <td>
                           <span>{{conventionDialog.cisco.code}}</span>
                         </td>
 

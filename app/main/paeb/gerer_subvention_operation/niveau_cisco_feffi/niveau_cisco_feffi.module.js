@@ -8,7 +8,9 @@
             'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.site_validation',
             'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.convention_cisco_feffi',
             'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.convention_cisco_feffi_validation',
-            'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.feffi'
+            'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.feffi',
+            'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.insertion_avenant_document',
+            'app.paeb.gerer_subvention_operation.niveau_cisco_feffi.validation_avenant_document'
             ])
         .run(testPermission)        
         .config(config);
@@ -44,7 +46,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["BCAF","AAC","ADMIN"];
+                var permissions = ["DPFI","AAC","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

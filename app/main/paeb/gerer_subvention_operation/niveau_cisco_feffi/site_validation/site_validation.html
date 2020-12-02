@@ -9,7 +9,7 @@
                 <span class="parent">Gestion technique des activitées</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Niveau UFP/DAAF</span>
+                <span class="parent" href="javascript:;"> Niveau CISCO/FEFFI</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
                 <span class="parent" href="javascript:;"> Validation site</span>
@@ -121,14 +121,13 @@
                     </md-input-container>
                   </div>
                   
-                  <div class="footer-animate-show-hide">
-                      <md-button class="md-raised boutonfixe" disabled>
+                  
+                  <div class="footer-animate-show-hide" layout="row" layout-align="end end">
+                      <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
                       </md-button>
                       <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
                                             Réinitialise
-                      </md-button>
-                        <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
-                                                Recherche
                       </md-button>
                   </div>
             </form>

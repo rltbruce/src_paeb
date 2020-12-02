@@ -29,7 +29,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_ufp_feffi.suivi_f_bcaf_ufp.convention_suivi_f_obcaf_ufp', {
-            title: 'Insertion activitée financière (O-BCAF)',
+            title: 'Insertion activitée financière',
             icon  : 'icon-keyboard-variant',
             state: 'app.paeb_gerer_subvention_financiere_niveau_ufp_feffi_suivi_f_bcaf_ufp_convention_suivi_f_obcaf_ufp',
             weight: 1,
@@ -53,7 +53,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["OBCAF","ADMIN"];
+                var permissions = ["AAC","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 
