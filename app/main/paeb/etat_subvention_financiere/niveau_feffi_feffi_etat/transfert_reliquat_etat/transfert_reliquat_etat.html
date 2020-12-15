@@ -12,7 +12,7 @@
                 <span class="parent" href="javascript:;"> Niveau FEFFI/PRESTATAIRE</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Etat activité financier FEFFI/PRESTATAIRE</span>
+                <span class="parent" href="javascript:;"> Transfert reliquat</span>
             </div>
 
             <!--div class="title">Convention CISCO/FEFFI</div-->
@@ -236,6 +236,7 @@
            <md-tab ng-disabled="!vm.stepMenu_reliquat" ng-click="vm.step_menu_reliquat()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
+                          <span class="ms-form-wizard-step-number md-accent-bg">R</span>
                             <span class="ms-form-wizard-step-text">Reliquat</span>
                         </span>
                        
@@ -292,9 +293,10 @@
 
                       </md-tab-body>
                     </md-tab>
-                    <md-tab ng-disabled="!vm.stepjusti_trans_reliqua">
+                    <md-tab ng-disabled="!vm.stepjusti_trans_reliqua" ng-click="vm.step_menu_justi()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
+                          <span class="ms-form-wizard-step-number md-accent-bg">J</span>
                             <span class="ms-form-wizard-step-text">Justification</span>
                         </span>
                        

@@ -9,13 +9,13 @@
                 <span class="parent">Données de bases</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Attachement</span>
+                <span class="parent" href="javascript:;"> Rubrique pv constataion</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Latrine</span>
+                <span class="parent" href="javascript:;"> Batiment</span>
             </div>
 
-            <!--div class="title">Type latrine</div-->
+            <!--div class="title">Type batiment</div-->
         </div>
     </div>
     <!-- / HEADER -->
@@ -27,24 +27,8 @@
         <!--Geographique  -->
           <kendo-grid options="vm.mainGridOptions">
             <div k-detail-template>
-              <kendo-grid k-options="vm.allattachement_latrine_detail({{dataItem.id}})">
+              <kendo-grid k-options="vm.allpv_consta_rubrique_designation_bat({{dataItem.id}})">
               </kendo-grid>
-              <!--kendo-tabstrip>
-                <ul>
-                  <li>Avanchement physique</li>
-                  <li>Attachement</li>
-                </ul>
-                
-                <div>
-                    <div kendo-grid k-options="vm.allattachement_latrine({{dataItem.id}})">
-
-                    </div>
-                </div>
-                <div>
-                    <div kendo-grid k-options="vm.alldivers_attachement_latrine({{dataItem.id}})">
-                    </div>
-                </div>
-                </kendo-tabstrip-->
             </div>
           </kendo-grid>        
       </div>

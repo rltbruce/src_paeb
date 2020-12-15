@@ -1,296 +1,316 @@
-  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+<div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
 
-    <!-- HEADER -->
-    <div class="header md-accent-bg" layout="row" layout-align="space-between">
-        <div layout="column" layout-align="space-between">
-            <div class="breadcrumb" layout="row" layout-align="start center">
-                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
-                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Données de bases</span>
-                
-                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Ecole</span>
-            </div>
-
-            <!--div class="title">Ecole</div-->
-        </div>
-    </div>
-    <!-- / HEADER -->
-    
-    <!-- CONTENT -->
-    <div class="content widget-group" layout="column" >
-
-      <!-- Ecole -->
-      <!--div class="form-wrapper md-whiteframe-1dp" --> 
-      <ms-widget class="form-wrapper" flippable="true" id="widgetecole">
-      <ms-widget-front>       
-        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
-          <div layout="row" layout-align="start" flex>
-              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
-                <span style="line-height: normal;"> Ecole</span>
-              </div>
-
-              <div>
-
-                <md-button class="md-icon-button" aria-label="add ecole" ng-click="vm.ajouter()">
-                  <md-icon md-font-icon="icon-plus"></md-icon>
-                  <md-tooltip><span>Ajout ecole</span></md-tooltip>
-                </md-button>
-              </div>
-              <!--div flex>
-                <md-button class="md-icon-button" ng-click="flipWidget()" aria-label="Flip widget" style="float: right; margin-right: 10px">
-                  <md-icon md-font-icon="icon-google-maps"></md-icon>
-                  <md-tooltip><span>Vue map</span></md-tooltip>
-                </md-button>
-              </div--> 
-
-              <!--div flex>
-                <md-button class="md-icon-button md-primary" aria-label="add coordonnees" ng-click="vm.insertecoordonnees()">
-                  <md-icon md-font-icon="icon-plus"></md-icon>
-                  <md-tooltip><span>Ajou coordo</span></md-tooltip>
-                </md-button>
-              </div-->                     
+  <!-- HEADER -->
+  <div class="header md-accent-bg" layout="row" layout-align="space-between">
+      <div layout="column" layout-align="space-between">
+          <div class="breadcrumb" layout="row" layout-align="start center">
+              <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+              <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+              <span class="parent">Données de bases</span>
+              
+              <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+              <span class="parent" href="javascript:;"> Ecole</span>
           </div>
-        </header>
-                
-          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-            <thead>
-              <tr>
-                <th class="secondary-text" ng-repeat="cisc in ::vm.ecole_column">
-                  <div class="table-header">
-                    <span class="column-title">{{cisc.titre}}</span>
-                  </div>
-                </th>
-              </tr>
-            </thead>
-                     
-            <tbody >
-              <tr ng-repeat="ecole in vm.allecole"  ng-class="{selected: ecole.$selected}" ng-click="vm.selection(ecole)">           
-                <td>
-                  <span ng-if="ecole.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Code</label>
-                      <input name="code" type="text" ng-model="ecole.code"/>
-                    </md-input-container>
-                  </span>                          
-                  <span ng-if="!ecole.$edit">{{ecole.code}}</span>
-                </td>
-                          
-                <td>
-                  <span ng-if="ecole.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Description</label>
-                      <input name="Description" type="text" ng-model="ecole.description"/>
-                    </md-input-container>   
-                  </span>
-                            
-                  <span ng-if="!ecole.$edit">{{ecole.description}}</span>
-                </td>
 
-                <td>
-                  <span ng-if="ecole.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Cisco</label>
-                      <md-select ng-model="ecole.id_cisco"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_cisco(ecole)">
-                        <md-option ng-repeat="cisco in vm.allcisco" value="{{cisco.id}}">
-                                                            {{cisco.description}}
-                        </md-option>
-                      </md-select>
-                    </md-input-container>  
-                  </span>
-                  <span ng-if="!ecole.$edit">{{ecole.cisco.description}}</span>
-                </td>
-
-                <td>
-                  <span ng-if="ecole.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Commune</label>
-                      <md-select ng-model="ecole.id_commune"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_commune(ecole)">
-                        <md-option ng-repeat="commune in vm.allcommune" value="{{commune.id}}">
-                                                            {{commune.nom}}
-                        </md-option>
-                      </md-select>
-                    </md-input-container>  
-                  </span>
-                  <span ng-if="!ecole.$edit">{{ecole.commune.nom}}</span>
-                </td>
-
-                <td>
-                  <span ng-if="ecole.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Zap</label>
-                      <md-select ng-model="ecole.id_zap"style="overflow: hidden;text-overflow: ellipsis;">
-                        <md-option ng-repeat="zap in vm.allzap" value="{{zap.id}}">
-                                                            {{zap.nom}}
-                        </md-option>
-                      </md-select>
-                    </md-input-container>  
-                  </span>
-                  <span ng-if="!ecole.$edit">{{ecole.zap.nom}}</span>
-                </td>
-
-                <td>
-                  <span ng-if="ecole.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Fokontany</label>
-                      <md-select ng-model="ecole.id_fokontany"style="overflow: hidden;text-overflow: ellipsis;">
-                        <md-option ng-repeat="fokontany in vm.allfokontany" value="{{fokontany.id}}">
-                                                            {{fokontany.nom}}
-                        </md-option>
-                      </md-select>
-                    </md-input-container>  
-                  </span>
-                  <span ng-if="!ecole.$edit">{{ecole.fokontany.nom}}</span>
-                </td>
-                          
-                <td>
-                  <span ng-if="ecole.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Lieu</label>
-                      <input name="Lieu" type="text" ng-model="ecole.lieu"/>
-                    </md-input-container>   
-                  </span>
-                            
-                  <span ng-if="!ecole.$edit">{{ecole.lieu}}</span>
-                </td>
-                          
-                <td>
-                  <span ng-if="ecole.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Latitude</label>
-                      <input name="Latitude" type="text" ng-model="ecole.latitude"/>
-                    </md-input-container>   
-                  </span>
-                            
-                  <span ng-if="!ecole.$edit">{{ecole.latitude}}</span>
-                </td>
-                          
-                <td>
-                  <span ng-if="ecole.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Longitude</label>
-                      <input name="Longitude" type="text" ng-model="ecole.longitude"/>
-                    </md-input-container>   
-                  </span>
-                            
-                  <span ng-if="!ecole.$edit">{{ecole.longitude}}</span>
-                </td>
-                          
-                <td>
-                  <span ng-if="ecole.$edit">
-                    <md-input-container style="width:100%;display: flex !important;">
-                      <label>Altitude</label>
-                      <input name="Altitude" type="text" ng-model="ecole.altitude"/>
-                    </md-input-container>   
-                  </span>
-                            
-                  <span ng-if="!ecole.$edit">{{ecole.altitude}}</span>
-                </td>
-
-                        <td>
-                          <span ng-if="ecole.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Type zone</label>
-                              <md-select ng-model="ecole.id_zone_subvention"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_zone_subvention(ecole)">
-                                <md-option ng-repeat="zone_subvention in vm.allzone_subvention" value="{{zone_subvention.id}}">
-                                                                    {{zone_subvention.libelle}}
-                                </md-option>
-                              </md-select>
-                            </md-input-container>  
-                          </span>
-                          <span ng-if="!ecole.$edit">{{ecole.zone_subvention.libelle}}</span>
-                        </td>
-
-                        <td>
-                          <span ng-if="ecole.$edit">
-                            <md-input-container style="width:100%;display: flex !important;">
-                              <label>Acces zone</label>
-                              <md-select ng-model="ecole.id_acces_zone"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="!ecole.id_zone_subvention" ng-change="vm.change_acces_zone(ecole)">
-                                <md-option ng-repeat="acces_zone in vm.allacces_zone" value="{{acces_zone.id}}">
-                                                                    {{acces_zone.libelle}}
-                                </md-option>
-                              </md-select>
-                            </md-input-container>  
-                          </span>
-                          <span ng-if="!ecole.$edit">{{ecole.acces_zone.libelle}}</span>
-                        </td>
-                                             
-                <td>
-                  <a ng-if="!ecole.$edit" ng-click="vm.modifier(ecole)" title="Modifier">
-                    <span class="icon-table-edit"></span>
-                  </a>
-                            
-                  <a ng-if="!ecole.$edit" ng-click="vm.supprimer(ecole)" title="Supprimer">
-                    <span class="icon-delete"></span>
-                  </a>
-                            
-                  <a ng-if="ecole.$edit" ng-click="vm.annuler(ecole)" title="Annuler modification">
-                    <span class="icon-cancel"></span>
-                  </a>
-                            
-                  <a ng-if="ecole.$edit && ecole.code && ecole.description && ecole.id_fokontany && ecole.latitude && ecole.longitude && ecole.altitude && ecole.lieu>''" ng-click="vm.ajout(ecole,0)" title="Sauvegarder">
-                    <span class="icon-content-save"></span>
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-       
-      </ms-widget-front>
-      <ms-widget-back flex="100" >
-       
-          <md-button class="md-icon-button" ng-click="flipWidget()" aria-label="Flip widget" style="float: left top">
-            <md-icon md-font-icon="icon-undo-variant" class="s16"></md-icon>
-          </md-button>             
-          <!--ui-gmap-google-map center="vm.ecolevueMap.center" zoom="vm.ecolevueMap.zoom" >
-            <div ng-repeat="ec in vm.ecolevueMap.marker">
-              <ui-gmap-marker  coords="ec.coords"
-                    idkey="ec.id" events="events" model="ec">
-                <ui-gmap-window show="false" ng-cloak>
-                  <div>
-                      <span><b>Lieu:</b> {{ec.coords.lieu}} </span><br>
-                      <span><b>Code:</b> {{ec.coords.code}} </span><br>
-                      <span><b>Description:</b> {{ec.coords.description}}</span>
-                     
-                  </div>
-              </ui-gmap-window>        
-              </ui-gmap-marker>
-            </div>
-          </ui-gmap-google-map-->
-          <ui-gmap-google-map center="vm.ecolevueMap.center" zoom="vm.ecolevueMap.zoom" draggable="true" options="options" bounds="">
-            <ui-gmap-polygon ng-repeat="p in vm.polylines" path="p.path" stroke="p.stroke" visible='p.visible'
-                  geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" clickable='true' icons='p.icons' events="p.events" fill="p.fill">
-                    
-            </ui-gmap-polygon>
-            <ui-gmap-window show="vm.showwindow" coords="vm.coords" closeclick="polywindow.closeClick()">
-              <h1> test </h1>
-            </ui-gmap-window>
-        </ui-gmap-google-map>
-        
-      </ms-widget-back>  
-      </ms-widget>                     
-      <!--/div-->
-      <!-- / ecole -->
-    </div>
-    <!-- / CONTENT -->
+          <!--div class="title">Ecole</div-->
+      </div>
   </div>
+  <!-- / HEADER -->
+  <div class="content" layout="column">
+    
+    <div class="form-wrapper md-whiteframe-1dp" >
+      <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+        <div layout="row" layout-align="start">
+            <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+              <span style="line-height: normal;"> Ecole</span>
+            </div>
+            <div>
+              <md-button class="md-icon-button" aria-label="add zap" ng-click="vm.ajouter()">
+                <md-icon md-font-icon="icon-plus"></md-icon>
+                <md-tooltip><span>Ajout ecole</span></md-tooltip>
+              </md-button>
+            </div>                      
+        </div>
+      </header>
+      <div style="margin-top: 1px;">
+        <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
+          <form name="filtreform" class="md-inline-form" novalidate >
+                          <br>
+            <div layout="column" layout-gt-xs="row" >
 
-  <!--ui-gmap-windows show="'showWindow'" ng-cloak>
-                <div>
-                    <p>This is an info window</p>
+              <md-input-container flex="100" flex-gt-xs="90">
+                <label>Région</label>
+                <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)" ng-disabled="vm.session=='BCAF' || vm.session=='OBCAF'" required>
+                  <md-option  value="*">*</md-option>
+                  <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
+                </md-select>
+                <div ng-messages="filtreform.region.$error" role="alert">
+                  <div ng-message="required"><span>Région</span></div>
                 </div>
-            </ui-gmap-windows-->
+              </md-input-container>
+                            
+              <md-input-container flex="100" flex-gt-xs="90">
+                <label>Cisco</label>
+                <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region || vm.session=='BCAF' || vm.session=='OBCAF'" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
+                  <md-option  value="*">*</md-option>
+                  <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                                            
+                  </md-select>
+                  <div ng-messages="filtreform.cisco.$error" role="alert">
+                  <div ng-message="required"><span>Cisco</span></div>
+                </div>
+              </md-input-container>
+                            
+              <md-input-container flex="100" flex-gt-xs="90">
+                <label>Commune</label>
+                <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
+                  <md-option  value="*">*</md-option>
+                  <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
+                </md-select>
+                <div ng-messages="filtreform.commune.$error" role="alert">
+                  <div ng-message="required"><span>Commune</span></div>
+                </div>
+              </md-input-container>
 
-            <!--ui-gmap-google-map center='main.map.center' zoom='main.map.zoom' options='main.map.options'>
-     <ui-gmap-markers models="main.markers" coords="'self'" icon="'icon'" options="'options'" click="'onClick'" fit="true">
-         <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
-             <div class="mapinfowindow" data-ui-sref="display({id: id})">                                                                      
-                 <span class="itemname" data-ng-non-bindable>{{ title }}</span>
-             </div>
-         </ui-gmap-windows>
-     </ui-gmap-markers>
- </ui-gmap-google-map-->
+              <md-input-container flex="100" flex-gt-xs="90">
+                <label>Zap</label>
+                <md-select ng-model="vm.filtre.id_zap" name="zap" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_zap(vm.filtre)">
+                  <md-option  value="*">*</md-option>
+                  <md-option ng-repeat="zaps in vm.zaps" value="{{zaps.zap.id}}"> {{zaps.zap.nom}}
+                  </md-option>
+                </md-select>  
+                <div ng-messages="filtreform.zap.$error" role="alert">
+                  <div ng-message="required"><span>Zap</span></div>
+                </div>
+              </md-input-container>
+            </div>
+                            
+            <div class="footer-animate-show-hide" layout="row" layout-align="end end">
+              <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                        Recherche
+              </md-button>
+              <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                    Réinitialise
+              </md-button>
+            </div>
+          </form>
+        </div>            
+        <div class="bouton-animate-show-hide">
 
- <!--ui-gmap-window show="polywindow.show" coords="polywindow.coords" closeclick="polywindow.closeClick()">
-        <h1> test </h1>
-      </ui-gmap-window-->
+        <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+          <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+          </md-icon>                           
+          <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+          </md-icon>
+          <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+          </md-icon>
+          <md-tooltip><span>Bouton filtre</span></md-tooltip>
+          </md-button> 
+        </div>
+      </div>
+      <div style="float: top !important">
+        <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+        <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                Chargement,veuillez patienter s'il vous plait ...
+        </div>
+      </div>
+      
+      <!-- CONTENT --> 
+        <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+          <thead>
+            <tr>
+              <th class="secondary-text" ng-repeat="cisc in ::vm.ecole_column">
+                <div class="table-header">
+                  <span class="column-title">{{cisc.titre}}</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+                  
+          <tbody >
+            <tr ng-repeat="ecole in vm.allecole"  ng-class="{selected: ecole.$selected}" ng-click="vm.selection(ecole)">
+              <td>
+                <span ng-if="ecole.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Region</label>
+                    <md-select ng-model="ecole.id_region"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_region(ecole)">
+                      <md-option ng-repeat="region in vm.regions" value="{{region.id}}">{{region.nom}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>  
+                </span>
+                <span ng-if="!ecole.$edit">{{ecole.region.nom}}</span>
+              </td>
+              
+              <td>
+                <span ng-if="ecole.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Cisco</label>
+                    <md-select ng-model="ecole.id_cisco"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_cisco(ecole)">
+                      <md-option ng-repeat="cisco in vm.allcisco" value="{{cisco.id}}">
+                                                          {{cisco.description}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>  
+                </span>
+                <span ng-if="!ecole.$edit">{{ecole.cisco.description}}</span>
+              </td>
+
+              <td>
+                <span ng-if="ecole.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Commune</label>
+                    <md-select ng-model="ecole.id_commune"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_commune(ecole)">
+                      <md-option ng-repeat="commune in vm.allcommune" value="{{commune.id}}">
+                                                          {{commune.nom}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>  
+                </span>
+                <span ng-if="!ecole.$edit">{{ecole.commune.nom}}</span>
+              </td>
+
+              <td>
+                <span ng-if="ecole.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Zap</label>
+                    <md-select ng-model="ecole.id_zap"style="overflow: hidden;text-overflow: ellipsis;">
+                      <md-option ng-repeat="zap in vm.allzap" value="{{zap.id}}">
+                                                          {{zap.nom}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>  
+                </span>
+                <span ng-if="!ecole.$edit">{{ecole.zap.nom}}</span>
+              </td>
+
+              <td>
+                <span ng-if="ecole.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Fokontany</label>
+                    <md-select ng-model="ecole.id_fokontany"style="overflow: hidden;text-overflow: ellipsis;">
+                      <md-option ng-repeat="fokontany in vm.allfokontany" value="{{fokontany.id}}">
+                                                          {{fokontany.nom}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>  
+                </span>
+                <span ng-if="!ecole.$edit">{{ecole.fokontany.nom}}</span>
+              </td>
+                        
+              <td>
+                <span ng-if="ecole.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Lieu</label>
+                    <input name="Lieu" type="text" ng-model="ecole.lieu"/>
+                  </md-input-container>   
+                </span>
+                          
+                <span ng-if="!ecole.$edit">{{ecole.lieu}}</span>
+              </td>           
+              <td>
+                <span ng-if="ecole.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Code</label>
+                    <input name="code" type="text" ng-model="ecole.code"/>
+                  </md-input-container>
+                </span>                          
+                <span ng-if="!ecole.$edit">{{ecole.code}}</span>
+              </td>
+                        
+              <td>
+                <span ng-if="ecole.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Description</label>
+                    <input name="Description" type="text" ng-model="ecole.description"/>
+                  </md-input-container>   
+                </span>
+                          
+                <span ng-if="!ecole.$edit">{{ecole.description}}</span>
+              </td>            
+                        
+              <td>
+                <span ng-if="ecole.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Latitude</label>
+                    <input name="Latitude" type="text" ng-model="ecole.latitude"/>
+                  </md-input-container>   
+                </span>
+                          
+                <span ng-if="!ecole.$edit">{{ecole.latitude}}</span>
+              </td>
+                        
+              <td>
+                <span ng-if="ecole.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Longitude</label>
+                    <input name="Longitude" type="text" ng-model="ecole.longitude"/>
+                  </md-input-container>   
+                </span>
+                          
+                <span ng-if="!ecole.$edit">{{ecole.longitude}}</span>
+              </td>
+                        
+              <td>
+                <span ng-if="ecole.$edit">
+                  <md-input-container style="width:100%;display: flex !important;">
+                    <label>Altitude</label>
+                    <input name="Altitude" type="text" ng-model="ecole.altitude"/>
+                  </md-input-container>   
+                </span>
+                          
+                <span ng-if="!ecole.$edit">{{ecole.altitude}}</span>
+              </td>
+
+                      <td>
+                        <span ng-if="ecole.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Type zone</label>
+                            <md-select ng-model="ecole.id_zone_subvention"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_zone_subvention(ecole)">
+                              <md-option ng-repeat="zone_subvention in vm.allzone_subvention" value="{{zone_subvention.id}}">
+                                                                  {{zone_subvention.libelle}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>  
+                        </span>
+                        <span ng-if="!ecole.$edit">{{ecole.zone_subvention.libelle}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="ecole.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Acces zone</label>
+                            <md-select ng-model="ecole.id_acces_zone"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="!ecole.id_zone_subvention" ng-change="vm.change_acces_zone(ecole)">
+                              <md-option ng-repeat="acces_zone in vm.allacces_zone" value="{{acces_zone.id}}">
+                                                                  {{acces_zone.libelle}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>  
+                        </span>
+                        <span ng-if="!ecole.$edit">{{ecole.acces_zone.libelle}}</span>
+                      </td>
+                                          
+              <td>
+                <a ng-if="!ecole.$edit" ng-click="vm.modifier(ecole)" title="Modifier">
+                  <span class="icon-table-edit"></span>
+                </a>
+                          
+                <a ng-if="!ecole.$edit" ng-click="vm.supprimer(ecole)" title="Supprimer">
+                  <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
+                </a>
+                          
+                <a ng-if="ecole.$edit" ng-click="vm.annuler(ecole)" title="Annuler modification">
+                  <span class="icon-cancel"></span>
+                </a>
+                          
+                <a ng-if="ecole.$edit && ecole.id_region && ecole.code && ecole.description && ecole.id_fokontany && ecole.latitude && ecole.longitude && ecole.altitude && ecole.lieu>''" ng-click="vm.ajout(ecole,0)" title="Sauvegarder">
+                  <span class="icon-content-save"></span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>    
+      <!-- / CONTENT -->
+    </div> 
+  </div>
+</div>

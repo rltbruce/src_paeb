@@ -219,6 +219,8 @@
                         <td>                         
                           <span>{{convention_cife_tete.user.nom}}</span>
                         </td>
+                        <td>                         
+                          <span>{{vm.affichage_situation(convention_cife_tete.validation)}}</span>
                         </td>
                       </tr>
                     </tbody>
@@ -230,7 +232,7 @@
     <!-----fin convention_cife_tete ------>
 
     <!-----debut convention_detail ------>
-            <md-tab ng-disabled="vm.stepOne==false">
+            <md-tab ng-disabled="!vm.stepOne" ng-click="vm.step_menu_detail()">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
 
@@ -325,7 +327,7 @@
             </md-tab>
 
     <!-----debut divers cout construction ********------>
-      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
+      <md-tab ng-disabled="!vm.stepOne" ng-click="vm.step_menu_cout_maitrise()">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
 
@@ -371,7 +373,7 @@
     <!-----fin divers cout construction ********------>
 
     <!-----debut batiment construction ------>
-      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
+      <md-tab ng-disabled="!vm.stepOne" ng-click="vm.step_menu_batiment()">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
 
@@ -421,7 +423,7 @@
     <!-----fin batiment construction ------>
 
     <!-----debut detail latrine ------>
-      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
+      <md-tab ng-disabled="!vm.stepOne" ng-click="vm.step_menu_latrine()">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
             <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">L</span>
@@ -471,7 +473,7 @@
     <!-----debut detail latrine ------>
 
     <!-----debut detail mobilier ------>
-      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
+      <md-tab ng-disabled="!vm.stepOne" ng-click="vm.step_menu_mobilier()">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
             <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">M</span>
@@ -526,7 +528,7 @@
     <!-----debut detail mobilier ------>
 
         <!-----debut divers cout construction ********------>
-      <md-tab ng-disabled="(vm.allconvention_cife_detail.length == 0)">
+      <md-tab ng-disabled="!vm.stepOne" ng-click="vm.step_menu_cout_sousprojet()">
         <md-tab-label>
           <span class="ms-form-wizard-step-label">
 

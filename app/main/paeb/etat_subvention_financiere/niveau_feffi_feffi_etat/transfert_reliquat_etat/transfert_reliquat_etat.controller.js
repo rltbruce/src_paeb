@@ -126,57 +126,7 @@
                   }, function error(result){ alert('something went wrong')});
             }
         }
-        var id_user = $cookieStore.get('id');
-         apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
-        {
-              vm.roles = result.data.response.roles;
-              switch (vm.roles[0])
-                {
-                 case 'BCAF':                            
 
-                            vm.session = 'BCAF';
-                      
-                      break;
-
-                  case 'ADMIN':                            
-                            vm.session = 'ADMIN';                  
-                      break;
-                  default:
-                      break;
-              
-                }                  
-
-         });
-
-         
-        vm.importerfiltre =function(filtre)
-        {   
-            var date_debut = convertionDate(filtre.date_debut);
-            var date_fin = convertionDate(filtre.date_fin);
-            vm.affiche_load = true ;
-            var repertoire = 'bdd_construction';
-
-            apiFactory.getAPIgeneraliserREST("excel_bdd_construction/index",'menu','getdonneeexporter',
-                'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
-                filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
-                filtre.id_convention_entete,"repertoire",repertoire).then(function(result)
-            {
-                vm.status    = result.data.status; 
-                
-                if(vm.status)
-                {
-                    vm.nom_file = result.data.nom_file;            
-                    window.location = apiUrlexcel+"bdd_construction/"+vm.nom_file ;
-                    vm.affiche_load =false; 
-
-                }else{
-                    vm.message=result.data.message;
-                    vm.Alert('Export en excel',vm.message);
-                    vm.affiche_load =false; 
-                }
-                console.log(result.data.data);
-            });
-        } 
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
@@ -212,7 +162,6 @@
                 vm.allconvention_entete = result.data.response;
                  vm.affiche_load =false;
             });
-                console.log(filtre);
         }
         
         /***************fin convention cisco/feffi************/
@@ -237,7 +186,7 @@
         });
         vm.step_menu_reliquat=function()
         {
-                apiFactory.getAPIgeneraliserREST("transfert_reliquat/index",'menu','gettransfertByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                apiFactory.getAPIgeneraliserREST("transfert_reliquat/index",'menu','gettransfertvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.alltransfert_reliquat = result.data.response;
                 }); 
@@ -277,19 +226,13 @@
         vm.selectionTransfert_reliquat = function (item)
         {
             vm.selectedItemTransfert_reliquat = item;
+            vm.stepjusti_trans_reliqua = true;
             //recuperation donnée convention
            if (vm.selectedItemTransfert_reliquat.id!=0)
             {   
                 vm.validation_transfert_reliquat = item.validation;
-                 
-                apiFactory.getAPIgeneraliserREST("justificatif_transfert_reliquat/index",'id_transfert_reliquat',item.id).then(function(result)
-                {
-                    vm.alljustificatif_transfert_reliquat = result.data.response; 
-                    console.log(vm.alljustificatif_transfert_reliquat);
-                });
               //Fin Récupération cout divers par convention
               
-                vm.stepjusti_trans_reliqua = true;
             };           
 
         };
@@ -307,7 +250,13 @@
     /*********************************************Fin transfert reliquat************************************************/
 
     /*********************************************Fin justificatif reliquat************************************************/
-
+    vm.step_menu_justi = function()
+    {          
+      apiFactory.getAPIgeneraliserREST("justificatif_transfert_reliquat/index",'id_transfert_reliquat',vm.selectedItemTransfert_reliquat.id).then(function(result)
+      {
+          vm.alljustificatif_transfert_reliquat = result.data.response;
+      });
+    }
     vm.justificatif_transfert_reliquat_column = [
         {titre:"Description"
         },
@@ -334,7 +283,7 @@
         
         vm.download_transfert_reliquat = function(item)
         {
-            window.location = apiUrlFile+item.fichier ;
+          window.open(apiUrlFile+item.fichier);
         }
 
     /*********************************************Fin justificatif reliquat************************************************/

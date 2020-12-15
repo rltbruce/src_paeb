@@ -5,7 +5,7 @@
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.decai_fonctionnement', [])
         .run(testPermission)
-        .run(insertiondemande_ufp_daaf_syst)
+        //.run(insertiondemande_ufp_daaf_syst)
         .config(config);
         var vs ;
     /** @ngInject */
@@ -54,7 +54,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["OBCAF","ADMIN"];
+                var permissions = ["AAC","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

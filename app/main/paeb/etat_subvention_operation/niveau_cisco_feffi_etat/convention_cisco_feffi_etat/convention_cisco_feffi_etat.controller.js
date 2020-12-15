@@ -239,6 +239,8 @@
         {titre:"Avancement"
         },
         {titre:"Utilisateur"
+        },
+        {titre:"Situation"
         }];
         
         
@@ -246,99 +248,10 @@
         vm.selectionTete = function (item)
         {
             vm.selectedItemTete = item; 
-           if (item.id!=0)
-            { 
-              if (item.$edit==false || item.$edit==undefined)
-              { 
-                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_detail/index",'id_convention_entete',item.id).then(function(result)
-                  {
-                      vm.allconvention_cife_detail = result.data.response;
-                  });
-                  apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
-                  {
-                    vm.allcompte_feffi = result.data.response;
-                   
-                  });
-
-
-                  apiFactory.getAPIgeneraliserREST("cout_maitrise_construction/index",'id_convention_entete',item.id).then(function(result)
-                  {
-                    vm.allcout_maitrise_construction = result.data.response;
-                   
-                  });
-                  apiFactory.getAPIgeneraliserREST("cout_sousprojet_construction/index",'id_convention_entete',item.id).then(function(result)
-                  {
-                    vm.allcout_sousprojet_construction = result.data.response;
-                   
-                  });
-               
-                  apiFactory.getAPIgeneraliserREST("batiment_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
-                  {
-                      vm.allbatiment_construction = result.data.response;
-
-                      if (vm.allbatiment_construction.length >0)
-                      {                    
-                        vm.showbuttonNouvBatiment=false;
-                      } 
-                  });
-
-                  apiFactory.getAPIgeneraliserREST("latrine_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
-                  {
-                      vm.alllatrine_construction = result.data.response;
-
-                      if (vm.alllatrine_construction.length >0)
-                      {                    
-                        vm.showbuttonNouvLatrine=false;
-                      } 
-                  });
-
-
-                  apiFactory.getAPIgeneraliserREST("mobilier_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
-                  {
-                      vm.allmobilier_construction = result.data.response;
-
-                      if (vm.allmobilier_construction.length >0)
-                      {                    
-                        vm.showbuttonNouvMobilier=false;
-                      } 
-                  });
-
-                  apiFactory.getAPIgeneraliserREST("type_batiment/index",'menu','getbatimentByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
-                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
-                  {
-                    vm.alltype_batiment = result.data.response;
-                  });
-
-                  apiFactory.getAPIgeneraliserREST("type_latrine/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
-                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
-                  {
-                    vm.alltype_latrine = result.data.response;
-                  });
-
-                  apiFactory.getAPIgeneraliserREST("type_mobilier/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
-                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
-                  {
-                    vm.alltype_mobilier = result.data.response;
-                  });
-
-                  apiFactory.getAPIgeneraliserREST("type_cout_maitrise/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
-                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
-                  {
-                    vm.alltype_cout_maitrise = result.data.response;
-                  });
-                  apiFactory.getAPIgeneraliserREST("type_cout_sousprojet/index",'menu','getByZone','id_zone_subvention',vm.selectedItemTete.ecole.id_zone_subvention,
-                    'id_acces_zone',vm.selectedItemTete.ecole.id_acces_zone).then(function(result)
-                  {
-                    vm.alltype_cout_sousprojet = result.data.response;
-                  });
-
-                  vm.stepOne = true;
-                  vm.stepTwo = false;
-                  vm.stepThree = false;
-              }
-              
-            };           
-
+            vm.stepOne = true;
+            vm.stepTwo = false;
+            vm.stepThree = false;
+             
         };
         $scope.$watch('vm.selectedItemTete', function()
         {
@@ -359,6 +272,65 @@
             affichage = 'Autre';
           }
           return affichage;
+        }
+        vm.affichage_situation = function(validation)
+        { 
+          var affichage = 'En préparation';
+          if(validation == 2)
+          {
+            affichage = 'En cours de traitement';
+          }
+          return affichage;
+        }
+        vm.step_menu_detail = function()
+        {
+          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_detail/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+          {
+              vm.allconvention_cife_detail = result.data.response;
+          });
+
+        }
+        vm.step_menu_cout_maitrise = function()
+        {
+          apiFactory.getAPIgeneraliserREST("cout_maitrise_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+          {
+            vm.allcout_maitrise_construction = result.data.response;
+           
+          });
+          
+        }
+        vm.step_menu_cout_sousprojet = function()
+        {
+          apiFactory.getAPIgeneraliserREST("cout_sousprojet_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+          {
+            vm.allcout_sousprojet_construction = result.data.response;
+           
+          });
+          
+        }
+        vm.step_menu_batiment = function()
+        {
+          apiFactory.getAPIgeneraliserREST("batiment_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+          {
+              vm.allbatiment_construction = result.data.response;
+          });
+          
+        }
+        vm.step_menu_latrine = function()
+        {
+          apiFactory.getAPIgeneraliserREST("latrine_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+          {
+              vm.alllatrine_construction = result.data.response; 
+          });
+          
+        }
+        vm.step_menu_mobilier = function()
+        {
+          apiFactory.getAPIgeneraliserREST("mobilier_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
+          {
+              vm.allmobilier_construction = result.data.response; 
+          });
+          
         }
 
 /**********************************fin convention entete***********************************/

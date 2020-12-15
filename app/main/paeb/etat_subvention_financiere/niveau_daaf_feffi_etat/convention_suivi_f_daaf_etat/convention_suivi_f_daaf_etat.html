@@ -25,7 +25,7 @@
     
     <!-- CONTENT -->
     <div class="content" layout="column">
-      <div class="form-wrapper md-whiteframe-1dp acc_menu" >
+      <div class="form-wrapper md-whiteframe-1dp" >
 <!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
          <ms-form-wizard flex>
           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" style="">
@@ -195,7 +195,11 @@
                                   </td>
 
                                   <td>
-                                    <span>{{convention_entete.site.denomination_epp}}</span>
+                                    <span>{{convention_entete.site.code_sous_projet}}</span>
+                                  </td>
+
+                                  <td>
+                                    <span>{{convention_entete.site.acces}}</span>
                                   </td>
 
                                   <td>                         
@@ -231,29 +235,16 @@
                   <!----------------------------DEBUT ESTIMATION CONVENTION-convention cisco/feffi---------------->
 
                   <!----------------------------DEBUT SUIVI FINANCIER FEFFI---------------------------------------->
-                  <md-tab ng-disabled="vm.stepMenu_feffi==false" ng-if="vm.session!='ODPFI'">
+                  <md-tab ng-disabled="vm.stepMenu_feffi==false" ng-click="vm.step_menu_demande()">
                     <md-tab-label >
                       <span class="ms-form-wizard-step-label">
-                          <span class="ms-form-wizard-step-text">Suivi financier FEFFI</span>
+                        <span class="ms-form-wizard-step-number md-accent-bg">D</span>
+                          <span class="ms-form-wizard-step-text">Demande de deblocage FEFFI</span>
                       </span>
                      
                     </md-tab-label>
                             
                             <md-tab-body>
-                              <div style="widht:100%;">                                    
-
-                                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.valider_demandeemidaaf(5)" style="width:12%;" ng-if="vm.showbuttonValidationencourdaaf && vm.permissionboutonvaliderdaaf && vm.validation==4">
-                                     Mettre en-cours
-                                    </md-button>
-
-                                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.rejeter_demandedaaf(6)" style="width:10%;" ng-if="vm.showbuttonValidationenrejedaaf && vm.permissionboutonvaliderdaaf && vm.validation==5">
-                                     Rejeter
-                                    </md-button>
-
-                                    <md-button type="submit" class="md-raised md-warn" aria-label="Nouveau" ng-click="vm.valider_demande_final(7)" style="width:10%;" ng-if="vm.showbuttonValidationdaaf && vm.permissionboutonvaliderdaaf && vm.validation==5">
-                                     Valider
-                                    </md-button>
-                              </div> <br>
 
                               <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                                 <thead>
@@ -318,7 +309,7 @@
 
 
                     <!---------------------------------DEBUT PIECE JUSTIFICATIVE------------------------------------------->
-                          <md-tab ng-disabled="vm.steppiecefeffi==false">
+                          <md-tab ng-disabled="vm.steppiecefeffi==false" ng-click="vm.step_justificatif()">
                             <md-tab-label>
                               <span class="ms-form-wizard-step-label">
                                   <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">FF</span>
@@ -328,6 +319,7 @@
                                   <!--span class="ms-form-wizard-step-number md-accent-bg">
                                     <i class="icon-attachment s16"></i>
                                   </span-->
+                              <span class="ms-form-wizard-step-number md-accent-bg">P</span>
                                   <span class="ms-form-wizard-step-text">Pièce jointe</span>
                               </span>
                              
@@ -355,10 +347,6 @@
                                 <td>                                            
                                   <span>{{piece_justificatif_feffi.fichier}}</span>
                                 </td>
-
-                                <td>                                            
-                                  <span>{{vm.formatDate(piece_justificatif_feffi.date)}}</span>
-                                </td>
                                                              
                                 <td>                                                   
                                   <a ng-click="vm.download_piece_justificatif(piece_justificatif_feffi)" title="Telecharger fichier">
@@ -375,12 +363,13 @@
 
                    <!---------------------------------------DEBUT Transfert daaf----------------------------------------->
 
-                        <md-tab ng-disabled="vm.steptransdaaf==false || vm.validation!=7">
+                        <md-tab ng-disabled="vm.steptransdaaf==false || vm.validation!=7" ng-click="vm.step_transfert_daaf()">
                           <md-tab-label>
                             <span class="ms-form-wizard-step-label">
                                 <!--span class="ms-form-wizard-step-number md-accent-bg">
                                     <i class="icon-currency-eur s16"></i>
                                 </span-->
+                              <span class="ms-form-wizard-step-number md-accent-bg">T</span>
                               <span class="ms-form-wizard-step-text">Transfert</span>
                             </span>
                           </md-tab-label>

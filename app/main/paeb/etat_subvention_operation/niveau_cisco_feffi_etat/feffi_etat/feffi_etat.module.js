@@ -11,7 +11,7 @@ var vs;
     {
         // State
         $stateProvider.state('app.paeb_etat_subvention_operation_niveau_cisco_feffi_etat_feffi_etat', {
-            url      : '/donnees-de-base/feffi_etat',
+            url      : '/donnees-de-base/etat_subvention_operation/niveau_cisco_feffi_etat/feffi_etat',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/etat_subvention_operation/niveau_cisco_feffi_etat/feffi_etat/feffi_etat.html',

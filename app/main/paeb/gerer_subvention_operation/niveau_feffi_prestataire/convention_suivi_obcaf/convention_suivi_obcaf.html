@@ -4926,7 +4926,7 @@
                                   <span ng-if="contrat_prestataire.$edit">
                                     <md-input-container style="width:100%;display: flex !important;">
                                       <label>Cout batiment</label>
-                                      <input name="cout_batiment" type="number" ng-model="contrat_prestataire.cout_batiment" ng-change="vm.change_montant_mpe(contrat_prestataire)" disabled/>
+                                      <input name="cout_batiment" type="number" ng-model="contrat_prestataire.cout_batiment" ng-change="vm.change_montant_mpe(contrat_prestataire) "min=1/>
                                     </md-input-container>   
                                   </span>
                                             
@@ -4937,7 +4937,7 @@
                                   <span ng-if="contrat_prestataire.$edit">
                                     <md-input-container style="width:100%;display: flex !important;">
                                       <label>Cout latrine</label>
-                                      <input name="cout_latrine" type="number" ng-model="contrat_prestataire.cout_latrine" ng-change="vm.change_montant_mpe(contrat_prestataire)" disabled/>
+                                      <input name="cout_latrine" type="number" ng-model="contrat_prestataire.cout_latrine" ng-change="vm.change_montant_mpe(contrat_prestataire)"min=1/>
                                     </md-input-container>   
                                   </span>
                                             
@@ -4948,7 +4948,7 @@
                                   <span ng-if="contrat_prestataire.$edit">
                                     <md-input-container style="width:100%;display: flex !important;">
                                       <label>Cout Mobilier</label>
-                                      <input name="cout_mobilier" type="number" ng-model="contrat_prestataire.cout_mobilier" ng-change="vm.change_montant_mpe(contrat_prestataire)" disabled/>
+                                      <input name="cout_mobilier" type="number" ng-model="contrat_prestataire.cout_mobilier" ng-change="vm.change_montant_mpe(contrat_prestataire)" min=1/>
                                     </md-input-container>   
                                   </span>
                                             
@@ -4956,25 +4956,25 @@
                                 </td>
                                           
                                 <td>
-                                  <span ng-if="contrat_prestataire.$edit">
+                                  <!--span ng-if="contrat_prestataire.$edit">
                                     <md-input-container style="width:100%;display: flex !important;">
                                       <label>Montant HT</label>
                                       <input name="montant_total_ht" type="number" ng-model="contrat_prestataire.montant_total_ht" disabled />
                                     </md-input-container>   
-                                  </span>
+                                  </span-->
                                             
-                                  <span ng-if="!contrat_prestataire.$edit">{{vm.formatMillier(contrat_prestataire.montant_total_ht)}} Ar</span>
+                                  <span>{{vm.formatMillier(contrat_prestataire.montant_total_ht)}} Ar</span>
                                 </td>
                                           
                                 <td>
-                                  <span ng-if="contrat_prestataire.$edit">
+                                  <!--span ng-if="contrat_prestataire.$edit">
                                     <md-input-container style="width:100%;display: flex !important;">
                                       <label>Montant TTC</label>
                                       <input name="montant_total_ttc" type="number" ng-model="contrat_prestataire.montant_total_ttc" disabled />
                                     </md-input-container>   
-                                  </span>
+                                  </span-->
                                             
-                                  <span ng-if="!contrat_prestataire.$edit">{{vm.formatMillier(contrat_prestataire.montant_total_ttc)}} Ar</span>
+                                  <span>{{vm.formatMillier(contrat_prestataire.montant_total_ttc)}} Ar</span>
                                 </td>
 
                                 <td>                         
@@ -4986,11 +4986,11 @@
                                 </td>
 
                                 <td>
-                                  <span ng-if="contrat_prestataire.$edit">
+                                  <!--span ng-if="contrat_prestataire.$edit">
                                     <md-datepicker ng-model="contrat_prestataire.date_signature" md-placeholder="Date de signature" md-max-date="vm.datenow" required disabled>                       
                                     </md-datepicker>
-                                  </span>                          
-                                  <span ng-if="!contrat_prestataire.$edit">{{vm.formatDate(contrat_prestataire.date_signature)}}</span>
+                                  </span-->                          
+                                  <span>{{vm.formatDate(contrat_prestataire.passation.date_signature_contrat)}}</span>
                                 </td>
 
                                 <td>                          
@@ -5009,7 +5009,8 @@
                                     <span class="icon-cancel"></span>
                                   </a>
                                             
-                                  <a ng-if="contrat_prestataire.$edit && contrat_prestataire.description && contrat_prestataire.num_contrat && contrat_prestataire.date_signature && contrat_prestataire.id_prestataire>''" ng-click="vm.ajoutContrat_prestataire(contrat_prestataire,0)" title="Sauvegarder">
+                                  <a ng-if="contrat_prestataire.$edit && contrat_prestataire.description && contrat_prestataire.num_contrat 
+                                  && contrat_prestataire.id_prestataire && contrat_prestataire.cout_batiment && contrat_prestataire.cout_latrine && contrat_prestataire.cout_mobilier>''" ng-click="vm.ajoutContrat_prestataire(contrat_prestataire,0)" title="Sauvegarder">
                                     <span class="icon-content-save"></span>
                                   </a>
                                 </td>
@@ -5022,7 +5023,7 @@
                     </md-tab>
 
                     <!-------------------------------Debut attachement -------------------------------------------->
-                    <md-tab ng-disabled="!vm.stepattachement" ng-click="vm.step_attachement_prevu()">
+                    <!--md-tab ng-disabled="!vm.stepattachement" ng-click="vm.step_attachement_prevu()">
                         <md-tab-label>
 
                           <span class="ms-form-wizard-step-label">
@@ -5031,11 +5032,10 @@
                         </md-tab-label>
                         
                         <md-tab-body>
-                          <ms-form-wizard flex id="sousmenu"> 
-                          <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu" class="kendogrid"--> 
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" class="kendogrid" id="acc_sous_menu">
+                          <ms-form-wizard flex id="sousmenu"--> 
+                             <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" class="kendogrid" id="acc_sous_menu"-->
                           <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
-                              <md-tab ng-click="vm.click_rubrique_attachement_batiment_mpe()">
+                              <!--md-tab ng-click="vm.click_rubrique_attachement_batiment_mpe()">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">                        
                                       
@@ -5079,9 +5079,9 @@
                                         </td>
                                       </tbody>
 
-                                      <tfoot >
+                                      <tfoot -->
                                           <!--tr style="background-color: rgba(54,117,136,0.9); color:white;text-align: center"-->
-                                          <tr style=" font-weight:bold; text-align: center">
+                                          <!--tr style=" font-weight:bold; text-align: center">
                                             <td colspan="2">TOTAL BATIMENT</td>
                                             <td>{{vm.Total_prevu()}} Ar HT &nbsp | &nbsp{{vm.Total_prevu_ttc()}} Ar TTC</td>
 
@@ -5091,11 +5091,11 @@
                                   </div>
 
                                 </md-tab-body>
-                              </md-tab>
+                              </md-tab-->
                         <!---------------------------FIN rubrique batiment mpe---------------------------------->
 
                         <!------------------------Debut attachement batiment prevu------------------------------>
-                              <md-tab ng-click="vm.click_tab_attachement_batiment_prevu()" ng-disabled="!vm.stepattachement_batiment_detail">
+                              <!--md-tab ng-click="vm.click_tab_attachement_batiment_prevu()" ng-disabled="!vm.stepattachement_batiment_detail">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">                        
                                       
@@ -5202,12 +5202,12 @@
                                   </div>
 
                                 </md-tab-body>
-                              </md-tab>
+                              </md-tab-->
                          
                         <!------------------------Debut attachement batiment prevu------------------------------>  
 
                         <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
-                              <md-tab ng-click="vm.click_rubrique_attachement_latrine_mpe()" ng-disabled="!vm.steprubriquetachement_latrine" >
+                              <!--md-tab ng-click="vm.click_rubrique_attachement_latrine_mpe()" ng-disabled="!vm.steprubriquetachement_latrine" >
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">                        
                                       
@@ -5250,9 +5250,9 @@
                                         </td>
                                       </tbody>
 
-                                      <tfoot >
+                                      <tfoot -->
                                           <!--tr style="background-color: rgba(54,117,136,0.9); color:white;text-align: center"-->
-                                          <tr style=" font-weight:bold; text-align: center">
+                                          <!--tr style=" font-weight:bold; text-align: center">
                                             <td colspan="2">TOTAL LATRINE</td>
                                             <td>{{vm.Total_prevu_latrine()}} Ar HT &nbsp | &nbsp{{vm.Total_prevu_latrine_ttc()}}  Ar TTC
                                           </tr>
@@ -5261,11 +5261,11 @@
                                   </div>
 
                                 </md-tab-body>
-                              </md-tab>
+                              </md-tab-->
                         <!---------------------------FIN rubrique latrine mpe---------------------------------->
 
                         <!------------------------Debut attachement latrine prevu------------------------------>
-                              <md-tab ng-click="vm.click_tab_attachement_latrine_prevu()" ng-disabled="!vm.stepattachement_latrine_detail">
+                              <!--md-tab ng-click="vm.click_tab_attachement_latrine_prevu()" ng-disabled="!vm.stepattachement_latrine_detail">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">                        
                                       
@@ -5369,12 +5369,12 @@
                                   </div>
 
                                 </md-tab-body>
-                              </md-tab>
+                              </md-tab-->
                         <!------------------------Fin attachement latrine prevu------------------------------>
   
 
                         <!-----------------------------DEBUT rubrique batiment mpe------------------------------> 
-                              <md-tab ng-click="vm.click_rubrique_attachement_mobilier_mpe()" ng-disabled="!vm.steprubriquetachement_mobilier">
+                              <!--md-tab ng-click="vm.click_rubrique_attachement_mobilier_mpe()" ng-disabled="!vm.steprubriquetachement_mobilier">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">                        
                                       
@@ -5416,9 +5416,9 @@
                                         </td>
                                       </tbody>
 
-                                      <tfoot >
+                                      <tfoot -->
                                           <!--tr style="background-color: rgba(54,117,136,0.9); color:white;text-align: center"-->
-                                          <tr style=" font-weight:bold; text-align: center">
+                                          <!--tr style=" font-weight:bold; text-align: center">
                                             <td colspan="2">TOTAL MOBILIER</td>
                                             <td>{{vm.Total_prevu_mobilier()}} Ar HT &nbsp | &nbsp{{vm.Total_prevu_mobilier_ttc()}} Ar TTC
                                           </tr>
@@ -5427,11 +5427,11 @@
                                   </div>
 
                                 </md-tab-body>
-                              </md-tab>
+                              </md-tab-->
                         <!---------------------------FIN rubrique mobilier mpe---------------------------------->
 
                         <!------------------------Debut attachement mobilier prevu------------------------------>
-                              <md-tab ng-click="vm.click_tab_attachement_mobilier_prevu()" ng-disabled="!vm.stepattachement_mobilier_detail">
+                              <!--md-tab ng-click="vm.click_tab_attachement_mobilier_prevu()" ng-disabled="!vm.stepattachement_mobilier_detail">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">                        
                                       
@@ -5536,12 +5536,12 @@
                                   </div>
 
                                 </md-tab-body>
-                              </md-tab>
+                              </md-tab-->
                         <!------------------------Fin attachement mobilier prevu------------------------------> 
-                            </md-tabs> 
+                            <!--/md-tabs> 
                           </ms-form-wizard>
                       </md-tab-body>
-                    </md-tab>
+                    </md-tab-->
                     <!--------------------------------------FIN document moe --------------------------------------------> 
                     <md-tab ng-disabled = "!vm.stepsuiviexecution || vm.validation_contrat_prestataire==0" ng-click="vm.step_suivitravaux()">
                       <md-tab-label>

@@ -5,7 +5,9 @@
     angular
         .module('app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat', [
             'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.convention_cisco_feffi_etat',
-            'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.feffi_etat'
+            'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.feffi_etat',
+            'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.site_etat',
+            'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.avenant_document_etat'
             ])       
         .config(config);
         var vs ;

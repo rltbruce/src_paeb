@@ -157,14 +157,11 @@
                            
                   <tbody >
                     <tr ng-repeat="ecole in vm.allecole"  ng-class="{selected: ecole.$selected}" ng-click="vm.selectionecole(ecole)">           
-                      <td>                         
-                        <span>{{ecole.code}}</span>
+                      
+                      
+                      <td>
+                        <span>{{ecole.region.nom}}</span>
                       </td>
-                                
-                      <td>                            
-                        <span>{{ecole.description}}</span>
-                      </td>
-
                       <td>
                         <span>{{ecole.cisco.description}}</span>
                       </td>
@@ -183,6 +180,13 @@
                                 
                       <td>                            
                         <span>{{ecole.lieu}}</span>
+                      </td>
+                      <td>                         
+                        <span>{{ecole.code}}</span>
+                      </td>
+                                
+                      <td>                            
+                        <span>{{ecole.description}}</span>
                       </td>
                                 
                       <td>                            
@@ -214,7 +218,7 @@
     <!-----FIN FEFFI ------>
     <!-----debut FEFFI ------>
 
-            <md-tab ng-disabled="!vm.stepOne">
+            <md-tab ng-disabled="!vm.stepOne" ng-click = "vm.step_menu_feffi()">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
@@ -233,6 +237,12 @@
                     <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouter()" style="width:10%;" ng-show="vm.nouveaubuttonfeffi">
                       Nouveau
                     </md-button>
+                </div>
+                <div style="float: top !important">
+                  <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                  <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                          Chargement,veuillez patienter s'il vous plait ...
+                  </div>
                 </div>
                <div>        
                 <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
@@ -354,7 +364,7 @@
           </md-tab>
     <!-----FIN FEFFI ------>
     <!-----Debut membre ------>
-          <md-tab ng-disabled="vm.stepTwo==false">
+          <md-tab ng-disabled="vm.stepTwo==false" ng-click = "vm.step_menu_membre()">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">M</span>
@@ -373,6 +383,12 @@
                     <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterMembre()" style="width:10%;">
                       Nouveau
                     </md-button>
+                </div><br>
+                <div style="float: top !important">
+                  <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                  <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                          Chargement,veuillez patienter s'il vous plait ...
+                  </div>
                 </div>
                <div>        
                 <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
@@ -479,7 +495,7 @@
     <!-----FIN membre ------>   
 
      <!-----Debut membre ------>
-          <md-tab ng-disabled="vm.stepTwo==false">
+          <md-tab ng-disabled="vm.stepTwo==false" ng-click = "vm.step_menu_compte()">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">C</span>
@@ -498,8 +514,15 @@
                     <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterCompte_feffi()" style="width:10%;">
                       Nouveau
                     </md-button>
+                </div><br>
+                
+              <div style="float: top !important">
+                <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                        Chargement,veuillez patienter s'il vous plait ...
                 </div>
-               <div>        
+              </div>
+              <div>        
                 <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
                   <thead>
                     <tr>
@@ -596,7 +619,7 @@
     <!-----FIN membre ------>
 
      <!-----Debut membre ------>
-          <md-tab ng-disabled="vm.stepThree==false">
+          <md-tab ng-disabled="vm.stepThree==false" ng-click = "vm.step_menu_membre_titulaire()">
               <md-tab-label>
                 <span class="ms-form-wizard-step-label">
                     <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepFor==false">T</span>
@@ -615,6 +638,12 @@
                     <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterMembre_titulaire()" style="width:10%;">
                       Nouveau
                     </md-button>
+                </div>
+                <div style="float: top !important">
+                  <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                  <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                          Chargement,veuillez patienter s'il vous plait ...
+                  </div>
                 </div>
                <div>        
                 <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
@@ -697,7 +726,7 @@
 
             </md-tab-body>
           </md-tab>
-    <!-----FIN membre ------> 
+        <!-----FIN membre ------> 
           </md-tabs>  
         </ms-form-wizard>           
       </div>

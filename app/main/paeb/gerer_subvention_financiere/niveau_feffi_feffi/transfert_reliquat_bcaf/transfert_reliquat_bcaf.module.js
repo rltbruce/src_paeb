@@ -29,7 +29,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_feffi_feffi.transfert_reliquat_bcaf', {
-            title: 'Transfert reliquat validation',
+            title: 'Validation transfert reliquat ',
             icon  : 'icon-link',
             state: 'app.paeb_gerer_subvention_financiere_niveau_feffi_feffi_transfert_reliquat_bcaf',
             weight: 1,
@@ -53,7 +53,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["BCAF","ADMIN"];
+                var permissions = ["DPFI","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

@@ -3,15 +3,15 @@
     'use strict';
 
     angular
-        .module('app.paeb.ddb.divers_attachement.divers_attachement_mobilier')
-        .controller('Divers_attachement_mobilierController', Divers_attachement_mobilierController);
+        .module('app.paeb.ddb.pv_constatation_rubrique.pv_constatation_rubrique_latrine')
+        .controller('Pv_constatation_rubrique_latrineController', Pv_constatation_rubrique_latrineController);
     /** @ngInject */
-    function Divers_attachement_mobilierController($mdDialog, $scope, apiFactory, $state)
+    function Pv_constatation_rubrique_latrineController($mdDialog, $scope, apiFactory, $state)
     {
       var vm = this;
       var NouvelItem=false;        
 
-/* ***************DEBUT TYPE OUVRAGE**********************/
+/* ***************DEBUT**********************/
 
 vm.mainGridOptions = {
 
@@ -19,10 +19,9 @@ vm.mainGridOptions = {
          transport: {
               read: function (e)
               {
-                apiFactory.getAll("divers_attachement_mobilier/index").then(function(result)
+                apiFactory.getAll("pv_consta_rubrique_phase_lat/index").then(function(result)
                 {
                     e.success(result.data.response);
-                    console.log(result.data.response);
                 }, function error(result)
                   {
                       alert('something went wrong')
@@ -37,10 +36,11 @@ vm.mainGridOptions = {
                           id:        e.data.models[0].id,     
                           libelle:   e.data.models[0].libelle,
                           description:   e.data.models[0].description,
-                          numero:   e.data.models[0].numero               
+                          numero:   e.data.models[0].numero,
+                          pourcentage_prevu:   e.data.models[0].pourcentage_prevu               
                       });
-                  
-                  apiFactory.add("divers_attachement_mobilier/index",datas, config).success(function (data)
+                  console.log(e);
+                  apiFactory.add("pv_consta_rubrique_phase_lat/index",datas, config).success(function (data)
                   {                
                     e.success(e.data.models); 
                   }).error(function (data)
@@ -54,7 +54,7 @@ vm.mainGridOptions = {
                  
                   var datas = $.param({supprimer: 1,id: e.data.models[0].id});
                   
-                  apiFactory.add("divers_attachement_mobilier/index",datas, config).success(function (data)
+                  apiFactory.add("pv_consta_rubrique_phase_lat/index",datas, config).success(function (data)
                   {                
                     e.success(e.data.models); 
                   }).error(function (data)
@@ -71,10 +71,10 @@ vm.mainGridOptions = {
                           id:        0,      
                           libelle:   e.data.models[0].libelle,
                           description:   e.data.models[0].description,
-                          numero:   e.data.models[0].numero                
+                          numero:   e.data.models[0].numero,
+                          pourcentage_prevu:   e.data.models[0].pourcentage_prevu                 
                       });
-                  console.log(e.data.models[0]);
-                  apiFactory.add("divers_attachement_mobilier/index",datas, config).success(function (data)
+                  apiFactory.add("pv_consta_rubrique_phase_lat/index",datas, config).success(function (data)
                   { 
                     e.data.models[0].id = String(data.response);             
                     e.success(e.data.models); 
@@ -94,7 +94,10 @@ vm.mainGridOptions = {
                     {
                         libelle: {type: "string",validation: {required: true}},
                         description: {type: "string",validation: {required: true}},
-                        numero: {type: "string",validation: {required: true}}
+                        numero: {type: "number",validation: {required: true}},
+                        pourcentage_prevu: {type: "number",validation: {required: true, min:1}, decimals:3}
+                        //,editable: false
+                        //, min: 1
                     }
                 }
             },     
@@ -102,7 +105,7 @@ vm.mainGridOptions = {
             pageSize: 10
           }),
           toolbar: [{               
-               template: "<label id='table_titre'>Attachement</label>"
+               template: "<label id='table_titre'>PHASE</label>"
           },{
                name: "create",
                text:"",
@@ -129,9 +132,8 @@ vm.mainGridOptions = {
                       last: "Dernière page"
                     }
                   },
-          //dataBound: function() {
-                   // this.expandRow(this.tbody.find("tr.k-master-row").first());
-               // },
+         /* dataBound: function() {
+                },*/
           columns: [
             {
               field: "numero",
@@ -146,6 +148,13 @@ vm.mainGridOptions = {
               field: "description",
               title: "Description",
               width: "Auto"
+            },{
+              field: "pourcentage_prevu",
+              title: "Pourcentage prevu",
+              format: "{0:n3}",
+              width: "Auto",
+              editor: numberEditor,
+              culture:"fr-FR"
             },
             
             { 
@@ -159,9 +168,21 @@ vm.mainGridOptions = {
                   },{name: "destroy", text: ""}]
             }]
         };
+        function numberEditor(container, options) {
+          $('<input name="' + options.field + '"/>')
+                  .appendTo(container)
+                  .kendoNumericTextBox({
+                      format  : "{0:n3}",
+                      decimals: 3,
+                      step    : 0.001,
+                      culture:"fr-FR"
 
+                  });
+                  var culture = kendo.culture();
+console.log(culture.name);
+      }
 
-      vm.allattachement_mobilier_detail = function(id_attachement_mobilier) {
+      vm.allpv_consta_rubrique_designation_lat = function(id_rubrique_phase) {
         return {
           dataSource:
           {
@@ -169,13 +190,13 @@ vm.mainGridOptions = {
             transport: {
               read: function (e)
               {
-                apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier_detail/index","menu","getdetailbyattachement_mobilier","id_attachement_mobilier",id_attachement_mobilier).then(function(result)
+                apiFactory.getAPIgeneraliserREST("pv_consta_rubrique_designation_lat/index","menu","getrubrique_designation_lat","id_rubrique_phase",id_rubrique_phase).then(function(result)
                 {
                     e.success(result.data.response)
                 }, function error(result)
                   {
                       alert('something went wrong')
-                  })
+                  });
               },
               update : function (e)
               {
@@ -187,10 +208,10 @@ vm.mainGridOptions = {
                           libelle:   e.data.models[0].libelle,
                           description: e.data.models[0].description,
                           numero: e.data.models[0].numero,
-                          id_attachement_mobilier: e.data.models[0].id_attachement_mobilier               
+                          id_rubrique_phase: e.data.models[0].id_rubrique_phase               
                       });
                   
-                  apiFactory.add("divers_attachement_mobilier_detail/index",datas, config).success(function (data)
+                  apiFactory.add("pv_consta_rubrique_designation_lat/index",datas, config).success(function (data)
                   {                
                     e.success(e.data.models); 
                   }).error(function (data)
@@ -204,7 +225,7 @@ vm.mainGridOptions = {
                  
                   var datas = $.param({supprimer: 1,id: e.data.models[0].id});
                   
-                  apiFactory.add("divers_attachement_mobilier_detail/index",datas, config).success(function (data)
+                  apiFactory.add("pv_consta_rubrique_designation_lat/index",datas, config).success(function (data)
                   {                
                     e.success(e.data.models); 
                   }).error(function (data)
@@ -222,13 +243,13 @@ vm.mainGridOptions = {
                           libelle:      e.data.models[0].libelle,
                           description:  e.data.models[0].description,
                           numero:  e.data.models[0].numero,
-                          id_attachement_mobilier:   id_attachement_mobilier               
+                          id_rubrique_phase :   id_rubrique_phase                
                       });
                  // console.log(datas);
-                  apiFactory.add("divers_attachement_mobilier_detail/index",datas, config).success(function (data)
+                  apiFactory.add("pv_consta_rubrique_designation_lat/index",datas, config).success(function (data)
                   { 
                     e.data.models[0].id = String(data.response);
-                    e.data.models[0].id_attachement_mobilier=id_attachement_mobilier;              
+                    e.data.models[0].id_rubrique_phase=id_rubrique_phase;              
                     e.success(e.data.models); 
                   }).error(function (data)
                     {
@@ -246,7 +267,7 @@ vm.mainGridOptions = {
                     {
                         libelle: {type: "string",validation: {required: true}},
                         description: {type: "string", validation: {required: true}},
-                        numero: {type: "string", validation: {required: true}}
+                        numero: {type: "number", validation: {required: true}}
                     }
                 }
             },     
@@ -254,7 +275,7 @@ vm.mainGridOptions = {
             pageSize: 5,
           },
           toolbar: [{               
-               template: "<label id='table_titre'>Détail</label>"
+               template: "<label id='table_titre'>DESIGNATION</label>"
           },{
                name: "create",
                text:"",
@@ -313,8 +334,9 @@ vm.mainGridOptions = {
         };
       };
 
+  
 
-/* ***************FIN TYPE OUVRAGE**********************/
+/* ***************FIN**********************/
         
         //Alert
         vm.showAlert = function(titre,content)

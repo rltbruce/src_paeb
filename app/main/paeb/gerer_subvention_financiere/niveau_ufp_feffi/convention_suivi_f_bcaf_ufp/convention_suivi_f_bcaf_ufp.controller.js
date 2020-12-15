@@ -687,7 +687,6 @@
         }
         vm.tranchechange = function(item)
         { 
-          console.log('eeeee');
           var reste = 0;
           var anterieur = 0;
           var prevu = 0;
@@ -696,32 +695,98 @@
           if (vm.allcurenttranche_deblocage_feffi[0].code =='tranche 1')
             {
               //prevu = parseInt(vm.allconvention_entete[0].montant_divers)+((parseInt(vm.allconvention_entete[0].montant_trav_mob) * parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100);
-              prevu = ((parseInt(vm.allconvention_entete[0].montant_divers) + parseInt(vm.allconvention_entete[0].montant_trav_mob)) * parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
-            console.log(prevu);
+              prevu = ((parseFloat(vm.selectedItemConvention_entete.montant_divers) + parseFloat(vm.selectedItemConvention_entete.montant_trav_mob)) * parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
+              
+              cumul = prevu;
+              if (vm.alldemande_realimentation.length>0)
+              {                 
+                  anterieur = vm.dataLastedemande[0].prevu;         
+                  cumul = prevu + parseFloat(vm.dataLastedemande[0].cumul);
+              }
+
+              reste= vm.selectedItemConvention_entete.montant_total - cumul;
+
+              item.periode = vm.allcurenttranche_deblocage_feffi[0].periode;
+              item.pourcentage = vm.allcurenttranche_deblocage_feffi[0].pourcentage;
+
+              item.prevu = prevu;
+              item.anterieur = anterieur;
+              item.cumul = cumul;
+              item.reste = reste;
             } 
+            else if (vm.allcurenttranche_deblocage_feffi[0].code =='tranche 2')
+            {
+              apiFactory.getAPIgeneraliserREST("avenant_convention/index","menu","getavenantByconvention",'id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+              {
+                  var avenant_convention = result.data.response;
+                  var montant_avenant_tranche1 = 0;
+                  var montant_avenant_tranche2 = 0;
+                  var montant_convention_tranche2 = 0;
+                  if (avenant_convention.length !=0)
+                  {
+                    var tranche_deblo_1 = vm.alltranche_deblocage_feffi.filter(function(obj)
+                    {
+                        return obj.tranche == 'tranche 1';
+                    });
+                    montant_avenant_tranche1 = (parseFloat(avenant_convention[0].montant) * tranche_deblo_1[0].pourcentage)/100;
+                    montant_avenant_tranche2 = (parseFloat(avenant_convention[0].montant) * vm.allcurenttranche_deblocage_feffi[0].pourcentage)/100;
+                    montant_convention_tranche2 = ((parseFloat(vm.selectedItemConvention_entete.montant_divers) + parseFloat(vm.selectedItemConvention_entete.montant_trav_mob)) * parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;                    
+                  }
+                  prevu = montant_avenant_tranche1 + montant_avenant_tranche2 + montant_convention_tranche2;
+                  
+                  cumul = prevu;
+                  if (vm.alldemande_realimentation.length>0)
+                  {                 
+                      anterieur = vm.dataLastedemande[0].prevu;         
+                      cumul = prevu + parseFloat(vm.dataLastedemande[0].cumul);
+                  }
+
+                  reste=parseFloat( vm.selectedItemConvention_entete.montant_total) +parseFloat( avenant_convention[0].montant) -parseFloat( cumul);
+
+                  item.periode = vm.allcurenttranche_deblocage_feffi[0].periode;
+                  item.pourcentage = vm.allcurenttranche_deblocage_feffi[0].pourcentage;
+
+                  item.prevu = prevu;
+                  item.anterieur = anterieur;
+                  item.cumul = cumul;
+                  item.reste = reste;
+              });
+            }
             else 
             {
-              //prevu = (parseInt(vm.allconvention_entete[0].montant_trav_mob )* parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
-            prevu = ((parseInt(vm.allconvention_entete[0].montant_divers) + parseInt(vm.allconvention_entete[0].montant_trav_mob)) * parseInt(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
-            console.log(prevu);
+              //prevu = (parseFloat(vm.allconvention_entete[0].montant_trav_mob )* parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
+              apiFactory.getAPIgeneraliserREST("avenant_convention/index","menu","getavenantByconvention",'id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+              {
+                  var avenant_convention = result.data.response;
+                  console.log(avenant_convention);
+                  var montant_avenant_tranche = 0;
+                  var montant_convention_tranche = 0;
+                  if (avenant_convention.length !=0)
+                  {
+                    montant_avenant_tranche = (parseFloat(avenant_convention[0].montant) * vm.allcurenttranche_deblocage_feffi[0].pourcentage)/100;
+                    montant_convention_tranche = ((parseFloat(vm.selectedItemConvention_entete.montant_divers) + parseFloat(vm.selectedItemConvention_entete.montant_trav_mob)) * parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;                    
+                  }
+                  prevu = montant_avenant_tranche + montant_convention_tranche;
+                  
+                  cumul = prevu;
+                  if (vm.alldemande_realimentation.length>0)
+                  {                 
+                      anterieur = vm.dataLastedemande[0].prevu;         
+                      cumul = prevu + parseFloat(vm.dataLastedemande[0].cumul);
+                  }
+
+                  reste=parseFloat( vm.selectedItemConvention_entete.montant_total) +parseFloat( avenant_convention[0].montant) -parseFloat( cumul);
+
+                  item.periode = vm.allcurenttranche_deblocage_feffi[0].periode;
+                  item.pourcentage = vm.allcurenttranche_deblocage_feffi[0].pourcentage;
+
+                  item.prevu = prevu;
+                  item.anterieur = anterieur;
+                  item.cumul = cumul;
+                  item.reste = reste;
+                  
+              });
             }
-
-          cumul = prevu;
-          if (vm.alldemande_realimentation.length>0)
-          {                 
-              anterieur = vm.dataLastedemande[0].prevu; console.log( anterieur) ;         
-              cumul = prevu + parseInt(vm.dataLastedemande[0].cumul);
-          }
-
-          reste= vm.allconvention_entete[0].montant_total - cumul;
-
-          item.periode = vm.allcurenttranche_deblocage_feffi[0].periode;
-          item.pourcentage = vm.allcurenttranche_deblocage_feffi[0].pourcentage;
-
-          item.prevu = prevu;
-          item.anterieur = anterieur;
-          item.cumul = cumul;
-          item.reste = reste;
         }
         vm.change_compte = function(item)
         {

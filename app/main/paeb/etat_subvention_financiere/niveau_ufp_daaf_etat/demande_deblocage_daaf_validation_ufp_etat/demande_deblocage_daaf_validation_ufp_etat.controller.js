@@ -97,15 +97,7 @@
             
             vm.stepOne = true;
             vm.stepTwo = false;
-            vm.stepThree = false;
-
-           //recuperation donnée demande
-            apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemandedisponible","id_convention_ufp_daaf_entete",item.id).then(function(result)
-            {
-                vm.alldemande_deblocage_daaf_valide_daaf = result.data.response; 
-                console.log(vm.alldemande_deblocage_daaf_valide_daaf );
-            });
-           
+            vm.stepThree = false;           
         };
         $scope.$watch('vm.selectedItemConvention_ufp_daaf_entete', function()
         {
@@ -141,6 +133,18 @@
 
   /*****************Debut StepTwo demande_deblocage_daaf_validation_ufp****************/
 
+  vm.step_menu_demande_daaf = function()
+  { 
+    vm.affiche_load = true;
+    //recuperation donnée demande
+    apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemandedisponible","id_convention_ufp_daaf_entete",vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
+    {
+        vm.alldemande_deblocage_daaf_valide_daaf = result.data.response; 
+        vm.affiche_load = false;
+    });
+
+  }
+
       vm.demande_deblocage_daaf_validation_ufp_column = [
         {titre:"Réference demande"},
         {titre:"Objet"},       
@@ -159,23 +163,6 @@
         vm.selectionDemande_deblocage_daaf_validation_ufp= function (item)
         {
             vm.selectedItemDemande_deblocage_daaf_validation_ufp = item;
-           //recuperation donnée demande_deblocage_daaf_validation_ufp
-            apiFactory.getAPIgeneraliserREST("justificatif_daaf/index",'id_demande_deblocage_daaf',item.id,'id_tranche',item.tranche.id).then(function(result)
-            {
-                vm.alljustificatif_daaf = result.data.response;
-                console.log(vm.alljustificatif_daaf);
-            });
-            if (item.validation==3)
-            {
-              apiFactory.getAPIgeneraliserREST("transfert_ufp/index",'id_demande_deblocage_daaf',item.id).then(function(result)
-              {
-                  vm.alltransfert_ufp = result.data.response;
-                  if (vm.alltransfert_ufp.length >0)
-                  {
-                    vm.showbuttonNouvtransfert= false;
-                  }
-              });
-            }
             vm.stepTwo = true;
             vm.stepThree = false;
             vm.validation_item = item.validation;
@@ -195,22 +182,19 @@
         {
             switch (parseInt(validation))
             {
+             
               case 1:
-                      return 'Emise';                  
-                  break;
-              
-              case 2:
-                        return 'En cours de traitement'; 
+                      return 'En attente de validation';                  
+                  break; 
+
+             case 2:
+                  
+                  return 'Rejetée'; 
                   break;
 
               case 3:
                   
                   return 'Finalisée'; 
-                  break;
-
-             case 4:
-                  
-                  return 'Rejeté'; 
                   break;
 
               default:
@@ -223,6 +207,18 @@
   /*****************Fin StepThree justificatif_daaf****************/
 
   /****************************Debut stepTwo Transfert ufp******************************/
+  vm.step_menu_transfert_ufp = function()
+  { 
+      vm.affiche_load = true;
+      apiFactory.getAPIgeneraliserREST("transfert_ufp/index",'id_demande_deblocage_daaf',vm.selectedItemDemande_deblocage_daaf_validation_ufp.id).then(function(result)
+      {
+          vm.alltransfert_ufp = result.data.response.filter(function(obj)
+          {
+              return obj.validation != 0;
+          });
+          vm.affiche_load = false;
+      }); 
+  }
 //col table
         vm.transfert_ufp_column = [        
         {titre:"Montant transféré"},        
@@ -252,6 +248,15 @@
 
       
   /*****************Fin StepThree Transfert ufp****************/ 
+  vm.step_menu_fustificatif = function()
+  { 
+      vm.affiche_load = true;
+      apiFactory.getAPIgeneraliserREST("justificatif_daaf/index",'id_demande_deblocage_daaf',vm.selectedItemDemande_deblocage_daaf_validation_ufp.id,'id_tranche',vm.selectedItemDemande_deblocage_daaf_validation_ufp.tranche.id).then(function(result)
+      {
+          vm.alljustificatif_daaf = result.data.response;
+          vm.affiche_load = false;
+      }); 
+  }
 
   //col table
         vm.justificatif_daaf_column = [

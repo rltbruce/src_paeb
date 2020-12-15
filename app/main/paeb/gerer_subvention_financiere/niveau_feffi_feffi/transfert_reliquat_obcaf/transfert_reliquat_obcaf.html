@@ -26,7 +26,7 @@
     
     <!-- CONTENT -->
     <div class="content" layout="column">
-      <div class="form-wrapper md-whiteframe-1dp acc_menu" >
+      <div class="form-wrapper md-whiteframe-1dp" >
 <!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
          <ms-form-wizard flex>
           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
@@ -230,9 +230,10 @@
             </md-tab>
           
             <!-----------------------DEBUT RELIQUAT--------------------------------------------->
-            <md-tab ng-disabled="!vm.stepMenu_reliquat">
+            <md-tab ng-disabled="!vm.stepMenu_reliquat" ng-click="vm.transfert_reliquat()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
+                          <span class="ms-form-wizard-step-number md-accent-bg">R</span>
                             <span class="ms-form-wizard-step-text">Reliquat</span>
                         </span>
                        
@@ -360,9 +361,10 @@
 
                       </md-tab-body>
                     </md-tab>
-                    <md-tab ng-disabled="!vm.stepjusti_trans_reliqua">
+                    <md-tab ng-disabled="!vm.stepjusti_trans_reliqua" ng-click="vm.step_menu_justi()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
+                          <span class="ms-form-wizard-step-number md-accent-bg">J</span>
                             <span class="ms-form-wizard-step-text">Justification</span>
                         </span>
                        
@@ -421,7 +423,7 @@
                                 <span ng-if="justificatif_transfert_reliquat.$edit" style="display: inline-block !important;">
                                   <md-input-container style="width:100%;display: flex !important;">
                                     <label>Fichier</label>
-                                  <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFiletransfert_reliquat"  ng-model="fichier" id="fileid"/>
+                                  <input type="file"name="myFile" aria-label="upload" custom-on-changepiecereliq="uploadFiletransfert_reliquat"  ng-model="fichier" id="fileid"/>
                                   </md-input-container>   
                                 </span>
                                           

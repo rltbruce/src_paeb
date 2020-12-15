@@ -29,7 +29,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_feffi_feffi.transfert_reliquat_obcaf', {
-            title: 'Transfert reliquat (O-BCAF)',
+            title: 'Insertion transfert reliquat',
             icon  : 'icon-link',
             state: 'app.paeb_gerer_subvention_financiere_niveau_feffi_feffi_transfert_reliquat_obcaf',
             weight: 1,
@@ -53,7 +53,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["OBCAF","ADMIN"];
+                var permissions = ["AAC","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

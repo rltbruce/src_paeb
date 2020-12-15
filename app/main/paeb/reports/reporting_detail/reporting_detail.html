@@ -233,7 +233,7 @@
             <thead>
               <tr>
 
-                <th class="secondary-text" rowSpan="2" colspan="6" style="background: rgb(190, 212, 237); border-right: 1px solid rgb(170,170,170) ">
+                <th class="secondary-text" rowSpan="2" colspan="10" style="background: rgb(190, 212, 237); border-right: 1px solid rgb(170,170,170) ">
                    <div class="table-header"> <span class="column-title text-center">DONNEES GLOBALES</span> </div>
 
                 </th>
@@ -425,6 +425,14 @@
                 <th class="secondary-text" rowSpan="2" style="background: rgb(220, 230, 241); border-right: 1px solid rgb(170,170,170)"> <div class="table-header"> <span class="column-title text-center">AGENCE</span> </div>
                 </th>          
                 <th class="secondary-text" rowSpan="2" style="background: rgb(220, 230, 241); border-right: 1px solid rgb(170,170,170)"> <div class="table-header"> <span class="column-title text-center">ECOLE</span> </div>
+                </th>          
+                <th class="secondary-text" rowSpan="2" style="background: rgb(220, 230, 241); border-right: 1px solid rgb(170,170,170)"> <div class="table-header"> <span class="column-title text-center">CODE ETABLISSEMENT</span> </div>
+                </th>          
+                <th class="secondary-text" rowSpan="2" style="background: rgb(220, 230, 241); border-right: 1px solid rgb(170,170,170)"> <div class="table-header"> <span class="column-title text-center">C0DE CONVENTION</span> </div>
+                </th>          
+                <th class="secondary-text" rowSpan="2" style="background: rgb(220, 230, 241); border-right: 1px solid rgb(170,170,170)"> <div class="table-header"> <span class="column-title text-center">VILLAGE ou HAMEAU</span> </div>
+                </th>          
+                <th class="secondary-text" rowSpan="2" style="background: rgb(220, 230, 241); border-right: 1px solid rgb(170,170,170)"> <div class="table-header"> <span class="column-title text-center">FOKONTANTY</span> </div>
                 </th>          
                 <th class="secondary-text" rowSpan="2" style="background: rgb(220, 230, 241); border-right: 1px solid rgb(170,170,170)"> <div class="table-header"> <span class="column-title text-center">COMMUNE</span> </div>
                 </th>
@@ -970,6 +978,18 @@
                   <span>{{reporting.nom_ecole}}</span>
                 </td>
                 <td>
+                  <span>{{reporting.code_ecole}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.ref_convention}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.village}}</span>
+                </td>
+                <td>
+                  <span>{{reporting.nom_fokontany}}</span>
+                </td>
+                <td>
                   <span>{{reporting.nom_commune}}</span>
                 </td>
                 <td>
@@ -1450,7 +1470,7 @@
                 </td> 
                 
                 <td ng-show="vm.cacher.suivi_passation_marches_mpe">
-                  <span>{{reporting.nbr_mpe_soumissionaire_pme}}</span>
+                  <span>{{reporting.liste_mpe_soumissionaire}}</span>
                 </td> 
 
                 <td ng-show="vm.cacher.suivi_passation_marches_mpe">
@@ -1719,7 +1739,7 @@
               
               <tr ng-if="!vm.datafound" style=" height: 100px !important">
 
-                <td colspan="17">
+                <td colspan="21">
                   <span>No data available in table</span>
                 </td>
                 <td ng-show="vm.cacher.suivi_financier_daaf_feffi" colspan="11">

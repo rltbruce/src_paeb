@@ -1,0 +1,342 @@
+  <div id="formssitedispo" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+      <div layout="column" layout-align="space-between">
+          <div class="breadcrumb" layout="row" layout-align="start center">
+              <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+              <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+              <span class="parent">Etat technique des activités</span>
+              
+              <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+              <span class="parent" href="javascript:;"> Niveau CISCO/FEFFI</span>
+              
+              <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+              <span class="parent" href="javascript:;"> SITE</span>
+          </div>
+
+          <!--div class="title">Feffi</div-->
+      </div>
+  </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <!-- Convention -->
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+       <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start" flex>
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Site</span>
+              </div>
+
+              <div>
+
+                <md-button class="md-icon-button" aria-label="add site" ng-click="vm.ajouter()">
+                  <!--md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout site</span></md-tooltip-->
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+        <div>
+
+          <div style="margin-top: 1px;">
+              <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
+              <form name="filtreform" class="md-inline-form" novalidate >
+                                <br>
+                  <div layout="column" layout-gt-xs="row" >
+                    <md-input-container flex="100" flex-gt-xs="90">
+                      <label>Région</label>
+                      <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)" required>
+                        <md-option  value="*">*</md-option>
+                        <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
+                      </md-select>
+                      <div ng-messages="filtreform.region.$error" role="alert">
+                        <div ng-message="required"><span>Région</span></div>
+                      </div>
+                    </md-input-container>
+                                  
+                    <md-input-container flex="100" flex-gt-xs="90">
+                      <label>Cisco</label>
+                      <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
+                        <md-option  value="*">*</md-option>
+                        <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                                                  
+                        </md-select>
+                        <div ng-messages="filtreform.cisco.$error" role="alert">
+                        <div ng-message="required"><span>Cisco</span></div>
+                      </div>
+                    </md-input-container>
+                                  
+                    <md-input-container flex="100" flex-gt-xs="90">
+                      <label>Commune</label>
+                      <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
+                        <md-option  value="*">*</md-option>
+                        <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
+                      </md-select>
+                      <div ng-messages="filtreform.commune.$error" role="alert">
+                        <div ng-message="required"><span>Commune</span></div>
+                      </div>
+                    </md-input-container>
+
+                    <md-input-container flex="100" flex-gt-xs="90">
+                      <label>Zap</label>
+                      <md-select ng-model="vm.filtre.id_zap" name="zap" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_zap(vm.filtre)">
+                        <md-option  value="*">*</md-option>
+                        <md-option ng-repeat="zaps in vm.zaps" value="{{zaps.zap.id}}"> {{zaps.zap.nom}}
+                        </md-option>
+                      </md-select>  
+                      <div ng-messages="filtreform.zap.$error" role="alert">
+                        <div ng-message="required"><span>Zap</span></div>
+                      </div>
+                    </md-input-container>
+                                  
+                    <md-input-container flex="100" flex-gt-xs="90">
+                      <label>Ecole</label>
+                      <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_zap">
+                        <md-option  value="*">*</md-option>
+                        <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
+                        </md-option>
+                      </md-select>
+                      <div ng-messages="filtreform.ecole.$error" role="alert">
+                        <div ng-message="required"><span>Ecole</span></div>
+                      </div>
+                    </md-input-container>
+                  </div>
+                  
+                  <div class="footer-animate-show-hide">
+                      <md-button class="md-raised boutonfixe" disabled>
+                      </md-button>
+                      <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                            Réinitialise
+                      </md-button>
+                        <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                Recherche
+                      </md-button>
+                  </div>
+            </form>
+            </div>            
+            <div class="bouton-animate-show-hide">
+
+            <md-button type="submit" class="md-raised md-accent bouton-show-hide" aria-label="Filtre" ng-click="vm.showformfiltre()"><!--ng-show="vm.showbuttonfiltre"-->
+               <md-icon md-font-icon="icon-filter" class="s16" style="color:green">                            
+              </md-icon>                           
+               <md-icon md-font-icon="icon-chevron-double-up" ng-if="!vm.showfiltre" class="s16">                            
+              </md-icon>
+              <md-icon md-font-icon="icon-chevron-double-down" ng-if="vm.showfiltre" class="s16">                            
+              </md-icon>
+              <md-tooltip><span>Bouton filtre</span></md-tooltip>
+              </md-button> 
+          </div>
+          </div>
+            
+        
+                
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="cisc in ::vm.site_column">
+                  <div class="table-header">
+                    <span class="column-title">{{cisc.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                     
+            <tbody >
+              <tr ng-repeat="site in vm.allsite"  ng-class="{selected: site.$selected}" ng-click="vm.selection(site)">
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Region</label>
+                      <md-select ng-model="site.id_region"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_region(site)">
+                        <md-option ng-repeat="region in vm.regions" value="{{region.id}}">
+                                                            {{region.nom}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!site.$edit">{{site.region.nom}}</span>
+                </td>
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>CISCO</label>
+                      <md-select ng-model="site.id_cisco"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="!site.id_region" ng-change="vm.change_cisco(site)">
+                        <md-option ng-repeat="cisco in vm.ciscos" value="{{cisco.id}}">
+                                                            {{cisco.description}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!site.$edit">{{site.cisco.description}}</span>
+                </td>
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>commune</label>
+                      <md-select ng-model="site.id_commune"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="!site.id_cisco" ng-change="vm.change_commune(site)">
+                        <md-option ng-repeat="commune in vm.communes" value="{{commune.id}}">
+                                                            {{commune.nom}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!site.$edit">{{site.commune.nom}}</span>
+                </td>
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>ZAP</label>
+                      <md-select ng-model="site.id_zap"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="!site.id_commune" ng-change="vm.change_zap(site)">
+                        <md-option ng-repeat="zaps in vm.zaps" value="{{zaps.zap.id}}">
+                                                            {{zaps.zap.nom}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!site.$edit">{{site.zap.nom}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Ecole</label>
+                      <md-select ng-model="site.id_ecole"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="site.statu_convention!=0">
+                        <md-option ng-repeat="ecole in vm.allecole" value="{{ecole.id}}">
+                                                            {{ecole.description}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!site.$edit">{{site.ecole.description}}</span>
+                </td>           
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Code sous projet</label>
+                      <input name="code_sous_projet" type="text" ng-model="site.code_sous_projet"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!site.$edit">{{site.code_sous_projet}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Objet sous projet</label>
+                      <input name="objet_sous_projet" type="text" ng-model="site.objet_sous_projet"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!site.$edit">{{site.objet_sous_projet}}</span>
+                </td>
+                          
+                <!--td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>denomination_epp</label>
+                      <input name="denomination_epp" type="text" ng-model="site.denomination_epp"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!site.$edit">{{site.denomination_epp}}</span>
+                </td-->
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Identification site</label>
+                      <md-select ng-model="site.id_classification_site"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="classification_site in vm.allclassification_site" value="{{classification_site.id}}">
+                                                            {{classification_site.libelle}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!site.$edit">{{site.classification_site.libelle}}</span>
+                </td>
+
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Lot</label>
+                      <md-select ng-model="site.lot"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option value="1">Lot 1</md-option>
+                        <md-option value="2">Lot 2</md-option>
+                        <md-option value="3">Lot 3</md-option>
+                        <md-option value="4">Lot 4</md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!site.$edit">{{vm.affichelot(site.lot)}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Agence d'accompagnement</label>
+                      <md-select ng-model="site.id_agence_acc"style="overflow: hidden;text-overflow: ellipsis;">
+                        <md-option ng-repeat="agence_acc in vm.allagence_acc" value="{{agence_acc.id}}">
+                                                            {{agence_acc.nom}}
+                        </md-option>
+                      </md-select>
+                    </md-input-container>  
+                  </span>
+                  <span ng-if="!site.$edit">{{site.agence_acc.nom}}</span>
+                </td>
+                <!--td>
+                  <span ng-if="site.$edit">
+                    <md-autocomplete required md-input-name="autocompleteField" ng-disabled="vm.isDisabled"
+                        md-no-cache="vm.noCache" md-selected-item="site.agence_acc"
+                        md-search-text-change="vm.searchTextChange(vm.searchText)" md-search-text="vm.searchText"
+                        md-selected-item-change="vm.selectedItemChange(agence)" md-items="agence in vm.querySearch(vm.searchText)"
+                        md-item-text="agence.nom" md-min-length="0" placeholder="agence" md-floating-label="Agence"
+                        md-require-match= "vm.match" md-clear-button= "vm.match" style="width:100%;display: flex !important;">
+                        <md-item-template >
+                            <span> {{agence.nom}} </span>                          
+                        </md-item-template>
+                        <md-not-found>
+                          Aucun resultat correspondant à "{{vm.searchText}}".         
+                        </md-not-found>
+                    </md-autocomplete> 
+                  </span>
+                  <span ng-if="!site.$edit">{{site.agence_acc.nom}}</span>
+                </td-->
+                          
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>statut convention</label>
+                      <md-select ng-model="site.statu_convention"style="overflow: hidden;text-overflow: ellipsis;" disabled>
+                        <md-option value="0">Preparation</md-option>
+                        <md-option value="1">En cours de traitement </md-option>
+                        <md-option value="2">Signé </md-option>
+                      </md-select>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!site.$edit">{{vm.affichestatuconvention(site.statu_convention)}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="site.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>observation</label>
+                      <input name="observation" type="text" ng-model="site.observation"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!site.$edit">{{site.observation}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>       
+                     
+      </div>
+      <!-- / convention -->
+    </div>
+    <!-- / CONTENT -->
+  </div>

@@ -177,10 +177,6 @@
         vm.selectionecole = function (item)
         {
             vm.selectedItemecole = item;
-            apiFactory.getAPIgeneraliserREST("feffi/index","id_ecole",item.id).then(function(result)
-            {
-              vm.allfeffi = result.data.response;
-            });
             vm.stepOne = true;
             vm.stepTwo = false;
             vm.stepThree = false;
@@ -197,34 +193,28 @@
              vm.selectedItemecole.$selected = true;
         });
 
-       
+        vm.step_menu_feffi = function()
+        {
+          
+          vm.stepTwo = false;
+          vm.stepThree = false;
+          vm.stepFor = false;
+          apiFactory.getAPIgeneraliserREST("feffi/index","id_ecole",vm.selectedItemecole.id).then(function(result)
+          {
+            vm.allfeffi = result.data.response;
+          });
+        }
         //fonction selection item region
         vm.selection= function (item)
         {
-            vm.selectedItem = item;
-            if (vm.selectedItem.id!=0)
-            {
-              //recuperation donnée membre
-              apiFactory.getAPIgeneraliserREST("membre_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
-              {
-                  vm.allmembre = result.data.response; 
-                  console.log( vm.allmembre);
-              });
-
-              //recuperation donnée compte
-              apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
-              {
-                  vm.allcompte_feffi = result.data.response; 
-                  console.log(vm.allcompte_feffi);
-              });
+            vm.selectedItem = item;              
+              
               //vm.stepOne = true;
               //vm.stepTwo = false;
 
               vm.stepTwo = true;
               vm.stepThree = false;
               vm.stepFor = false;
-
-            }
             
         };
         $scope.$watch('vm.selectedItem', function()
@@ -242,6 +232,27 @@
 /**********************************fin feffi****************************************/
 
 /**********************************debut membre****************************************/
+
+              vm.step_menu_membre = function()
+              {
+                //recuperation donnée membre
+                apiFactory.getAPIgeneraliserREST("membre_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
+                {
+                    vm.allmembre = result.data.response; 
+                    console.log( vm.allmembre);
+                });
+              }
+              
+              vm.step_menu_compte = function()
+              {//recuperation donnée compte
+                
+                vm.stepThree = false;
+                apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
+                {
+                    vm.allcompte_feffi = result.data.response; 
+                    console.log(vm.allcompte_feffi);
+                });
+              }
 //col table
         vm.membre_column = [
         {titre:"Nom"},
@@ -279,15 +290,9 @@
         vm.selectionCompte_feffi= function (item)
         {
             vm.selectedItemCompte_feffi = item;
-            vm.nouvelItemCompte_feffi   = item;
                 //vm.stepTwo = true;
                 vm.stepThree = true;
                 vm.stepFor = false;
-                apiFactory.getAPIgeneraliserREST("membre_titulaire/index",'id_compte',vm.selectedItemCompte_feffi.id).then(function(result)
-                {
-                    vm.allmembre_titulaire = result.data.response; 
-                    console.log( vm.allmembre_titulaire);
-                });
              
         };
         $scope.$watch('vm.selectedItemCompte_feffi', function()
@@ -298,7 +303,15 @@
                 item.$selected = false;
              });
              vm.selectedItemCompte_feffi.$selected = true;
-        });       
+        }); 
+        vm.step_menu_membre_titulaire = function()
+              {
+                apiFactory.getAPIgeneraliserREST("membre_titulaire/index",'id_compte',vm.selectedItemCompte_feffi.id).then(function(result)
+                {
+                    vm.allmembre_titulaire = result.data.response; 
+                    console.log( vm.allmembre_titulaire);
+                });
+              }      
 
         vm.affichage_sexe= function (sexe)
         { var affiche='';

@@ -6,13 +6,13 @@
             <div class="breadcrumb" layout="row" layout-align="start center" >
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent">Gestion financière des activitées</span>
+                <span class="parent">Etats financiers des activités</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
                 <span class="parent" href="javascript:;"> Niveau FEFFI</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Insertion décaissement fonctionnement (O-BCAF)</span>
+                <span class="parent" href="javascript:;"> Décaissement fonctionnement FEFFI</span>
             </div>
 
             <!--div class="title">Convention CISCO/FEFFI</div-->
@@ -26,7 +26,7 @@
     
     <!-- CONTENT -->
     <div class="content" layout="column">
-      <div class="form-wrapper md-whiteframe-1dp acc_menu" >
+      <div class="form-wrapper md-whiteframe-1dp" >
 <!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
          <ms-form-wizard flex>
           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
@@ -231,15 +231,16 @@
     <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
 
                     <!-----------------------DEBUT DECAISSEMENT FONCTIONNEMENT FEFFI------------------------------------->
-                          <md-tab ng-disabled="!vm.stepDecaiss">
-                            <md-tab-label>
-                              <span class="ms-form-wizard-step-label">
-                                  <!--span class="ms-form-wizard-step-number md-accent-bg">
-                                    <i class="icon-basket-unfill s16"></i>
-                                  </span-->
-                                  <span class="ms-form-wizard-step-text">Décaissement fonctionnement</span>
-                                  <!--span class="ms-form-wizard-step-number md-accent-bg notification">{{vm.nbr_decaiss_feffi}}</span-->
-                              </span>
+                    <md-tab ng-disabled="!vm.stepDecaiss" ng-click="vm.step_menu_decaiss()">
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <!--span class="ms-form-wizard-step-number md-accent-bg">
+                              <i class="icon-basket-unfill s16"></i>
+                            </span-->
+                            <span class="ms-form-wizard-step-number md-accent-bg">D</span>
+                            <span class="ms-form-wizard-step-text">Décaissement fonctionnement</span>
+                            <!--span class="ms-form-wizard-step-number md-accent-bg notification">{{vm.nbr_decaiss_feffi}}</span-->
+                        </span>
                              
                             </md-tab-label>
                             
@@ -296,11 +297,12 @@
                             </md-tab-body>
                           </md-tab>
 
-                    <md-tab ng-disabled="!vm.stepjusti_decais">
-                      <md-tab-label>
-                        <span class="ms-form-wizard-step-label">
-                            <span class="ms-form-wizard-step-text">Justification</span>
-                        </span>
+                          <md-tab ng-disabled="!vm.stepjusti_decais" ng-click="vm.step_menu_justif()">
+                            <md-tab-label>
+                              <span class="ms-form-wizard-step-label">
+                                <span class="ms-form-wizard-step-number md-accent-bg">J</span>
+                                  <span class="ms-form-wizard-step-text">Justification</span>
+                              </span>
                        
                       </md-tab-label>                       
                       

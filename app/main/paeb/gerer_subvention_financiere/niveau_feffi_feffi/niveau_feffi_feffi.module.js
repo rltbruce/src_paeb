@@ -43,7 +43,7 @@
                
 
                 var permission = user.roles;
-                var permissions = ["ADMIN","OBCAF","BCAF"];
+                var permissions = ["ADMIN","DPFI","AAC"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

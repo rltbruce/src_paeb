@@ -58,9 +58,7 @@
 /**********************************debut feffi****************************************/
       //col table
         vm.ecole_column = [
-        {titre:"Code"
-        },
-        {titre:"Denomination"
+        {titre:"Région"
         },
         {titre:"CISCO"
         },
@@ -71,6 +69,10 @@
         {titre:"Fokontany"
         },
         {titre:"Village"
+        },
+        {titre:"Code"
+        },
+        {titre:"Denomination"
         },
         {titre:"Latitude"
         },
@@ -98,8 +100,7 @@
 
         apiFactory.getAll("region/index").then(function success(response)
         {
-          vm.regions = response.data.response;
-          console.log(vm.regions);
+          vm.regions = response.data.response;          
         });
 
           vm.showformfiltre = function()
@@ -173,7 +174,7 @@
             vm.session = 'BCAF';
           }
           
-          if (utilisateur.roles.indexOf("OBCAF")!= -1)
+          /*if (utilisateur.roles.indexOf("OBCAF")!= -1)
           {
               if (usercisco.id!=undefined)
               { 
@@ -186,9 +187,9 @@
               }
                vm.session = 'OBCAF'; 
               
-          } 
+          } */
           
-          if (utilisateur.roles.indexOf("ADMIN")!= -1)
+          if (utilisateur.roles.indexOf("ADMIN")!= -1 || utilisateur.roles.indexOf("AAC")!= -1 )
           {
             vm.affiche_load = false;
           }
@@ -273,14 +274,7 @@
         {
             vm.selectedItemecole = item;
             vm.nouveaubuttonfeffi = true;
-            apiFactory.getAPIgeneraliserREST("feffi/index","id_ecole",item.id).then(function(result)
-            {
-              vm.allfeffi = result.data.response;
-              if (vm.allfeffi.length>0)
-              {
-                vm.nouveaubuttonfeffi = false;
-              }
-            });
+            
             vm.stepOne = true;
             vm.stepTwo = false;
             vm.stepThree = false;
@@ -297,6 +291,20 @@
              vm.selectedItemecole.$selected = true;
         });
 
+        vm.step_menu_feffi= function()
+        {   
+            vm.stepTwo = false;
+            vm.affiche_load = true;
+            apiFactory.getAPIgeneraliserREST("feffi/index","id_ecole",vm.selectedItemecole.id).then(function(result)
+            {
+              vm.allfeffi = result.data.response;
+              if (vm.allfeffi.length>0)
+              {
+                vm.nouveaubuttonfeffi = false;
+              }
+              vm.affiche_load = false;
+            });
+        }
         //Masque de saisi ajout
         vm.ajouter = function ()
         { 
@@ -375,25 +383,12 @@
         {
             vm.selectedItem = item;
             vm.nouvelItem   = item;
-            if(item.$selected==false)
+            if(item.$edit == false || item.$edit == undefined)
             {
               currentItem     = JSON.parse(JSON.stringify(vm.selectedItem)); 
             }
             if (vm.selectedItem.id!=0)
-            {
-              //recuperation donnée membre
-              apiFactory.getAPIgeneraliserREST("membre_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
-              {
-                  vm.allmembre = result.data.response; 
-                  console.log( vm.allmembre);
-              });
-
-              //recuperation donnée compte
-              apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
-              {
-                  vm.allcompte_feffi = result.data.response; 
-                  console.log(vm.allcompte_feffi);
-              });
+            {              
               //vm.stepOne = true;
               //vm.stepTwo = false;
 
@@ -440,7 +435,7 @@
         vm.supprimer = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -554,6 +549,15 @@
 /**********************************fin feffi****************************************/
 
 /**********************************debut membre****************************************/
+vm.step_menu_membre= function()
+{
+  //recuperation donnée membre
+  apiFactory.getAPIgeneraliserREST("membre_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
+  {
+      vm.allmembre = result.data.response; 
+      console.log( vm.allmembre);
+  });
+}
 //col table
         vm.membre_column = [
         {titre:"Nom"},
@@ -638,7 +642,7 @@
         {
             vm.selectedItemMembre = item;
             vm.nouvelItemMembre   = item;
-            if(item.$selected==false)
+            if(item.$edit == false || item.$edit == undefined)
             {
               currentItemMembre    = JSON.parse(JSON.stringify(vm.selectedItemMembre));
             } 
@@ -676,7 +680,7 @@
         vm.supprimerMembre = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -802,6 +806,18 @@
         }
 
         /**********************************debut compte****************************************/
+        vm.step_menu_compte= function()
+        { 
+          vm.stepThree=false;
+          vm.affiche_load = true;
+          //recuperation donnée compte
+          apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
+          {
+              vm.allcompte_feffi = result.data.response; 
+              console.log(vm.allcompte_feffi);
+              vm.affiche_load = false;
+          });
+        }
         //col table
         vm.compte_feffi_column = [
         {titre:"Nom banque"},
@@ -885,18 +901,13 @@
         vm.selectionCompte_feffi= function (item)
         {
             vm.selectedItemCompte_feffi = item;
-            vm.nouvelItemCompte_feffi   = item;
-            if (item.$selected == false || item.$selected == undefined)
+            //vm.nouvelItemCompte_feffi   = item;
+            if (item.$edit == false || item.$edit == undefined)
             {
                 currentItemCompte_feffi    = JSON.parse(JSON.stringify(vm.selectedItemCompte_feffi));
                 //vm.stepTwo = true;
                 vm.stepThree = true;
                 vm.stepFor = false;
-                apiFactory.getAPIgeneraliserREST("membre_titulaire/index",'id_compte',vm.selectedItemCompte_feffi.id).then(function(result)
-                {
-                    vm.allmembre_titulaire = result.data.response; 
-                    console.log( vm.allmembre_titulaire);
-                });
             } 
         };
         $scope.$watch('vm.selectedItemCompte_feffi', function()
@@ -932,7 +943,7 @@
         vm.supprimerCompte_feffi = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -1077,6 +1088,18 @@
 
 
         /**********************************debut compte titulaire****************************************/
+        vm.step_menu_membre_titulaire= function()
+        {  
+          
+          vm.affiche_load = true;        
+          apiFactory.getAPIgeneraliserREST("membre_titulaire/index",'id_compte',vm.selectedItemCompte_feffi.id).then(function(result)
+          {
+              vm.allmembre_titulaire = result.data.response; 
+              console.log( vm.allmembre_titulaire);
+              
+              vm.affiche_load = false;
+          });
+        }
         vm.membre_titulaire_column = [
         {titre:"Nom"},
         {titre:"Prenom"},
@@ -1153,8 +1176,8 @@
         vm.selectionMembre_titulaire= function (item)
         {
             vm.selectedItemMembre_titulaire = item;
-            vm.nouvelItemMembre_titulaire   = item;
-            if(item.$selected==false)
+            //vm.nouvelItemMembre_titulaire   = item;
+            if(item.$edit == false || item.$edit == undefined)
             {
               currentItemMembre_titulaire    = JSON.parse(JSON.stringify(vm.selectedItemMembre_titulaire));
             } 
@@ -1190,7 +1213,7 @@
         vm.supprimerMembre_titulaire = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)

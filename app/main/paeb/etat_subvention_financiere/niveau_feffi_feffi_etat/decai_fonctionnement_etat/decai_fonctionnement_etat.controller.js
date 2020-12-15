@@ -125,7 +125,11 @@
                   }, function error(result){ alert('something went wrong')});
             }
         }
-        var id_user = $cookieStore.get('id');
+        apiFactory.getAll("region/index").then(function success(response)
+        {
+            vm.regions = response.data.response;
+        });
+        /*var id_user = $cookieStore.get('id');
          apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
               vm.roles = result.data.response.roles;
@@ -157,7 +161,7 @@
               
                 }                  
 
-         });
+         });*/
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
@@ -186,8 +190,14 @@
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
             vm.affiche_load =true;
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+            {
+                vm.allconvention_entete = result.data.response;
+                vm.affiche_load =false;
 
-              switch (vm.session)
+            });
+             /* switch (vm.session)
                 { 
                   case 'OBCAF':console.log(vm.usercisco.id);
                             
@@ -215,7 +225,7 @@
                   default:
                       break;
               
-                }
+                }*/
         }
         
         /***************fin convention cisco/feffi************/
@@ -227,13 +237,13 @@
            // vm.allconvention= [] ;
             
             vm.showbuttonNouvContrat_prestataire=true;
-
-            donnee_sousmenu_feffi(item,vm.session).then(function () 
+            vm.stepDecaiss=true;
+            /*donnee_sousmenu_feffi(item,vm.session).then(function () 
             {
                     // On récupère le resultat de la requête dans la varible "response"                    
                 vm.stepDecaiss=true;
                 console.log(vm.stepMenu_feffi);  
-            });
+            });*/
               
               vm.steppiecefeffi=false;
               vm.steptransdaaf=false;
@@ -251,7 +261,7 @@
              vm.selectedItemConvention_entete.$selected = true;
         });
         
-        function donnee_sousmenu_feffi(item,session)
+        /*function donnee_sousmenu_feffi(item,session)
         {
             return new Promise(function (resolve, reject) 
             {
@@ -283,11 +293,18 @@
                 }            
             });
         
-        }
+        }*/
 
 
   /**********************************fin decaissement fonctionnement feffi******************************/
-
+      vm.step_menu_decaiss = function()
+      { 
+        vm.stepjusti_decais = false; 
+        apiFactory.getAPIgeneraliserREST("decaiss_fonct_feffi/index",'menu','getdecaiss_valideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+        {
+            vm.alldecaiss_fonct_feffi = result.data.response; 
+        });
+      }
 
        
 
@@ -296,11 +313,12 @@
         {
             vm.selectedItemDecaiss_fonct_feffi = item;
             vm.validation_decais_fef=item.validation;
-            apiFactory.getAPIgeneraliserREST("justificatif_decaiss_fonct_feffi/index",'id_decaiss_fonct_feffi',item.id).then(function(result)
+            vm.stepjusti_decais = true;
+           /* apiFactory.getAPIgeneraliserREST("justificatif_decaiss_fonct_feffi/index",'id_decaiss_fonct_feffi',item.id).then(function(result)
             {
                 vm.alljustificatif_decaiss_fonct_feffi = result.data.response;
-                vm.stepjusti_decais = true;
-            }); 
+                
+            }); */
             
         };
         $scope.$watch('vm.selectedItemDecaiss_fonct_feffi', function()
@@ -316,6 +334,14 @@
                 
 
     /*********************************************Fin justificatif reliquat************************************************/
+
+    vm.step_menu_justif = function()
+    {
+      apiFactory.getAPIgeneraliserREST("justificatif_decaiss_fonct_feffi/index",'id_decaiss_fonct_feffi',vm.selectedItemDecaiss_fonct_feffi.id).then(function(result)
+      {
+        vm.alljustificatif_decaiss_fonct_feffi = result.data.response;
+      });
+    }
       //fonction selection item justificatif decaiss_fonct_feffi
         vm.selectionJustificatif_decaiss_fonct_feffi= function (item)
         {
@@ -335,7 +361,7 @@
         
         vm.download_decaiss_fonct_feffi = function(item)
         {
-            window.location = apiUrlFile+item.fichier ;
+          window.open(apiUrlFile+item.fichier);
         }
   /******************************************fin maitrise d'oeuvre*******************************************************/
         vm.showAlert = function(titre,content)

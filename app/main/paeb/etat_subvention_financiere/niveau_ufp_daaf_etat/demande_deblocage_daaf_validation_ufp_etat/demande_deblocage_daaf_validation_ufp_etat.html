@@ -146,7 +146,7 @@
               </table>
             </md-tab-body>
           </md-tab>
-          <md-tab ng-disabled="vm.stepOne==false">
+          <md-tab ng-disabled="vm.stepOne==false" ng-click="vm.step_menu_demande_daaf()">
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
                 <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepTwo==false">2</span>
@@ -226,7 +226,7 @@
             </md-tab-body>
           </md-tab>                   
 
-          <md-tab ng-disabled="vm.stepTwo==false">
+          <md-tab ng-disabled="vm.stepTwo==false" ng-click="vm.step_menu_fustificatif()">
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
                 <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>
@@ -272,7 +272,7 @@
             </md-tab-body>
           </md-tab>
 
-          <md-tab ng-disabled="vm.stepTwo==false || vm.validation_item!=3">
+          <md-tab ng-disabled="vm.stepTwo==false || vm.validation_item!=3" ng-click="vm.step_menu_transfert_ufp()">
             <md-tab-label>
               <span class="ms-form-wizard-step-label">
                 <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepThree==false">3</span>

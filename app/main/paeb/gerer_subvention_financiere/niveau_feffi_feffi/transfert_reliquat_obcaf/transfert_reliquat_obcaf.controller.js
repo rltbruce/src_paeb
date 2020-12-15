@@ -5,20 +5,44 @@
 
     angular
         .module('app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.transfert_reliquat_obcaf')
-        .directive('customOnChange', function() {
-      return {
-        restrict: 'A',
-        require:'ngModel',
-        link: function (scope, element, attrs,ngModel) {
-          var onChangeHandler = scope.$eval(attrs.customOnChange);
-          element.bind('change', onChangeHandler);
-          element.on("change", function(e) {
-          var files = element[0].files;
-          ngModel.$setViewValue(files);
+        .directive('customOnChangepiecereliq', function($mdDialog) {
+          return {
+            restrict: 'A',
+            require:'ngModel',
+            link: function (scope, element, attrs,ngModel) {
+              var onChangeHandler = scope.$eval(attrs.customOnChangepiecereliq);
+                element.bind('change', onChangeHandler);
+              element.on("change", function(e) {
+              var files = element[0].files;
+              if((files[0].size/1024/1024)>20)
+                {
+                    ngModel.$setViewValue(null);
+                    var confirm = $mdDialog.confirm()
+                        .title('Cet action n\'est pas autorisé')
+                        .textContent('La taille doit être inferieur à 20MB')
+                        .ariaLabel('Lucky day')
+                        .clickOutsideToClose(true)
+                        .parent(angular.element(document.body))
+                        .ok('Fermer');
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {
+                        ngModel.$setViewValue(null);
+                        element.val(null);
+                        scope.justificatif_transfert_reliquat.fichier = null;
+                      }, function() {
+                        //alert('rien');
+                      });
+                }
+                else
+                {                
+                    ngModel.$setViewValue(files);
+                    scope.justificatif_transfert_reliquat.fichier = files[0].name;
+                } 
+            });
+            }
+          };
         })
-        }
-      };
-    })
     .service('fileUpload', ['$http', function ($http) {
       this.uploadFileToUrl = function(file, uploadUrl){
         var fd = new FormData();
@@ -49,6 +73,7 @@
         vm.session = '';
         vm.ciscos=[];
         vm.affiche_load =false;
+        vm.myFile = [];
 
 /********************************************Fin reliquat********************************************/
         var NouvelItemTransfert_reliquat = false;
@@ -91,8 +116,8 @@
         vm.filtre_change_region = function(item)
         { 
             vm.filtre.id_cisco = null;
-            if (vm.session=='ADMIN')
-            {
+           /* if (vm.session=='ADMIN')
+            {*/
               if (item.id_region != '*')
               {
                   apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
@@ -105,7 +130,7 @@
               {               
                   vm.ciscos = [];                
               }
-            }
+           // }
             
           
         }
@@ -159,7 +184,12 @@
                 id_cisco: null,
                 id_region: null
               }
-         apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        vm.showbuttonNeauveaudemandefeffi=true;
+        apiFactory.getAll("region/index").then(function success(response)
+        {
+            vm.regions = response.data.response;
+        });
+        /* apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
               vm.roles = result.data.response.roles;
               var utilisateur = result.data.response;
@@ -188,7 +218,7 @@
               
               }                  
 
-         });
+         });*/
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
@@ -211,42 +241,19 @@
         {titre:"Utilisateur"
         }]; 
 
-        vm.importerfiltre =function(filtre)
-        {   
-            var date_debut = convertionDate(filtre.date_debut);
-            var date_fin = convertionDate(filtre.date_fin);
-            vm.affiche_load = true ;
-            var repertoire = 'bdd_construction';
-
-            apiFactory.getAPIgeneraliserREST("excel_bdd_construction/index",'menu','getdonneeexporter',
-                'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
-                filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
-                filtre.id_convention_entete,"repertoire",repertoire).then(function(result)
-            {
-                vm.status    = result.data.status; 
-                
-                if(vm.status)
-                {
-                    vm.nom_file = result.data.nom_file;            
-                    window.location = apiUrlexcel+"bdd_construction/"+vm.nom_file ;
-                    vm.affiche_load =false; 
-
-                }else{
-                    vm.message=result.data.message;
-                    vm.Alert('Export en excel',vm.message);
-                    vm.affiche_load =false; 
-                }
-                console.log(result.data.data);
-            });
-        }       
-
         vm.recherchefiltre = function(filtre)
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
             vm.affiche_load =true;
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+            {
+                  vm.allconvention_entete = result.data.response;
+                  vm.affiche_load =false;
+            });
 
-              switch (vm.session)
+             /* switch (vm.session)
                 { 
                   case 'OBCAF':console.log(vm.usercisco.id);
                             
@@ -274,7 +281,7 @@
                   default:
                       break;
               
-                }
+                }*/
         }
         
         /***************fin convention cisco/feffi************/
@@ -287,17 +294,17 @@
             
             vm.showbuttonNouvContrat_prestataire=true;
 
-            donnee_menu_reliquat(item,vm.session).then(function () 
+           /* donnee_menu_reliquat(item,vm.session).then(function () 
             {
                     // On récupère le resultat de la requête dans la varible "response"                    
                 vm.stepMenu_reliquat=true;
                 console.log(vm.stepMenu_reliquat);  
-            });
-                          
-              apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
+            });*/
+            vm.stepMenu_reliquat=true;            
+             /* apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
               {
                   vm.allcompte_feffi= result.data.response;
-              });
+              });*/
               
               vm.steppiecefeffi=false;
               vm.steptransdaaf=false;
@@ -316,7 +323,7 @@
              vm.selectedItemConvention_entete.$selected = true;
         });       
 
-        function donnee_menu_reliquat(item,session)
+       /* function donnee_menu_reliquat(item,session)
         {
             return new Promise(function (resolve, reject)
             {
@@ -366,11 +373,27 @@
               
                 }            
             });
-        }
+        }*/
 
 
         /**************************************Debut transfert reliquat*********************************************/
-         vm.transfert_reliquat_column = [        
+        vm.transfert_reliquat = function()
+        { 
+          vm.stepjusti_trans_reliqua = false;
+          apiFactory.getAPIgeneraliserREST("transfert_reliquat/index",'menu','gettransfertByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+          {
+              vm.alltransfert_reliquat = result.data.response.filter(function(obj)
+              {
+                  return obj.validation == 0;
+              });
+              console.log(result.data.response);
+              if (result.data.response.length!=0)
+              {
+                  vm.showbuttonNouvTransfert_reliquat=false;
+              }
+        });
+        }
+        vm.transfert_reliquat_column = [        
         {titre:"Montant"
         },
         {titre:"Objet utilisation"
@@ -523,22 +546,13 @@
             if(item.$edit==false || item.$edit==undefined)
             {
               currentItemTransfert_reliquat     = JSON.parse(JSON.stringify(vm.selectedItemTransfert_reliquat));
+              vm.showbuttonValidationtransfert_reliquat = true;
             }
             
             //recuperation donnée convention
            if (vm.selectedItemTransfert_reliquat.id!=0)
             {   
-                vm.showbuttonValidationtransfert_reliquat = true;
                 vm.validation_transfert_reliquat = item.validation;
-                if (item.$edit == true)
-                {
-                  vm.showbuttonValidationtransfert_reliquat = false;
-                } 
-                apiFactory.getAPIgeneraliserREST("justificatif_transfert_reliquat/index",'id_transfert_reliquat',item.id).then(function(result)
-                {
-                    vm.alljustificatif_transfert_reliquat = result.data.response; 
-                    console.log(vm.alljustificatif_transfert_reliquat);
-                });
               //Fin Récupération cout divers par convention
               
                 vm.stepjusti_trans_reliqua = true;
@@ -665,17 +679,17 @@
             apiFactory.add("transfert_reliquat/index",datas, config).success(function (data)
             {
                 
-                var conv = vm.allconvention_entete.filter(function(obj)
+                /*var conv = vm.allconvention_entete.filter(function(obj)
                 {
                     return obj.id == transfert_reliquat.id_convention_entete;
-                });
+                });*/
 
                 if (NouvelItemTransfert_reliquat == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItemTransfert_reliquat.convention_entete   = conv[0];
+                       // vm.selectedItemTransfert_reliquat.convention_entete   = conv[0];
                         vm.selectedItemTransfert_reliquat.$selected  = false;
                         vm.selectedItemTransfert_reliquat.$edit      = false;
                         vm.selectedItemTransfert_reliquat ={};
@@ -695,7 +709,7 @@
                 else
                 {
                   transfert_reliquat.validation=0;
-                  transfert_reliquat.convention_entete = conv[0];
+                  //transfert_reliquat.convention_entete = conv[0];
                   transfert_reliquat.id  =   String(data.response);
                   NouvelItemTransfert_reliquat = false;
                   vm.showbuttonNouvTransfert_reliquat= false;
@@ -710,7 +724,13 @@
     /*********************************************Fin transfert reliquat************************************************/
 
     /*********************************************Fin justificatif reliquat************************************************/
-
+        vm.step_menu_justi = function()
+        {          
+          apiFactory.getAPIgeneraliserREST("justificatif_transfert_reliquat/index",'id_transfert_reliquat',vm.selectedItemTransfert_reliquat.id).then(function(result)
+          {
+              vm.alljustificatif_transfert_reliquat = result.data.response;
+          });
+        }
     vm.justificatif_transfert_reliquat_column = [
         {titre:"Description"
         },
@@ -721,11 +741,11 @@
 
         $scope.uploadFiletransfert_reliquat = function(event)
        {
-          console.dir(event);
+          //console.dir(event);
           var files = event.target.files;
           vm.myFile = files;
-          vm.selectedItemJustificatif_transfert_reliquat.fichier = vm.myFile[0].name;
-          console.log(vm.selectedItemJustificatif_transfert_reliquat.fichier);
+          //vm.selectedItemJustificatif_transfert_reliquat.fichier = vm.myFile[0].name;
+          //console.log(vm.selectedItemJustificatif_transfert_reliquat.fichier);
         } 
 
         //Masque de saisi ajout
@@ -908,15 +928,15 @@
                     // Update_paiement or delete: id exclu                 
                     if(suppression==0)
                     {
-                         var file= vm.myFile[0];
+                         
                     
                           var repertoire = 'justificatif_transfert_reliquat/';
                           var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
                           var getIdFile = vm.selectedItemJustificatif_transfert_reliquat.id
                                               
-                          if(file)
+                          if(vm.myFile.length !=0)
                           { 
-
+                            var file= vm.myFile[0];
                             var name_file = vm.selectedItemConvention_entete.ref_convention +'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                             var fd = new FormData();
@@ -939,8 +959,8 @@
                                   var datas = $.param({
                                                       supprimer: suppression,
                                                       id:        getIdFile,
-                                                      description: justificatif_transfert_reliquat.description,
-                                                      fichier: justificatif_transfert_reliquat.fichier,
+                                                      description: currentItemJustificatif_transfert_reliquat.description,
+                                                      fichier: currentItemJustificatif_transfert_reliquat.fichier,
                                                       id_transfert_reliquat: vm.selectedItemTransfert_reliquat.id,
                                                       validation:0
                                         });
@@ -948,7 +968,8 @@
                                       {  
                                           vm.showbuttonNouvManuel = true;
                                           justificatif_transfert_reliquat.$selected = false;
-                                          justificatif_transfert_reliquat.$edit = false;
+                                          justificatif_transfert_reliquat.$edit = false;                                      
+                                          justificatif_transfert_reliquat.fichier=currentItemJustificatif_transfert_reliquat.fichier;
                                           vm.selectedItemJustificatif_transfert_reliquat = {};
                                       console.log('b');
                                       }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -977,6 +998,23 @@
                             }).error(function()
                             {
                               vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                              var datas = $.param({
+                                supprimer: suppression,
+                                id:        getIdFile,
+                                description: currentItemJustificatif_transfert_reliquat.description,
+                                fichier: currentItemJustificatif_transfert_reliquat.fichier,
+                                id_transfert_reliquat: vm.selectedItemTransfert_reliquat.id,
+                                validation:0
+                              });
+                            apiFactory.add("justificatif_transfert_reliquat/index",datas, config).success(function (data)
+                            {  
+                                vm.showbuttonNouvManuel = true;
+                                justificatif_transfert_reliquat.$selected = false;
+                                justificatif_transfert_reliquat.$edit = false;                                      
+                                justificatif_transfert_reliquat.fichier=currentItemJustificatif_transfert_reliquat.fichier;
+                                vm.selectedItemJustificatif_transfert_reliquat = {};
+                            console.log('b');
+                            });
                             });
                           }
 
@@ -1015,15 +1053,15 @@
                   NouvelItemJustificatif_transfert_reliquat = false;
 
                   vm.showbuttonNouvManuel = false;
-                    var file= vm.myFile[0];
+                    
                     
                     var repertoire = 'justificatif_transfert_reliquat/';
                     var uploadUrl  = apiUrl + "importer_fichier/save_upload_file";
                     var getIdFile = String(data.response);
                                         
-                    if(file)
+                    if(vm.myFile.length!=0)
                     { 
-
+                      var file= vm.myFile[0];
                       var name_file = vm.selectedItemConvention_entete.ref_convention +'_'+getIdFile+'_'+vm.myFile[0].name ;
 
                       var fd = new FormData();
@@ -1046,8 +1084,8 @@
                             var datas = $.param({
                                                 supprimer: suppression,
                                                 id:        getIdFile,
-                                                description: justificatif_transfert_reliquat.description,
-                                                fichier: justificatif_transfert_reliquat.fichier,
+                                                description: currentItemJustificatif_transfert_reliquat.description,
+                                                fichier: currentItemJustificatif_transfert_reliquat.fichier,
                                                 id_transfert_reliquat: vm.selectedItemTransfert_reliquat.id,
                                                 
                                   });
@@ -1055,6 +1093,7 @@
                                 { 
                                     justificatif_transfert_reliquat.$selected = false;
                                     justificatif_transfert_reliquat.$edit = false;
+                                    justificatif_transfert_reliquat.fichier=currentItemJustificatif_transfert_reliquat.fichier;
                                     vm.selectedItemJustificatif_transfert_reliquat = {};
                                
                                 }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -1083,19 +1122,35 @@
                       }).error(function()
                       {
                         vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
+                        var datas = $.param({
+                          supprimer: suppression,
+                          id:        getIdFile,
+                          description: currentItemJustificatif_transfert_reliquat.description,
+                          fichier: currentItemJustificatif_transfert_reliquat.fichier,
+                          id_transfert_reliquat: vm.selectedItemTransfert_reliquat.id,
+                          
+                          });
+                        apiFactory.add("justificatif_transfert_reliquat/index",datas, config).success(function (data)
+                        { 
+                            justificatif_transfert_reliquat.$selected = false;
+                            justificatif_transfert_reliquat.$edit = false;
+                            justificatif_transfert_reliquat.fichier=currentItemJustificatif_transfert_reliquat.fichier;
+                            vm.selectedItemJustificatif_transfert_reliquat = {};
+                      
+                        });
                       });
                     }
               }
               justificatif_transfert_reliquat.$selected = false;
               justificatif_transfert_reliquat.$edit = false;
-              vm.selectedItemJustificatif_transfert_reliquat = {};
+              //vm.selectedItemJustificatif_transfert_reliquat = {};
 
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
         vm.download_transfert_reliquat = function(item)
         {
-            window.location = apiUrlFile+item.fichier ;
+          window.open(apiUrlFile+item.fichier);
         }
 
     /*********************************************Fin justificatif reliquat************************************************/

@@ -1,4 +1,4 @@
-  <div id="formsbcafvactivif" class="page-layout simple fullwidth doc-page" layout="column" >
+  <div id="formsdecais" class="page-layout simple fullwidth doc-page" layout="column" >
 
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="space-between" >
@@ -26,7 +26,7 @@
     
     <!-- CONTENT -->
     <div class="content" layout="column">
-      <div class="form-wrapper md-whiteframe-1dp acc_menu" >
+      <div class="form-wrapper md-whiteframe-1dp" >
 <!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
          <ms-form-wizard flex >
           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" >
@@ -230,12 +230,13 @@
     <!------------------------------------FIN CONVENTION CISCO/FEFFI--------------------------------------------------->
                   
                     <!-----------------------DEBUT DECAISSEMENT FONCTIONNEMENT FEFFI------------------------------------->
-                          <md-tab ng-disabled="!vm.stepDecaiss">
+                          <md-tab ng-disabled="!vm.stepDecaiss" ng-click="vm.step_menu_decaiss()">
                             <md-tab-label>
-                              <span >
+                              <span class="ms-form-wizard-step-label">
                                   <!--span class="ms-form-wizard-step-number md-accent-bg">
                                     <i class="icon-basket-unfill s16"></i>
                                   </span-->
+                                  <span class="ms-form-wizard-step-number md-accent-bg">D</span>
                                   <span class="ms-form-wizard-step-text">Décaissement fonctionnement</span>
                                   <!--span class="ms-form-wizard-step-number md-accent-bg notification">{{vm.nbr_decaiss_feffi}}</span-->
                               </span>
@@ -245,7 +246,7 @@
                            <md-tab-body>
                                <div style="widht:100%;"> 
                                   <md-button type="submit" class="md-raised md-warn md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validerDecaiss_fonct_feffi()" style="width:10%;" ng-show="vm.showbuttonValidation_dec_feffi && vm.validation_decais_fef==0">
-                                    Validation
+                                    Valider
                                   </md-button><br>
                               </div>
 
@@ -343,9 +344,10 @@
 
                    <!---------------------------FIN DECAISSEMENT FONCTIONNEMENT FEFFI-------------------------------------->
 
-                   <md-tab ng-disabled="!vm.stepjusti_decais">
+                   <md-tab ng-disabled="!vm.stepjusti_decais" ng-click="vm.step_menu_justif()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
+                          <span class="ms-form-wizard-step-number md-accent-bg">J</span>
                             <span class="ms-form-wizard-step-text">Justification</span>
                         </span>
                        
@@ -400,7 +402,7 @@
                                 <span ng-if="justificatif_decaiss_fonct_feffi.$edit" style="display: inline-block !important;">
                                   <md-input-container style="width:100%;display: flex !important;">
                                     <label>Fichier</label>
-                                  <input type="file"name="myFile" aria-label="upload" custom-on-change="uploadFiledecaiss_fonct_feffi"  ng-model="fichier" id="fileid"/>
+                                  <input type="file"name="myFile" aria-label="upload" custom-on-changepiecedecaiss="uploadFiledecaiss_fonct_feffi"  ng-model="fichier" id="fileid"/>
                                   </md-input-container>   
                                 </span>
                                           

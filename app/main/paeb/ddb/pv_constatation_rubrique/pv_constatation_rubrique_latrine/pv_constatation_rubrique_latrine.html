@@ -9,13 +9,13 @@
                 <span class="parent">Données de bases</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Attachement</span>
+                <span class="parent" href="javascript:;"> Rubrique pv de constatation</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Mobilier</span>
+                <span class="parent" href="javascript:;"> Latrine</span>
             </div>
 
-            <!--div class="title">Type mobilier</div-->
+            <!--div class="title">Type latrine</div-->
         </div>
     </div>
     <!-- / HEADER -->
@@ -25,26 +25,10 @@
     <div class="content" layout="column">
       <div class="form-wrapper md-whiteframe-1dp" >
         <!--Geographique  -->
-          
           <kendo-grid options="vm.mainGridOptions">
             <div k-detail-template>
-              <kendo-grid k-options="vm.allattachement_mobilier_detail({{dataItem.id}})">
+              <kendo-grid k-options="vm.allpv_consta_rubrique_designation_lat({{dataItem.id}})">
               </kendo-grid>
-              <!--kendo-tabstrip>
-                <ul>
-                  <li>Avanchement physique</li>
-                  <li>Attachement</li>
-                </ul>
-                
-                <div>
-                    <div kendo-grid k-options="vm.allattachement_mobilier({{dataItem.id}})">
-                    </div>
-                </div>
-                <div>
-                    <div kendo-grid k-options="vm.alldivers_attachement_mobilier({{dataItem.id}})">
-                    </div>
-                </div>
-                </kendo-tabstrip-->
             </div>
           </kendo-grid>        
       </div>
