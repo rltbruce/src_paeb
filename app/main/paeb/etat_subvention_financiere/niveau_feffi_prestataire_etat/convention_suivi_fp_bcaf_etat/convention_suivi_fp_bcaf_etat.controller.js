@@ -2049,7 +2049,7 @@ vm.pv_consta_rubrique_phase_mob_mpe_column = [
         vm.affiche_load =true;
         apiFactory.getAPIgeneraliserREST("facture_mpe/index","menu","getdecompte_mpeBycontratandfacture",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id,'id_facture_mpe',vm.id_facture_mpe).then(function(result)
         {
-            vm.decompte_mpes = result.data.response[0];
+            vm.decompte_mpes = result.data.response;
             console.log(vm.decompte_mpes);
             vm.affiche_load =false;
         });

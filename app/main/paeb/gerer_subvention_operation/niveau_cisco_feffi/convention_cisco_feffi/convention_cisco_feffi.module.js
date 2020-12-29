@@ -32,7 +32,7 @@ var vs;
             title: 'Insertion convention CISCO/FEFFI',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_subvention_operation_niveau_cisco_feffi_convention_cisco_feffi',
-			weight: 2,
+			weight: 4,
             hidden: function()
             {
                     return vs;

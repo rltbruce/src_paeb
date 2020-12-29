@@ -2624,7 +2624,7 @@
                             { 
                               justificatif_facture_moe.fichier='';
                             var datas = $.param({
-                                                supprimer: suppression,
+                                                supprimer: 1,
                                                 id:        getIdFile,
                                                 description: currentItemJustificatif_facture_moe.description,
                                                 fichier: currentItemJustificatif_facture_moe.fichier,                                                
@@ -2633,10 +2633,14 @@
                                   });
                                 apiFactory.add("justificatif_facture_moe/index",datas, config).success(function (data)
                                 { 
-                                    justificatif_facture_moe.$selected = false;
+                                  vm.alljustificatif_facture_moe = vm.alljustificatif_facture_moe.filter(function(obj)
+                                  {
+                                      return obj.id !== getIdFile;
+                                  });
+                                  justificatif_facture_moe.$selected = false;
                                     justificatif_facture_moe.$edit = false;
-                                    justificatif_facture_moe.fichier=currentItemJustificatif_facture_moe.fichier;
-                                    vm.selectedItemJustificatif_facture_moe = {};
+                                    //justificatif_facture_moe.fichier=currentItemJustificatif_facture_moe.fichier;
+                                    //vm.selectedItemJustificatif_facture_moe = {};
                                
                                 }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
                             });
@@ -2665,7 +2669,7 @@
                       {
                         vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
                         var datas = $.param({
-                                                      supprimer: suppression,
+                                                      supprimer: 1,
                                                       id:        getIdFile,
                                                       description: currentItemJustificatif_facture_moe.description,
                                                       fichier: currentItemJustificatif_facture_moe.fichier,
@@ -2674,11 +2678,15 @@
                                         });
                                       apiFactory.add("justificatif_facture_moe/index",datas, config).success(function (data)
                                       {  
-                                          vm.showbuttonNouvManuel = true;
+                                        vm.alljustificatif_facture_moe = vm.alljustificatif_facture_moe.filter(function(obj)
+                                        {
+                                            return obj.id !== getIdFile;
+                                        });
+                                        vm.showbuttonNouvManuel = true;
                                           justificatif_facture_moe.$selected = false;
                                           justificatif_facture_moe.$edit = false;
-                                          justificatif_facture_moe.fichier=currentItemJustificatif_facture_moe.fichier;
-                                          vm.selectedItemJustificatif_facture_moe = {};
+                                          //justificatif_facture_moe.fichier=currentItemJustificatif_facture_moe.fichier;
+                                          //vm.selectedItemJustificatif_facture_moe = {};
                                       
                                       });
                       });
@@ -3567,7 +3575,7 @@
                                               date_etablissement: '',
                                               montant_travaux: 0,
                                               avancement_global_periode: 0,
-                                              avancement_global_cumul: vm.dataLastepv_consta_entete_mpe[0].avancement_global_cumul,
+                                              avancement_global_cumul: parseFloat(vm.dataLastepv_consta_entete_mpe[0].avancement_global_cumul),
                                               validation_fact: null,
                                               id_fact: null
                                             };
@@ -3591,11 +3599,11 @@
                                                 $edit: true,
                                                 $selected: true,
                                                 id: '0',        
-                                                numero: parseInt(vm.dataLasteattachement_mpe[0].numero)+1 ,
+                                                numero: parseInt(vm.dataLastepv_consta_entete_mpe[0].numero)+1 ,
                                                 date_etablissement: '',
                                                 montant_travaux:0,
                                                 avancement_global_periode: 0,
-                                                avancement_global_cumul: vm.dataLastepv_consta_entete_mpe[0].avancement_global_cumul,
+                                                avancement_global_cumul:parseFloat(vm.dataLastepv_consta_entete_mpe[0].avancement_global_cumul),
                                                 validation_fact: null,
                                                 id_fact: null
                                               };
@@ -7210,7 +7218,7 @@ function insert_in_basePv_consta_statu_mob_travaux(pv_consta_statu_mob_travaux,s
             vm.affiche_load =true;
             apiFactory.getAPIgeneraliserREST("facture_mpe/index","menu","getdecompte_mpeBycontratandfacture",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id,'id_facture_mpe',vm.id_facture_mpe).then(function(result)
             {
-                vm.decompte_mpes = result.data.response[0];
+                vm.decompte_mpes = result.data.response;
                 console.log(vm.decompte_mpes);
                 vm.affiche_load =false;
             });
@@ -8524,6 +8532,38 @@ function insert_in_basePv_consta_statu_mob_travaux(pv_consta_statu_mob_travaux,s
               return 0;
             }
             
+          }
+          
+          vm.formatMillier_double = function (nombre1,nombre2) 
+          {   //var nbr = nombre.toFixed(0);
+            var nombre_1=0;
+            var nombre_2=0;
+            if (nombre1!=null && nombre1!='undefined')
+            {
+              nombre_1=nombre1;
+            }
+            if (nombre2!=null && nombre2!='undefined')
+            {
+              nombre_2=nombre2;
+            }
+
+            var nbr=parseFloat(nombre_1)+parseFloat(nombre_2);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
           }
  
     }

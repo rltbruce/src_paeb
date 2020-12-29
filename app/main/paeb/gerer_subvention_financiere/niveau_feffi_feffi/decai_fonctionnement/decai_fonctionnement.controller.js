@@ -1001,7 +1001,7 @@
                             { 
                               justificatif_decaiss_fonct_feffi.fichier='';
                             var datas = $.param({
-                                                supprimer: suppression,
+                                                supprimer: 1,
                                                 id:        getIdFile,
                                                 description: currentItemJustificatif_decaiss_fonct_feffi.description,
                                                 fichier: currentItemJustificatif_decaiss_fonct_feffi.fichier,
@@ -1010,9 +1010,12 @@
                                   });
                                 apiFactory.add("justificatif_decaiss_fonct_feffi/index",datas, config).success(function (data)
                                 { 
-                                    justificatif_decaiss_fonct_feffi.$selected = false;
+                                  vm.alljustificatif_decaiss_fonct_feffi = vm.alljustificatif_decaiss_fonct_feffi.filter(function(obj)
+                                  {
+                                      return obj.id !== getIdFile;
+                                  });
+                                  justificatif_decaiss_fonct_feffi.$selected = false;
                                     justificatif_decaiss_fonct_feffi.$edit = false;
-                                    justificatif_decaiss_fonct_feffi.fichier=currentItemJustificatif_decaiss_fonct_feffi.fichier;
                                     vm.selectedItemJustificatif_decaiss_fonct_feffi = {};
                                
                                 }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -1034,7 +1037,7 @@
                                   
                                 justificatif_decaiss_fonct_feffi.$selected = false;
                                 justificatif_decaiss_fonct_feffi.$edit = false;
-                                vm.selectedItemJustificatif_decaiss_fonct_feffi = {};
+                                //vm.selectedItemJustificatif_decaiss_fonct_feffi = {};
                                 
                             }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
                           }
@@ -1042,7 +1045,7 @@
                       {
                         vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
                         var datas = $.param({
-                          supprimer: suppression,
+                          supprimer: 1,
                           id:        getIdFile,
                           description: currentItemJustificatif_decaiss_fonct_feffi.description,
                           fichier: currentItemJustificatif_decaiss_fonct_feffi.fichier,
@@ -1051,10 +1054,13 @@
                         });
                       apiFactory.add("justificatif_decaiss_fonct_feffi/index",datas, config).success(function (data)
                       { 
-                          justificatif_decaiss_fonct_feffi.$selected = false;
+                        vm.alljustificatif_decaiss_fonct_feffi = vm.alljustificatif_decaiss_fonct_feffi.filter(function(obj)
+                        {
+                            return obj.id !== getIdFile;
+                        });
+                        justificatif_decaiss_fonct_feffi.$selected = false;
                           justificatif_decaiss_fonct_feffi.$edit = false;
-                          justificatif_decaiss_fonct_feffi.fichier=currentItemJustificatif_decaiss_fonct_feffi.fichier;
-                          vm.selectedItemJustificatif_decaiss_fonct_feffi = {};
+                          //vm.selectedItemJustificatif_decaiss_fonct_feffi = {};
                     
                       });
                       });

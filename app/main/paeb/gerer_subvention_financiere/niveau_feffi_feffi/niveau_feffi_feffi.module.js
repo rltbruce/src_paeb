@@ -7,7 +7,9 @@
             'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.decai_fonctionnement',         
             'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.decai_fonctionnement_validation',         
             'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.transfert_reliquat_obcaf',         
-            'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.transfert_reliquat_bcaf'
+            'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.transfert_reliquat_bcaf',         
+            'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.addition_frais_fonctionnement',         
+            'app.paeb.gerer_subvention_financiere.niveau_feffi_feffi.addition_frais_fonctionnement_validation'
             ]) 
         .run(testPermission)       
         .config(config);

@@ -31,11 +31,7 @@ var vs;
             title: 'Avenant et document FEFFI',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_etat_subvention_operation_niveau_cisco_feffi_etat_avenant_document_etat',
-            weight: 4,
-            hidden: function()
-            {
-                    return vs;
-            }
+            weight: 4
         });
 
 

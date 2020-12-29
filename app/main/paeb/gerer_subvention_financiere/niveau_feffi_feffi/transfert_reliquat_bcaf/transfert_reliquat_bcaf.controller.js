@@ -950,7 +950,7 @@
                            { 
                              justificatif_transfert_reliquat.fichier='';
                            var datas = $.param({
-                                               supprimer: suppression,
+                                               supprimer: 1,
                                                id:        getIdFile,
                                                description: currentItemJustificatif_transfert_reliquat.description,
                                                fichier: currentItemJustificatif_transfert_reliquat.fichier,
@@ -959,10 +959,14 @@
                                  });
                                apiFactory.add("justificatif_transfert_reliquat/index",datas, config).success(function (data)
                                { 
-                                   justificatif_transfert_reliquat.$selected = false;
+                                  vm.alljustificatif_transfert_reliquat = vm.alljustificatif_transfert_reliquat.filter(function(obj)
+                                  {
+                                      return obj.id !== getIdFile;
+                                  });
+                                  justificatif_transfert_reliquat.$selected = false;
                                    justificatif_transfert_reliquat.$edit = false;
-                                   justificatif_transfert_reliquat.fichier=currentItemJustificatif_transfert_reliquat.fichier;
-                                   vm.selectedItemJustificatif_transfert_reliquat = {};
+                                   //justificatif_transfert_reliquat.fichier=currentItemJustificatif_transfert_reliquat.fichier;
+                                   //vm.selectedItemJustificatif_transfert_reliquat = {};
                               
                                }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
                            });
@@ -991,7 +995,7 @@
                      {
                        vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
                        var datas = $.param({
-                         supprimer: suppression,
+                         supprimer: 1,
                          id:        getIdFile,
                          description: currentItemJustificatif_transfert_reliquat.description,
                          fichier: currentItemJustificatif_transfert_reliquat.fichier,
@@ -1000,10 +1004,14 @@
                          });
                        apiFactory.add("justificatif_transfert_reliquat/index",datas, config).success(function (data)
                        { 
-                           justificatif_transfert_reliquat.$selected = false;
+                        vm.alljustificatif_transfert_reliquat = vm.alljustificatif_transfert_reliquat.filter(function(obj)
+                        {
+                            return obj.id !== getIdFile;
+                        });
+                          justificatif_transfert_reliquat.$selected = false;
                            justificatif_transfert_reliquat.$edit = false;
-                           justificatif_transfert_reliquat.fichier=currentItemJustificatif_transfert_reliquat.fichier;
-                           vm.selectedItemJustificatif_transfert_reliquat = {};
+                           //justificatif_transfert_reliquat.fichier=currentItemJustificatif_transfert_reliquat.fichier;
+                           //vm.selectedItemJustificatif_transfert_reliquat = {};
                      
                        });
                      });

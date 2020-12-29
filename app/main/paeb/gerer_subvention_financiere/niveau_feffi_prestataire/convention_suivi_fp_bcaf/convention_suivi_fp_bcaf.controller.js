@@ -2455,7 +2455,7 @@
                             { 
                               justificatif_facture_moe.fichier='';
                             var datas = $.param({
-                                                supprimer: suppression,
+                                                supprimer: 1,
                                                 id:        getIdFile,
                                                 description: currentItemJustificatif_facture_moe.description,
                                                 fichier: currentItemJustificatif_facture_moe.fichier,                                                
@@ -2464,10 +2464,14 @@
                                   });
                                 apiFactory.add("justificatif_facture_moe/index",datas, config).success(function (data)
                                 { 
-                                    justificatif_facture_moe.$selected = false;
+                                  vm.alljustificatif_facture_moe = vm.alljustificatif_facture_moe.filter(function(obj)
+                                  {
+                                      return obj.id !== getIdFile;
+                                  });
+                                  justificatif_facture_moe.$selected = false;
                                     justificatif_facture_moe.$edit = false;
-                                    justificatif_facture_moe.fichier=currentItemJustificatif_facture_moe.fichier;
-                                    vm.selectedItemJustificatif_facture_moe = {};
+                                    //justificatif_facture_moe.fichier=currentItemJustificatif_facture_moe.fichier;
+                                    //.selectedItemJustificatif_facture_moe = {};
                                
                                 }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
                             });
@@ -2496,7 +2500,7 @@
                       {
                         vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
                         var datas = $.param({
-                                                      supprimer: suppression,
+                                                      supprimer: 1,
                                                       id:        getIdFile,
                                                       description: currentItemJustificatif_facture_moe.description,
                                                       fichier: currentItemJustificatif_facture_moe.fichier,
@@ -2505,11 +2509,15 @@
                                         });
                                       apiFactory.add("justificatif_facture_moe/index",datas, config).success(function (data)
                                       {  
-                                          vm.showbuttonNouvManuel = true;
+                                        vm.alljustificatif_facture_moe = vm.alljustificatif_facture_moe.filter(function(obj)
+                                        {
+                                            return obj.id !== getIdFile;
+                                        });
+                                        vm.showbuttonNouvManuel = true;
                                           justificatif_facture_moe.$selected = false;
                                           justificatif_facture_moe.$edit = false;
-                                          justificatif_facture_moe.fichier=currentItemJustificatif_facture_moe.fichier;
-                                          vm.selectedItemJustificatif_facture_moe = {};
+                                          //justificatif_facture_moe.fichier=currentItemJustificatif_facture_moe.fichier;
+                                          //vm.selectedItemJustificatif_facture_moe = {};
                                       
                                       });
                       });
@@ -3375,7 +3383,20 @@ function insert_in_baseAvance_demarrage(avance_demarrage,suppression)
         }
         vm.validerFacture_mpe = function(facture_mpe)
         {
-            maj_insertFacture_mpe(facture_mpe,0,2)
+            //maj_insertFacture_mpe(facture_mpe,0,2)
+            apiFactory.getAPIgeneraliserREST("facture_mpe/index",'menu',"getcount_statubyfacture",'id_pv_consta_entete_travaux',vm.selectedItemPv_consta_entete_travaux.id).then(function(result)
+            {
+              var resp = result.data.response;
+              var statu_incomplete = result.data.statu_pv;
+              if (statu_incomplete==true)
+              {
+                showinternDialog(resp);
+              }
+              else
+              {
+                maj_insertFacture_mpe(facture_mpe,0,2);
+              }
+            });
         }
         vm.rejeterFacture_mpe = function(facture_mpe)
         {
@@ -3408,6 +3429,7 @@ function insert_in_baseAvance_demarrage(avance_demarrage,suppression)
                     net_payer: facture_mpe.net_payer,
                     date_signature:convertionDate(facture_mpe.date_signature) ,
                     id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
+                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id,
                     validation: validation               
                 });
                 console.log(datas);
@@ -3419,11 +3441,46 @@ function insert_in_baseAvance_demarrage(avance_demarrage,suppression)
                 vm.selectedItemFacture_mpe = {};
                 vm.showbuttonValidationFacture_mpe = false;
               vm.validation_facture_mpe = 1;
-            
+            console.log(data);
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
 
+        function showinternDialog(data) {
+          var parentEl = angular.element(document.body);
+          $mdDialog.show({
+            parent: parentEl,
+            template:
+              '<md-dialog aria-label="List dialog">' +
+              '  <md-dialog-content>'+
+              '    <h2 mat-dialog-title>Cette action ne peut pas être réaliser!'+
+              '    </h2>'+
+              '    <p>Certains phases de pv de constatation d\'avancement sont incomplètes. Voir:</p>' +
+              '    <md-list>'+
+              '      <md-list-item ng-repeat="item in items">'+
+              '       <p>{{item}}</p>' +
+              '      '+
+              '    </md-list-item></md-list>'+
+              '  </md-dialog-content>' +
+              '  <md-dialog-actions>' +
+              '    <md-button ng-click="vm.closeDialog()" class="md-primary">' +
+              '      Close Dialog' +
+              '    </md-button>' +
+              '  </md-dialog-actions>' +
+              '</md-dialog>',
+            locals: {
+              items: vm.items
+            },
+            controller: DialogController,
+            controllerAs: 'vm'
+         });
+         function DialogController($mdDialog,$scope) {
+           $scope.items=data;
+           this.closeDialog = function() {
+             $mdDialog.hide();
+           }
+         }
+        }
 /************************************************fin avance demarrage***************************************************/
 
 /************************************************debut  pv constatation entete*************************************************/
@@ -3435,7 +3492,7 @@ vm.click_tabs_pv_consta_entete_travaux = function()
     {
         vm.allpv_consta_entete_travaux = result.data.response.filter(function(obj)
         {
-            return obj.validation_fact == null || obj.validation_fact == 0;
+            return obj.validation_fact == null || parseInt(obj.validation_fact) == 0;
         });
         console.log(result.data.response);
        /* if (result.data.response.length>0)
@@ -3503,7 +3560,7 @@ vm.ajouterPv_consta_entete_travaux = function ()
                                       date_etablissement: '',
                                       montant_travaux: 0,
                                       avancement_global_periode: 0,
-                                      avancement_global_cumul: vm.dataLastepv_consta_entete_mpe[0].avancement_global_cumul,
+                                      avancement_global_cumul: parseFloat(vm.dataLastepv_consta_entete_mpe[0].avancement_global_cumul),
                                       validation_fact: null,
                                       id_fact: null
                                     };
@@ -3527,11 +3584,11 @@ vm.ajouterPv_consta_entete_travaux = function ()
                                         $edit: true,
                                         $selected: true,
                                         id: '0',        
-                                        numero: parseInt(vm.dataLasteattachement_mpe[0].numero)+1 ,
+                                        numero: parseInt(vm.dataLastepv_consta_entete_mpe[0].numero)+1 ,
                                         date_etablissement: '',
                                         montant_travaux:0,
                                         avancement_global_periode: 0,
-                                        avancement_global_cumul: vm.dataLastepv_consta_entete_mpe[0].avancement_global_cumul,
+                                        avancement_global_cumul: parseFloat(vm.dataLastepv_consta_entete_mpe[0].avancement_global_cumul),
                                         validation_fact: null,
                                         id_fact: null
                                       };
@@ -7146,7 +7203,7 @@ vm.click_tab_decompte_mpe = function()
     vm.affiche_load =true;
     apiFactory.getAPIgeneraliserREST("facture_mpe/index","menu","getdecompte_mpeBycontratandfacture",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id,'id_facture_mpe',vm.id_facture_mpe).then(function(result)
     {
-        vm.decompte_mpes = result.data.response[0];
+        vm.decompte_mpes = result.data.response;
         console.log(vm.decompte_mpes);
         vm.affiche_load =false;
     });
@@ -8366,6 +8423,37 @@ vm.download_piece_pv_consta_entete_travaux_mpe = function(item)
           vm.formatMillier = function (nombre) 
           {   //var nbr = nombre.toFixed(0);
             var nbr=parseFloat(nombre);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+          }
+          vm.formatMillier_double = function (nombre1,nombre2) 
+          {   //var nbr = nombre.toFixed(0);
+            var nombre_1=0;
+            var nombre_2=0;
+            if (nombre1!=null && nombre1!='undefined')
+            {
+              nombre_1=nombre1;
+            }
+            if (nombre2!=null && nombre2!='undefined')
+            {
+              nombre_2=nombre2;
+            }
+
+            var nbr=parseFloat(nombre_1+nombre_2);
             var n = nbr.toFixed(2);
             var spl= n.split('.');
             var apre_virgule = spl[1];

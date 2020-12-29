@@ -29,7 +29,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.gerer_subvention_financiere.niveau_feffi_prestataire.convention_suivi_fp_obcaf', {
-            title: 'Insertion activité financier (O-BCAF)',
+            title: 'Insertion activité financier',
             icon  : 'icon-keyboard-variant',
             state: 'app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_convention_suivi_fp_obcaf',
             weight: 1,

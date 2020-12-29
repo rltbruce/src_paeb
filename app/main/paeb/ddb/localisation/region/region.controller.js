@@ -411,6 +411,8 @@ function clicke()
                   apiFactory.add("commune/index",datas, config).success(function (data)
                   {                
                     e.success(e.data.models); 
+                    console.log(data);
+                    
                   }).error(function (data)
                     {
                       //vm.showAlert('Error','Erreur lors de l\'insertion de donnée');

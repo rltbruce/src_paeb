@@ -32,7 +32,7 @@ var vs ;
             title: 'Validation site',
             icon  : 'icon-nfc-variant',
             state: 'app.paeb_gerer_subvention_operation_niveau_cisco_feffi_site_validation',
-            weight: 2,
+            weight: 3,
             hidden: function()
             {
                     return vs;

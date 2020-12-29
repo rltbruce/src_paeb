@@ -362,7 +362,8 @@
   /**********************************fin decaissement fonctionnement feffi******************************/
       vm.step_menu_decaiss = function()
       { 
-        vm.stepjusti_decais = false; 
+        vm.stepjusti_decais = false;
+        vm.showbuttonValidation_dec_feffi = false; 
         apiFactory.getAPIgeneraliserREST("decaiss_fonct_feffi/index",'menu','getdecaiss_invalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
         {
             vm.alldecaiss_fonct_feffi = result.data.response; 
@@ -476,7 +477,7 @@
         vm.supprimerDecaiss_fonct_feffi = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -536,7 +537,7 @@
                     supprimer: suppression,
                     id:        getId,
                     montant: decaiss_fonct_feffi.montant,
-                    date_decaissement: convertionDate(new Date(decaiss_fonct_feffi.date_decaissement)),
+                    date_decaissement: convertionDate(decaiss_fonct_feffi.date_decaissement),
                     observation: decaiss_fonct_feffi.observation,
                     id_convention_entete: vm.selectedItemConvention_entete.id,
                     validation:0               
@@ -568,8 +569,7 @@
                           return obj.id !== vm.selectedItemDecaiss_fonct_feffi.id;
                       });
                       vm.showbuttonValidation_dec_feffi = false;
-
-              vm.nbr_decaiss_feffi = parseInt(vm.nbr_decaiss_feffi)-1;
+                      vm.nbr_decaiss_feffi = parseInt(vm.nbr_decaiss_feffi)-1;
                     }
               }
               else
@@ -591,8 +591,29 @@
 
         }
         vm.validerDecaiss_fonct_feffi = function()
-        {
-          maj_in_baseDecaiss_fonct_feffi(vm.selectedItemDecaiss_fonct_feffi,0);
+        {          
+          apiFactory.getAPIgeneraliserREST("justificatif_decaiss_fonct_feffi/index",'id_decaiss_fonct_feffi',vm.selectedItemDecaiss_fonct_feffi.id).then(function(result)
+          {
+            var justificatif_decaiss_fonct_feffi = result.data.response;
+            if (justificatif_decaiss_fonct_feffi.length>0)
+            {
+              maj_in_baseDecaiss_fonct_feffi(vm.selectedItemDecaiss_fonct_feffi,0);
+            }
+            else
+            {
+              $mdDialog.show(
+                $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(false)
+                .parent(angular.element(document.body))
+                .title("cette validation n\'est pas autorisé")
+                .textContent("La pièce justificative est vide")
+                .ariaLabel('Alert')
+                .ok('Fermer')
+                .targetEvent()
+              );
+            }
+          });
         }
 
         //insertion ou mise a jours ou suppression item dans bdd decaiss_fonct_feffi
@@ -608,7 +629,7 @@
                     supprimer: suppression,
                     id:        decaiss_fonct_feffi.id,
                     montant: decaiss_fonct_feffi.montant,
-                    date_decaissement: convertionDate(new Date(decaiss_fonct_feffi.date_decaissement)),
+                    date_decaissement: convertionDate(decaiss_fonct_feffi.date_decaissement),
                     observation: decaiss_fonct_feffi.observation,
                     id_convention_entete: vm.selectedItemConvention_entete.id,
                     validation:1               
@@ -1021,7 +1042,7 @@
                             { 
                               justificatif_decaiss_fonct_feffi.fichier='';
                             var datas = $.param({
-                                                supprimer: suppression,
+                                                supprimer: 1,
                                                 id:        getIdFile,
                                                 description: currentItemJustificatif_decaiss_fonct_feffi.description,
                                                 fichier: currentItemJustificatif_decaiss_fonct_feffi.fichier,
@@ -1030,10 +1051,14 @@
                                   });
                                 apiFactory.add("justificatif_decaiss_fonct_feffi/index",datas, config).success(function (data)
                                 { 
-                                    justificatif_decaiss_fonct_feffi.$selected = false;
+                                  vm.alljustificatif_decaiss_fonct_feffi = vm.alljustificatif_decaiss_fonct_feffi.filter(function(obj)
+                                  {
+                                      return obj.id !== getIdFile;
+                                  });
+                                  justificatif_decaiss_fonct_feffi.$selected = false;
                                     justificatif_decaiss_fonct_feffi.$edit = false;
-                                    justificatif_decaiss_fonct_feffi.fichier=currentItemJustificatif_decaiss_fonct_feffi.fichier;
-                                    vm.selectedItemJustificatif_decaiss_fonct_feffi = {};
+                                    //justificatif_decaiss_fonct_feffi.fichier=currentItemJustificatif_decaiss_fonct_feffi.fichier;
+                                    //.selectedItemJustificatif_decaiss_fonct_feffi = {};
                                
                                 }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
                             });
@@ -1062,7 +1087,7 @@
                       {
                         vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
                         var datas = $.param({
-                          supprimer: suppression,
+                          supprimer: 1,
                           id:        getIdFile,
                           description: currentItemJustificatif_decaiss_fonct_feffi.description,
                           fichier: currentItemJustificatif_decaiss_fonct_feffi.fichier,
@@ -1071,10 +1096,14 @@
                         });
                       apiFactory.add("justificatif_decaiss_fonct_feffi/index",datas, config).success(function (data)
                       { 
-                          justificatif_decaiss_fonct_feffi.$selected = false;
+                        vm.alljustificatif_decaiss_fonct_feffi = vm.alljustificatif_decaiss_fonct_feffi.filter(function(obj)
+                        {
+                            return obj.id !== getIdFile;
+                        });
+                        justificatif_decaiss_fonct_feffi.$selected = false;
                           justificatif_decaiss_fonct_feffi.$edit = false;
-                          justificatif_decaiss_fonct_feffi.fichier=currentItemJustificatif_decaiss_fonct_feffi.fichier;
-                          vm.selectedItemJustificatif_decaiss_fonct_feffi = {};
+                          //justificatif_decaiss_fonct_feffi.fichier=currentItemJustificatif_decaiss_fonct_feffi.fichier;
+                          //vm.selectedItemJustificatif_decaiss_fonct_feffi = {};
                     
                       });
                       });

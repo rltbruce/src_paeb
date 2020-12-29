@@ -34,7 +34,7 @@
             title: 'Validation convention CISCO/FEFFI',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_gerer_subvention_operation_niveau_cisco_feffi_convention_cisco_feffi_validation',
-			weight: 3,
+			weight: 5,
             hidden: function()
             {
                 return vs;

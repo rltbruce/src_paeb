@@ -21,7 +21,8 @@
             'app.paeb.ddb.piece_justificatif_prevu',
             'app.paeb.ddb.pv_constatation_rubrique',
             'app.paeb.ddb.divers_calendrier_paie_moe',
-            'app.paeb.ddb.taxe_marche_public'
+            'app.paeb.ddb.taxe_marche_public',
+            'app.paeb.ddb.rubrique_addition_fonct_feffi'
 
             ] ;
 

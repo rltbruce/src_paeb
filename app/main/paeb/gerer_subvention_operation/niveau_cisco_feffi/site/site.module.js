@@ -32,7 +32,7 @@ var vs ;
             title: 'Insertion site',
             icon  : 'icon-nfc-variant',
             state: 'app.paeb_gerer_subvention_operation_niveau_cisco_feffi_site',
-            weight: 1,
+            weight: 2,
             hidden: function()
             {
                     return vs;

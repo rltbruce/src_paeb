@@ -32,7 +32,7 @@
             title: 'Validation avenant et document',
             icon  : 'icon-keyboard-variant',
             state: 'app.paeb_gerer_subvention_operation_niveau_cisco_feffi_validation_avenant_document',
-            weight: 1,
+            weight: 7,
             hidden: function()
             {
                     return vs;

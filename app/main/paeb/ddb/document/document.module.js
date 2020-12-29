@@ -15,7 +15,7 @@
     function config(msNavigationServiceProvider)
     {
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.document', {
-            title : 'Document',
+            title : 'Rubrique document',
             icon  : 'icon-clipboard-text',
             weight: 14
         });

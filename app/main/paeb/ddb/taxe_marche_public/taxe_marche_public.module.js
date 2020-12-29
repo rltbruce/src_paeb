@@ -28,10 +28,10 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.administration.donneesdebases.taxe_marche_public', {
-            title: 'Acces zone',
+            title: 'Taxe sur marchés publics',
             icon  : 'icon-fullscreen-exit',
             state: 'app.paeb_ddb_taxe_marche_public',
-            weight: 7
+            weight: 16
         });
     }
 

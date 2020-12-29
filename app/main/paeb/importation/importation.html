@@ -1,0 +1,465 @@
+  <div id="formsnoteagence" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Importation</span>                
+            </div>
+
+            <!--div class="title">Note agence d'accompagnement</div-->
+        </div>
+    </div>
+    <!-- / HEADER -->
+    
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+      <ms-form-wizard flex>
+        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+
+          <md-tab>
+            <md-tab-label>
+              <span class="ms-form-wizard-step-label">
+                  <span class="ms-form-wizard-step-number md-accent-bg">
+                    <i class="icon-check s16"></i>
+                </span>
+                  <span class="ms-form-wizard-step-text">Region</span>
+              </span>
+            </md-tab-label>
+            
+            <md-tab-body> 
+              <div style="float: top !important">
+                <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                        Chargement,veuillez patienter s'il vous plait ...
+                </div>
+              </div>      
+          
+              <div>
+                  <form name="filtreformimporter" class="md-inline-form" novalidate >
+                        <br>
+                        <div layout="column" layout-gt-xs="row">
+  
+                          <md-input-container flex="100" flex-gt-xs="90">
+                            <label>Fichier</label>
+                            <input ng-model="vm.fichier" id="fichier" name="fichier" type="file" custom-on-changeimportation="uploadFile"  ng-multiple="false" required />
+                            <div ng-messages="filtreformimporter.fichier.$error" role="alert">
+                              <div ng-message="required"><span>Fichier</span></div>
+                            </div>
+                          </md-input-container>
+                        </div>
+  
+                        <div>
+                         <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                      ng-disabled="filtreformimporter.$invalid" ng-click="vm.importertest_region()">
+                                      Importer
+                        </md-button>
+                        <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltreimporter()">
+                                  Annuler
+                        </md-button>
+                        </div>
+                  </form>
+                  <md-divider></md-divider><br>
+                </div>
+           
+        
+              </md-tab-body>
+            </md-tab>
+
+            <md-tab>
+              <md-tab-label>
+                <span class="ms-form-wizard-step-label">
+                    <span class="ms-form-wizard-step-number md-accent-bg">
+                      <i class="icon-check s16"></i>
+                  </span>
+                    <span class="ms-form-wizard-step-text">District</span>
+                </span>
+              </md-tab-label>
+              
+              <md-tab-body> 
+                <div style="float: top !important">
+                  <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                  <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                          Chargement,veuillez patienter s'il vous plait ...
+                  </div>
+                </div>      
+            
+                <div>
+                    <form name="filtreformimporter" class="md-inline-form" novalidate >
+                          <br>
+                          <div layout="column" layout-gt-xs="row">
+    
+                            <md-input-container flex="100" flex-gt-xs="90">
+                              <label>Fichier</label>
+                              <input ng-model="vm.fichier" id="fichier" name="fichier" type="file" custom-on-changeimportation="uploadFile"  ng-multiple="false" required />
+                              <div ng-messages="filtreformimporter.fichier.$error" role="alert">
+                                <div ng-message="required"><span>Fichier</span></div>
+                              </div>
+                            </md-input-container>
+                          </div>
+    
+                          <div>
+                           <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                        ng-disabled="filtreformimporter.$invalid" ng-click="vm.importertest_district()">
+                                        Importer
+                          </md-button>
+                          <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltreimporter()">
+                                    Annuler
+                          </md-button>
+                          </div>
+                    </form>
+                    <md-divider></md-divider><br>
+                  </div>
+             
+          
+                </md-tab-body>
+              </md-tab>
+
+              <md-tab>
+                <md-tab-label>
+                  <span class="ms-form-wizard-step-label">
+                      <span class="ms-form-wizard-step-number md-accent-bg">
+                        <i class="icon-check s16"></i>
+                    </span>
+                      <span class="ms-form-wizard-step-text">Commune</span>
+                  </span>
+                </md-tab-label>
+                
+                <md-tab-body> 
+                  <div style="float: top !important">
+                    <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                    <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                            Chargement,veuillez patienter s'il vous plait ...
+                    </div>
+                  </div>      
+              
+                  <div>
+                      <form name="filtreformimporter" class="md-inline-form" novalidate >
+                            <br>
+                            <div layout="column" layout-gt-xs="row">
+      
+                              <md-input-container flex="100" flex-gt-xs="90">
+                                <label>Fichier</label>
+                                <input ng-model="vm.fichier" id="fichier" name="fichier" type="file" custom-on-changeimportation="uploadFile"  ng-multiple="false" required />
+                                <div ng-messages="filtreformimporter.fichier.$error" role="alert">
+                                  <div ng-message="required"><span>Fichier</span></div>
+                                </div>
+                              </md-input-container>
+                            </div>
+      
+                            <div>
+                             <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                          ng-disabled="filtreformimporter.$invalid" ng-click="vm.importertest_commune()">
+                                          Importer
+                            </md-button>
+                            <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltreimporter()">
+                                      Annuler
+                            </md-button>
+                            </div>
+                      </form>
+                      <md-divider></md-divider><br>
+                    </div>
+               
+            
+                  </md-tab-body>
+                </md-tab>
+
+                <md-tab>
+                  <md-tab-label>
+                    <span class="ms-form-wizard-step-label">
+                        <span class="ms-form-wizard-step-number md-accent-bg">
+                          <i class="icon-check s16"></i>
+                      </span>
+                        <span class="ms-form-wizard-step-text">Fokontany</span>
+                    </span>
+                  </md-tab-label>
+                  
+                  <md-tab-body> 
+                    <div style="float: top !important">
+                      <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                      <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                              Chargement,veuillez patienter s'il vous plait ...
+                      </div>
+                    </div>      
+                
+                    <div>
+                        <form name="filtreformimporter" class="md-inline-form" novalidate >
+                              <br>
+                              <div layout="column" layout-gt-xs="row">
+        
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Fichier</label>
+                                  <input ng-model="vm.fichier" id="fichier" name="fichier" type="file" custom-on-changeimportation="uploadFile"  ng-multiple="false" required />
+                                  <div ng-messages="filtreformimporter.fichier.$error" role="alert">
+                                    <div ng-message="required"><span>Fichier</span></div>
+                                  </div>
+                                </md-input-container>
+                              </div>
+        
+                              <div>
+                               <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                            ng-disabled="filtreformimporter.$invalid" ng-click="vm.importertest_fokontany()">
+                                            Importer
+                              </md-button>
+                              <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltreimporter()">
+                                        Annuler
+                              </md-button>
+                              </div>
+                        </form>
+                        <md-divider></md-divider><br>
+                      </div>
+                 
+              
+                    </md-tab-body>
+                  </md-tab>
+
+                  <md-tab>
+                    <md-tab-label>
+                      <span class="ms-form-wizard-step-label">
+                          <span class="ms-form-wizard-step-number md-accent-bg">
+                            <i class="icon-check s16"></i>
+                        </span>
+                          <span class="ms-form-wizard-step-text">Zap commune</span>
+                      </span>
+                    </md-tab-label>
+                    
+                    <md-tab-body> 
+                      <div style="float: top !important">
+                        <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                        <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                                Chargement,veuillez patienter s'il vous plait ...
+                        </div>
+                      </div>      
+                  
+                      <div>
+                          <form name="filtreformimporter" class="md-inline-form" novalidate >
+                                <br>
+                                <div layout="column" layout-gt-xs="row">
+          
+                                  <md-input-container flex="100" flex-gt-xs="90">
+                                    <label>Fichier</label>
+                                    <input ng-model="vm.fichier" id="fichier" name="fichier" type="file" custom-on-changeimportation="uploadFile"  ng-multiple="false" required />
+                                    <div ng-messages="filtreformimporter.fichier.$error" role="alert">
+                                      <div ng-message="required"><span>Fichier</span></div>
+                                    </div>
+                                  </md-input-container>
+                                </div>
+          
+                                <div>
+                                 <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                              ng-disabled="filtreformimporter.$invalid" ng-click="vm.importertest_zap_commune()">
+                                              Importer
+                                </md-button>
+                                <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltreimporter()">
+                                          Annuler
+                                </md-button>
+                                </div>
+                          </form>
+                          <md-divider></md-divider><br>
+                        </div>
+                   
+                
+                      </md-tab-body>
+                    </md-tab>
+
+                    <md-tab>
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-number md-accent-bg">
+                              <i class="icon-check s16"></i>
+                          </span>
+                            <span class="ms-form-wizard-step-text">Cisco</span>
+                        </span>
+                      </md-tab-label>
+                      
+                      <md-tab-body> 
+                        <div style="float: top !important">
+                          <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                          <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                                  Chargement,veuillez patienter s'il vous plait ...
+                          </div>
+                        </div>      
+                    
+                        <div>
+                            <form name="filtreformimporter" class="md-inline-form" novalidate >
+                                  <br>
+                                  <div layout="column" layout-gt-xs="row">
+            
+                                    <md-input-container flex="100" flex-gt-xs="90">
+                                      <label>Fichier</label>
+                                      <input ng-model="vm.fichier" id="fichier" name="fichier" type="file" custom-on-changeimportation="uploadFile"  ng-multiple="false" required />
+                                      <div ng-messages="filtreformimporter.fichier.$error" role="alert">
+                                        <div ng-message="required"><span>Fichier</span></div>
+                                      </div>
+                                    </md-input-container>
+                                  </div>
+            
+                                  <div>
+                                   <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                                ng-disabled="filtreformimporter.$invalid" ng-click="vm.importertest_cisco()">
+                                                Importer
+                                  </md-button>
+                                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltreimporter()">
+                                            Annuler
+                                  </md-button>
+                                  </div>
+                            </form>
+                            <md-divider></md-divider><br>
+                          </div>
+                     
+                  
+                        </md-tab-body>
+                      </md-tab>
+
+                      <md-tab>
+                        <md-tab-label>
+                          <span class="ms-form-wizard-step-label">
+                              <span class="ms-form-wizard-step-number md-accent-bg">
+                                <i class="icon-check s16"></i>
+                            </span>
+                              <span class="ms-form-wizard-step-text">Zap</span>
+                          </span>
+                        </md-tab-label>
+                        
+                        <md-tab-body> 
+                          <div style="float: top !important">
+                            <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                            <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                                    Chargement,veuillez patienter s'il vous plait ...
+                            </div>
+                          </div>      
+                      
+                          <div>
+                              <form name="filtreformimporter" class="md-inline-form" novalidate >
+                                    <br>
+                                    <div layout="column" layout-gt-xs="row">
+              
+                                      <md-input-container flex="100" flex-gt-xs="90">
+                                        <label>Fichier</label>
+                                        <input ng-model="vm.fichier" id="fichier" name="fichier" type="file" custom-on-changeimportation="uploadFile"  ng-multiple="false" required />
+                                        <div ng-messages="filtreformimporter.fichier.$error" role="alert">
+                                          <div ng-message="required"><span>Fichier</span></div>
+                                        </div>
+                                      </md-input-container>
+                                    </div>
+              
+                                    <div>
+                                     <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                                  ng-disabled="filtreformimporter.$invalid" ng-click="vm.importertest_zap()">
+                                                  Importer
+                                    </md-button>
+                                    <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltreimporter()">
+                                              Annuler
+                                    </md-button>
+                                    </div>
+                              </form>
+                              <md-divider></md-divider><br>
+                            </div>
+                       
+                    
+                          </md-tab-body>
+                        </md-tab>
+
+                        <md-tab>
+                          <md-tab-label>
+                            <span class="ms-form-wizard-step-label">
+                                <span class="ms-form-wizard-step-number md-accent-bg">
+                                  <i class="icon-check s16"></i>
+                              </span>
+                                <span class="ms-form-wizard-step-text">Ecole</span>
+                            </span>
+                          </md-tab-label>
+                          
+                          <md-tab-body> 
+                            <div style="float: top !important">
+                              <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                              <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                                      Chargement,veuillez patienter s'il vous plait ...
+                              </div>
+                            </div>      
+                        
+                            <div>
+                                <form name="filtreformimporter" class="md-inline-form" novalidate >
+                                      <br>
+                                      <div layout="column" layout-gt-xs="row">
+                
+                                        <md-input-container flex="100" flex-gt-xs="90">
+                                          <label>Fichier</label>
+                                          <input ng-model="vm.fichier" id="fichier" name="fichier" type="file" custom-on-changeimportation="uploadFile"  ng-multiple="false" required />
+                                          <div ng-messages="filtreformimporter.fichier.$error" role="alert">
+                                            <div ng-message="required"><span>Fichier</span></div>
+                                          </div>
+                                        </md-input-container>
+                                      </div>
+                
+                                      <div>
+                                       <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                                    ng-disabled="filtreformimporter.$invalid" ng-click="vm.importertest_ecole()">
+                                                    Importer
+                                      </md-button>
+                                      <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltreimporter()">
+                                                Annuler
+                                      </md-button>
+                                      </div>
+                                </form>
+                                <md-divider></md-divider><br>
+                              </div>
+                         
+                      
+                            </md-tab-body>
+                          </md-tab>
+
+        <md-tab>
+          <md-tab-label>
+            <span class="ms-form-wizard-step-label">
+                <span class="ms-form-wizard-step-number md-accent-bg">
+                  <i class="icon-check s16"></i>
+              </span>
+                <span class="ms-form-wizard-step-text">Ecole Acces</span>
+            </span>
+          </md-tab-label>
+          
+          <md-tab-body> 
+            <div style="float: top !important">
+              <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+              <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                      Chargement,veuillez patienter s'il vous plait ...
+              </div>
+            </div>      
+        
+            <div>
+                <form name="filtreformimporter" class="md-inline-form" novalidate >
+                      <br>
+                      <div layout="column" layout-gt-xs="row">
+
+                        <md-input-container flex="100" flex-gt-xs="90">
+                          <label>Fichier</label>
+                          <input ng-model="vm.fichier" id="fichier" name="fichier" type="file" custom-on-changeimportation="uploadFile"  ng-multiple="false" required />
+                          <div ng-messages="filtreformimporter.fichier.$error" role="alert">
+                            <div ng-message="required"><span>Fichier</span></div>
+                          </div>
+                        </md-input-container>
+                      </div>
+
+                      <div>
+                       <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                                    ng-disabled="filtreformimporter.$invalid" ng-click="vm.importertest_ecoleacces()">
+                                    Importer
+                      </md-button>
+                      <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltreimporter()">
+                                Annuler
+                      </md-button>
+                      </div>
+                </form>
+                <md-divider></md-divider><br>
+              </div>
+         
+      
+            </md-tab-body>
+          </md-tab>
+      
+    </div>
+    <!-- / CONTENT -->
+  </div>

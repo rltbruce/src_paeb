@@ -1,13 +1,15 @@
 (function ()
 {
     'use strict';
-
+    
     angular
         .module('app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat', [
             'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.convention_cisco_feffi_etat',
             'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.feffi_etat',
             'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.site_etat',
-            'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.avenant_document_etat'
+            'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.avenant_document_etat',
+            'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.convention_need_avenant',
+            'app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.convention_presence_reliquat'
             ])       
         .config(config);
         var vs ;

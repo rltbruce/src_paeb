@@ -31,11 +31,7 @@ var vs;
             title: 'Information sur convention CISCO/FEFFI',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_etat_subvention_operation_niveau_cisco_feffi_etat_convention_cisco_feffi_etat',
-			weight: 3,
-            hidden: function()
-            {
-                return vs;
-            }
+			weight: 3
         });
 
 

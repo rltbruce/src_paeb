@@ -1039,7 +1039,7 @@
                             { 
                               justificatif_daaf.fichier='';
                             var datas = $.param({
-                                                supprimer: suppression,
+                                                supprimer: 1,
                                                 id:        getIdFile,
                                                 id_justificatif_prevu: currentItemJustificatif_daaf.id_justificatif_prevu,
                                                 fichier: currentItemJustificatif_daaf.fichier,
@@ -1050,7 +1050,7 @@
                                     vm.showbuttonNouvManuel = true;
                                     justificatif_daaf.$selected = false;
                                     justificatif_daaf.$edit = false;
-                                    justificatif_daaf.fichier=currentItemJustificatif_daaf.fichier;
+                                    justificatif_daaf.fichier=null;
                                     vm.selectedItemJustificatif_daaf = {};
                                 
                                 }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -1079,7 +1079,7 @@
                       {
                         vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
                         var datas = $.param({
-                                                supprimer: suppression,
+                                                supprimer: 1,
                                                 id:        getIdFile,
                                                 id_justificatif_prevu: currentItemJustificatif_daaf.id_justificatif_prevu,
                                                 fichier: currentItemJustificatif_daaf.fichier,
@@ -1090,7 +1090,7 @@
                                     vm.showbuttonNouvManuel = true;
                                     justificatif_daaf.$selected = false;
                                     justificatif_daaf.$edit = false;
-                                    justificatif_daaf.fichier=currentItemJustificatif_daaf.fichier;
+                                    justificatif_daaf.fichier=null;
                                     vm.selectedItemJustificatif_daaf = {};
                                 
                                 });

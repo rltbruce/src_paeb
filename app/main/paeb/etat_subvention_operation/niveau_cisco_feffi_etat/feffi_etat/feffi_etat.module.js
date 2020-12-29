@@ -18,11 +18,11 @@ var vs;
                     controller : 'Feffi_etatController as vm'
                 }
             },
-            bodyClass: 'feffi',
+            bodyClass: 'feffi_etat',
             data : {
               authorizer : true,
               permitted : ["ACC","ADMIN"],
-              page: "feffi"
+              page: "feffi_etat"
             }
         });
 
@@ -31,11 +31,7 @@ var vs;
             title: 'Renseignement FEFFI',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_etat_subvention_operation_niveau_cisco_feffi_etat_feffi_etat',
-            weight: 1,
-            hidden: function()
-            {
-                    return vs;
-            }
+            weight: 1
         });
 
 

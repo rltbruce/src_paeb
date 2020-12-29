@@ -17,7 +17,8 @@
             'app.paeb.etat_subvention_operation',
             'app.paeb.note_agence_acc',
             'app.paeb.reports',
-            'app.paeb.autre_information'
+            //'app.paeb.autre_information',
+            'app.paeb.importation'
         ] ;
 
     angular

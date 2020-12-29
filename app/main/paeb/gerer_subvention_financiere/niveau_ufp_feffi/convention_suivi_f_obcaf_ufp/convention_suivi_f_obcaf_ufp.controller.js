@@ -1341,7 +1341,7 @@
                             { 
                               justificatif_feffi.fichier='';
                             var datas = $.param({
-                                                supprimer: suppression,
+                                                supprimer: 1,
                                                 id:        getIdFile,
                                                 id_justificatif_prevu: currentItemJustificatif_feffi.id_justificatif_prevu,
                                                 fichier: currentItemJustificatif_feffi.fichier,
@@ -1352,7 +1352,7 @@
                                     vm.showbuttonNouvManuel = true;
                                     justificatif_feffi.$selected = false;
                                     justificatif_feffi.$edit = false;
-                                    justificatif_feffi.fichier=currentItemJustificatif_feffi.fichier;
+                                    justificatif_feffi.fichier=null;
                                     vm.selectedItemJustificatif_feffi = {};
                                 console.log('b');
                                 }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
@@ -1381,7 +1381,7 @@
                       {
                         vm.showAlert("Information","Erreur lors de l'enregistrement du fichier");
                         var datas = $.param({
-                                                      supprimer: suppression,
+                                                      supprimer: 1,
                                                       id:        getIdFile,
                                                       id_justificatif_prevu: currentItemJustificatif_feffi.id_justificatif_prevu,
                                                       fichier: currentItemJustificatif_feffi.fichier,
@@ -1393,7 +1393,7 @@
                                           vm.showbuttonNouvManuel = true;
                                           justificatif_feffi.$selected = false;
                                           justificatif_feffi.$edit = false;
-                                          justificatif_feffi.fichier=currentItemJustificatif_feffi.fichier;
+                                          justificatif_feffi.fichier=null;
                                           vm.selectedItemJustificatif_feffi = {};
                                       
                                       });
