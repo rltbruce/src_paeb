@@ -77,7 +77,7 @@
                       <label>Cisco</label>
                       <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
                         <md-option  value="*">*</md-option>
-                        <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                        <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.description}}</md-option>
                                                   
                         </md-select>
                         <div ng-messages="filtreform.cisco.$error" role="alert">
@@ -344,14 +344,14 @@
                 </td>
                                              
                 <td>
-                  <a ng-if="!site.$edit && site.validation==0" ng-click="vm.modifier(site)" title="Modifier">
+                  <a ng-if="!site.$edit" ng-click="vm.modifier(site)" title="Modifier">
                     <span class="icon-table-edit"></span>
                   </a>
                             
-                  <a ng-if="!site.$edit && site.validation==0" ng-click="vm.supprimer(site)" title="Supprimer">
+                  <a ng-if="!site.$edit" ng-click="vm.supprimer(site)" title="Supprimer">
                     <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                   </a>
-                  <span ng-if="!site.$edit && site.validation!=0">Aucune action disponible</span>          
+                  <!--span ng-if="!site.$edit && site.validation!=0">Aucune action disponible</span-->          
                   <a ng-if="site.$edit" ng-click="vm.annuler(site)" title="Annuler modification">
                     <span class="icon-cancel"></span>
                   </a>

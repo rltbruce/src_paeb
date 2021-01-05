@@ -207,6 +207,7 @@
                 apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalidenow','annee',annee).then(function(result)
                 {
                     vm.allconvention_cife_tete = result.data.response; 
+                    
                     vm.affiche_load =false;
                 });
                /* apiFactory.getAll("cisco/index").then(function success(response)
@@ -256,7 +257,7 @@
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importerconvention = function (item,suppression) {
+     /*   vm.importerconvention = function (item,suppression) {
           var file =vm.myFile[0];
           var repertoire = 'importerconvention/';
           var uploadUrl = apiUrl + "importer_convention/importerdonneeconvention";
@@ -304,7 +305,7 @@
           } else {
             vm.showAlert("Information","Aucun fichier");
           }
-        }
+        }*/
 
         vm.recherchefiltre = function(filtre)
         {
@@ -337,12 +338,14 @@
                       break;
 
                   case 'ADMIN':                            
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalidefiltre',
+                            //apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalidefiltre',
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionfiltre',
                             'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
                               filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
                               filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
                                 vm.allconvention_cife_tete = result.data.response; 
+                                console.log(vm.allconvention_cife_tete);
                                 vm.affiche_load =false;
                             });                  
                       break;
@@ -528,39 +531,47 @@
         {
             if (NouvelItemTete==false)
             {   
-                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',convention_cife_tete.id).then(function(result)
-                { 
-                  var convention_valide = result.data.response;
-                  if (convention_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
+                if (vm.session=='AAC')
+                {
+                    apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',convention_cife_tete.id).then(function(result)
                     { 
-
-                      vm.stepOne           = false;
-                      vm.stepTwo           = false;
-                      vm.stepThree         = false;
-                      vm.stepFor           = false;                     
-                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                      var convention_valide = result.data.response;
+                      if (convention_valide.length !=0)
                       {
-                          return obj.id !== convention_cife_tete.id;
-                      });
-                    }, function() {
-                      //alert('rien');
+                          var confirm = $mdDialog.confirm()
+                        .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                        .textContent('')
+                        .ariaLabel('Lucky day')
+                        .clickOutsideToClose(true)
+                        .parent(angular.element(document.body))
+                        .ok('Fermer')
+                        
+                        $mdDialog.show(confirm).then(function()
+                        { 
+    
+                          vm.stepOne           = false;
+                          vm.stepTwo           = false;
+                          vm.stepThree         = false;
+                          vm.stepFor           = false;                     
+                          vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                          {
+                              return obj.id !== convention_cife_tete.id;
+                          });
+                        }, function() {
+                          //alert('rien');
+                        });
+                      }
+                      else
+                      {
+                        test_existanceTete (convention_cife_tete,suppression);                    
+                      }
                     });
-                  }
-                  else
-                  {
-                    test_existanceTete (convention_cife_tete,suppression);                    
-                  }
-                }); 
+                }
+                else
+                {
+                  test_existanceTete (convention_cife_tete,suppression);
+                }
+                 
             } 
             else
             {
@@ -776,10 +787,14 @@
             
             var getId = 0;
             var user = id_user;
+            var validation = 0;
+            var id_conv_ufp=null;
             if (NouvelItemTete ==false)
             {
                 getId = vm.selectedItemTete.id;
                 user = vm.selectedItemTete.user.id; 
+                validation = vm.selectedItemTete.validation;
+                id_conv_ufp= vm.selectedItemTete.id_convention_ufpdaaf
             } 
             
             var datas = $.param({
@@ -794,9 +809,9 @@
                     ref_financement:  convention_cife_tete.ref_financement,
                     ref_convention:   convention_cife_tete.ref_convention,
                     montant_total:    convention_cife_tete.montant_total,
-                    //avancement:    convention_cife_tete.avancement,
-                    id_user:    user,
-                    validation: 0               
+                    id_convention_ufpdaaf:    id_conv_ufp,
+                    id_user:    id_user,
+                    validation: validation               
                 });
                 //console.log(convention.pays_id);
                 console.log(datas);
@@ -1421,40 +1436,48 @@ console.log(fef[0]);
         {
             if (NouvelItemDetail==false)
             {                
-                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
-                { 
-                  var convention_valide = result.data.response;
-                  if (convention_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    { 
-
-                      vm.stepOne           = false;
-                      vm.stepTwo           = false;
-                      vm.stepThree         = false;
-                      vm.stepFor           = false;
-                      vm.allconvention_cife_detail = [];                     
-                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemTete.id;
+                if (vm.session=="AAC")
+                {
+                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
+                  { 
+                    var convention_valide = result.data.response;
+                    if (convention_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      { 
+  
+                        vm.stepOne           = false;
+                        vm.stepTwo           = false;
+                        vm.stepThree         = false;
+                        vm.stepFor           = false;
+                        vm.allconvention_cife_detail = [];                     
+                        vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                        {
+                            return obj.id !== vm.selectedItemTete.id;
+                        });
+                      }, function() {
+                        //alert('rien');
                       });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceDetail (convention_cife_detail,suppression);                    
-                  }
-                }); 
+                    }
+                    else
+                    {
+                      test_existanceDetail (convention_cife_detail,suppression);                    
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceDetail (convention_cife_detail,suppression);
+                }           
+               
             } 
             else
             {
@@ -1797,40 +1820,48 @@ console.log(fef[0]);
         {
             if (NouvelItemcout_maitrise_construction==false)
             {
-                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
-                { 
-                  var convention_valide = result.data.response;
-                  if (convention_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    { 
+                if (vm.session=="AAC")
+                {
+                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
+                  { 
+                    var convention_valide = result.data.response;
+                    if (convention_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      { 
 
-                      vm.stepOne           = false;
-                      vm.stepTwo           = false;
-                      vm.stepThree         = false;
-                      vm.stepFor           = false;
-                      vm.allconvention_cife_detail = [];                     
-                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemTete.id;
+                        vm.stepOne           = false;
+                        vm.stepTwo           = false;
+                        vm.stepThree         = false;
+                        vm.stepFor           = false;
+                        vm.allconvention_cife_detail = [];                     
+                        vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                        {
+                            return obj.id !== vm.selectedItemTete.id;
+                        });
+                      }, function() {
+                        //alert('rien');
                       });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existancecout_maitrise_construction (cout_maitrise_construction,suppression);                  
-                  }
-                });  
+                    }
+                    else
+                    {
+                      test_existancecout_maitrise_construction (cout_maitrise_construction,suppression);                  
+                    }
+                  });
+                }
+                else
+                {
+                  test_existancecout_maitrise_construction (cout_maitrise_construction,suppression); 
+                }
+                
             } 
             else
             {
@@ -2119,40 +2150,48 @@ vm.click_step_cout_sousprojet = function()
         {
             if (NouvelItemcout_sousprojet_construction==false)
             {
-                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
-                { 
-                  var convention_valide = result.data.response;
-                  if (convention_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    { 
+                if (vm.session=="AAC")
+                {
+                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
+                  { 
+                    var convention_valide = result.data.response;
+                    if (convention_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      { 
 
-                      vm.stepOne           = false;
-                      vm.stepTwo           = false;
-                      vm.stepThree         = false;
-                      vm.stepFor           = false;
-                      vm.allconvention_cife_detail = [];                     
-                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemTete.id;
+                        vm.stepOne           = false;
+                        vm.stepTwo           = false;
+                        vm.stepThree         = false;
+                        vm.stepFor           = false;
+                        vm.allconvention_cife_detail = [];                     
+                        vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                        {
+                            return obj.id !== vm.selectedItemTete.id;
+                        });
+                      }, function() {
+                        //alert('rien');
                       });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existancecout_sousprojet_construction (cout_sousprojet_construction,suppression);                 
-                  }
-                }); 
+                    }
+                    else
+                    {
+                      test_existancecout_sousprojet_construction (cout_sousprojet_construction,suppression);                 
+                    }
+                  });
+                }
+                else
+                {
+                  test_existancecout_sousprojet_construction (cout_sousprojet_construction,suppression);
+                }              
+                 
             } 
             else
             {
@@ -2422,40 +2461,48 @@ vm.click_step_cout_sousprojet = function()
         {
             if (NouvelItemBatiment_construction==false)
             {
-                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
-                { 
-                  var convention_valide = result.data.response;
-                  if (convention_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    { 
+                if (vm.session=="AAC")
+                {
+                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
+                  { 
+                    var convention_valide = result.data.response;
+                    if (convention_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      { 
 
-                      vm.stepOne           = false;
-                      vm.stepTwo           = false;
-                      vm.stepThree         = false;
-                      vm.stepFor           = false;
-                      vm.allconvention_cife_detail = [];                     
-                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemTete.id;
+                        vm.stepOne           = false;
+                        vm.stepTwo           = false;
+                        vm.stepThree         = false;
+                        vm.stepFor           = false;
+                        vm.allconvention_cife_detail = [];                     
+                        vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                        {
+                            return obj.id !== vm.selectedItemTete.id;
+                        });
+                      }, function() {
+                        //alert('rien');
                       });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceBatiment_construction (batiment_construction,suppression);                
-                  }
-                });  
+                    }
+                    else
+                    {
+                      test_existanceBatiment_construction (batiment_construction,suppression);                
+                    }
+                  }); 
+                }
+                else
+                {
+                  test_existanceBatiment_construction (batiment_construction,suppression); 
+                }              
+                 
             } 
             else
             {
@@ -2784,41 +2831,48 @@ vm.click_step_cout_sousprojet = function()
         {
             if (NouvelItemLatrine_construction==false)
             {
-                
-                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
-                { 
-                  var convention_valide = result.data.response;
-                  if (convention_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
+                if (vm.session=="AAC")
+                {
+                    apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
                     { 
-
-                      vm.stepOne           = false;
-                      vm.stepTwo           = false;
-                      vm.stepThree         = false;
-                      vm.stepFor           = false;
-                      vm.allconvention_cife_detail = [];                     
-                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                      var convention_valide = result.data.response;
+                      if (convention_valide.length !=0)
                       {
-                          return obj.id !== vm.selectedItemTete.id;
-                      });
-                    }, function() {
-                      //alert('rien');
+                          var confirm = $mdDialog.confirm()
+                        .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                        .textContent('')
+                        .ariaLabel('Lucky day')
+                        .clickOutsideToClose(true)
+                        .parent(angular.element(document.body))
+                        .ok('Fermer')
+                        
+                        $mdDialog.show(confirm).then(function()
+                        { 
+
+                          vm.stepOne           = false;
+                          vm.stepTwo           = false;
+                          vm.stepThree         = false;
+                          vm.stepFor           = false;
+                          vm.allconvention_cife_detail = [];                     
+                          vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                          {
+                              return obj.id !== vm.selectedItemTete.id;
+                          });
+                        }, function() {
+                          //alert('rien');
+                        });
+                      }
+                      else
+                      {
+                        test_existanceLatrine_construction (latrine_construction,suppression);               
+                      }
                     });
-                  }
-                  else
-                  {
-                    test_existanceLatrine_construction (latrine_construction,suppression);               
-                  }
-                }); 
+                }
+                else
+                {
+                  test_existanceLatrine_construction (latrine_construction,suppression); 
+                }
+                 
             } 
             else
             {
@@ -3127,41 +3181,48 @@ vm.click_step_cout_sousprojet = function()
         {
             if (NouvelItemMobilier_construction==false)
             {
-                
-                apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
-                { 
-                  var convention_valide = result.data.response;
-                  if (convention_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    { 
-
-                      vm.stepOne           = false;
-                      vm.stepTwo           = false;
-                      vm.stepThree         = false;
-                      vm.stepFor           = false;
-                      vm.allconvention_cife_detail = [];                     
-                      vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemTete.id;
+                if (vm.session=="AAC")
+                {
+                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','testconventionByIfvalide','id_convention_entete',vm.selectedItemTete.id).then(function(result)
+                  { 
+                    var convention_valide = result.data.response;
+                    if (convention_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      { 
+  
+                        vm.stepOne           = false;
+                        vm.stepTwo           = false;
+                        vm.stepThree         = false;
+                        vm.stepFor           = false;
+                        vm.allconvention_cife_detail = [];                     
+                        vm.allconvention_cife_tete = vm.allconvention_cife_tete.filter(function(obj)
+                        {
+                            return obj.id !== vm.selectedItemTete.id;
+                        });
+                      }, function() {
+                        //alert('rien');
                       });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceMobilier_construction (mobilier_construction,suppression);              
-                  }
-                }); 
+                    }
+                    else
+                    {
+                      test_existanceMobilier_construction (mobilier_construction,suppression);              
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceMobilier_construction (mobilier_construction,suppression); 
+                }
+                 
             } 
             else
             {

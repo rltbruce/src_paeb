@@ -144,9 +144,10 @@
             vm.filtre.id_zap = null;
             if (item.id_commune != '*')
             {
-                apiFactory.getAPIgeneraliserREST("zap_commune/index","getzap_communeBycommune","id_commune",item.id_commune).then(function(result)
+                apiFactory.getAPIgeneraliserREST("zap_commune/index",'menu',"getzap_communeBycommune","id_commune",item.id_commune).then(function(result)
               {
                 vm.zaps = result.data.response;
+                console.log(vm.zaps);
               });
               
             apiFactory.getAPIgeneraliserREST("fokontany/index","cle_etrangere",item.id_commune).then(function(result)

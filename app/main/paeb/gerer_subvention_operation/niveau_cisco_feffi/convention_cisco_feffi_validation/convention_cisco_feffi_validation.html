@@ -95,7 +95,7 @@
                                   <label>Cisco</label>
                                   <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
                                     <md-option  value="*">*</md-option>
-                                    <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                                    <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.description}}</md-option>
                                                         
                                     </md-select>
                                     <div ng-messages="filtreform.cisco.$error" role="alert">
@@ -225,12 +225,12 @@
                               <label>Cisco</label>
                               <md-select ng-model="convention_cife_tete.id_cisco"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_cisco(convention_cife_tete)">
                                 <md-option ng-repeat="cisco in vm.allcisco" value="{{cisco.id}}">
-                                                                    {{cisco.code}}
+                                                                    {{cisco.description}}
                                 </md-option>
                               </md-select>
                             </md-input-container>  
                           </span>
-                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.cisco.code}}</span>
+                          <span ng-if="!convention_cife_tete.$edit">{{convention_cife_tete.cisco.description}}</span>
                         </td>
 
                         <td>

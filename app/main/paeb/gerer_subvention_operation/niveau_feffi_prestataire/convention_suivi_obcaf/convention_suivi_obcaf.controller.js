@@ -968,7 +968,9 @@
             vm.stepdoc_pr = false; 
             vm.stepcontrat_pr = false;
             vm.showbuttonNouvPassation_pr=true;
-                apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+            if (vm.session=="AAC")
+            {
+              apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.allpassation_marches_pr = result.data.response.filter(function(obj)
                     {
@@ -981,7 +983,22 @@
                         vm.affiche_load = false;
                         console.log(vm.allpassation_marches_pr);
                     vm.stepcontrat_pr = true;
-                });        
+                });
+            }
+            else
+            {
+                apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.allpassation_marches_pr = result.data.response;
+                    if (result.data.response.length!=0)
+                    {
+                         vm.showbuttonNouvPassation_pr=false;
+                     };
+                        vm.affiche_load = false;
+                    vm.stepcontrat_pr = true;
+                });
+            }
+                        
           
             
         }
@@ -1119,34 +1136,42 @@
         {
             if (NouvelItemPassation_marches_pr==false)
             {                
-                apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationvalideById','id_passation_pr',passation_marches_pr.id).then(function(result)
-                { 
-                  var passation_pr_valide = result.data.response;
-                  if (passation_pr_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allpassation_marches_pr = vm.allpassation_marches_pr.filter(function(obj)
+                if (condition)
+                {
+                    apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationvalideById','id_passation_pr',passation_marches_pr.id).then(function(result)
+                    { 
+                      var passation_pr_valide = result.data.response;
+                      if (passation_pr_valide.length !=0)
                       {
-                          return obj.id !== passation_marches_pr.id;
-                      });
-                    }, function() {
-                      //alert('rien');
+                          var confirm = $mdDialog.confirm()
+                        .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                        .textContent('')
+                        .ariaLabel('Lucky day')
+                        .clickOutsideToClose(true)
+                        .parent(angular.element(document.body))
+                        .ok('Fermer')
+                        
+                        $mdDialog.show(confirm).then(function()
+                        {                      
+                          vm.allpassation_marches_pr = vm.allpassation_marches_pr.filter(function(obj)
+                          {
+                              return obj.id !== passation_marches_pr.id;
+                          });
+                        }, function() {
+                          //alert('rien');
+                        });
+                      }
+                      else
+                      {
+                        test_existancePassation_marches_pr (passation_marches_pr,suppression);                    
+                      }
                     });
-                  }
-                  else
-                  {
-                    test_existancePassation_marches_pr (passation_marches_pr,suppression);                    
-                  }
-                }); 
+                }
+                else
+                {
+                  test_existancePassation_marches_pr (passation_marches_pr,suppression);
+                }
+                 
             } 
             else
             {
@@ -1469,15 +1494,14 @@
         { 
           if (NouvelItemContrat_partenaire_relai == false)
           {
-            var items = {}; 
-
+            var items = {};
                 apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getdate_contratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     if (result.data.response.length!=0)
                     {                       
                         var passation = result.data.response;
                         if (passation[0].date_signature_contrat!=null)
-                        {                            
+                        {                           
                             
                             items = {
                               $edit: true,
@@ -1523,7 +1547,10 @@
         function ajoutContrat_partenaire_relai(contrat_partenaire_relai,suppression)
         {
             if (NouvelItemContrat_partenaire_relai==false)
-            {
+            {   
+                 
+              if (vm.session=="AAC")
+              {
                 apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratvalideById','id_contrat_partenaire',contrat_partenaire_relai.id).then(function(result)
                 { 
                   var contrat_pr_valide = result.data.response;
@@ -1548,7 +1575,13 @@
                   {
                     test_existanceContrat_partenaire_relai (contrat_partenaire_relai,suppression);                  
                   }
-                }); 
+                });
+              }
+              else
+              {
+                test_existanceContrat_partenaire_relai (contrat_partenaire_relai,suppression); 
+              }
+                 
             } 
             else
             {
@@ -1778,18 +1811,34 @@
 vm.click_step_avenant_pr = function()
 {   
     vm.affiche_load = true;
-    apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+    if (vm.session=="AAC")
     {
-        vm.allavenant_partenaire = result.data.response.filter(function(obj)
-        {
-            return obj.validation == 0;
-        });
-        if (result.data.response.length!=0)
-        {                            
-            vm.showbuttonNouvavenant_partenaire = false;  
-        }
-        vm.affiche_load = false; 
-    });
+      apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+      {
+          vm.allavenant_partenaire = result.data.response.filter(function(obj)
+          {
+              return obj.validation == 0;
+          });
+          if (result.data.response.length!=0)
+          {                            
+              vm.showbuttonNouvavenant_partenaire = false;  
+          }
+          vm.affiche_load = false; 
+      });
+    }
+    else
+    {
+      apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+      {
+          vm.allavenant_partenaire = result.data.response;
+          if (result.data.response.length!=0)
+          {                            
+              vm.showbuttonNouvavenant_partenaire = false;  
+          }
+          vm.affiche_load = false; 
+      });
+    }
+    
 }
 
 //col table
@@ -1839,7 +1888,9 @@ vm.click_step_avenant_pr = function()
         function ajoutAvenant_partenaire(avenant_partenaire,suppression)
         {
             if (NouvelItemAvenant_partenaire==false)
-            {                
+            {    
+              if (vm.session=="AAC")
+              {
                 apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantvalideById','id_avenant_partenaire',avenant_partenaire.id).then(function(result)
                 { 
                   var avenant_pr_valide = result.data.response;
@@ -1868,6 +1919,12 @@ vm.click_step_avenant_pr = function()
                     test_existanceAvenant_partenaire (avenant_partenaire,suppression);                   
                   }
                 }); 
+              }
+              else
+              {
+                test_existanceAvenant_partenaire (avenant_partenaire,suppression);  
+              }            
+                
             } 
             else
             {
@@ -7267,20 +7324,38 @@ vm.click_step_avenant_pr = function()
             vm.step_contrat_moe_onglet = false;
             vm.stepcalendrier_paie_moe = false;
             vm.affiche_load = true;
-            apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+            if (vm.session=="AAC")
             {
-                vm.allpassation_marches_moe = result.data.response.filter(function(obj)
-                {
-                    return obj.validation == 0;
-                }); 
-                if (result.data.response.length!=0)
-                {
-                    vm.showbuttonNouvPassation_moe=false;
-                }
-                vm.step_contrat_moe_onglet = true;
-                vm.affiche_load = false;
-                                
-            });
+              apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+              {
+                  vm.allpassation_marches_moe = result.data.response.filter(function(obj)
+                  {
+                      return obj.validation == 0;
+                  }); 
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvPassation_moe=false;
+                  }
+                  vm.step_contrat_moe_onglet = true;
+                  vm.affiche_load = false;
+                                  
+              });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+              {
+                  vm.allpassation_marches_moe = result.data.response; 
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvPassation_moe=false;
+                  }
+                  vm.step_contrat_moe_onglet = true;
+                  vm.affiche_load = false;
+                                  
+              });
+            }
+            
             
         }
       /**************************************fin passation marchés***************************************************/
@@ -7288,18 +7363,34 @@ vm.click_step_avenant_pr = function()
         { 
             vm.affiche_load = true;
             vm.showbuttonNouvPassation_moe=true;
-            apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+            if (vm.session=="AAC")
             {
-                vm.allpassation_marches_moe = result.data.response.filter(function(obj)
-                {
-                    return obj.validation == 0;
-                }); 
-                if (result.data.response.length!=0)
-                {
-                    vm.showbuttonNouvPassation_moe=false;
-                }
-                vm.affiche_load = false;                                
-            });
+              apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+              {
+                  vm.allpassation_marches_moe = result.data.response.filter(function(obj)
+                  {
+                      return obj.validation == 0;
+                  }); 
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvPassation_moe=false;
+                  }
+                  vm.affiche_load = false;                                
+              });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+              {
+                  vm.allpassation_marches_moe = result.data.response; 
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvPassation_moe=false;
+                  }
+                  vm.affiche_load = false;                                
+              });
+            }
+            
             
         }
         //col table
@@ -7385,35 +7476,43 @@ vm.click_step_avenant_pr = function()
         function ajoutPassation_marches_moe(passation_marches_moe,suppression)
         {
             if (NouvelItemPassation_marches_moe==false)
-            {
-                apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationvalideById','id_passation_moe',passation_marches_moe.id).then(function(result)
+            {   
+                if (vm.session=="AAC")
                 {
-                  var passation_marches_moe_valide = result.data.response;
-                  if (passation_marches_moe_valide.length !=0)
+                  apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationvalideById','id_passation_moe',passation_marches_moe.id).then(function(result)
                   {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allpassation_marches_moe = vm.allpassation_marches_moe.filter(function(obj)
-                      {
-                          return obj.id !== passation_marches_moe.id;
+                    var passation_marches_moe_valide = result.data.response;
+                    if (passation_marches_moe_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {                      
+                        vm.allpassation_marches_moe = vm.allpassation_marches_moe.filter(function(obj)
+                        {
+                            return obj.id !== passation_marches_moe.id;
+                        });
+                      }, function() {
+                        //alert('rien');
                       });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existancePassation_marches_moe (passation_marches_moe,suppression);                  
-                  }
-                }); 
+                    }
+                    else
+                    {
+                      test_existancePassation_marches_moe (passation_marches_moe,suppression);                  
+                    }
+                  });
+                }
+                else
+                {
+                  test_existancePassation_marches_moe (passation_marches_moe,suppression); 
+                }
+                 
             } 
             else
             {
@@ -7854,34 +7953,42 @@ vm.click_step_avenant_pr = function()
         function ajoutContrat_moe(contrat_moe,suppression)
         {
             if (NouvelItemContrat_moe==false)
-            {
-                apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideById','id_contrat_moe',contrat_moe.id).then(function(result)
+            {   
+                if (vm.session=="AAC")
                 {
-                  var contrat_moe_valide = result.data.response;
-                  if (contrat_moe_valide.length !=0)
+                  apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratvalideById','id_contrat_moe',contrat_moe.id).then(function(result)
                   {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
+                    var contrat_moe_valide = result.data.response;
+                    if (contrat_moe_valide.length !=0)
                     {
-                        vm.stepcalendrier_paie_moe=false;
-                        vm.allcontrat_moe = contrat_moe_valide; 
-                        vm.selectedItemContrat_moe ={};
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceContrat_moe (contrat_moe,suppression);                 
-                  }
-                });  
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {
+                          vm.stepcalendrier_paie_moe=false;
+                          vm.allcontrat_moe = contrat_moe_valide; 
+                          vm.selectedItemContrat_moe ={};
+                      }, function() {
+                        //alert('rien');
+                      });
+                    }
+                    else
+                    {
+                      test_existanceContrat_moe (contrat_moe,suppression);                 
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceContrat_moe (contrat_moe,suppression);
+                }
+                  
             } 
             else
             {
@@ -8823,20 +8930,34 @@ vm.click_step_avenant_pr = function()
 
 
         vm.step_avenant_moe = function()
-        {
-            
+        {            
             vm.affiche_load = true;
-            apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+            if (vm.session=="AAC")
             {
-                vm.allavenant_moe = result.data.response.filter(function(obj)
-                {
-                    return obj.validation == 0;
-                });
-                 vm.showbuttonNouvavenant_moe = true;
-                 console.log(vm.allavenant_moe);
+              apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+              {
+                  vm.allavenant_moe = result.data.response.filter(function(obj)
+                  {
+                      return obj.validation == 0;
+                  });
+                  vm.showbuttonNouvavenant_moe = true;
+                  console.log(vm.allavenant_moe);
 
-                vm.affiche_load = false;
-            });
+                  vm.affiche_load = false;
+              });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+              {
+                  vm.allavenant_moe = result.data.response;
+                  vm.showbuttonNouvavenant_moe = true;
+                  console.log(vm.allavenant_moe);
+
+                  vm.affiche_load = false;
+              });
+            }
+            
         }
     /*********************************************fin avenant moe***********************************************/
 
@@ -8888,34 +9009,42 @@ vm.click_step_avenant_pr = function()
         {
             if (NouvelItemAvenant_moe==false)
             {
-                apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantvalideById",'id_avenant_moe',avenant_moe.id).then(function(result)
+                if (vm.session=="AAC")
                 {
-                  var avenant_moe_valide = result.data.response;
-                  if (avenant_moe_valide.length !=0)
+                  apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantvalideById",'id_avenant_moe',avenant_moe.id).then(function(result)
                   {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allavenant_moe = vm.allavenant_moe.filter(function(obj)
-                      {
-                          return obj.id !== avenant_moe.id;
+                    var avenant_moe_valide = result.data.response;
+                    if (avenant_moe_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {                      
+                        vm.allavenant_moe = vm.allavenant_moe.filter(function(obj)
+                        {
+                            return obj.id !== avenant_moe.id;
+                        });
+                      }, function() {
+                        //alert('rien');
                       });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceAvenant_moe (avenant_moe,suppression);           
-                  }
-                }); 
+                    }
+                    else
+                    {
+                      test_existanceAvenant_moe (avenant_moe,suppression);           
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceAvenant_moe (avenant_moe,suppression);
+                }
+                 
             } 
             else
             {
@@ -11079,7 +11208,9 @@ vm.step_menu_mpe = function ()
     vm.stepavenant_mpe = false;
     vm.step_importer_doc_mpe = false;
     vm.showbuttonNouvPassation=true;
-        apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+    if (vm.session=="AAC")
+    {
+      apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
         {
             vm.allpassation_marches = result.data.response.filter(function(obj)
             {
@@ -11092,23 +11223,54 @@ vm.step_menu_mpe = function ()
             vm.step_detail_contrat_mpe = true;
             vm.affiche_load = false;
         });
+    }
+    else
+    {
+      apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+        {
+            vm.allpassation_marches = result.data.response;
+            if (result.data.response.length!=0)
+            {
+               vm.showbuttonNouvPassation=false;
+            }
+            vm.step_detail_contrat_mpe = true;
+            vm.affiche_load = false;
+        });
+    }
+        
    
 }
 vm.steppassation_marches = function()
 {
     vm.affiche_load = true;
-    apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+    if (vm.session=="AAC")
     {
-        vm.allpassation_marches = result.data.response.filter(function(obj)
-        {
-            return obj.validation == 0;
-        });
-        if (result.data.response.length!=0)
-        {
-            vm.showbuttonNouvPassation=false;
-        }
-        vm.affiche_load = false;
-    });
+      apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+      {
+          vm.allpassation_marches = result.data.response.filter(function(obj)
+          {
+              return obj.validation == 0;
+          });
+          if (result.data.response.length!=0)
+          {
+              vm.showbuttonNouvPassation=false;
+          }
+          vm.affiche_load = false;
+      });
+    }
+    else
+    {
+      apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+      {
+          vm.allpassation_marches = result.data.response;
+          if (result.data.response.length!=0)
+          {
+              vm.showbuttonNouvPassation=false;
+          }
+          vm.affiche_load = false;
+      });
+    }
+    
 }
 //col table
         vm.passation_marches_column = [
@@ -11186,36 +11348,44 @@ vm.steppassation_marches = function()
         function ajoutPassation_marches(passation_marches,suppression)
         {
             if (NouvelItemPassation_marches==false)
-            {
-                apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu',"getpassationvalideById",'id_passation_mpe',passation_marches.id).then(function(result)
+            {   
+                if (vm.session=="AAC")
                 {
-                  var passation_marches_valide = result.data.response;
-                  if (passation_marches_valide.length !=0)
+                  apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu',"getpassationvalideById",'id_passation_mpe',passation_marches.id).then(function(result)
                   {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allpassation_marches = vm.allpassation_marches.filter(function(obj)
-                      {
-                          return obj.id !== passation_marches.id;
+                    var passation_marches_valide = result.data.response;
+                    if (passation_marches_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {                      
+                        vm.allpassation_marches = vm.allpassation_marches.filter(function(obj)
+                        {
+                            return obj.id !== passation_marches.id;
+                        });
+                        vm.stepsoumissionnaire = false;
+                      }, function() {
+                        //alert('rien');
                       });
-                      vm.stepsoumissionnaire = false;
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existancePassation_marches (passation_marches,suppression);          
-                  }
-                }); 
+                    }
+                    else
+                    {
+                      test_existancePassation_marches (passation_marches,suppression);          
+                    }
+                  }); 
+                }
+                else
+                {
+                  test_existancePassation_marches (passation_marches,suppression); 
+                }
+                
             } 
             else
             {
@@ -11588,32 +11758,40 @@ vm.steppassation_marches = function()
         function ajoutMpe_soumissionaire(mpe_soumissionaire,suppression)
         {
             if (NouvelItemMpe_soumissionaire==false)
-            {
-                apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu',"getpassationvalideById",'id_passation_mpe',vm.selectedItemPassation_marches.id).then(function(result)
+            {   
+                if (vm.session=="AAC")
                 {
-                  var passation_marches_valide = result.data.response;
-                  if (passation_marches_valide.length !=0)
+                  apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu',"getpassationvalideById",'id_passation_mpe',vm.selectedItemPassation_marches.id).then(function(result)
                   {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
+                    var passation_marches_valide = result.data.response;
+                    if (passation_marches_valide.length !=0)
                     {
-                      vm.stepsoumissionnaire = false;
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceMpe_soumissionaire (mpe_soumissionaire,suppression);        
-                  }
-                }); 
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {
+                        vm.stepsoumissionnaire = false;
+                      }, function() {
+                        //alert('rien');
+                      });
+                    }
+                    else
+                    {
+                      test_existanceMpe_soumissionaire (mpe_soumissionaire,suppression);        
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceMpe_soumissionaire (mpe_soumissionaire,suppression); 
+                }
+                 
             } 
             else
             {
@@ -12003,32 +12181,40 @@ vm.steppassation_marches = function()
         {
             if (NouvelItemContrat_prestataire==false)
             {
-                apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus',"getcontrat_mpevalideById",'id_contrat_mpe',contrat_prestataire.id).then(function(result)
+                if (vm.session=="AAC")
                 {
-                  var contrat_prestataire_valide = result.data.response;
-                  if (contrat_prestataire_valide.length !=0)
+                  apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus',"getcontrat_mpevalideById",'id_contrat_mpe',contrat_prestataire.id).then(function(result)
                   {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allcontrat_prestataire = contrat_prestataire_valide;
-                        vm.stepattachement = false;
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceContrat_prestataire (contrat_prestataire,suppression);         
-                  }
-                }); 
+                    var contrat_prestataire_valide = result.data.response;
+                    if (contrat_prestataire_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {                      
+                        vm.allcontrat_prestataire = contrat_prestataire_valide;
+                          vm.stepattachement = false;
+                      }, function() {
+                        //alert('rien');
+                      });
+                    }
+                    else
+                    {
+                      test_existanceContrat_prestataire (contrat_prestataire,suppression);         
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceContrat_prestataire (contrat_prestataire,suppression);
+                }
+                 
             } 
             else
             {

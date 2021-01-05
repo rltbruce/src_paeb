@@ -46,6 +46,11 @@
           var files = event.target.files;
           vm.myFile = files;
         }
+        vm.annulerfiltreimporter = function()
+        {
+          vm.fichier=null;
+          $scope.uploadFile = null;
+        };
 
         vm.importertest_region = function (item,suppression) 
         {
@@ -527,6 +532,506 @@
                   $mdDialog.show(confirm).then(function()
                   {
                     window.location = apiUrlexcel+"importerecoleacces/"+data.nomFile;
+                    vm.allimporation = data.zap_inserer;
+                    console.log(vm.allzapp);
+                    vm.affiche_load = false;
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+            vm.affiche_load = false;
+          }
+        }
+        vm.importertest_feffi = function (item,suppression) 
+        {
+          vm.affiche_load = true;
+          var file =vm.myFile[0];
+          var repertoire = 'importerfeffi/';
+          var uploadUrl = apiUrl + "importer_feffi/testfeffi";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) 
+          { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               vm.affiche_load = false;
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé erreur: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importerfeffi/"+data.nomFile;
+                    vm.allimporation = data.zap_inserer;
+                    console.log(vm.allzapp);
+                    vm.affiche_load = false;
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+            vm.affiche_load = false;
+          }
+        }
+        vm.importertest_conventionfeffi = function (item,suppression) 
+        {
+          vm.affiche_load = true;
+          var file =vm.myFile[0];
+          var repertoire = 'importerconventionfeffi/';
+          var uploadUrl = apiUrl + "importer_conventionfeffi/testconventionfeffi";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) 
+          { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               vm.affiche_load = false;
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé erreur: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importerconventionfeffi/"+data.nomFile;
+                    vm.allimporation = data.zap_inserer;
+                    console.log(vm.allzapp);
+                    vm.affiche_load = false;
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+            vm.affiche_load = false;
+          }
+        }
+        
+        vm.importertest_avenant_convention = function (item,suppression) 
+        {
+          vm.affiche_load = true;
+          var file =vm.myFile[0];
+          var repertoire = 'importeravenant_convention/';
+          var uploadUrl = apiUrl + "importer_avenant_convention/testavenant_convention";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) 
+          { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               vm.affiche_load = false;
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé erreur: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importeravenant_convention/"+data.nomFile;
+                    vm.allimporation = data.zap_inserer;
+                    console.log(vm.allzapp);
+                    vm.affiche_load = false;
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+            vm.affiche_load = false;
+          }
+        }
+        vm.importertest_passation_partenaire = function (item,suppression) 
+        {
+          vm.affiche_load = true;
+          var file =vm.myFile[0];
+          var repertoire = 'importerpassation_partenaire/';
+          var uploadUrl = apiUrl + "importer_passation_partenaire/testpassation_partenaire";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) 
+          { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               vm.affiche_load = false;
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé erreur: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importerpassation_partenaire/"+data.nomFile;
+                    vm.allimporation = data.zap_inserer;
+                    console.log(vm.allzapp);
+                    vm.affiche_load = false;
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+            vm.affiche_load = false;
+          }
+        }
+        vm.importertest_contrat_partenaire = function (item,suppression) 
+        {
+          vm.affiche_load = true;
+          var file =vm.myFile[0];
+          var repertoire = 'importercontrat_partenaire/';
+          var uploadUrl = apiUrl + "importer_contrat_partenaire/testcontrat_partenaire";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) 
+          { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               vm.affiche_load = false;
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé erreur: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importercontrat_partenaire/"+data.nomFile;
+                    vm.allimporation = data.zap_inserer;
+                    console.log(vm.allzapp);
+                    vm.affiche_load = false;
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+            vm.affiche_load = false;
+          }
+        }
+        
+        vm.importertest_passation_bureau_etude = function (item,suppression) 
+        {
+          vm.affiche_load = true;
+          var file =vm.myFile[0];
+          var repertoire = 'importerpassation_bureau_etude/';
+          var uploadUrl = apiUrl + "importer_passation_bureau_etude/testpassation_bureau_etude";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) 
+          { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               vm.affiche_load = false;
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé erreur: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importerpassation_bureau_etude/"+data.nomFile;
+                    vm.allimporation = data.zap_inserer;
+                    console.log(vm.allzapp);
+                    vm.affiche_load = false;
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+            vm.affiche_load = false;
+          }
+        }
+        
+        vm.importertest_contrat_bureau_etude = function (item,suppression) 
+        {
+          vm.affiche_load = true;
+          var file =vm.myFile[0];
+          var repertoire = 'importercontrat_bureau_etude/';
+          var uploadUrl = apiUrl + "importer_contrat_bureau_etude/testcontrat_bureau_etude";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) 
+          { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               vm.affiche_load = false;
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé erreur: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importercontrat_bureau_etude/"+data.nomFile;
+                    vm.allimporation = data.zap_inserer;
+                    console.log(vm.allzapp);
+                    vm.affiche_load = false;
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+            vm.affiche_load = false;
+          }
+        }
+        
+        vm.importertest_passation_prestataire = function (item,suppression) 
+        {
+          vm.affiche_load = true;
+          var file =vm.myFile[0];
+          var repertoire = 'importerpassation_prestataire/';
+          var uploadUrl = apiUrl + "importer_passation_prestataire/testpassation_prestataire";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) 
+          { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               vm.affiche_load = false;
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé erreur: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importerpassation_prestataire/"+data.nomFile;
+                    vm.allimporation = data.zap_inserer;
+                    console.log(vm.allzapp);
+                    vm.affiche_load = false;
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+            vm.affiche_load = false;
+          }
+        }
+        
+        vm.importertest_contrat_prestataire = function (item,suppression) 
+        {
+          vm.affiche_load = true;
+          var file =vm.myFile[0];
+          var repertoire = 'importercontrat_prestataire/';
+          var uploadUrl = apiUrl + "importer_contrat_prestataire/testcontrat_prestataire";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) 
+          { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               vm.affiche_load = false;
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé erreur: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importercontrat_prestataire/"+data.nomFile;
                     vm.allimporation = data.zap_inserer;
                     console.log(vm.allzapp);
                     vm.affiche_load = false;

@@ -267,7 +267,7 @@
                 <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
                 
                     <!-------------------convention cisco/feffi----------------->
-                    <md-tab ng-disabled="vm.session=='OBCAF'">
+                    <md-tab>
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">DF</span>
@@ -284,9 +284,9 @@
                               <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches_pr()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPassation_pr">
                                 Nouveau
                               </md-button>
-                            <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_passation_pr()" style="width:10%;" ng-show="vm.showbuttonimporter_passation_pr">
+                            <!--md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_passation_pr()" style="width:10%;" ng-show="vm.showbuttonimporter_passation_pr">
                                     Importer
-                            </md-button>
+                            </md-button-->
                           </div><br>
                           <div ng-show="vm.showformimporter_passation_pr">
                             <form name="formimporter_passation_pr" class="md-inline-form" novalidate >
@@ -423,9 +423,9 @@
                             <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterContrat_partenaire_relai()" style="width:10%;" ng-disabled="!vm.showbuttonNouvcontrat_pr">
                               Nouveau
                             </md-button>
-                            <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_pr()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_pr">
+                            <!--md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_pr()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_pr">
                                     Importer
-                            </md-button>
+                            </md-button-->
                           </div><br>
                           <div ng-show="vm.showformimporter_contrat_pr">
                             <form name="formimporter_contrat_pr" class="md-inline-form" novalidate >
@@ -533,14 +533,21 @@
                               </td-->
                                                            
                               <td>
-                                <a ng-if="!contrat_partenaire_relai.$edit && contrat_partenaire_relai.validation==0" ng-click="vm.modifierContrat_partenaire_relai(contrat_partenaire_relai)" title="Modifier">
+                                <a ng-if="!contrat_partenaire_relai.$edit && contrat_partenaire_relai.validation==0 && vm.session=='AAC'" ng-click="vm.modifierContrat_partenaire_relai(contrat_partenaire_relai)" title="Modifier">
                                   <span class="icon-table-edit"></span>
                                 </a>
                                           
-                                <a ng-if="!contrat_partenaire_relai.$edit && contrat_partenaire_relai.validation==0" ng-click="vm.supprimerContrat_partenaire_relai(contrat_partenaire_relai)" title="Supprimer">
+                                <a ng-if="!contrat_partenaire_relai.$edit && contrat_partenaire_relai.validation==0 && vm.session=='AAC'" ng-click="vm.supprimerContrat_partenaire_relai(contrat_partenaire_relai)" title="Supprimer">
                                   <span class="icon-delete"></span>
                                 </a>
-                               <span ng-if="contrat_partenaire_relai.validation==1">Aucune action disponible</span>
+                                <a ng-if="!contrat_partenaire_relai.$edit && vm.session=='ADMIN'" ng-click="vm.modifierContrat_partenaire_relai(contrat_partenaire_relai)" title="Modifier">
+                                  <span class="icon-table-edit"></span>
+                                </a>
+                                          
+                                <a ng-if="!contrat_partenaire_relai.$edit && vm.session=='ADMIN'" ng-click="vm.supprimerContrat_partenaire_relai(contrat_partenaire_relai)" title="Supprimer">
+                                  <span class="icon-delete"></span>
+                                </a>
+                               <span ng-if="contrat_partenaire_relai.validation==1 && vm.session=='AAC'">Aucune action disponible</span>
                                 <a ng-if="contrat_partenaire_relai.$edit" ng-click="vm.annulerContrat_partenaire_relai(contrat_partenaire_relai)" title="Annuler modification">
                                   <span class="icon-cancel"></span>
                                 </a>
@@ -636,14 +643,14 @@
                                         <span ng-if="!avenant_partenaire.$edit">{{vm.formatDate(avenant_partenaire.date_signature)}}</span>
                                       </td>                      
                                       <td>
-                                        <a ng-if="!avenant_partenaire.$edit && avenant_partenaire.validation==0" ng-click="vm.modifierAvenant_partenaire(avenant_partenaire)" title="Modifier">
+                                        <a ng-if="!avenant_partenaire.$edit" ng-click="vm.modifierAvenant_partenaire(avenant_partenaire)" title="Modifier">
                                           <span class="icon-table-edit"></span>
                                         </a>
                                                   
-                                        <a ng-if="!avenant_partenaire.$edit && avenant_partenaire.validation==0" ng-click="vm.supprimerAvenant_partenaire(avenant_partenaire)" title="Supprimer">
+                                        <a ng-if="!avenant_partenaire.$edit" ng-click="vm.supprimerAvenant_partenaire(avenant_partenaire)" title="Supprimer">
                                           <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                         </a>
-                                        <span ng-if="!avenant_partenaire.$edit && avenant_partenaire.validation==1">Aucune action disponible</span>          
+                                        <!--span ng-if="!avenant_partenaire.$edit && avenant_partenaire.validation==1">Aucune action disponible</span-->          
                                         <a ng-if="avenant_partenaire.$edit" ng-click="vm.annulerAvenant_partenaire(avenant_partenaire)" title="Annuler modification">
                                           <span class="icon-cancel"></span>
                                         </a>
@@ -2896,9 +2903,9 @@
                               <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches_moe()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPassation_moe">
                                 Nouveau
                               </md-button>
-                              <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_passation_moe()" style="width:10%;" ng-show="vm.showbuttonimporter_passation_moe">
+                              <!--md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_passation_moe()" style="width:10%;" ng-show="vm.showbuttonimporter_passation_moe">
                                     Importer
-                            </md-button>
+                            </md-button-->
                           </div>
                               
                   <div style="clear:both;"></div>            
@@ -3078,14 +3085,14 @@
                                 </td>
                                                              
                                 <td>
-                                  <a ng-if="!passation_marches_moe.$edit && passation_marches_moe.validation==0" ng-click="vm.modifierPassation_marches_moe(passation_marches_moe)" title="Modifier">
+                                  <a ng-if="!passation_marches_moe.$edit" ng-click="vm.modifierPassation_marches_moe(passation_marches_moe)" title="Modifier">
                                     <span class="icon-table-edit"></span>
                                   </a>
                                             
-                                  <a ng-if="!passation_marches_moe.$edit && passation_marches_moe.validation==0" ng-click="vm.supprimerPassation_marches_moe(passation_marches_moe)" title="Supprimer">
+                                  <a ng-if="!passation_marches_moe.$edit" ng-click="vm.supprimerPassation_marches_moe(passation_marches_moe)" title="Supprimer">
                                     <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                   </a>
-                                   <span ng-if="!passation_marches_moe.$edit && passation_marches_moe.validation==1">Aucune action disponible</span>         
+                                   <!--span ng-if="!passation_marches_moe.$edit && passation_marches_moe.validation==1">Aucune action disponible</span-->         
                                   <a ng-if="passation_marches_moe.$edit" ng-click="vm.annulerPassation_marches_moe(passation_marches_moe)" title="Annuler modification">
                                     <span class="icon-cancel"></span>
                                   </a>
@@ -3118,9 +3125,9 @@
                               <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterContrat_moe()" style="width:10%;"  ng-disabled="!vm.showbuttonNouvcontrat_moe">
                                 Nouveau
                               </md-button>
-                              <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_moe()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_moe">
+                              <!--md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_moe()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_moe">
                                     Importer
-                            </md-button>
+                            </md-button-->
                           </div>
 
                   <div style="clear:both;"></div>            
@@ -3250,14 +3257,20 @@
                                 </td>
                                                              
                                 <td>
-                                  <a ng-if="!contrat_moe.$edit && contrat_moe.validation==0" ng-click="vm.modifierContrat_moe(contrat_moe)" title="Modifier">
+                                  <a ng-if="!contrat_moe.$edit && contrat_moe.validation==0 && vm.session=='AAC'" ng-click="vm.modifierContrat_moe(contrat_moe)" title="Modifier">
                                     <span class="icon-table-edit"></span>
-                                  </a>
-                                            
-                                  <a ng-if="!contrat_moe.$edit && contrat_moe.validation==0" ng-click="vm.supprimerContrat_moe(contrat_moe)" title="Supprimer">
+                                  </a>                                   
+                                  <a ng-if="!contrat_moe.$edit && vm.session=='ADMIN'" ng-click="vm.modifierContrat_moe(contrat_moe)" title="Modifier">
+                                    <span class="icon-table-edit"></span>
+                                  </a>         
+                                  <a ng-if="!contrat_moe.$edit && contrat_moe.validation==0 && vm.session=='AAC'" ng-click="vm.supprimerContrat_moe(contrat_moe)" title="Supprimer">
                                     <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                   </a>
-                                 <span ng-if="!contrat_moe.$edit && contrat_moe.validation==1">Aucune action disponible</span>
+                                           
+                                  <a ng-if="!contrat_moe.$edit && vm.session=='ADMIN'" ng-click="vm.supprimerContrat_moe(contrat_moe)" title="Supprimer">
+                                    <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
+                                  </a>
+                                 <span ng-if="!contrat_moe.$edit && contrat_moe.validation==1 && vm.session=='AAC'">Aucune action disponible</span>
                                   <a ng-if="contrat_moe.$edit" ng-click="vm.annulerContrat_moe(contrat_moe)" title="Annuler modification">
                                     <span class="icon-cancel"></span>
                                   </a>
@@ -4307,14 +4320,22 @@
                                         <span ng-if="!avenant_moe.$edit">{{vm.formatDate(avenant_moe.date_signature)}}</span>
                                       </td>                      
                                       <td>
-                                        <a ng-if="!avenant_moe.$edit && avenant_moe.validation==0" ng-click="vm.modifierAvenant_moe(avenant_moe)" title="Modifier">
+                                        <a ng-if="!avenant_moe.$edit && avenant_moe.validation==0 && vm.session=='AAC'" ng-click="vm.modifierAvenant_moe(avenant_moe)" title="Modifier">
+                                          <span class="icon-table-edit"></span>
+                                        </a>
+                                        
+                                        <a ng-if="!avenant_moe.$edit && vm.session=='ADMIN'" ng-click="vm.modifierAvenant_moe(avenant_moe)" title="Modifier">
                                           <span class="icon-table-edit"></span>
                                         </a>
                                                   
-                                        <a ng-if="!avenant_moe.$edit && avenant_moe.validation==0" ng-click="vm.supprimerAvenant_moe(avenant_moe)" title="Supprimer">
+                                        <a ng-if="!avenant_moe.$edit && avenant_moe.validation==0 && vm.session=='AAC'" ng-click="vm.supprimerAvenant_moe(avenant_moe)" title="Supprimer">
                                           <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                         </a>
-                                        <span ng-if="!avenant_moe.$edit && avenant_moe.validation==1">Aucune action disponible</span>          
+                                              
+                                        <a ng-if="!avenant_moe.$edit && vm.session=='ADMIN'" ng-click="vm.supprimerAvenant_moe(avenant_moe)" title="Supprimer">
+                                          <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
+                                        </a>
+                                        <span ng-if="!avenant_moe.$edit && avenant_moe.validation==1 && vm.session=='AAC'">Aucune action disponible</span>          
                                         <a ng-if="avenant_moe.$edit" ng-click="vm.annulerAvenant_moe(avenant_moe)" title="Annuler modification">
                                           <span class="icon-cancel"></span>
                                         </a>
@@ -4514,9 +4535,9 @@
                               <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterPassation_marches()" style="width:10%;" ng-disabled="!vm.showbuttonNouvPassation">
                                 Nouveau
                               </md-button>
-                              <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_passation_mpe()" style="width:10%;" ng-show="vm.showbuttonimporter_passation_mpe">
+                              <!--md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_passation_mpe()" style="width:10%;" ng-show="vm.showbuttonimporter_passation_mpe">
                                     Importer
-                            </md-button>
+                            </md-button-->
                           </div><br>
                           <div ng-show="vm.showformimporter_passation_mpe">
                             <form name="formimporter_passation_mpe" class="md-inline-form" novalidate >
@@ -4673,15 +4694,15 @@
                                 </td>
                                                              
                                 <td>
-                                  <a ng-if="!passation_marches.$edit && passation_marches.validation ==0" ng-click="vm.modifierPassation_marches(passation_marches)" title="Modifier">
+                                  <a ng-if="!passation_marches.$edit" ng-click="vm.modifierPassation_marches(passation_marches)" title="Modifier">
                                     <span class="icon-table-edit"></span>
                                   </a>
                                             
-                                  <a ng-if="!passation_marches.$edit && passation_marches.validation ==0" ng-click="vm.supprimerPassation_marches(passation_marches)" title="Supprimer">
+                                  <a ng-if="!passation_marches.$edit" ng-click="vm.supprimerPassation_marches(passation_marches)" title="Supprimer">
                                     <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                   </a>
 
-                                  <span ng-if="!passation_marches.$edit && passation_marches.validation ==1">Aucune action disponible</span> 
+                                  <!--span ng-if="!passation_marches.$edit && passation_marches.validation ==1">Aucune action disponible</span--> 
                                             
                                   <a ng-if="passation_marches.$edit" ng-click="vm.annulerPassation_marches(passation_marches)" title="Annuler modification">
                                     <span class="icon-cancel"></span>
@@ -4791,14 +4812,14 @@
                                     <span ng-if="!mpe_soumissionaire.$edit">{{mpe_soumissionaire.prestataire.siege}}</span>
                                   </td>                       
                                   <td>
-                                    <a ng-if="!mpe_soumissionaire.$edit && vm.validation_passation ==0" ng-click="vm.modifierMpe_soumissionaire(mpe_soumissionaire)" title="Modifier">
+                                    <a ng-if="!mpe_soumissionaire.$edit" ng-click="vm.modifierMpe_soumissionaire(mpe_soumissionaire)" title="Modifier">
                                       <span class="icon-table-edit"></span>
                                     </a>
                                               
-                                    <a ng-if="!mpe_soumissionaire.$edit  && vm.validation_passation ==0" ng-click="vm.supprimerMpe_soumissionaire(mpe_soumissionaire)" title="Supprimer">
+                                    <a ng-if="!mpe_soumissionaire.$edit" ng-click="vm.supprimerMpe_soumissionaire(mpe_soumissionaire)" title="Supprimer">
                                       <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                     </a>
-                                    <span ng-if="!mpe_soumissionaire.$edit  && vm.validation_passation ==1">Aucune action disponible</span>          
+                                    <!--span ng-if="!mpe_soumissionaire.$edit  && vm.validation_passation ==1">Aucune action disponible</span-->          
                                     <a ng-if="mpe_soumissionaire.$edit" ng-click="vm.annulerMpe_soumissionaire(mpe_soumissionaire)" title="Annuler modification">
                                       <span class="icon-cancel"></span>
                                     </a>
@@ -4834,9 +4855,9 @@
                               <md-button type="submit" class="md-raised md-accent md-green-600-bg" aria-label="Nouveau" ng-click="vm.ajouterContrat_prestataire()" style="width:10%;" ng-disabled="!vm.showbuttonNouvContrat_prestataire">
                                 Nouveau
                               </md-button>
-                              <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_mpe()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_mpe">
+                              <!--md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_contrat_mpe()" style="width:10%;" ng-show="vm.showbuttonimporter_contrat_mpe">
                                     Importer
-                            </md-button>
+                            </md-button-->
                           </div>
 
                   <div style="clear:both;"></div>            
@@ -4997,14 +5018,21 @@
                                   <span>{{vm.formatDate(contrat_prestataire.passation.date_os)}}</span>
                                 </td>                                                             
                                 <td>
-                                  <a ng-if="!contrat_prestataire.$edit && contrat_prestataire.validation==0" ng-click="vm.modifierContrat_prestataire(contrat_prestataire)" title="Modifier">
+                                  <a ng-if="!contrat_prestataire.$edit && contrat_prestataire.validation==0 && vm.session=='AAC'" ng-click="vm.modifierContrat_prestataire(contrat_prestataire)" title="Modifier">
+                                    <span class="icon-table-edit"></span>
+                                  </a>
+                                  <a ng-if="!contrat_prestataire.$edit && vm.session=='ADMIN'" ng-click="vm.modifierContrat_prestataire(contrat_prestataire)" title="Modifier">
                                     <span class="icon-table-edit"></span>
                                   </a>
                                             
-                                  <a ng-if="!contrat_prestataire.$edit && contrat_prestataire.validation==0" ng-click="vm.supprimerContrat_prestataire(contrat_prestataire)" title="Supprimer">
+                                  <a ng-if="!contrat_prestataire.$edit && contrat_prestataire.validation==0 && vm.session=='AAC'" ng-click="vm.supprimerContrat_prestataire(contrat_prestataire)" title="Supprimer">
                                     <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                   </a>
-                                  <span ng-if="!contrat_prestataire.$edit && contrat_prestataire.validation==1">Aucune action disponible</span>          
+                                           
+                                  <a ng-if="!contrat_prestataire.$edit && vm.session=='ADMIN'" ng-click="vm.supprimerContrat_prestataire(contrat_prestataire)" title="Supprimer">
+                                    <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
+                                  </a>
+                                  <span ng-if="!contrat_prestataire.$edit && contrat_prestataire.validation==1 && vm.session=='AAC'">Aucune action disponible</span>          
                                   <a ng-if="contrat_prestataire.$edit" ng-click="vm.annulerContrat_prestataire(contrat_prestataire)" title="Annuler modification">
                                     <span class="icon-cancel"></span>
                                   </a>

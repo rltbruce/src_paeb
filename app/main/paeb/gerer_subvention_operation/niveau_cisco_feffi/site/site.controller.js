@@ -96,6 +96,23 @@
 
           vm.affiche_load =false;
         });*/
+        var id_user = $cookieStore.get('id');
+        apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+            vm.user = result.data.response;
+
+            if (vm.user.roles.indexOf("AAC")!= -1)
+            { 
+               vm.session='AAC';                  
+            }
+
+            if (vm.user.roles.indexOf("ADMIN")!= -1)
+            {
+                vm.session='ADMIN';
+            }
+
+            
+        });
 
         apiFactory.getAll("classification_site/index").then(function(result)
         {
@@ -210,13 +227,27 @@
         {   
 
             vm.affiche_load =true;
-            apiFactory.getAPIgeneraliserREST("site/index",'menu',
+            if (vm.session=='AAC')
+            {
+              apiFactory.getAPIgeneraliserREST("site/index",'menu',
               'getsiteByenpreparationandinvalide','lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
               filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
               {
                   vm.allsite = result.data.response;
                   vm.affiche_load =false;
               });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("site/index",'menu',
+              'getsiteByfiltre','lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
+              filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
+              {
+                  vm.allsite = result.data.response;
+                  vm.affiche_load =false;
+              });
+            }
+            
         }
 
         vm.change_region = function(item)
@@ -330,37 +361,44 @@
         function ajout(site,suppression)
         {
             if (NouvelItem==false)
-            {   
-                apiFactory.getAPIgeneraliserREST("site/index",'menu','testIfinvalide','id_site', site.id)
-                .then(function(result)
+            {   if (vm.session=='AAC') 
                 {
-                  var site_valide = result.data.response;
-                  console.log(site_valide);
-                  if (site_valide.length!=0)
+                    apiFactory.getAPIgeneraliserREST("site/index",'menu','testIfinvalide','id_site', site.id)
+                  .then(function(result)
                   {
-                    var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allsite = vm.allsite.filter(function(obj)
-                      {
-                          return obj.id !== site.id;
+                    var site_valide = result.data.response;
+                    console.log(site_valide);
+                    if (site_valide.length!=0)
+                    {
+                      var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {                      
+                        vm.allsite = vm.allsite.filter(function(obj)
+                        {
+                            return obj.id !== site.id;
+                        });
+                      }, function() {
+                        //alert('rien');
                       });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existance (site,suppression)
-                  }
-                });
+                    }
+                    else
+                    {
+                      test_existance (site,suppression);
+                    }
+                  });
+                } 
+                else
+                {
+                  test_existance (site,suppression);
+                }
+                
             } 
             else
             {
@@ -558,9 +596,11 @@
             };
             
             var getId = 0;
+            var validation = 0;
             if (NouvelItem==false)
             {
-                getId = vm.selectedItem.id; 
+                getId = vm.selectedItem.id;
+                validation = vm.selectedItem.validation
             } 
             
             var datas = $.param({
@@ -580,7 +620,7 @@
                     id_ecole: site.id_ecole,
                     acces: site.acces,
                     id_classification_site: site.id_classification_site,
-                    validation:0                 
+                    validation:validation                 
                 });
                 //factory
             apiFactory.add("site/index",datas, config).success(function (data)

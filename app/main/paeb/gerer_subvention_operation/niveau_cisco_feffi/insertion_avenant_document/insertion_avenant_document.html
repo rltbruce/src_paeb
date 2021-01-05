@@ -266,9 +266,9 @@
                                       Nouveau
                             </md-button>
 
-                            <md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_avenant_conv()" style="width:10%;" ng-show="vm.showbuttonimporter_avenant_conv">
+                            <!--md-button type="submit" class="md-raised md-accent md-cyan-900-bg" aria-label="Importer" ng-click="vm.affichageformimporter_avenant_conv()" style="width:10%;" ng-show="vm.showbuttonimporter_avenant_conv">
                                     Importer
-                            </md-button><br>
+                            </md-button--><br>
                         </div>
 
                 <div ng-show="vm.showformimporter_avenant_conv">
@@ -357,14 +357,14 @@
                                         <span ng-if="!avenant_convention.$edit">{{vm.formatDate(avenant_convention.date_signature)}}</span>
                                       </td>                      
                                       <td>
-                                        <a ng-if="!avenant_convention.$edit && avenant_convention.validation==0" ng-click="vm.modifierAvenant_convention(avenant_convention)" title="Modifier">
+                                        <a ng-if="!avenant_convention.$edit" ng-click="vm.modifierAvenant_convention(avenant_convention)" title="Modifier">
                                           <span class="icon-table-edit"></span>
                                         </a>
                                                   
-                                        <a ng-if="!avenant_convention.$edit && avenant_convention.validation==0" ng-click="vm.supprimerAvenant_convention(avenant_convention)" title="Supprimer">
+                                        <a ng-if="!avenant_convention.$edit" ng-click="vm.supprimerAvenant_convention(avenant_convention)" title="Supprimer">
                                           <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                         </a>
-                                        <span ng-if="!avenant_convention.$edit && avenant_convention.validation==1">Aucune action disponible</span>          
+                                        <!--span ng-if="!avenant_convention.$edit && avenant_convention.validation==1">Aucune action disponible</span-->          
                                         <a ng-if="avenant_convention.$edit" ng-click="vm.annulerAvenant_convention(avenant_convention)" title="Annuler modification">
                                           <span class="icon-cancel"></span>
                                         </a>

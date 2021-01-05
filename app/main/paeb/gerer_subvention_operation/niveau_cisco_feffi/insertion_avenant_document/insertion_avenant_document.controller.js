@@ -223,13 +223,11 @@
               vm.roles = result.data.response.roles;              
               var utilisateur = result.data.response;
             if (utilisateur.roles.indexOf("AAC")!= -1)
-            {
-                vm.showbuttonNeauveaudemandefeffi=true;                            
+            {                          
                 vm.session = 'AAC';
             }
             if (utilisateur.roles.indexOf("ADMIN")!= -1)
-            {
-                vm.showbuttonNeauveaudemandefeffi=true;                            
+            {                           
                 vm.session = 'ADMIN';
             }                 
 
@@ -298,6 +296,7 @@
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
+                                console.log(vm.allconvention_entete );
                                 vm.affiche_load =false;
                             });
 
@@ -349,24 +348,34 @@
              vm.selectedItemConvention_entete.$selected = true;
         });
         vm.step_importerdocument_feffi= function ()
-        {vm.affiche_load = true;
-                apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentinvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
-                {
-                    vm.alldocument_feffi_scan = result.data.response; 
-                    vm.affiche_load = false;                                       
-                });
+        {   
+          vm.affiche_load = true;
+          if (vm.session=="AAC")
+          {
+              apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentinvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+              {
+                  vm.alldocument_feffi_scan = result.data.response; 
+                  vm.affiche_load = false;                                       
+              });
+          }
+          else
+          {
+              apiFactory.getAPIgeneraliserREST("dossier_feffi/index",'menu','getdocumentByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+              {
+                  vm.alldocument_feffi_scan = result.data.response; 
+                  vm.affiche_load = false;                                       
+              });
+          }
+                
         
         }       
 
   /**********************************************Debut Dossier feffi***************************************************/
     //vm.myFile = [];
      $scope.uploadFile_doc_feffi = function(event)
-       {
-          console.dir(event);
+       {          
           var files = event.target.files;
           vm.myFile = files;
-         // vm.selectedItemDocument_feffi_scan.fichier = vm.myFile[0].name;
-          //console.log(vm.selectedItemDocument_feffi_scan.fichier);
         } 
 
         //fonction ajout dans bdd
@@ -374,35 +383,42 @@
         {
             if (NouvelItemDocument_feffi_scan==false)
             {
-                
-                apiFactory.getAPIgeneraliserREST("document_feffi_scan/index",'menu',"getdocument_feffi_scanvalideById",'id_document_feffi_scan',document_feffi_scan.id_document_feffi_scan).then(function(result)
+                if (vm.session=="AAC")
                 {
-                  var document_feffi_scan_valide = result.data.response;
-                  if (document_feffi_scan_valide.length !=0)
+                  apiFactory.getAPIgeneraliserREST("document_feffi_scan/index",'menu',"getdocument_feffi_scanvalideById",'id_document_feffi_scan',document_feffi_scan.id_document_feffi_scan).then(function(result)
                   {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. ')
-                    .textContent('Les données sont déjà validées!')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.alldocument_feffi_scan = vm.alldocument_feffi_scan.filter(function(obj)
-                      {
-                          return obj.id !== document_feffi_scan.id;
+                    var document_feffi_scan_valide = result.data.response;
+                    if (document_feffi_scan_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. ')
+                      .textContent('Les données sont déjà validées!')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {                      
+                        vm.alldocument_feffi_scan = vm.alldocument_feffi_scan.filter(function(obj)
+                        {
+                            return obj.id !== document_feffi_scan.id;
+                        });
+                      }, function() {
+                        //alert('rien');
                       });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceDocument_feffi_scan (document_feffi_scan,suppression);         
-                  }
-                }); 
+                    }
+                    else
+                    {
+                      test_existanceDocument_feffi_scan (document_feffi_scan,suppression);         
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceDocument_feffi_scan (document_feffi_scan,suppression); 
+                }
+                 
             } 
             else
             {
@@ -950,12 +966,24 @@
         vm.step_avenant_feffi= function ()
         {   
             vm.affiche_load = true;
-            apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantinvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+            if (vm.session=="AAC")
+            {              
+              apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantinvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+              {
+                  vm.allavenant_convention = result.data.response;
+                  vm.showbuttonNouvavenant_convention=true;
+                  vm.affiche_load = false;                                    
+              }); 
+            }
+            else
             {
-                vm.allavenant_convention = result.data.response;
-                vm.showbuttonNouvavenant_convention=true;
-                vm.affiche_load = false;                                    
-            }); 
+              apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+              {
+                  vm.allavenant_convention = result.data.response;
+                  vm.showbuttonNouvavenant_convention=true;
+                  vm.affiche_load = false;                                    
+              });
+            }
         
         }
 //col table
@@ -1006,34 +1034,42 @@
         {
             if (NouvelItemAvenant_convention==false)
             {                
-                apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu',"getavenant_conventionvalideById",'id_avenant_convention',avenant_convention.id).then(function(result)
+                if (vm.session=="AAC")
                 {
-                  var avenant_convention_valide = result.data.response;
-                  if (avenant_convention_valide.length !=0)
+                  apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu',"getavenant_conventionvalideById",'id_avenant_convention',avenant_convention.id).then(function(result)
                   {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé.')
-                    .textContent(' Les données sont déjà validées!')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allavenant_convention = vm.allavenant_convention.filter(function(obj)
-                      {
-                          return obj.id !== avenant_convention.id;
+                    var avenant_convention_valide = result.data.response;
+                    if (avenant_convention_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé.')
+                      .textContent(' Les données sont déjà validées!')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {                      
+                        vm.allavenant_convention = vm.allavenant_convention.filter(function(obj)
+                        {
+                            return obj.id !== avenant_convention.id;
+                        });
+                      }, function() {
+                        //alert('rien');
                       });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceAvenant_convention (avenant_convention,suppression);        
-                  }
-                }); 
+                    }
+                    else
+                    {
+                      test_existanceAvenant_convention (avenant_convention,suppression);        
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceAvenant_convention (avenant_convention,suppression); 
+                }
+                 
             } 
             else
             {
