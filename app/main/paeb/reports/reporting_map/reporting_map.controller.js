@@ -4,13 +4,38 @@
 
     angular
         .module('app.paeb.reports.reporting_map')
-        .controller('Reporting_mapController', Reporting_mapController);
+        .controller('Reporting_mapController', Reporting_mapController)
+        .controller('ReportingDialogController', ReportingDialogController);
     /** @ngInject */
-    function Reporting_mapController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,apiUrlexcel)
+    function Reporting_mapController($mdDialog, $scope, apiFactory, $state,apiUrl,$http,apiUrlFile,apiUrlexcel,$cookieStore)
     { 
         var vm = this;  
         vm.regions = [];
         vm.affiche_load = false;
+        var id_user = $cookieStore.get('id');
+        if (id_user > 0) 
+        {
+
+            apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+            {
+                  var utilisateur = result.data.response;
+                  console.log(utilisateur);
+                  if (utilisateur.roles.indexOf("ADMIN")!= -1)
+                  {
+                    vm.session="ADMIN";
+                  }
+
+                  if (utilisateur.roles.indexOf("AAC")!= -1)
+                  {
+                    vm.session="AAC";
+                  }
+                  if (utilisateur.roles.indexOf("DPFI")!= -1)
+                  {
+                    vm.session="DPFI";
+                  }              
+
+             });
+        }
 
         apiFactory.getAll("region/index").then(function success(response)
         {
@@ -122,12 +147,13 @@
                               opacity: 0                           
                           },
                           events: { 
-                            click: function(event)
+                            click: function()
                             { 
-                              console.log(event);
+                              //console.log(event);
                               apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu",'reportingvuecarte','id_district',data.id).then(function(result)
                               {
                                   vm.data_dialogs = result.data.response;
+                                  console.log(vm.data_dialogs);
                                 vm.showreportingDialog();
                               });
                               vm.district_nom=data.nom;
@@ -211,44 +237,82 @@
 
             }
 
-            vm.showreportingDialog = function (ev)
+            vm.showreportingDialog = function ()
             {
               var confirm = $mdDialog.confirm({
               controller: ReportingDialogController,
               templateUrl: 'app/main/paeb/reports/reporting_map/reporting_map_dialog.html',
               parent: angular.element(document.body),
-              targetEvent: ev, 
-              
-              })
+              locals:{dist: vm.district_nom, data:vm.data_dialogs, session:vm.session}
+              });
 
-                  $mdDialog.show(confirm).then(function(data)
+                  $mdDialog.show(confirm).then(function()
                   {
                  
                   }, function(){//alert('rien');
                 });
 
             } 
-            function ReportingDialogController($mdDialog, $scope, apiFactory, $state)
+             
+         
+    }
+
+    function ReportingDialogController($mdDialog, $scope,dist,data,session,$timeout)
             { 
                 var dg=$scope;
-                console.log(vm.data_dialogs);
-                dg.data_dialog = vm.data_dialogs;
-                dg.district_nom = vm.district_nom;
+               var self= this;
+                console.log(dist);
+                console.log(data);
+                dg.alldataDialog = data;
+                dg.district_nom = dist;
+                dg.selectedItemDataDialog = {};
+                dg.showracourci_dpfi = false;
+                dg.showracourci_aac = false; 
+                dg.showracourcie=false;
                 dg.tOptions = {
                   dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
                   pagingType: 'simple',
-                  autoWidth: false          
+                  autoWidth: false ,
+                  order:[]         
                 };
+                if (session=="ADMIN")
+                  {
+                    dg.showracourci_dpfi = true;
+                    dg.showracourci_aac = true; 
+                    dg.showracourcie=true;
+                  }
+
+                  if (session=="AAC")
+                  {
+                    dg.showracourci_aac = true;
+                    dg.showracourcie=true;
+                  }
+                  if (session=="DPFI")
+                  {
+                    dg.showracourci_dpfi = true;
+                    dg.showracourcie=true;
+                  }
+
+                dg.dataDialog_column = [
+                  {titre:"Référence convention"
+                  },
+                  {titre:"CISCO"
+                  },
+                  {titre:"FEFFI"
+                  },
+                  {titre:"Avancement physique"
+                  }
+                  ];
 
                 dg.cancel = function()
                 {
                   $mdDialog.cancel();
                 };
-
-                dg.dialognouveauajout = function(conven)
+/*
+                dg.dialognouveauajout = function()
                 {  
-                    $mdDialog.hide(convention_a_anvoyer);
-                }
+                    $mdDialog.hide();
+                }*/
                 dg.to_upper= function(nom)
                 { var nom_upper=""
 
@@ -258,11 +322,36 @@
                   return nom_upper
                 }
                 //format date affichage sur datatable
+                dg.selectionDataDialog = function (item)
+                {
+                    dg.selectedItemDataDialog  = item; 
+                    console.log(dg.selectedItemDataDialog) ;            
+                };
+                
+              $scope.$watch('selectedItemDataDialog', function()
+                {
+                    if (!dg.alldataDialog) return;
+                      dg.alldataDialog.forEach(function(iteme)
+                      {
+                          iteme.$selected = false;
+                      });
+                    dg.selectedItemDataDialog.$selected = true;
+                });
+               /* dg.topDirections = ['left', 'up'];
+                dg.bottomDirections = ['down', 'right'];
+                dg.isOpen = false;
+                dg.availableModes = ['md-fling', 'md-scale'];
+                dg.selectedMode = 'md-fling';
+                dg.availableDirections = ['up', 'down', 'left', 'right'];
+                dg.selectedDirection = 'up';*/
+                $scope.isOpen = false;
+      $scope.demo = {
+        isOpen: false,
+        selectedMode : 'md-fling',
+        selectedDirection: 'left'
+      };
 
-            } 
-         
-    }
 
-    
+            }
 
 })();

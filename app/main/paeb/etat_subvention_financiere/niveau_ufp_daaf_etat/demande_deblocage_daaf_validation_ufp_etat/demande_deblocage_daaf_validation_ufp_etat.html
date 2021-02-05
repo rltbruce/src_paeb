@@ -60,14 +60,12 @@
                           <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
                           </md-datepicker>
                         </div>  
-                      <div class="footer-animate-show-hide">
-                          <md-button class="md-raised boutonfixe" disabled>
+                        <div class="footer-animate-show-hide" layout="row" layout-align="end end">
+                          <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                    Recherche
                           </md-button>
                           <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
-                                            Réinitialise
-                          </md-button>
-                            <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
-                                                Recherche
+                                                Réinitialise
                           </md-button>
                       </div>
                    </form>

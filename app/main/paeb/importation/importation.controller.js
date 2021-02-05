@@ -50,6 +50,7 @@
         {
           vm.fichier=null;
           $scope.uploadFile = null;
+          angular.element("input[type='file']").val(null);
         };
 
         vm.importertest_region = function (item,suppression) 
@@ -602,7 +603,64 @@
             vm.affiche_load = false;
           }
         }
-        vm.importertest_conventionfeffi = function (item,suppression) 
+        vm.importertest_membre_feffi = function (item,suppression) 
+        {
+          vm.affiche_load = true;
+          var file =vm.myFile[0];
+          var repertoire = 'importermembre_feffi/';
+          var uploadUrl = apiUrl + "importer_membre_feffi/testmembre_feffi";
+          var name = vm.myFile[0].name;
+          var fd = new FormData();
+          fd.append('file', file);
+          fd.append('repertoire',repertoire);
+          fd.append('name_fichier',name);
+          if(file) 
+          { 
+            var upl=   $http.post(uploadUrl, fd, {
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(data){
+              vm.fichier=data["nom_fichier"];
+              vm.repertoire=data["repertoire"];
+              if(data.erreur==true) {
+               
+               vm.showAlert("Erreur",data.erreur_value);
+               vm.affiche_load = false;
+              } else {
+                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
+                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
+                console.log(data); 
+                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
+                var confirm = $mdDialog.confirm()
+                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnéé erreur: '+data.nbr_refuser)
+                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
+                    .ariaLabel('Lucky day')
+                    .clickOutsideToClose(true)
+                    .parent(angular.element(document.body))
+                    .ok('ok')
+                    .cancel('annuler');
+                  
+                  $mdDialog.show(confirm).then(function()
+                  {
+                    window.location = apiUrlexcel+"importermembre_feffi/"+data.nomFile;
+                    vm.allimporation = data.zap_inserer;
+                    console.log(vm.allzapp);
+                    vm.affiche_load = false;
+                    
+                    angular.element("input[type='file']").val(null);
+                  }, function() {
+                    //alert('rien');
+                  });                    
+              } 
+            }).error(function(){
+              // console.log("Rivotra");
+            });
+          } else {
+            vm.showAlert("Information","Aucun fichier");
+            vm.affiche_load = false;
+          }
+        }
+        vm.importertest_conventionfeffi = function (item) 
         {
           vm.affiche_load = true;
           var file =vm.myFile[0];
@@ -613,6 +671,7 @@
           fd.append('file', file);
           fd.append('repertoire',repertoire);
           fd.append('name_fichier',name);
+          fd.append('lot',item.lot);
           if(file) 
           { 
             var upl=   $http.post(uploadUrl, fd, {

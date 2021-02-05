@@ -45,6 +45,11 @@
         vm.styleTabfils = "acc_sous_menu";
         vm.selectedItemConvention_entete = {} ;
         vm.allconvention_entete = [] ;
+        
+        vm.header_ref_convention = null;
+        vm.header_cisco = null;
+        vm.header_feffi = null;
+        vm.header_class = null;
       
         vm.stepMenu_mpe=false;
         vm.stepMenu_moe=false;
@@ -100,7 +105,7 @@
 
         vm.selectedItemJustificatif_facture_moe = {} ;
         vm.alljustificatif_facture_moe = [] ;
-
+        vm.allsuivi_marche_facture_moe = [] ; 
 
 /*********************************************Fin maitrise d'oeuvre*************************************/
 
@@ -184,7 +189,7 @@
         apiFactory.getAll("region/index").then(function success(response)
         {
           vm.regions = response.data.response;
-        }, function error(response){ alert('something went wrong')});
+        });
 
         vm.filtre_change_region = function(item)
         { 
@@ -219,16 +224,32 @@
             }
           
         }
+        
         vm.filtre_change_commune = function(item)
         { 
-            vm.filtre.id_ecole = null;
+            vm.filtre.id_zap = null;
             if (item.id_commune != '*')
             {
-                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleBycommune","id_commune",item.id_commune).then(function(result)
+                apiFactory.getAPIgeneraliserREST("zap_commune/index","menu","getzapBycommune","id_commune",item.id_commune).then(function(result)
+              {
+                vm.zaps = result.data.response;
+              });
+            }
+            else
+            {
+                vm.zaps = [];
+            }
+          
+        }
+        vm.filtre_change_zap = function(item)
+        { 
+            vm.filtre.id_ecole = null;
+            if (item.id_zap != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleByzap","id_zap",item.id_zap).then(function(result)
               {
                 vm.ecoles = result.data.response;
-                console.log(vm.ecoles);
-              }, function error(result){ alert('something went wrong')});
+              });
             }
             else
             {
@@ -244,7 +265,6 @@
                   apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByecole","id_ecole",item.id_ecole).then(function(result)
                   {
                     vm.convention_cisco_feffi_entetes = result.data.response;
-                    console.log(vm.convention_cisco_feffi_entetes );
                   }, function error(result){ alert('something went wrong')});
             }
         }
@@ -269,36 +289,6 @@
                 }                  
 
          });
-
-         
-        vm.importerfiltre =function(filtre)
-        {   
-            var date_debut = convertionDate(filtre.date_debut);
-            var date_fin = convertionDate(filtre.date_fin);
-            vm.affiche_load = true ;
-            var repertoire = 'bdd_construction';
-
-            apiFactory.getAPIgeneraliserREST("excel_bdd_construction/index",'menu','getdonneeexporter',
-                'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
-                filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
-                filtre.id_convention_entete,"repertoire",repertoire).then(function(result)
-            {
-                vm.status    = result.data.status; 
-                
-                if(vm.status)
-                {
-                    vm.nom_file = result.data.nom_file;            
-                    window.location = apiUrlexcel+"bdd_construction/"+vm.nom_file ;
-                    vm.affiche_load =false; 
-
-                }else{
-                    vm.message=result.data.message;
-                    vm.Alert('Export en excel',vm.message);
-                    vm.affiche_load =false; 
-                }
-                console.log(result.data.data);
-            });
-        } 
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
@@ -325,16 +315,17 @@
 
         vm.recherchefiltre = function(filtre)
         {
-            var date_debut = convertionDate(filtre.date_debut);
-            var date_fin = convertionDate(filtre.date_fin);
+           // var date_debut = convertionDate(filtre.date_debut);
+           // var date_fin = convertionDate(filtre.date_fin);
             vm.affiche_load =true;
-            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
-                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','lot',filtre.lot,'id_region',filtre.id_region
+            ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
             {
                 vm.allconvention_entete = result.data.response;
-                 vm.affiche_load =false;
+                vm.affiche_load =false;
+
             });
-                console.log(filtre);
+                
         }
         
         /***************fin convention cisco/feffi************/
@@ -348,7 +339,12 @@
               vm.stepprestaion_pr=false;
               vm.stepprestation_moe = false;
               vm.stepjusti_d_tra_moe = false;
-              //console.log(vm.nbr_demande_feffi);                        
+              //console.log(vm.nbr_demande_feffi); 
+              
+              vm.header_ref_convention = item.ref_convention;
+              vm.header_cisco = item.cisco.description;
+              vm.header_feffi = item.feffi.denomination; 
+              vm.header_class = 'headerbig';                       
 
         };
         $scope.$watch('vm.selectedItemConvention_entete', function()
@@ -450,7 +446,7 @@
 
            if(item.id!=0)
            {
-              if (item.$selected==false || item.$selected==undefined)
+              /*if (item.$selected==false || item.$selected==undefined)
               {                  
                   apiFactory.getAPIgeneraliserREST("demande_debut_travaux_moe/index","menu","getdemandedisponibleBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
                     {
@@ -468,8 +464,9 @@
                     {
                       vm.alldemande_fin_travaux_moe = result.data.response;
                     });
-                }
+                }*/
                 vm.stepsuivi_paiement_moe = true;
+                vm.stepsuivi_marche_moe = true;
             vm.validation_contrat_moe = item.validation;
             console.log(item);
            }
@@ -525,8 +522,9 @@
         },
         {titre:"Date de BR"
         },
-        {titre:"Situation"
-        }];
+       // {titre:"Situation"
+       // }
+    ];
 
 //fonction selection item Demande_batiment_mpe
         vm.selectionFacture_moe_entete= function (item)
@@ -993,6 +991,140 @@
         }
 /***************************************fin justificatif fin_travaux**********************************************/
 
+vm.click_tab_suivi_marche_moe = function()
+    {
+            
+        apiFactory.getAPIgeneraliserREST("facture_moe_entete/index","menu","getfacture_moevalideBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+        {
+            vm.allsuivi_marche_facture_moe = result.data.response;
+            console.log(vm.allsuivi_marche_facture_moe);
+        });
+    }
+    vm.som_pourcentage_moe= function()
+    {
+        var total_cumul = 0;
+        if (vm.allsuivi_marche_facture_moe.length!=0)
+        {                
+           for(var i = 0; i < vm.allsuivi_marche_facture_moe.length; i++){
+                var product = vm.allsuivi_marche_facture_moe[i];
+                total_cumul += parseFloat(product.pourcentage);
+            }
+        }
+
+        
+            var nbr=parseFloat(total_cumul);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+    }
+    vm.som_montant_facture= function()
+    {
+        var total_cumul = 0;
+        if (vm.allsuivi_marche_facture_moe.length!=0)
+        {                
+           for(var i = 0; i < vm.allsuivi_marche_facture_moe.length; i++){
+                var product = vm.allsuivi_marche_facture_moe[i];
+                total_cumul += parseFloat(product.montant_facture);
+            }
+        }
+
+        
+            var nbr=parseFloat(total_cumul);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+    }
+
+
+    vm.som_rest_payer_moe= function()
+    {
+        var total_cumul = 0;
+        var montant_pre = 0;
+        if (vm.allsuivi_marche_facture_moe.length!=0)
+        {                
+            for(var i = 0; i < vm.allsuivi_marche_facture_moe.length; i++){
+                var product = vm.allsuivi_marche_facture_moe[i];
+                total_cumul += parseFloat(product.montant_facture);
+                montant_pre = parseFloat(product.cout_contrat);
+            }
+        }
+
+        
+            var nbr=montant_pre - parseFloat(total_cumul);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+    }
+    vm.som_montant_prevu_moe= function()
+    {
+        var montant_pre = 0;
+        if (vm.allsuivi_marche_facture_moe.length!=0)
+        {                
+            for(var i = 0; i < vm.allsuivi_marche_facture_moe.length; i++){
+                var product = vm.allsuivi_marche_facture_moe[i];
+                montant_pre = parseFloat(product.cout_contrat);
+            }
+        }
+
+        
+            var nbr=montant_pre;
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+    }
+
 /**********************************debut contrat prestataire****************************************/
          vm.click_step_contrat_mpe=function()
       {
@@ -1034,10 +1166,11 @@
         //fonction selection item contrat
         vm.selectionContrat_prestataire= function (item)
         {
-            vm.selectedItemContrat_prestataire = item;            
-
+            vm.selectedItemContrat_prestataire = item; 
+            console.log(item);           
+            vm.som_montant_contrat_mpe = parseFloat(item.cout_batiment)+parseFloat(item.cout_latrine)+parseFloat(item.cout_mobilier);
             vm.stepsuivi_paiement_mpe = true;
-
+            console.log(vm.som_montant_contrat_mpe); 
             vm.stepsuivi_marche = true;
            if(item.id!=0)
            {  
@@ -2440,6 +2573,68 @@ vm.pv_consta_rubrique_phase_mob_mpe_column = [
                   return "0,00";
               }
     }
+    vm.som_rest_payer= function()
+    {
+        var total_cumul = 0;
+        var montant_pre = 0;
+        if (vm.allsuivi_marche_facture_mpe.length!=0)
+        {                
+            for(var i = 0; i < vm.allsuivi_marche_facture_mpe.length; i++){
+                var product = vm.allsuivi_marche_facture_mpe[i];
+                total_cumul += parseFloat(product.net_payer);
+                montant_pre = parseFloat(product.cout_contrat);
+            }
+        }
+
+        
+            var nbr=montant_pre - parseFloat(total_cumul);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+    }
+    vm.som_montant_prevu= function()
+    {
+        var montant_pre = 0;
+        if (vm.allsuivi_marche_facture_mpe.length!=0)
+        {                
+            for(var i = 0; i < vm.allsuivi_marche_facture_mpe.length; i++){
+                var product = vm.allsuivi_marche_facture_mpe[i];
+                montant_pre = parseFloat(product.cout_contrat);
+            }
+        }
+
+        
+            var nbr=montant_pre;
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+    }
 
         
 
@@ -2511,6 +2706,36 @@ vm.pv_consta_rubrique_phase_mob_mpe_column = [
             return initnumber;
         }
 
+        vm.formatMillierplus = function (nombre1,nombre2) 
+          {   //var nbr = nombre.toFixed(0);
+            var nbr1=0;
+            var nbr2=0;
+            if (nombre1)
+            {
+                nbr1 =nombre1;
+            }
+            if (nombre2)
+            {
+                nbr2 =nombre2;
+            }
+            var nbr=parseFloat(nbr1)+parseFloat(nbr2);
+            var n = nbr.toFixed(2);
+            var spl= n.split('.');
+            var apre_virgule = spl[1];
+            var avan_virgule = spl[0];
+
+              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
+                  avan_virgule += '';
+                  var sep = ' ';
+                  var reg = /(\d+)(\d{3})/;
+                  while (reg.test(avan_virgule)) {
+                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
+                  }
+                  return avan_virgule+","+apre_virgule;
+              } else {
+                  return "0,00";
+              }
+          }
         vm.formatMillier = function (nombre) 
           {   //var nbr = nombre.toFixed(0);
             var nbr=parseFloat(nombre);

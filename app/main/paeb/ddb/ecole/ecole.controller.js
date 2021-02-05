@@ -341,8 +341,16 @@
             item.latitude      = vm.selectedItem.latitude ;
             item.longitude = vm.selectedItem.longitude;
             item.altitude  = vm.selectedItem.altitude;
+            if (vm.selectedItem.zone_subvention) 
+            {
+              
             item.id_zone_subvention = vm.selectedItem.zone_subvention.id ;
-            item.id_acces_zone = vm.selectedItem.acces_zone.id ;
+            }
+            if (vm.selectedItem.acces_zone) 
+            {
+              item.id_acces_zone = vm.selectedItem.acces_zone.id ;
+              
+            }
             apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.region.id).then(function(result)
             {
                       vm.allcisco = result.data.response;

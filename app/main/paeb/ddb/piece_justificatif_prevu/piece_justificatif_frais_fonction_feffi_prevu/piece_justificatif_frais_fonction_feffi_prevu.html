@@ -1,0 +1,97 @@
+  <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Données de bases</span>
+                
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent" href="javascript:;"> Rubrique pièce justificative prévue frais fonctionnement</span>
+            </div>
+
+            <!--div class="title">Pièce justificative prévue feffi</div-->
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+  <!-- CONTENT -->
+    <div class="content" layout="column">
+
+      <div class="form-wrapper md-whiteframe-1dp" >
+
+        <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
+          <div layout="row" layout-align="start">
+              <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
+                <span style="line-height: normal;"> Rubrique pièce justificative</span>
+              </div>
+              <div>
+                <md-button class="md-icon-button" aria-label="add type ouvrage" ng-click="vm.ajouter()">
+                  <md-icon md-font-icon="icon-plus"></md-icon>
+                  <md-tooltip><span>Ajout rubrique pièce justificative</span></md-tooltip>
+                </md-button>
+              </div>                      
+          </div>
+        </header>
+        <div>        
+          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="acce in ::vm.piece_justificatif_frais_fonction_feffi_prevu_column">
+                  <div class="table-header">
+                    <span class="column-title">{{acce.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+                    
+            <tbody>
+              <tr ng-repeat="piece_justificatif_frais_fonction_feffi_prevu in vm.allpiece_justificatif_frais_fonction_feffi_prevu"  ng-class="{selected: piece_justificatif_frais_fonction_feffi_prevu.$selected}" ng-click="vm.selection(piece_justificatif_frais_fonction_feffi_prevu)">           
+                <td>
+                  <span ng-if="piece_justificatif_frais_fonction_feffi_prevu.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Code</label>
+                      <input name="code" type="text" ng-model="piece_justificatif_frais_fonction_feffi_prevu.code"/>
+                    </md-input-container>
+                  </span>                          
+                  <span ng-if="!piece_justificatif_frais_fonction_feffi_prevu.$edit">{{piece_justificatif_frais_fonction_feffi_prevu.code}}</span>
+                </td>
+                          
+                <td>
+                  <span ng-if="piece_justificatif_frais_fonction_feffi_prevu.$edit">
+                    <md-input-container style="width:100%;display: flex !important;">
+                      <label>Intitule</label>
+                      <input name="intitule" type="text" ng-model="piece_justificatif_frais_fonction_feffi_prevu.intitule"/>
+                    </md-input-container>   
+                  </span>
+                            
+                  <span ng-if="!piece_justificatif_frais_fonction_feffi_prevu.$edit">{{piece_justificatif_frais_fonction_feffi_prevu.intitule}}</span>
+                </td>
+                                            
+                <td>
+                  <a ng-if="!piece_justificatif_frais_fonction_feffi_prevu.$edit" ng-click="vm.modifier(piece_justificatif_frais_fonction_feffi_prevu)" title="Modifier">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                            
+                  <a ng-if="!piece_justificatif_frais_fonction_feffi_prevu.$edit" ng-click="vm.supprimer(piece_justificatif_frais_fonction_feffi_prevu)" title="Supprimer">
+                    <span class="icon-table-row-remove" style="color: rgb(211,47,47)" ></span>
+                  </a>
+                            
+                  <a ng-if="piece_justificatif_frais_fonction_feffi_prevu.$edit" ng-click="vm.annuler(piece_justificatif_frais_fonction_feffi_prevu)" title="Annuler modification">
+                    <span class="icon-cancel"></span>
+                  </a>
+                            
+                  <a ng-if="piece_justificatif_frais_fonction_feffi_prevu.$edit && piece_justificatif_frais_fonction_feffi_prevu.code && piece_justificatif_frais_fonction_feffi_prevu.intitule>''" ng-click="vm.ajout(piece_justificatif_frais_fonction_feffi_prevu,0)" title="Sauvegarder">
+                    <span class="icon-content-save"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>          
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>

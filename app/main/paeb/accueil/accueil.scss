@@ -1,5 +1,29 @@
 #forms {
-
+    
+   /* .md-fab-toolbar.md-right .md-toolbar-tools{
+        background-color: yellow;
+    }*/
+    .racourcie_accueil
+    {
+        a.md-button.md-default-theme.md-primary.md-raised, a.md-button.md-primary.md-raised, a.md-button.md-default-theme.md-primary.md-fab, a.md-button.md-primary.md-fab, .md-button.md-default-theme.md-primary.md-raised, .md-button.md-primary.md-raised, .md-button.md-default-theme.md-primary.md-fab, .md-button.md-primary.md-fab {
+            color: rgba(255,255,255,0.87);
+           // background-color: rgb(96, 195, 225) !important;
+           background-color: rgb(5, 126, 182) !important;
+        }
+        .md-primary
+        {
+            color:white !important;
+        }
+        .md-primary:hover
+        {
+            color:rgb(85, 5, 5) !important;
+            background-color: transparent !important;
+        }
+    }
+    .md-fab-toolbar.md-right {
+        //background-color: yellow;
+    }
+    
     .content {
 
         .form-wrapper {
@@ -8,14 +32,15 @@
         .acceuil
         {
                 
-            background-image: url('/../../../../assets/images/backgrounds/Ifaty-941.jpg') !important;
-            .md-raised:hover
-            {
-                color:black !important;
+            //background-image: url('/../../../../assets/images/backgrounds/Ifaty-941.jpg') !important;
+            //.md-primary:hover
+           // {
+                //color:white !important;
                 //border:1px solid rgba(33,150,243,0.3)
                // background-color:rgba(0,0,0,0.5) !important;
-            }
+           // }
         }
+
         .form-data-wrapper {
             margin-left: 16px;
 

@@ -22,7 +22,8 @@
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
           autoWidth: false,
-          responsive: true          
+          responsive: true,
+          order:[]          
         };
 
         //col table
@@ -54,7 +55,7 @@
               description: '',
               id_district: ''
             };         
-            vm.allcisco.push(items);
+            vm.allcisco.unshift(items);
             vm.allcisco.forEach(function(cis)
             {
               if(cis.$selected==true)

@@ -3,7 +3,60 @@
     'use strict';
 
     angular
-        .module('app.paeb.etat_subvention_financiere.niveau_feffi_feffi_etat.addition_frais_fonctionnement_etat')        
+        .module('app.paeb.etat_subvention_financiere.niveau_feffi_feffi_etat.addition_frais_fonctionnement_etat')
+        .directive('customOnChangepieceaddition', function($mdDialog) {
+          return {
+            restrict: 'A',
+            require:'ngModel',
+            link: function (scope, element, attrs,ngModel) {
+              var onChangeHandler = scope.$eval(attrs.customOnChangepieceaddition);
+                element.bind('change', onChangeHandler);
+              element.on("change", function(e) {
+              var files = element[0].files;
+              if((files[0].size/1024/1024)>20)
+                {
+                    ngModel.$setViewValue(null);
+                    var confirm = $mdDialog.confirm()
+                        .title('Cet action n\'est pas autorisé')
+                        .textContent('La taille doit être inferieur à 20MB')
+                        .ariaLabel('Lucky day')
+                        .clickOutsideToClose(true)
+                        .parent(angular.element(document.body))
+                        .ok('Fermer');
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {
+                        ngModel.$setViewValue(null);
+                        element.val(null);
+                        scope.justificatif_frais_fonction_feffi.fichier = null;
+                      }, function() {
+                        //alert('rien');
+                      });
+                }
+                else
+                {                
+                    ngModel.$setViewValue(files);
+                    scope.justificatif_frais_fonction_feffi.fichier = files[0].name;
+                } 
+            });
+            }
+          };
+        })
+        .service('fileUpload', ['$http', function ($http) {
+          this.uploadFileToUrl = function(file, uploadUrl){
+            var fd = new FormData();
+            var rep='test';
+            fd.append('file', file);
+            $http.post(uploadUrl, fd,{
+              transformRequest: angular.identity,
+              headers: {'Content-Type': undefined}
+            }).success(function(){
+               console.log('tafa');
+            }).error(function(){
+               console.log('Rivotra');
+            });
+          }
+        }])         
         .controller('Addition_frais_fonctionnement_etatController', Addition_frais_fonctionnement_etatController)
     /** @ngInject */
     function Addition_frais_fonctionnement_etatController($mdDialog, $scope, apiFactory, $state,loginService,apiUrl,$http,$cookieStore,apiUrlFile)
@@ -20,6 +73,11 @@
         vm.ciscos=[];
         vm.affiche_load =false;
         vm.myFile = [];
+        
+        vm.header_ref_convention = null;
+        vm.header_cisco = null;
+        vm.header_feffi = null;
+        vm.header_class = null;
 
 /*******************************Debut initialisation suivi financement feffi******************************/ 
         vm.validation = 0;
@@ -29,6 +87,11 @@
         //initialisation decaissement fonctionnement feffi       
         vm.selectedItemAddition_frais_fonctionnement = {} ;
         vm.alladdition_frais_fonctionnement = [] ;  
+
+        vm.selectedItemJustificatif_frais_fonction_feffi = {} ;
+        vm.alljustificatif_frais_fonction_feffi = [] ;
+        
+        vm.steppieceaddition = false;
 
 /*******************************Fin initialisation suivi financement feffi******************************/
 
@@ -53,27 +116,21 @@
 
         vm.datenow = new Date();
 
-       
-
         vm.filtre_change_region = function(item)
         { 
             vm.filtre.id_cisco = null;
-           /* if (vm.session=='ADMIN')
-            {*/
-              if (item.id_region != '*')
-              {
-                  apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
-                  {
-                      vm.ciscos = result.data.response;
-                      console.log(vm.ciscos);
-                  }, function error(result){ alert('something went wrong')});
-              }
-              else
-              {               
-                  vm.ciscos = [];                
-              }
-           // }
-            
+            if (item.id_region != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+                {
+                    vm.ciscos = result.data.response;
+                    console.log(vm.ciscos);
+                }, function error(result){ alert('something went wrong')});
+            }
+            else
+            {
+                vm.ciscos = [];
+            }
           
         }
         vm.filtre_change_cisco = function(item)
@@ -92,16 +149,32 @@
             }
           
         }
+        
         vm.filtre_change_commune = function(item)
         { 
-            vm.filtre.id_ecole = null;
+            vm.filtre.id_zap = null;
             if (item.id_commune != '*')
             {
-                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleBycommune","id_commune",item.id_commune).then(function(result)
+                apiFactory.getAPIgeneraliserREST("zap_commune/index","menu","getzapBycommune","id_commune",item.id_commune).then(function(result)
+              {
+                vm.zaps = result.data.response;
+              });
+            }
+            else
+            {
+                vm.zaps = [];
+            }
+          
+        }
+        vm.filtre_change_zap = function(item)
+        { 
+            vm.filtre.id_ecole = null;
+            if (item.id_zap != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleByzap","id_zap",item.id_zap).then(function(result)
               {
                 vm.ecoles = result.data.response;
-                console.log(vm.ecoles);
-              }, function error(result){ alert('something went wrong')});
+              });
             }
             else
             {
@@ -117,7 +190,6 @@
                   apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByecole","id_ecole",item.id_ecole).then(function(result)
                   {
                     vm.convention_cisco_feffi_entetes = result.data.response;
-                    console.log(vm.convention_cisco_feffi_entetes );
                   }, function error(result){ alert('something went wrong')});
             }
         }
@@ -156,11 +228,11 @@
 
         vm.recherchefiltre = function(filtre)
         {
-            var date_debut = convertionDate(filtre.date_debut);
-            var date_fin = convertionDate(filtre.date_fin);
+            //var date_debut = convertionDate(filtre.date_debut);
+            //var date_fin = convertionDate(filtre.date_fin);
             vm.affiche_load =true;
-            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
-                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','lot',filtre.lot,'id_region',filtre.id_region
+            ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
             {
                 vm.allconvention_entete = result.data.response;
                 vm.affiche_load =false;
@@ -177,7 +249,11 @@
            // vm.allconvention= [] ;
             
             vm.showbuttonNouvContrat_prestataire=true;
-            vm.stepAddition=true
+            vm.stepAddition=true;
+            vm.header_ref_convention = item.ref_convention;
+              vm.header_cisco = item.cisco.description;
+              vm.header_feffi = item.feffi.denomination; 
+              vm.header_class = 'headerbig';
                          
 
         };
@@ -200,7 +276,8 @@
           {
               vm.alladdition_frais_fonctionnement = result.data.response;
               console.log(vm.alladdition_frais_fonctionnement);
-              vm.affiche_load =false; 
+              vm.affiche_load =false;               
+              vm.steppieceaddition = false;
           });
         }
         //Masque de saisi ajout
@@ -209,6 +286,7 @@
         vm.selectionAddition_frais_fonctionnement= function (item)
         {
             vm.selectedItemAddition_frais_fonctionnement = item;
+            vm.steppieceaddition = true;
             
         };
         $scope.$watch('vm.selectedItemAddition_frais_fonctionnement', function()
@@ -222,6 +300,42 @@
         });               
 
     /*********************************************Fin decaissement feffi************************************************/
+  /*********************************************Debut justificatif************************************************/
+  vm.step_justificatif = function()
+    {
+      apiFactory.getAPIgeneraliserREST("piece_justificatif_frais_fonction_feffi/index",'id_addition_frais',vm.selectedItemAddition_frais_fonctionnement.id).then(function(result)
+      {
+          vm.alljustificatif_frais_fonction_feffi = result.data.response;
+          console.log(vm.alljustificatif_frais_fonction_feffi);
+      });
+    }
+        vm.justificatif_frais_fonction_feffi_column = [
+        {titre:"Description"
+        },
+        {titre:"Fichier"
+        },
+        {titre:"Action"
+        }];
+    vm.selectionJustificatif_frais_fonction_feffi= function (item)
+        {
+            vm.selectedItemJustificatif_frais_fonction_feffi = item;
+        };
+        $scope.$watch('vm.selectedItemJustificatif_frais_fonction_feffi', function()
+        {
+             if (!vm.alljustificatif_frais_fonction_feffi) return;
+             vm.alljustificatif_frais_fonction_feffi.forEach(function(item)
+             {
+                item.$selected = false;
+             });
+             vm.selectedItemJustificatif_frais_fonction_feffi.$selected = true;
+        });
+
+        vm.download_justificatif = function(item)
+        {
+           window.open(apiUrlFile+item.fichier);
+        }
+    /*********************************************Fin justificatif************************************************/
+
         vm.showAlert = function(titre,content)
         {
           $mdDialog.show(

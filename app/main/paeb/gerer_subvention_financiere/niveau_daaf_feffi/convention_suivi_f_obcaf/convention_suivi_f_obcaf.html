@@ -51,7 +51,7 @@
                           <form name="filtreform" class="md-inline-form" novalidate >
                                 <br>
                             <div style="margin: 0px 15px 10px 15px;">
-                              <div layout="column" layout-gt-xs="row">
+                              <!--div layout="column" layout-gt-xs="row">
                                   <md-input-container>
                                     <span style="font-size: 14.5px" class="text-semibold">Date signature convention du: &nbsp</span>
                                   </md-input-container>
@@ -65,7 +65,7 @@
 
                                   <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
                                   </md-datepicker>
-                                </div>
+                                </div-->
                                 <div layout="column" layout-gt-xs="row">
 
                                   <md-input-container flex="100" flex-gt-xs="90">
@@ -83,8 +83,8 @@
                                   </md-input-container>
                                   <md-input-container flex="100" flex-gt-xs="90">
                                     <label>Région</label>
-                                    <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)">
-                                      <md-option  value="*">*</md-option>
+                                    <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)" required>
+                                      
                                       <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
                                     </md-select>
                                     <div ng-messages="filtreform.region.$error" role="alert">
@@ -94,9 +94,9 @@
                                   
                                   <md-input-container flex="100" flex-gt-xs="90">
                                     <label>Cisco</label>
-                                    <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
-                                      <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                                    <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco" required>
+                                      
+                                      <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.description}}</md-option>
                                                   
                                      </md-select>
                                      <div ng-messages="filtreform.cisco.$error" role="alert">
@@ -189,7 +189,7 @@
                    <tbody>
                      <tr ng-repeat="convention_entete in vm.allconvention_entete"  ng-class="{selected: convention_entete.$selected}" ng-click="vm.selectionConvention_entete(convention_entete)">           
                        <td>
-                        <span>{{convention_entete.cisco.code}}</span>
+                        <span>{{convention_entete.cisco.description}}</span>
                       </td>
 
                       <td>

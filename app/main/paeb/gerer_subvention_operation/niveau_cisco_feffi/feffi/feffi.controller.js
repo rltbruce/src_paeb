@@ -261,12 +261,13 @@
         }
 
          vm.recherchefiltre = function(filtre)
-        {
+        {   vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("ecole/index",'menus',
               'getecoleByfiltre','id_region',filtre.id_region,'id_cisco',
               filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
               {
                   vm.allecole = result.data.response;
+                  vm.affiche_load = false;
               });
         }
 
@@ -558,13 +559,18 @@ vm.step_menu_membre= function()
       console.log( vm.allmembre);
   });
 }
+apiFactory.getAll("organe_feffi/index").then(function success(response)
+{
+    vm.organe_feffis = response.data.response;          
+});
 //col table
         vm.membre_column = [
         {titre:"Nom"},
         {titre:"Prenom"},
         {titre:"Sexe"},
         {titre:"Age"},
-        {titre:"Occupation"},
+        {titre:"Organe"},
+        {titre:"Fonction"},
         {titre:"Action"}]; 
 
         //Masque de saisi ajout
@@ -580,7 +586,8 @@ vm.step_menu_membre= function()
               prenom: '',
               sexe: '',
               age:'',
-              occupation:''
+              id_organe_feffi:'',
+              id_fonction_feffi:''
             };         
             vm.allmembre.push(items);
             vm.allmembre.forEach(function(mem)
@@ -623,7 +630,8 @@ vm.step_menu_membre= function()
             item.prenom   = currentItemMembre.prenom ;
             item.sexe      = currentItemMembre.sexe;
             item.age      = currentItemMembre.age ;
-            item.occupation   = currentItemMembre.occupation ; 
+            item.id_organe_feffi   = currentItemMembre.id_organe_feffi ; 
+            item.id_fonction_feffi   = currentItemMembre.id_fonction_feffi ;
           }else
           {
             vm.allmembre = vm.allmembre.filter(function(obj)
@@ -674,6 +682,10 @@ vm.step_menu_membre= function()
             item.sexe  = vm.selectedItemMembre.sexe;
             item.age      =parseInt(vm.selectedItemMembre.age)  ;
             item.occupation = vm.selectedItemMembre.occupation; 
+            apiFactory.getAPIgeneraliserREST("fonction_feffi/index",'menu','getfonction_feffiByorgane','id_organe_feffi',item.id_organe_feffi).then(function(result)
+          {
+            vm.fonction_feffis= result.data.response;
+          });
         };
 
         //fonction bouton suppression item membre
@@ -709,7 +721,8 @@ vm.step_menu_membre= function()
                     || (mem[0].prenom!=currentItemMembre.prenom)
                     || (mem[0].sexe!=currentItemMembre.sexe)
                     || (mem[0].age!=currentItemMembre.age)
-                    || (mem[0].occupation!=currentItemMembre.occupation))                    
+                    || (mem[0].id_organe_feffi!=currentItemMembre.id_organe_feffi)
+                    || (mem[0].id_fonction_feffi!=currentItemMembre.id_fonction_feffi))                    
                       { 
                          insert_in_baseMembre(item,suppression);
                       }
@@ -745,18 +758,29 @@ vm.step_menu_membre= function()
                     prenom: membre.prenom,
                     sexe: membre.sexe,
                     age: membre.age,
-                    occupation: membre.occupation,
+                    id_organe_feffi: membre.id_organe_feffi,
+                    id_fonction_feffi: membre.id_fonction_feffi,
                     id_feffi: vm.selectedItem.id                
                 });
                 //console.log(feffi.pays_id);
                 //factory
             apiFactory.add("membre_feffi/index",datas, config).success(function (data)
             {
-                if (NouvelItemMembre == false)
+              var org = vm.organe_feffis.filter(function(obj)
+              {
+                  return obj.id == membre.id_organe_feffi;
+              });
+              var fonc = vm.fonction_feffis.filter(function(obj)
+              {
+                  return obj.id == membre.id_fonction_feffi;
+              });
+              if (NouvelItemMembre == false)
                 {
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
+                        vm.selectedItemMembre.fonction_feffi = fonc[0];
+                        vm.selectedItemMembre.organe_feffi = org[0];
                         vm.selectedItemMembre.$selected  = false;
                         vm.selectedItemMembre.$edit      = false;
                         vm.selectedItemMembre ={};
@@ -788,7 +812,9 @@ vm.step_menu_membre= function()
                 }
                 else
                 {
-                  membre.id  =   String(data.response);              
+                  membre.id  =   String(data.response); 
+                  membre.fonction_feffi = fonc[0];
+                  membre.organe_feffi = org[0];             
                   NouvelItemMembre=false;
 
                   vm.selectedItem.nbr_membre = parseInt(vm.selectedItem.nbr_membre)+1;
@@ -803,6 +829,14 @@ vm.step_menu_membre= function()
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
+        }
+        vm.change_organe_feffi = function(membre)
+        {
+          apiFactory.getAPIgeneraliserREST("fonction_feffi/index",'menu','getfonction_feffiByorgane','id_organe_feffi',membre.id_organe_feffi).then(function(result)
+          {
+            vm.fonction_feffis= result.data.response;
+            console.log(vm.fonction_feffis);
+          });
         }
 
         /**********************************debut compte****************************************/
@@ -1103,12 +1137,14 @@ vm.step_menu_membre= function()
         vm.membre_titulaire_column = [
         {titre:"Nom"},
         {titre:"Prenom"},
-        {titre:"Occupation"},
+        {titre:"Organe"},
+        {titre:"Fonction"},
         {titre:"Action"}]; 
 
         //Masque de saisi ajout
         vm.ajouterMembre_titulaire = function ()
         { 
+          
           if (NouvelItemMembre_titulaire == false)
           {
             var items = {
@@ -1117,7 +1153,7 @@ vm.step_menu_membre= function()
               id: '0',         
               nom: '',
               prenom: '',
-              occupation:''
+              organe_libelle:''
             };         
             vm.allmembre_titulaire.push(items);
             vm.allmembre_titulaire.forEach(function(mem)
@@ -1127,7 +1163,11 @@ vm.step_menu_membre= function()
                 vm.selectedItemMembre_titulaire = mem;
               }
             });
-
+            apiFactory.getAPIgeneraliserREST("membre_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
+            {
+                vm.allmembre = result.data.response; 
+                console.log( vm.allmembre);
+            });
             NouvelItemMembre_titulaire = true ;
           }else
           {
@@ -1158,7 +1198,8 @@ vm.step_menu_membre= function()
             item.$selected = false;
             item.nom      = currentItemMembre_titulaire.nom ;
             item.prenom   = currentItemMembre_titulaire.prenom ;
-            item.occupation   = currentItemMembre_titulaire.occupation ; 
+            item.id_organe_feffi   = currentItemMembre_titulaire.id_organe_feffi ; 
+            item.id_fonction_feffi   = currentItemMembre_titulaire.id_fonction_feffi ;
           }else
           {
             vm.allmembre_titulaire = vm.allmembre_titulaire.filter(function(obj)
@@ -1206,7 +1247,8 @@ vm.step_menu_membre= function()
             item.$selected = true;            
             item.id_membre      = vm.selectedItemMembre_titulaire.membre.id ;
             item.prenom = vm.selectedItemMembre_titulaire.membre.prenom;
-            item.occupation = vm.selectedItemMembre_titulaire.membre.occupation; 
+            item.id_organe_feffi = vm.selectedItemMembre_titulaire.membre.id_organe_feffi; 
+            item.id_fonction_feffi = vm.selectedItemMembre_titulaire.membre.id_fonction_feffi; 
         };
 
         //fonction bouton suppression item membre_titulaire
@@ -1286,7 +1328,8 @@ vm.step_menu_membre= function()
                     // Update or delete: id exclu                 
                     if(suppression==0)
                     {
-                        vm.selectedItemMembre_titulaire.membre  = membre[0];
+                        vm.selectedItemMembre_titulaire.membre  = {organe_libelle:membre[0].organe_feffi.libelle,
+                          fonction_libelle:membre[0].fonction_feffi.libelle};
                         vm.selectedItemMembre_titulaire.$selected  = false;
                         vm.selectedItemMembre_titulaire.$edit      = false;
                         vm.selectedItemMembre_titulaire ={};
@@ -1302,13 +1345,20 @@ vm.step_menu_membre= function()
                 }
                 else
                 {
-                  membre_titulaire.membre  = membre[0];
+                  membre_titulaire.membre  = 
+                  {
+                    organe_libelle:membre[0].organe_feffi.libelle,
+                    fonction_libelle:membre[0].fonction_feffi.libelle,
+                    nom:membre[0].nom,
+                    prenom:membre[0].prenom
+                  };
                   membre_titulaire.id  =   String(data.response);              
                   NouvelItemMembre_titulaire=false;
             }
               membre_titulaire.$selected = false;
               membre_titulaire.$edit = false;
-              vm.selectedItemMembre_titulaire = {};
+              //vm.selectedItemMembre_titulaire = {};
+              console.log(vm.selectedItemMembre_titulaire);
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
@@ -1331,7 +1381,10 @@ vm.step_menu_membre= function()
             });
             console.log(tousmembre);
             item.prenom = tousmembre[0].prenom;
-            item.occupation = tousmembre[0].occupation;
+            item.membre = 
+            { organe_libelle:tousmembre[0].organe_feffi.libelle,
+              fonction_libelle:tousmembre[0].fonction_feffi.libelle
+            };
           }
           else
           {

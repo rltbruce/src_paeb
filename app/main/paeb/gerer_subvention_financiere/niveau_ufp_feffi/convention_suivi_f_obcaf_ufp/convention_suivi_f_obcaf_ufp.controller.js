@@ -76,6 +76,11 @@
         vm.ciscos=[];
         vm.affiche_load =false;
         vm.myFile = [];
+        
+        vm.header_ref_convention = null;
+        vm.header_cisco = null;
+        vm.header_feffi = null;
+        vm.header_class = null;
 
 /*******************************Debut initialisation suivi financement feffi******************************/        
 
@@ -136,27 +141,21 @@
 
         vm.datenow = new Date();
 
-       
-
         vm.filtre_change_region = function(item)
         { 
             vm.filtre.id_cisco = null;
-            if (vm.session=='ADMIN' || vm.session=='AAC')
+            if (item.id_region != '*')
             {
-              if (item.id_region != '*')
-              {
-                  apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
-                  {
-                      vm.ciscos = result.data.response;
-                      console.log(vm.ciscos);
-                  }, function error(result){ alert('something went wrong')});
-              }
-              else
-              {               
-                  vm.ciscos = [];                
-              }
+                apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+                {
+                    vm.ciscos = result.data.response;
+                    console.log(vm.ciscos);
+                }, function error(result){ alert('something went wrong')});
             }
-            
+            else
+            {
+                vm.ciscos = [];
+            }
           
         }
         vm.filtre_change_cisco = function(item)
@@ -175,16 +174,32 @@
             }
           
         }
+        
         vm.filtre_change_commune = function(item)
         { 
-            vm.filtre.id_ecole = null;
+            vm.filtre.id_zap = null;
             if (item.id_commune != '*')
             {
-                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleBycommune","id_commune",item.id_commune).then(function(result)
+                apiFactory.getAPIgeneraliserREST("zap_commune/index","menu","getzapBycommune","id_commune",item.id_commune).then(function(result)
+              {
+                vm.zaps = result.data.response;
+              });
+            }
+            else
+            {
+                vm.zaps = [];
+            }
+          
+        }
+        vm.filtre_change_zap = function(item)
+        { 
+            vm.filtre.id_ecole = null;
+            if (item.id_zap != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleByzap","id_zap",item.id_zap).then(function(result)
               {
                 vm.ecoles = result.data.response;
-                console.log(vm.ecoles);
-              }, function error(result){ alert('something went wrong')});
+              });
             }
             else
             {
@@ -228,23 +243,20 @@
                             vm.session = 'OBCAF';
 
             }*/
-            if (utilisateur.roles.indexOf("AAC")!= -1)
-            { 
-              vm.showbuttonNeauveaudemandefeffi=true;
-              apiFactory.getAll("region/index").then(function success(response)
+            apiFactory.getAll("region/index").then(function success(response)
               {
                 vm.regions = response.data.response;
               });
+            if (utilisateur.roles.indexOf("AAC")!= -1)
+            { 
+              vm.showbuttonNeauveaudemandefeffi=true;
+              
               vm.session = 'AAC';
 
             }
             else
             {                           
               vm.showbuttonNeauveaudemandefeffi=true;
-                apiFactory.getAll("region/index").then(function success(response)
-              {
-                vm.regions = response.data.response;
-              });
               vm.session = 'ADMIN'; 
               
             }                  
@@ -295,7 +307,7 @@
                       break;*/
                   case 'AAC':
                             
-                              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydateutilisateur','id_utilisateur',id_user,'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydateutilisateur','id_utilisateur',id_user,'lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
@@ -306,8 +318,8 @@
 
                   case 'ADMIN':
                            
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
-                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','lot',filtre.lot,'id_region',filtre.id_region
+                            ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
                                 vm.affiche_load =false;
@@ -329,13 +341,6 @@
             
             vm.showbuttonNouvContrat_prestataire=true;
             vm.stepMenu_feffi=true;
-
-           /* donnee_sousmenu_feffi(item,vm.session).then(function () 
-            {
-                    // On récupère le resultat de la requête dans la varible "response"                    
-                vm.stepMenu_feffi=true;
-                console.log(vm.stepMenu_feffi);  
-            });*/
                           
               apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
               {
@@ -346,6 +351,11 @@
               vm.steptransdaaf=false;
               //vm.nbr_decaiss_feffi = item.nbr_decaiss_feffi;
               //console.log(vm.nbr_demande_feffi);
+              
+              vm.header_ref_convention = item.ref_convention;
+              vm.header_cisco = item.cisco.description;
+              vm.header_feffi = item.feffi.denomination; 
+              vm.header_class = 'headerbig';
                          
 
         };

@@ -60,7 +60,7 @@
     }])        
         .controller('Convention_suivi_fp_bcafController', Convention_suivi_fp_bcafController);
     /** @ngInject */
-    function Convention_suivi_fp_bcafController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile,apiUrlexcel)
+    function Convention_suivi_fp_bcafController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile,apiUrlexcel,$stateParams)
     {
           /*****debut initialisation*****/
 
@@ -230,7 +230,8 @@
         vm.alljustificatif_pv_consta_entete_travaux_mpe = [] ;
 
 /********************************************Fin entreprise********************************************/
-
+        vm.notification_mpe=0;
+        vm.notification_moe=0;
         vm.showbuttonfiltre=true;
         vm.showfiltre=false;
 
@@ -299,72 +300,84 @@
             console.log(vm.allannee);
           }*/
 
-        vm.filtre_change_region = function(item)
-        { 
-            vm.filtre.id_cisco = null;
-            if (vm.session=='ADMIN')
-            {
-                if (item.id_region != '*')
-                {
-                    apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
-                    {
-                        vm.ciscos = result.data.response;
-                        console.log(vm.ciscos);
-                    }, function error(result){ alert('something went wrong')});
-                }
-                else
-                {
-                    vm.ciscos = [];
-                }
-            }
-            
-          
-        }
-        vm.filtre_change_cisco = function(item)
-        { vm.filtre.id_commune = null;
-            if (item.id_cisco != '*')
-            {
-                apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",item.id_cisco).then(function(result)
+          vm.filtre_change_region = function(item)
+          { 
+              vm.filtre.id_cisco = null;
+              if (item.id_region != '*')
               {
-                vm.communes = result.data.response;
-                console.log(vm.communes);
-              }, function error(result){ alert('something went wrong')});
-            }
-            else
-            {
-                vm.communes = [];
-            }
-          
-        }
-        vm.filtre_change_commune = function(item)
-        { 
-            vm.filtre.id_ecole = null;
-            if (item.id_commune != '*')
-            {
-                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleBycommune","id_commune",item.id_commune).then(function(result)
-              {
-                vm.ecoles = result.data.response;
-                console.log(vm.ecoles);
-              }, function error(result){ alert('something went wrong')});
-            }
-            else
-            {
-                vm.ecoles = [];
-            }
-          
-        }
-        vm.filtre_change_ecole = function(item)
-        { 
-            vm.filtre.id_convention_entete_entete = null;
-            if (item.id_ecole != '*')
-            {
-                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByecole","id_ecole",item.id_ecole).then(function(result)
+                  apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
                   {
-                    vm.convention_cisco_feffi_entetes = result.data.response;
-                    console.log(vm.convention_cisco_feffi_entetes );
+                      vm.ciscos = result.data.response;
+                      console.log(vm.ciscos);
                   }, function error(result){ alert('something went wrong')});
-            }
-        }
+              }
+              else
+              {
+                  vm.ciscos = [];
+              }
+            
+          }
+          vm.filtre_change_cisco = function(item)
+          { vm.filtre.id_commune = null;
+              if (item.id_cisco != '*')
+              {
+                  apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",item.id_cisco).then(function(result)
+                {
+                  vm.communes = result.data.response;
+                  console.log(vm.communes);
+                }, function error(result){ alert('something went wrong')});
+              }
+              else
+              {
+                  vm.communes = [];
+              }
+            
+          }
+          
+          vm.filtre_change_commune = function(item)
+          { 
+              vm.filtre.id_zap = null;
+              if (item.id_commune != '*')
+              {
+                  apiFactory.getAPIgeneraliserREST("zap_commune/index","menu","getzapBycommune","id_commune",item.id_commune).then(function(result)
+                {
+                  vm.zaps = result.data.response;
+                });
+              }
+              else
+              {
+                  vm.zaps = [];
+              }
+            
+          }
+          vm.filtre_change_zap = function(item)
+          { 
+              vm.filtre.id_ecole = null;
+              if (item.id_zap != '*')
+              {
+                  apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleByzap","id_zap",item.id_zap).then(function(result)
+                {
+                  vm.ecoles = result.data.response;
+                });
+              }
+              else
+              {
+                  vm.ecoles = [];
+              }
+            
+          }
+          vm.filtre_change_ecole = function(item)
+          { 
+              vm.filtre.id_convention_entete_entete = null;
+              if (item.id_ecole != '*')
+              {
+                    apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByecole","id_ecole",item.id_ecole).then(function(result)
+                    {
+                      vm.convention_cisco_feffi_entetes = result.data.response;
+                      console.log(vm.convention_cisco_feffi_entetes );
+                    }, function error(result){ alert('something went wrong')});
+              }
+          }
         var id_user = $cookieStore.get('id');
         vm.filtre = {
                 id_cisco: null,
@@ -398,39 +411,67 @@
                             vm.session = 'BCAF';
                       
                 }*/
+              apiFactory.getAll("region/index").then(function success(response)
+              {
+                  vm.regions = response.data.response;
+              });
+
+              
+                
                 if (utilisateur.roles.indexOf("DPFI")!= -1)
                 {  
-                             apiFactory.getAll("region/index").then(function success(response)
-                            {
-                              vm.regions = response.data.response;
-                            });
-
-                          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionneedfacturevalidation").then(function(result)
-                          {
-                            vm.allconvention_entete = result.data.response;
-                            vm.affiche_load =false;
-                          });                            
-                            vm.session = 'DPFI';
-                      
+                   vm.session = 'DPFI';                      
                 }
                 else
-                {
-
-                            apiFactory.getAll("region/index").then(function success(response)
-                            {
-                              vm.regions = response.data.response;
-                            });
-
-                          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionneedfacturevalidation").then(function(result)
-                          {
-                            vm.allconvention_entete = result.data.response;
-                            vm.affiche_load =false;
-                          });                            
-                            vm.session = 'ADMIN';
-              
+                {                           
+                    vm.session = 'ADMIN';              
                 }                  
 
          });
+         var racourci = $stateParams.rac;
+         console.log(racourci); 
+        if (racourci!=null && racourci!=undefined && racourci!='')
+        { vm.affiche_load=true;
+          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByracourci","id_convention_entete",racourci).then(function(result)
+          {
+            vm.allconvention_entete= result.data.response;
+            console.log(vm.allconvention_entete);
+            
+            var item = vm.allconvention_entete[0];
+            item.$selected=true;
+            vm.selectedItemConvention_entete = item;
+            vm.showbuttonNouvContrat_prestataire=true;
+             
+            vm.stepMenu_reliquat =true;
+            vm.stepMenu_moe=true;
+            vm.stepMenu_mpe=true; 
+             
+
+            vm.header_ref_convention = item.ref_convention;
+            vm.header_cisco = item.cisco.code;
+            vm.header_feffi = item.feffi.denomination; 
+            vm.header_class = 'headerbig';           
+              
+            vm.stepprestaion_pr=false;
+            vm.stepprestation_moe = false;
+            apiFactory.getAPIgeneraliserREST("facture_mpe/index",'menu','count_facture_prestatairebyconventionvalidation','id_convention_entete',item.id,'validation',0).then(function(result) 
+            {
+                var resultat = result.data.response;
+                vm.notification_mpe = parseInt(resultat[0].nombre_mpe);
+                vm.notification_moe = parseInt(resultat[0].nombre_moe);
+                console.log(resultat);
+                vm.affiche_load=false;
+            });
+          });
+        }
+        else
+        {
+          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionneedfacturevalidation").then(function(result)
+              {
+                  vm.allconvention_entete = result.data.response;
+                  vm.affiche_load =false;
+              });
+        }
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
@@ -454,43 +495,15 @@
         },*/
         {titre:"Utilisateur"
         }]; 
-
-        vm.importerfiltre =function(filtre)
-        {   
-            var date_debut = convertionDate(filtre.date_debut);
-            var date_fin = convertionDate(filtre.date_fin);
-            vm.affiche_load = true ;
-            var repertoire = 'bdd_construction';
-
-            apiFactory.getAPIgeneraliserREST("excel_bdd_construction/index",'menu','getdonneeexporter',
-                'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
-                filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
-                filtre.id_convention_entete,"repertoire",repertoire).then(function(result)
-            {
-                vm.status    = result.data.status; 
-                
-                if(vm.status)
-                {
-                    vm.nom_file = result.data.nom_file;            
-                    window.location = apiUrlexcel+"bdd_construction/"+vm.nom_file ;
-                    vm.affiche_load =false; 
-
-                }else{
-                    vm.message=result.data.message;
-                    vm.Alert('Export en excel',vm.message);
-                    vm.affiche_load =false; 
-                }
-                console.log(result.data.data);
-            });
-        }       
+       
 
         vm.recherchefiltre = function(filtre)
         {
-            var date_debut = convertionDate(filtre.date_debut);
-            var date_fin = convertionDate(filtre.date_fin);
+            //var date_debut = convertionDate(filtre.date_debut);
+            //var date_fin = convertionDate(filtre.date_fin);
             vm.affiche_load =true;
-            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
-                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
             {
                 vm.allconvention_entete = result.data.response;
                 vm.affiche_load =false;
@@ -544,29 +557,17 @@
             vm.header_ref_convention = item.ref_convention;
             vm.header_cisco = item.cisco.code;
             vm.header_feffi = item.feffi.denomination; 
-            vm.header_class = 'headerbig';
-
-           /* donnee_menu_moe(item,vm.session).then(function () 
-            {
-                    // On récupère le resultat de la requête dans la varible "response"                    
-                vm.stepMenu_moe=true;
-                console.log(vm.stepMenu_moe);  
-            });
-            donnee_menu_mpe(item,vm.session).then(function () 
-            {
-                // On récupère le resultat de la requête dans la varible "response"                    
-                vm.stepMenu_mpe=true;
-                console.log(vm.stepMenu_mpe);  
-            }); */           
-                          
-              /*apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
-              {
-                  vm.allcompte_feffi= result.data.response;
-              }); */            
+            vm.header_class = 'headerbig';           
               
-              vm.stepprestaion_pr=false;
-              vm.stepprestation_moe = false;
-              //console.log(vm.nbr_demande_feffi);                        
+            vm.stepprestaion_pr=false;
+            vm.stepprestation_moe = false;
+            apiFactory.getAPIgeneraliserREST("facture_mpe/index",'menu','count_facture_prestatairebyconventionvalidation','id_convention_entete',item.id,'validation',0).then(function(result) 
+            {
+                var resultat = result.data.response;
+                vm.notification_mpe = parseInt(resultat[0].nombre_mpe);
+                vm.notification_moe = parseInt(resultat[0].nombre_moe);
+                console.log(resultat);
+            });                       
 
         };
         $scope.$watch('vm.selectedItemConvention_entete', function()
@@ -741,6 +742,7 @@
             //item.id_contrat_prestataire   = currentItemDemande_batiment_mpe.id_contrat_prestataire ;
             item.numero   = currentItemFacture_moe_entete.numero ;
             item.date_br   = currentItemFacture_moe_entete.date_br ;
+            item.statu_fact   = currentItemFacture_moe_entete.statu_fact ;
           }else
           {
             vm.allfacture_moe_entete = vm.allfacture_moe_entete.filter(function(obj)
@@ -800,6 +802,7 @@
             //item.id_contrat_prestataire   = vm.selectedItemAttachement_travaux.contrat_prestataire.id ;
             item.numero   = vm.selectedItemFacture_moe_entete.numero ;
             item.date_br   = new Date(vm.selectedItemFacture_moe_entete.date_br) ;
+            item.statu_fact   = vm.selectedItemFacture_moe_entete.statu_fact ;
 
             vm.showbuttonValidationFacture_moe_rejedpfi = false;
             vm.showbuttonValidationFacture_moe_creer =false;
@@ -870,6 +873,7 @@
                     numero: facture_moe_entete.numero,
                     date_br:convertionDate(new Date(facture_moe_entete.date_br)),
                     id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
+                    statu_fact: vm.selectedItemFacture_moe_entete.statu_fact,
                     validation: 0               
                 });
                 console.log(datas);
@@ -936,6 +940,7 @@
                     numero: facture_moe_entete.numero,
                     date_br:convertionDate(facture_moe_entete.date_br),
                     id_contrat_bureau_etude: vm.selectedItemContrat_moe.id,
+                    statu_fact: vm.selectedItemFacture_moe_entete.statu_fact,
                     validation: validation               
                 });
                 console.log(datas);
@@ -954,11 +959,16 @@
                 vm.stepsousrubriquecalendrier = false;
                 vm.stepjusti_facture_moe = false;
                 vm.stepfacture_detail = false;
+
               /*facture_moe_entete.validation = validation;
               vm.validation_fact_moe = validation;
               facture_moe_entete.$selected = false;
               facture_moe_entete.$edit = false;*/
               vm.selectedItemFacture_moe_entete = {};
+              if (vm.notification_moe!=0)
+              {
+                vm.notification_moe = vm.notification_moe-1;
+              }
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
@@ -1341,11 +1351,11 @@
             var pourcentage_anterieur =   0;
             var pourcentage_cumul =   0;
 
-            pourcentage_periode     =   (parseFloat(item.montant_periode) * 100)/parseFloat(item.montant_prevu);
+            pourcentage_periode     =   (parseFloat(item.montant_periode) * (parseFloat(item.pourcentage)))/parseFloat(item.montant_prevu);
             item.pourcentage_periode  =   pourcentage_periode.toFixed(3);
 
             cumul_montant           =   parseFloat(currentItemFacture_moe_detail.montant_cumul)-parseFloat(currentItemFacture_moe_detail.montant_periode) + parseFloat(item.montant_periode) ;
-            pourcentage_cumul       =   (parseFloat(cumul_montant) * 100)/parseFloat(item.montant_prevu);
+            pourcentage_cumul       =   (parseFloat(cumul_montant) * (parseFloat(item.pourcentage)))/parseFloat(item.montant_prevu);
             item.montant_cumul      =   cumul_montant;
             item.pourcentage_cumul  =   pourcentage_cumul.toFixed(3);
             apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getmontant_anterieurbycontratbyid','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'code_pai',item.code,'id_facture_detail_moe',item.id).then(function(result)
@@ -1359,6 +1369,7 @@
                         monta_current = monta_current + parseFloat(montant[0].montant_periode);
                     }
                 }
+                console.log()
                 monta_current = monta_current + parseFloat(item.montant_periode);
                 if (parseFloat(item.montant_prevu_detail)<parseFloat(monta_current))
                 {
@@ -3441,7 +3452,10 @@ function insert_in_baseAvance_demarrage(avance_demarrage,suppression)
                 vm.selectedItemFacture_mpe = {};
                 vm.showbuttonValidationFacture_mpe = false;
               vm.validation_facture_mpe = 1;
-            console.log(data);
+              if (vm.notification_mpe!=0)
+              {
+                vm.notification_mpe = vm.notification_mpe-1;
+              }
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
         }
@@ -4870,176 +4884,676 @@ vm.click_tab_pv_consta_statu_bat_travaux = function()
 }
 vm.changestatu = function(item)
 {
-    insert_in_basePv_consta_statu_bat_travaux(item,0);
+    //insert_in_basePv_consta_statu_bat_travaux(item,0);
     console.log(item);
 }        
 //insertion ou mise a jours ou suppression item dans bdd divers_attachement_batiment_travaux
-function insert_in_basePv_consta_statu_bat_travaux(pv_consta_statu_bat_travaux,suppression)
-{
-    //add
-    var config =
-    {
-        headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-    };
-    vm.affiche_load = true;
-    var getId = 0;
-    var stat =0;
-    if (pv_consta_statu_bat_travaux.periode==true)
-    {
-      stat = 1;
-    }
-    if (pv_consta_statu_bat_travaux.id!=null || pv_consta_statu_bat_travaux.id!=undefined)
-    {
-        getId = pv_consta_statu_bat_travaux.id; 
-    } 
-    
-    var datas = $.param({
-            supprimer: suppression,
-            id:        getId,
-            id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
-            id_rubrique_designation: pv_consta_statu_bat_travaux.id_designation,
-            status: stat           
-        });
-        console.log(datas);
-        //factory
-    apiFactory.add("pv_consta_statu_bat_travaux/index",datas, config).success(function (data)
-    {
-        
-      if (pv_consta_statu_bat_travaux.id != null || pv_consta_statu_bat_travaux.id != undefined)
-      {
-        apiFactory.getAPIgeneraliserREST("pv_consta_statu_bat_travaux/index","menu","getcount_desination_statubyphasecontrat",
-        "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_pv_consta_entete_travaux",vm.selectedItemPv_consta_entete_travaux.id
-        ,"id_rubrique_phase",vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id_phase).then(function(result)
+/*function insert_in_basePv_consta_statu_bat_travaux(pv_consta_statu_bat_travaux,suppression)
         {
-            var count_desination_statu = result.data.response;
-            console.log(count_desination_statu);
-            var getId_detail = 0;
-            if (vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id!=null || vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id!=undefined)
+            //add
+            var config =
             {
-                getId_detail = vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id; 
+                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+            };
+            vm.affiche_load = true;
+            var getId = 0;
+            var stat =0;
+            if (pv_consta_statu_bat_travaux.periode==true)
+            {
+              stat = 1;
             }
-            if (vm.allpv_consta_statu_bat_travaux.length==parseInt(count_desination_statu[0].nombre))
-            { 
-              console.log(vm.selectedItemPv_consta_rubrique_phase_bat_mpe);
-                var datas_detail = $.param({
-                  supprimer: 0,
-                  id:        getId_detail,
-                  id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
-                  id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id_phase,
-                  periode: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.pourcentage_prevu,
-                  observation: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.observation           
-                });
-                console.log(datas_detail);
-                apiFactory.add("pv_consta_detail_bat_travaux/index",datas_detail, config).success(function (data)
-                {
-                  if (vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != undefined)
-                  { 
-                    console.log('atodet1');
-                  }
-                  else
-                  {
-                    vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id  =   String(data.response);
-                    console.log('atodet2');
-                  }
-                });
+            if (pv_consta_statu_bat_travaux.id!=null || pv_consta_statu_bat_travaux.id!=undefined)
+            {
+                getId = pv_consta_statu_bat_travaux.id; 
             } 
-            else
+            
+            var datas = $.param({
+                    supprimer: suppression,
+                    id:        getId,
+                    id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
+                    id_rubrique_designation: pv_consta_statu_bat_travaux.id_designation,
+                    status: stat           
+                });
+                console.log(datas);
+                //factory
+            apiFactory.add("pv_consta_statu_bat_travaux/index",datas, config).success(function (data)
             {
-                var datas_detail = $.param({
-                  supprimer: 0,
-                  id:        getId_detail,
-                  id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
-                  id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id_phase,
-                  periode: 0,
-                  observation: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.observation           
-                });
-                console.log(datas_detail);
-                apiFactory.add("pv_consta_detail_bat_travaux/index",datas_detail, config).success(function (data_detail)
+                
+              if (pv_consta_statu_bat_travaux.id != null || pv_consta_statu_bat_travaux.id != undefined)
+              {
+                apiFactory.getAPIgeneraliserREST("pv_consta_statu_bat_travaux/index","menu","getcount_desination_statubyphasecontrat",
+                "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_pv_consta_entete_travaux",vm.selectedItemPv_consta_entete_travaux.id
+                ,"id_rubrique_phase",vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id_phase).then(function(result)
                 {
-                  if (vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != undefined)
-                  { 
-                    console.log('atodett1');
-                  }
-                  else
-                  {
-                    vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id  =   String(data_detail.response);
-                    console.log('atodett2');
-                  }
-                });
-            }
-        });
-        console.log('ato');
-      }
-      else
-      {
-        pv_consta_statu_bat_travaux.id  =   String(data.response); 
-        console.log(pv_consta_statu_bat_travaux)  
-        console.log('ato2'); apiFactory.getAPIgeneraliserREST("pv_consta_statu_bat_travaux/index","menu","getcount_desination_statubyphasecontrat",
-        "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_pv_consta_entete_travaux",vm.selectedItemPv_consta_entete_travaux.id
-        ,"id_rubrique_phase",vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id_phase).then(function(result)
-        {
-            var count_desination_statu = result.data.response;
-            console.log(count_desination_statu);
-            var getId_detail = 0;
-            if (vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id!=null || vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id!=undefined)
-            {
-                getId_detail = vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id; 
-            }
-            if (vm.allpv_consta_statu_bat_travaux.length==parseInt(count_desination_statu[0].nombre))
-            { 
-              console.log(vm.selectedItemPv_consta_rubrique_phase_bat_mpe);
-                var datas_detail = $.param({
-                  supprimer: 0,
-                  id:        getId_detail,
-                  id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
-                  id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id_phase,
-                  periode: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.pourcentage_prevu,
-                  observation: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.observation           
-                });
-                console.log(datas_detail);
-                apiFactory.add("pv_consta_detail_bat_travaux/index",datas_detail, config).success(function (data)
-                {
-                  if (vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != undefined)
-                  { 
-                    console.log('atodet1');
-                  }
-                  else
-                  {
-                    vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id  =   String(data.response);
-                    console.log('atodet2');
-                  }
-                });
-            } 
-            else
-            {
-                var datas_detail = $.param({
-                  supprimer: 0,
-                  id:        getId_detail,
-                  id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
-                  id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id_phase,
-                  periode: 0,
-                  observation: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.observation           
-                });
-                console.log(datas_detail);
-                apiFactory.add("pv_consta_detail_bat_travaux/index",datas_detail, config).success(function (data_detail)
-                {
-                  if (vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != undefined)
-                  { 
-                    console.log('atodett1');
-                  }
-                  else
-                  {
-                    vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id  =   String(data_detail.response);
-                    console.log('atodett2');
-                  }
-                });
-            }
-        });                 
-      }
-      vm.affiche_load = false;
-  }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+                    var count_desination_statu = result.data.response;
+                    console.log(count_desination_statu);
+                    var getId_detail = 0;
+                    if (vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id!=null || vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id!=undefined)
+                    {
+                        getId_detail = vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id; 
+                    }
+                    if (vm.allpv_consta_statu_bat_travaux.length==parseInt(count_desination_statu[0].nombre))
+                    { 
+                      console.log(vm.selectedItemPv_consta_rubrique_phase_bat_mpe);
+                        var datas_detail = $.param({
+                          supprimer: 0,
+                          id:        getId_detail,
+                          id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
+                          id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id_phase,
+                          periode: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.pourcentage_prevu,
+                          observation: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.observation           
+                        });
+                        console.log(datas_detail);
+                        apiFactory.add("pv_consta_detail_bat_travaux/index",datas_detail, config).success(function (data)
+                        {
+                          if (vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != undefined)
+                          { 
+                            console.log('atodet1');
+                          }
+                          else
+                          {
+                            vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id  =   String(data.response);
+                            console.log('atodet2');
+                          }
+                        });
 
-}
+                        //insertion facture moe
+                        if (parseInt(vm.selectedItemPv_consta_rubrique_phase_bat_mpe.numero)==1) 
+                        {
+                          apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p2').then(function(result)
+                          {
+                              var detail = result.data.response;
+                              console.log(detail);
+                              if (detail[0].id_detail==null || detail[0].id_detail==undefined)
+                              {
+                                if (detail[0].id_entete)
+                                {
+                                  var datas_fact_moe = $.param({
+                                    supprimer: 0,
+                                    id:        0,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                  {
+                                  });
+                                }
+                                else
+                                {     
+                                    var num=1;
+                                    if (detail[0].num_max)
+                                    {
+                                      num = parseInt(detail[0].num_max)+1;
+                                    }
+
+                                      var datas_entete = $.param({
+                                        supprimer: 0,
+                                        id:        0,
+                                        numero: num,
+                                        date_br:convertionDate(new Date()),
+                                        id_contrat_bureau_etude: detail[0].id_contrat,
+                                        validation: 0               
+                                    });
+                                    console.log(datas_entete);
+                                    //factory
+                                    apiFactory.add("facture_moe_entete/index",datas_entete, config).success(function (data)
+                                    {
+                                        var datas_fact_moe = $.param({
+                                          supprimer: 0,
+                                          id:        0,
+                                          id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                          id_facture_moe_entete: String(data.response),
+                                          montant_periode: detail[0].montant_prevu,
+                                          observation: ""           
+                                        });
+                                        console.log(datas_fact_moe);
+                                        apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                        {
+                                        });
+                                    });
+                                }
+                              }
+                          });
+                        }
+                        if (parseInt(vm.selectedItemPv_consta_rubrique_phase_bat_mpe.numero)==2) 
+                        {
+                          apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p3').then(function(result)
+                          {
+                              var detail = result.data.response;
+                              console.log(detail);
+                              if (detail[0].id_detail==null || detail[0].id_detail==undefined)
+                              {
+                                if (detail[0].id_entete)
+                                {
+                                  var datas_fact_moe = $.param({
+                                    supprimer: 0,
+                                    id:        0,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                  {
+                                  });
+                                }
+                                else
+                                {     
+                                    var num=1;
+                                    if (detail[0].num_max)
+                                    {
+                                      num = parseInt(detail[0].num_max)+1;
+                                    }
+
+                                      var datas_entete = $.param({
+                                        supprimer: 0,
+                                        id:        0,
+                                        numero: num,
+                                        date_br:convertionDate(new Date()),
+                                        id_contrat_bureau_etude: detail[0].id_contrat,
+                                        validation: 0               
+                                    });
+                                    console.log(datas_entete);
+                                    //factory
+                                    apiFactory.add("facture_moe_entete/index",datas_entete, config).success(function (data)
+                                    {
+                                        var datas_fact_moe = $.param({
+                                          supprimer: 0,
+                                          id:        0,
+                                          id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                          id_facture_moe_entete: String(data.response),
+                                          montant_periode: detail[0].montant_prevu,
+                                          observation: ""           
+                                        });
+                                        console.log(datas_fact_moe);
+                                        apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                        {
+                                        });
+                                    });
+                                }
+                              }
+                          });
+                        }
+                        if (parseInt(vm.selectedItemPv_consta_rubrique_phase_bat_mpe.numero)==3) 
+                        {
+                          apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p4').then(function(result)
+                          {
+                              var detail = result.data.response;
+                              console.log(detail);
+                              if (detail[0].id_detail==null || detail[0].id_detail==undefined)
+                              {
+                                if (detail[0].id_entete)
+                                {
+                                  var datas_fact_moe = $.param({
+                                    supprimer: 0,
+                                    id:        0,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                  {
+                                  });
+                                }
+                                else
+                                {     
+                                    var num=1;
+                                    if (detail[0].num_max)
+                                    {
+                                      num = parseInt(detail[0].num_max)+1;
+                                    }
+
+                                      var datas_entete = $.param({
+                                        supprimer: 0,
+                                        id:        0,
+                                        numero: num,
+                                        date_br:convertionDate(new Date()),
+                                        id_contrat_bureau_etude: detail[0].id_contrat,
+                                        validation: 0               
+                                    });
+                                    console.log(datas_entete);
+                                    //factory
+                                    apiFactory.add("facture_moe_entete/index",datas_entete, config).success(function (data)
+                                    {
+                                        var datas_fact_moe = $.param({
+                                          supprimer: 0,
+                                          id:        0,
+                                          id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                          id_facture_moe_entete: String(data.response),
+                                          montant_periode: detail[0].montant_prevu,
+                                          observation: ""           
+                                        });
+                                        console.log(datas_fact_moe);
+                                        apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                        {
+                                        });
+                                    });
+                                }
+                              }
+                          });
+                        }
+                    } 
+                    else
+                    {
+                        var datas_detail = $.param({
+                          supprimer: 0,
+                          id:        getId_detail,
+                          id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
+                          id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id_phase,
+                          periode: 0,
+                          observation: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.observation           
+                        });
+                        console.log(datas_detail);
+                        apiFactory.add("pv_consta_detail_bat_travaux/index",datas_detail, config).success(function (data_detail)
+                        {
+                          if (vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != undefined)
+                          { 
+                            console.log('atodett1');
+                          }
+                          else
+                          {
+                            vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id  =   String(data_detail.response);
+                            console.log('atodett2');
+                          }
+                        });
+                        if (parseInt(vm.selectedItemPv_consta_rubrique_phase_bat_mpe.numero)==1) 
+                        {
+                          apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p2').then(function(result)
+                          {
+                              var detail = result.data.response;
+                              console.log(detail);
+                              if (detail[0].id_detail!=null && detail[0].id_detail!=undefined)
+                              {
+                                  var datas_fact_moe = $.param({
+                                    supprimer: 1,
+                                    id:        detail[0].id_detail,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                  {
+                                  });                                
+                              }
+                          });
+                        }
+                        if (parseInt(vm.selectedItemPv_consta_rubrique_phase_bat_mpe.numero)==2) 
+                        {
+                          apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p3').then(function(result)
+                          {
+                              var detail = result.data.response;
+                              console.log(detail);
+                              if (detail[0].id_detail!=null && detail[0].id_detail!=undefined)
+                              {
+                                  var datas_fact_moe = $.param({
+                                    supprimer: 1,
+                                    id:        detail[0].id_detail,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                  {
+                                  });                                
+                              }
+                          });
+                        }
+                        if (parseInt(vm.selectedItemPv_consta_rubrique_phase_bat_mpe.numero)==3) 
+                        {
+                          apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p4').then(function(result)
+                          {
+                              var detail = result.data.response;
+                              console.log(detail);
+                              if (detail[0].id_detail!=null && detail[0].id_detail!=undefined)
+                              {
+                                  var datas_fact_moe = $.param({
+                                    supprimer: 1,
+                                    id:        detail[0].id_detail,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                  {
+                                  });                                
+                              }
+                          });
+                        }
+                    }
+                });
+                console.log('ato');
+              }
+              else
+              {
+                pv_consta_statu_bat_travaux.id  =   String(data.response); 
+                console.log(pv_consta_statu_bat_travaux)  
+                console.log('ato2'); apiFactory.getAPIgeneraliserREST("pv_consta_statu_bat_travaux/index","menu","getcount_desination_statubyphasecontrat",
+                "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_pv_consta_entete_travaux",vm.selectedItemPv_consta_entete_travaux.id
+                ,"id_rubrique_phase",vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id_phase).then(function(result)
+                {
+                    var count_desination_statu = result.data.response;
+                    console.log(count_desination_statu);
+                    var getId_detail = 0;
+                    if (vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id!=null || vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id!=undefined)
+                    {
+                        getId_detail = vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id; 
+                    }
+                    if (vm.allpv_consta_statu_bat_travaux.length==parseInt(count_desination_statu[0].nombre))
+                    { 
+                      console.log(vm.selectedItemPv_consta_rubrique_phase_bat_mpe);
+                        var datas_detail = $.param({
+                          supprimer: 0,
+                          id:        getId_detail,
+                          id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
+                          id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id_phase,
+                          periode: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.pourcentage_prevu,
+                          observation: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.observation           
+                        });
+                        console.log(datas_detail);
+                        apiFactory.add("pv_consta_detail_bat_travaux/index",datas_detail, config).success(function (data)
+                        {
+                          if (vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != undefined)
+                          { 
+                            console.log('atodet1');
+                          }
+                          else
+                          {
+                            vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id  =   String(data.response);
+                            console.log('atodet2');
+                          }
+                        });
+                        if (parseInt(vm.selectedItemPv_consta_rubrique_phase_bat_mpe.numero)==1) 
+                        {
+                          apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p2').then(function(result)
+                          {
+                              var detail = result.data.response;
+                              console.log(detail);
+                              if (detail[0].id_detail==null || detail[0].id_detail==undefined)
+                              {
+                                if (detail[0].id_entete)
+                                {
+                                  var datas_fact_moe = $.param({
+                                    supprimer: 0,
+                                    id:        0,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                  {
+                                  });
+                                }
+                                else
+                                {     
+                                    var num=1;
+                                    if (detail[0].num_max)
+                                    {
+                                      num = parseInt(detail[0].num_max)+1;
+                                    }
+
+                                      var datas_entete = $.param({
+                                        supprimer: 0,
+                                        id:        0,
+                                        numero: num,
+                                        date_br:convertionDate(new Date()),
+                                        id_contrat_bureau_etude: detail[0].id_contrat,
+                                        validation: 0               
+                                    });
+                                    console.log(datas_entete);
+                                    //factory
+                                    apiFactory.add("facture_moe_entete/index",datas_entete, config).success(function (data)
+                                    {
+                                        var datas_fact_moe = $.param({
+                                          supprimer: 0,
+                                          id:        0,
+                                          id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                          id_facture_moe_entete: String(data.response),
+                                          montant_periode: detail[0].montant_prevu,
+                                          observation: ""           
+                                        });
+                                        console.log(datas_fact_moe);
+                                        apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                        {
+                                        });
+                                    });
+                                }
+                              }
+                          });
+                        }
+                        if (parseInt(vm.selectedItemPv_consta_rubrique_phase_bat_mpe.numero)==2) 
+                        {
+                          apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p3').then(function(result)
+                          {
+                              var detail = result.data.response;
+                              console.log(detail);
+                              if (detail[0].id_detail==null || detail[0].id_detail==undefined)
+                              {
+                                if (detail[0].id_entete)
+                                {
+                                  var datas_fact_moe = $.param({
+                                    supprimer: 0,
+                                    id:        0,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                  {
+                                  });
+                                }
+                                else
+                                {     
+                                    var num=1;
+                                    if (detail[0].num_max)
+                                    {
+                                      num = parseInt(detail[0].num_max)+1;
+                                    }
+
+                                      var datas_entete = $.param({
+                                        supprimer: 0,
+                                        id:        0,
+                                        numero: num,
+                                        date_br:convertionDate(new Date()),
+                                        id_contrat_bureau_etude: detail[0].id_contrat,
+                                        validation: 0               
+                                    });
+                                    console.log(datas_entete);
+                                    //factory
+                                    apiFactory.add("facture_moe_entete/index",datas_entete, config).success(function (data)
+                                    {
+                                        var datas_fact_moe = $.param({
+                                          supprimer: 0,
+                                          id:        0,
+                                          id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                          id_facture_moe_entete: String(data.response),
+                                          montant_periode: detail[0].montant_prevu,
+                                          observation: ""           
+                                        });
+                                        console.log(datas_fact_moe);
+                                        apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                        {
+                                        });
+                                    });
+                                }
+                              }
+                          });
+                        }
+                        if (parseInt(vm.selectedItemPv_consta_rubrique_phase_bat_mpe.numero)==3) 
+                        {
+                          apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p4').then(function(result)
+                          {
+                              var detail = result.data.response;
+                              console.log(detail);
+                              if (detail[0].id_detail==null || detail[0].id_detail==undefined)
+                              {
+                                if (detail[0].id_entete)
+                                {
+                                  var datas_fact_moe = $.param({
+                                    supprimer: 0,
+                                    id:        0,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                  {
+                                  });
+                                }
+                                else
+                                {     
+                                    var num=1;
+                                    if (detail[0].num_max)
+                                    {
+                                      num = parseInt(detail[0].num_max)+1;
+                                    }
+
+                                      var datas_entete = $.param({
+                                        supprimer: 0,
+                                        id:        0,
+                                        numero: num,
+                                        date_br:convertionDate(new Date()),
+                                        id_contrat_bureau_etude: detail[0].id_contrat,
+                                        validation: 0               
+                                    });
+                                    console.log(datas_entete);
+                                    //factory
+                                    apiFactory.add("facture_moe_entete/index",datas_entete, config).success(function (data)
+                                    {
+                                        var datas_fact_moe = $.param({
+                                          supprimer: 0,
+                                          id:        0,
+                                          id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                          id_facture_moe_entete: String(data.response),
+                                          montant_periode: detail[0].montant_prevu,
+                                          observation: ""           
+                                        });
+                                        console.log(datas_fact_moe);
+                                        apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                        {
+                                        });
+                                    });
+                                }
+                              }
+                          });
+                        }
+                    } 
+                    else
+                    {
+                        var datas_detail = $.param({
+                          supprimer: 0,
+                          id:        getId_detail,
+                          id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
+                          id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id_phase,
+                          periode: 0,
+                          observation: vm.selectedItemPv_consta_rubrique_phase_bat_mpe.observation           
+                        });
+                        console.log(datas_detail);
+                        apiFactory.add("pv_consta_detail_bat_travaux/index",datas_detail, config).success(function (data_detail)
+                        {
+                          if (vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id != undefined)
+                          { 
+                            console.log('atodett1');
+                          }
+                          else
+                          {
+                            vm.selectedItemPv_consta_rubrique_phase_bat_mpe.id  =   String(data_detail.response);
+                            console.log('atodett2');
+                          }
+                        });
+                        if (parseInt(vm.selectedItemPv_consta_rubrique_phase_bat_mpe.numero)==1) 
+                        {
+                          apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p2').then(function(result)
+                          {
+                              var detail = result.data.response;
+                              console.log(detail);
+                              if (detail[0].id_detail!=null && detail[0].id_detail!=undefined)
+                              {
+                                  var datas_fact_moe = $.param({
+                                    supprimer: 1,
+                                    id:        detail[0].id_detail,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                  {
+                                  });                                
+                              }
+                          });
+                        }
+                        if (parseInt(vm.selectedItemPv_consta_rubrique_phase_bat_mpe.numero)==2) 
+                        {
+                          apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p3').then(function(result)
+                          {
+                              var detail = result.data.response;
+                              console.log(detail);
+                              if (detail[0].id_detail!=null && detail[0].id_detail!=undefined)
+                              {
+                                  var datas_fact_moe = $.param({
+                                    supprimer: 1,
+                                    id:        detail[0].id_detail,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                  {
+                                  });                                
+                              }
+                          });
+                        }
+                        if (parseInt(vm.selectedItemPv_consta_rubrique_phase_bat_mpe.numero)==3) 
+                        {
+                          apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p4').then(function(result)
+                          {
+                              var detail = result.data.response;
+                              console.log(detail);
+                              if (detail[0].id_detail!=null && detail[0].id_detail!=undefined)
+                              {
+                                  var datas_fact_moe = $.param({
+                                    supprimer: 1,
+                                    id:        detail[0].id_detail,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe, config).success(function (data)
+                                  {
+                                  });                                
+                              }
+                          });
+                        }
+                    }
+                });                 
+              }
+              vm.affiche_load = false;
+          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+
+        }*/
 
 
 /******************************************fin attachement batiment travaux***********************************************/
@@ -5942,174 +6456,737 @@ console.log(item);
 //insertion ou mise a jours ou suppression item dans bdd divers_attachement_latrine_travaux
 function insert_in_basePv_consta_statu_lat_travaux(pv_consta_statu_lat_travaux,suppression)
 {
-//add
-var config =
-{
-headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-};
-vm.affiche_load = true;
-var getId = 0;
-var stat =0;
-if (pv_consta_statu_lat_travaux.periode==true)
-{
-stat = 1;
-}
-if (pv_consta_statu_lat_travaux.id!=null || pv_consta_statu_lat_travaux.id!=undefined)
-{
-getId = pv_consta_statu_lat_travaux.id; 
-} 
-
-var datas = $.param({
-    supprimer: suppression,
-    id:        getId,
-    id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
-    id_rubrique_designation: pv_consta_statu_lat_travaux.id_designation,
-    status: stat           
-});
-console.log(datas);
-
-console.log(vm.selectedItemPv_consta_rubrique_phase_lat_mpe);
-//factory
-apiFactory.add("pv_consta_statu_lat_travaux/index",datas, config).success(function (data)
-{
-
-if (pv_consta_statu_lat_travaux.id != null || pv_consta_statu_lat_travaux.id != undefined)
-{
-console.log(vm.selectedItemPv_consta_rubrique_phase_lat_mpe);
-apiFactory.getAPIgeneraliserREST("pv_consta_statu_lat_travaux/index","menu","getcount_desination_statubyphasecontrat",
-"id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_pv_consta_entete_travaux",vm.selectedItemPv_consta_entete_travaux.id
-,"id_rubrique_phase",vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase).then(function(result)
-{
-  console.log(vm.selectedItemPv_consta_rubrique_phase_lat_mpe);
-    var count_desination_statu = result.data.response;
-    console.log(count_desination_statu);
-    var getId_detail = 0;
-    if (vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id!=null || vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id!=undefined)
+    //add
+    var config =
     {
-        getId_detail = vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id; 
+        headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
+    };
+    vm.affiche_load = true;
+    var getId = 0;
+    var stat =0;
+    if (pv_consta_statu_lat_travaux.periode==true)
+    {
+      stat = 1;
     }
-    if (vm.allpv_consta_statu_lat_travaux.length==parseInt(count_desination_statu[0].nombre))
-    { 
-      console.log(vm.selectedItemPv_consta_rubrique_phase_lat_mpe);
-        var datas_detail = $.param({
-          supprimer: 0,
-          id:        getId_detail,
-          id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
-          id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase,
-          periode: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.pourcentage_prevu,
-          observation: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.observation           
-        });
-        console.log(datas_detail);
-        apiFactory.add("pv_consta_detail_lat_travaux/index",datas_detail, config).success(function (data)
-        {
-          if (vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != undefined)
-          { 
-            console.log('atodet1');
-          }
-          else
-          {
-            vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id  =   String(data.response);
-            console.log('atodet2');
-          }
-        });
+    if (pv_consta_statu_lat_travaux.id!=null || pv_consta_statu_lat_travaux.id!=undefined)
+    {
+        getId = pv_consta_statu_lat_travaux.id; 
     } 
-    else
-    {
-        var datas_detail = $.param({
-          supprimer: 0,
-          id:        getId_detail,
-          id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
-          id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase,
-          periode: 0,
-          observation: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.observation           
+    
+    var datas = $.param({
+            supprimer: suppression,
+            id:        getId,
+            id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
+            id_rubrique_designation: pv_consta_statu_lat_travaux.id_designation,
+            status: stat           
         });
-        console.log(datas_detail);
-        apiFactory.add("pv_consta_detail_lat_travaux/index",datas_detail, config).success(function (data_detail)
-        {
-          if (vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != undefined)
-          { 
-            console.log('atodett1');
-          }
-          else
-          {
-            vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id  =   String(data_detail.response);
-            console.log('atodett2');
-          }
-        });
-    }
-});
-console.log('ato');
-}
-else
-{
-console.log(vm.selectedItemPv_consta_rubrique_phase_lat_mpe);
-pv_consta_statu_lat_travaux.id  =   String(data.response); 
-console.log(pv_consta_statu_lat_travaux)  
-console.log('ato2'); apiFactory.getAPIgeneraliserREST("pv_consta_statu_lat_travaux/index","menu","getcount_desination_statubyphasecontrat",
-"id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_pv_consta_entete_travaux",vm.selectedItemPv_consta_entete_travaux.id
-,"id_rubrique_phase",vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase).then(function(result)
-{
-    var count_desination_statu = result.data.response;
-    console.log(count_desination_statu);
-    var getId_detail = 0;
-    if (vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id!=null || vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id!=undefined)
-    {
-        getId_detail = vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id; 
-    }
-    if (vm.allpv_consta_statu_lat_travaux.length==parseInt(count_desination_statu[0].nombre))
-    { 
-      console.log(vm.selectedItemPv_consta_rubrique_phase_lat_mpe);
-        var datas_detail = $.param({
-          supprimer: 0,
-          id:        getId_detail,
-          id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
-          id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase,
-          periode: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.pourcentage_prevu,
-          observation: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.observation           
-        });
-        console.log(datas_detail);
+        console.log(datas);
+        
         console.log(vm.selectedItemPv_consta_rubrique_phase_lat_mpe);
-        apiFactory.add("pv_consta_detail_lat_travaux/index",datas_detail, config).success(function (data)
-        {
-          if (vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != undefined)
-          { 
-            console.log('atodet1');
-          }
-          else
-          {
-            vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id  =   String(data.response);
-            console.log('atodet2');
-          }
-        });
-    } 
-    else
+        //factory
+    apiFactory.add("pv_consta_statu_lat_travaux/index",datas, config).success(function (data)
     {
-        var datas_detail = $.param({
-          supprimer: 0,
-          id:        getId_detail,
-          id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
-          id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase,
-          periode: 0,
-          observation: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.observation           
-        });
-        console.log(datas_detail);
-        apiFactory.add("pv_consta_detail_lat_travaux/index",datas_detail, config).success(function (data_detail)
+        
+      if (pv_consta_statu_lat_travaux.id != null || pv_consta_statu_lat_travaux.id != undefined)
+      {
+        //test et insertion facture p1 et p2 latrine
+
+        var facture_p1etp2latrine = new Promise(function(resolvefact, rejectfact)
         {
-          if (vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != undefined)
-          { 
-            console.log('atodett1');
-          }
-          else
-          {
-            vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id  =   String(data_detail.response);
-            console.log('atodett2');
-          }
+              apiFactory.getAPIgeneraliserREST("pv_consta_statu_lat_travaux/index","menu","getcount_desination_inferieur6byphasecontrat",
+            "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_pv_consta_entete_travaux",vm.selectedItemPv_consta_entete_travaux.id
+            ,"id_rubrique_phase",vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase).then(function(result)
+            {
+                var count_desination_statu = result.data.response;
+
+                if (parseInt(count_desination_statu[0].nombre)==5)
+                {                   
+                      apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailp5p6byconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                      {
+                          var detail = result.data.response;
+                          console.log(detail);
+                          var paiement1et2 = new Promise(function(resolve, reject)
+                          {
+                              if (detail[0].id_detail_p5==null || detail[0].id_detail_p5==undefined)
+                              {
+                                if (detail[0].id_entete)
+                                {
+                                  var datas_fact_moe5 = $.param({
+                                    supprimer: 0,
+                                    id:        0,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu_p5,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu_p5,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe5);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe5, config).success(function (data)
+                                  {
+                                    resolve();                                    
+                                  });
+                                }
+                                else
+                                {     
+                                    var num=1;
+                                    if (detail[0].num_max)
+                                    {
+                                      num = parseInt(detail[0].num_max)+1;
+                                    }
+
+                                      var datas_entete = $.param({
+                                        supprimer: 0,
+                                        id:        0,
+                                        numero: num,
+                                        date_br:convertionDate(new Date()),
+                                        id_contrat_bureau_etude: detail[0].id_contrat,
+                                        validation: 0               
+                                    });
+                                    console.log(datas_entete);
+                                    //factory
+                                    apiFactory.add("facture_moe_entete/index",datas_entete, config).success(function (data)
+                                    {
+                                        var data_id_entete=String(data.response);
+                                      var datas_fact_moe5 = $.param({
+                                          supprimer: 0,
+                                          id:        0,
+                                          id_calendrier_paie_moe_prevu: detail[0].id_prevu_p5,
+                                          id_facture_moe_entete: String(data.response),
+                                          montant_periode: detail[0].montant_prevu_p5,
+                                          observation: ""           
+                                        });
+                                        console.log(datas_fact_moe5);
+                                        apiFactory.add("facture_moe_detail/index",datas_fact_moe5, config).success(function (data)
+                                        {
+                                          detail[0].id_entete=data_id_entete;
+                                          resolve();
+                                        });
+                                    });
+                                }
+                              }
+                              else
+                              {
+                                resolve();
+                              }
+                            }); 
+                            paiement1et2.then(function() {
+                            
+                                  console.log(detail);
+                                  
+                                      if (detail[0].id_detail_p6==null || detail[0].id_detail_p6==undefined)
+                                      {
+                                        if (detail[0].id_entete)
+                                        {
+                                          var datas_fact_moe6 = $.param({
+                                            supprimer: 0,
+                                            id:        0,
+                                            id_calendrier_paie_moe_prevu: detail[0].id_prevu_p6,
+                                            id_facture_moe_entete: detail[0].id_entete,
+                                            montant_periode: detail[0].montant_prevu_p6,
+                                            observation: ""           
+                                          });
+                                          console.log(datas_fact_moe6);
+                                          apiFactory.add("facture_moe_detail/index",datas_fact_moe6, config).success(function (data)
+                                          {
+                                            resolvefact();
+                                          });
+                                        }
+                                        else
+                                        {     
+                                            var num=1;
+                                            if (detail[0].num_max)
+                                            {
+                                              num = parseInt(detail[0].num_max)+1;
+                                            }
+            
+                                              var datas_entete = $.param({
+                                                supprimer: 0,
+                                                id:        0,
+                                                numero: num,
+                                                date_br:convertionDate(new Date()),
+                                                id_contrat_bureau_etude: detail[0].id_contrat,
+                                                validation: 0               
+                                            });
+                                            console.log(datas_entete);
+                                            //factory
+                                            apiFactory.add("facture_moe_entete/index",datas_entete, config).success(function (data)
+                                            {
+                                                var data_id_entete=String(data.response);
+                                              var datas_fact_moe6 = $.param({
+                                                  supprimer: 0,
+                                                  id:        0,
+                                                  id_calendrier_paie_moe_prevu: detail[0].id_prevu_p6,
+                                                  id_facture_moe_entete: String(data.response),
+                                                  montant_periode: detail[0].montant_prevu_p6,
+                                                  observation: ""           
+                                                });
+                                                console.log(datas_fact_moe6);
+                                                apiFactory.add("facture_moe_detail/index",datas_fact_moe6, config).success(function (data)
+                                                {
+                                                  detail[0].id_entete=data_id_entete;
+                                                  resolvefact();
+                                                });
+                                            });
+                                        }
+                                      } 
+                                      else
+                                      {
+                                        resolvefact();
+                                      }                                                   
+                            
+                          });                    
+                      });
+                  
+
+                } 
+                if (parseInt(count_desination_statu[0].nombre)<5)
+                {
+                  apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailp5p6byconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                  {
+                      var detail = result.data.response;
+                      console.log(detail);
+                    
+                          if (detail[0].id_detail_p5!=null && detail[0].id_detail_p5!=undefined)
+                          {
+                            
+                              var datas_fact_moe5 = $.param({
+                                supprimer: 1,
+                                id:        detail[0].id_detail_p5,
+                                id_calendrier_paie_moe_prevu: detail[0].id_prevu_p5,
+                                id_facture_moe_entete: detail[0].id_entete,
+                                montant_periode: detail[0].montant_prevu_p5,
+                                observation: ""           
+                              });
+                              console.log(datas_fact_moe5);
+                              apiFactory.add("facture_moe_detail/index",datas_fact_moe5, config).success(function (data)
+                              {
+                                
+                              });
+                            
+                            
+                          }
+                              
+                          if (detail[0].id_detail_p6!=null && detail[0].id_detail_p6!=undefined)
+                          {
+                              var datas_fact_moe6 = $.param({
+                                        supprimer: 1,
+                                        id:        detail[0].id_detail_p6,
+                                        id_calendrier_paie_moe_prevu: detail[0].id_prevu_p6,
+                                        id_facture_moe_entete: detail[0].id_entete,
+                                        montant_periode: detail[0].montant_prevu_p6,
+                                        observation: ""           
+                              });
+                              console.log(datas_fact_moe6);
+                              apiFactory.add("facture_moe_detail/index",datas_fact_moe6, config).success(function (data)
+                              {
+                              });
+                                    
+                          } 
+                          resolvefact();          
+                  });
+                }
+            });
         });
-    }
-});                 
-}
-vm.affiche_load = false;
-}).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
+        facture_p1etp2latrine.then(function(){console.log('to');
+              apiFactory.getAPIgeneraliserREST("pv_consta_statu_lat_travaux/index","menu","getcount_desination_statubyphasecontrat",
+            "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_pv_consta_entete_travaux",vm.selectedItemPv_consta_entete_travaux.id
+            ,"id_rubrique_phase",vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase).then(function(result)
+            {
+              console.log(vm.selectedItemPv_consta_rubrique_phase_lat_mpe);
+                var count_desination_statu = result.data.response;
+                console.log(count_desination_statu);
+                var getId_detail = 0;
+                if (vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id!=null || vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id!=undefined)
+                {
+                    getId_detail = vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id; 
+                }
+                if (vm.allpv_consta_statu_lat_travaux.length==parseInt(count_desination_statu[0].nombre))
+                { 
+                  console.log(vm.selectedItemPv_consta_rubrique_phase_lat_mpe);
+                    var datas_detail = $.param({
+                      supprimer: 0,
+                      id:        getId_detail,
+                      id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
+                      id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase,
+                      periode: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.pourcentage_prevu,
+                      observation: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.observation           
+                    });
+                    console.log(datas_detail);
+                    apiFactory.add("pv_consta_detail_lat_travaux/index",datas_detail, config).success(function (data)
+                    {
+                      if (vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != undefined)
+                      { 
+                        console.log('atodet1');
+                      }
+                      else
+                      {
+                        vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id  =   String(data.response);
+                        console.log('atodet2');
+                      }
+                    });
+                    apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p7').then(function(result)
+                      {
+                          var detail_p7 = result.data.response;
+                          console.log(detail_p7);
+                              if (detail_p7[0].id_detail==null || detail_p7[0].id_detail==undefined)
+                              {
+                                if (detail_p7[0].id_entete)
+                                {
+                                  var datas_fact_moe7 = $.param({
+                                    supprimer: 0,
+                                    id:        0,
+                                    id_calendrier_paie_moe_prevu: detail_p7[0].id_prevu,
+                                    id_facture_moe_entete: detail_p7[0].id_entete,
+                                    montant_periode: detail_p7[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe7);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe7, config).success(function (data)
+                                  {
+                                                                        
+                                  });
+                                }
+                                else
+                                {     
+                                    var num=1;
+                                    if (detail_p7[0].num_max)
+                                    {
+                                      num = parseInt(detail_p7[0].num_max)+1;
+                                    }
+                                      var datas_entete = $.param({
+                                        supprimer: 0,
+                                        id:        0,
+                                        numero: num,
+                                        date_br:convertionDate(new Date()),
+                                        id_contrat_bureau_etude: detail_p7[0].id_contrat,
+                                        validation: 0               
+                                    });
+                                    console.log(datas_entete);
+                                    //factory
+                                    apiFactory.add("facture_moe_entete/index",datas_entete, config).success(function (data)
+                                    {
+                                        var data_id_entete=String(data.response);
+                                      var datas_fact_moe7 = $.param({
+                                          supprimer: 0,
+                                          id:        0,
+                                          id_calendrier_paie_moe_prevu: detail_p7[0].id_prevu,
+                                          id_facture_moe_entete: String(data.response),
+                                          montant_periode: detail_p7[0].montant_prevu,
+                                          observation: ""           
+                                        });
+                                        console.log(datas_fact_moe7);
+                                        apiFactory.add("facture_moe_detail/index",datas_fact_moe7, config).success(function (data)
+                                        {
+                                          detail_p7[0].id_entete=data_id_entete;
+                                         
+                                        });
+                                    });
+                                }
+                              }                     
+                      });
+                } 
+                else
+                {
+                    var datas_detail = $.param({
+                      supprimer: 0,
+                      id:        getId_detail,
+                      id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
+                      id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase,
+                      periode: 0,
+                      observation: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.observation           
+                    });
+                    console.log(datas_detail);
+                    apiFactory.add("pv_consta_detail_lat_travaux/index",datas_detail, config).success(function (data_detail)
+                    {
+                      if (vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != undefined)
+                      { 
+                        console.log('atodett1');
+                      }
+                      else
+                      {
+                        vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id  =   String(data_detail.response);
+                        console.log('atodett2');
+                      }
+                    });
+
+                    apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p7').then(function(result)
+                    {
+                        var detail_p7 = result.data.response;
+                        console.log(detail_p7);
+                            if (detail_p7[0].id_detail!=null && detail_p7[0].id_detail!=undefined)
+                            {
+                                var datas_fact_moe7 = $.param({
+                                  supprimer: 1,
+                                  id:        detail_p7[0].id_detail,
+                                  id_calendrier_paie_moe_prevu: detail_p7[0].id_prevu,
+                                  id_facture_moe_entete: detail_p7[0].id_entete,
+                                  montant_periode: detail_p7[0].montant_prevu,
+                                  observation: ""           
+                                });
+                                console.log(datas_fact_moe7);
+                                apiFactory.add("facture_moe_detail/index",datas_fact_moe7, config).success(function (data)
+                                {
+                                                                      
+                                });
+                              
+                            }                     
+                    });
+                }
+            });
+        });
+        
+      }
+      else
+      {
+        var facture_p1etp2latrine = new Promise(function(resolvefact, rejectfact)
+        {
+              apiFactory.getAPIgeneraliserREST("pv_consta_statu_lat_travaux/index","menu","getcount_desination_inferieur6byphasecontrat",
+            "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_pv_consta_entete_travaux",vm.selectedItemPv_consta_entete_travaux.id
+            ,"id_rubrique_phase",vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase).then(function(result)
+            {
+                var count_desination_statu = result.data.response;
+
+                if (parseInt(count_desination_statu[0].nombre)==5)
+                {                   
+                      apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailp5p6byconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                      {
+                          var detail = result.data.response;
+                          console.log(detail);
+                          var paiement1et2 = new Promise(function(resolve, reject)
+                          {
+                              if (detail[0].id_detail_p5==null || detail[0].id_detail_p5==undefined)
+                              {
+                                if (detail[0].id_entete)
+                                {
+                                  var datas_fact_moe5 = $.param({
+                                    supprimer: 0,
+                                    id:        0,
+                                    id_calendrier_paie_moe_prevu: detail[0].id_prevu_p5,
+                                    id_facture_moe_entete: detail[0].id_entete,
+                                    montant_periode: detail[0].montant_prevu_p5,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe5);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe5, config).success(function (data)
+                                  {
+                                    resolve();                                    
+                                  });
+                                }
+                                else
+                                {     
+                                    var num=1;
+                                    if (detail[0].num_max)
+                                    {
+                                      num = parseInt(detail[0].num_max)+1;
+                                    }
+
+                                      var datas_entete = $.param({
+                                        supprimer: 0,
+                                        id:        0,
+                                        numero: num,
+                                        date_br:convertionDate(new Date()),
+                                        id_contrat_bureau_etude: detail[0].id_contrat,
+                                        validation: 0               
+                                    });
+                                    console.log(datas_entete);
+                                    //factory
+                                    apiFactory.add("facture_moe_entete/index",datas_entete, config).success(function (data)
+                                    {
+                                        var data_id_entete=String(data.response);
+                                      var datas_fact_moe5 = $.param({
+                                          supprimer: 0,
+                                          id:        0,
+                                          id_calendrier_paie_moe_prevu: detail[0].id_prevu_p5,
+                                          id_facture_moe_entete: String(data.response),
+                                          montant_periode: detail[0].montant_prevu_p5,
+                                          observation: ""           
+                                        });
+                                        console.log(datas_fact_moe5);
+                                        apiFactory.add("facture_moe_detail/index",datas_fact_moe5, config).success(function (data)
+                                        {
+                                          detail[0].id_entete=data_id_entete;
+                                          resolve();
+                                        });
+                                    });
+                                }
+                              }
+                              else
+                              {
+                                resolve();
+                              }
+                            }); 
+                            paiement1et2.then(function() {
+                            
+                                  console.log(detail);
+                                  
+                                      if (detail[0].id_detail_p6==null || detail[0].id_detail_p6==undefined)
+                                      {
+                                        if (detail[0].id_entete)
+                                        {
+                                          var datas_fact_moe6 = $.param({
+                                            supprimer: 0,
+                                            id:        0,
+                                            id_calendrier_paie_moe_prevu: detail[0].id_prevu_p6,
+                                            id_facture_moe_entete: detail[0].id_entete,
+                                            montant_periode: detail[0].montant_prevu_p6,
+                                            observation: ""           
+                                          });
+                                          console.log(datas_fact_moe6);
+                                          apiFactory.add("facture_moe_detail/index",datas_fact_moe6, config).success(function (data)
+                                          {
+                                            resolvefact();
+                                          });
+                                        }
+                                        else
+                                        {     
+                                            var num=1;
+                                            if (detail[0].num_max)
+                                            {
+                                              num = parseInt(detail[0].num_max)+1;
+                                            }
+            
+                                              var datas_entete = $.param({
+                                                supprimer: 0,
+                                                id:        0,
+                                                numero: num,
+                                                date_br:convertionDate(new Date()),
+                                                id_contrat_bureau_etude: detail[0].id_contrat,
+                                                validation: 0               
+                                            });
+                                            console.log(datas_entete);
+                                            //factory
+                                            apiFactory.add("facture_moe_entete/index",datas_entete, config).success(function (data)
+                                            {
+                                                var data_id_entete=String(data.response);
+                                              var datas_fact_moe6 = $.param({
+                                                  supprimer: 0,
+                                                  id:        0,
+                                                  id_calendrier_paie_moe_prevu: detail[0].id_prevu_p6,
+                                                  id_facture_moe_entete: String(data.response),
+                                                  montant_periode: detail[0].montant_prevu_p6,
+                                                  observation: ""           
+                                                });
+                                                console.log(datas_fact_moe6);
+                                                apiFactory.add("facture_moe_detail/index",datas_fact_moe6, config).success(function (data)
+                                                {
+                                                  detail[0].id_entete=data_id_entete;
+                                                  resolvefact();
+                                                });
+                                            });
+                                        }
+                                      } 
+                                      else
+                                      {
+                                        resolvefact();
+                                      }                                                   
+                            
+                          });                    
+                      });
+                  
+
+                } 
+                if (parseInt(count_desination_statu[0].nombre)<5)
+                {
+                  apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailp5p6byconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                  {
+                      var detail = result.data.response;
+                      console.log(detail);
+                    
+                          if (detail[0].id_detail_p5!=null && detail[0].id_detail_p5!=undefined)
+                          {
+                            
+                              var datas_fact_moe5 = $.param({
+                                supprimer: 1,
+                                id:        detail[0].id_detail_p5,
+                                id_calendrier_paie_moe_prevu: detail[0].id_prevu_p5,
+                                id_facture_moe_entete: detail[0].id_entete,
+                                montant_periode: detail[0].montant_prevu_p5,
+                                observation: ""           
+                              });
+                              console.log(datas_fact_moe5);
+                              apiFactory.add("facture_moe_detail/index",datas_fact_moe5, config).success(function (data)
+                              {
+                                
+                              });
+                            
+                            
+                          }
+                              
+                          if (detail[0].id_detail_p6!=null && detail[0].id_detail_p6!=undefined)
+                          {
+                              var datas_fact_moe6 = $.param({
+                                        supprimer: 1,
+                                        id:        detail[0].id_detail_p6,
+                                        id_calendrier_paie_moe_prevu: detail[0].id_prevu_p6,
+                                        id_facture_moe_entete: detail[0].id_entete,
+                                        montant_periode: detail[0].montant_prevu_p6,
+                                        observation: ""           
+                              });
+                              console.log(datas_fact_moe6);
+                              apiFactory.add("facture_moe_detail/index",datas_fact_moe6, config).success(function (data)
+                              {
+                              });
+                                    
+                          } 
+                          resolvefact();          
+                  });
+                }
+            });
+        });
+        facture_p1etp2latrine.then(function() {
+          console.log(vm.selectedItemPv_consta_rubrique_phase_lat_mpe);
+          pv_consta_statu_lat_travaux.id  =   String(data.response); 
+          console.log(pv_consta_statu_lat_travaux)  
+          console.log('ato2'); apiFactory.getAPIgeneraliserREST("pv_consta_statu_lat_travaux/index","menu","getcount_desination_statubyphasecontrat",
+          "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id,"id_pv_consta_entete_travaux",vm.selectedItemPv_consta_entete_travaux.id
+          ,"id_rubrique_phase",vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase).then(function(result)
+          {
+              var count_desination_statu = result.data.response;
+              console.log(count_desination_statu);
+              var getId_detail = 0;
+              if (vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id!=null || vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id!=undefined)
+              {
+                  getId_detail = vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id; 
+              }
+              if (vm.allpv_consta_statu_lat_travaux.length==parseInt(count_desination_statu[0].nombre))
+              { 
+                console.log(vm.selectedItemPv_consta_rubrique_phase_lat_mpe);
+                  var datas_detail = $.param({
+                    supprimer: 0,
+                    id:        getId_detail,
+                    id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
+                    id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase,
+                    periode: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.pourcentage_prevu,
+                    observation: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.observation           
+                  });
+                  console.log(datas_detail);
+                  console.log(vm.selectedItemPv_consta_rubrique_phase_lat_mpe);
+                  apiFactory.add("pv_consta_detail_lat_travaux/index",datas_detail, config).success(function (data)
+                  {
+                    if (vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != undefined)
+                    { 
+                      console.log('atodet1');
+                    }
+                    else
+                    {
+                      vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id  =   String(data.response);
+                      console.log('atodet2');
+                    }
+                  });
+                  apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p7').then(function(result)
+                      {
+                          var detail_p7 = result.data.response;
+                          console.log(detail_p7);
+                              if (detail_p7[0].id_detail==null || detail_p7[0].id_detail==undefined)
+                              {
+                                if (detail_p7[0].id_entete)
+                                {
+                                  var datas_fact_moe7 = $.param({
+                                    supprimer: 0,
+                                    id:        0,
+                                    id_calendrier_paie_moe_prevu: detail_p7[0].id_prevu,
+                                    id_facture_moe_entete: detail_p7[0].id_entete,
+                                    montant_periode: detail_p7[0].montant_prevu,
+                                    observation: ""           
+                                  });
+                                  console.log(datas_fact_moe7);
+                                  apiFactory.add("facture_moe_detail/index",datas_fact_moe7, config).success(function (data)
+                                  {
+                                                                        
+                                  });
+                                }
+                                else
+                                {     
+                                    var num=1;
+                                    if (detail_p7[0].num_max)
+                                    {
+                                      num = parseInt(detail_p7[0].num_max)+1;
+                                    }
+                                      var datas_entete = $.param({
+                                        supprimer: 0,
+                                        id:        0,
+                                        numero: num,
+                                        date_br:convertionDate(new Date()),
+                                        id_contrat_bureau_etude: detail_p7[0].id_contrat,
+                                        validation: 0               
+                                    });
+                                    console.log(datas_entete);
+                                    //factory
+                                    apiFactory.add("facture_moe_entete/index",datas_entete, config).success(function (data)
+                                    {
+                                        var data_id_entete=String(data.response);
+                                      var datas_fact_moe7 = $.param({
+                                          supprimer: 0,
+                                          id:        0,
+                                          id_calendrier_paie_moe_prevu: detail_p7[0].id_prevu,
+                                          id_facture_moe_entete: String(data.response),
+                                          montant_periode: detail_p7[0].montant_prevu,
+                                          observation: ""           
+                                        });
+                                        console.log(datas_fact_moe7);
+                                        apiFactory.add("facture_moe_detail/index",datas_fact_moe7, config).success(function (data)
+                                        {
+                                          detail_p7[0].id_entete=data_id_entete;
+                                         
+                                        });
+                                    });
+                                }
+                              }                     
+                      });
+              } 
+              else
+              {
+                  var datas_detail = $.param({
+                    supprimer: 0,
+                    id:        getId_detail,
+                    id_pv_consta_entete_travaux: vm.selectedItemPv_consta_entete_travaux.id,
+                    id_rubrique_phase: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id_phase,
+                    periode: 0,
+                    observation: vm.selectedItemPv_consta_rubrique_phase_lat_mpe.observation           
+                  });
+                  console.log(datas_detail);
+                  apiFactory.add("pv_consta_detail_lat_travaux/index",datas_detail, config).success(function (data_detail)
+                  {
+                    if (vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != null || vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id != undefined)
+                    { 
+                      console.log('atodett1');
+                    }
+                    else
+                    {
+                      vm.selectedItemPv_consta_rubrique_phase_lat_mpe.id  =   String(data_detail.response);
+                      console.log('atodett2');
+                    }
+                  });
+                  apiFactory.getAPIgeneraliserREST("facture_moe_detail/index",'menu','getfacturedetailbyconventionandcode','id_convention_entete',vm.selectedItemConvention_entete.id,'code_pai','p7').then(function(result)
+                    {
+                        var detail_p7 = result.data.response;
+                        console.log(detail_p7);
+                            if (detail_p7[0].id_detail!=null && detail_p7[0].id_detail!=undefined)
+                            {
+                                var datas_fact_moe7 = $.param({
+                                  supprimer: 1,
+                                  id:        detail_p7[0].id_detail,
+                                  id_calendrier_paie_moe_prevu: detail_p7[0].id_prevu,
+                                  id_facture_moe_entete: detail_p7[0].id_entete,
+                                  montant_periode: detail_p7[0].montant_prevu,
+                                  observation: ""           
+                                });
+                                console.log(datas_fact_moe7);
+                                apiFactory.add("facture_moe_detail/index",datas_fact_moe7, config).success(function (data)
+                                {
+                                                                      
+                                });
+                              
+                            }                     
+                    });
+              }
+          });
+        });
+        //eto
+        
+       
+      }
+      vm.affiche_load = false;
+  }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
 }
 

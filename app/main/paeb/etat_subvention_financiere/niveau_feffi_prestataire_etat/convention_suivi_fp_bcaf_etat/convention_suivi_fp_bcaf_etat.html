@@ -1,7 +1,7 @@
   <div id="formsbcafetat" class="page-layout simple fullwidth doc-page" layout="column" >
 
     <!-- HEADER -->    
-    <div class="header md-accent-bg" layout="row" layout-align="space-between" >
+    <div class="header md-accent-bg {{vm.header_class}}" layout="row" layout-align="space-between" >
         <div layout="column" layout-align="space-between" style="height: 10px !important;">
             <div class="breadcrumb" layout="row" layout-align="start center" >
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
@@ -18,6 +18,16 @@
             <!--div class="title">Convention CISCO/FEFFI</div-->
                                        
             
+        </div><br>
+        <div style="text-align: center; margin: auto; float: bottom" ng-if="vm.header_ref_convention">
+                <span>Référence convention:</span>
+                <span style="margin-right: 20px; color: rgb(253, 159, 46);text-shadow: 1px 1px 1px rgb(52, 3, 65);">{{vm.header_ref_convention}}</span>
+                
+                <span>CISCO:</span>                
+                <span style="margin-right: 20px; color: black;color: rgb(253, 159, 46);text-shadow: 1px 1px 1px rgb(52, 3, 65);">{{vm.header_cisco}}</span>
+
+                <span>FEFFI:</span>
+                <span style="color: rgb(253, 159, 46);text-shadow: 1px 1px 1px rgb(52, 3, 65);">{{vm.header_feffi}}</span>
         </div>
         
     </div>    
@@ -26,7 +36,7 @@
     
     <!-- CONTENT -->
     <div class="content" layout="column">
-      <div class="form-wrapper md-whiteframe-1dp acc_menu" >
+      <div class="form-wrapper md-whiteframe-1dp acc_menuformsbcafetat_mere" >
 <!----------------------------------------------DEBUT TABS MERE-------------------------------------------------------------->
          <ms-form-wizard flex>
           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
@@ -39,7 +49,8 @@
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
                         <i class="icon-basket-fill s16"></i>
                     </span-->
-                    <span class="ms-form-wizard-step-text">Convention</span>
+                    <md-icon md-font-icon="icon-black-mesa"></md-icon>
+                    <span class="ms-form-wizard-step-text">&nbsp Convention</span>
                 </span>
                
               </md-tab-label>
@@ -49,9 +60,9 @@
                       <div style="margin-top: 1px;">
                           <div ng-show="vm.showfiltre" class="md-whiteframe-3dp animate-show-hide">
                           <form name="filtreform" class="md-inline-form" novalidate >
-                                <br>
+                            <br>
                             <div style="margin: 0px 15px 10px 15px;">
-                              <div layout="column" layout-gt-xs="row">
+                              <!--div layout="column" layout-gt-xs="row">
                                   <md-input-container>
                                     <span style="font-size: 14.5px" class="text-semibold">Date signature convention du: &nbsp</span>
                                   </md-input-container>
@@ -65,90 +76,100 @@
 
                                   <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
                                   </md-datepicker>
-                                </div>
+                                </div-->
                                 <div layout="column" layout-gt-xs="row">
 
                                   <md-input-container flex="100" flex-gt-xs="90">
-                                    <label>Lot</label>
-                                    <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
-                                      <md-option value="*">*</md-option>
-                                      <md-option value="1">Lot 1</md-option>
-                                      <md-option value="2">Lot 2</md-option>
-                                      <md-option value="3">Lot 3</md-option>
-                                      <md-option value="4">Lot 4</md-option>
+                                  <label>Lot</label>
+                                  <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                                    <md-option value="*">*</md-option>
+                                    <md-option value="1">Lot 1</md-option>
+                                    <md-option value="2">Lot 2</md-option>
+                                    <md-option value="3">Lot 3</md-option>
+                                    <md-option value="4">Lot 4</md-option>
+                                  </md-select>
+                                  <div ng-messages="filtreform.lot.$error" role="alert">
+                                    <div ng-message="required"><span>Lot</span></div>
+                                  </div>
+                                </md-input-container>
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Région</label>
+                                  <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)" required>
+                                    
+                                    <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
+                                  </md-select>
+                                  <div ng-messages="filtreform.region.$error" role="alert">
+                                    <div ng-message="required"><span>Région</span></div>
+                                  </div>
+                                </md-input-container>
+                                        
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Cisco</label>
+                                  <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco" required>
+                                    
+                                    <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.description}}</md-option>
+                                                        
                                     </md-select>
-                                    <div ng-messages="filtreform.lot.$error" role="alert">
-                                      <div ng-message="required"><span>Lot</span></div>
-                                    </div>
-                                  </md-input-container>
-                                  <md-input-container flex="100" flex-gt-xs="90">
-                                    <label>Région</label>
-                                    <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)">
-                                      <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
-                                    </md-select>
-                                    <div ng-messages="filtreform.region.$error" role="alert">
-                                      <div ng-message="required"><span>Région</span></div>
-                                    </div>
-                                  </md-input-container>
-                                  
-                                  <md-input-container flex="100" flex-gt-xs="90">
-                                    <label>Cisco</label>
-                                    <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
-                                      <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
-                                                  
-                                     </md-select>
-                                     <div ng-messages="filtreform.cisco.$error" role="alert">
-                                      <div ng-message="required"><span>Cisco</span></div>
-                                    </div>
-                                  </md-input-container>
-                                  
-                                  <md-input-container flex="100" flex-gt-xs="90">
-                                    <label>Commune</label>
-                                    <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
-                                      <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
-                                    </md-select>
-                                    <div ng-messages="filtreform.commune.$error" role="alert">
-                                      <div ng-message="required"><span>Commune</span></div>
-                                    </div>
-                                  </md-input-container>
-                                  
-                                  <md-input-container flex="100" flex-gt-xs="90">
-                                    <label>Ecole</label>
-                                    <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
-                                      <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
-                                      </md-option>
-                                    </md-select>
-                                    <div ng-messages="filtreform.ecole.$error" role="alert">
-                                      <div ng-message="required"><span>Ecole</span></div>
-                                    </div>
-                                  </md-input-container>
-                                  <md-input-container flex="100" flex-gt-xs="90">
-                                    <label>Convention</label>
-                                    <md-select ng-model="vm.filtre.id_convention_entete" name="convention" ng-disabled="!vm.filtre.id_ecole">
-                                      <md-option  value="*">*</md-option>
-                                      <md-option ng-repeat="eco in vm.convention_cisco_feffi_entetes" value="{{eco.id}}"> {{eco.ref_convention}}
-                                      </md-option>
-                                    </md-select>  
-                                    <div ng-messages="filtreform.convention_entete.$error" role="alert">
-                                      <div ng-message="required"><span>Convention</span></div>
-                                    </div>
-                                  </md-input-container>
+                                    <div ng-messages="filtreform.cisco.$error" role="alert">
+                                    <div ng-message="required"><span>Cisco</span></div>
+                                  </div>
+                                </md-input-container>
+                                        
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Commune</label>
+                                  <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
+                                    <md-option  value="*">*</md-option>
+                                    <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
+                                  </md-select>
+                                  <div ng-messages="filtreform.commune.$error" role="alert">
+                                    <div ng-message="required"><span>Commune</span></div>
+                                  </div>
+                                 </md-input-container>                                 
+
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Zap</label>
+                                  <md-select ng-model="vm.filtre.id_zap" name="zap" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_zap(vm.filtre)">
+                                    <md-option  value="*">*</md-option>
+                                    <md-option ng-repeat="zaps in vm.zaps" value="{{zaps.id}}"> {{zaps.nom}}
+                                    </md-option>
+                                  </md-select>  
+                                  <div ng-messages="filtreform.zap.$error" role="alert">
+                                    <div ng-message="required"><span>Zap</span></div>
+                                  </div>
+                                </md-input-container>
+                                        
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Ecole</label>
+                                  <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
+                                    <md-option  value="*">*</md-option>
+                                    <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
+                                    </md-option>
+                                  </md-select>
+                                  <div ng-messages="filtreform.ecole.$error" role="alert">
+                                    <div ng-message="required"><span>Ecole</span></div>
+                                  </div>
+                                </md-input-container>
+                                <md-input-container flex="100" flex-gt-xs="90">
+                                  <label>Convention</label>
+                                  <md-select ng-model="vm.filtre.id_convention_entete" name="convention" ng-disabled="!vm.filtre.id_ecole">
+                                    <md-option  value="*">*</md-option>
+                                    <md-option ng-repeat="eco in vm.convention_cisco_feffi_entetes" value="{{eco.id}}"> {{eco.ref_convention}}
+                                    </md-option>
+                                  </md-select>  
+                                  <div ng-messages="filtreform.convention_entete.$error" role="alert">
+                                    <div ng-message="required"><span>Convention</span></div>
+                                  </div>
+                                </md-input-container>
                                 </div>
                               </div>  
-                              <div class="footer-animate-show-hide">
-                                  <md-button class="md-raised boutonfixe" disabled>
-                                  </md-button>
-                                  <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
-                                            Réinitialise
-                                  </md-button>
-                                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
-                                                Recherche
-                                  </md-button>
-                              </div>
+                              <div class="footer-animate-show-hide" layout="row" layout-align="end end">
+                                <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                          Recherche
+                                </md-button>
+                                <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                                      Réinitialise
+                                </md-button>
+                            </div>
                           </form>
                       </div>
 
@@ -187,7 +208,7 @@
                    <tbody>
                      <tr ng-repeat="convention_entete in vm.allconvention_entete"  ng-class="{selected: convention_entete.$selected}" ng-click="vm.selectionConvention_entete(convention_entete)">           
                        <td>
-                        <span>{{convention_entete.cisco.code}}</span>
+                        <span>{{convention_entete.cisco.description}}</span>
                       </td>
 
                       <td>
@@ -239,7 +260,8 @@
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
                       <i class="icon-drawing-box s16"></i>
                     </span-->
-                    <span class="ms-form-wizard-step-text">MAITRISE D'ŒUVRE</span>
+                    <md-icon md-font-icon="icon-codepen"></md-icon>
+                    <span class="ms-form-wizard-step-text">&nbsp MAITRISE D'ŒUVRE</span>
                     <!--span class="ms-form-wizard-step-number md-accent-bg notification" >4</span-->
                 </span>
                
@@ -247,7 +269,7 @@
               
               <md-tab-body>
                <ms-form-wizard flex> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menuformsbcafetat_child1">
                     
                     <md-tab ng-click="vm.click_step_contrat_moe()">
                       <md-tab-label>
@@ -330,7 +352,7 @@
                        <!---------------------------------FILS PRESTATION----------------------------------------------->       
                          <ms-form-wizard flex> 
                           <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_sous_menu"-->
-                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                          <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menuformsbcafetat_child2">
 
                         <!-----------------------------DEBUT demande debut travaux moe-------------------------> 
                               <md-tab>
@@ -366,9 +388,9 @@
                                             <span>{{vm.formatDate(facture_moe_entete.date_br)}}</span>
                                           </td>
 
-                                           <td>                          
+                                           <!--td>                          
                                             <span>{{vm.situationfacture_moe(facture_moe_entete.validation)}}</span>
-                                          </td>
+                                          </td-->
                                         </tr>
                                       </tbody>
                                     </table>
@@ -689,7 +711,108 @@
                     <!---------------------------------FILS PRESTATION-----------------------------------------------> 
 
                       </md-tab-body>
-                    </md-tab>            
+                    </md-tab>
+                    
+                    <md-tab ng-disabled="!vm.stepsuivi_marche_moe" ng-click="vm.click_tab_suivi_marche_moe()">
+                      <md-tab-label>
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Fiche de suivi MOE</span>
+                        </span>
+                       
+                      </md-tab-label>
+                      
+                      <md-tab-body>
+                         <div style="margin-top: 30px;margin-bottom: 30px">
+                          <div style="margin-left: 5px;"><span style="text-decoration: underline; font-weight: bold;">MONTANT CONTRAT</span>: <span>{{vm.formatMillier(vm.selectedItemContrat_moe.montant_contrat)}} Ar</span></div> <br>       
+                          <table class="dataTable row-border hover cell-border" dt-options="vm.dtOptions" ms-responsive-table>
+                            <thead>
+                              <tr>
+                                <th class="secondary-text" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)" >
+                                  <div class="table-header">
+                                    <span class="column-title">Date BR</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
+                                  <div class="table-header">
+                                    <span class="column-title">Numero facture</span>
+                                  </div>
+                                </th>
+                                <th class="secondary-text" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
+                                  <div class="table-header">
+                                    <span class="column-title">Montant facture</span>
+                                  </div>
+                                </th>
+
+                                <th class="secondary-text" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
+                                  <div class="table-header">
+                                    <span class="column-title">Pourcentage</span>
+                                </th>
+                                                                         
+                                <th class="secondary-text" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
+                                  <div class="table-header">
+                                    <span class="column-title">RESTE A PAYER &nbsp &nbsp &nbsp</span>
+                                  </div>
+                                </th>                                          
+                                <!--th class="secondary-text" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
+                                  <div class="table-header">
+                                    <span class="column-title">MONTANT PREVU</span>
+                                  </div>
+                                </th-->
+                              </tr>                              
+                            </thead>
+                                     
+                            <tbody>                              
+                              <tr ng-repeat="suivi_marche_facture_moe in vm.allsuivi_marche_facture_moe" style="text-align: center">
+
+                              <td>
+                                <span>{{vm.formatDate(suivi_marche_facture_moe.date_br)}}</span>
+                              </td> 
+                                <td>                                                      
+                                  <span>{{suivi_marche_facture_moe.numero}}</span>
+                                </td>
+                                <td>                                                      
+                                  <span>{{vm.formatMillier(suivi_marche_facture_moe.montant_facture)}} Ar</span>
+                                </td>
+                                <td>                                                      
+                                  <span>{{vm.formatMillier(suivi_marche_facture_moe.pourcentage)}} %</span>
+                                </td>                             
+
+                                <td>                                                      
+                                  <span>{{vm.formatMillier(suivi_marche_facture_moe.reste_payer)}} Ar</span>
+                                </td>
+
+                                <!--td>                                                      
+                                  <span>{{vm.formatMillier(suivi_marche_facture_moe.cout_contrat)}} Ar</span>
+                                </td-->                                          
+                              </tr>
+                            </tbody>
+                            <tfoot>
+                              <tr style="text-align: center; font-weight: bold;">
+
+                              <td colspan="2">
+                                <span>TOTAL</span>
+                              </td> 
+                                <td>                                                      
+                                  <span>{{vm.som_montant_facture()}}</span>
+                                </td>                                
+
+                                <td>                                                      
+                                  <span>{{vm.som_pourcentage_moe()}}</span>
+                                </td>
+
+                                <td>                                                      
+                                  <span>{{vm.som_rest_payer_moe()}}</span>
+                                </td>
+
+                                <!--td>                                                      
+                                  <span>{{vm.som_montant_prevu_moe()}}</span>
+                                </td-->                                          
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                        </md-tab-body>
+                      </md-tab>
                   </md-tabs> 
                 </ms-form-wizard>               
               </md-tab-body>
@@ -705,7 +828,8 @@
                     <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepMenu==true">
                       <i class="icon-worker s16"></i>
                     </span-->
-                    <span class="ms-form-wizard-step-text">ENTREPRISE</span>
+                    <md-icon md-font-icon="icon-palette-advanced" ></md-icon>
+                    <span class="ms-form-wizard-step-text">&nbsp ENTREPRISE</span>
                     <!--span class="ms-form-wizard-step-number md-accent-bg notification" >4</span-->
                 </span>
                
@@ -713,7 +837,7 @@
               
               <md-tab-body>
                <ms-form-wizard flex id="sousmenu"> 
-                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menuformsbcafetat_child1">
                                         
                     <!------------------------------------------------Debut contrat mpe----------------------------------------->
                     <md-tab ng-click="vm.click_step_contrat_mpe()">
@@ -825,7 +949,7 @@
                       <md-tab-body>
                     <!----------------------------------FILS DEBUT SUIVI PAIEMENT--------------------------------------------->  
                       <ms-form-wizard  flex id="sousmenu">
-                        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true">
+                        <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menuformsbcafetat_child2">
 
                         <!--------------------------------DEBUT AVANCE DE DEMARRAGE------------------------------------------> 
                           <md-tab ng-click="vm.click_tab_avance_mpe()">
@@ -1071,7 +1195,7 @@
                                   <span>{{vm.formatMillier(pv_consta_rubrique_phase_bat_mpe.anterieur)}} %</span>
                                 </td>
                                 <td>
-                                  <span>{{vm.formatMillier(pv_consta_rubrique_phase_bat_mpe.periode + pv_consta_rubrique_phase_bat_mpe.anterieur )}} %</span>
+                                  <span>{{vm.formatMillierplus(pv_consta_rubrique_phase_bat_mpe.periode,pv_consta_rubrique_phase_bat_mpe.anterieur )}} %</span>
                                 </td>
                                 <td>                                                    
                                   <span>{{pv_consta_rubrique_phase_bat_mpe.observation}}</span>
@@ -2072,7 +2196,7 @@
                                       <span>{{justificatif_pv_consta_entete_travaux_mpe.fichier}}</span>
                                     </td>                       
                                     <td>
-                                      <a ng-click="vm.download_piece_attachement_mpe(justificatif_pv_consta_entete_travaux_mpe)" title="Telecharger">
+                                      <a ng-click="vm.download_piece_pv_consta_entete_travaux_mpe(justificatif_pv_consta_entete_travaux_mpe)" title="Telecharger">
                                         <span class="icon-box-download"></span>
                                       </a>
                                     </td>
@@ -2106,7 +2230,8 @@
                                 </md-tab-label>
                                 
                                 <md-tab-body>
-                                   <div style="margin-top: 30px;margin-bottom: 30px">        
+                                   <div style="margin-top: 30px;margin-bottom: 30px"> 
+                                    <div style="margin-left: 5px;"><span style="text-decoration: underline; font-weight: bold;">MONTANT CONTRAT</span>: <span>{{vm.formatMillier(vm.som_montant_contrat_mpe)}} Ar</span></div> <br>        
                                     <table class="dataTable row-border hover cell-border" dt-options="vm.dtOptions" ms-responsive-table>
                                       <thead>
                                         <tr>
@@ -2117,12 +2242,12 @@
                                           </th>
                                           <th class="secondary-text" rowSpan="2" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
-                                              <span class="column-title">Numero attachement</span>
+                                              <span class="column-title">Numero travaux</span>
                                             </div>
                                           </th>
                                           <th class="secondary-text" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
-                                              <span class="column-title">Montant attachement</span>
+                                              <span class="column-title">Montant travaux</span>
                                             </div>
                                           </th>
 
@@ -2131,23 +2256,23 @@
                                               <span class="column-title">Pourcentage</span>
                                           </th>
 
-                                          <th class="secondary-text" colspan="2" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
+                                          <!--th class="secondary-text" colspan="2" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
                                               <span class="column-title">PERIODE</span>
-                                          </th>
+                                          </th-->
 
                                           <th class="secondary-text" rowSpan="2" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
-                                              <span class="column-title">Montant HT</span>
+                                              <span class="column-title">Montant HT &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp</span>
                                           </th>
                                           <th class="secondary-text" rowSpan="2" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
-                                              <span class="column-title">Rabais</span>
+                                              <span class="column-title">Rabais </span>
                                             </div>
                                           </th>
                                           <th class="secondary-text" rowSpan="2" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
-                                              <span class="column-title">Total HT</span>
+                                              <span class="column-title"> &nbsp &nbsp &nbsp &nbsp Total HT &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp</span>
                                             </div>
                                           </th>
 
@@ -2158,24 +2283,29 @@
                                           </th>
                                           <th class="secondary-text" rowSpan="2" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
-                                              <span class="column-title">Montant TTC</span>
+                                              <span class="column-title">Montant TTC &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp</span>
                                             </div>
                                           </th>                                          
-                                          <th class="secondary-text" colspan="5" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
+                                          <th class="secondary-text" colspan="4" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
                                               <span class="column-title">MONTANT A DEDUIRE</span>
                                             </div>
                                           </th>                                           
                                           <th class="secondary-text" rowSpan="2" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
-                                              <span class="column-title">NET A PAYER</span>
+                                              <span class="column-title">NET A PAYER &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp</span>
                                             </div>
                                           </th>                                          
                                           <th class="secondary-text" rowSpan="2" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
-                                              <span class="column-title">RESTE A PAYER</span>
+                                              <span class="column-title">RESTE A PAYER &nbsp &nbsp &nbsp</span>
                                             </div>
-                                          </th>
+                                          </th>                                          
+                                          <!--th class="secondary-text" rowSpan="2" style="border-right: 1px solid rgb(170,170,170);border-top: 1px solid rgb(170,170,170)">
+                                            <div class="table-header">
+                                              <span class="column-title">MONTANT PREVU</span>
+                                            </div>
+                                          </th-->
                                         </tr>
                                         <tr> 
                                           <th class="secondary-text" style="border-right: 1px solid rgb(170,170,170)">
@@ -2183,7 +2313,7 @@
                                               <span class="column-title">Avance/acompte</span>
                                             </div>
                                           </th> 
-                                          <th class="secondary-text" style="border-right: 1px solid rgb(170,170,170)">
+                                          <!--th class="secondary-text" style="border-right: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
                                               <span class="column-title"> &nbsp &nbsp &nbsp &nbsp &nbsp du &nbsp &nbsp &nbsp  &nbsp &nbsp</span>
                                             </div>
@@ -2192,17 +2322,17 @@
                                             <div class="table-header">
                                               <span class="column-title"> &nbsp &nbsp &nbsp &nbsp &nbsp au &nbsp &nbsp &nbsp  &nbsp &nbsp</span>
                                             </div>
-                                          </th> 
+                                          </th--> 
                                           <th class="secondary-text" style="border-right: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
                                               <span class="column-title">Retenu de garantie 5%</span>
                                             </div>
                                           </th> 
-                                          <th class="secondary-text" style="border-right: 1px solid rgb(170,170,170)">
+                                          <!--th class="secondary-text" style="border-right: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
                                               <span class="column-title">Plaque en marbre</span>
                                             </div>
-                                          </th> 
+                                          </th--> 
                                           <th class="secondary-text" style="border-right: 1px solid rgb(170,170,170)">
                                             <div class="table-header">
                                               <span class="column-title">Remboursement acompte</span>
@@ -2239,12 +2369,12 @@
                                           <td>                                                     
                                             <span></span>
                                           </td>
-                                          <td>                                                      
+                                          <!--td>                                                      
                                             <span></span>
                                           </td>
                                           <td>                                                      
                                             <span></span>
-                                          </td>            
+                                          </td-->            
 
                                           
                                           <td>                                                      
@@ -2295,12 +2425,12 @@
                                           <td>                                                      
                                             <span>{{vm.formatMillier(suivi_marche_facture_mpe.pourcentage)}} %</span>
                                           </td>
-                                          <td>                                                     
+                                          <!--td>                                                     
                                             <span>{{suivi_marche_facture_mpe.date_debut}}</span>
                                           </td>
                                           <td>                                                      
                                             <span>{{suivi_marche_facture_mpe.date_fin}}</span>
-                                          </td>
+                                          </td-->
                                           <td>                                                      
                                             <span>{{vm.formatMillier(suivi_marche_facture_mpe.montant_travaux)}} Ar</span>
                                           </td>            
@@ -2323,9 +2453,9 @@
                                             <span>{{vm.formatMillier(suivi_marche_facture_mpe.retenue_garantie)}} Ar</span>
                                           </td>
 
-                                          <td>                                                      
+                                          <!--td>                                                      
                                             <span>{{vm.formatMillier(suivi_marche_facture_mpe.remboursement_plaque)}} Ar</span>
-                                          </td>
+                                          </td-->
 
                                           <td>                                                      
                                             <span>{{vm.formatMillier(suivi_marche_facture_mpe.remboursement_acompte)}} Ar</span>
@@ -2345,7 +2475,11 @@
 
                                           <td>                                                      
                                             <span>{{vm.formatMillier(suivi_marche_facture_mpe.reste_payer)}} Ar</span>
-                                          </td>                                          
+                                          </td>
+
+                                          <!--td>                                                      
+                                            <span>{{vm.formatMillier(suivi_marche_facture_mpe.cout_contrat)}} Ar</span>
+                                          </td-->                                          
                                         </tr>
 
                                         <tr style="text-align: center; height: 100px" ng-if="!vm.show_facture_mpe && !vm.show_avance_dem">
@@ -2356,7 +2490,7 @@
                                         </tr>
                                       </tbody>
                                       <tfoot>
-                                        <tr style="text-align: center">
+                                        <tr style="text-align: center; font-weight: bold;">
 
                                         <td colspan="2">
                                           <span>TOTAL</span>
@@ -2370,12 +2504,12 @@
                                           <td>                                                     
                                             <span></span>
                                           </td>
-                                          <td>                                                      
+                                          <!--td>                                                      
                                             <span></span>
                                           </td>
                                           <td>                                                      
                                             <span></span>
-                                          </td>            
+                                          </td-->            
 
                                           
                                           <td>                                                      
@@ -2395,9 +2529,9 @@
                                             <span>{{vm.som_retenue_garantie()}}</span>
                                           </td>
 
-                                          <td>                                                      
+                                          <!--td>                                                      
                                             <span>{{vm.som_remboursement_plaque()}}</span>
-                                          </td>
+                                          </td-->
 
                                           <td>                                                      
                                             <span>{{vm.som_remboursement_acompte()}}</span>
@@ -2416,8 +2550,12 @@
                                           </td>
 
                                           <td>                                                      
-                                            <span></span>
-                                          </td>                                          
+                                            <span>{{vm.som_rest_payer()}}</span>
+                                          </td>
+
+                                          <!--td>                                                      
+                                            <span>{{vm.som_montant_prevu()}}</span>
+                                          </td-->                                          
                                         </tr>
                                       </tfoot>
                                     </table>

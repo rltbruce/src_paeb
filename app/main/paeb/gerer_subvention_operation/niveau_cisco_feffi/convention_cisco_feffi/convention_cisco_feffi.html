@@ -1,8 +1,8 @@
   <div id="formsincociscofeffi" class="page-layout simple fullwidth doc-page" layout="column">
 
     <!-- HEADER -->
-    <div class="header md-accent-bg" layout="row" layout-align="space-between">
-        <div layout="column" layout-align="space-between">
+    <div class="header md-accent-bg {{vm.header_class}}" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="space-between" style="height: 10px !important;">
             <div class="breadcrumb" layout="row" layout-align="start center">
                 <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
@@ -16,6 +16,16 @@
             </div>
 
             <!--div class="title">Convention CISCO/FEFFI</div-->
+        </div><br>
+        <div style="text-align: center; margin: auto; float: bottom" ng-if="vm.header_ref_convention">
+                <span>Référence convention:</span>
+                <span style="margin-right: 20px; color: rgb(253, 159, 46);text-shadow: 1px 1px 1px rgb(52, 3, 65);">{{vm.header_ref_convention}}</span>
+                
+                <span>CISCO:</span>                
+                <span style="margin-right: 20px; color: black;color: rgb(253, 159, 46);text-shadow: 1px 1px 1px rgb(52, 3, 65);">{{vm.header_cisco}}</span>
+
+                <span>FEFFI:</span>
+                <span style="color: rgb(253, 159, 46);text-shadow: 1px 1px 1px rgb(52, 3, 65);">{{vm.header_feffi}}</span>
         </div>
     </div>
     <!-- / HEADER -->
@@ -50,7 +60,7 @@
                           <form name="filtreform" class="md-inline-form" novalidate >
                                 <br>
                             <div style="margin: 0px 15px 10px 15px;">
-                              <div layout="column" layout-gt-xs="row">
+                              <!--div layout="column" layout-gt-xs="row">
                                   <md-input-container>
                                     <span style="font-size: 14.5px" class="text-semibold">Date de création entre: &nbsp</span>
                                   </md-input-container>
@@ -64,7 +74,7 @@
 
                                   <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
                                   </md-datepicker>
-                                </div>
+                                </div-->
                                 <div layout="column" layout-gt-xs="row">
 
                                 <md-input-container flex="100" flex-gt-xs="90">
@@ -82,8 +92,8 @@
                                 </md-input-container>
                                 <md-input-container flex="100" flex-gt-xs="90">
                                   <label>Région</label>
-                                  <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)">
-                                    <md-option  value="*">*</md-option>
+                                  <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)" required>
+                                    <!--md-option  value="*">*</md-option-->
                                     <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
                                   </md-select>
                                   <div ng-messages="filtreform.region.$error" role="alert">
@@ -93,8 +103,8 @@
                                         
                                 <md-input-container flex="100" flex-gt-xs="90">
                                   <label>Cisco</label>
-                                  <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
-                                    <md-option  value="*">*</md-option>
+                                  <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco" required>
+                                    <!--md-option  value="*">*</md-option-->
                                     <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.description}}</md-option>
                                                         
                                     </md-select>

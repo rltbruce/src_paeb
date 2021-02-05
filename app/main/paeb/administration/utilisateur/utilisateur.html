@@ -29,6 +29,9 @@
           <md-button type="submit" ng-show="vm.afficherboutonModifSupr==1" class="md-raised md-accent" aria-label="Supprimer" ng-click="vm.supprimer()" style="width:10%;">
               Supprimer
           </md-button>
+          <md-button type="submit" ng-show="vm.afficherboutonModifSupr==1" class="md-raised md-accent" aria-label="Changer" ng-click="vm.changer_mpd_form()" style="width:10%;">
+              Changer MDP
+          </md-button>
         </div>  
         <div style="clear:both;"></div>
         <!-- BASIC FORM -->
@@ -213,6 +216,49 @@
                           Annuler
                         </md-button>
                     </form>
+                </md-tab-body>
+              </md-tab>
+            </md-tabs>
+            <md-tabs md-dynamic-height ng-show="vm.affichageMasqueMdp==1">
+              <md-tab label="Changer mot de passe">
+                <md-tab-body>
+                  <form name="profil_user_form" class="md-inline-form"  novalidate>
+                      <div layout="column" layout-gt-xs="row" flex>
+                        <md-input-container flex="100" flex-gt-xs="33">
+                          <input type="password" name="mdp" ng-model="vm.profil.mdp"
+                            placeholder="Mot de passe" ng-init="vm.profil.mdp=''"
+                            required>
+                            <div ng-messages="profil_user_form.mdp.$error"
+                              role="alert">
+                              <div ng-message="required">
+                                <span>Mot de passe obligatoire.</span>
+                              </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex="100" flex-gt-xs="33">
+                          <input type="password" name="mdp_confirmation" ng-model="vm.profil.mdp_confirmation"
+                            placeholder="Confirmation mot de passe " ng-init="vm.profil.mdp_confirmation=''"
+                            required>
+                            <div ng-messages="profil_user_form.mdp_confirmation.$error"
+                              role="alert">
+                              <div ng-message="required">
+                                <span>Confirmation mot de passe obligatoire.</span>
+                              </div>
+                              <div ng-if="(vm.profil.mdp!=vm.profil.mdp_confirmation)&&(vm.profil.mdp_confirmation)">
+                                <span style="font-size: 12px;">Vérifier votre mot de passe!</span>
+                              </div>
+                            </div>
+                        </md-input-container>
+                      </div>
+
+                      <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer"
+                          ng-disabled="(profil_user_form.$invalid)||(vm.profil.mdp!=vm.profil.mdp_confirmation)" ng-click="vm.changer_mdp(vm.profil,0)">
+                          Sauvegarder
+                      </md-button>
+                      <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerChanger_mdp()">
+                          Annuler
+                      </md-button>
+                  </form>
                 </md-tab-body>
               </md-tab>
             </md-tabs>

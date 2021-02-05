@@ -136,7 +136,7 @@
     }])        
         .controller('Convention_suivi_obcafController', Convention_suivi_obcafController);
     /** @ngInject */
-    function Convention_suivi_obcafController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile,apiUrlexcel)
+    function Convention_suivi_obcafController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile,apiUrlexcel,$stateParams)
     {
 		  /*****debut initialisation*****/
 
@@ -803,6 +803,42 @@
             }                 
 
          });
+         var racourci = $stateParams.rac; 
+        if (racourci!=null && racourci!=undefined && racourci!='')
+        { vm.affiche_load=true;
+          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByracourci","id_convention_entete",racourci).then(function(result)
+          {
+            vm.allconvention_entete= result.data.response;
+            console.log(vm.allconvention_entete);
+            var item = vm.allconvention_entete[0];
+            item.$selected=true;
+            vm.selectedItemConvention_entete = item;
+            vm.header_ref_convention = item.ref_convention;
+            vm.header_cisco = item.cisco.description;
+            vm.header_feffi = item.feffi.denomination; 
+            vm.header_class = 'headerbig';
+            vm.affiche_load=false;
+            vm.showbuttonNouvContrat_prestataire=true;
+           
+            vm.stepMenu_pr=true;                  
+            vm.stepMenu_moe=true;                  
+            vm.stepMenu_mpe=true;                    
+            vm.stepMenu_feffi=true;                   
+            vm.stepMenu_indicateur=true;
+
+            vm.steppiecefeffi=false;
+              vm.steptransdaaf=false;
+              vm.stepprestaion_pr=false;
+                vm.stepdoc_pr=false;
+              vm.stepprestation_moe = false;
+              vm.stepjusti_d_tra_moe = false;
+                vm.stepdoc_moe=false;
+              vm.stepsuiviexecution = false;
+              vm.stepphase = false;
+              vm.stepsoumissionnaire = false; 
+              vm.stepattachement =false;
+          });
+        }
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
@@ -825,35 +861,6 @@
         {titre:"Utilisateur"
         }]; 
 
-        vm.importerfiltre =function(filtre)
-        {   
-            var date_debut = convertionDate(filtre.date_debut);
-            var date_fin = convertionDate(filtre.date_fin);
-            vm.affiche_load = true ;
-            var repertoire = 'bdd_construction';
-
-            apiFactory.getAPIgeneraliserREST("excel_bdd_construction/index",'menu','getdonneeexporter',
-                'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
-                filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
-                filtre.id_convention_entete,"repertoire",repertoire).then(function(result)
-            {
-                vm.status    = result.data.status; 
-                
-                if(vm.status)
-                {
-                    vm.nom_file = result.data.nom_file;            
-                    window.location = apiUrlexcel+"bdd_construction/"+vm.nom_file ;
-                    vm.affiche_load =false; 
-
-                }else{
-                    vm.message=result.data.message;
-                    vm.Alert('Export en excel',vm.message);
-                    vm.affiche_load =false; 
-                }
-                console.log(result.data.data);
-            });
-        }       
-
         vm.recherchefiltre = function(filtre)
         {
             var date_debut = convertionDate(filtre.date_debut);
@@ -863,7 +870,7 @@
             switch (vm.session)
                 {
                   case 'AAC': 
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydateutilisateur','id_utilisateur',id_user,'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydateutilisateur','id_utilisateur',id_user,'lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
@@ -873,7 +880,7 @@
                       break;
 
                   case 'ADMIN':                            
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
@@ -907,7 +914,7 @@
             vm.stepMenu_indicateur=true;
 
             vm.header_ref_convention = item.ref_convention;
-            vm.header_cisco = item.cisco.code;
+            vm.header_cisco = item.cisco.description;
             vm.header_feffi = item.feffi.denomination; 
             vm.header_class = 'headerbig';
 
@@ -2128,11 +2135,23 @@ vm.click_step_avenant_pr = function()
         vm.step_importer_doc_pr = function()
         {   
             vm.affiche_load = true;
-             apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentinvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
-             {
-                vm.alldocument_pr_scan = result.data.response; 
-                vm.affiche_load = false;                                       
-            });
+            if (vm.session=="AAC")
+            {
+                apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentinvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+              {
+                  vm.alldocument_pr_scan = result.data.response; 
+                  vm.affiche_load = false;                                       
+              });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("dossier_pr/index",'menu','getdocumentBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+              {
+                  vm.alldocument_pr_scan = result.data.response; 
+                  vm.affiche_load = false;                                       
+              });
+            }
+             
         }
     //vm.myFile = [];
      $scope.uploadFile_doc_pr = function(event)
@@ -2148,48 +2167,56 @@ vm.click_step_avenant_pr = function()
         function ajoutDocument_pr_scan(document_pr_scan,suppression)
         {
             if (NouvelItemDocument_pr_scan==false)
-            {
-                apiFactory.getAPIgeneraliserREST("document_pr_scan/index",'menu','getdocumentvalideById','id_document_pr_scan',document_pr_scan.id_document_pr_scan).then(function(result)
+            {   
+                if (vm.session=="AAC")
                 {
-                  var document_pr_scan_valide = result.data.response;
-                  if (document_pr_scan_valide.length !=0)
+                    apiFactory.getAPIgeneraliserREST("document_pr_scan/index",'menu','getdocumentvalideById','id_document_pr_scan',document_pr_scan.id_document_pr_scan).then(function(result)
                   {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé.')
-                    .textContent('Les données sont déjà validées!')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {   
-                        /*document_pr_scan.$edit = false;
-                        document_pr_scan.$selected = false;
-                        document_pr_scan.fichier   = currentItemDocument_pr_scan.fichier ;
-                        document_pr_scan.date_elaboration   = currentItemDocument_pr_scan.date_elaboration ;
-                        document_pr_scan.observation   = currentItemDocument_pr_scan.observation ;
-                        vm.selectedItemDocument_pr_scan = {} ;*/
+                    var document_pr_scan_valide = result.data.response;
+                    if (document_pr_scan_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé.')
+                      .textContent('Les données sont déjà validées!')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {   
+                          /*document_pr_scan.$edit = false;
+                          document_pr_scan.$selected = false;
+                          document_pr_scan.fichier   = currentItemDocument_pr_scan.fichier ;
+                          document_pr_scan.date_elaboration   = currentItemDocument_pr_scan.date_elaboration ;
+                          document_pr_scan.observation   = currentItemDocument_pr_scan.observation ;
+                          vm.selectedItemDocument_pr_scan = {} ;*/
 
-                        document_pr_scan.fichier   = null;
-                        document_pr_scan.date_elaboration   = null ;
-                        document_pr_scan.observation   = null ;
-                        document_pr_scan.$edit = false;
-                        document_pr_scan.$selected = false;
+                          document_pr_scan.fichier   = null;
+                          document_pr_scan.date_elaboration   = null ;
+                          document_pr_scan.observation   = null ;
+                          document_pr_scan.$edit = false;
+                          document_pr_scan.$selected = false;
 
-                        document_pr_scan.id_document_pr_scan = null;
-                        document_pr_scan.validation   = null ;
-                        document_pr_scan.existance   = false ;
-                        vm.selectedItemDocument_pr_scan = {} ;
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                        test_existanceDocument_pr_scan (document_pr_scan,suppression);          
-                  }
-                }); 
+                          document_pr_scan.id_document_pr_scan = null;
+                          document_pr_scan.validation   = null ;
+                          document_pr_scan.existance   = false ;
+                          vm.selectedItemDocument_pr_scan = {} ;
+                      }, function() {
+                        //alert('rien');
+                      });
+                    }
+                    else
+                    {
+                          test_existanceDocument_pr_scan (document_pr_scan,suppression);          
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceDocument_pr_scan (document_pr_scan,suppression);
+                }
+                 
             } 
             else
             {
@@ -2741,124 +2768,242 @@ vm.click_step_avenant_pr = function()
             vm.stepparticipantgfpc = false;
             vm.stepparticipantpmc = false;
             vm.stepparticipantsep = false;
-            apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            if (vm.session=="AAC")
             {
-                vm.allmodule_dpp = result.data.response.filter(function(obj)
+                apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
                 {
-                    return obj.validation == 0;
-                });                          
-                console.log(vm.allmodule_dpp);
-                if (result.data.response.length!=0)
+                    vm.allmodule_dpp = result.data.response.filter(function(obj)
+                    {
+                        return obj.validation == 0;
+                    });                          
+                    console.log(vm.allmodule_dpp);
+                    if (result.data.response.length!=0)
+                    {
+                        vm.showbuttonNouvformdpp=false;
+                    }
+                    vm.affiche_load = false;
+                    vm.step_onglet_odc = true;
+                    vm.step_onglet_emies = true;
+                    vm.step_onglet_gfpc = true;
+                    vm.step_onglet_pmc = true;
+                    vm.step_onglet_sep = true;
+                });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
                 {
-                    vm.showbuttonNouvformdpp=false;
-                }
-                vm.affiche_load = false;
-                vm.step_onglet_odc = true;
-                vm.step_onglet_emies = true;
-                vm.step_onglet_gfpc = true;
-                vm.step_onglet_pmc = true;
-                vm.step_onglet_sep = true;
-            });
+                    vm.allmodule_dpp = result.data.response;                          
+                    console.log(vm.allmodule_dpp);
+                    if (result.data.response.length!=0)
+                    {
+                        vm.showbuttonNouvformdpp=false;
+                    }
+                    vm.affiche_load = false;
+                    vm.step_onglet_odc = true;
+                    vm.step_onglet_emies = true;
+                    vm.step_onglet_gfpc = true;
+                    vm.step_onglet_pmc = true;
+                    vm.step_onglet_sep = true;
+                });
+            }
+            
         }
         vm.step_module_dpp = function()
         {   
             vm.stepparticipantdpp = false;
-           apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            if (vm.session=="AAC")
             {
-                vm.allmodule_dpp = result.data.response.filter(function(obj)
+                apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
                 {
-                    return obj.validation == 0;
-                });                           
-                console.log(vm.allmodule_dpp);
-                if (result.data.response.length!=0)
+                    vm.allmodule_dpp = result.data.response.filter(function(obj)
+                    {
+                        return obj.validation == 0;
+                    });                           
+                    console.log(vm.allmodule_dpp);
+                    if (result.data.response.length!=0)
+                    {
+                        vm.showbuttonNouvformdpp=false;
+                    }
+                });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
                 {
-                    vm.showbuttonNouvformdpp=false;
-                }
-            }); 
+                    vm.allmodule_dpp = result.data.response;                           
+                    console.log(vm.allmodule_dpp);
+                    if (result.data.response.length!=0)
+                    {
+                        vm.showbuttonNouvformdpp=false;
+                    }
+                });
+            }
+             
         }
         vm.step_module_odc = function()
         {   
             vm.stepparticipantodc = false;
-            apiFactory.getAPIgeneraliserREST("module_odc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            if (vm.session=="AAC")
             {
-                 vm.allmodule_odc = result.data.response.filter(function(obj)
-                {
-                    return obj.validation == 0;
-                });                           
-                console.log(vm.allmodule_odc);
-                if (result.data.response.length!=0)
-                {
-                    vm.showbuttonNouvformodc=false;
-                }
-            });
+              apiFactory.getAPIgeneraliserREST("module_odc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+              {
+                  vm.allmodule_odc = result.data.response.filter(function(obj)
+                  {
+                      return obj.validation == 0;
+                  });                           
+                  console.log(vm.allmodule_odc);
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvformodc=false;
+                  }
+              });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("module_odc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+              {
+                  vm.allmodule_odc = result.data.response;                           
+                  console.log(vm.allmodule_odc);
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvformodc=false;
+                  }
+              });
+            }
+            
         }
 
         vm.step_module_emies = function()
         {
             vm.stepparticipantemies = false;
-            apiFactory.getAPIgeneraliserREST("module_emies/index",'menu','getmoduleinvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            if (vm.session=="AAC")
             {
-                vm.allmodule_emies = result.data.response.filter(function(obj)
-                {
-                    return obj.validation == 0;
-                });                           
-                console.log(vm.allmodule_emies);
-                if (result.data.response.length!=0)
-                {
-                    vm.showbuttonNouvformemies=false;
-                }
-            });
+              apiFactory.getAPIgeneraliserREST("module_emies/index",'menu','getmoduleinvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+              {
+                  vm.allmodule_emies = result.data.response.filter(function(obj)
+                  {
+                      return obj.validation == 0;
+                  });                           
+                  console.log(vm.allmodule_emies);
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvformemies=false;
+                  }
+              });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("module_emies/index",'menu','getmoduleinvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+              {
+                  vm.allmodule_emies = result.data.response;                           
+                  console.log(vm.allmodule_emies);
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvformemies=false;
+                  }
+              });
+            }
+            
         }
 
         vm.step_module_gfpc = function()
-        {   ;
+        {   
             vm.stepparticipantgfpc = false;
-            apiFactory.getAPIgeneraliserREST("module_gfpc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            if (vm.session=="AAC")
             {
-                vm.allmodule_gfpc = result.data.response.filter(function(obj)
-                {
-                    return obj.validation == 0;
-                });                           
-                console.log(vm.allmodule_gfpc);
-                if (result.data.response.length!=0)
-                {
-                    vm.showbuttonNouvformgfpc=false;
-                }
-            });
+              apiFactory.getAPIgeneraliserREST("module_gfpc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+              {
+                  vm.allmodule_gfpc = result.data.response.filter(function(obj)
+                  {
+                      return obj.validation == 0;
+                  });                           
+                  console.log(vm.allmodule_gfpc);
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvformgfpc=false;
+                  }
+              });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("module_gfpc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+              {
+                  vm.allmodule_gfpc = result.data.response;                           
+                  console.log(vm.allmodule_gfpc);
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvformgfpc=false;
+                  }
+              });
+            }
+            
         }
 
         vm.step_module_pmc = function()
         {   
             vm.stepparticipantpmc = false;
-             apiFactory.getAPIgeneraliserREST("module_pmc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            if (vm.session=="AAC")
             {
-                vm.allmodule_pmc = result.data.response.filter(function(obj)
-                {
-                    return obj.validation == 0;
-                });                           
-                console.log(vm.allmodule_pmc);
-                if (result.data.response.length!=0)
-                {
-                    vm.showbuttonNouvformpmc=false;
-                }
-            });
+              apiFactory.getAPIgeneraliserREST("module_pmc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+              {
+                  vm.allmodule_pmc = result.data.response.filter(function(obj)
+                  {
+                      return obj.validation == 0;
+                  });                           
+                  console.log(vm.allmodule_pmc);
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvformpmc=false;
+                  }
+              });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("module_pmc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+              {
+                  vm.allmodule_pmc = result.data.response;                           
+                  console.log(vm.allmodule_pmc);
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvformpmc=false;
+                  }
+              });
+            }
+             
         }
 
         vm.step_module_sep = function()
         {   
             vm.stepparticipantsep = false;
-            apiFactory.getAPIgeneraliserREST("module_sep/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+            if (vm.session=="AAC")
             {
-                vm.allmodule_sep = result.data.response.filter(function(obj)
-                {
-                    return obj.validation == 0;
-                });                           
-                console.log(vm.allmodule_sep);
-                if (result.data.response.length!=0)
-                {
-                    vm.showbuttonNouvformsep=false;
-                }
-            });
+              apiFactory.getAPIgeneraliserREST("module_sep/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+              {
+                  vm.allmodule_sep = result.data.response.filter(function(obj)
+                  {
+                      return obj.validation == 0;
+                  });                           
+                  console.log(vm.allmodule_sep);
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvformsep=false;
+                  }
+              });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("module_sep/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
+              {
+                  vm.allmodule_sep = result.data.response;                           
+                  console.log(vm.allmodule_sep);
+                  if (result.data.response.length!=0)
+                  {
+                      vm.showbuttonNouvformsep=false;
+                  }
+              });
+            }
+            
         }
 
 /*******************************************debut formation dpp**************************************************/
@@ -2938,35 +3083,43 @@ vm.click_step_avenant_pr = function()
         {
             if (NouvelItemModule_dpp==false)
             {
-                apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmodulevalideById','id_module',module_dpp.id).then(function(result)
-                { 
-                  var module_dpp_valide = result.data.response;
-                  if (module_dpp_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allmodule_dpp = vm.allmodule_dpp.filter(function(obj)
+                if (vm.session=="AAC")
+                {
+                    apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmodulevalideById','id_module',module_dpp.id).then(function(result)
+                    { 
+                      var module_dpp_valide = result.data.response;
+                      if (module_dpp_valide.length !=0)
                       {
-                          return obj.id !== module_dpp.id;
-                      });
-                      vm.stepparticipantdpp=false;
-                    }, function() {
-                      //alert('rien');
+                          var confirm = $mdDialog.confirm()
+                        .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                        .textContent('')
+                        .ariaLabel('Lucky day')
+                        .clickOutsideToClose(true)
+                        .parent(angular.element(document.body))
+                        .ok('Fermer')
+                        
+                        $mdDialog.show(confirm).then(function()
+                        {                      
+                          vm.allmodule_dpp = vm.allmodule_dpp.filter(function(obj)
+                          {
+                              return obj.id !== module_dpp.id;
+                          });
+                          vm.stepparticipantdpp=false;
+                        }, function() {
+                          //alert('rien');
+                        });
+                      }
+                      else
+                      {
+                        test_existanceModule_dpp (module_dpp,suppression);                   
+                      }
                     });
-                  }
-                  else
-                  {
-                    test_existanceModule_dpp (module_dpp,suppression);                   
-                  }
-                }); 
+                }
+                else
+                {
+                  test_existanceModule_dpp (module_dpp,suppression);
+                }
+                 
             } 
             else
             {
@@ -3678,36 +3831,44 @@ vm.click_step_avenant_pr = function()
         function ajoutModule_odc(module_odc,suppression)
         {
             if (NouvelItemModule_odc==false)
-            {                
-                apiFactory.getAPIgeneraliserREST("module_odc/index",'menu','getmodulevalideById','id_module',module_odc.id).then(function(result)
-                { 
-                  var module_odc_valide = result.data.response;
-                  if (module_odc_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allmodule_odc = vm.allmodule_odc.filter(function(obj)
+            {    
+                if (vm.session=="AAC")
+                {
+                      apiFactory.getAPIgeneraliserREST("module_odc/index",'menu','getmodulevalideById','id_module',module_odc.id).then(function(result)
+                    { 
+                      var module_odc_valide = result.data.response;
+                      if (module_odc_valide.length !=0)
                       {
-                          return obj.id !== module_odc.id;
-                      });
-                      vm.stepparticipantodc=false;
-                    }, function() {
-                      //alert('rien');
+                          var confirm = $mdDialog.confirm()
+                        .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                        .textContent('')
+                        .ariaLabel('Lucky day')
+                        .clickOutsideToClose(true)
+                        .parent(angular.element(document.body))
+                        .ok('Fermer')
+                        
+                        $mdDialog.show(confirm).then(function()
+                        {                      
+                          vm.allmodule_odc = vm.allmodule_odc.filter(function(obj)
+                          {
+                              return obj.id !== module_odc.id;
+                          });
+                          vm.stepparticipantodc=false;
+                        }, function() {
+                          //alert('rien');
+                        });
+                      }
+                      else
+                      {
+                        test_existanceModule_odc (module_odc,suppression);                   
+                      }
                     });
-                  }
-                  else
-                  {
-                    test_existanceModule_odc (module_odc,suppression);                   
-                  }
-                }); 
+                }
+                else
+                {
+                  test_existanceModule_odc (module_odc,suppression); 
+                }            
+                 
             } 
             else
             {
@@ -4420,36 +4581,45 @@ vm.click_step_avenant_pr = function()
         function ajoutModule_emies(module_emies,suppression)
         {
             if (NouvelItemModule_emies==false)
-            {
-                apiFactory.getAPIgeneraliserREST("module_emies/index",'menu','getmodulevalideById','id_module',module_emies.id).then(function(result)
-                { 
-                  var module_emies_valide = result.data.response;
-                  if (module_emies_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allmodule_emies = vm.allmodule_emies.filter(function(obj)
+            { 
+
+                if (vm.session=="AAC")
+                {
+                      apiFactory.getAPIgeneraliserREST("module_emies/index",'menu','getmodulevalideById','id_module',module_emies.id).then(function(result)
+                    { 
+                      var module_emies_valide = result.data.response;
+                      if (module_emies_valide.length !=0)
                       {
-                          return obj.id !== module_emies.id;
-                      });
-                      vm.stepparticipantemies=false;
-                    }, function() {
-                      //alert('rien');
+                          var confirm = $mdDialog.confirm()
+                        .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                        .textContent('')
+                        .ariaLabel('Lucky day')
+                        .clickOutsideToClose(true)
+                        .parent(angular.element(document.body))
+                        .ok('Fermer')
+                        
+                        $mdDialog.show(confirm).then(function()
+                        {                      
+                          vm.allmodule_emies = vm.allmodule_emies.filter(function(obj)
+                          {
+                              return obj.id !== module_emies.id;
+                          });
+                          vm.stepparticipantemies=false;
+                        }, function() {
+                          //alert('rien');
+                        });
+                      }
+                      else
+                      {
+                        test_existanceModule_emies (module_emies,suppression);                   
+                      }
                     });
-                  }
-                  else
-                  {
-                    test_existanceModule_emies (module_emies,suppression);                   
-                  }
-                }); 
+                }
+                else
+                {
+                  test_existanceModule_emies (module_emies,suppression);
+                }
+                 
             } 
             else
             {
@@ -5162,35 +5332,43 @@ vm.click_step_avenant_pr = function()
         {
             if (NouvelItemModule_gfpc==false)
             {
-                apiFactory.getAPIgeneraliserREST("module_gfpc/index",'menu','getmodulevalideById','id_module',module_gfpc.id).then(function(result)
-                { 
-                  var module_gfpc_valide = result.data.response;
-                  if (module_gfpc_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allmodule_gfpc = vm.allmodule_gfpc.filter(function(obj)
-                      {
-                          return obj.id !== module_gfpc.id;
+                if (vm.session=="AAC")
+                {
+                    apiFactory.getAPIgeneraliserREST("module_gfpc/index",'menu','getmodulevalideById','id_module',module_gfpc.id).then(function(result)
+                  { 
+                    var module_gfpc_valide = result.data.response;
+                    if (module_gfpc_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {                      
+                        vm.allmodule_gfpc = vm.allmodule_gfpc.filter(function(obj)
+                        {
+                            return obj.id !== module_gfpc.id;
+                        });
+                        vm.stepparticipantgfpc=false;
+                      }, function() {
+                        //alert('rien');
                       });
-                      vm.stepparticipantgfpc=false;
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceModule_gfpc (module_gfpc,suppression);                   
-                  }
-                });
+                    }
+                    else
+                    {
+                      test_existanceModule_gfpc (module_gfpc,suppression);                   
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceModule_gfpc (module_gfpc,suppression); 
+                }
+                
             } 
             else
             {
@@ -5903,35 +6081,44 @@ vm.click_step_avenant_pr = function()
         {
             if (NouvelItemModule_pmc==false)
             {
-                apiFactory.getAPIgeneraliserREST("module_pmc/index",'menu','getmodulevalideById','id_module',module_pmc.id).then(function(result)
-                { 
-                  var module_pmc_valide = result.data.response;
-                  if (module_pmc_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allmodule_pmc = vm.allmodule_pmc.filter(function(obj)
-                      {
-                          return obj.id !== module_pmc.id;
+
+                if (vm.session=="AAC")
+                {
+                  apiFactory.getAPIgeneraliserREST("module_pmc/index",'menu','getmodulevalideById','id_module',module_pmc.id).then(function(result)
+                  { 
+                    var module_pmc_valide = result.data.response;
+                    if (module_pmc_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {                      
+                        vm.allmodule_pmc = vm.allmodule_pmc.filter(function(obj)
+                        {
+                            return obj.id !== module_pmc.id;
+                        });
+                        vm.stepparticipantpmc=false;
+                      }, function() {
+                        //alert('rien');
                       });
-                      vm.stepparticipantpmc=false;
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceModule_pmc (module_pmc,suppression);                   
-                  }
-                }); 
+                    }
+                    else
+                    {
+                      test_existanceModule_pmc (module_pmc,suppression);                   
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceModule_pmc (module_pmc,suppression); 
+                }
+                 
             } 
             else
             {
@@ -6642,35 +6829,44 @@ vm.click_step_avenant_pr = function()
         {
             if (NouvelItemModule_sep==false)
             {
-                apiFactory.getAPIgeneraliserREST("module_sep/index",'menu','getmodulevalideById','id_module',module_sep.id).then(function(result)
-                { 
-                  var module_sep_valide = result.data.response;
-                  if (module_sep_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      vm.allmodule_sep = vm.allmodule_sep.filter(function(obj)
-                      {
-                          return obj.id !== module_sep.id;
+
+                if (vm.session=="AAC")
+                {
+                    apiFactory.getAPIgeneraliserREST("module_sep/index",'menu','getmodulevalideById','id_module',module_sep.id).then(function(result)
+                  { 
+                    var module_sep_valide = result.data.response;
+                    if (module_sep_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {                      
+                        vm.allmodule_sep = vm.allmodule_sep.filter(function(obj)
+                        {
+                            return obj.id !== module_sep.id;
+                        });
+                        vm.stepparticipantsep=false;
+                      }, function() {
+                        //alert('rien');
                       });
-                      vm.stepparticipantsep=false;
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceModule_sep (module_sep,suppression);                   
-                  }
-                }); 
+                    }
+                    else
+                    {
+                      test_existanceModule_sep (module_sep,suppression);                   
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceModule_sep (module_sep,suppression);
+                }
+                 
             } 
             else
             {
@@ -8401,12 +8597,22 @@ vm.click_step_avenant_pr = function()
         {
             
             vm.affiche_load = true;
-            apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentinvalideBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+            if (vm.session=="AAC")
+            {              
+              apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentinvalideBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+              {
+                  vm.alldocument_moe_scan = result.data.response;                 
+                  vm.affiche_load = false;                       
+              });
+            }
+            else
             {
-                vm.alldocument_moe_scan = result.data.response;                 
-                vm.affiche_load = false;                       
-            });
-            vm.styleTabfils = "acc_sous_menu";
+              apiFactory.getAPIgeneraliserREST("dossier_moe/index",'menu','getdocumentBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+              {
+                  vm.alldocument_moe_scan = result.data.response;                 
+                  vm.affiche_load = false;                       
+              });
+            }
         }
        /**********************************************Debut Dossier MOE***************************************************/
     //vm.myFile = [];
@@ -8421,47 +8627,55 @@ vm.click_step_avenant_pr = function()
         {
             if (NouvelItemDocument_moe_scan==false)
             {          
-                apiFactory.getAPIgeneraliserREST("document_moe_scan/index",'menu','getdocumentvalideById','id_document_moe_scan',document_moe_scan.id_document_moe_scan).then(function(result)
+                if (vm.session=="AAC")
                 {
-                  var document_moe_scan_valide = result.data.response;
-                  if (document_moe_scan_valide.length !=0)
+                    apiFactory.getAPIgeneraliserREST("document_moe_scan/index",'menu','getdocumentvalideById','id_document_moe_scan',document_moe_scan.id_document_moe_scan).then(function(result)
                   {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé.')
-                    .textContent('Les données sont déjà validées!')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {   
-                        /*document_moe_scan.$edit = false;
-                        document_moe_scan.$selected = false;
-                        document_moe_scan.fichier   = currentItemDocument_moe_scan.fichier ;
-                        document_moe_scan.date_elaboration   = currentItemDocument_moe_scan.date_elaboration ;
-                        document_moe_scan.observation   = currentItemDocument_moe_scan.observation ;
-                        vm.selectedItemDocument_moe_scan = {} ;*/
+                    var document_moe_scan_valide = result.data.response;
+                    if (document_moe_scan_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé.')
+                      .textContent('Les données sont déjà validées!')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {   
+                          /*document_moe_scan.$edit = false;
+                          document_moe_scan.$selected = false;
+                          document_moe_scan.fichier   = currentItemDocument_moe_scan.fichier ;
+                          document_moe_scan.date_elaboration   = currentItemDocument_moe_scan.date_elaboration ;
+                          document_moe_scan.observation   = currentItemDocument_moe_scan.observation ;
+                          vm.selectedItemDocument_moe_scan = {} ;*/
 
-                        document_moe_scan.fichier   = null;
-                        document_moe_scan.date_elaboration   = null ;
-                        document_moe_scan.observation   = null ;
-                        document_moe_scan.$edit = false;
-                        document_moe_scan.$selected = false;
+                          document_moe_scan.fichier   = null;
+                          document_moe_scan.date_elaboration   = null ;
+                          document_moe_scan.observation   = null ;
+                          document_moe_scan.$edit = false;
+                          document_moe_scan.$selected = false;
 
-                        document_moe_scan.id_document_moe_scan = null;
-                        document_moe_scan.validation   = null ;
-                        document_moe_scan.existance   = false ;
-                        vm.selectedItemDocument_moe_scan = {} ;
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceDocument_moe_scan (document_moe_scan,suppression);           
-                  }
-                }); 
+                          document_moe_scan.id_document_moe_scan = null;
+                          document_moe_scan.validation   = null ;
+                          document_moe_scan.existance   = false ;
+                          vm.selectedItemDocument_moe_scan = {} ;
+                      }, function() {
+                        //alert('rien');
+                      });
+                    }
+                    else
+                    {
+                      test_existanceDocument_moe_scan (document_moe_scan,suppression);           
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceDocument_moe_scan (document_moe_scan,suppression);
+                }
+                 
             } 
             else
             {
@@ -9244,23 +9458,44 @@ vm.click_step_avenant_pr = function()
             vm.step_manuel = false;
             vm.step_police = false;
             vm.showbuttonNouvMemoire_technique = true;
-            apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            if (vm.session=="AAC")
             {
-                vm.allmemoire_technique = result.data.response.filter(function(obj)
+                apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
                 {
-                       return obj.validation == 0;
-                });
-                if (result.data.response.length>0)
-                {
-                    vm.showbuttonNouvMemoire_technique = false;
-                }
-                vm.step_appel = true;
-                vm.step_rapport = true;
-                vm.step_manuel = true;
-                vm.step_police = true;
+                    vm.allmemoire_technique = result.data.response.filter(function(obj)
+                    {
+                          return obj.validation == 0;
+                    });
+                    if (result.data.response.length>0)
+                    {
+                        vm.showbuttonNouvMemoire_technique = false;
+                    }
+                    vm.step_appel = true;
+                    vm.step_rapport = true;
+                    vm.step_manuel = true;
+                    vm.step_police = true;
 
-                vm.affiche_load = false;                           
-            });
+                    vm.affiche_load = false;                           
+                });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+                {
+                    vm.allmemoire_technique = result.data.response;
+                    if (result.data.response.length>0)
+                    {
+                        vm.showbuttonNouvMemoire_technique = false;
+                    }
+                    vm.step_appel = true;
+                    vm.step_rapport = true;
+                    vm.step_manuel = true;
+                    vm.step_police = true;
+
+                    vm.affiche_load = false;                           
+                });
+            }
+            
         }
 
         vm.step_memoire_technique = function()
@@ -9268,19 +9503,36 @@ vm.click_step_avenant_pr = function()
             
             vm.affiche_load = true;
             vm.showbuttonNouvMemoire_technique = true;
-            apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            if (vm.session=="AAC")
             {
-                vm.allmemoire_technique = result.data.response.filter(function(obj)
-                {
-                       return obj.validation == 0;
-                });
-                if (result.data.response.length>0)
-                {
-                    vm.showbuttonNouvMemoire_technique = false;
-                }
+                apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+              {
+                  vm.allmemoire_technique = result.data.response.filter(function(obj)
+                  {
+                        return obj.validation == 0;
+                  });
+                  if (result.data.response.length>0)
+                  {
+                      vm.showbuttonNouvMemoire_technique = false;
+                  }
 
-                vm.affiche_load = false;                           
-            });
+                  vm.affiche_load = false;                           
+              });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+              {
+                  vm.allmemoire_technique = result.data.response;
+                  if (result.data.response.length>0)
+                  {
+                      vm.showbuttonNouvMemoire_technique = false;
+                  }
+
+                  vm.affiche_load = false;                           
+              });
+            }
+            
         }
 
  /*******************************************debut importer mamoire technique*************************************************/
@@ -9400,6 +9652,8 @@ vm.click_step_avenant_pr = function()
         {
             if (NouvelItemMemoire_technique==false)
             {
+              if (vm.session=="AAC")
+              {
                 apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoirevalideById','id_memoire_technique',memoire_technique.id).then(function(result)
                 {
                   var memoire_technique_valide = result.data.response;
@@ -9427,7 +9681,13 @@ vm.click_step_avenant_pr = function()
                   {
                     test_existanceMemoire_technique (memoire_technique,suppression);                 
                   }
-                }); 
+                });
+              }
+              else
+              {
+                test_existanceMemoire_technique (memoire_technique,suppression);
+              }
+                 
             } 
             else
             {
@@ -9633,7 +9893,9 @@ vm.click_step_avenant_pr = function()
             
             vm.affiche_load = true;
             vm.showbuttonNouvAppel_offre = true;
-            apiFactory.getAPIgeneraliserREST("appel_offre/index",'menu','getappelBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+            if (vm.session=="AAC")
+            {
+              apiFactory.getAPIgeneraliserREST("appel_offre/index",'menu','getappelBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
             {
                 vm.allappel_offre = result.data.response.filter(function(obj)
                 {
@@ -9646,6 +9908,21 @@ vm.click_step_avenant_pr = function()
 
                 vm.affiche_load = false;                         
             });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("appel_offre/index",'menu','getappelBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+            {
+                vm.allappel_offre = result.data.response;
+                if (result.data.response.length>0)
+                {
+                     vm.showbuttonNouvAppel_offre = false;
+                } 
+
+                vm.affiche_load = false;                         
+            });
+            }
+            
         }
         vm.affichageformimporter_appel_offre = function()
         {
@@ -9760,7 +10037,9 @@ vm.click_step_avenant_pr = function()
         function ajoutAppel_offre(appel_offre,suppression)
         {
             if (NouvelItemAppel_offre==false)
-            {
+            {   
+              if (vm.session=="AAC")
+              {
                 apiFactory.getAPIgeneraliserREST("appel_offre/index",'menu','getappelvalideById','id_appel_offre',appel_offre.id).then(function(result)
                 {
                   var appel_offre_valide = result.data.response;
@@ -9789,6 +10068,12 @@ vm.click_step_avenant_pr = function()
                     test_existanceAppel_offre (appel_offre,suppression);                
                   }
                 }); 
+              }
+              else
+              {
+                test_existanceAppel_offre (appel_offre,suppression);
+              }
+                
             } 
             else
             {
@@ -9993,12 +10278,27 @@ vm.click_step_avenant_pr = function()
             
             vm.affiche_load = true;
             vm.showbuttonNouvRapport_mensuel = true;
-            apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+            if (vm.session=="AAC")
             {
-                vm.allrapport_mensuel = result.data.response.filter(function(obj)
-                {
-                       return obj.validation == 0;
-                });
+                apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+              {
+                  vm.allrapport_mensuel = result.data.response.filter(function(obj)
+                  {
+                        return obj.validation == 0;
+                  });
+                  if (result.data.response.length==4)
+                  {
+                      vm.showbuttonNouvRapport_mensuel = false;
+                  }
+
+                  vm.affiche_load = false;                           
+              });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
+            {
+                vm.allrapport_mensuel = result.data.response;
                 if (result.data.response.length==4)
                 {
                     vm.showbuttonNouvRapport_mensuel = false;
@@ -10006,6 +10306,8 @@ vm.click_step_avenant_pr = function()
 
                 vm.affiche_load = false;                           
             });
+            }
+            
         }
         vm.affichageformimporter_rapport_mensuel = function()
         {
@@ -10120,7 +10422,9 @@ vm.click_step_avenant_pr = function()
         function ajoutRapport_mensuel(rapport_mensuel,suppression)
         {
             if (NouvelItemRapport_mensuel==false)
-            {
+            {   
+              if (vm.session=="AAC")
+              {
                 apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportvalideById','id_rapport_mensuel',rapport_mensuel.id).then(function(result)
                 {
                   var rapport_mensuel_valide = result.data.response;
@@ -10148,7 +10452,13 @@ vm.click_step_avenant_pr = function()
                   {
                     test_existanceRapport_mensuel (rapport_mensuel,suppression);               
                   }
-                }); 
+                });
+              }
+              else
+              {
+                test_existanceRapport_mensuel (rapport_mensuel,suppression); 
+              }
+                 
             } 
             else
             {
@@ -10414,7 +10724,9 @@ vm.click_step_avenant_pr = function()
             
             vm.affiche_load = true;
             vm.showbuttonNouvManuel_gestion = true;
-            apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            if (vm.session=="AAC")
+            {
+              apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
             {
                 vm.allmanuel_gestion = result.data.response.filter(function(obj)
                 {
@@ -10427,6 +10739,21 @@ vm.click_step_avenant_pr = function()
 
                 vm.affiche_load = false;                          
             });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            {
+                vm.allmanuel_gestion = result.data.response;
+                if (result.data.response.length>0)
+                {
+                     vm.showbuttonNouvManuel_gestion = false;
+                }
+
+                vm.affiche_load = false;                          
+            });
+            }
+            
         }
         vm.affichageformimporter_manuel_gestion = function()
         {
@@ -10541,7 +10868,9 @@ vm.click_step_avenant_pr = function()
         function ajoutManuel_gestion(manuel_gestion,suppression)
         {
             if (NouvelItemManuel_gestion==false)
-            {
+            {   
+              if (vm.session=="AAC")
+              {
                 apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelvalideById','id_manuel_gestion',manuel_gestion.id).then(function(result)
                 {
                   var manuel_gestion_valide = result.data.response;
@@ -10569,7 +10898,13 @@ vm.click_step_avenant_pr = function()
                   {
                     test_existanceManuel_gestion (manuel_gestion,suppression);              
                   }
-                }); 
+                });
+              }
+              else
+              {
+                test_existanceManuel_gestion (manuel_gestion,suppression); 
+              }
+                 
             } 
             else
             {
@@ -10849,7 +11184,9 @@ vm.click_step_avenant_pr = function()
             
             vm.affiche_load = true;
             vm.showbuttonNouvPolice_assurance = true;
-            apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpoliceBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            if (vm.session=="AAC")
+            {
+              apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpoliceBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
             {
                 vm.allpolice_assurance = result.data.response.filter(function(obj)
                 {
@@ -10862,6 +11199,21 @@ vm.click_step_avenant_pr = function()
 
                 vm.affiche_load = false;                                                   
             });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpoliceBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
+            {
+                vm.allpolice_assurance = result.data.response;
+                if (result.data.response.length>0)
+                {
+                 vm.showbuttonNouvPolice_assurance = false;
+                }
+
+                vm.affiche_load = false;                                                   
+            });
+            }
+            
         }
       /**************************************Fin police d'assurance*************************************************/
       vm.ajouterPolice_assurance = function ()
@@ -10901,7 +11253,9 @@ vm.click_step_avenant_pr = function()
         function ajoutPolice_assurance(police_assurance,suppression)
         {
             if (NouvelItemPolice_assurance==false)
-            {
+            {   
+              if (vm.session=="AAC")
+              {
                 apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpolicevalideById','id_police_assurance_moe',police_assurance.id).then(function(result)
                 {
                   var police_assurance_valide = result.data.response;
@@ -10929,7 +11283,13 @@ vm.click_step_avenant_pr = function()
                   {
                     test_existancePolice_assurance (police_assurance,suppression);            
                   }
-                }); 
+                });
+              }
+              else
+              {
+                test_existancePolice_assurance (police_assurance,suppression); 
+              }
+                 
             } 
             else
             {
@@ -12277,16 +12637,7 @@ vm.steppassation_marches = function()
                 item.$selected = false;
              });
              vm.selectedItemContrat_prestataire.$selected = true;
-        });
-        vm.step_avenant_mpe = function()
-        {   vm.affiche_load = true;
-           apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantinvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
-            {
-                vm.allavenant_mpe = result.data.response;
-                vm.affiche_load = false;
-                vm.showbuttonNouvavenant_mpe = true;
-            });
-        }
+        });        
 
         //fonction masque de saisie modification item feffi
         vm.modifierContrat_prestataire = function(item)
@@ -13799,7 +14150,27 @@ vm.steppassation_marches = function()
     /******************************************fin attachement mobilier travaux***********************************************/
 
  /*********************************************fin avenant mpe***********************************************/
-
+        vm.step_avenant_mpe = function()
+        {   vm.affiche_load = true;
+          if (vm.session=="AAC")
+          {            
+            apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantinvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.allavenant_mpe = result.data.response;
+                vm.affiche_load = false;
+                vm.showbuttonNouvavenant_mpe = true;
+            });
+          }
+          else
+          {
+            apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.allavenant_mpe = result.data.response;
+                vm.affiche_load = false;
+                vm.showbuttonNouvavenant_mpe = true;
+            });
+          }
+        }
 //col table
         vm.avenant_mpe_column = [
         {titre:"Description"
@@ -13864,35 +14235,43 @@ vm.steppassation_marches = function()
         function ajoutAvenant_mpe(avenant_mpe,suppression)
         {
             if (NouvelItemAvenant_mpe==false)
-            {
-                apiFactory.getAPIgeneraliserREST("avenant_prestataire/index",'menu',"getavenant_mpevalideById",'id_avenant_mpe',avenant_mpe.id).then(function(result)
+            {   
+                if (vm.session=="AAC")
                 {
-                  var avenant_mpe_valide = result.data.response;
-                  if (avenant_mpe_valide.length !=0)
+                  apiFactory.getAPIgeneraliserREST("avenant_prestataire/index",'menu',"getavenant_mpevalideById",'id_avenant_mpe',avenant_mpe.id).then(function(result)
                   {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                        vm.allavenant_mpe = vm.allavenant_mpe.filter(function(obj)
-                        {
-                            return obj.id !== avenant_mpe.id;
-                        });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceAvenant_mpe (avenant_mpe,suppression);       
-                  }
-                }); 
+                    var avenant_mpe_valide = result.data.response;
+                    if (avenant_mpe_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      {                      
+                          vm.allavenant_mpe = vm.allavenant_mpe.filter(function(obj)
+                          {
+                              return obj.id !== avenant_mpe.id;
+                          });
+                      }, function() {
+                        //alert('rien');
+                      });
+                    }
+                    else
+                    {
+                      test_existanceAvenant_mpe (avenant_mpe,suppression);       
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceAvenant_mpe (avenant_mpe,suppression);
+                }
+                 
             } 
             else
             {
@@ -14105,12 +14484,25 @@ vm.steppassation_marches = function()
 
         vm.step_importerdocument_mpe = function()
         {   vm.affiche_load = true;
+          if (vm.session=="AAC")
+          {
             apiFactory.getAPIgeneraliserREST("dossier_prestataire/index",'menu','getdocumentinvalideBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.alldocument_prestataire_scan = result.data.response;
                 vm.affiche_load = false;
                                         
             });
+          }
+          else
+          {
+            apiFactory.getAPIgeneraliserREST("dossier_prestataire/index",'menu','getdocumentBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.alldocument_prestataire_scan = result.data.response;
+                vm.affiche_load = false;
+                                        
+            });
+          }
+            
         }
 
      $scope.uploadFile_doc_pre = function(event)
@@ -14125,7 +14517,9 @@ vm.steppassation_marches = function()
         function ajoutDocument_prestataire_scan(document_prestataire_scan,suppression)
         {
             if (NouvelItemDocument_prestataire_scan==false)
-            {
+            {   
+              if (vm.session=="AAC")
+              {
                 apiFactory.getAPIgeneraliserREST("document_prestataire_scan/index",'menu','getdocumentvalideById','id_document_prestataire_scan',document_prestataire_scan.id_document_prestataire_scan).then(function(result)
                 {
                   var document_prestataire_scan_valide = result.data.response;
@@ -14167,6 +14561,12 @@ vm.steppassation_marches = function()
                         test_existanceDocument_prestataire_scan (document_prestataire_scan,suppression);        
                   }
                 }); 
+              }
+              else
+              {
+                test_existanceDocument_prestataire_scan (document_prestataire_scan,suppression); 
+              }
+                
             } 
             else
             {
@@ -14715,6 +15115,9 @@ vm.steppassation_marches = function()
         {
             if (NouvelItemDelai_travaux==false)
             {
+
+              if (vm.session=="AAC")
+              {
                 apiFactory.getAPIgeneraliserREST("delai_travaux/index",'menu',"getdelai_travauxvalideById",'id_delai_travaux',delai_travaux.id).then(function(result)
                 {
                   var delai_travaux_valide = result.data.response;
@@ -14739,7 +15142,13 @@ vm.steppassation_marches = function()
                   {
                     test_existanceDelai_travaux (delai_travaux,suppression);     
                   }
-                }); 
+                });
+              }
+              else
+              {
+                test_existanceDelai_travaux (delai_travaux,suppression); 
+              }
+                 
             } 
             else
             {
@@ -14955,7 +15364,9 @@ vm.steppassation_marches = function()
 /**********************************fin eelai_travaux****************************************/
 /**********************************debut passation_marches****************************************/
     vm.click_phase_sous = function()
-    {          
+    {    
+      if (vm.session=="AAC")
+      {
         apiFactory.getAPIgeneraliserREST("phase_sous_projet/index",'menu','getphasesousprojetBydelai','id_delai_travaux',vm.selectedItemDelai_travaux.id).then(function(result)
         {
             vm.allphase_sous_projet = result.data.response.filter(function(obj)
@@ -14964,6 +15375,16 @@ vm.steppassation_marches = function()
             });
             vm.showbuttonNouvPhase_sous_projet=true;
         });
+      }
+      else
+      {
+        apiFactory.getAPIgeneraliserREST("phase_sous_projet/index",'menu','getphasesousprojetBydelai','id_delai_travaux',vm.selectedItemDelai_travaux.id).then(function(result)
+        {
+            vm.allphase_sous_projet = result.data.response;
+            vm.showbuttonNouvPhase_sous_projet=true;
+        });
+      }      
+        
 
     }
    apiFactory.getAll("etape_sousprojet/index").then(function(result)
@@ -15040,7 +15461,9 @@ vm.steppassation_marches = function()
         function ajoutPhase_sous_projet(phase_sous_projet,suppression)
         {
             if (NouvelItemPhase_sous_projet==false)
-            {
+            {   
+              if (vm.session=="AAC")
+              {
                 apiFactory.getAPIgeneraliserREST("phase_sous_projet/index",'menu',"getphase_sous_projetvalideById",'id_phase_sous_projet',phase_sous_projet.id).then(function(result)
                 {
                   var phase_sous_projet_valide = result.data.response;
@@ -15068,7 +15491,13 @@ vm.steppassation_marches = function()
                   {
                     test_existancePhase_sous_projet (phase_sous_projet,suppression);   
                   }
-                }); 
+                });
+              }
+              else
+              {
+                test_existancePhase_sous_projet (phase_sous_projet,suppression);
+              }
+                
             } 
             else
             {
@@ -15269,7 +15698,9 @@ vm.steppassation_marches = function()
 
         vm.step_reception_mpe = function()
         {   vm.affiche_load = true;
-             apiFactory.getAPIgeneraliserREST("reception_mpe/index",'menu','getreception_mpeBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+          if (vm.session=="AAC")
+          {
+            apiFactory.getAPIgeneraliserREST("reception_mpe/index",'menu','getreception_mpeBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                 vm.allreception_mpe = result.data.response.filter(function(obj)
               {
@@ -15282,6 +15713,21 @@ vm.steppassation_marches = function()
                   vm.showbuttonNouvReception_mpe=false;
                 }
             });
+          }
+          else
+          {
+            apiFactory.getAPIgeneraliserREST("reception_mpe/index",'menu','getreception_mpeBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
+            {
+                vm.allreception_mpe = result.data.response;
+                vm.affiche_load = false;
+
+                if (result.data.response.length!=0)
+                {
+                  vm.showbuttonNouvReception_mpe=false;
+                }
+            });
+          }
+            
         }
  vm.reception_mpe_column = [        
         {titre:"Date prévisionnelle réception technique"
@@ -15342,7 +15788,9 @@ vm.steppassation_marches = function()
         function ajoutReception_mpe(reception_mpe,suppression)
         {
             if (NouvelItemReception_mpe==false)
-            {
+            {   
+              if (vm.session=="AAC")
+              {
                 apiFactory.getAPIgeneraliserREST("reception_mpe/index",'menu',"getreception_mpevalideById",'id_reception_mpe',reception_mpe.id).then(function(result)
                 {
                   var reception_mpe_valide = result.data.response;
@@ -15371,6 +15819,12 @@ vm.steppassation_marches = function()
                     test_existanceReception_mpe (reception_mpe,suppression);  
                   }
                 }); 
+              }
+              else
+              {
+                test_existanceReception_mpe (reception_mpe,suppression);
+              }
+                
             } 
             else
             {
@@ -15604,7 +16058,9 @@ vm.steppassation_marches = function()
         vm.step_menu_indicateur= function ()
         {vm.showbuttonNouvIndicateur=true;
             vm.affiche_load = true;
-                apiFactory.getAPIgeneraliserREST("indicateur/index",'menu','getindicateurByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+            if (vm.session=="AAC")
+            {
+              apiFactory.getAPIgeneraliserREST("indicateur/index",'menu','getindicateurByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.allindicateur = result.data.response.filter(function(obj)
                       {
@@ -15615,7 +16071,21 @@ vm.steppassation_marches = function()
                       vm.showbuttonNouvIndicateur=false;
                     }
                     vm.affiche_load = false;
-                }); 
+                });
+            }
+            else
+            {
+              apiFactory.getAPIgeneraliserREST("indicateur/index",'menu','getindicateurByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+                {
+                    vm.allindicateur = result.data.response;
+                    if (result.data.response.length!=0)
+                    {
+                      vm.showbuttonNouvIndicateur=false;
+                    }
+                    vm.affiche_load = false;
+                });
+            }
+                 
         } 
     vm.indicateur_column = [
         {titre:"Nombre salle"
@@ -15680,6 +16150,8 @@ vm.steppassation_marches = function()
         {
             if (NouvelItemIndicateur==false)
             { 
+              if (vm.session=="AAC")
+              {
                 apiFactory.getAPIgeneraliserREST("indicateur/index",'menu','getindicateurvalideById','id_indicateur',indicateur.id).then(function(result)
                 {
                   var indicateur_valide = result.data.response;
@@ -15708,6 +16180,13 @@ vm.steppassation_marches = function()
                     test_existanceIndicateur (indicateur,suppression);                
                   }
                 });
+              }
+              else
+              {
+                test_existanceIndicateur (indicateur,suppression);
+              }
+  
+                
             } 
             else
             {

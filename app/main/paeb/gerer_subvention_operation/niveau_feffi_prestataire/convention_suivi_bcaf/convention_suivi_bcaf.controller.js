@@ -136,7 +136,7 @@
     }])        
         .controller('Convention_suivi_bcafController', Convention_suivi_bcafController);
     /** @ngInject */
-    function Convention_suivi_bcafController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile,apiUrlexcel)
+    function Convention_suivi_bcafController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile,apiUrlexcel,$stateParams)
     {
 		  /*****debut initialisation*****/
 
@@ -735,6 +735,47 @@
         {
             vm.regions = response.data.response;
         });
+
+        var racourci = $stateParams.rac; 
+        if (racourci!=null && racourci!=undefined && racourci!='')
+        { vm.affiche_load=true;
+          apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByracourci","id_convention_entete",racourci).then(function(result)
+          {
+            vm.allconvention_entete= result.data.response;
+            console.log(vm.allconvention_entete);
+            vm.affiche_load=false;
+            var item = vm.allconvention_entete[0];
+            item.$selected=true;
+            vm.selectedItemConvention_entete = item;
+            vm.header_ref_convention = item.ref_convention;
+            vm.header_cisco = item.cisco.description;
+            vm.header_feffi = item.feffi.denomination; 
+            vm.header_class = 'headerbig';
+
+            vm.showbuttonNouvContrat_prestataire=true;
+            vm.stepMenu_pr=true;                  
+            vm.stepMenu_moe=true;                  
+            vm.stepMenu_mpe=true;                    
+            vm.stepMenu_feffi=true;                   
+            vm.stepMenu_indicateur=true;
+            apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
+              {
+                  vm.allcompte_feffi= result.data.response;
+              });
+              
+              vm.steppiecefeffi=false;
+              vm.steptransdaaf=false;
+              vm.stepprestaion_pr=false;
+              vm.stepdoc_pr=false;
+              vm.stepdoc_moe=false;
+              vm.stepprestation_moe = false;
+              vm.stepjusti_d_tra_moe = false;
+              vm.stepsuiviexecution = false;
+              vm.stepphase = false;
+              vm.stepsoumissionnaire = false;
+              vm.stepattachement =false;
+          });
+        }
         /* apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
         {
               vm.roles = result.data.response.roles;
@@ -789,43 +830,15 @@
         },
         {titre:"Utilisateur"
         }]; 
-
-        vm.importerfiltre =function(filtre)
-        {   
-            var date_debut = convertionDate(filtre.date_debut);
-            var date_fin = convertionDate(filtre.date_fin);
-            vm.affiche_load = true ;
-            var repertoire = 'bdd_construction';
-
-            apiFactory.getAPIgeneraliserREST("excel_bdd_construction/index",'menu','getdonneeexporter',
-                'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
-                filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
-                filtre.id_convention_entete,"repertoire",repertoire).then(function(result)
-            {
-                vm.status    = result.data.status; 
-                
-                if(vm.status)
-                {
-                    vm.nom_file = result.data.nom_file;            
-                    window.location = apiUrlexcel+"bdd_construction/"+vm.nom_file ;
-                    vm.affiche_load =false; 
-
-                }else{
-                    vm.message=result.data.message;
-                    vm.Alert('Export en excel',vm.message);
-                    vm.affiche_load =false; 
-                }
-                console.log(result.data.data);
-            });
-        }       
+       
 
         vm.recherchefiltre = function(filtre)
         {
             var date_debut = convertionDate(filtre.date_debut);
             var date_fin = convertionDate(filtre.date_fin);
             vm.affiche_load =true;
-            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
-                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
             {
                 vm.allconvention_entete = result.data.response;
                 vm.affiche_load =false;
@@ -886,7 +899,7 @@
             vm.stepMenu_indicateur=true;
 
             vm.header_ref_convention = item.ref_convention;
-            vm.header_cisco = item.cisco.code;
+            vm.header_cisco = item.cisco.description;
             vm.header_feffi = item.feffi.denomination; 
             vm.header_class = 'headerbig';
                           

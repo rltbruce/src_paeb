@@ -108,6 +108,21 @@
         {titre:"Action"}];
         
         var annee = vm.date_now.getFullYear();
+        var id_user = $cookieStore.get('id');
+         apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
+        {
+              vm.roles = result.data.response.roles;              
+              var utilisateur = result.data.response;
+            if (utilisateur.roles.indexOf("AAC")!= -1)
+            {                           
+                vm.session = 'AAC';
+            }
+            if (utilisateur.roles.indexOf("ADMIN")!= -1)
+            {                           
+                vm.session = 'ADMIN';
+            }                 
+
+         });
   //recuperation donnée programmation
         apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getconvention_creerinvalide_now","annee",annee).then(function(result)
         {
@@ -200,36 +215,44 @@
         {
             if (NouvelItemConvention_ufp_daaf_entete==false)
             {
-                 apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','testconventionByIfvalide','id_convention_ufp_daaf_entete',convention_ufp_daaf_entete.id).then(function(result)
-                { 
-                  var convention_valide = result.data.response;
-                  if (convention_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    { 
+                if (vm.session=="AAC")
+                {
+                    apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','testconventionByIfvalide','id_convention_ufp_daaf_entete',convention_ufp_daaf_entete.id).then(function(result)
+                  { 
+                    var convention_valide = result.data.response;
+                    if (convention_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      { 
 
-                      vm.stepOne           = false;                     
-                      vm.allconvention_ufp_daaf_entete = vm.allconvention_ufp_daaf_entete.filter(function(obj)
-                      {
-                          return obj.id !== convention_ufp_daaf_entete.id;
+                        vm.stepOne           = false;                     
+                        vm.allconvention_ufp_daaf_entete = vm.allconvention_ufp_daaf_entete.filter(function(obj)
+                        {
+                            return obj.id !== convention_ufp_daaf_entete.id;
+                        });
+                      }, function() {
+                        //alert('rien');
                       });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceConvention_ufp_daaf_entete (convention_ufp_daaf_entete,suppression,validation);                   
-                  }
-                });
+                    }
+                    else
+                    {
+                      test_existanceConvention_ufp_daaf_entete (convention_ufp_daaf_entete,suppression,validation);                   
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceConvention_ufp_daaf_entete (convention_ufp_daaf_entete,suppression,validation);
+                } 
+                
             } 
             else
             {
@@ -568,37 +591,45 @@
         function ajoutConvention_ufp_daaf_detail(convention_ufp_daaf_detail,suppression,validation)
         {
             if (NouvelItemConvention_ufp_daaf_detail==false)
-            {                
-                apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','testconventionByIfvalide','id_convention_ufp_daaf_entete',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
-                { 
-                  var convention_valide = result.data.response;
-                  if (convention_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    { 
+            {    
+                if (vm.session=="AAC")
+                {
+                    apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','testconventionByIfvalide','id_convention_ufp_daaf_entete',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
+                  { 
+                    var convention_valide = result.data.response;
+                    if (convention_valide.length !=0)
+                    {
+                        var confirm = $mdDialog.confirm()
+                      .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                      .textContent('')
+                      .ariaLabel('Lucky day')
+                      .clickOutsideToClose(true)
+                      .parent(angular.element(document.body))
+                      .ok('Fermer')
+                      
+                      $mdDialog.show(confirm).then(function()
+                      { 
 
-                      vm.stepOne           = false;                     
-                      vm.allconvention_ufp_daaf_entete = vm.allconvention_ufp_daaf_entete.filter(function(obj)
-                      {
-                          return obj.id !== vm.selectedItemConvention_ufp_daaf_entete.id;
+                        vm.stepOne           = false;                     
+                        vm.allconvention_ufp_daaf_entete = vm.allconvention_ufp_daaf_entete.filter(function(obj)
+                        {
+                            return obj.id !== vm.selectedItemConvention_ufp_daaf_entete.id;
+                        });
+                      }, function() {
+                        //alert('rien');
                       });
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceConvention_ufp_daaf_detail (convention_ufp_daaf_detail,suppression,validation);                  
-                  }
-                }); 
+                    }
+                    else
+                    {
+                      test_existanceConvention_ufp_daaf_detail (convention_ufp_daaf_detail,suppression,validation);                  
+                    }
+                  });
+                }
+                else
+                {
+                  test_existanceConvention_ufp_daaf_detail (convention_ufp_daaf_detail,suppression,validation);
+                }            
+                 
             } 
             else
             {
@@ -915,71 +946,113 @@
         };
 
         vm.ajoutConventionDialog = function (ev)
-        {
-          apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','testconventionByIfvalide','id_convention_ufp_daaf_entete',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
-          { 
-            var convention_valide = result.data.response;
-            if (convention_valide.length !=0)
-            {
-              var confirm = $mdDialog.confirm()
-              .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
-              .textContent('')
-              .ariaLabel('Lucky day')
-              .clickOutsideToClose(true)
-              .parent(angular.element(document.body))
-              .ok('Fermer')
-                    
-              $mdDialog.show(confirm).then(function()
-              { 
+        { 
+          if (vm.session=="AAC")
+          {
+            apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index",'menu','testconventionByIfvalide','id_convention_ufp_daaf_entete',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
+            { 
+              var convention_valide = result.data.response;
+              if (convention_valide.length !=0)
+              {
+                var confirm = $mdDialog.confirm()
+                .title('cette modification n\'est pas autorisé. Les données sont déjà validées!')
+                .textContent('')
+                .ariaLabel('Lucky day')
+                .clickOutsideToClose(true)
+                .parent(angular.element(document.body))
+                .ok('Fermer')
+                      
+                $mdDialog.show(confirm).then(function()
+                { 
 
-                vm.stepOne           = false;                     
-                vm.allconvention_ufp_daaf_entete = vm.allconvention_ufp_daaf_entete.filter(function(obj)
-                {
-                    return obj.id !== vm.selectedItemConvention_ufp_daaf_entete.id;
+                  vm.stepOne           = false;                     
+                  vm.allconvention_ufp_daaf_entete = vm.allconvention_ufp_daaf_entete.filter(function(obj)
+                  {
+                      return obj.id !== vm.selectedItemConvention_ufp_daaf_entete.id;
+                  });
+                }, function() {
+                        //alert('rien');
                 });
-              }, function() {
-                      //alert('rien');
-              });
-            }
-            else
-            {
-                NouvelItemConvention_cisco_feffi_entete = true;          
-                var confirm = $mdDialog.confirm({
-                controller: ConventionDialogController,
-                templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_ufp_daaf/convention_ufp_daaf/conventiondialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev, 
-                
-                })
+              }
+              else
+              {
+                  NouvelItemConvention_cisco_feffi_entete = true;          
+                  var confirm = $mdDialog.confirm({
+                  controller: ConventionDialogController,
+                  templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_ufp_daaf/convention_ufp_daaf/conventiondialog.html',
+                  parent: angular.element(document.body),
+                  targetEvent: ev, 
+                  
+                  })
 
-                    $mdDialog.show(confirm).then(function(data)
-                    { var nbr= data.length;
-                      var iterator = 0;
-                      var sum_montant=0;
-                      console.log(nbr);
-                      vm.affiche_load = true;
-                     data.forEach(function(item,index)
-                     {
-                        insert_in_base_convention_cisco_feffi_entete(item,'0',0);
-                        vm.allconvention_cisco_feffi_entete.push(item);
-                        sum_montant += item.montant_total;
-                        if (index== nbr-1)
-                        {
-                          var montant_trans = parseInt(vm.selectedItemConvention_ufp_daaf_entete.montant_trans_comm) + parseInt(sum_montant);
-                          var montant_conv = montant_trans + parseInt(vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire);
-                          console.log(sum_montant);
-                          miseajourconvention_ufp_daaf_entete(vm.selectedItemConvention_ufp_daaf_entete,montant_trans,montant_conv);
-                          vm.affiche_load = false;
-                        }
+                      $mdDialog.show(confirm).then(function(data)
+                      { var nbr= data.length;
+                        var iterator = 0;
+                        var sum_montant=0;
+                        console.log(nbr);
+                        vm.affiche_load = true;
+                      data.forEach(function(item,index)
+                      {
+                          insert_in_base_convention_cisco_feffi_entete(item,'0',0);
+                          vm.allconvention_cisco_feffi_entete.push(item);
+                          sum_montant += item.montant_total;
+                          if (index== nbr-1)
+                          {
+                            var montant_trans = parseInt(vm.selectedItemConvention_ufp_daaf_entete.montant_trans_comm) + parseInt(sum_montant);
+                            var montant_conv = montant_trans + parseInt(vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire);
+                            console.log(sum_montant);
+                            miseajourconvention_ufp_daaf_entete(vm.selectedItemConvention_ufp_daaf_entete,montant_trans,montant_conv);
+                            vm.affiche_load = false;
+                          }
+                          
+                        //console.log(sum_montant);
                         
-                       //console.log(sum_montant);
-                       
-                     });
-                   
-                    }, function(){//alert('rien');
-                  });                  
-            }
-          });
+                      });
+                    
+                      }, function(){//alert('rien');
+                    });                  
+              }
+            });
+          }
+          else
+          {
+            NouvelItemConvention_cisco_feffi_entete = true;          
+                  var confirm = $mdDialog.confirm({
+                  controller: ConventionDialogController,
+                  templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_ufp_daaf/convention_ufp_daaf/conventiondialog.html',
+                  parent: angular.element(document.body),
+                  targetEvent: ev, 
+                  
+                  })
+
+                      $mdDialog.show(confirm).then(function(data)
+                      { var nbr= data.length;
+                        var iterator = 0;
+                        var sum_montant=0;
+                        console.log(nbr);
+                        vm.affiche_load = true;
+                      data.forEach(function(item,index)
+                      {
+                          insert_in_base_convention_cisco_feffi_entete(item,'0',0);
+                          vm.allconvention_cisco_feffi_entete.push(item);
+                          sum_montant += item.montant_total;
+                          if (index== nbr-1)
+                          {
+                            var montant_trans = parseInt(vm.selectedItemConvention_ufp_daaf_entete.montant_trans_comm) + parseInt(sum_montant);
+                            var montant_conv = montant_trans + parseInt(vm.selectedItemConvention_ufp_daaf_entete.frais_bancaire);
+                            console.log(sum_montant);
+                            miseajourconvention_ufp_daaf_entete(vm.selectedItemConvention_ufp_daaf_entete,montant_trans,montant_conv);
+                            vm.affiche_load = false;
+                          }
+                          
+                        //console.log(sum_montant);
+                        
+                      });
+                    
+                      }, function(){//alert('rien');
+                    }); 
+          }
+          
           
 
         }

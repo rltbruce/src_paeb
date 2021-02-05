@@ -48,7 +48,8 @@
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
-          autoWidth: false          
+          autoWidth: false,
+          order:[]          
         };
         $scope.uploadFile = function(event)
        {
@@ -284,7 +285,7 @@
               code: '',
               nom: ''
             };         
-            vm.allzap.push(items);
+            vm.allzap.unshift(items);
             vm.allzap.forEach(function(cis)
             {
               if(cis.$selected==true)

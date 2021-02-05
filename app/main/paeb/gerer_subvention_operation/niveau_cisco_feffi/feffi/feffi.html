@@ -65,9 +65,9 @@
                                   
                     <md-input-container flex="100" flex-gt-xs="90">
                       <label>Cisco</label>
-                      <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region || vm.session=='BCAF' || vm.session=='OBCAF'" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
+                      <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region || vm.session=='BCAF' || vm.session=='OBCAF'" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco" required>
                         <md-option  value="*">*</md-option>
-                        <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                        <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.description}}</md-option>
                                                   
                         </md-select>
                         <div ng-messages="filtreform.cisco.$error" role="alert">
@@ -454,18 +454,29 @@
                       <td>
                         <span ng-if="membre.$edit">
                           <md-input-container style="width:100%;display: flex !important;">
-                            <label>Occupation</label>
-                            <md-select ng-model="membre.occupation"style="overflow: hidden;text-overflow: ellipsis;">
-                                <md-option value="1">President
-                                </md-option>
-                                <md-option value="2">Secretaire
-                                </md-option>
-                                <md-option value="3">Simple membre
-                                </md-option>
-                              </md-select>
-                          </md-input-container>
-                        </span>                          
-                        <span ng-if="!membre.$edit">{{vm.affichage_occupation(membre.occupation)}}</span>
+                            <label>Organe</label>
+                            <md-select ng-model="membre.id_organe_feffi"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.change_organe_feffi(membre)">
+                              <md-option ng-repeat="organe_feffi in vm.organe_feffis" value="{{organe_feffi.id}}">
+                                                                  {{organe_feffi.libelle}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>  
+                        </span>
+                        <span ng-if="!membre.$edit">{{membre.organe_feffi.libelle}}</span>
+                      </td>
+
+                      <td>
+                        <span ng-if="membre.$edit">
+                          <md-input-container style="width:100%;display: flex !important;">
+                            <label>Fonction</label>
+                            <md-select ng-model="membre.id_fonction_feffi"style="overflow: hidden;text-overflow: ellipsis;" ng-disabled="!membre.id_organe_feffi">
+                              <md-option ng-repeat="fonction_feffi in vm.fonction_feffis" value="{{fonction_feffi.id}}">
+                                                                  {{fonction_feffi.libelle}}
+                              </md-option>
+                            </md-select>
+                          </md-input-container>  
+                        </span>
+                        <span ng-if="!membre.$edit">{{membre.fonction_feffi.libelle}}</span>
                       </td>
                                                    
                       <td>
@@ -481,7 +492,7 @@
                           <span class="icon-cancel"></span>
                         </a>
                                   
-                        <a ng-if="membre.$edit && membre.nom && membre.prenom && membre.sexe && membre.age && membre.occupation>''" ng-click="vm.ajoutMembre(membre,0)" title="Sauvegarder">
+                        <a ng-if="membre.$edit && membre.nom && membre.prenom && membre.sexe && membre.age && membre.id_organe_feffi && membre.id_fonction_feffi>''" ng-click="vm.ajoutMembre(membre,0)" title="Sauvegarder">
                           <span class="icon-content-save"></span>
                         </a>
                       </td>
@@ -685,21 +696,12 @@
                         <span ng-if="!membre_titulaire.$edit">{{membre_titulaire.membre.prenom}}</span>
                       </td>
 
-                      <td>
-                        <span ng-if="membre_titulaire.$edit">
-                          <md-input-container style="width:100%;display: flex !important;">
-                            <label>Occupation</label>
-                            <md-select ng-model="membre_titulaire.occupation"style="overflow: hidden;text-overflow: ellipsis;" disabled>
-                                <md-option value="1">President
-                                </md-option>
-                                <md-option value="2">Secretaire
-                                </md-option>
-                                <md-option value="3">Simple membre_titulaire
-                                </md-option>
-                              </md-select>
-                          </md-input-container>
-                        </span>                          
-                        <span ng-if="!membre_titulaire.$edit">{{vm.affichage_occupation(membre_titulaire.membre.occupation)}}</span>
+                      <td>                         
+                        <span>{{membre_titulaire.membre.organe_libelle}}</span>
+                      </td>
+
+                      <td>                         
+                        <span>{{membre_titulaire.membre.fonction_libelle}}</span>
                       </td>
                                                    
                       <td>

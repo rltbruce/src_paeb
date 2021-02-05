@@ -10,10 +10,6 @@
     {   
         .animate-show-hide
         {
-            md-icon
-            {
-                color: rgb(22,152,214);
-            }
             margin:0px 6px 0px 6px;
             //border-top: 2px solid rgba(50,64,99,0.9);
             .footer-animate-show-hide
@@ -48,17 +44,66 @@
                 min-width:5px !important;
             }
         }                
-    .acc_menu
+        #acc_menuformsbcaffvactivif_fp_child1
         {
             md-tabs-wrapper
             {
-                height:55px !important;
-                background-color: transparent !important;
+                background-color: rgb(26, 149, 206) !important;
+               // border: 1px solid red;
 
+            }
+            md-tab-item.md-tab.ng-scope.ng-isolate-scope.md-ink-ripple.md-active
+            {   
+               background-color: rgb(46, 169, 226) !important;
+               //color:rgb(85, 5, 5) !important;
+               color:rgb(245, 212, 152) !important;
+               font-size: 12px;
+            }
+            md-tab-item
+            {   
+                color:wheat !important;
+                font-size: 11px;          
+            }
+            
+        }
+        #acc_menuformsbcaffvactivif_fp_child2
+        {
+            md-tabs-wrapper
+            {
+                background-color: rgb(46, 169, 226) !important;
+               // border: 1px solid red;
+
+            }
+            md-tab-item.md-tab.ng-scope.ng-isolate-scope.md-ink-ripple.md-active
+            {   
+               background-color: rgb(68, 188, 243) !important;
+               color:rgb(38, 18, 18) !important;
+               font-size: 11px;
+            }
+            
+            md-tab-item.md-tab.ng-scope.ng-isolate-scope.md-ink-ripple.md-disabled {
+                
+                opacity: 0.5 !important;
+         }
+            md-tab-item
+            {   
+                color:rgb(38, 18, 18) !important;
+                font-size: 10px;          
+            }
+        }             
+        .acc_menuformsbcaffvactivif_fp_mere
+        { 
+                        
+            md-tabs-wrapper
+            {
+                height:55px !important;
+                //background-color: transparent !important;
+                background-color: rgb(5, 126, 182) !important; //niova
+                font-weight: normal;
                 margin: auto !important;
                 //border: 1px solid red;
                md-icon.md-default-theme, md-icon {
-                    color: rgb(82,205,203) !important;
+                    color: white !important;
                 }
 
             }
@@ -83,13 +128,18 @@
                
                 //background-color: rgba(1,161,245,0.7) !important;
                 border-bottom: none !important;
-                color: rgba(255,255,255,1) !important;
-                background-color: rgba(50,64,99,0.9) !important;
-
+                //color: rgba(255,255,255,1) !important;
+                //color:wheat !important; //niova
+                color:wheat !important;
+               // background-color: rgba(50,64,99,0.9) !important;
+               background-color: rgb(26, 149, 206) !important; //niova
+               font-size: 12px;
+               font-weight: bold !important ;
+               
             }
             md-tab-item.md-tab.ng-scope.ng-isolate-scope.md-ink-ripple.md-disabled {
                 
-                   opacity: 0.5 !important;
+                   opacity: 0.7 !important;
                    .notification {
                    background-color: rgb(89,89,89) !important;
                    }
@@ -100,13 +150,14 @@
             md-tab-item
             {
                 //color: rgb(30,128,174) !important;
-                color: rgb(59,88,130) !important;
+                //color: rgb(59,88,130) !important;
+                color:rgba(255,255,255,1) !important; //niova
                 font-weight:none !important;
           
                 padding:16px 24px 16px 24px !important;
-                font-size: 13px;
+                font-size: 11px;
                 margin: auto !important;
-               font-family: Franklin Gothic Medium !important;
+              // font-family: Franklin Gothic Medium !important; niova
                 //border: 1px solid blue;           
             }
             
@@ -131,7 +182,7 @@
             color: #FFFFFF !important;
             background: rgb(170,0,0) !important;
            
-        }
+            }
           
             .ms-form-wizard md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item:after
             {

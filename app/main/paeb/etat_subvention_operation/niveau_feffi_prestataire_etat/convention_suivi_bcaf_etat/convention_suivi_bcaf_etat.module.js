@@ -31,11 +31,7 @@
             title: 'Etat activité technique',
             icon  : 'icon-rotate-3d',
             state: 'app.paeb_etat_subvention_operation_niveau_feffi_prestataire_etat_convention_suivi_bcaf_etat',
-			weight: 2,
-            hidden: function()
-            {
-                    return vs;
-            }
+			weight: 2
         });
 
     }

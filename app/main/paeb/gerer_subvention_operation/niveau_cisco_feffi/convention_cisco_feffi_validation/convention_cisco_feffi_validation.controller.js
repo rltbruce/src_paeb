@@ -18,6 +18,10 @@
         vm.allsite = [];
         vm.filtre = {};
         vm.affiche_load =true;
+        vm.header_ref_convention = null;
+        vm.header_cisco = null;
+        vm.header_feffi = null;
+        vm.header_class = null;
 
         var NouvelItemDetail = false;
         var currentItemDetail;
@@ -187,17 +191,17 @@
 
         vm.recherchefiltre = function(filtre)
         {
-            var date_debut = convertionDate(filtre.date_debut);
-            var date_fin = convertionDate(filtre.date_fin);
+           // var date_debut = convertionDate(filtre.date_debut);
+            //var date_fin = convertionDate(filtre.date_fin);
             vm.affiche_load =true;
-            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventioncreerinvalidefiltre',
-              'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
-                filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
-                filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
-              {
-                  vm.allconvention_cife_tete = result.data.response; 
-                  vm.affiche_load =false;
-              });
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionfiltre',
+                            'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
+                              filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
+            {
+                vm.allconvention_cife_tete = result.data.response; 
+                console.log(vm.allconvention_cife_tete);
+                vm.affiche_load =false;
+            });
 
            /* if(vm.session=='BCAF')
             {
@@ -432,6 +436,10 @@
                   vm.stepTwo = false;
                   vm.stepThree = false;
               }
+              vm.header_ref_convention = item.ref_convention;
+              vm.header_cisco = item.cisco.description;
+              vm.header_feffi = item.feffi.denomination; 
+              vm.header_class = 'headerbig';
             };           
 
         };

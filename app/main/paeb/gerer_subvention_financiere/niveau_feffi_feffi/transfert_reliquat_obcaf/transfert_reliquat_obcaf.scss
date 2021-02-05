@@ -1,7 +1,12 @@
-#reliquatobcafiactivif {
-
-.content 
-    {   
+#reliquatobcafiactivifi {
+    .headerbig
+    {
+        height: 60px !important;
+        min-height: 60px !important;
+    }
+    .content {
+        
+        
         .animate-show-hide
         {
             md-icon
@@ -41,14 +46,23 @@
                 background-color: rgba(21,28,43,0.8);
                 min-width:5px !important;
             }
-        }                
-    
+        }
 
         .form-wrapper {
+            md-tab-item {
+                //background:rgb(49,140,231) !important;
+            }
 
+            .ms-form-wizard-step-label {
+               //background:transparent; 
+            }
+
+            md-tabs-wrapper {
+                //background:rgba(255,255,255,5)!important;
+            }
 
         }
-        
+		
         .form-data-wrapper {
             margin-left: 16px;
 
@@ -59,7 +73,6 @@
                     font-size: 16px;
                 }
             }
-
         }
     }
 }

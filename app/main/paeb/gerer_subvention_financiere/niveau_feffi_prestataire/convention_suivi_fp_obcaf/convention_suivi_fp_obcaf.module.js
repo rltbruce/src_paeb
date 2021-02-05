@@ -12,7 +12,7 @@
     {
         // State
         $stateProvider.state('app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_convention_suivi_fp_obcaf', {
-            url      : '/donnees-de-base/gerer_subvention_financiere/niveau_feffi_prestataire/convention_suivi_fp_obcaf',
+            url      : '/donnees-de-base/gerer_subvention_financiere/niveau_feffi_prestataire/convention_suivi_fp_obcaf:rac?',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/gerer_subvention_financiere/niveau_feffi_prestataire/convention_suivi_fp_obcaf/convention_suivi_fp_obcaf.html',

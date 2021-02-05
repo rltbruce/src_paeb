@@ -5,13 +5,13 @@
     angular
         .module('app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.site_etat', [])
         .config(config);
-var vs;
+    var vs ;
     /** @ngInject */
     function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
     {
         // State
         $stateProvider.state('app.paeb_etat_subvention_operation_niveau_cisco_feffi_etat_site_etat', {
-            url      : '/donnees-de-base/etat_subvention_operation/niveau_cisco_feffi_etat/site_etat',
+            url      : '/donnees-de-base/site_etat',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/etat_subvention_operation/niveau_cisco_feffi_etat/site_etat/site_etat.html',
@@ -21,7 +21,7 @@ var vs;
             bodyClass: 'site_etat',
             data : {
               authorizer : true,
-              permitted : ["ACC","ADMIN"],
+              permitted : ["USER","PERSONNEL","ADMIN"],
               page: "site_etat"
             }
         });
@@ -31,10 +31,8 @@ var vs;
             title: 'Site',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_etat_subvention_operation_niveau_cisco_feffi_etat_site_etat',
-            weight: 2
+			weight: 2
         });
-
-
 
     }
 

@@ -21,7 +21,7 @@ var vs;
             bodyClass: 'feffi_etat',
             data : {
               authorizer : true,
-              permitted : ["ACC","ADMIN"],
+              permitted : ["USER","PERSONNEL","ACC","ADMIN"],
               page: "feffi_etat"
             }
         });

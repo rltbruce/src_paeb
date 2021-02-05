@@ -10,7 +10,7 @@
     function UserController(apiFactory, $location, $mdDialog, $scope)
     {
       var vm = this;
-
+      vm.affichageMasqueMdp = 0;
       vm.allSite = [];
 
       vm.selectedItem = {} ;
@@ -676,6 +676,60 @@ console.log(datas);
           item.ufp = false;
           item.aac = false;
         }
-      }    
+      } 
+      vm.changer_mpd_form = function(item)
+      {
+        vm.affichageMasqueMdp = 1;
+      }
+       
+      vm.annulerChanger_mdp = function()
+      {
+        vm.affichageMasqueMdp = 0;
+        vm.profil = {};
+      }
+
+      vm.changer_mdp = function(profil)
+  		{
+  		
+  			var config = {
+                headers : {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+                }
+            };
+
+            var datas = $.param(
+            {
+            	profil:1,
+                id:vm.selectedItem.id,      
+                nom: vm.selectedItem.nom,
+                prenom: vm.selectedItem.prenom,
+               // cin: vm.selectedItem.cin,
+                email: vm.selectedItem.email,
+                password: profil.mdp
+                
+            });
+
+            apiFactory.add("utilisateurs/index",datas, config)
+                .success(function (data) 
+                {
+                    // console.log('update');
+                    var confirm = $mdDialog.confirm()
+                        .title('Mis à jour du compte avec succès!')
+                        .textContent('Votre nouveau mot de passe est : '+profil.mdp)
+                        .ariaLabel('Lucky day')
+                        .clickOutsideToClose(true)
+                        .parent(angular.element(document.body))
+                        .ok('ok');
+                    $mdDialog.show(confirm).then(function() {
+                    
+                    vm.affichageMasqueMdp = 0;
+                    vm.profil={};
+                    }, function() {
+                    //alert('rien');
+                    });
+
+                });
+  		}
+      
     }
 })();

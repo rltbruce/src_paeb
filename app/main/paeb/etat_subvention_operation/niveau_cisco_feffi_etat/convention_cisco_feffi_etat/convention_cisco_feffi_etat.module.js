@@ -5,13 +5,13 @@
     angular
         .module('app.paeb.etat_subvention_operation.niveau_cisco_feffi_etat.convention_cisco_feffi_etat', [])
         .config(config);
-var vs;
+    var vs ;
     /** @ngInject */
     function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
     {
         // State
         $stateProvider.state('app.paeb_etat_subvention_operation_niveau_cisco_feffi_etat_convention_cisco_feffi_etat', {
-            url      : '/donnees-de-base/etat_subvention_operation/niveau_cisco_feffi_etat/convention_cisco_feffi_etat',
+            url      : '/donnees-de-base/convention_cisco_feffi_etat',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/etat_subvention_operation/niveau_cisco_feffi_etat/convention_cisco_feffi_etat/convention_cisco_feffi_etat.html',
@@ -21,8 +21,8 @@ var vs;
             bodyClass: 'convention_cisco_feffi_etat',
             data : {
               authorizer : true,
-              permitted : ["ACC","ADMIN"],
-              page: "Convention_cisco_feffi_etat"
+              permitted : ["USER","PERSONNEL","ADMIN"],
+              page: "convention_cisco_feffi_etat"
             }
         });
 
@@ -33,8 +33,6 @@ var vs;
             state: 'app.paeb_etat_subvention_operation_niveau_cisco_feffi_etat_convention_cisco_feffi_etat',
 			weight: 3
         });
-
-
 
     }
 
@@ -51,7 +49,7 @@ var vs;
                
 
                 var permission = user.roles;
-                var permissions = ["ACC","ADMIN"];
+                var permissions = ["BCAF","ADMIN"];
                 var x =  loginService.gestionMenu(permissions,permission);        
                 vs = x ;
 

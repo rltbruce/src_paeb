@@ -1,28 +1,96 @@
 
 
   <md-dialog ng-cloak aria-label="dialog_type_effort" class="price-table">
-      <md-subheader style="background-color: rgb(245,245,245)">
-        <div class="package-type md-accent-fg">{{to_upper(
-                              district_nom)}}</div>
+      <md-subheader style="background-color: rgb(245,245,245); padding: 0 !important; margin: 0 !important;" >
+        <div class="package-type md-accent-fg" style="display:inline-block;">{{to_upper(district_nom)}}</div>
           <!--h2 mat-dialog-title  style="margin:0px">{{data_dialog.nom}}</h2-->
+          <div class="lock-size" style="display:inline-block; float: right;padding: 0 !important; margin: 0 !important;">
+            <md-fab-speed-dial md-open="demo.isOpen" md-direction="{{demo.selectedDirection}}"
+                               ng-class="demo.selectedMode">
+              <md-fab-trigger>
+                <md-button aria-label="menu" class="md-fab md-mini" style="margin: 0 !important;">
+                  <md-icon md-font-icon="icon-menu"></md-icon>
+                </md-button>
+              </md-fab-trigger>
+              <md-fab-actions>
+                <md-button  aria-label="Insertion acti" class="md-fab md-raised md-mini" ui-sref="app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_convention_suivi_obcaf({rac: selectedItemDataDialog.id}) " ng-if="showracourci_aac">
+                  <md-icon md-font-icon="icon-basecamp" aria-label="Twitter"></md-icon>
+                  <md-tooltip><span>Insertion activitée technique</span></md-tooltip>
+                </md-button>
+                <md-button aria-label="Insertion fina" class="md-fab md-raised md-mini" ui-sref="app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_convention_suivi_fp_obcaf({rac: selectedItemDataDialog.id}) " ng-if="showracourci_aac">
+                  <md-icon md-font-icon="icon-basket-fill" aria-label="Facebook"></md-icon>
+                  <md-tooltip><span>Insértion activitée financière</span></md-tooltip>
+                </md-button>
+                <md-button aria-label="Validation acti" class="md-fab md-raised md-mini" ui-sref="app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_convention_suivi_bcaf({rac: selectedItemDataDialog.id}) " ng-if="showracourci_dpfi">
+                  <md-icon md-font-icon="icon-basket-unfill" aria-label="Validation acti"></md-icon>
+                  <md-tooltip><span>Validation activitée technique</span></md-tooltip>
+                </md-button>
+                <md-button aria-label="Validation fin" class="md-fab md-raised md-mini" ui-sref="app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_convention_suivi_fp_bcaf({rac: selectedItemDataDialog.id}) " ng-if="showracourci_dpfi">
+                  <md-icon md-font-icon="icon-beats" aria-label="Validation fin"></md-icon>
+                  <md-tooltip><span>Validation activitée financièr</span></md-tooltip>
+                </md-button>
+              </md-fab-actions>
+            </md-fab-speed-dial>
+          </div>            
+        
       </md-subheader>
 
       <md-dialog-content>
 
-          <div ng-repeat="reports in data_dialog">
-            <div class="period"><span class="text-bold">Référance convention:</span> {{reports.ref_convention}}</div>
+          <!--div ng-repeat="dataDialog in alldataDialog" ng-class="{selected: dataDialog.$selected}" ng-click="selectionReportDialog(dataDialog)">
+            <div class="period"><span class="text-bold">Référance convention:</span> {{dataDialog.ref_convention}}</div>
 
             <div class="terms" layout="column" layout-align="start center"style="margin: 0;padding: 0">
-                <div class="term"style="margin: 0;padding: 0"><span class="">Avancement physique:</span> {{reports.avancement_tot | number:2}} %</div>
+                <div class="term"style="margin: 0;padding: 0"><span class="">CISCO:</span> {{dataDialog.cisco.description}}</div>
+                <div class="term"style="margin: 0;padding: 0"><span class="">FEFFI:</span> {{dataDialog.feffi.denomination}}</div>
+                <div class="term"style="margin: 0;padding: 0"><span class="">Avancement physique:</span> {{dataDialog.avancement_tot | number:2}} %</div>
             </div>
             <md-divider></md-divider><br>
-          </div> 
+          </div--> 
+          <table class="dataTable row-border hover cell-border"  datatable="ng" dt-options="tOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="conve in ::dataDialog_column">
+                  <div class="table-header">
+                    <span class="column-title">{{conve.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+
+              
+              <div style="float: top !important">
+                <md-progress-circular ng-if="affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                      Récuperation,veuillez patienter s'il vous plait ...
+                </div>
+              </div>
+                     
+            <tbody>
+              <tr ng-repeat="conventionDialog in alldataDialog"  ng-class="{selected: conventionDialog.$selected}" ng-click="selectionDataDialog(conventionDialog)">
+                        <td>
+                          <span>{{conventionDialog.ref_convention}}</span>
+                        </td>
+                        <td>
+                          <span>{{conventionDialog.cisco.description}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{conventionDialog.feffi.denomination}}</span>
+                        </td>
+
+                        <td>                          
+                          <span>{{conventionDialog.avancement_total | number:2}} %</span>
+                        </td>
+              </tr>
+            </tbody>
+          </table>
       </md-dialog-content>
 
       <md-dialog-actions style="background-color: rgb(245,245,245); margin: 0px !important">
         <span>
           
-        <md-button type="submit" class="md-raised md-primary" ng-click="cancel()";>Fermer</md-button>
+        <md-button type="submit" class="md-raised md-primary" ng-click="cancel()">Fermer</md-button>
         </span>             
       </md-dialog-actions>
    

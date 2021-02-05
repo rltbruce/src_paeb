@@ -12,7 +12,7 @@
     {
         // State
         $stateProvider.state('app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_convention_suivi_bcaf', {
-            url      : '/donnees-de-base/gerer_subvention_operation/niveau_feffi_prestataire/convention_suivi_bcaf',
+            url      : '/donnees-de-base/gerer_subvention_operation/niveau_feffi_prestataire/convention_suivi_bcaf:rac?',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_feffi_prestataire/convention_suivi_bcaf/convention_suivi_bcaf.html',
@@ -22,7 +22,7 @@
             bodyClass: 'convention_suivi_bcaf',
             data : {
               authorizer : true,
-              permitted : ["USER","PERSONNEL","ADMIN"],
+              permitted : ["USER","PERSONNEL","ADMIN","DPFI"],
               page: "convention_suivi_bcaf"
             }
         });

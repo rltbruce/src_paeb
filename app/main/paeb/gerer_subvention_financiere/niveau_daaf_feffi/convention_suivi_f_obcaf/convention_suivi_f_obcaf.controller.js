@@ -140,8 +140,6 @@
         vm.filtre_change_region = function(item)
         { 
             vm.filtre.id_cisco = null;
-            if (vm.session=='ADMIN')
-            {
               if (item.id_region != '*')
               {
                   apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
@@ -154,9 +152,6 @@
               {               
                   vm.ciscos = [];                
               }
-            }
-            
-          
         }
         vm.filtre_change_cisco = function(item)
         { vm.filtre.id_commune = null;
@@ -227,24 +222,20 @@
                             vm.session = 'OBCAF';
 
              }*/
+             apiFactory.getAll("region/index").then(function success(response)
+              {
+                  vm.regions = response.data.response;
+              });
              if (utilisateur.roles.indexOf("AAC")!= -1)
             {
-                            vm.showbuttonNeauveaudemandefeffi=true;
-                             apiFactory.getAll("region/index").then(function success(response)
-                            {
-                              vm.regions = response.data.response;
-                            });                           
-                            vm.session = 'AAC';
+                vm.showbuttonNeauveaudemandefeffi=true;                          
+                vm.session = 'AAC';
 
              }
              else
              {                           
-                            vm.showbuttonNeauveaudemandefeffi=true;
-                             apiFactory.getAll("region/index").then(function success(response)
-                            {
-                              vm.regions = response.data.response;
-                            });
-                            vm.session = 'ADMIN'; 
+                vm.showbuttonNeauveaudemandefeffi=true;                             
+                vm.session = 'ADMIN'; 
               
               }                  
 
@@ -270,35 +261,7 @@
         },
         {titre:"Utilisateur"
         }]; 
-
-        vm.importerfiltre =function(filtre)
-        {   
-            var date_debut = convertionDate(filtre.date_debut);
-            var date_fin = convertionDate(filtre.date_fin);
-            vm.affiche_load = true ;
-            var repertoire = 'bdd_construction';
-
-            apiFactory.getAPIgeneraliserREST("excel_bdd_construction/index",'menu','getdonneeexporter',
-                'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
-                filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',
-                filtre.id_convention_entete,"repertoire",repertoire).then(function(result)
-            {
-                vm.status    = result.data.status; 
-                
-                if(vm.status)
-                {
-                    vm.nom_file = result.data.nom_file;            
-                    window.location = apiUrlexcel+"bdd_construction/"+vm.nom_file ;
-                    vm.affiche_load =false; 
-
-                }else{
-                    vm.message=result.data.message;
-                    vm.Alert('Export en excel',vm.message);
-                    vm.affiche_load =false; 
-                }
-                console.log(result.data.data);
-            });
-        }       
+     
 
         vm.recherchefiltre = function(filtre)
         {
@@ -322,7 +285,7 @@
                       break;*/
                   case 'AAC':
                             
-                              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydateutilisateur','id_utilisateur',id_user,'date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
+                              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydateutilisateur','id_utilisateur',id_user,'lot',filtre.lot,'id_region',filtre.id_region
                                 ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
                             {
                                 vm.allconvention_entete = result.data.response;
@@ -332,13 +295,12 @@
 
                   case 'ADMIN':
                            
-                            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','date_debut',date_debut,'date_fin',date_fin,'lot',filtre.lot,'id_region',filtre.id_region
-                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete).then(function(result)
-                            {
-                                vm.allconvention_entete = result.data.response;
-                                vm.affiche_load =false;
-
-                            });                 
+                    apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalideufpBydate','lot',filtre.lot,'id_region',filtre.id_region
+                    ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
+                    {
+                        vm.allconvention_entete = result.data.response;
+                        vm.affiche_load =false;
+                    });                 
                       break;
                   default:
                       break;

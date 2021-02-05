@@ -21,7 +21,7 @@ var vs;
             bodyClass: 'convention_presence_reliquat',
             data : {
               authorizer : true,
-              permitted : ["ACC","ADMIN"],
+              permitted : ["USER","PERSONNEL","ACC","ADMIN"],
               page: "convention_presence_reliquat"
             }
         });
@@ -31,7 +31,7 @@ var vs;
             title: 'Convention avec reliquat',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_etat_subvention_operation_niveau_cisco_feffi_etat_convention_presence_reliquat',
-            weight: 4
+            weight: 6
         });
 
 

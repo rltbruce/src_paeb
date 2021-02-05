@@ -1,5 +1,9 @@
-#formsetatconvcf_cf {
-
+#formsetatconvcf_cfi {
+    .headerbig
+    {
+        height: 60px !important;
+        min-height: 60px !important;
+    }
     .content {
 
         .animate-show-hide

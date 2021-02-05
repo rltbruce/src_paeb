@@ -63,7 +63,7 @@
                       <label>Cisco</label>
                       <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco">
                         <md-option  value="*">*</md-option>
-                        <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.code}}</md-option>
+                        <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.description}}</md-option>
                                                   
                         </md-select>
                         <div ng-messages="filtreform.cisco.$error" role="alert">
@@ -107,16 +107,14 @@
                     </md-input-container>
                   </div>
                   
-                  <div class="footer-animate-show-hide">
-                      <md-button class="md-raised boutonfixe" disabled>
-                      </md-button>
-                      <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
-                                            Réinitialise
-                      </md-button>
-                        <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
-                                                Recherche
-                      </md-button>
-                  </div>
+                  <div class="footer-animate-show-hide" layout="row" layout-align="end end">
+                    <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                              Recherche
+                    </md-button>
+                    <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                          Réinitialise
+                    </md-button>
+                </div>
             </form>
             </div>            
             <div class="bouton-animate-show-hide">

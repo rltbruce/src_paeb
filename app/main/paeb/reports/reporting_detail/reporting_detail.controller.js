@@ -585,7 +585,7 @@
             vm.affiche_load = true ;
             var repertoire = 'bdd_construction';
 
-            apiFactory.getAPIall("excel_bdd_construction_detail/index?menu=getdonneeexporter&date_debut="+date_debut+"&date_fin="+date_fin+"&lot="+filtre.lot+"&id_region="+filtre.id_region+"&id_cisco="+
+           /* apiFactory.getAPIall("excel_bdd_construction_detail/index?menu=getdonneeexporter&date_debut="+date_debut+"&date_fin="+date_fin+"&lot="+filtre.lot+"&id_region="+filtre.id_region+"&id_cisco="+
                 filtre.id_cisco+"&id_commune="+filtre.id_commune+"&id_ecole="+filtre.id_ecole+"&id_convention_entete="+
                 filtre.id_convention_entete+"&repertoire="+repertoire+"&convention_feffi="+vm.cacher.convention_feffi+"&suivi_financier_daaf_feffi="
                 +vm.cacher.suivi_financier_daaf_feffi+"&suivi_financier_feffi_prestataire="+vm.cacher.suivi_financier_feffi_prestataire+
@@ -596,8 +596,20 @@
                 +vm.cacher.suivi_passation_marches_moe+"&suivi_prestation_moe="+vm.cacher.suivi_prestation_moe+"&suivi_paiement_moe="
                 +vm.cacher.suivi_paiement_moe+"&police_assurance_moe="+vm.cacher.police_assurance_moe+"&entreprise="+vm.cacher.entreprise+
                 "&suivi_passation_marches_mpe="+vm.cacher.suivi_passation_marches_mpe+"&suivi_execution_travau_mpe="+vm.cacher.suivi_execution_travau_mpe+
+                "&suivi_paiement_mpe="+vm.cacher.suivi_paiement_mpe+"&indicateur="+vm.cacher.indicateur+"&transfert_reliquat="+vm.cacher.transfert_reliquat+"").then(function(result)*/
+                apiFactory.getAPIall("excel_bdd_construction_detail/index?menu=getdonneeexporter&lot="+filtre.lot+"&id_region="+filtre.id_region+"&id_cisco="+
+                filtre.id_cisco+"&id_commune="+filtre.id_commune+"&id_ecole="+filtre.id_ecole+"&id_zap="+filtre.id_zap+"&id_convention_entete="+
+                filtre.id_convention_entete+"&repertoire="+repertoire+"&convention_feffi="+vm.cacher.convention_feffi+"&suivi_financier_daaf_feffi="
+                +vm.cacher.suivi_financier_daaf_feffi+"&suivi_financier_feffi_prestataire="+vm.cacher.suivi_financier_feffi_prestataire+
+                "&suivi_financier_feffi_fonctionnement="+vm.cacher.suivi_financier_feffi_fonctionnement+"&total_convention_decaissee="
+                +vm.cacher.total_convention_decaissee+"&reliquat_des_fonds="+vm.cacher.reliquat_des_fonds+"&partenaire_relais="
+                +vm.cacher.partenaire_relais+"&suivi_passation_marches_pr="+vm.cacher.suivi_passation_marches_pr+"&suivi_prestation_pr="
+                +vm.cacher.suivi_prestation_pr+"&maitrise_oeuvre="+vm.cacher.maitrise_oeuvre+"&suivi_passation_marches_moe="
+                +vm.cacher.suivi_passation_marches_moe+"&suivi_prestation_moe="+vm.cacher.suivi_prestation_moe+"&suivi_paiement_moe="
+                +vm.cacher.suivi_paiement_moe+"&police_assurance_moe="+vm.cacher.police_assurance_moe+"&entreprise="+vm.cacher.entreprise+
+                "&suivi_passation_marches_mpe="+vm.cacher.suivi_passation_marches_mpe+"&suivi_execution_travau_mpe="+vm.cacher.suivi_execution_travau_mpe+
                 "&suivi_paiement_mpe="+vm.cacher.suivi_paiement_mpe+"&indicateur="+vm.cacher.indicateur+"&transfert_reliquat="+vm.cacher.transfert_reliquat+"").then(function(result)
-            {
+                {
                 vm.status    = result.data.status; 
                 
                 if(vm.status)
@@ -622,7 +634,7 @@
             vm.affiche_load = true ;
             var repertoire = 'bdd_construction';
 
-            apiFactory.getAPIall("excel_bdd_construction_detail/index?date_debut="+date_debut+"&date_fin="+date_fin+"&lot="+filtre.lot+"&id_region="+filtre.id_region+"&id_cisco="+
+            /*apiFactory.getAPIall("excel_bdd_construction_detail/index?date_debut="+date_debut+"&date_fin="+date_fin+"&lot="+filtre.lot+"&id_region="+filtre.id_region+"&id_cisco="+
                 filtre.id_cisco+"&id_commune="+filtre.id_commune+"&id_ecole="+filtre.id_ecole+"&id_convention_entete="+
                 filtre.id_convention_entete+"&repertoire="+repertoire+"&convention_feffi="+vm.cacher.convention_feffi+"&suivi_financier_daaf_feffi="
                 +vm.cacher.suivi_financier_daaf_feffi+"&suivi_financier_feffi_prestataire="+vm.cacher.suivi_financier_feffi_prestataire+
@@ -633,8 +645,20 @@
                 +vm.cacher.suivi_passation_marches_moe+"&suivi_prestation_moe="+vm.cacher.suivi_prestation_moe+"&suivi_paiement_moe="
                 +vm.cacher.suivi_paiement_moe+"&police_assurance_moe="+vm.cacher.police_assurance_moe+"&entreprise="+vm.cacher.entreprise+
                 "&suivi_passation_marches_mpe="+vm.cacher.suivi_passation_marches_mpe+"&suivi_execution_travau_mpe="+vm.cacher.suivi_execution_travau_mpe+
+                "&suivi_paiement_mpe="+vm.cacher.suivi_paiement_mpe+"&indicateur="+vm.cacher.indicateur+"&transfert_reliquat="+vm.cacher.transfert_reliquat+"").then(function(result)*/
+                apiFactory.getAPIall("excel_bdd_construction_detail/index?lot="+filtre.lot+"&id_region="+filtre.id_region+"&id_cisco="+
+                filtre.id_cisco+"&id_commune="+filtre.id_commune+"&id_ecole="+filtre.id_ecole+"&id_zap="+filtre.id_zap+"&id_convention_entete="+
+                filtre.id_convention_entete+"&repertoire="+repertoire+"&convention_feffi="+vm.cacher.convention_feffi+"&suivi_financier_daaf_feffi="
+                +vm.cacher.suivi_financier_daaf_feffi+"&suivi_financier_feffi_prestataire="+vm.cacher.suivi_financier_feffi_prestataire+
+                "&suivi_financier_feffi_fonctionnement="+vm.cacher.suivi_financier_feffi_fonctionnement+"&total_convention_decaissee="
+                +vm.cacher.total_convention_decaissee+"&reliquat_des_fonds="+vm.cacher.reliquat_des_fonds+"&partenaire_relais="
+                +vm.cacher.partenaire_relais+"&suivi_passation_marches_pr="+vm.cacher.suivi_passation_marches_pr+"&suivi_prestation_pr="
+                +vm.cacher.suivi_prestation_pr+"&maitrise_oeuvre="+vm.cacher.maitrise_oeuvre+"&suivi_passation_marches_moe="
+                +vm.cacher.suivi_passation_marches_moe+"&suivi_prestation_moe="+vm.cacher.suivi_prestation_moe+"&suivi_paiement_moe="
+                +vm.cacher.suivi_paiement_moe+"&police_assurance_moe="+vm.cacher.police_assurance_moe+"&entreprise="+vm.cacher.entreprise+
+                "&suivi_passation_marches_mpe="+vm.cacher.suivi_passation_marches_mpe+"&suivi_execution_travau_mpe="+vm.cacher.suivi_execution_travau_mpe+
                 "&suivi_paiement_mpe="+vm.cacher.suivi_paiement_mpe+"&indicateur="+vm.cacher.indicateur+"&transfert_reliquat="+vm.cacher.transfert_reliquat+"").then(function(result)
-            {
+                {
                 vm.allreporting =result.data.response;
                 vm.affiche_load =false; 
                 if(vm.allreporting.length>0)

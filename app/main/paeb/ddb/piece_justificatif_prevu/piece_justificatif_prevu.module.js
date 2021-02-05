@@ -5,7 +5,8 @@
     angular
         .module('app.paeb.ddb.piece_justificatif_prevu', [
             'app.paeb.ddb.piece_justificatif_prevu.piece_justificatif_daaf_prevu',
-            'app.paeb.ddb.piece_justificatif_prevu.piece_justificatif_feffi_prevu'
+            'app.paeb.ddb.piece_justificatif_prevu.piece_justificatif_feffi_prevu',
+            'app.paeb.ddb.piece_justificatif_prevu.piece_justificatif_frais_fonction_feffi_prevu'
         ])
         .config(config);
 

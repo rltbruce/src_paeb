@@ -24,7 +24,7 @@
             bodyClass: 'convention_cisco_feffi_validation',
             data : {
               authorizer : true,
-              permitted : ["ACC","ADMIN"],
+              permitted : ["USER","DPFI","ADMIN"],
               page: "Convention_cisco_feffi_validation"
             }
         });

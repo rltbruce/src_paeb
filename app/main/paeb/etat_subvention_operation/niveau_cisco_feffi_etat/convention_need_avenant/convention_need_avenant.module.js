@@ -21,7 +21,7 @@ var vs;
             bodyClass: 'convention_need_avenant',
             data : {
               authorizer : true,
-              permitted : ["ACC","ADMIN"],
+              permitted : ["USER","PERSONNEL","ACC","ADMIN"],
               page: "convention_need_avenant"
             }
         });
@@ -31,7 +31,7 @@ var vs;
             title: 'Convention besoin avenant',
             icon  : 'icon-blur-radial',
             state: 'app.paeb_etat_subvention_operation_niveau_cisco_feffi_etat_convention_need_avenant',
-            weight: 4
+            weight: 5
         });
 
 

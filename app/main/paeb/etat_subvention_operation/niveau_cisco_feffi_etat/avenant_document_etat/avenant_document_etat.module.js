@@ -21,7 +21,7 @@ var vs;
             bodyClass: 'avenant_document_etat',
             data : {
               authorizer : true,
-              permitted : ["ACC","ADMIN"],
+              permitted : ["USER","PERSONNEL","ACC","ADMIN"],
               page: "avenant_document_etat"
             }
         });
