@@ -504,7 +504,7 @@
         vm.supprimerDocument_feffi_scan = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -651,7 +651,17 @@
                                       document_feffi_scan.$selected = false;
                                       document_feffi_scan.$edit = false;
                                       vm.selectedItemDocument_feffi_scan = {};
-                                      console.log('e');
+                                      var chemin= currentItemDocument_feffi_scan.fichier;
+                                      var fd = new FormData();
+                                          fd.append('chemin',chemin);
+                                    
+                                      var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
+
+                                      var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
+                                      headers: {'Content-Type': undefined}, chemin: chemin
+                                      }).success(function(dataa)
+                                      {
+                                      });
                                   }).error(function (data)
                                     {
                                         vm.showAlert('Error','Erreur lors de l\'insertion de donnée');
@@ -900,6 +910,7 @@
         vm.step_avenant_feffi= function ()
         {   
             vm.affiche_load = true;
+            NouvelItemAvenant_convention = false;
             apiFactory.getAPIgeneraliserREST("avenant_convention/index",'menu','getavenantinvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
             {
                 vm.allavenant_convention = result.data.response;
@@ -1114,7 +1125,7 @@
         vm.supprimerAvenant_convention = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)

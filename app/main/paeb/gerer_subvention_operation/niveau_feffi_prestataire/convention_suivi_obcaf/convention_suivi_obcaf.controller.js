@@ -975,6 +975,7 @@
             vm.stepdoc_pr = false; 
             vm.stepcontrat_pr = false;
             vm.showbuttonNouvPassation_pr=true;
+            NouvelItemPassation_marches_pr = false;
             if (vm.session=="AAC")
             {
               apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
@@ -1087,6 +1088,10 @@
     /*******************************************fin importer passation***************************************************/
 
   /********************************************Debut passation de marcher*********************************************/
+        vm.menu_click_passation_pr = function()
+        {
+          NouvelItemPassation_marches_pr = false;
+        }        
             
         //col table
         vm.passation_marches_pr_column = [
@@ -1143,7 +1148,7 @@
         {
             if (NouvelItemPassation_marches_pr==false)
             {                
-                if (condition)
+                if (vm.session=="AAC")
                 {
                     apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationvalideById','id_passation_pr',passation_marches_pr.id).then(function(result)
                     { 
@@ -1464,6 +1469,7 @@
             vm.stepdoc_pr = false;
             vm.showbuttonNouvcontrat_pr = false;
             vm.showbuttonimporter_contrat_pr = false
+            NouvelItemContrat_partenaire_relai = false;
             apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(resultc)
             {
                  vm.allcontrat_partenaire_relai = resultc.data.response;
@@ -1625,32 +1631,27 @@
         vm.selectionContrat_partenaire_relai= function (item)
         {
             vm.selectedItemContrat_partenaire_relai = item;
-            vm.nouvelItemContrat_partenaire_relai   = item;
             if (item.$selected==false || item.$selected==undefined)
             {
                 currentItemContrat_partenaire_relai    = JSON.parse(JSON.stringify(vm.selectedItemContrat_partenaire_relai));
             }
-            vm.stepavenant_pr = true;
-            vm.stepprestaion_pr = true;
-            vm.stepdoc_pr = true; 
+             
 
            if(item.id!=0)
            {            
               if (item.$selected==false || item.$selected==undefined)
               {
-                  
-                
                   vm.validation_contrat_pr = item.validation;
-                  vm.stepprestaion_pr=true;
-
-                    vm.stepdoc_pr=true;
                   apiFactory.getAPIgeneraliserREST("situation_participant_odc/index",'id_classification_site',vm.selectedItemConvention_entete.site.id_classification_site).then(function(result)
                   {
                       vm.allsituation_participant_odc = result.data.response;
                   }); 
               }
               vm.validation_contrat_pr = item.validation;
-              
+              vm.stepavenant_pr = true;
+              vm.stepprestaion_pr = true;
+              vm.stepdoc_pr = true;
+              console.log(item);
            }
              
         };
@@ -1818,6 +1819,7 @@
 vm.click_step_avenant_pr = function()
 {   
     vm.affiche_load = true;
+    NouvelItemAvenant_partenaire = false;
     if (vm.session=="AAC")
     {
       apiFactory.getAPIgeneraliserREST("avenant_partenaire_relai/index",'menu','getavenantBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
@@ -2487,7 +2489,17 @@ vm.click_step_avenant_pr = function()
                                       document_pr_scan.$selected = false;
                                       document_pr_scan.$edit = false;
                                       vm.selectedItemDocument_pr_scan = {};
-                                      console.log('b');
+                                      var chemin= currentItemDocument_pr_scan.fichier;
+                                        var fd = new FormData();
+                                            fd.append('chemin',chemin);
+                                      
+                                        var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
+
+                                        var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
+                                        headers: {'Content-Type': undefined}, chemin: chemin
+                                        }).success(function(data)
+                                        {
+                                        });
                                   }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
                                 }
                             }).error(function()
@@ -2701,57 +2713,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_module_dpp = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_module_dpp[0];
-          var repertoire = 'importer_module_dpp/';
-          var uploadUrl = apiUrl + "importer_module_dpp/importerdonnee_module_dpp";
-          var name = vm.myFile_module_dpp[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_module_dpp=data["nom_fichier"];
-              vm.repertoire_module_dpp=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée réfusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_module_dpp/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
         vm.step_prestation_pr = function()
@@ -2768,6 +2729,7 @@ vm.click_step_avenant_pr = function()
             vm.stepparticipantgfpc = false;
             vm.stepparticipantpmc = false;
             vm.stepparticipantsep = false;
+            NouvelItemModule_dpp = false;
             if (vm.session=="AAC")
             {
                 apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
@@ -2812,6 +2774,7 @@ vm.click_step_avenant_pr = function()
         vm.step_module_dpp = function()
         {   
             vm.stepparticipantdpp = false;
+            NouvelItemModule_dpp = false;
             if (vm.session=="AAC")
             {
                 apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
@@ -2843,7 +2806,8 @@ vm.click_step_avenant_pr = function()
         }
         vm.step_module_odc = function()
         {   
-            vm.stepparticipantodc = false;
+            vm.stepparticipantodc = false;            
+            NouvelItemModule_odc = false;
             if (vm.session=="AAC")
             {
               apiFactory.getAPIgeneraliserREST("module_odc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
@@ -2876,7 +2840,8 @@ vm.click_step_avenant_pr = function()
 
         vm.step_module_emies = function()
         {
-            vm.stepparticipantemies = false;
+            vm.stepparticipantemies = false;            
+            NouvelItemModule_emies = false;
             if (vm.session=="AAC")
             {
               apiFactory.getAPIgeneraliserREST("module_emies/index",'menu','getmoduleinvalideBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
@@ -2909,7 +2874,8 @@ vm.click_step_avenant_pr = function()
 
         vm.step_module_gfpc = function()
         {   
-            vm.stepparticipantgfpc = false;
+            vm.stepparticipantgfpc = false;            
+            NouvelItemModule_gfpc = false;
             if (vm.session=="AAC")
             {
               apiFactory.getAPIgeneraliserREST("module_gfpc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
@@ -2942,7 +2908,8 @@ vm.click_step_avenant_pr = function()
 
         vm.step_module_pmc = function()
         {   
-            vm.stepparticipantpmc = false;
+            vm.stepparticipantpmc = false;            
+            NouvelItemModule_pmc = false;
             if (vm.session=="AAC")
             {
               apiFactory.getAPIgeneraliserREST("module_pmc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
@@ -2975,7 +2942,8 @@ vm.click_step_avenant_pr = function()
 
         vm.step_module_sep = function()
         {   
-            vm.stepparticipantsep = false;
+            vm.stepparticipantsep = false;            
+            NouvelItemModule_sep = false;
             if (vm.session=="AAC")
             {
               apiFactory.getAPIgeneraliserREST("module_sep/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
@@ -3370,57 +3338,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_participant_dpp = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_participant_dpp[0];
-          var repertoire = 'importer_participant_dpp/';
-          var uploadUrl = apiUrl + "importer_participant_dpp/importerdonnee_participant_dpp";
-          var name = vm.myFile_participant_dpp[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_participant_dpp=data["nom_fichier"];
-              vm.repertoire_participant_dpp=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_participant_dpp/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /**********************************debut participant_dpp****************************************/
@@ -3704,57 +3621,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_module_odc = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_module_odc[0];
-          var repertoire = 'importer_module_odc/';
-          var uploadUrl = apiUrl + "importer_module_odc/importerdonnee_module_odc";
-          var name = vm.myFile_module_odc[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_module_odc=data["nom_fichier"];
-              vm.repertoire_module_odc=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_module_odc/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /*******************************************debut formation odc**************************************************/
@@ -3912,7 +3778,7 @@ vm.click_step_avenant_pr = function()
         vm.selectionModule_odc= function (item)
         {
             vm.selectedItemModule_odc = item;
-            vm.nouvelItemModule_odc   = item;
+            vm.NouvelItemModule_odc   = item;
             vm.showbuttonNouvRapport =true;
             if (item.id!=0)
             {
@@ -4122,57 +3988,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_participant_odc = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_participant_odc[0];
-          var repertoire = 'importer_participant_odc/';
-          var uploadUrl = apiUrl + "importer_participant_odc/importerdonnee_participant_odc";
-          var name = vm.myFile_participant_odc[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_participant_odc=data["nom_fichier"];
-              vm.repertoire_participant_odc=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_participant_odc/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /******************************************debut participant_odc****************************************/
@@ -4452,57 +4267,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_module_emies = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_module_emies[0];
-          var repertoire = 'importer_module_emies/';
-          var uploadUrl = apiUrl + "importer_module_emies/importerdonnee_module_emies";
-          var name = vm.myFile_module_emies[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_module_emies=data["nom_fichier"];
-              vm.repertoire_module_emies=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_module_emies/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /*******************************************debut formation emies**************************************************/
@@ -4872,57 +4636,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_participant_emies = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_participant_emies[0];
-          var repertoire = 'importer_participant_emies/';
-          var uploadUrl = apiUrl + "importer_participant_emies/importerdonnee_participant_emies";
-          var name = vm.myFile_participant_emies[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_participant_emies=data["nom_fichier"];
-              vm.repertoire_participant_emies=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_participant_emies/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /******************************************debut participant_emies*************************************************/
@@ -5202,57 +4915,7 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_module_gfpc = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_module_gfpc[0];
-          var repertoire = 'importer_module_gfpc/';
-          var uploadUrl = apiUrl + "importer_module_gfpc/importerdonnee_module_gfpc";
-          var name = vm.myFile_module_gfpc[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_module_gfpc=data["nom_fichier"];
-              vm.repertoire_module_gfpc=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_module_gfpc/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
+
     /*******************************************fin importer passation moe***************************************************/
 
 /*******************************************debut formation gfpc**************************************************/
@@ -5621,57 +5284,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_participant_gfpc = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_participant_gfpc[0];
-          var repertoire = 'importer_participant_gfpc/';
-          var uploadUrl = apiUrl + "importer_participant_gfpc/importerdonnee_participant_gfpc";
-          var name = vm.myFile_participant_gfpc[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_participant_gfpc=data["nom_fichier"];
-              vm.repertoire_participant_gfpc=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_participant_gfpc/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /*****************************************debut participant_gfpc********************************************/
@@ -5951,57 +5563,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_module_pmc = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_module_pmc[0];
-          var repertoire = 'importer_module_pmc/';
-          var uploadUrl = apiUrl + "importer_module_pmc/importerdonnee_module_pmc";
-          var name = vm.myFile_module_pmc[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_module_pmc=data["nom_fichier"];
-              vm.repertoire_module_pmc=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_module_pmc/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /*******************************************debut formation pmc**************************************************/
@@ -6369,57 +5930,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_participant_pmc = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_participant_pmc[0];
-          var repertoire = 'importer_participant_pmc/';
-          var uploadUrl = apiUrl + "importer_participant_pmc/importerdonnee_participant_pmc";
-          var name = vm.myFile_participant_pmc[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_participant_pmc=data["nom_fichier"];
-              vm.repertoire_participant_pmc=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_participant_pmc/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /**********************************debut participant_pmc****************************************/
@@ -6699,57 +6209,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_module_sep = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_module_sep[0];
-          var repertoire = 'importer_module_sep/';
-          var uploadUrl = apiUrl + "importer_module_sep/importerdonnee_module_sep";
-          var name = vm.myFile_module_sep[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_module_sep=data["nom_fichier"];
-              vm.repertoire_module_sep=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_module_sep/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /*******************************************debut formation sep**************************************************/
@@ -7123,57 +6582,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_participant_sep = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_participant_sep[0];
-          var repertoire = 'importer_participant_sep/';
-          var uploadUrl = apiUrl + "importer_participant_sep/importerdonnee_participant_sep";
-          var name = vm.myFile_participant_sep[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_participant_sep=data["nom_fichier"];
-              vm.repertoire_participant_sep=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_participant_sep/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /**********************************debut participant_sep****************************************/
@@ -7456,57 +6864,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_passation_moe = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_passation_moe[0];
-          var repertoire = 'importer_passation_moe/';
-          var uploadUrl = apiUrl + "importer_passation_moe/importerdonnee_passation_moe";
-          var name = vm.myFile_passation_moe[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_passation_moe=data["nom_fichier"];
-              vm.repertoire_passation_moe=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_passation_moe/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 
@@ -7519,6 +6876,7 @@ vm.click_step_avenant_pr = function()
             vm.stepdoc_moe=false;
             vm.step_contrat_moe_onglet = false;
             vm.stepcalendrier_paie_moe = false;
+            NouvelItemPassation_marches_moe = false;
             vm.affiche_load = true;
             if (vm.session=="AAC")
             {
@@ -7559,6 +6917,7 @@ vm.click_step_avenant_pr = function()
         { 
             vm.affiche_load = true;
             vm.showbuttonNouvPassation_moe=true;
+            NouvelItemPassation_marches_moe = false;
             if (vm.session=="AAC")
             {
               apiFactory.getAPIgeneraliserREST("passation_marches_be/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
@@ -7976,7 +7335,8 @@ vm.click_step_avenant_pr = function()
             vm.stepcalendrier_paie_moe=false;
             vm.sousrubrique_calendrier=false;
             vm.calendrier_prevu=false;
-            vm.affiche_load = true;                
+            vm.affiche_load = true; 
+            NouvelItemContrat_moe = false;               
                 apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                         vm.allcontrat_moe = result.data.response;
@@ -8011,57 +7371,7 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_contrat_moe = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_contrat_moe[0];
-          var repertoire = 'importer_contrat_moe/';
-          var uploadUrl = apiUrl + "importer_contrat_moe/importerdonnee_contrat_moe";
-          var name = vm.myFile_contrat_moe[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_contrat_moe=data["nom_fichier"];
-              vm.repertoire_contrat_moe=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_contrat_moe/"+data.nomFile;
-                    //vm.allcontrat_moeention = data.contrat_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
+
     /*******************************************fin importer passation moe***************************************************/
 
       /**************************************fin contrat moe***************************************************/
@@ -8950,7 +8260,17 @@ vm.click_step_avenant_pr = function()
                                       document_moe_scan.$selected = false;
                                       document_moe_scan.$edit = false;
                                       vm.selectedItemDocument_moe_scan = {};
-                                      console.log('e');
+                                      var chemin= currentItemDocument_moe_scan.fichier;
+                                      var fd = new FormData();
+                                          fd.append('chemin',chemin);
+                                    
+                                      var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
+
+                                      var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
+                                      headers: {'Content-Type': undefined}, chemin: chemin
+                                      }).success(function(data)
+                                      { 
+                                      });
                                   }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
                                 }
                             }).error(function()
@@ -9008,7 +8328,8 @@ vm.click_step_avenant_pr = function()
                           vm.selectedItemDocument_moe_scan.observation = '';
                           vm.selectedItemDocument_moe_scan.existance = false;
 
-                          vm.selectedItemDocument_pr_scan.id_document_moe_scan = null;
+                          vm.selectedItemDocument_moe_scan.id_document_moe_scan = null;
+                          
                       }).error(function()
                       {
                           showAlert(event,chemin);
@@ -9146,6 +8467,7 @@ vm.click_step_avenant_pr = function()
         vm.step_avenant_moe = function()
         {            
             vm.affiche_load = true;
+            NouvelItemAvenant_moe = false;
             if (vm.session=="AAC")
             {
               apiFactory.getAPIgeneraliserREST("avenant_be/index","menu","getavenantBycontrat",'id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
@@ -9457,7 +8779,8 @@ vm.click_step_avenant_pr = function()
             vm.step_rapport = false;
             vm.step_manuel = false;
             vm.step_police = false;
-            vm.showbuttonNouvMemoire_technique = true;
+            vm.showbuttonNouvMemoire_technique = true;            
+            NouvelItemMemoire_technique = false;
             if (vm.session=="AAC")
             {
                 apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
@@ -9502,7 +8825,8 @@ vm.click_step_avenant_pr = function()
         {
             
             vm.affiche_load = true;
-            vm.showbuttonNouvMemoire_technique = true;
+            vm.showbuttonNouvMemoire_technique = true;            
+            NouvelItemMemoire_technique = false;
             if (vm.session=="AAC")
             {
                 apiFactory.getAPIgeneraliserREST("memoire_technique/index",'menu','getmemoireBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
@@ -9558,57 +8882,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_memoire_technique = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_memoire_technique[0];
-          var repertoire = 'importer_memoire_technique/';
-          var uploadUrl = apiUrl + "importer_memoire_technique/importerdonnee_memoire_technique";
-          var name = vm.myFile_memoire_technique[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_memoire_technique=data["nom_fichier"];
-              vm.repertoire_memoire_technique=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_memoire_technique/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer mamoire technique***************************************************/
 
       /**************************************fin memoire technique***************************************************/
@@ -9893,6 +9166,7 @@ vm.click_step_avenant_pr = function()
             
             vm.affiche_load = true;
             vm.showbuttonNouvAppel_offre = true;
+            NouvelItemAppel_offre = false;
             if (vm.session=="AAC")
             {
               apiFactory.getAPIgeneraliserREST("appel_offre/index",'menu','getappelBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
@@ -9945,57 +9219,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_appel_offre = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_appel_offre[0];
-          var repertoire = 'importer_appel_offre/';
-          var uploadUrl = apiUrl + "importer_appel_offre/importerdonnee_appel_offre";
-          var name = vm.myFile_appel_offre[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_appel_offre=data["nom_fichier"];
-              vm.repertoire_appel_offre=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_appel_offre/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer mamoire technique***************************************************/
 
       /**************************************Debut appel d'offre*****************************************************/
@@ -10278,6 +9501,7 @@ vm.click_step_avenant_pr = function()
             
             vm.affiche_load = true;
             vm.showbuttonNouvRapport_mensuel = true;
+            NouvelItemRapport_mensuel = false;
             if (vm.session=="AAC")
             {
                 apiFactory.getAPIgeneraliserREST("rapport_mensuel/index",'menu','getrapportBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id).then(function(result)
@@ -10330,57 +9554,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_rapport_mensuel = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_rapport_mensuel[0];
-          var repertoire = 'importer_rapport_mensuel/';
-          var uploadUrl = apiUrl + "importer_rapport_mensuel/importerdonnee_rapport_mensuel";
-          var name = vm.myFile_rapport_mensuel[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_rapport_mensuel=data["nom_fichier"];
-              vm.repertoire_rapport_mensuel=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_rapport_mensuel/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer rapport mensuel***************************************************/
 
       /**************************************Debut rapport mensuel***************************************************/
@@ -10724,6 +9897,7 @@ vm.click_step_avenant_pr = function()
             
             vm.affiche_load = true;
             vm.showbuttonNouvManuel_gestion = true;
+            NouvelItemManuel_gestion = false;
             if (vm.session=="AAC")
             {
               apiFactory.getAPIgeneraliserREST("manuel_gestion/index",'menu','getmanuelBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
@@ -10776,57 +9950,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_manuel_gestion = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_manuel_gestion[0];
-          var repertoire = 'importer_manuel_gestion/';
-          var uploadUrl = apiUrl + "importer_manuel_gestion/importerdonnee_manuel_gestion";
-          var name = vm.myFile_manuel_gestion[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_manuel_gestion=data["nom_fichier"];
-              vm.repertoire_manuel_gestion=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_manuel_gestion/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer mamoire technique***************************************************/
 
 
@@ -11125,57 +10248,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_police_assurance = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_police_assurance[0];
-          var repertoire = 'importer_police_assurance/';
-          var uploadUrl = apiUrl + "importer_police_assurance/importerdonnee_police_assurance";
-          var name = vm.myFile_police_assurance[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_police_assurance=data["nom_fichier"];
-              vm.repertoire_police_assurance=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_police_assurance/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer mamoire technique***************************************************/
 
 
@@ -11184,6 +10256,7 @@ vm.click_step_avenant_pr = function()
             
             vm.affiche_load = true;
             vm.showbuttonNouvPolice_assurance = true;
+            NouvelItemPolice_assurance = false;
             if (vm.session=="AAC")
             {
               apiFactory.getAPIgeneraliserREST("police_assurance/index",'menu','getpoliceBycontrat','id_contrat_bureau_etude',vm.selectedItemContrat_moe.id,'validation',0).then(function(result)
@@ -11503,57 +10576,6 @@ vm.click_step_avenant_pr = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_passation_mpe = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_passation_mpe[0];
-          var repertoire = 'importer_passation_mpe/';
-          var uploadUrl = apiUrl + "importer_passation_mpe/importerdonnee_passation_mpe";
-          var name = vm.myFile_passation_mpe[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_passation_mpe=data["nom_fichier"];
-              vm.repertoire_passation_mpe=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_passation_mpe/"+data.nomFile;
-                    //vm.allpassation_mpeention = data.passation_mpe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /**********************************debut passation_marches****************************************/
@@ -11567,7 +10589,8 @@ vm.step_menu_mpe = function ()
     vm.stepsuiviexecution = false;
     vm.stepavenant_mpe = false;
     vm.step_importer_doc_mpe = false;
-    vm.showbuttonNouvPassation=true;
+    vm.showbuttonNouvPassation=true;    
+    NouvelItemPassation_marches = false;
     if (vm.session=="AAC")
     {
       apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
@@ -11602,7 +10625,9 @@ vm.step_menu_mpe = function ()
 }
 vm.steppassation_marches = function()
 {
-    vm.affiche_load = true;
+    vm.affiche_load = true;    
+    NouvelItemPassation_marches = false;
+    vm.stepsoumissionnaire = false;
     if (vm.session=="AAC")
     {
       apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
@@ -11962,6 +10987,7 @@ vm.steppassation_marches = function()
               passation_marches.$selected = false;
               passation_marches.$edit = false;
               vm.selectedItemPassation_marches = {};
+              vm.stepsoumissionnaire = false;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
@@ -11971,6 +10997,12 @@ vm.steppassation_marches = function()
  /*******************************************debut importer passation moe*************************************************/
         vm.stepmpe_soumissionaire = function()
         {            
+          
+          apiFactory.getAll("prestataire/index").then(function(result)
+          {
+              vm.allprestataire= result.data.response;
+          });
+          NouvelItemMpe_soumissionaire = false;         
             apiFactory.getAPIgeneraliserREST("mpe_soumissionaire/index",'id_passation_marches',vm.selectedItemPassation_marches.id).then(function(result)
             {
                 vm.allmpe_soumissionaire = result.data.response;
@@ -11997,57 +11029,6 @@ vm.steppassation_marches = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_mpe_soumissionaire = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_mpe_soumissionaire[0];
-          var repertoire = 'importer_mpe_soumissionaire/';
-          var uploadUrl = apiUrl + "importer_mpe_soumissionaire/importerdonnee_mpe_soumissionaire";
-          var name = vm.myFile_mpe_soumissionaire[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_mpe_soumissionaire=data["nom_fichier"];
-              vm.repertoire_mpe_soumissionaire=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre de donnée inserée: '+data.nbr_inserer+', Nombre de donnée refusée: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_mpe_soumissionaire/"+data.nomFile;
-                    //vm.allpassation_moeention = data.passation_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /**********************************debut sousmissionnaire****************************************/
@@ -12362,57 +11343,6 @@ vm.steppassation_marches = function()
             //$scope.uploadFile.$setUntouched();
         }
 
-        vm.importer_contrat_mpe = function (item,suppression) {
-          vm.affiche_load = true;  
-          var file =vm.myFile_contrat_mpe[0];
-          var repertoire = 'importer_contrat_mpe/';
-          var uploadUrl = apiUrl + "importer_contrat_mpe/importerdonnee_contrat_mpe";
-          var name = vm.myFile_contrat_mpe[0].name;
-          var fd = new FormData();
-          fd.append('file', file);
-          fd.append('repertoire',repertoire);
-          fd.append('name_fichier',name);
-          if(file) { 
-            var upl=   $http.post(uploadUrl, fd, {
-              transformRequest: angular.identity,
-              headers: {'Content-Type': undefined}
-            }).success(function(data){
-              vm.fichier_contrat_mpe=data["nom_fichier"];
-              vm.repertoire_contrat_mpe=data["repertoire"];
-              if(data.erreur==true)
-              {               
-               vm.showAlert("Erreur",data.erreur_value);
-               
-              } else {
-                //vm.showAlert("Erreur","Il y a des erreurs dans le fichier à importer.Veuillez clicquer sur ok pour voir les erreurs");
-                // Enlever de la liste puisqu'il y a des erreurs : sans sauvegarde dans la BDD
-                console.log(data); 
-                //vm.showAlert("INFORMATION","Le fichier a été importer avec succés");
-                var confirm = $mdDialog.confirm()
-                    .title('Nombre donnée inserer: '+data.nbr_inserer+', Nombre donnée réfuser: '+data.nbr_refuser)
-                    .textContent('Clicquer sur ok pour télécharger le rapport excel')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-                  
-                  $mdDialog.show(confirm).then(function()
-                  {
-                    window.location = apiUrlexcel+"importer_contrat_mpe/"+data.nomFile;
-                    //vm.allcontrat_moeention = data.contrat_moe_inserer;
-                    vm.affiche_load = false;
-                  }, function() {
-                    //alert('rien');
-                  });                    
-              } 
-            }).error(function(){
-              // console.log("Rivotra");
-            });
-          } else {
-            vm.showAlert("Information","Aucun fichier");
-          }
-        }
     /*******************************************fin importer passation moe***************************************************/
 
 /**********************************debut contrat prestataire****************************************/
@@ -12429,8 +11359,13 @@ vm.steppassation_marches = function()
         { 
             vm.showbuttonNouvContrat_prestataire=false;
             vm.affiche_load = true;
-            vm.showbuttonimporter_contrat_mpe = false;
-                 apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+            vm.showbuttonimporter_contrat_mpe = false;            
+            NouvelItemContrat_prestataire = false;
+            
+        apiFactory.getAPIgeneraliserREST("prestataire/index",'menu','prestataireBysousmissionnaire','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(resultpre)
+        {
+            vm.allprestataire= resultpre.data.response;
+            apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.allcontrat_prestataire = result.data.response;
                     vm.stepattachement = false;
@@ -12446,6 +11381,8 @@ vm.steppassation_marches = function()
 
                     vm.affiche_load = false;
                 });
+        });
+                 
         }
         
 //col table
@@ -12801,1357 +11738,11 @@ vm.steppassation_marches = function()
         
 /**********************************fin contrat_prestataire****************************************/
 
-    /*    vm.step_attachement_prevu = function()
-        {
-
-                vm.steprubriquetachement_latrine = false;
-                vm.steprubriquetachement_mobilier = false;
-                vm.affiche_load = true;
-             apiFactory.getAPIgeneraliserREST("divers_attachement_batiment/index","menu","getrubrique_attachement_withmontant_prevu","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
-            {   
-                vm.allrubrique_attachement_batiment_mpe= result.data.response;
-                vm.stepattachement_batiment_detail = false;
-                vm.stepattachement_latrine_detail = false;
-                vm.stepattachement_mobilier_detail = false;
-
-                vm.steprubriquetachement_latrine = true;
-                vm.steprubriquetachement_mobilier = true;
-                vm.affiche_load = false;
-
-                console.log(vm.allrubrique_attachement_batiment_mpe);
-            });
-            vm.styleTabfils = "acc_menu";
-        }*/
-/************************************************Debut rubrique attachement batiment_mpe***************************************************/
-       
-     /*   vm.rubrique_attachement_batiment_mpe_column = [
-        {titre:"Numero"
-        },
-        {titre:"Libelle"
-        },
-        {titre:"Montant prévu HT"
-        }];
-
-        vm.click_rubrique_attachement_batiment_mpe = function()
-        {   vm.affiche_load = true;
-            apiFactory.getAPIgeneraliserREST("divers_attachement_batiment/index","menu","getrubrique_attachement_withmontant_prevu","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
-            {   
-                vm.allrubrique_attachement_batiment_mpe= result.data.response;
-                vm.stepattachement_batiment_detail = false;
-                vm.affiche_load = false;
-
-                console.log(vm.allrubrique_attachement_batiment_mpe);
-            });
-        }
- //fonction selection item rubrique attachement batiment mpe
-        vm.selectionRubrique_attachement_batiment_mpe= function (item)
-        {
-            vm.selectedItemRubrique_attachement_batiment_mpe = item;
-            vm.stepattachement_batiment_detail = true;
-            
-        };
-
-        $scope.$watch('vm.selectedItemRubrique_attachement_batiment_mpe', function()
-        {
-             if (!vm.allrubrique_attachement_batiment_mpe) return;
-             vm.allrubrique_attachement_batiment_mpe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemRubrique_attachement_batiment_mpe.$selected = true;
-        });
-
-        vm.Total_prevu = function()
-        {
-            var total_prevu = 0;
-            if (vm.allrubrique_attachement_batiment_mpe.length!=0)
-            {                
-                for(var i = 0; i < vm.allrubrique_attachement_batiment_mpe.length; i++){
-                    var product = vm.allrubrique_attachement_batiment_mpe[i];
-                    total_prevu += parseFloat(product.montant_prevu);
-                }
-            }
-            
-            
-            var nbr=parseFloat(total_prevu);
-            var n = nbr.toFixed(2);
-            var spl= n.split('.');
-            var apre_virgule = spl[1];
-            var avan_virgule = spl[0];
-
-              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
-                  avan_virgule += '';
-                  var sep = ' ';
-                  var reg = /(\d+)(\d{3})/;
-                  while (reg.test(avan_virgule)) {
-                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
-                  }
-                  return avan_virgule+","+apre_virgule;
-              } else {
-                  return "0,00";
-              }
-        }
-
-        vm.Total_prevu_ttc = function()
-        {
-            var total_prevu = 0;
-            if (vm.allrubrique_attachement_batiment_mpe.length!=0)
-            {                
-                for(var i = 0; i < vm.allrubrique_attachement_batiment_mpe.length; i++){
-                    var product = vm.allrubrique_attachement_batiment_mpe[i];
-                    total_prevu += parseFloat(product.montant_prevu);
-                }
-            }
-            //var total_prevu_ttc = total_prevu + ((total_prevu*20)/100);
-            var total_prevu_ttc = total_prevu;
-            
-            
-            var nbr=parseFloat(total_prevu_ttc);
-            var n = nbr.toFixed(2);
-            var spl= n.split('.');
-            var apre_virgule = spl[1];
-            var avan_virgule = spl[0];
-
-              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
-                  avan_virgule += '';
-                  var sep = ' ';
-                  var reg = /(\d+)(\d{3})/;
-                  while (reg.test(avan_virgule)) {
-                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
-                  }
-                  return avan_virgule+","+apre_virgule;
-              } else {
-                  return "0,00";
-              }
-        }*/
-
-/************************************************fin rubrique attachement batiment_mpe***************************************************/
-/**********************************************debut attachement batiment travauxe***************************************************/
-      /*  vm.click_tab_attachement_batiment_prevu = function()
-        {
-            vm.affiche_load = true;
-            apiFactory.getAPIgeneraliserREST("divers_attachement_batiment_prevu/index","menu","getattachement_batiment_prevuwithdetailbyrubrique",
-                    "id_attachement_batiment",vm.selectedItemRubrique_attachement_batiment_mpe.id,
-                    "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
-            {
-                vm.alldivers_attachement_batiment_prevu = result.data.response;
-                vm.affiche_load = false;
-                console.log(vm.alldivers_attachement_batiment_prevu);
-            });
-        }
-
-
-        vm.attachement_batiment_prevu_column = [
-        {titre:"Numero"
-        },
-        {titre:"Libelle"
-        },
-        {titre:"Unite"
-        },
-        {titre:"Quantite prévu"
-        },
-        {titre:"Prix unitaire"
-        },
-        {titre:"Montant prévu HT"
-        },
-        {titre:"Action"
-        }]
-        vm.ajouterDivers_attachement_batiment_prevu = function ()
-        {
-          var items = {
-                $edit: true,
-                $selected: true,
-                id: 0,
-                unite:'',
-                quantite_prevu  : 0,
-                prix_unitaire  : 0,
-                montant_prevu  : 0 , 
-                id_attachement_batiment_detail : 0
-            };
-
-        if (NouvelItemDivers_attachement_batiment_prevu == false)
-          {                      
-            vm.alldivers_attachement_batiment_prevu.push(items);
-            vm.alldivers_attachement_batiment_prevu.forEach(function(cis)
-            {
-              if(cis.$selected==true)
-              {
-                vm.selectedItemDivers_attachement_batiment_prevu = cis;
-              }
-            });
-            NouvelItemDivers_attachement_batiment_prevu = true;
-            if (vm.alldivers_attachement_batiment_prevu.length>1)
-                {console.log(vm.alldivers_attachement_batiment_prevu);
-                   // vm.alldivers_attachement_batiment_prevu = vm.alldivers_attachement_batiment_prevus;
-                   vm.alldivers_attachement_batiment_prevu.forEach(function(cis)
-                    {   if (cis.id!=0) 
-                        {
-                           vm.alldivers_attachement_batiment_prevu = vm.alldivers_attachement_batiment_prevu.filter(function(obj)
-                            {   
-                               return obj.id != cis.attachement_batiment_prevu.id;
-                            }); 
-                        }
-                         
-                    }); 
-                }
-          }
-          else
-          {
-              vm.showAlert('Ajout avance démarrage','Un formulaire d\'ajout est déjà ouvert!!!');
-          }          
-          
-        };
-
-        //fonction ajout dans bdd
-        function ajoutDivers_attachement_batiment_prevu(divers_attachement_batiment_prevu,suppression)
-        {
-            if (NouvelItemDivers_attachement_batiment_prevu==false)
-            {
-                apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus',"getcontrat_mpevalideById",'id_contrat_mpe',vm.selectedItemContrat_prestataire.id).then(function(result)
-                {
-                  var contrat_prestataire_valide = result.data.response;
-                  if (contrat_prestataire_valide.length !=0)
-                  {
-                      var confirm = $mdDialog.confirm()
-                    .title('Cette action ne peut pas être réalisée. Les données sont déjà validées!')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('Fermer')
-                    
-                    $mdDialog.show(confirm).then(function()
-                    {                      
-                      //vm.allcontrat_prestataire = contrat_prestataire_valide;
-                    }, function() {
-                      //alert('rien');
-                    });
-                  }
-                  else
-                  {
-                    test_existanceDivers_attachement_batiment_prevu (divers_attachement_batiment_prevu,suppression);        
-                  }
-                });  
-            } 
-            else
-            {
-                insert_in_baseDivers_attachement_batiment_prevu(divers_attachement_batiment_prevu,suppression);
-            }
-        }
-
-        //fonction de bouton d'annulation divers_attachement_batiment_prevu
-        vm.annulerDivers_attachement_batiment_prevu = function(item)
-        {
-          if (NouvelItemDivers_attachement_batiment_prevu == false)
-          {
-            item.$edit = false;
-            item.$selected = false;
-
-            item.unite   = currentItemDivers_attachement_batiment_prevu.unite ;
-            item.quantite_prevu = currentItemDivers_attachement_batiment_prevu.quantite_prevu ;
-            item.prix_unitaire     = currentItemDivers_attachement_batiment_prevu.prix_unitaire ;                
-            item.montant_prevu      = currentItemDivers_attachement_batiment_prevu.montant_prevu ;
-            //item.id_attachement_batiment_detail   = currentItemDivers_attachement_batiment_prevu.id_attachement_batiment_detail ;
-          }else
-          {
-            item.unite   = '' ;
-            item.quantite_prevu = '' ;
-            item.prix_unitaire     = '' ;                
-            item.montant_prevu      = '' ;                
-            //item.id      = 0 ;
-          }
-
-          vm.selectedItemDivers_attachement_batiment_prevu = {} ;
-          NouvelItemDivers_attachement_batiment_prevu      = false;
-          
-        };
-
-        //fonction selection item justificatif batiment
-        vm.selectionDivers_attachement_batiment_prevu= function (item)
-        {
-            vm.selectedItemDivers_attachement_batiment_prevu = item;
-            if (item.$edit==false || item.$edit==undefined)
-            {
-               currentItemDivers_attachement_batiment_prevu    = JSON.parse(JSON.stringify(vm.selectedItemDivers_attachement_batiment_prevu));             
-            }
-            
-        };
-        $scope.$watch('vm.selectedItemDivers_attachement_batiment_prevu', function()
-        {
-             if (!vm.alldivers_attachement_batiment_prevu) return;
-             vm.alldivers_attachement_batiment_prevu.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemDivers_attachement_batiment_prevu.$selected = true;
-        });
-
-        //fonction masque de saisie modification item feffi
-        vm.modifierDivers_attachement_batiment_prevu = function(item)
-        {
-            
-            vm.selectedItemDivers_attachement_batiment_prevu = item;
-            currentItemDivers_attachement_batiment_prevu = angular.copy(vm.selectedItemDivers_attachement_batiment_prevu);
-            $scope.vm.alldivers_attachement_batiment_prevu.forEach(function(jus) {
-              jus.$edit = false;
-            });
-            item.$edit = true;
-            item.$selected = true;
-
-            item.quantite_prevu   = parseFloat(vm.selectedItemDivers_attachement_batiment_prevu.quantite_prevu) ;
-            item.prix_unitaire = parseFloat(vm.selectedItemDivers_attachement_batiment_prevu.prix_unitaire) ;
-            item.unite     = vm.selectedItemDivers_attachement_batiment_prevu.unite;
-            item.montant_prevu      = parseFloat(vm.selectedItemDivers_attachement_batiment_prevu.montant_prevu) ;
-            
-            if (item.id==0)
-            {   
-                NouvelItemDivers_attachement_batiment_prevu = true ;
-            }
-            else
-            {   
-                NouvelItemDivers_attachement_batiment_prevu = false ;
-            }
-        };
-
-        //fonction bouton suppression item divers_attachement_batiment_prevu
-        vm.supprimerDivers_attachement_batiment_prevu = function()
-        {
-            var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-              $mdDialog.show(confirm).then(function() {
-                vm.ajoutDivers_attachement_batiment_prevu(vm.selectedItemDivers_attachement_batiment_prevu,1);
-              }, function() {
-                //alert('rien');
-              });
-        };
-
-        //function teste s'il existe une modification item feffi
-        function test_existanceDivers_attachement_batiment_prevu (item,suppression)
-        {          
-            if (suppression!=1)
-            {
-               var mem = vm.alldivers_attachement_batiment_prevu.filter(function(obj)
-                {
-                   return obj.id == currentItemDivers_attachement_batiment_prevu.id;
-                });
-                if(mem[0])
-                {
-                   if((mem[0].quantite_prevu != currentItemDivers_attachement_batiment_prevu.quantite_prevu )
-                    ||(mem[0].unite != currentItemDivers_attachement_batiment_prevu.unite )
-                    ||(mem[0].montant_prevu != currentItemDivers_attachement_batiment_prevu.montant_prevu )
-                    ||(mem[0].prix_unitaire != currentItemDivers_attachement_batiment_prevu.prix_unitaire ))                   
-                    { 
-                        insert_in_baseDivers_attachement_batiment_prevu(item,suppression);
-                    }
-                    else
-                    {  
-                        item.$selected = true;
-                        item.$edit = false;
-                    }
-                }
-            } else
-                  insert_in_baseDivers_attachement_batiment_prevu(item,suppression);
-        }
-
-        //insertion ou mise a jours ou suppression item dans bdd divers_attachement_batiment_prevu
-        function insert_in_baseDivers_attachement_batiment_prevu(divers_attachement_batiment_prevu,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemDivers_attachement_batiment_prevu==false)
-            {
-                getId = vm.selectedItemDivers_attachement_batiment_prevu.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,
-                    quantite_prevu: divers_attachement_batiment_prevu.quantite_prevu,
-                    prix_unitaire: divers_attachement_batiment_prevu.prix_unitaire,
-                    unite: divers_attachement_batiment_prevu.unite,
-                    montant_prevu: divers_attachement_batiment_prevu.montant_prevu,                    
-                    id_attachement_batiment_detail: divers_attachement_batiment_prevu.id_attachement_batiment_detail,
-                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id           
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("divers_attachement_batiment_prevu/index",datas, config).success(function (data)
-            {
-              if (NouvelItemDivers_attachement_batiment_prevu == false)
-              {
-                    // Update_paiement or delete: id exclu                 
-                    if(suppression==0)
-                    {   
-                        //vm.selectedItemDivers_attachement_batiment_prevu.attachement_batiment_prevu  = bat_prevu[0];
-                        vm.selectedItemDivers_attachement_batiment_prevu.$selected  = false;
-                        vm.selectedItemDivers_attachement_batiment_prevu.$edit      = false;
-                        vm.selectedItemDivers_attachement_batiment_prevu ={};
-                        vm.showbuttonValidation = false;
-                        //var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu)+((parseFloat(divers_attachement_batiment_prevu.montant_prevu)*20)/100) -parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)*20)/100);
-                        var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu) - parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu);
-                        console.log(cout_batiment);
-                        maj_insertion_contrat_in_base(cout_batiment);
-                    }
-                    else 
-                    { 
-
-                        //var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) - parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu)*20)/100);
-                        var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) - parseFloat(currentItemDivers_attachement_batiment_prevu.montant_prevu);
-                        console.log(cout_batiment);
-                        maj_insertion_contrat_in_base(cout_batiment); 
-                        vm.selectedItemDivers_attachement_batiment_prevu.unite   = '' ;
-                        vm.selectedItemDivers_attachement_batiment_prevu.quantite_prevu = '' ;
-                        vm.selectedItemDivers_attachement_batiment_prevu.prix_unitaire     = '' ;                
-                        vm.selectedItemDivers_attachement_batiment_prevu.montant_prevu      = '' ;                
-                        vm.selectedItemDivers_attachement_batiment_prevu.id      = 0 ;                 
-                    }
-              }
-              else
-              {
-                  divers_attachement_batiment_prevu.id  =   String(data.response);              
-                  NouvelItemDivers_attachement_batiment_prevu = false;
-
-                  //var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu)+((parseFloat(divers_attachement_batiment_prevu.montant_prevu)*20)/100);
-                  
-                  var cout_batiment =parseFloat(vm.selectedItemContrat_prestataire.cout_batiment) + parseFloat(divers_attachement_batiment_prevu.montant_prevu);
-                  //vm.selectedItemContrat_prestataire.cout_batiment = cout_batiment;
-                  
-                  maj_insertion_contrat_in_base(cout_batiment);
-              }
-
-              divers_attachement_batiment_prevu.$selected = false;
-              divers_attachement_batiment_prevu.$edit = false;
-              vm.selectedItemDivers_attachement_batiment_prevu ={};
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
-        vm.change_quantite_prix= function(item) 
-        {
-            
-            item.montant_prevu=parseFloat(item.quantite_prevu)*parseFloat(item.prix_unitaire);                    
-          
-        }
-        //insertion ou mise a jours ou suppression item dans bdd feffi
-        function maj_insertion_contrat_in_base(cout_batiment)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };            
-            var datas = $.param({
-                    supprimer: 0,
-                    id:        vm.selectedItemContrat_prestataire.id,
-                    description: vm.selectedItemContrat_prestataire.description,
-                    num_contrat: vm.selectedItemContrat_prestataire.num_contrat,
-                    cout_batiment: cout_batiment,
-                    cout_latrine: vm.selectedItemContrat_prestataire.cout_latrine,
-                    cout_mobilier:vm.selectedItemContrat_prestataire.cout_mobilier,
-                    date_signature:convertionDate(vm.selectedItemContrat_prestataire.date_signature),
-                    id_prestataire:vm.selectedItemContrat_prestataire.prestataire.id,
-                    paiement_recu: 0,
-                    id_convention_entete: vm.selectedItemConvention_entete.id,
-                    validation : 0               
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("contrat_prestataire/index",datas, config).success(function (data)
-            {   
-                vm.selectedItemContrat_prestataire.cout_batiment = cout_batiment;
-            
-            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
-        //insertion ou mise a jours ou suppression item dans bdd feffi
-        function maj_insertion_contrat_in_base_latrine(cout_latrine)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };            
-            var datas = $.param({
-                    supprimer: 0,
-                    id:        vm.selectedItemContrat_prestataire.id,
-                    description: vm.selectedItemContrat_prestataire.description,
-                    num_contrat: vm.selectedItemContrat_prestataire.num_contrat,
-                    cout_batiment: vm.selectedItemContrat_prestataire.cout_batiment,
-                    cout_latrine: cout_latrine,
-                    cout_mobilier:vm.selectedItemContrat_prestataire.cout_mobilier,
-                    date_signature:convertionDate(vm.selectedItemContrat_prestataire.date_signature),
-                    id_prestataire:vm.selectedItemContrat_prestataire.prestataire.id,
-                    paiement_recu: 0,
-                    id_convention_entete: vm.selectedItemConvention_entete.id,
-                    validation : 0               
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("contrat_prestataire/index",datas, config).success(function (data)
-            {   
-                vm.selectedItemContrat_prestataire.cout_latrine = cout_latrine;
-            
-            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
-
-        //insertion ou mise a jours ou suppression item dans bdd feffi
-        function maj_insertion_contrat_in_base_mobilier(cout_mobilier)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };            
-            var datas = $.param({
-                    supprimer: 0,
-                    id:        vm.selectedItemContrat_prestataire.id,
-                    description: vm.selectedItemContrat_prestataire.description,
-                    num_contrat: vm.selectedItemContrat_prestataire.num_contrat,
-                    cout_batiment: vm.selectedItemContrat_prestataire.cout_batiment,
-                    cout_latrine: vm.selectedItemContrat_prestataire.cout_latrine,
-                    cout_mobilier: cout_mobilier,
-                    date_signature:convertionDate(vm.selectedItemContrat_prestataire.date_signature),
-                    id_prestataire:vm.selectedItemContrat_prestataire.prestataire.id,
-                    paiement_recu: 0,
-                    id_convention_entete: vm.selectedItemConvention_entete.id,
-                    validation : 0               
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("contrat_prestataire/index",datas, config).success(function (data)
-            {   
-                vm.selectedItemContrat_prestataire.cout_mobilier = cout_mobilier;
-            
-            }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }*/
-
-/******************************************fin attachement batiment travaux***********************************************/
- 
-/************************************************Debut rubrique attachement batiment_mpe***************************************************/
-       
-     /*   vm.rubrique_attachement_latrine_mpe_column = [
-        {titre:"Numero"
-        },
-        {titre:"Libelle"
-        },
-        {titre:"Montant prévu HT"
-        }];
-
-        vm.click_rubrique_attachement_latrine_mpe = function()
-        {   vm.affiche_load = true;
-            apiFactory.getAPIgeneraliserREST("divers_attachement_latrine/index","menu","getrubrique_attachement_withmontant_prevu","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
-            {   
-                vm.allrubrique_attachement_latrine_mpe= result.data.response;
-                vm.stepattachement_latrine_detail = false;
-                vm.affiche_load = false;
-                console.log(vm.allrubrique_attachement_latrine_mpe);
-            });
-        }
- //fonction selection item rubrique attachement latrine mpe
-        vm.selectionRubrique_attachement_latrine_mpe= function (item)
-        {
-            vm.selectedItemRubrique_attachement_latrine_mpe = item;
-            vm.stepattachement_latrine_detail = true;
-            
-        };
-
-        $scope.$watch('vm.selectedItemRubrique_attachement_latrine_mpe', function()
-        {
-             if (!vm.allrubrique_attachement_latrine_mpe) return;
-             vm.allrubrique_attachement_latrine_mpe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemRubrique_attachement_latrine_mpe.$selected = true;
-        });
-
-        vm.Total_prevu_latrine = function()
-        {
-            var total_prevu = 0;
-            if (vm.allrubrique_attachement_latrine_mpe.length!=0)
-            {                
-                for(var i = 0; i < vm.allrubrique_attachement_latrine_mpe.length; i++){
-                    var product = vm.allrubrique_attachement_latrine_mpe[i];
-                    total_prevu += parseFloat(product.montant_prevu);
-                }
-            }
-            
-            
-            var nbr=parseFloat(total_prevu);
-            var n = nbr.toFixed(2);
-            var spl= n.split('.');
-            var apre_virgule = spl[1];
-            var avan_virgule = spl[0];
-
-              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
-                  avan_virgule += '';
-                  var sep = ' ';
-                  var reg = /(\d+)(\d{3})/;
-                  while (reg.test(avan_virgule)) {
-                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
-                  }
-                  return avan_virgule+","+apre_virgule;
-              } else {
-                  return "0,00";
-              }
-        }
-
-        vm.Total_prevu_latrine_ttc = function()
-        {
-            var total_prevu = 0;
-            if (vm.allrubrique_attachement_latrine_mpe.length!=0)
-            {                
-                for(var i = 0; i < vm.allrubrique_attachement_latrine_mpe.length; i++){
-                    var product = vm.allrubrique_attachement_latrine_mpe[i];
-                    total_prevu += parseFloat(product.montant_prevu);
-                }
-            }
-            //var total_prevu_ttc = total_prevu + ((total_prevu*20)/100);
-             var total_prevu_ttc = total_prevu;
-           
-            
-            var nbr=parseFloat(total_prevu_ttc);
-            var n = nbr.toFixed(2);
-            var spl= n.split('.');
-            var apre_virgule = spl[1];
-            var avan_virgule = spl[0];
-
-              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
-                  avan_virgule += '';
-                  var sep = ' ';
-                  var reg = /(\d+)(\d{3})/;
-                  while (reg.test(avan_virgule)) {
-                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
-                  }
-                  return avan_virgule+","+apre_virgule;
-              } else {
-                  return "0,00";
-              }
-        }*/
-
-/************************************************fin rubrique attachement latrine_mpe***************************************************/
-/**********************************************debut attachement latrine travauxe***************************************************/
-      /*  vm.click_tab_attachement_latrine_prevu = function()
-        {
-            vm.affiche_load = true;
-            apiFactory.getAPIgeneraliserREST("divers_attachement_latrine_prevu/index","menu","getattachement_latrine_prevuwithdetailbyrubrique",
-                    "id_attachement_latrine",vm.selectedItemRubrique_attachement_latrine_mpe.id,
-                    "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
-            {
-                vm.alldivers_attachement_latrine_prevu = result.data.response;
-                vm.affiche_load = false;
-                console.log(vm.alldivers_attachement_latrine_prevu);
-            });
-        }*/
-
-
-     /*   vm.attachement_latrine_prevu_column = [
-        {titre:"Numero"
-        },
-        {titre:"Libelle"
-        },
-        {titre:"Unite"
-        },
-        {titre:"Quantite prévu"
-        },
-        {titre:"Prix unitaire"
-        },
-        {titre:"Montant prévu HT"
-        },
-        {titre:"Action"
-        }]
-        vm.ajouterDivers_attachement_latrine_prevu = function ()
-        {
-          var items = {
-                $edit: true,
-                $selected: true,
-                id: 0,
-                unite:'',
-                quantite_prevu  : 0,
-                prix_unitaire  : 0,
-                montant_prevu  : 0 , 
-                id_attachement_latrine_detail : 0
-            };
-
-        if (NouvelItemDivers_attachement_latrine_prevu == false)
-          {                      
-            vm.alldivers_attachement_latrine_prevu.push(items);
-            vm.alldivers_attachement_latrine_prevu.forEach(function(cis)
-            {
-              if(cis.$selected==true)
-              {
-                vm.selectedItemDivers_attachement_latrine_prevu = cis;
-              }
-            });
-            NouvelItemDivers_attachement_latrine_prevu = true;
-            if (vm.alldivers_attachement_latrine_prevu.length>1)
-                {console.log(vm.alldivers_attachement_latrine_prevu);
-                   // vm.alldivers_attachement_latrine_prevu = vm.alldivers_attachement_latrine_prevus;
-                   vm.alldivers_attachement_latrine_prevu.forEach(function(cis)
-                    {   if (cis.id!=0) 
-                        {
-                           vm.alldivers_attachement_latrine_prevu = vm.alldivers_attachement_latrine_prevu.filter(function(obj)
-                            {   
-                               return obj.id != cis.attachement_latrine_prevu.id;
-                            }); 
-                        }
-                         
-                    }); 
-                }
-          }
-          else
-          {
-              vm.showAlert('Ajout avance démarrage','Un formulaire d\'ajout est déjà ouvert!!!');
-          }          
-          
-        };
-
-        //fonction ajout dans bdd
-        function ajoutDivers_attachement_latrine_prevu(divers_attachement_latrine_prevu,suppression)
-        {
-            if (NouvelItemDivers_attachement_latrine_prevu==false)
-            {
-                test_existanceDivers_attachement_latrine_prevu (divers_attachement_latrine_prevu,suppression); 
-            } 
-            else
-            {
-                insert_in_baseDivers_attachement_latrine_prevu(divers_attachement_latrine_prevu,suppression);
-            }
-        }
-
-        //fonction de bouton d'annulation divers_attachement_latrine_prevu
-        vm.annulerDivers_attachement_latrine_prevu = function(item)
-        {
-          if (NouvelItemDivers_attachement_latrine_prevu == false)
-          {
-            item.$edit = false;
-            item.$selected = false;
-
-            item.unite   = currentItemDivers_attachement_latrine_prevu.unite ;
-            item.quantite_prevu = currentItemDivers_attachement_latrine_prevu.quantite_prevu ;
-            item.prix_unitaire     = currentItemDivers_attachement_latrine_prevu.prix_unitaire ;                
-            item.montant_prevu      = currentItemDivers_attachement_latrine_prevu.montant_prevu ;
-            //item.id_attachement_latrine_detail   = currentItemDivers_attachement_latrine_prevu.id_attachement_latrine_detail ;
-          }else
-          {
-            item.unite   = '' ;
-            item.quantite_prevu = '' ;
-            item.prix_unitaire     = '' ;                
-            item.montant_prevu      = '' ;                
-            //item.id      = 0 ;
-          }
-
-          vm.selectedItemDivers_attachement_latrine_prevu = {} ;
-          NouvelItemDivers_attachement_latrine_prevu      = false;
-          
-        };
-
-        //fonction selection item justificatif latrine
-        vm.selectionDivers_attachement_latrine_prevu= function (item)
-        {
-            vm.selectedItemDivers_attachement_latrine_prevu = item;
-            if (item.$edit==false || item.$edit==undefined)
-            {
-               currentItemDivers_attachement_latrine_prevu    = JSON.parse(JSON.stringify(vm.selectedItemDivers_attachement_latrine_prevu));             
-            }
-            
-        };
-        $scope.$watch('vm.selectedItemDivers_attachement_latrine_prevu', function()
-        {
-             if (!vm.alldivers_attachement_latrine_prevu) return;
-             vm.alldivers_attachement_latrine_prevu.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemDivers_attachement_latrine_prevu.$selected = true;
-        });
-
-        //fonction masque de saisie modification item feffi
-        vm.modifierDivers_attachement_latrine_prevu = function(item)
-        {
-            
-            vm.selectedItemDivers_attachement_latrine_prevu = item;
-            currentItemDivers_attachement_latrine_prevu = angular.copy(vm.selectedItemDivers_attachement_latrine_prevu);
-            $scope.vm.alldivers_attachement_latrine_prevu.forEach(function(jus) {
-              jus.$edit = false;
-            });
-            item.$edit = true;
-            item.$selected = true;
-            if (item.id==0)
-            {   
-                NouvelItemDivers_attachement_latrine_prevu = true ;
-
-                item.quantite_prevu   = parseFloat(vm.selectedItemDivers_attachement_latrine_prevu.quantite_prevu) ;
-                item.prix_unitaire = parseFloat(vm.selectedItemDivers_attachement_latrine_prevu.prix_unitaire) ;
-                item.unite     = vm.selectedItemDivers_attachement_latrine_prevu.unite;
-
-                item.montant_prevu      = parseFloat(vm.selectedItemDivers_attachement_latrine_prevu.montant_prevu) ;
-                //item.id_attachement_latrine_detail = vm.selectedItemDivers_attachement_latrine_prevu.id_attachement_latrine_detail;
-            }
-            else
-            {   
-                NouvelItemDivers_attachement_latrine_prevu = false ;
-
-                item.quantite_prevu   = parseFloat(vm.selectedItemDivers_attachement_latrine_prevu.quantite_prevu) ;
-                item.prix_unitaire = parseFloat(vm.selectedItemDivers_attachement_latrine_prevu.prix_unitaire) ;
-                item.unite     = vm.selectedItemDivers_attachement_latrine_prevu.unite;
-
-                item.montant_prevu      = parseFloat(vm.selectedItemDivers_attachement_latrine_prevu.montant_prevu) ;
-               
-
-            }
-        };
-
-        //fonction bouton suppression item divers_attachement_latrine_prevu
-        vm.supprimerDivers_attachement_latrine_prevu = function()
-        {
-            var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-              $mdDialog.show(confirm).then(function() {
-                vm.ajoutDivers_attachement_latrine_prevu(vm.selectedItemDivers_attachement_latrine_prevu,1);
-              }, function() {
-                //alert('rien');
-              });
-        };
-
-        //function teste s'il existe une modification item feffi
-        function test_existanceDivers_attachement_latrine_prevu (item,suppression)
-        {          
-            if (suppression!=1)
-            {
-               var mem = vm.alldivers_attachement_latrine_prevu.filter(function(obj)
-                {
-                   return obj.id == currentItemDivers_attachement_latrine_prevu.id;
-                });
-                if(mem[0])
-                {
-                   if((mem[0].quantite_prevu != currentItemDivers_attachement_latrine_prevu.quantite_prevu )
-                    ||(mem[0].unite != currentItemDivers_attachement_latrine_prevu.unite )
-                    ||(mem[0].montant_prevu != currentItemDivers_attachement_latrine_prevu.montant_prevu )
-                    ||(mem[0].prix_unitaire != currentItemDivers_attachement_latrine_prevu.prix_unitaire ))                   
-                    { 
-                        insert_in_baseDivers_attachement_latrine_prevu(item,suppression);
-                    }
-                    else
-                    {  
-                        item.$selected = true;
-                        item.$edit = false;
-                    }
-                }
-            } else
-                  insert_in_baseDivers_attachement_latrine_prevu(item,suppression);
-        }
-
-        //insertion ou mise a jours ou suppression item dans bdd divers_attachement_latrine_prevu
-        function insert_in_baseDivers_attachement_latrine_prevu(divers_attachement_latrine_prevu,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemDivers_attachement_latrine_prevu==false)
-            {
-                getId = vm.selectedItemDivers_attachement_latrine_prevu.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,
-                    quantite_prevu: divers_attachement_latrine_prevu.quantite_prevu,
-                    prix_unitaire: divers_attachement_latrine_prevu.prix_unitaire,
-                    unite: divers_attachement_latrine_prevu.unite,
-                    montant_prevu: divers_attachement_latrine_prevu.montant_prevu,                    
-                    id_attachement_latrine_detail: divers_attachement_latrine_prevu.id_attachement_latrine_detail,
-                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id           
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("divers_attachement_latrine_prevu/index",datas, config).success(function (data)
-            {
-              if (NouvelItemDivers_attachement_latrine_prevu == false)
-              {
-                    // Update_paiement or delete: id exclu                 
-                    if(suppression==0)
-                    {   
-                        //vm.selectedItemDivers_attachement_latrine_prevu.attachement_latrine_prevu  = bat_prevu[0];
-                        //var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) + parseFloat(divers_attachement_latrine_prevu.montant_prevu)+((parseFloat(divers_attachement_latrine_prevu.montant_prevu)*20)/100) -parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)*20)/100);                        
-                        
-                        var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) - parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu) + parseFloat(divers_attachement_latrine_prevu.montant_prevu);                        
-                        maj_insertion_contrat_in_base_latrine(cout_latrine);
-                        vm.selectedItemDivers_attachement_latrine_prevu.$selected  = false;
-                        vm.selectedItemDivers_attachement_latrine_prevu.$edit      = false;
-                        vm.selectedItemDivers_attachement_latrine_prevu ={};
-                        vm.showbuttonValidation = false;
-                    }
-                    else 
-                    { 
-                        //var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) - parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu)*20)/100);
-                        
-                        var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) - parseFloat(currentItemDivers_attachement_latrine_prevu.montant_prevu);
-                        //console.log(cout_latrine);
-                        maj_insertion_contrat_in_base_latrine(cout_latrine); 
-                        vm.selectedItemDivers_attachement_latrine_prevu.unite   = '' ;
-                        vm.selectedItemDivers_attachement_latrine_prevu.quantite_prevu = '' ;
-                        vm.selectedItemDivers_attachement_latrine_prevu.prix_unitaire     = '' ;                
-                        vm.selectedItemDivers_attachement_latrine_prevu.montant_prevu      = '' ;                
-                        vm.selectedItemDivers_attachement_latrine_prevu.id      = 0 ;                    
-                    }
-              }
-              else
-              {
-                  divers_attachement_latrine_prevu.id  =   String(data.response);              
-                  NouvelItemDivers_attachement_latrine_prevu = false;
-                  //var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) + parseFloat(divers_attachement_latrine_prevu.montant_prevu)+((parseFloat(divers_attachement_latrine_prevu.montant_prevu)*20)/100);
-                  var cout_latrine =parseFloat(vm.selectedItemContrat_prestataire.cout_latrine) + parseFloat(divers_attachement_latrine_prevu.montant_prevu);
-                  maj_insertion_contrat_in_base_latrine(cout_latrine);
-
-              }
-
-              divers_attachement_latrine_prevu.$selected = false;
-              divers_attachement_latrine_prevu.$edit = false;
-              vm.selectedItemDivers_attachement_latrine_prevu ={};
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
-        vm.change_quantite_prix_latrine= function(item) 
-        {
-            
-            item.montant_prevu=parseFloat(item.quantite_prevu)*parseFloat(item.prix_unitaire);                    
-          
-        }*/
-
-    /******************************************fin attachement latrine travaux***********************************************/
- 
-
-
- /************************************************Debut rubrique attachement mobilier_mpe***************************************************/
-       
-    /*    vm.rubrique_attachement_mobilier_mpe_column = [
-        {titre:"Numero"
-        },
-        {titre:"Libelle"
-        },
-        {titre:"Montant prévu HT"
-        }];
-
-        vm.click_rubrique_attachement_mobilier_mpe = function()
-        {   vm.affiche_load = true;
-            apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier/index","menu","getrubrique_attachement_withmontant_prevu","id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
-            {   
-                vm.allrubrique_attachement_mobilier_mpe= result.data.response;
-                vm.stepattachement_mobilier_detail = false;
-                vm.affiche_load = false;
-                console.log(vm.allrubrique_attachement_mobilier_mpe);
-            });
-        }
- //fonction selection item rubrique attachement mobilier mpe
-        vm.selectionRubrique_attachement_mobilier_mpe= function (item)
-        {
-            vm.selectedItemRubrique_attachement_mobilier_mpe = item;
-            vm.stepattachement_mobilier_detail = true;
-            
-        };
-
-        $scope.$watch('vm.selectedItemRubrique_attachement_mobilier_mpe', function()
-        {
-             if (!vm.allrubrique_attachement_mobilier_mpe) return;
-             vm.allrubrique_attachement_mobilier_mpe.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemRubrique_attachement_mobilier_mpe.$selected = true;
-        });
-
-        vm.Total_prevu_mobilier = function()
-        {
-            var total_prevu = 0;
-            if (vm.allrubrique_attachement_mobilier_mpe.length!=0)
-            {                
-                for(var i = 0; i < vm.allrubrique_attachement_mobilier_mpe.length; i++){
-                    var product = vm.allrubrique_attachement_mobilier_mpe[i];
-                    total_prevu += parseFloat(product.montant_prevu);
-                }
-            }
-            
-            
-            var nbr=parseFloat(total_prevu);
-            var n = nbr.toFixed(2);
-            var spl= n.split('.');
-            var apre_virgule = spl[1];
-            var avan_virgule = spl[0];
-
-              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
-                  avan_virgule += '';
-                  var sep = ' ';
-                  var reg = /(\d+)(\d{3})/;
-                  while (reg.test(avan_virgule)) {
-                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
-                  }
-                  return avan_virgule+","+apre_virgule;
-              } else {
-                  return "0,00";
-              }
-        }
-
-
-        vm.Total_prevu_mobilier_ttc = function()
-        {
-            var total_prevu = 0;
-            if (vm.allrubrique_attachement_mobilier_mpe.length!=0)
-            {                
-                for(var i = 0; i < vm.allrubrique_attachement_mobilier_mpe.length; i++){
-                    var product = vm.allrubrique_attachement_mobilier_mpe[i];
-                    total_prevu += parseFloat(product.montant_prevu);
-                }
-            }
-            //var total_prevu_ttc = total_prevu + ((total_prevu*20)/100);
-            var total_prevu_ttc = total_prevu;
-            
-            
-            var nbr=parseFloat(total_prevu_ttc);
-            var n = nbr.toFixed(2);
-            var spl= n.split('.');
-            var apre_virgule = spl[1];
-            var avan_virgule = spl[0];
-
-              if (typeof avan_virgule != 'undefined' && parseInt(avan_virgule) >= 0) {
-                  avan_virgule += '';
-                  var sep = ' ';
-                  var reg = /(\d+)(\d{3})/;
-                  while (reg.test(avan_virgule)) {
-                      avan_virgule = avan_virgule.replace(reg, '$1' + sep + '$2');
-                  }
-                  return avan_virgule+","+apre_virgule;
-              } else {
-                  return "0,00";
-              }
-        }*/
-
-/************************************************fin rubrique attachement mobilier_mpe***************************************************/
-/**********************************************debut attachement mobilier travauxe***************************************************/
-      /*  vm.click_tab_attachement_mobilier_prevu = function()
-        {
-            vm.affiche_load = true;
-            apiFactory.getAPIgeneraliserREST("divers_attachement_mobilier_prevu/index","menu","getattachement_mobilier_prevuwithdetailbyrubrique",
-                    "id_attachement_mobilier",vm.selectedItemRubrique_attachement_mobilier_mpe.id,
-                    "id_contrat_prestataire",vm.selectedItemContrat_prestataire.id).then(function(result)
-            {
-                vm.alldivers_attachement_mobilier_prevu = result.data.response;
-                vm.affiche_load = false;
-                console.log(vm.alldivers_attachement_mobilier_prevu);
-            });
-        }*/
-
-/*
-        vm.attachement_mobilier_prevu_column = [
-        {titre:"Numero"
-        },
-        {titre:"Libelle"
-        },
-        {titre:"Unite"
-        },
-        {titre:"Quantite prévu"
-        },
-        {titre:"Prix unitaire"
-        },
-        {titre:"Montant prévu HT"
-        },
-        {titre:"Action"
-        }]
-        vm.ajouterDivers_attachement_mobilier_prevu = function ()
-        {
-          var items = {
-                $edit: true,
-                $selected: true,
-                id: 0,
-                unite:'',
-                quantite_prevu  : 0,
-                prix_unitaire  : 0,
-                montant_prevu  : 0 , 
-                id_attachement_mobilier_detail : 0
-            };
-
-        if (NouvelItemDivers_attachement_mobilier_prevu == false)
-          {                      
-            vm.alldivers_attachement_mobilier_prevu.push(items);
-            vm.alldivers_attachement_mobilier_prevu.forEach(function(cis)
-            {
-              if(cis.$selected==true)
-              {
-                vm.selectedItemDivers_attachement_mobilier_prevu = cis;
-              }
-            });
-            NouvelItemDivers_attachement_mobilier_prevu = true;
-            if (vm.alldivers_attachement_mobilier_prevu.length>1)
-                {console.log(vm.alldivers_attachement_mobilier_prevu);
-                   // vm.alldivers_attachement_mobilier_prevu = vm.alldivers_attachement_mobilier_prevus;
-                   vm.alldivers_attachement_mobilier_prevu.forEach(function(cis)
-                    {   if (cis.id!=0) 
-                        {
-                           vm.alldivers_attachement_mobilier_prevu = vm.alldivers_attachement_mobilier_prevu.filter(function(obj)
-                            {   
-                               return obj.id != cis.attachement_mobilier_prevu.id;
-                            }); 
-                        }
-                         
-                    }); 
-                }
-          }
-          else
-          {
-              vm.showAlert('Ajout avance démarrage','Un formulaire d\'ajout est déjà ouvert!!!');
-          }          
-          
-        };
-
-        //fonction ajout dans bdd
-        function ajoutDivers_attachement_mobilier_prevu(divers_attachement_mobilier_prevu,suppression)
-        {
-            if (NouvelItemDivers_attachement_mobilier_prevu==false)
-            {
-                test_existanceDivers_attachement_mobilier_prevu (divers_attachement_mobilier_prevu,suppression); 
-            } 
-            else
-            {
-                insert_in_baseDivers_attachement_mobilier_prevu(divers_attachement_mobilier_prevu,suppression);
-            }
-        }
-
-        //fonction de bouton d'annulation divers_attachement_mobilier_prevu
-        vm.annulerDivers_attachement_mobilier_prevu = function(item)
-        {
-          if (NouvelItemDivers_attachement_mobilier_prevu == false)
-          {
-            item.$edit = false;
-            item.$selected = false;
-
-            item.unite   = currentItemDivers_attachement_mobilier_prevu.unite ;
-            item.quantite_prevu = currentItemDivers_attachement_mobilier_prevu.quantite_prevu ;
-            item.prix_unitaire     = currentItemDivers_attachement_mobilier_prevu.prix_unitaire ;                
-            item.montant_prevu      = currentItemDivers_attachement_mobilier_prevu.montant_prevu ;
-            //item.id_attachement_mobilier_detail   = currentItemDivers_attachement_mobilier_prevu.id_attachement_mobilier_detail ;
-          }else
-          {
-            item.unite   = '' ;
-            item.quantite_prevu = '' ;
-            item.prix_unitaire     = '' ;                
-            item.montant_prevu      = '' ;                
-            //item.id      = 0 ;
-          }
-
-          vm.selectedItemDivers_attachement_mobilier_prevu = {} ;
-          NouvelItemDivers_attachement_mobilier_prevu      = false;
-          
-        };
-
-        //fonction selection item justificatif mobilier
-        vm.selectionDivers_attachement_mobilier_prevu= function (item)
-        {
-            vm.selectedItemDivers_attachement_mobilier_prevu = item;
-            if (item.$edit==false || item.$edit==undefined)
-            {
-               currentItemDivers_attachement_mobilier_prevu    = JSON.parse(JSON.stringify(vm.selectedItemDivers_attachement_mobilier_prevu));             
-            }
-            
-        };
-        $scope.$watch('vm.selectedItemDivers_attachement_mobilier_prevu', function()
-        {
-             if (!vm.alldivers_attachement_mobilier_prevu) return;
-             vm.alldivers_attachement_mobilier_prevu.forEach(function(item)
-             {
-                item.$selected = false;
-             });
-             vm.selectedItemDivers_attachement_mobilier_prevu.$selected = true;
-        });
-
-        //fonction masque de saisie modification item feffi
-        vm.modifierDivers_attachement_mobilier_prevu = function(item)
-        {
-            
-            vm.selectedItemDivers_attachement_mobilier_prevu = item;
-            currentItemDivers_attachement_mobilier_prevu = angular.copy(vm.selectedItemDivers_attachement_mobilier_prevu);
-            $scope.vm.alldivers_attachement_mobilier_prevu.forEach(function(jus) {
-              jus.$edit = false;
-            });
-            item.$edit = true;
-            item.$selected = true;
-            if (item.id==0)
-            {   
-                NouvelItemDivers_attachement_mobilier_prevu = true ;
-
-                item.quantite_prevu   = parseFloat(vm.selectedItemDivers_attachement_mobilier_prevu.quantite_prevu) ;
-                item.prix_unitaire = parseFloat(vm.selectedItemDivers_attachement_mobilier_prevu.prix_unitaire) ;
-                item.unite     = vm.selectedItemDivers_attachement_mobilier_prevu.unite;
-
-                item.montant_prevu      = parseFloat(vm.selectedItemDivers_attachement_mobilier_prevu.montant_prevu) ;
-                //item.id_attachement_mobilier_detail = vm.selectedItemDivers_attachement_mobilier_prevu.id_attachement_mobilier_detail;
-            }
-            else
-            {   
-                NouvelItemDivers_attachement_mobilier_prevu = false ;
-
-                item.quantite_prevu   = parseFloat(vm.selectedItemDivers_attachement_mobilier_prevu.quantite_prevu) ;
-                item.prix_unitaire = parseFloat(vm.selectedItemDivers_attachement_mobilier_prevu.prix_unitaire) ;
-                item.unite     = vm.selectedItemDivers_attachement_mobilier_prevu.unite;
-
-                item.montant_prevu      = parseFloat(vm.selectedItemDivers_attachement_mobilier_prevu.montant_prevu) ;
-               
-
-            }
-        };
-
-        //fonction bouton suppression item divers_attachement_mobilier_prevu
-        vm.supprimerDivers_attachement_mobilier_prevu = function()
-        {
-            var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
-                    .textContent('')
-                    .ariaLabel('Lucky day')
-                    .clickOutsideToClose(true)
-                    .parent(angular.element(document.body))
-                    .ok('ok')
-                    .cancel('annuler');
-              $mdDialog.show(confirm).then(function() {
-                vm.ajoutDivers_attachement_mobilier_prevu(vm.selectedItemDivers_attachement_mobilier_prevu,1);
-              }, function() {
-                //alert('rien');
-              });
-        };
-
-        //function teste s'il existe une modification item feffi
-        function test_existanceDivers_attachement_mobilier_prevu (item,suppression)
-        {          
-            if (suppression!=1)
-            {
-               var mem = vm.alldivers_attachement_mobilier_prevu.filter(function(obj)
-                {
-                   return obj.id == currentItemDivers_attachement_mobilier_prevu.id;
-                });
-                if(mem[0])
-                {
-                   if((mem[0].quantite_prevu != currentItemDivers_attachement_mobilier_prevu.quantite_prevu )
-                    ||(mem[0].unite != currentItemDivers_attachement_mobilier_prevu.unite )
-                    ||(mem[0].montant_prevu != currentItemDivers_attachement_mobilier_prevu.montant_prevu )
-                    ||(mem[0].prix_unitaire != currentItemDivers_attachement_mobilier_prevu.prix_unitaire ))                   
-                    { 
-                        insert_in_baseDivers_attachement_mobilier_prevu(item,suppression);
-                    }
-                    else
-                    {  
-                        item.$selected = true;
-                        item.$edit = false;
-                    }
-                }
-            } else
-                  insert_in_baseDivers_attachement_mobilier_prevu(item,suppression);
-        }
-
-        //insertion ou mise a jours ou suppression item dans bdd divers_attachement_mobilier_prevu
-        function insert_in_baseDivers_attachement_mobilier_prevu(divers_attachement_mobilier_prevu,suppression)
-        {
-            //add
-            var config =
-            {
-                headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
-            };
-            
-            var getId = 0;
-            if (NouvelItemDivers_attachement_mobilier_prevu==false)
-            {
-                getId = vm.selectedItemDivers_attachement_mobilier_prevu.id; 
-            } 
-            
-            var datas = $.param({
-                    supprimer: suppression,
-                    id:        getId,
-                    quantite_prevu: divers_attachement_mobilier_prevu.quantite_prevu,
-                    prix_unitaire: divers_attachement_mobilier_prevu.prix_unitaire,
-                    unite: divers_attachement_mobilier_prevu.unite,
-                    montant_prevu: divers_attachement_mobilier_prevu.montant_prevu,                    
-                    id_attachement_mobilier_detail: divers_attachement_mobilier_prevu.id_attachement_mobilier_detail,
-                    id_contrat_prestataire: vm.selectedItemContrat_prestataire.id           
-                });
-                console.log(datas);
-                //factory
-            apiFactory.add("divers_attachement_mobilier_prevu/index",datas, config).success(function (data)
-            {
-              if (NouvelItemDivers_attachement_mobilier_prevu == false)
-              {
-                    // Update_paiement or delete: id exclu                 
-                    if(suppression==0)
-                    {   
-                        //vm.selectedItemDivers_attachement_mobilier_prevu.attachement_mobilier_prevu  = bat_prevu[0];
-                        
-                        var cout_mobilier =parseFloat(vm.selectedItemContrat_prestataire.cout_mobilier) + parseFloat(divers_attachement_mobilier_prevu.montant_prevu)-parseFloat(currentItemDivers_attachement_mobilier_prevu.montant_prevu);                        
-                        maj_insertion_contrat_in_base_mobilier(cout_mobilier);
-                        vm.selectedItemDivers_attachement_mobilier_prevu.$selected  = false;
-                        vm.selectedItemDivers_attachement_mobilier_prevu.$edit      = false;
-                        vm.selectedItemDivers_attachement_mobilier_prevu ={};
-                        vm.showbuttonValidation = false;
-                    }
-                    else 
-                    {  
-
-                        var cout_mobilier =parseFloat(vm.selectedItemContrat_prestataire.cout_mobilier) - parseFloat(currentItemDivers_attachement_mobilier_prevu.montant_prevu)-((parseFloat(currentItemDivers_attachement_mobilier_prevu.montant_prevu)*20)/100);
-                        //console.log(cout_mobilier);
-                        maj_insertion_contrat_in_base_mobilier(cout_mobilier);
-                        vm.selectedItemDivers_attachement_mobilier_prevu.unite   = '' ;
-                        vm.selectedItemDivers_attachement_mobilier_prevu.quantite_prevu = '' ;
-                        vm.selectedItemDivers_attachement_mobilier_prevu.prix_unitaire     = '' ;                
-                        vm.selectedItemDivers_attachement_mobilier_prevu.montant_prevu      = '' ;                
-                        vm.selectedItemDivers_attachement_mobilier_prevu.id      = 0 ;                    
-                    }
-              }
-              else
-              {
-                  divers_attachement_mobilier_prevu.id  =   String(data.response);              
-                  NouvelItemDivers_attachement_mobilier_prevu = false;
-                  var cout_mobilier =parseFloat(vm.selectedItemContrat_prestataire.cout_mobilier) + parseFloat(divers_attachement_mobilier_prevu.montant_prevu);
-                  //vm.selectedItemContrat_prestataire.cout_batiment = cout_batiment;
-                  
-                  maj_insertion_contrat_in_base_mobilier(cout_mobilier);
-
-              }
-
-              divers_attachement_mobilier_prevu.$selected = false;
-              divers_attachement_mobilier_prevu.$edit = false;
-              vm.selectedItemDivers_attachement_mobilier_prevu ={};
-          }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
-
-        }
-        vm.change_quantite_prix_mobilier= function(item) 
-        {
-            
-            item.montant_prevu=parseFloat(item.quantite_prevu)*parseFloat(item.prix_unitaire);                    
-          
-        }*/
-
-    /******************************************fin attachement mobilier travaux***********************************************/
-
  /*********************************************fin avenant mpe***********************************************/
         vm.step_avenant_mpe = function()
         {   vm.affiche_load = true;
+          NouvelItemAvenant_mpe = false;
+          
           if (vm.session=="AAC")
           {            
             apiFactory.getAPIgeneraliserREST("avenant_prestataire/index","menu","getavenantinvalideBycontrat",'id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
@@ -14837,7 +12428,17 @@ vm.steppassation_marches = function()
                                       document_prestataire_scan.$selected = false;
                                       document_prestataire_scan.$edit = false;
                                       vm.selectedItemDocument_prestataire_scan = {};
-                                      console.log('b');
+                                      var chemin= currentItemDocument_prestataire_scan.fichier;
+                                        var fd = new FormData();
+                                            fd.append('chemin',chemin);
+                                      
+                                        var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
+
+                                        var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
+                                        headers: {'Content-Type': undefined}, chemin: chemin
+                                        }).success(function(data)
+                                        {
+                                        });
                                   }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
                                 }
                             }).error(function()
@@ -15041,6 +12642,7 @@ vm.steppassation_marches = function()
             vm.affiche_load = true;
             vm.stepphase = false;
             vm.step_reception = false;
+            NouvelItemDelai_travaux = false;
             apiFactory.getAPIgeneraliserREST("delai_travaux/index",'menu','getdelai_travauxBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                  vm.alldelai_travaux = result.data.response;
@@ -15055,6 +12657,7 @@ vm.steppassation_marches = function()
         }
         vm.step_delai_execution = function()
         {   vm.affiche_load = true;
+          NouvelItemDelai_travaux = false;
             apiFactory.getAPIgeneraliserREST("delai_travaux/index",'menu','getdelai_travauxBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
             {
                  vm.alldelai_travaux = result.data.response;
@@ -15364,7 +12967,8 @@ vm.steppassation_marches = function()
 /**********************************fin eelai_travaux****************************************/
 /**********************************debut passation_marches****************************************/
     vm.click_phase_sous = function()
-    {    
+    {  
+      NouvelItemPhase_sous_projet = false;  
       if (vm.session=="AAC")
       {
         apiFactory.getAPIgeneraliserREST("phase_sous_projet/index",'menu','getphasesousprojetBydelai','id_delai_travaux',vm.selectedItemDelai_travaux.id).then(function(result)
@@ -15698,6 +13302,8 @@ vm.steppassation_marches = function()
 
         vm.step_reception_mpe = function()
         {   vm.affiche_load = true;
+          
+          NouvelItemReception_mpe = false;
           if (vm.session=="AAC")
           {
             apiFactory.getAPIgeneraliserREST("reception_mpe/index",'menu','getreception_mpeBycontrat','id_contrat_prestataire',vm.selectedItemContrat_prestataire.id).then(function(result)
@@ -16058,6 +13664,7 @@ vm.steppassation_marches = function()
         vm.step_menu_indicateur= function ()
         {vm.showbuttonNouvIndicateur=true;
             vm.affiche_load = true;
+            NouvelItemIndicateur = false;
             if (vm.session=="AAC")
             {
               apiFactory.getAPIgeneraliserREST("indicateur/index",'menu','getindicateurByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)

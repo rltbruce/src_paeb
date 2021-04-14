@@ -78,7 +78,7 @@
                                 </div-->
                                 <div layout="column" layout-gt-xs="row">
 
-                                  <md-input-container flex="100" flex-gt-xs="90">
+                                  <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
                                   <label>Lot</label>
                                   <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                                     <md-option value="*">*</md-option>
@@ -424,7 +424,10 @@
                                     </td>
                                                                  
                                     <td>  
-                                      <a ng-if="!justificatif_frais_fonction_feffi.$edit" ng-click="vm.modifierJustificatif_frais_fonction_feffi(justificatif_frais_fonction_feffi)" title="Modifier">
+                                      <a ng-if="!justificatif_frais_fonction_feffi.$edit && justificatif_frais_fonction_feffi.id==0" ng-click="vm.modifierJustificatif_frais_fonction_feffi(justificatif_frais_fonction_feffi)" title="Ajout">
+                                        <span class="icon-table-edit"></span>
+                                      </a> 
+                                      <a ng-if="!justificatif_frais_fonction_feffi.$edit && justificatif_frais_fonction_feffi.id==null" ng-click="vm.modifierJustificatif_frais_fonction_feffi(justificatif_frais_fonction_feffi)" title="Ajout">
                                         <span class="icon-table-edit"></span>
                                       </a>
                                                 

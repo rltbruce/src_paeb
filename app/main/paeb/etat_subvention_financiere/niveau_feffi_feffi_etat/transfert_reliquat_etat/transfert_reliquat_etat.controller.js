@@ -192,6 +192,7 @@
             vm.selectedItemConvention_entete = item;
                     // On récupère le resultat de la requête dans la varible "response"                    
                 vm.stepMenu_reliquat=true;
+                vm.stepjusti_trans_reliqua = false;
               //console.log(vm.nbr_demande_feffi); 
               vm.header_ref_convention = item.ref_convention;
               vm.header_cisco = item.cisco.description;

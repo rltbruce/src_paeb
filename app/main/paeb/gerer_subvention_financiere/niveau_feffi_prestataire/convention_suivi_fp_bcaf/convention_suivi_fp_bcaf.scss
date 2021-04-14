@@ -211,7 +211,28 @@
 
          #acc_sous_menu
         {          
+            md-tabs-wrapper
+            {
+                background-color: rgb(68, 188, 243) !important;
+               // border: 1px solid red;
+
+            }
+            md-tab-item.md-tab.ng-scope.ng-isolate-scope.md-ink-ripple.md-active
+            {   
+               background-color: rgb(105, 196, 238) !important;
+               color:rgb(38, 18, 18) !important;
+               font-size: 11px;
+            }
             
+            md-tab-item.md-tab.ng-scope.ng-isolate-scope.md-ink-ripple.md-disabled {
+                
+                opacity: 0.5 !important;
+         }
+            md-tab-item
+            {   
+                color:rgb(38, 18, 18) !important;
+                font-size: 11px;          
+            }
            /* .md-tab:first-child
             {
                 .ms-form-wizard-step-label 
@@ -223,72 +244,81 @@
             {
                 .ms-form-wizard-step-label 
                 { 
-                    color: rgb(124,179,66) !important;
+                    //color: rgb(124,179,66) !important;
+                    color: white !important;
                 }
             }
             .md-tab:nth-child(3)
             {
                 .ms-form-wizard-step-label 
                 { 
-                    color: rgb(124,179,66) !important;
+                   // color: rgb(124,179,66) !important;
+                   color: white !important;
                 }
             }
             .md-tab:nth-child(4)
             {
                 .ms-form-wizard-step-label 
                 { 
-                    color: rgb(124,179,66) !important;
+                   // color: rgb(124,179,66) !important;
+                   color: white !important;
                 }
             } 
             .md-tab:nth-child(5)
             {                
                 .ms-form-wizard-step-label 
                 { 
-                    color: rgb(33,150,243) !important;
+                    //color: rgb(33,150,243) !important;
+                    color: black!important;
                 }
             } 
             .md-tab:nth-child(6)
             {                
                 .ms-form-wizard-step-label 
                 { 
-                    color: rgb(33,150,243) !important;
+                   // color: rgb(33,150,243) !important;
+                   color: black!important;
                 }
             } 
             .md-tab:nth-child(7)
             {                
                 .ms-form-wizard-step-label 
                 { 
-                    color: rgb(33,150,243) !important;
+                    //color: rgb(33,150,243) !important;
+                    color: black!important;
                 }
             } 
             .md-tab:nth-child(8)
             {
                 .ms-form-wizard-step-label 
                 { 
-                    color: rgb(0,150,136) !important;
+                    //color: rgb(0,150,136) !important;
+                    color: whitesmoke!important;
                 }
             } 
             .md-tab:nth-child(8)
             {
                 .ms-form-wizard-step-label 
                 { 
-                    color: rgb(0,150,136) !important;
+                    //color: rgb(0,150,136) !important;
+                    color: whitesmoke!important;
                 }
             } 
             .md-tab:nth-child(9)
             {
                 .ms-form-wizard-step-label 
                 { 
-                    color: rgb(0,150,136) !important;
+                    //color: rgb(0,150,136) !important;
+                    color: whitesmoke!important;
                 }
             }
             .md-tab:nth-child(10)
             {
                 .ms-form-wizard-step-label 
                 { 
-                    color: rgb(0,150,136) !important;
+                    color: whitesmoke!important;
                 }
-            } 
+            }  
         }
 
         .form-wrapper {

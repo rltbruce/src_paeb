@@ -68,7 +68,7 @@
                                 </div-->
                                 <div layout="column" layout-gt-xs="row">
 
-                                  <md-input-container flex="100" flex-gt-xs="90">
+                                  <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
                                     <label>Lot</label>
                                     <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                                       <md-option value="*">*</md-option>
@@ -378,14 +378,14 @@
                                     </td-->
                                                                  
                                     <td>  
-                                      <a ng-if="!demande_realimentation.$edit && demande_realimentation.validation<5" ng-click="vm.modifierDemande_realimentation(demande_realimentation)" title="Modifier">
+                                      <a ng-if="!demande_realimentation.$edit && demande_realimentation.validation<6" ng-click="vm.modifierDemande_realimentation(demande_realimentation)" title="Modifier">
                                         <span class="icon-table-edit"></span>
                                       </a>
                                                 
-                                      <a ng-if="!demande_realimentation.$edit && demande_realimentation.validation<5" ng-click="vm.supprimerDemande_realimentation(demande_realimentation)" title="Supprimer">
+                                      <a ng-if="!demande_realimentation.$edit && demande_realimentation.validation<6" ng-click="vm.supprimerDemande_realimentation(demande_realimentation)" title="Supprimer">
                                         <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                       </a>
-                                      <span ng-if="demande_realimentation.validation>4" > Aucune action disponible</span>        
+                                      <span ng-if="demande_realimentation.validation>5" > Aucune action disponible</span>        
                                       <a ng-if="demande_realimentation.$edit" ng-click="vm.annulerDemande_realimentation(demande_realimentation)" title="Annuler modification">
                                         <span class="icon-cancel"></span>
                                       </a>
@@ -455,11 +455,14 @@
                                     </td>
                                                                  
                                     <td>  
-                                      <a ng-if="!justificatif_feffi.$edit && vm.validation=='4'" ng-click="vm.modifierJustificatif_feffi(justificatif_feffi)" title="Modifier">
+                                      <a ng-if="!justificatif_feffi.$edit && justificatif_feffi.id==0 && vm.validation=='5'" ng-click="vm.modifierJustificatif_feffi(justificatif_feffi)" title="Ajout">
+                                        <span class="icon-table-edit"></span>
+                                      </a>                                        
+                                      <a ng-if="!justificatif_feffi.$edit && justificatif_feffi.id==null && vm.validation=='5'" ng-click="vm.modifierJustificatif_feffi(justificatif_feffi)" title="Ajout">
                                         <span class="icon-table-edit"></span>
                                       </a>
                                                 
-                                      <a ng-if="!justificatif_feffi.$edit && justificatif_feffi.id!=0 && vm.validation=='4'" ng-click="vm.supprimerJustificatif_feffi(justificatif_feffi)" title="Supprimer">
+                                      <a ng-if="!justificatif_feffi.$edit && justificatif_feffi.id!=0 && vm.validation=='5'" ng-click="vm.supprimerJustificatif_feffi(justificatif_feffi)" title="Supprimer">
                                         <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                       </a>
                                                       

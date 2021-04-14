@@ -43,7 +43,7 @@
 
     <!------------------------------------DEBUT CONVENTION CISCO/FEFFI--------------------------------------------------->
             
-            <md-tab>
+            <md-tab ng-click="vm.click_menu_convention()">
               <md-tab-label >
                 <span class="ms-form-wizard-step-label">
                     <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -78,7 +78,7 @@
                                 </div-->
                                 <div layout="column" layout-gt-xs="row">
 
-                                <md-input-container flex="100" flex-gt-xs="90">
+                                <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
                                   <label>Lot</label>
                                   <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                                     <md-option value="*">*</md-option>
@@ -392,25 +392,25 @@
 
                                     <td>
                                       <span ng-if="demande_realimentation.$edit">
-                                        <md-datepicker ng-model="demande_realimentation.date" md-placeholder="Date de signature" md-max-date="vm.datenow" required>
+                                        <md-datepicker ng-model="demande_realimentation.date" md-placeholder="Date de signature" md-min-date="vm.date_convention" md-max-date="vm.datenow" required>
                                           
                                         </md-datepicker>  
                                       </span>
                                       <span ng-if="!demande_realimentation.$edit">{{vm.formatDate(demande_realimentation.date)}}</span>
                                     </td>
-                                    <td>
+                                    <!--td>
                                       <span >{{vm.situationdemande(demande_realimentation.validation)}}</span>
-                                    </td>
+                                    </td-->
                                                                  
                                     <td>  
-                                      <a ng-if="!demande_realimentation.$edit && demande_realimentation.validation<3" ng-click="vm.modifierDemande_realimentation(demande_realimentation)" title="Modifier">
+                                      <a ng-if="!demande_realimentation.$edit && demande_realimentation.validation<1" ng-click="vm.modifierDemande_realimentation(demande_realimentation)" title="Modifier">
                                         <span class="icon-table-edit"></span>
                                       </a>
                                                 
-                                      <a ng-if="!demande_realimentation.$edit && demande_realimentation.validation<3" ng-click="vm.supprimerDemande_realimentation(demande_realimentation)" title="Supprimer">
+                                      <a ng-if="!demande_realimentation.$edit && demande_realimentation.validation<1" ng-click="vm.supprimerDemande_realimentation(demande_realimentation)" title="Supprimer">
                                         <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                       </a>
-                                      <span ng-if="demande_realimentation.validation>2" > Aucune action disponible</span>        
+                                      <span ng-if="demande_realimentation.validation>0" > Aucune action disponible</span>        
                                       <a ng-if="demande_realimentation.$edit" ng-click="vm.annulerDemande_realimentation(demande_realimentation)" title="Annuler modification">
                                         <span class="icon-cancel"></span>
                                       </a>
@@ -482,7 +482,10 @@
                                     </td>
                                                                  
                                     <td>  
-                                      <a ng-if="!justificatif_feffi.$edit && vm.validation=='0'" ng-click="vm.modifierJustificatif_feffi(justificatif_feffi)" title="Modifier">
+                                      <a ng-if="!justificatif_feffi.$edit && justificatif_feffi.id==null && vm.validation=='0'" ng-click="vm.modifierJustificatif_feffi(justificatif_feffi)" title="Ajout">
+                                        <span class="icon-table-edit"></span>
+                                      </a> 
+                                      <a ng-if="!justificatif_feffi.$edit && justificatif_feffi.id==0 && vm.validation=='0'" ng-click="vm.modifierJustificatif_feffi(justificatif_feffi)" title="Ajout">
                                         <span class="icon-table-edit"></span>
                                       </a>
                                                 

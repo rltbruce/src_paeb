@@ -88,7 +88,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -143,7 +142,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -198,7 +196,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -253,7 +250,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -308,7 +304,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -363,7 +358,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -418,7 +412,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -473,7 +466,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -528,7 +520,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -583,7 +574,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -638,7 +628,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -696,7 +685,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -752,7 +740,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -807,7 +794,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -862,7 +848,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -918,7 +903,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -974,7 +958,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -1030,7 +1013,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {
@@ -1086,7 +1068,6 @@
                     .clickOutsideToClose(true)
                     .parent(angular.element(document.body))
                     .ok('ok')
-                    .cancel('annuler');
                   
                   $mdDialog.show(confirm).then(function()
                   {

@@ -633,10 +633,10 @@
         {
             vm.allpartenaire_relai= result.data.response;
         });
-        apiFactory.getAll("prestataire/index").then(function(result)
+        /*apiFactory.getAll("prestataire/index").then(function(result)
         {
             vm.allprestataire= result.data.response;
-        });
+        });*/
        /* vm.allannee =[{annee:"2017"},{annee:"2018"},{annee:"2019"}];
         var last_date = Math.max.apply(Math, vm.allannee.map(function(o){return o.annee;}));
           if (parseInt(last_date)<parseInt(vm.datenow.getFullYear()))
@@ -983,12 +983,19 @@
                 });*/
             vm.tabpartenaire = true; 
             vm.affiche_load = true;
-            vm.stepavenant_pr = false;
+           // vm.stepavenant_pr = false;
             vm.stepprestaion_pr = false;
             vm.stepdoc_pr = false; 
             vm.stepcontrat_pr = false;
-            vm.showbuttonNouvPassation_pr=true;
-                apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
+           // vm.showbuttonNouvPassation_pr=true;
+            apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(resultc)
+            {
+                vm.allcontrat_partenaire_relai = resultc.data.response;
+                vm.showbuttonimporter_contrat_pr = true;
+                vm.stepcontrat_pr = true;
+                vm.affiche_load = false;
+            });
+              /*  apiFactory.getAPIgeneraliserREST("passation_marches_pr/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.allpassation_marches_pr = result.data.response.filter(function(obj)
                     {
@@ -997,7 +1004,7 @@
                         vm.affiche_load = false;
                         console.log(vm.allpassation_marches_pr);
                     vm.stepcontrat_pr = true;
-                });
+                });*/
         } 
 
         //col table
@@ -1333,7 +1340,7 @@
             vm.stepdoc_pr = false;
             vm.showbuttonNouvcontrat_pr = false;
             vm.showbuttonimporter_contrat_pr = false
-            apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(resultc)
+            apiFactory.getAPIgeneraliserREST("contrat_partenaire_relai/index",'menus','getcontratvalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(resultc)
             {
                 vm.allcontrat_partenaire_relai = resultc.data.response;
                 vm.showbuttonimporter_contrat_pr = true;
@@ -2041,7 +2048,18 @@ vm.click_step_avenant_pr = function()
 
         vm.step_prestation_pr = function()
         {
-
+            vm.stepparticipantdpp = false;
+            vm.stepparticipantodc = false;
+            vm.stepparticipantemies = false;
+            vm.stepparticipantgfpc = false;
+            vm.stepparticipantpmc = false;
+            vm.stepparticipantsep = false;
+            vm.showbuttonValidationformdpp = false;
+            vm.showbuttonValidationformodc= false;
+            vm.showbuttonValidationformemies = false;            
+            vm.showbuttonValidationformgfpc = false;
+            vm.showbuttonValidationformpmc = false;
+            vm.showbuttonValidationformsep = false;
             apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
             {
                 vm.allmodule_dpp = result.data.response.filter(function(obj)
@@ -2054,6 +2072,8 @@ vm.click_step_avenant_pr = function()
         }
         vm.step_module_dpp = function()
         {
+           vm.stepparticipantdpp = false;
+           vm.showbuttonValidationformdpp = false;
            apiFactory.getAPIgeneraliserREST("module_dpp/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
             {
                 vm.allmodule_dpp = result.data.response.filter(function(obj)
@@ -2064,7 +2084,9 @@ vm.click_step_avenant_pr = function()
             }); 
         }
         vm.step_module_odc = function()
-        {
+        {   
+          vm.stepparticipantodc = false;
+          vm.showbuttonValidationformodc = false;
             apiFactory.getAPIgeneraliserREST("module_odc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
             {
                  vm.allmodule_odc = result.data.response.filter(function(obj)
@@ -2077,7 +2099,8 @@ vm.click_step_avenant_pr = function()
 
         vm.step_module_emies = function()
         {
-            
+          vm.stepparticipantemies= false;
+          vm.showbuttonValidationformemies = false;
             apiFactory.getAPIgeneraliserREST("module_emies/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
             {
                 vm.allmodule_emies = result.data.response.filter(function(obj)
@@ -2090,6 +2113,8 @@ vm.click_step_avenant_pr = function()
 
         vm.step_module_gfpc = function()
         {
+          vm.stepparticipantgfpc = false;
+          vm.showbuttonValidationformgfpc= false;
             apiFactory.getAPIgeneraliserREST("module_gfpc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
             {
                 vm.allmodule_gfpc = result.data.response.filter(function(obj)
@@ -2102,6 +2127,8 @@ vm.click_step_avenant_pr = function()
 
         vm.step_module_pmc = function()
         {
+          vm.stepparticipantpmc = false;
+          vm.showbuttonValidationformpmc = false;
              apiFactory.getAPIgeneraliserREST("module_pmc/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
             {
                 vm.allmodule_pmc = result.data.response.filter(function(obj)
@@ -2114,6 +2141,8 @@ vm.click_step_avenant_pr = function()
 
         vm.step_module_sep = function()
         {
+          vm.stepparticipantsep = false;
+          vm.showbuttonValidationformsep = false;
             apiFactory.getAPIgeneraliserREST("module_sep/index",'menu','getmoduleBycontrat','id_contrat_partenaire_relai',vm.selectedItemContrat_partenaire_relai.id).then(function(result)
             {
                 vm.allmodule_sep = result.data.response.filter(function(obj)
@@ -3186,14 +3215,14 @@ vm.click_step_avenant_pr = function()
             item.prenom = vm.selectedItemParticipant_dpp.prenom;
             item.sexe  = vm.selectedItemParticipant_dpp.sexe;
             item.id_situation_participant_dpp = vm.selectedItemParticipant_dpp.situation_participant_dpp.id; 
-            vm.stepparticipantdpp=false;
+            //vm.stepparticipantdpp=false;
         };
 
         //fonction bouton suppression item participant_dpp
         vm.supprimerParticipant_dpp = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -3799,7 +3828,7 @@ vm.click_step_avenant_pr = function()
         vm.supprimerParticipant_odc = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -4406,7 +4435,7 @@ vm.click_step_avenant_pr = function()
         vm.supprimerParticipant_emies = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -5042,7 +5071,7 @@ vm.click_step_avenant_pr = function()
         vm.supprimerParticipant_gfpc = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -5648,7 +5677,7 @@ vm.click_step_avenant_pr = function()
         vm.supprimerParticipant_pmc = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -6259,7 +6288,7 @@ vm.click_step_avenant_pr = function()
         vm.supprimerParticipant_sep = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -10371,6 +10400,7 @@ vm.steppassation_marches = function()
               passation_marches.$selected = false;
               passation_marches.$edit = false;
               vm.selectedItemPassation_marches = {};
+              vm.stepsoumissionnaire = false;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
@@ -10421,6 +10451,7 @@ vm.steppassation_marches = function()
                     return obj.id !== passation_marches.id;
                 });
               vm.selectedItemPassation_marches = {};
+              vm.stepsoumissionnaire = false;
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
@@ -10430,6 +10461,10 @@ vm.steppassation_marches = function()
 /**********************************debut sousmissionnaire****************************************/
         vm.stepmpe_soumissionaire = function()
         {
+          apiFactory.getAll("prestataire/index").then(function(result)
+          {
+              vm.allprestataire= result.data.response;
+          });
             apiFactory.getAPIgeneraliserREST("mpe_soumissionaire/index",'id_passation_marches',vm.selectedItemPassation_marches.id).then(function(result)
             {
                 vm.allmpe_soumissionaire = result.data.response;
@@ -10743,7 +10778,9 @@ vm.steppassation_marches = function()
         { 
             vm.showbuttonNouvContrat_prestataire=false;
             vm.affiche_load = true;
-            vm.showbuttonimporter_contrat_mpe = false;
+            vm.showbuttonimporter_contrat_mpe = false;apiFactory.getAPIgeneraliserREST("prestataire/index",'menu','prestataireBysousmissionnaire','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(resultpre)
+            {
+                vm.allprestataire= resultpre.data.response;
                  apiFactory.getAPIgeneraliserREST("contrat_prestataire/index",'menus','getcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
                 {
                     vm.allcontrat_prestataire = result.data.response;
@@ -10760,6 +10797,7 @@ vm.steppassation_marches = function()
 
                     vm.affiche_load = false;
                 });
+            });
         }
         
 //col table
@@ -10868,9 +10906,13 @@ vm.steppassation_marches = function()
               {
                     currentItemContrat_prestataire    = JSON.parse(JSON.stringify(vm.selectedItemContrat_prestataire)); 
               } 
+
               if(item.$edit==false || item.$edit==undefined)
               {
                   vm.showbuttonValidationcontrat_prestataire = true;
+              }
+              else{
+                vm.showbuttonValidationcontrat_prestataire = false;
               }
               vm.validation_contrat_prestataire = item.validation; 
               vm.stepattachement = true;
@@ -11417,7 +11459,7 @@ vm.steppassation_marches = function()
         vm.supprimerDivers_attachement_batiment_prevu = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -11879,7 +11921,7 @@ vm.steppassation_marches = function()
         vm.supprimerDivers_attachement_latrine_prevu = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -12248,7 +12290,7 @@ vm.steppassation_marches = function()
         vm.supprimerDivers_attachement_mobilier_prevu = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)
@@ -13262,7 +13304,7 @@ vm.steppassation_marches = function()
                 document_prestataire_scan.validation   = null ;
                 document_prestataire_scan.existance   = false ;
               vm.selectedItemDocument_prestataire_scan = {};
-              vm.showbuttonValidation = false;
+              vm.showbuttonValidation_document_prestataire_scan = false;
 
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 

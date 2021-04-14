@@ -26,7 +26,11 @@
 
         //col table
         vm.piece_justificatif_frais_fonction_feffi_prevu_column = [{titre:"code"},{titre:"intitule"},{titre:"Action"}];
-        
+        apiFactory.getAll("piece_justificatif_frais_fonction_feffi_prevu/index").then(function(result)
+        {
+          vm.allpiece_justificatif_frais_fonction_feffi_prevu= result.data.response;
+         
+        });
         //Masque de saisi ajout
         vm.ajouter = function ()
         { 

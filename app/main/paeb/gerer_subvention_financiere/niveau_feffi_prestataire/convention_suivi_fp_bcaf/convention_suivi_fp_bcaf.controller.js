@@ -555,7 +555,7 @@
              
 
             vm.header_ref_convention = item.ref_convention;
-            vm.header_cisco = item.cisco.code;
+            vm.header_cisco = item.cisco.description;
             vm.header_feffi = item.feffi.denomination; 
             vm.header_class = 'headerbig';           
               
@@ -564,7 +564,7 @@
             apiFactory.getAPIgeneraliserREST("facture_mpe/index",'menu','count_facture_prestatairebyconventionvalidation','id_convention_entete',item.id,'validation',0).then(function(result) 
             {
                 var resultat = result.data.response;
-                vm.notification_mpe = parseInt(resultat[0].nombre_mpe);
+                vm.notification_mpe = parseInt(resultat[0].nombre_mpe) + parseInt(resultat[0].nombre_avanc);
                 vm.notification_moe = parseInt(resultat[0].nombre_moe);
                 console.log(resultat);
             });                       
@@ -677,7 +677,14 @@
         vm.stepjusti_facture_moe = false;
         vm.stepfacture_detail = false;
         vm.showbuttonValidationFacture_moe_creer =false;
+        vm.showbuttonValidationFacture_moe_rejedpfi = false;
       }
+      vm.menu_click_fature_moe_entete= function ()
+      {
+        vm.showbuttonValidationFacture_moe_rejedpfi = false;
+        vm.showbuttonValidationFacture_moe_creer = false;
+      }
+
 
         vm.facture_moe_entete_column = [        
         {titre:"Numero"
@@ -766,13 +773,20 @@
                 currentItemFacture_moe_entete    = JSON.parse(JSON.stringify(vm.selectedItemFacture_moe_entete));
 
                 vm.steprubriquecalendrier = true;
-                vm.stepsousrubriquecalendrier = false;
                 vm.stepjusti_facture_moe = true;
-                vm.stepfacture_detail = false;
                 vm.showbuttonValidationFacture_moe_rejedpfi = true;
                 vm.showbuttonValidationFacture_moe_creer =true;
            }
+           else
+           {
+            vm.steprubriquecalendrier = true;
+            vm.stepjusti_facture_moe = true;
+            vm.showbuttonValidationFacture_moe_rejedpfi = true;
+            vm.showbuttonValidationFacture_moe_creer =true;
+           }
 
+           vm.stepfacture_detail = false;
+           vm.stepsousrubriquecalendrier = false;
             vm.validation_fact_moe = item.validation;
            
             //vm.stepjusti_batiment_mpe = true;   
@@ -2630,6 +2644,7 @@ vm.click_tabs_suivi_paiement = function()
     vm.stepfacture_mpe = false;
     vm.stepdecompte = false;
     vm.stepjusti_pv_consta_entete_travaux_mpe = false; 
+    vm.showbuttonValidationAvance_demarrage = false;
 }
 
 vm.click_tab_avance_mpe = function()
@@ -3783,6 +3798,19 @@ vm.selectionPv_consta_entete_travaux= function (item)
         vm.stepfacture_mpe = true;
         vm.stepjusti_pv_consta_entete_travaux_mpe = true;
    }
+   else
+   {
+        vm.steprubriquebatiment_mpe = false;
+        vm.steprubriquelatrine_mpe = false;
+        vm.steprubriquemobilier_mpe = false;
+        vm.steppv_consta_recap_travaux = false;
+        vm.stepdecompte =false;
+        vm.step_tranche_batiment_mpe = false;
+        vm.step_tranche_latrine_mpe = false;
+        vm.step_tranche_mobilier_mpe = false;
+        vm.stepfacture_mpe = false;
+        vm.stepjusti_pv_consta_entete_travaux_mpe = false;
+   }
     vm.validation_pv_consta_entete_travaux = item.validation;   
 };
 $scope.$watch('vm.selectedItemPv_consta_entete_travaux', function()
@@ -3907,7 +3935,7 @@ function insert_in_basePv_consta_entete_travaux(pv_consta_entete_travaux,suppres
                   return obj.id !== vm.selectedItemPv_consta_entete_travaux.id;
               });
 
-            NouvelItemPv_consta_entete_travaux      = true;
+            NouvelItemPv_consta_entete_travaux      = false;
             }
             
         }
@@ -3922,6 +3950,16 @@ function insert_in_basePv_consta_entete_travaux(pv_consta_entete_travaux,suppres
       pv_consta_entete_travaux.$selected = false;
       pv_consta_entete_travaux.$edit = false;
       vm.selectedItemPv_consta_entete_travaux = {};
+      vm.step_tranche_batiment_mpe = false;                
+      vm.step_tranche_latrine_mpe = false;
+      vm.step_tranche_mobilier_mpe = false;
+
+      vm.steprubriquebatiment_mpe = false;
+      vm.steprubriquelatrine_mpe = false;                
+      vm.steprubriquemobilier_mpe = false;
+      vm.stepdecompte =false;
+      vm.stepfacture_mpe = false;
+      vm.stepjusti_pv_consta_entete_travaux_mpe = false;
     
   }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 

@@ -458,6 +458,9 @@
           titre:"Nom banque"
         },
         {
+          titre:"Intitule"
+        },
+        {
           titre:"Adresse banque"
         },
         {

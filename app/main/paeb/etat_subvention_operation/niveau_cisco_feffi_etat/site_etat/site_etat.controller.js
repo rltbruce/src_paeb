@@ -140,12 +140,13 @@
         }
 
         vm.recherchefiltre = function(filtre)
-        {
+        {   vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("site/index",'menu',
               'getsite_etat','id_region',filtre.id_region,'id_cisco',
               filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
               {
                   vm.allsite = result.data.response;
+                  vm.affiche_load = false;
                   console.log(vm.allsite);
               });
         }

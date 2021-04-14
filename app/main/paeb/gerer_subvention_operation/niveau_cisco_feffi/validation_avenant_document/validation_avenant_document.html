@@ -75,7 +75,7 @@
                         </div-->
                         <div layout="column" layout-gt-xs="row">
 
-                        <md-input-container flex="100" flex-gt-xs="90">
+                        <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
                           <label>Lot</label>
                           <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                             <md-option value="*">*</md-option>
@@ -91,7 +91,7 @@
                         <md-input-container flex="100" flex-gt-xs="90">
                           <label>Région</label>
                           <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)" required>
-                            <md-option  value="*">*</md-option>
+                            
                             <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
                           </md-select>
                           <div ng-messages="filtreform.region.$error" role="alert">
@@ -102,7 +102,7 @@
                         <md-input-container flex="100" flex-gt-xs="90">
                           <label>Cisco</label>
                           <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco" required>
-                            <md-option  value="*">*</md-option>
+                            
                             <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.description}}</md-option>
                                                         
                             </md-select>
@@ -496,6 +496,9 @@
 
                       </md-tab-body>
                     </md-tab>
+                  <md-tab>
+                  </md-tab>
+                  
                     <!----------------------------------FIN document moe -------------------------------------------->
             
           </md-tabs>

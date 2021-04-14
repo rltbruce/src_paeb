@@ -106,6 +106,7 @@
         apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_entete/index","menu","getetatconvention_now","annee",annee).then(function(result)
         {   
             vm.allconvention_ufp_daaf_entete = result.data.response;
+            console.log(vm.allconvention_ufp_daaf_entete);
             vm.affiche_load = false;
         });
 
@@ -120,6 +121,7 @@
                                     date_debut,'date_fin',date_fin).then(function(result)
             {
                 vm.allconvention_ufp_daaf_entete = result.data.response;
+                console.log(vm.allconvention_ufp_daaf_entete);
                 vm.affiche_load = false;
             });
         }
@@ -226,7 +228,7 @@
   vm.step_menu_convention_cisco_feffi = function()
   {
     vm.affiche_load = true;
-    apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionFeffiByconvention_ufpdaaf','id_convention_ufpdaaf',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
+    apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionFeffietatByconvention_ufpdaaf','id_convention_ufpdaaf',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
     {
         vm.allconvention_cisco_feffi_entete = result.data.response; 
         vm.affiche_load = false;                

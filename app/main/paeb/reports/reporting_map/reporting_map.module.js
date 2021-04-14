@@ -28,7 +28,7 @@
 
         // Navigation
         msNavigationServiceProvider.saveItem('paeb.reports.reporting_map', {
-            title: 'Carte',
+            title: 'Reporting vue carte',
             icon  : 'icon-google-maps',
             state: 'app.paeb_reports_reporting_map',
 			weight: 1

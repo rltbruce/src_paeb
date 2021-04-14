@@ -75,9 +75,9 @@
                                   <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
                                   </md-datepicker>
                                 </div-->
-                                <div layout="column" layout-gt-xs="row">
+                                <div layout="column" layout-gt-xs="row" >
 
-                                <md-input-container flex="100" flex-gt-xs="90">
+                                <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
                                   <label>Lot</label>
                                   <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                                     <md-option value="*">*</md-option>
@@ -518,6 +518,17 @@
                           </span>
                                     
                           <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.compte_feffi.nom_banque}}</span>
+                        </td>
+
+                        <td>
+                          <span ng-if="convention_cife_detail.$edit">
+                            <md-input-container style="width:100%;display: flex !important;">
+                              <label>Intitule</label>
+                              <input name="intitule_compte" type="text" ng-model="convention_cife_detail.intitule_compte" disabled />
+                            </md-input-container>   
+                          </span>
+                                    
+                          <span ng-if="!convention_cife_detail.$edit">{{convention_cife_detail.compte_feffi.intitule}}</span>
                         </td>
 
                         <td>

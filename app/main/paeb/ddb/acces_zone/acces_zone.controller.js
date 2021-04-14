@@ -20,7 +20,8 @@
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
           autoWidth: false,
-          responsive: true          
+          responsive: true,
+          order:[]           
         };
 
         //col table
@@ -46,7 +47,7 @@
               libelle: '',
               description: ''
             };         
-            vm.allacces_zone.push(items);
+            vm.allacces_zone.unshift(items);
             vm.allacces_zone.forEach(function(cis)
             {
               if(cis.$selected==true)

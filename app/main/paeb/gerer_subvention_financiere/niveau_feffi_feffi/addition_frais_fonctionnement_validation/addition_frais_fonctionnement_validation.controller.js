@@ -276,6 +276,7 @@
         vm.step_menu_addition = function()
         { 
           vm.affiche_load =true;
+          NouvelItemAddition_frais_fonctionnement_validation = false;
           apiFactory.getAPIgeneraliserREST("addition_frais_fonctionnement/index",'menu','getaddition_invalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
           {
               vm.alladdition_frais_fonctionnement_validation = result.data.response;
@@ -390,10 +391,15 @@
             {
               currentItemAddition_frais_fonctionnement_validation    = JSON.parse(JSON.stringify(vm.selectedItemAddition_frais_fonctionnement_validation));
               vm.showbuttonvalidation_addition = true;
-                
+              vm.steppieceaddition = true; 
+            }
+            else
+            {
+              vm.showbuttonvalidation_addition = false;
+              vm.steppieceaddition = false;
             }
             vm.validation_decais_fef=item.validation;            
-            vm.steppieceaddition = true;
+            
             
         };
         $scope.$watch('vm.selectedItemAddition_frais_fonctionnement_validation', function()

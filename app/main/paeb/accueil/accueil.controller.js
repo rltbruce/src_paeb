@@ -23,7 +23,7 @@
             apiFactory.getOne("utilisateurs/index", id_user).then(function(result)             
             {
                   var utilisateur = result.data.response;
-                  console.log(utilisateur);
+                  //console.log(utilisateur);
                   if (utilisateur.roles.indexOf("ADMIN")!= -1)
                   {
                     vm.showracourci_dpfi = true;

@@ -20,7 +20,8 @@
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
           autoWidth: false,
-          responsive: true          
+          responsive: true ,
+          order:[]          
         };
 
         //col table
@@ -48,7 +49,7 @@
               siege: '',
               telephone: ''
             };         
-            vm.allpartenaire_relai.push(items);
+            vm.allpartenaire_relai.unshift(items);
             vm.allpartenaire_relai.forEach(function(pres)
             {
               if(pres.$selected==true)

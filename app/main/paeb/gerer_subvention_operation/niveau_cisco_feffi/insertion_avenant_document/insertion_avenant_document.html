@@ -75,7 +75,7 @@
                         </div-->
                         <div layout="column" layout-gt-xs="row">
 
-                        <md-input-container flex="100" flex-gt-xs="90">
+                        <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
                           <label>Lot</label>
                           <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                             <md-option value="*">*</md-option>
@@ -158,16 +158,14 @@
                         </md-input-container>
                       </div>
                       </div>  
-                      <div class="footer-animate-show-hide">
-                          <md-button class="md-raised boutonfixe" disabled>
-                          </md-button>
-                          <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
-                                            Réinitialise
-                          </md-button>
-                             <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
-                                                Recherche
-                          </md-button>
-                      </div>
+                      <div class="footer-animate-show-hide" layout="row" layout-align="end end">
+                        <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                  Recherche
+                        </md-button>
+                        <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                              Réinitialise
+                        </md-button>
+                    </div>
                   </form>
               </div>
                                    
@@ -521,6 +519,8 @@
                         </div>
 
                       </md-tab-body>
+                    </md-tab>
+                    <md-tab>
                     </md-tab>
                     <!----------------------------------FIN document moe -------------------------------------------->
             

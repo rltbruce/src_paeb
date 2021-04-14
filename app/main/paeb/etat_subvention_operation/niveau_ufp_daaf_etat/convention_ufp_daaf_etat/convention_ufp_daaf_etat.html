@@ -59,17 +59,15 @@
 
                           <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
                           </md-datepicker>
-                          </div>  
-                          <div class="footer-animate-show-hide">
-                              <md-button class="md-raised boutonfixe" disabled>
-                              </md-button>
-                              <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
-                                            Réinitialise
-                              </md-button>
-                                <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
-                                                Recherche
-                              </md-button>
-                          </div>
+                          </div> 
+                          <div class="footer-animate-show-hide" layout="row" layout-align="end end">
+                            <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                      Recherche
+                            </md-button>
+                            <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                                  Réinitialise
+                            </md-button>
+                        </div>
                       </form>
                   </div>
 
@@ -143,7 +141,7 @@
 
                      <td>
                                 
-                      <span>{{vm.formatMillier(convention_ufp_daaf_entete.avancement_physi)}} %</span>
+                      <span>{{vm.formatMillier(convention_ufp_daaf_entete.avancement_physique)}} %</span>
                     </td>
                   </tr>
                 </tbody>
@@ -312,7 +310,7 @@
                       <tr ng-repeat="convention_cisco_feffi_entete in vm.allconvention_cisco_feffi_entete"  ng-class="{selected: convention_cisco_feffi_entete.$selected}" ng-click="vm.selectionConvention_cisco_feffi_entete(convention_cisco_feffi_entete)">
 
                         <td>
-                          <span>{{convention_cisco_feffi_entete.cisco.code}}</span>
+                          <span>{{convention_cisco_feffi_entete.cisco.description}}</span>
                         </td>
 
                         <td>
@@ -344,7 +342,7 @@
                         </td>
 
                         <td>                          
-                          <span>{{vm.formatMillier(convention_cisco_feffi_entete.avancement)}} %</span>
+                          <span>{{vm.formatMillier(convention_cisco_feffi_entete.avancement_physique)}} %</span>
                         </td>
 
                         <td>                          

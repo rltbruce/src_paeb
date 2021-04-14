@@ -428,28 +428,34 @@
         }
         vm.situationdemande = function(validation)
         {
-            switch (validation)
+          switch (validation)
             {
               case '1':
                       return 'Validée par DPFI';                  
                   break;
+              case '2':                  
+                    return 'Rejetée par DPFI'; 
+                    break;
 
-             case '2':
-                  
-                  return 'Rejetée par UFP'; 
-                  break;
               case '3':                  
                   return 'Validée par UFP'; 
                   break;
+              case '4':                  
+                  return 'Rejetée par UFP'; 
+                  break;
              
-             case '5':                  
+             case '6':                  
                   return 'Validée par DPFI'; 
                   break;
-             case '6':                  
-                  return 'Rejetée par DAAF'; 
+            case '7':                  
+                  return 'Rejetée par DPFI'; 
                   break;
-              case '7':                  
+
+             case '8':                  
                   return 'Validée par DAAF'; 
+                  break;
+              case '9':                  
+                  return 'Rejetée par DAAF'; 
                   break;
               
               default:
@@ -703,6 +709,10 @@
                 {
                   vm.showbuttonValidation_trans_ufp = true;
                   currentItemTransfert_ufp     = JSON.parse(JSON.stringify(vm.selectedItemTransfert_ufp));
+                }
+                else
+                {
+                  vm.showbuttonValidation_trans_ufp = false;
                 }
                 vm.validation_transfert_ufp  = item.validation;          
 

@@ -335,9 +335,13 @@
             if (item.$edit==false || item.$edit==undefined)
             {
               currentItemDemande_deblocage_daaf     = JSON.parse(JSON.stringify(vm.selectedItemDemande_deblocage_daaf));
-              vm.showbuttonValidation = true;                         
-            } 
-            vm.stepTwo = true; 
+              vm.showbuttonValidation = true; 
+              vm.stepTwo = true;                         
+            }  
+            else{
+              vm.stepTwo = false;
+              vm.showbuttonValidation = false; 
+            }
             vm.stepThree = false;
             vm.validation_item = item.validation;
         };

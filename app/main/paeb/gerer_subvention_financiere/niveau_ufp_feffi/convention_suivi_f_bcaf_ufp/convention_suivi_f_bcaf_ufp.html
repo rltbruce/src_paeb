@@ -76,9 +76,9 @@
                                   <md-datepicker ng-model="vm.filtre.date_fin" md-min-date="vm.filtre.date_debut" md-max-date="vm.datenow" ng-disabled="!vm.filtre.date_debut" required>                        
                                   </md-datepicker>
                                 </div-->
-                                <div layout="column" layout-gt-xs="row">
+                                <div layout="column" layout-gt-xs="row" >
 
-                                  <md-input-container flex="100" flex-gt-xs="90">
+                                  <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
                                   <label>Lot</label>
                                   <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                                     <md-option value="*">*</md-option>
@@ -269,6 +269,9 @@
                                     <md-button type="submit" class="md-raised md-warn md-pink-900-bg" aria-label="Nouveau" ng-click="vm.valider_demandecreer(1)" style="width:10%;" ng-if="vm.showbuttonValidation && vm.validation==0">
                                       Valider
                                     </md-button>
+                                    <md-button type="submit" class="md-raised md-warn md-red-500-bg" aria-label="Nouveau" ng-click="vm.rejeter_demandecreer(2)" style="width:10%;" ng-if="vm.showbuttonValidation && vm.validation==0">
+                                      Rejeter
+                                    </md-button>
                               </div> <br>
                                           
                               <div style="float: top !important">
@@ -400,14 +403,14 @@
                                     </td>
                                                                  
                                     <td>  
-                                      <a ng-if="!demande_realimentation.$edit && demande_realimentation.validation<3" ng-click="vm.modifierDemande_realimentation(demande_realimentation)" title="Modifier">
+                                      <a ng-if="!demande_realimentation.$edit && demande_realimentation.validation<1" ng-click="vm.modifierDemande_realimentation(demande_realimentation)" title="Modifier">
                                         <span class="icon-table-edit"></span>
                                       </a>
                                                 
-                                      <a ng-if="!demande_realimentation.$edit && demande_realimentation.validation<3" ng-click="vm.supprimerDemande_realimentation(demande_realimentation)" title="Supprimer">
+                                      <a ng-if="!demande_realimentation.$edit && demande_realimentation.validation<1" ng-click="vm.supprimerDemande_realimentation(demande_realimentation)" title="Supprimer">
                                         <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                       </a>
-                                      <span ng-if="demande_realimentation.validation>2" > Aucune action disponible</span>        
+                                      <span ng-if="demande_realimentation.validation>0" > Aucune action disponible</span>        
                                       <a ng-if="demande_realimentation.$edit" ng-click="vm.annulerDemande_realimentation(demande_realimentation)" title="Annuler modification">
                                         <span class="icon-cancel"></span>
                                       </a>
@@ -480,7 +483,10 @@
                                   </td>
                                                                
                                   <td>  
-                                    <a ng-if="!justificatif_feffi.$edit && vm.validation=='0'" ng-click="vm.modifierJustificatif_feffi(justificatif_feffi)" title="Modifier">
+                                    <a ng-if="!justificatif_feffi.$edit && justificatif_feffi.id==null && vm.validation=='0'" ng-click="vm.modifierJustificatif_feffi(justificatif_feffi)" title="Ajout">
+                                      <span class="icon-table-edit"></span>
+                                    </a>  
+                                    <a ng-if="!justificatif_feffi.$edit && justificatif_feffi.id==0 && vm.validation=='0'" ng-click="vm.modifierJustificatif_feffi(justificatif_feffi)" title="Ajout">
                                       <span class="icon-table-edit"></span>
                                     </a>
                                               

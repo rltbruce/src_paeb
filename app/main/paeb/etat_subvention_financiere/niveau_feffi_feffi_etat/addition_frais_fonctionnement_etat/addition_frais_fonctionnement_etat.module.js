@@ -4,7 +4,7 @@
 
     angular
         .module('app.paeb.etat_subvention_financiere.niveau_feffi_feffi_etat.addition_frais_fonctionnement_etat', [])
-        .run(testPermission)
+        //.run(testPermission)
         //.run(insertiondemande_ufp_daaf_syst)
         .config(config);
         var vs ;
@@ -33,11 +33,7 @@
             title: 'Addition frais fonctionnement',
             icon  : 'icon-link',
             state: 'app.paeb_etat_subvention_financiere_niveau_feffi_feffi_etat_addition_frais_fonctionnement_etat',
-            weight: 1,
-            hidden: function()
-            {
-                    return vs;
-            }
+            weight: 1
         });
     }
 

@@ -75,7 +75,7 @@
             apiFactory.getDemande_realimentationByInvalide("count_facture_prestataire",Number(0)).then(function(result) 
             {
                 var x = result.data.response;
-                vs.content = Number(x[0].nombre_mpe) + Number(x[0].nombre_moe);
+                vs.content = Number(x[0].nombre_mpe) + Number(x[0].nombre_moe) + Number(x[0].nombre_avanc);
                 vs.color = '#F44336' ;
                 console.log(x);
             });
@@ -96,9 +96,9 @@
                     {
                         var resultat = result.data.response;
 
-                        if (vs.content != Number(resultat[0].nombre_mpe) + Number(resultat[0].nombre_moe)) 
+                        if (vs.content != Number(resultat[0].nombre_mpe) + Number(resultat[0].nombre_moe) + Number(resultat[0].nombre_avanc)) 
                         {
-                            vs.content = Number(resultat[0].nombre_mpe) + Number(resultat[0].nombre_moe) ;
+                            vs.content = Number(resultat[0].nombre_mpe) + Number(resultat[0].nombre_moe + Number(resultat[0].nombre_avanc)) ;
                         };
                         
                     

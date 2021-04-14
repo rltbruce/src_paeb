@@ -255,7 +255,8 @@
           vm.showbuttonValidationencourufp = false;
           vm.showbuttonValidationufp = false;
           vm.showbuttonValidationenrejeufp = false;
-          apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandevalideByconvention",'id_convention_cife_entete',vm.selectedItemConvention_entete.id).then(function(result)
+          //apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandevalideByconvention",'id_convention_cife_entete',vm.selectedItemConvention_entete.id).then(function(result)
+          apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getetatdemandeByconvention",'id_convention_cife_entete',vm.selectedItemConvention_entete.id).then(function(result)
           {
               vm.alldemande_realimentation_invalide = result.data.response;
             vm.affiche_load =false;
@@ -313,23 +314,29 @@
               case '1':
                       return 'Validée par DPFI';                  
                   break;
+              case '2':                  
+                    return 'Rejetée par DPFI'; 
+                    break;
 
-             case '2':
-                  
-                  return 'Rejetée par UFP'; 
-                  break;
               case '3':                  
                   return 'Validée par UFP'; 
+                  break;
+              case '4':                  
+                  return 'Rejetée par UFP'; 
                   break;
              
              case '5':                  
                   return 'Validée par DPFI'; 
                   break;
-             case '6':                  
-                  return 'Rejetée par DAAF'; 
+            case '6':                  
+                  return 'Rejetée par DPFI'; 
                   break;
-              case '7':                  
+
+             case '7':                  
                   return 'Validée par DAAF'; 
+                  break;
+              case '8':                  
+                  return 'Rejetée par DAAF'; 
                   break;
               
               default:

@@ -382,7 +382,8 @@
       vm.step_menu_decaiss = function()
       { 
         vm.stepjusti_decais = false;
-        vm.showbuttonValidation_dec_feffi = false; 
+        vm.showbuttonValidation_dec_feffi = false;         
+        NouvelItemDecaiss_fonct_feffi = false;
         apiFactory.getAPIgeneraliserREST("decaiss_fonct_feffi/index",'menu','getdecaiss_invalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
         {
             vm.alldecaiss_fonct_feffi = result.data.response; 
@@ -459,10 +460,15 @@
             if (item.$edit==false || item.$edit==undefined)
             {
               currentItemDecaiss_fonct_feffi    = JSON.parse(JSON.stringify(vm.selectedItemDecaiss_fonct_feffi));
-              vm.showbuttonValidation_dec_feffi = true;               
+              vm.showbuttonValidation_dec_feffi = true;
+              vm.stepjusti_decais = true;               
+            }
+            else
+            {
+              vm.stepjusti_decais = false;
             }
             vm.validation_decais_fef=item.validation;
-            vm.stepjusti_decais = true;
+            
         };
         $scope.$watch('vm.selectedItemDecaiss_fonct_feffi', function()
         {
@@ -836,7 +842,7 @@
         vm.supprimerJustificatif_decaiss_fonct_feffi = function()
         {
             var confirm = $mdDialog.confirm()
-                    .title('Etes-vous sûr de supprimer cet enfeffiistrement ?')
+                    .title('Etes-vous sûr de supprimer cet enregistrement ?')
                     .textContent('')
                     .ariaLabel('Lucky day')
                     .clickOutsideToClose(true)

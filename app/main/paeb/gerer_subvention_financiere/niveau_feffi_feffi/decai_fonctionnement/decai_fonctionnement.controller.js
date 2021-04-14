@@ -364,7 +364,8 @@
 
         vm.step_menu_decaiss = function()
         { 
-          vm.stepjusti_decais = false; 
+          vm.stepjusti_decais = false;
+          NouvelItemDecaiss_fonct_feffi = false; 
           apiFactory.getAPIgeneraliserREST("decaiss_fonct_feffi/index",'menu','getdecaiss_invalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
           {
               vm.alldecaiss_fonct_feffi = result.data.response; 
@@ -474,11 +475,14 @@
             if (item.$edit==false || item.$edit==undefined)
             {
               currentItemDecaiss_fonct_feffi    = JSON.parse(JSON.stringify(vm.selectedItemDecaiss_fonct_feffi));
-
-                
+              vm.stepjusti_decais = true;                
+            }
+            else
+            {
+              vm.stepjusti_decais = false;
             }
             vm.validation_decais_fef=item.validation;
-            vm.stepjusti_decais = true; 
+             
            /*if (vm.selectedItemDecaiss_fonct_feffi.id!=0)
             {  
                 apiFactory.getAPIgeneraliserREST("justificatif_decaiss_fonct_feffi/index",'id_decaiss_fonct_feffi',item.id).then(function(result)
@@ -931,6 +935,18 @@
                                       justificatif_decaiss_fonct_feffi.$selected = false;
                                       justificatif_decaiss_fonct_feffi.$edit = false;
                                       vm.selectedItemJustificatif_decaiss_fonct_feffi = {};
+                                     /* var chemin= currentItemDecaiss_fonct_feffi.fichier;
+                                        var fd = new FormData();
+                                            fd.append('chemin',chemin);
+                                      
+                                        var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
+
+                                        var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
+                                        headers: {'Content-Type': undefined}, chemin: chemin
+                                        }).success(function(data)
+                                        {
+                                          console.log('ok');
+                                        })*/
                                       console.log('e');
                                   }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
                                 }

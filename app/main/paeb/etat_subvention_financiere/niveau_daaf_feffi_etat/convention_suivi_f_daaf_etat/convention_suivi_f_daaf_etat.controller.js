@@ -210,7 +210,7 @@
   
             vm.steppiecefeffi=false;
             vm.steptransdaaf=false;
-               apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandedisponibleByconvention",'id_convention_cife_entete',vm.selectedItemConvention_entete.id).then(function(result)
+               apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandedisponibledaafByconvention",'id_convention_cife_entete',vm.selectedItemConvention_entete.id).then(function(result)
               {
                   vm.alldemande_realimentation_invalide = result.data.response; 
                   vm.affiche_load =false;
@@ -241,6 +241,7 @@
                   vm.validation = item.validation;
                   vm.steppiecefeffi=true;
                   vm.steptransdaaf=true;
+                  console.log(vm.validation);
           };
           $scope.$watch('vm.selectedItemDemande_realimentation', function()
           {
@@ -255,34 +256,40 @@
       
           vm.situationdemande = function(validation)
           {
-              switch (validation)
-              {
-                case '1':
-                        return 'Validée par DPFI';                  
+            switch (validation)
+            {
+              case '1':
+                      return 'Validée par DPFI';                  
+                  break;
+              case '2':                  
+                    return 'Rejetée par DPFI'; 
                     break;
-  
-               case '2':
-                    
-                    return 'Rejetée par UFP'; 
-                    break;
-                case '3':                  
-                    return 'Validée par UFP'; 
-                    break;
-               
-               case '5':                  
-                    return 'Validée par DPFI'; 
-                    break;
-               case '6':                  
-                    return 'Rejetée par DAAF'; 
-                    break;
-                case '7':                  
-                    return 'Validée par DAAF'; 
-                    break;
-                
-                default:
-                    break;
-            
-              }
+
+              case '3':                  
+                  return 'Validée par UFP'; 
+                  break;
+              case '4':                  
+                  return 'Rejetée par UFP'; 
+                  break;
+             
+             case '6':                  
+                  return 'Validée par DPFI'; 
+                  break;
+            case '7':                  
+                  return 'Rejetée par DPFI'; 
+                  break;
+
+             case '8':                  
+                  return 'Validée par DAAF'; 
+                  break;
+              case '9':                  
+                  return 'Rejetée par DAAF'; 
+                  break;
+              
+              default:
+                  break;
+          
+            }
           }
     
     /*************************Fin StepTwo demande_realimentation_feffi***************************************/
@@ -352,8 +359,7 @@
               {titre:"Montant total"},
               {titre:"Date"},
               {titre:"Situation"},
-              {titre:"Observation"},
-              {titre:"Action"}];
+              {titre:"Observation"}];
   
                
               //fonction selection item Transfert_daaf convention cisco/feffi

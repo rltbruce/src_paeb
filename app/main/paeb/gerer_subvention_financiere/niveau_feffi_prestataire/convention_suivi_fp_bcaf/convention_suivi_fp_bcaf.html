@@ -79,7 +79,7 @@
                                 </div-->
                                 <div layout="column" layout-gt-xs="row">
 
-                                  <md-input-container flex="100" flex-gt-xs="90">
+                                  <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
                                   <label>Lot</label>
                                   <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                                     <md-option value="*">*</md-option>
@@ -363,7 +363,7 @@
                           <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menuformsbcaffvactivif_fp_child2">
 
                             <!-----------------------------DEBUT demande debut travaux moe-------------------------> 
-                             <md-tab>
+                             <md-tab ng-click="vm.menu_click_fature_moe_entete()">
                                 <md-tab-label>
                                   <span class="ms-form-wizard-step-label">                   
                                       
@@ -829,9 +829,9 @@
                                               <span ng-if="!justificatif_facture_moe.$edit">{{justificatif_facture_moe.fichier}}</span>
                                             </td>                       
                                             <td>
-                                              <a ng-if="!justificatif_facture_moe.$edit" ng-click="vm.modifierJustificatif_facture_moe(justificatif_facture_moe)" title="Modifier">
+                                              <!--a ng-if="!justificatif_facture_moe.$edit" ng-click="vm.modifierJustificatif_facture_moe(justificatif_facture_moe)" title="Modifier">
                                                 <span class="icon-table-edit"></span>
-                                              </a>
+                                              </a-->
                                                         
                                               <a ng-if="!justificatif_facture_moe.$edit" ng-click="vm.supprimerJustificatif_facture_moe(justificatif_facture_moe)" title="Supprimer">
                                                 <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
@@ -2738,9 +2738,9 @@
                                       <span ng-if="!justificatif_pv_consta_entete_travaux_mpe.$edit">{{justificatif_pv_consta_entete_travaux_mpe.fichier}}</span>
                                     </td>                       
                                     <td>
-                                      <a ng-if="!justificatif_pv_consta_entete_travaux_mpe.$edit" ng-click="vm.modifierJustificatif_pv_consta_entete_travaux_mpe(justificatif_pv_consta_entete_travaux_mpe)" title="Modifier">
+                                      <!--a ng-if="!justificatif_pv_consta_entete_travaux_mpe.$edit" ng-click="vm.modifierJustificatif_pv_consta_entete_travaux_mpe(justificatif_pv_consta_entete_travaux_mpe)" title="Modifier">
                                         <span class="icon-table-edit"></span>
-                                      </a>
+                                      </a-->
                                                 
                                       <a ng-if="!justificatif_pv_consta_entete_travaux_mpe.$edit" ng-click="vm.supprimerJustificatif_pv_consta_entete_travaux_mpe(justificatif_pv_consta_entete_travaux_mpe)" title="Supprimer">
                                         <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>

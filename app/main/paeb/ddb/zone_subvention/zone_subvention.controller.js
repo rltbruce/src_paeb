@@ -20,7 +20,8 @@
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
           autoWidth: false,
-          responsive: true          
+          responsive: true,
+          order:[]           
         };
 
         //col table
@@ -46,7 +47,7 @@
               libelle: '',
               description: ''
             };         
-            vm.allzone_subvention.push(items);
+            vm.allzone_subvention.unshift(items);
             vm.allzone_subvention.forEach(function(cis)
             {
               if(cis.$selected==true)

@@ -275,6 +275,7 @@
         vm.step_menu_addition = function()
         { 
           vm.affiche_load =true;
+          NouvelItemAddition_frais_fonctionnement = false;
           apiFactory.getAPIgeneraliserREST("addition_frais_fonctionnement/index",'menu','getaddition_invalideByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
           {
               vm.alladdition_frais_fonctionnement = result.data.response;
@@ -387,11 +388,14 @@
             if (item.$edit==false || item.$edit==undefined)
             {
               currentItemAddition_frais_fonctionnement    = JSON.parse(JSON.stringify(vm.selectedItemAddition_frais_fonctionnement));
-
-                
+              vm.steppieceaddition = true;                
+            }
+            else
+            {
+              vm.steppieceaddition = false;
             }
             vm.validation_decais_fef=item.validation;
-            vm.steppieceaddition = true;
+            
             
         };
         $scope.$watch('vm.selectedItemAddition_frais_fonctionnement', function()

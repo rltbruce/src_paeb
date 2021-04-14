@@ -221,6 +221,7 @@
   vm.step_menu_demande_daaf = function()
   { 
     vm.affiche_load = true;
+    NouvelItemDemande_deblocage_daaf    = false;
     apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemandeByvalidationconvention","id_convention_ufp_daaf_entete",vm.selectedItemConvention_ufp_daaf_entete.id,'validation',0).then(function(result)
     {
         vm.alldemande_deblocage_daaf = result.data.response;
@@ -414,9 +415,12 @@
             //recuperation donnée demande_deblocage_daaf
             if (item.$edit==false || item.$edit==undefined)
             {
-              currentItemDemande_deblocage_daaf     = JSON.parse(JSON.stringify(vm.selectedItemDemande_deblocage_daaf));                         
+              currentItemDemande_deblocage_daaf     = JSON.parse(JSON.stringify(vm.selectedItemDemande_deblocage_daaf)); 
+              vm.stepTwo = true;                        
             } 
-            vm.stepTwo = true; 
+            else{
+              vm.stepTwo = false; 
+            } 
             vm.stepThree = false;
         };
         $scope.$watch('vm.selectedItemDemande_deblocage_daaf', function()

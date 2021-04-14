@@ -68,7 +68,7 @@
                                 </div-->
                                 <div layout="column" layout-gt-xs="row">
 
-                                  <md-input-container flex="100" flex-gt-xs="90">
+                                  <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
                                   <label>Lot</label>
                                   <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                                     <md-option value="*">*</md-option>
@@ -373,7 +373,7 @@
 
                    <!---------------------------------------DEBUT Transfert daaf----------------------------------------->
 
-                        <md-tab ng-disabled="vm.steptransdaaf==false || vm.validation!=7" ng-click="vm.step_transfert_daaf()">
+                        <md-tab ng-disabled="vm.steptransdaaf==false || vm.validation!=8" ng-click="vm.step_transfert_daaf()">
                           <md-tab-label>
                             <span class="ms-form-wizard-step-label">
                                 <!--span class="ms-form-wizard-step-number md-accent-bg">
@@ -431,6 +431,8 @@
                         </table>
                           </md-tab-body>
                         </md-tab>
+                      <md-tab>
+                      </md-tab>
                     <!--------------------------------------Fin Transfert daaf-------------------------------------------->
             
           </md-tabs>

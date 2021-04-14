@@ -176,13 +176,21 @@
         {   
 
             vm.affiche_load =true;
-            apiFactory.getAPIgeneraliserREST("site/index",'menu',
+           /* apiFactory.getAPIgeneraliserREST("site/index",'menu',
               'getsiteByfiltre','lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
               filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
               {
                   vm.allsite = result.data.response;
                   
         vm.affiche_load =false;
+              });*/
+              apiFactory.getAPIgeneraliserREST("site/index",'menu',
+              'getsiteByenpreparationandinvalide','lot',filtre.lot,'id_region',filtre.id_region,'id_cisco',
+              filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
+              {
+                  vm.allsite = result.data.response;
+                  console.log(vm.allsite);
+                  vm.affiche_load =false;
               });
         }
 
@@ -611,7 +619,12 @@
           {
               return obj.id == site.id_ecole;
           });
-          site.acces = ecol[0].zone_subvention.libelle+ecol[0].acces_zone.libelle;
+          if (ecol[0].zone_subvention && ecol[0].acces_zone) {
+            site.acces = ecol[0].zone_subvention.libelle+ecol[0].acces_zone.libelle;
+          }
+          else{
+            site.acces = null;
+          }
         }
 
         //Alert

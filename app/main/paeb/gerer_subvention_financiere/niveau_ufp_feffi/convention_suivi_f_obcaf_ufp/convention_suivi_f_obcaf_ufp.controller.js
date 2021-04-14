@@ -60,7 +60,7 @@
     }])        
         .controller('Convention_suivi_f_obcaf_ufpController', Convention_suivi_f_obcaf_ufpController);
     /** @ngInject */
-    function Convention_suivi_f_obcaf_ufpController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile,apiUrlexcel)
+    function Convention_suivi_f_obcaf_ufpController($mdDialog, $scope, apiFactory, $state,$cookieStore,apiUrl,$http,apiUrlFile,apiUrlexcel,$stateParams)
     {
 		  /*****debut initialisation*****/
 
@@ -262,6 +262,29 @@
             }                  
 
          });
+         var racourci = $stateParams.rac;
+         console.log(racourci);
+    if (racourci!=null && racourci!=undefined && racourci!='')
+    { vm.affiche_load=true;
+      apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByracourci","id_convention_entete",racourci).then(function(result)
+      {
+        vm.allconvention_entete= result.data.response;
+        console.log(vm.allconvention_entete);
+        vm.affiche_load=false;
+
+        var item = vm.allconvention_entete[0];
+            item.$selected=true;
+            vm.selectedItemConvention_entete = item;
+            vm.stepMenu_feffi=true;
+            vm.steppiecefeffi=false;
+              vm.steptransdaaf=false;
+
+            vm.header_ref_convention = item.ref_convention;
+            vm.header_cisco = item.cisco.description;
+            vm.header_feffi = item.feffi.denomination; 
+            vm.header_class = 'headerbig'; 
+      });
+    }
 
         /***************debut convention cisco/feffi**********/
         vm.convention_entete_column = [
@@ -330,7 +353,10 @@
               
                 }
         }
-        
+        vm.click_menu_convention = function()
+        {
+          vm.NouvelItemDemande_realimentation = false;
+        }
         /***************fin convention cisco/feffi************/
 
          //fonction selection item entete convention cisco/feffi
@@ -345,6 +371,13 @@
               apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',item.feffi.id).then(function(result)
               {
                   vm.allcompte_feffi= result.data.response;
+              });
+              apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_detail/index",'id_convention_entete',item.id).then(function(resultdetaildetail)
+              {
+                  var convention_cisco_feffi_detail= resultdetaildetail.data.response;
+                  vm.date_convention = new Date(convention_cisco_feffi_detail[0].date_signature); 
+                  console.log(convention_cisco_feffi_detail);
+                  console.log(vm.date_convention);
               });
               
               vm.steppiecefeffi=false;
@@ -372,6 +405,7 @@
         {
           vm.affiche_load =true;
           vm.steppiecefeffi=false;
+          vm.NouvelItemDemande_realimentation = false;
           apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandecreerByconvention",'id_convention_cife_entete',vm.selectedItemConvention_entete.id).then(function(result)
           {
               vm.alldemande_realimentation_invalide = result.data.response;
@@ -487,7 +521,7 @@
         {titre:"Nom banque"},
         {titre:"Numero compte"},
         {titre:"Date"},
-        {titre:"Situation"},
+        //{titre:"Situation"},
         {titre:"Action"}];     
         
 
@@ -516,54 +550,78 @@
                   vm.alldemande_realimentation = result.data.response;
                   var last_id_demande = Math.max.apply(Math, vm.alldemande_realimentation.map(function(o){return o.id;}));
 
-                vm.dataLastedemande = vm.alldemande_realimentation.filter(function(obj){return obj.id == last_id_demande;});
+                vm.dataLastedemande = vm.alldemande_realimentation.filter(function(obj){return obj.id == String(last_id_demande) ;});
+                console.log(vm.dataLastedemande);
+                console.log(last_id_demande);
 
                 if (vm.dataLastedemande.length>0)
                 {
                     switch (parseInt(vm.dataLastedemande[0].validation))
                     {
-                      case 2: //3
+                      case 2: //rejete par dpfi
+                      var last_tranche_demande = Math.max.apply(Math, vm.dataLastedemande.map(function(o){return o.tranche.code.split(' ')[1];}));
                             vm.allcurenttranche_deblocage_feffi = vm.alltranche_deblocage_feffi.filter(function(obj){return obj.code == 'tranche '+parseInt(last_tranche_demande);});
                            vm.alldemande_realimentation_invalide.push(items);                          
                            vm.selectedItemDemande_realimentation = items;
                            vm.NouvelItemDemande_realimentation = true ;
-                           vm.dataLastedemande = [];                  
+                           var majalldemande_realimentation = vm.alldemande_realimentation.filter(function(obj){return obj.id != String(last_id_demande) ;});
+                           var majlast_id_demande = Math.max.apply(Math, majalldemande_realimentation.map(function(o){return o.id;}));
+                           vm.dataLastedemande = vm.alldemande_realimentation.filter(function(obj){return obj.id == String(majlast_id_demande) ;});
+                           //vm.dataLastedemande = [];                  
                           break;
+                      case 3: //7 // valide par ufp
+                              
+                          var last_tranche_demande = Math.max.apply(Math, vm.dataLastedemande.map(function(o){return o.tranche.code.split(' ')[1];}));
+                                
+                            vm.allcurenttranche_deblocage_feffi = vm.alltranche_deblocage_feffi.filter(function(obj){return obj.code == 'tranche '+(parseInt(last_tranche_demande)+1);});
+                          vm.alldemande_realimentation_invalide.push(items);                          
+                          vm.selectedItemDemande_realimentation = items;
+                          vm.NouvelItemDemande_realimentation = true ;
+                          break;
+                      case 4: //3 //rejete par ufp
+                      var last_tranche_demande = Math.max.apply(Math, vm.dataLastedemande.map(function(o){return o.tranche.code.split(' ')[1];}));
+                            vm.allcurenttranche_deblocage_feffi = vm.alltranche_deblocage_feffi.filter(function(obj){return obj.code == 'tranche '+parseInt(last_tranche_demande);});
+                           vm.alldemande_realimentation_invalide.push(items);                          
+                           vm.selectedItemDemande_realimentation = items;
+                           vm.NouvelItemDemande_realimentation = true ;
+                           var majalldemande_realimentation = vm.alldemande_realimentation.filter(function(obj){return obj.id != String(last_id_demande) ;});
+                           var majlast_id_demande = Math.max.apply(Math, majalldemande_realimentation.map(function(o){return o.id;}));
+                           vm.dataLastedemande = vm.alldemande_realimentation.filter(function(obj){return obj.id == String(majlast_id_demande) ;});
+                           //vm.dataLastedemande = [];                  
+                          break;
+                      
+                          case 7: //rejete par dpfi
+                          var last_tranche_demande = Math.max.apply(Math, vm.dataLastedemande.map(function(o){return o.tranche.code.split(' ')[1];}));
+                                vm.allcurenttranche_deblocage_feffi = vm.alltranche_deblocage_feffi.filter(function(obj){return obj.code == 'tranche '+parseInt(last_tranche_demande);});
+                               vm.alldemande_realimentation_invalide.push(items);                          
+                               vm.selectedItemDemande_realimentation = items;
+                               vm.NouvelItemDemande_realimentation = true ;
+                               var majalldemande_realimentation = vm.alldemande_realimentation.filter(function(obj){return obj.id != String(last_id_demande) ;});
+                               var majlast_id_demande = Math.max.apply(Math, majalldemande_realimentation.map(function(o){return o.id;}));
+                               vm.dataLastedemande = vm.alldemande_realimentation.filter(function(obj){return obj.id == String(majlast_id_demande) ;});
+                               //vm.dataLastedemande = [];                  
+                              break;
+                          
+                          case 8: // valide par daaf                          
+                              var last_tranche_demande = Math.max.apply(Math, vm.dataLastedemande.map(function(o){return o.tranche.code.split(' ')[1];}));
+                                
+                                vm.allcurenttranche_deblocage_feffi = vm.alltranche_deblocage_feffi.filter(function(obj){return obj.code == 'tranche '+(parseInt(last_tranche_demande)+1);});
+                                vm.alldemande_realimentation_invalide.push(items);                          
+                                vm.selectedItemDemande_realimentation = items;
+                                vm.NouvelItemDemande_realimentation = true ;
+                              break;
 
-                     case 6: //6
-                            vm.allcurenttranche_deblocage_feffi = vm.alltranche_deblocage_feffi.filter(function(obj){return obj.code == 'tranche '+parseInt(last_tranche_demande);});
-                           vm.alldemande_realimentation_invalide.push(items);                          
-                           vm.selectedItemDemande_realimentation = items;
-                           vm.NouvelItemDemande_realimentation = true ;
-                           vm.dataLastedemande = [];
-                          break;
-                      case 3: //7
-                          
-                          var last_tranche_demande = Math.max.apply(Math, vm.dataLastedemande.map(function(o){return o.tranche.code.split(' ')[1];}));
-                            
-                            vm.allcurenttranche_deblocage_feffi = vm.alltranche_deblocage_feffi.filter(function(obj){return obj.code == 'tranche '+(parseInt(last_tranche_demande)+1);});
-                            vm.alldemande_realimentation_invalide.push(items);                          
-                            vm.selectedItemDemande_realimentation = items;
-                            vm.NouvelItemDemande_realimentation = true ;
-                          break;
-                      case 3: //7 
-                          
-                          var last_tranche_demande = Math.max.apply(Math, vm.dataLastedemande.map(function(o){return o.tranche.code.split(' ')[1];}));
-                            
-                            vm.allcurenttranche_deblocage_feffi = vm.alltranche_deblocage_feffi.filter(function(obj){return obj.code == 'tranche '+(parseInt(last_tranche_demande)+1);});
-                            vm.alldemande_realimentation_invalide.push(items);                          
-                            vm.selectedItemDemande_realimentation = items;
-                            vm.NouvelItemDemande_realimentation = true ;
-                          break;
-                      case 7: //7 
-                          
-                          var last_tranche_demande = Math.max.apply(Math, vm.dataLastedemande.map(function(o){return o.tranche.code.split(' ')[1];}));
-                            
-                            vm.allcurenttranche_deblocage_feffi = vm.alltranche_deblocage_feffi.filter(function(obj){return obj.code == 'tranche '+(parseInt(last_tranche_demande)+1);});
-                            vm.alldemande_realimentation_invalide.push(items);                          
-                            vm.selectedItemDemande_realimentation = items;
-                            vm.NouvelItemDemande_realimentation = true ;
-                          break;
+                          case 9: //6 //rejete par daaf
+                        var last_tranche_demande = Math.max.apply(Math, vm.dataLastedemande.map(function(o){return o.tranche.code.split(' ')[1];}));
+                                vm.allcurenttranche_deblocage_feffi = vm.alltranche_deblocage_feffi.filter(function(obj){return obj.code == 'tranche '+parseInt(last_tranche_demande);});
+                              vm.alldemande_realimentation_invalide.push(items);                          
+                              vm.selectedItemDemande_realimentation = items;
+                              vm.NouvelItemDemande_realimentation = true ;
+                              var majalldemande_realimentation = vm.alldemande_realimentation.filter(function(obj){return obj.id != String(last_id_demande) ;});
+                              var majlast_id_demande = Math.max.apply(Math, majalldemande_realimentation.map(function(o){return o.id;}));
+                              vm.dataLastedemande = vm.alldemande_realimentation.filter(function(obj){return obj.id == String(majlast_id_demande) ;});
+                              //vm.dataLastedemande = [];
+                              break;
 
                       default:
                             vm.showAlert('Ajout réfuser','La dernière demande est en cours de traitement!!!');
@@ -679,6 +737,9 @@
                 
                 vm.validation = item.validation;
                 vm.steppiecefeffi=true;
+            }
+            else{
+              vm.steppiecefeffi=false;
             }
         };
         $scope.$watch('vm.selectedItemDemande_realimentation', function()
@@ -896,9 +957,11 @@
                   var avenant_convention = result.data.response;
                   var montant_avenant_tranche1 = 0;
                   var montant_avenant_tranche2 = 0;
-                  var montant_convention_tranche2 = 0;
+                  //var montant_convention_tranche2 = 0;
+                  var montant_avenant =0;
                   if (avenant_convention.length !=0)
-                  {
+                  { 
+                    montant_avenant = avenant_convention[0].montant;
                     var tranche_deblo_1 = vm.alltranche_deblocage_feffi.filter(function(obj)
                     {
                         return obj.code == 'tranche 1';
@@ -906,10 +969,13 @@
                     //console.log(tranche_deblo_1);
                     montant_avenant_tranche1 = (parseFloat(avenant_convention[0].montant) * tranche_deblo_1[0].pourcentage)/100;
                     montant_avenant_tranche2 = (parseFloat(avenant_convention[0].montant) * vm.allcurenttranche_deblocage_feffi[0].pourcentage)/100;
-                    montant_convention_tranche2 = ((parseFloat(vm.selectedItemConvention_entete.montant_divers) + parseFloat(vm.selectedItemConvention_entete.montant_trav_mob)) * parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;                    
+                                        
                   }
+                  var montant_convention_tranche2 = ((parseFloat(vm.selectedItemConvention_entete.montant_divers) + parseFloat(vm.selectedItemConvention_entete.montant_trav_mob)) * parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
                   prevu = montant_avenant_tranche1 + montant_avenant_tranche2 + montant_convention_tranche2;
-                  
+                  console.log(montant_avenant_tranche1);
+                  console.log(montant_avenant_tranche2);
+                  console.log(montant_convention_tranche2);
                   cumul = prevu;
                   if (vm.alldemande_realimentation.length>0)
                   {                 
@@ -917,7 +983,7 @@
                       cumul = prevu + parseFloat(vm.dataLastedemande[0].cumul);
                   }
 
-                  reste=parseFloat( vm.selectedItemConvention_entete.montant_total) +parseFloat( avenant_convention[0].montant) -parseFloat( cumul);
+                  reste=parseFloat( vm.selectedItemConvention_entete.montant_total) +parseFloat( montant_avenant) -parseFloat( cumul);
 
                   item.periode = vm.allcurenttranche_deblocage_feffi[0].periode;
                   item.pourcentage = vm.allcurenttranche_deblocage_feffi[0].pourcentage;
@@ -934,14 +1000,15 @@
               apiFactory.getAPIgeneraliserREST("avenant_convention/index","menu","getavenantByconvention",'id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
               {
                   var avenant_convention = result.data.response;
-                  console.log(avenant_convention);
+                  var montant_avenant =0;
                   var montant_avenant_tranche = 0;
-                  var montant_convention_tranche = 0;
+                 // var montant_convention_tranche = 0;
                   if (avenant_convention.length !=0)
                   {
-                    montant_avenant_tranche = (parseFloat(avenant_convention[0].montant) * vm.allcurenttranche_deblocage_feffi[0].pourcentage)/100;
-                    montant_convention_tranche = ((parseFloat(vm.selectedItemConvention_entete.montant_divers) + parseFloat(vm.selectedItemConvention_entete.montant_trav_mob)) * parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;                    
+                    montant_avenant_tranche = (parseFloat(avenant_convention[0].montant) * vm.allcurenttranche_deblocage_feffi[0].pourcentage)/100;                   
+                    montant_avenant = avenant_convention[0].montant;
                   }
+                  var montant_convention_tranche = ((parseFloat(vm.selectedItemConvention_entete.montant_divers) + parseFloat(vm.selectedItemConvention_entete.montant_trav_mob)) * parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100; 
                   prevu = montant_avenant_tranche + montant_convention_tranche;
                   
                   cumul = prevu;
@@ -951,7 +1018,7 @@
                       cumul = prevu + parseFloat(vm.dataLastedemande[0].cumul);
                   }
 
-                  reste=parseFloat( vm.selectedItemConvention_entete.montant_total) +parseFloat( avenant_convention[0].montant) -parseFloat( cumul);
+                  reste=parseFloat( vm.selectedItemConvention_entete.montant_total) +parseFloat(montant_avenant) -parseFloat( cumul);
 
                   item.periode = vm.allcurenttranche_deblocage_feffi[0].periode;
                   item.pourcentage = vm.allcurenttranche_deblocage_feffi[0].pourcentage;
@@ -1256,7 +1323,18 @@
                                       justificatif_feffi.$selected = false;
                                       justificatif_feffi.$edit = false;
                                       vm.selectedItemJustificatif_feffi = {};
-                                      console.log('e');
+                                      var chemin= currentItemJustificatif_feffi.fichier;
+                                        var fd = new FormData();
+                                            fd.append('chemin',chemin);
+                                      
+                                        var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
+
+                                        var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
+                                        headers: {'Content-Type': undefined}, chemin: chemin
+                                        }).success(function(data)
+                                        {console.log('suppressionmodifi');
+
+                                        });
                                   }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
                                 }
                             }).error(function()

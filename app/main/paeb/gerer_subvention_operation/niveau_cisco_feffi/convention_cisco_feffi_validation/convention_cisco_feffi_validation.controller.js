@@ -829,9 +829,13 @@ console.log(fef[0]);
             {
                 headers : {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'}
             };
+            apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_detail/index",'menu','deletededail','id_convention_entete_delete',vm.selectedItemTete.id).then(function(result)
+            {
+                console.log('delete');
+            });
 
             
-            if (vm.allconvention_cife_detail.length>0)
+          /*  if (vm.allconvention_cife_detail.length>0)
             {
               var datasdetail = $.param({
                     supprimer: 1,
@@ -900,7 +904,7 @@ console.log(fef[0]);
               { 
                 console.log('vita cout_maitrise');
               });
-            }
+            }*/
 
             
         }
@@ -1155,6 +1159,7 @@ console.log(fef[0]);
     vm.click_step_detail = function()
       {   
           vm.affiche_load = true;
+          NouvelItemDetail = false;
           apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_detail/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
           {
               vm.allconvention_cife_detail = result.data.response;
@@ -1201,6 +1206,9 @@ console.log(fef[0]);
           titre:"Nom banque"
         },
         {
+          titre:"Intitule"
+        },
+        {
           titre:"Adresse banque"
         },
         {
@@ -1221,6 +1229,7 @@ console.log(fef[0]);
               prev_beneficiaire:'',
               id_compte_feffi:'',
               adresse_banque:'',
+              intitule_compte:'',
               rib:'',
               delai:'',
               date_signature:'',
@@ -1269,6 +1278,7 @@ console.log(fef[0]);
  
 
               item.id_compte_feffi  = currentItemDetail.compte_feffi.id ;
+              item.intitule_compte  = currentItemDetail.compte_feffi.intitule ;
               item.nom_banque  = currentItemDetail.compte_feffi.nom_banque ;
               item.adresse_banque  = currentItemDetail.compte_feffi.adresse_banque ;
               item.rib  = currentItemDetail.compte_feffi.rib ;
@@ -1329,6 +1339,7 @@ console.log(fef[0]);
             item.prev_nbr_ecole = parseInt(vm.selectedItemDetail.prev_nbr_ecole) ;
 
             item.id_compte_feffi  = vm.selectedItemDetail.compte_feffi.id ;
+            item.intitule_compte  = vm.selectedItemDetail.compte_feffi.intitule ;
             item.nom_banque  = vm.selectedItemDetail.compte_feffi.nom_banque ;
             item.adresse_banque  = vm.selectedItemDetail.compte_feffi.adresse_banque ;
             item.rib  = vm.selectedItemDetail.compte_feffi.rib ;
@@ -1481,6 +1492,7 @@ console.log(fef[0]);
           {
              return obj.id == item.id_compte_feffi;
           });
+          vm.selectedItemDetail.intitule_compte    = comp_fef[0].intitule;
           vm.selectedItemDetail.adresse_banque    = comp_fef[0].adresse_banque;
           vm.selectedItemDetail.rib       = comp_fef[0].rib;
 
@@ -1494,6 +1506,7 @@ console.log(fef[0]);
   vm.click_step_cout_maitrise = function ()
   {
     vm.affiche_load = true;
+    NouvelItemcout_maitrise_construction= false;
     apiFactory.getAPIgeneraliserREST("cout_maitrise_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
     {
       vm.allcout_maitrise_construction = result.data.response;
@@ -1776,6 +1789,7 @@ console.log(fef[0]);
 vm.click_step_cout_sousprojet = function()
 {
     vm.affiche_load = true;
+    NouvelItemcout_sousprojet_construction = false;
     apiFactory.getAPIgeneraliserREST("cout_sousprojet_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
     {
       vm.allcout_sousprojet_construction = result.data.response;
@@ -2061,7 +2075,8 @@ vm.click_step_cout_sousprojet = function()
    
   vm.click_step_cout_batiment = function ()
   {   
-      vm.affiche_load = true;         
+      vm.affiche_load = true; 
+      NouvelItemBatiment_construction = false;        
       apiFactory.getAPIgeneraliserREST("batiment_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
       {
           vm.allbatiment_construction = result.data.response;
@@ -2392,6 +2407,7 @@ vm.click_step_cout_sousprojet = function()
   vm.click_step_cout_latrine = function ()
   { 
       vm.affiche_load = true;
+      NouvelItemLatrine_construction = false;
       apiFactory.getAPIgeneraliserREST("latrine_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
       {
           vm.alllatrine_construction = result.data.response; 
@@ -2691,6 +2707,7 @@ vm.click_step_cout_sousprojet = function()
    vm.click_step_cout_mobilier = function ()
   {    
       vm.affiche_load = true;
+      NouvelItemMobilier_construction = false;
       apiFactory.getAPIgeneraliserREST("mobilier_construction/index",'id_convention_entete',vm.selectedItemTete.id).then(function(result)
       {
           vm.allmobilier_construction = result.data.response;

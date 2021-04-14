@@ -20,7 +20,8 @@
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
           autoWidth: false,
-          responsive: true          
+          responsive: true,
+          order:[]           
         };
 
         //col table
@@ -64,7 +65,7 @@
                   description: '',
                   code: 'tranche '+(parseInt(numcode)+1)
                 };         
-                vm.alltranche_demande_latrine_mpe.push(items);
+                vm.alltranche_demande_latrine_mpe.unshift(items);
                 vm.alltranche_demande_latrine_mpe.forEach(function(pres)
                 {
                   if(pres.$selected==true)
@@ -86,7 +87,7 @@
                   description: '',
                   code: 'tranche '+numcode
                 };         
-                vm.alltranche_demande_latrine_mpe.push(items);
+                vm.alltranche_demande_latrine_mpe.unshift(items);
                 vm.alltranche_demande_latrine_mpe.forEach(function(pres)
                 {
                   if(pres.$selected==true)

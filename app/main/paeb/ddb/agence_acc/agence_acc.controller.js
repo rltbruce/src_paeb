@@ -19,7 +19,8 @@
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
-          autoWidth: false         
+          autoWidth: false,
+          order:[]          
         };
 
         //col table
@@ -51,7 +52,7 @@
               telephone: '',         
               siege: ''
             };         
-            vm.allagence_acc.push(items);
+            vm.allagence_acc.unshift(items);
             vm.allagence_acc.forEach(function(cis)
             {
               if(cis.$selected==true)

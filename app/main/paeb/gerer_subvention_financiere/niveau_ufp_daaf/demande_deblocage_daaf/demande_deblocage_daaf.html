@@ -451,7 +451,10 @@
                 </td>
                                              
                 <td>  
-                  <a ng-if="!justificatif_daaf.$edit" ng-click="vm.modifierJustificatif_daaf(justificatif_daaf)" title="Modifier">
+                  <a ng-if="!justificatif_daaf.$edit && justificatif_daaf.id==0" ng-click="vm.modifierJustificatif_daaf(justificatif_daaf)" title="Ajouter">
+                    <span class="icon-table-edit"></span>
+                  </a>  
+                  <a ng-if="!justificatif_daaf.$edit && justificatif_daaf.id==null" ng-click="vm.modifierJustificatif_daaf(justificatif_daaf)" title="Ajouter">
                     <span class="icon-table-edit"></span>
                   </a>
                             

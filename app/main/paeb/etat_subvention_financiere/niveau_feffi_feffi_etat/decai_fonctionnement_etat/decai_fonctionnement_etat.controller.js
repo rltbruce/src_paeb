@@ -252,6 +252,7 @@
             
             vm.showbuttonNouvContrat_prestataire=true;
             vm.stepDecaiss=true;
+            vm.stepjusti_decais = false;
             /*donnee_sousmenu_feffi(item,vm.session).then(function () 
             {
                     // On récupère le resultat de la requête dans la varible "response"                    

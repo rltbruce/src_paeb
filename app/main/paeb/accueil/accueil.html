@@ -98,222 +98,229 @@
                   </div-->
                 
                 <span>
-                  <span><center><img  src="assets/images/backgrounds/Ifaty-941.jpg"></center></span>
+                  <span><center><img  src="assets/images/backgrounds/Ifaty-941.png"></center></span>
                   
                   
 
                 </span>
-                <md-tabs md-dynamic-height>
-                  <md-tab>
-                    <md-tab-label >
-                      <span class="ms-form-wizard-step-label">
-                          <span class="ms-form-wizard-step-text">Convention CISCO/FEFFI</span>
-                      </span>
-                     
-                    </md-tab-label>
-                    
-                    <md-tab-body>
+                <div style="border: 1px solid rgb(7, 121, 136);">
+                  <md-tabs md-dynamic-height>
+                    <md-tab>
+                      <md-tab-label >
+                        <span class="ms-form-wizard-step-label">
+                            <span class="ms-form-wizard-step-text">Convention CISCO/FEFFI</span>
+                        </span>
+                       
+                      </md-tab-label>
                       
-                            <div style="margin-top: 1px;">
-                                <div class="md-whiteframe-3dp animate-show-hide">
-                                <form name="filtreform" class="md-inline-form" novalidate >
-                                  <br>
-                                  <div style="margin: 0px 15px 10px 15px;">
-                                      <div layout="column" layout-gt-xs="row">
-      
-                                      <md-input-container flex="100" flex-gt-xs="90">
-                                        <label>Lot</label>
-                                        <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
-                                          <md-option value="*">*</md-option>
-                                          <md-option value="1">Lot 1</md-option>
-                                          <md-option value="2">Lot 2</md-option>
-                                          <md-option value="3">Lot 3</md-option>
-                                          <md-option value="4">Lot 4</md-option>
-                                        </md-select>
-                                        <div ng-messages="filtreform.lot.$error" role="alert">
-                                          <div ng-message="required"><span>Lot</span></div>
-                                        </div>
-                                      </md-input-container>
-                                      <md-input-container flex="100" flex-gt-xs="90">
-                                        <label>Région</label>
-                                        <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)" required>
-                                          
-                                          <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
-                                        </md-select>
-                                        <div ng-messages="filtreform.region.$error" role="alert">
-                                          <div ng-message="required"><span>Région</span></div>
-                                        </div>
-                                      </md-input-container>
-                                              
-                                      <md-input-container flex="100" flex-gt-xs="90">
-                                        <label>Cisco</label>
-                                        <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco" required>
-                                          
-                                          <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.description}}</md-option>
-                                                              
+                      <md-tab-body>
+                        
+                              <div style="margin-top: 1px;">
+                                  <div class="md-whiteframe-3dp animate-show-hide">
+                                  <form name="filtreform" class="md-inline-form" novalidate >
+                                    <br>
+                                    <div style="margin: 0px 15px 10px 15px;">
+                                        <div layout="column" layout-gt-xs="row">
+        
+                                        <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
+                                          <label>Lot</label>
+                                          <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
+                                            <md-option value="*">*</md-option>
+                                            <md-option value="1">Lot 1</md-option>
+                                            <md-option value="2">Lot 2</md-option>
+                                            <md-option value="3">Lot 3</md-option>
+                                            <md-option value="4">Lot 4</md-option>
                                           </md-select>
-                                          <div ng-messages="filtreform.cisco.$error" role="alert">
-                                            <div ng-message="required"><span>Cisco</span></div>
+                                          <div ng-messages="filtreform.lot.$error" role="alert">
+                                            <div ng-message="required"><span>Lot</span></div>
                                           </div>
-                                      </md-input-container>
-                                              
-                                      <md-input-container flex="100" flex-gt-xs="90">
-                                        <label>Commune</label>
-                                        <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
-                                          <md-option  value="*">*</md-option>
-                                          <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
-                                        </md-select>
-                                        <div ng-messages="filtreform.commune.$error" role="alert">
-                                          <div ng-message="required"><span>Commune</span></div>
-                                        </div>
-                                       </md-input-container>                                 
-      
-                                      <md-input-container flex="100" flex-gt-xs="90">
-                                        <label>Zap</label>
-                                        <md-select ng-model="vm.filtre.id_zap" name="zap" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_zap(vm.filtre)">
-                                          <md-option  value="*">*</md-option>
-                                          <md-option ng-repeat="zaps in vm.zaps" value="{{zaps.id}}"> {{zaps.nom}}
-                                          </md-option>
-                                        </md-select>  
-                                        <div ng-messages="filtreform.zap.$error" role="alert">
-                                          <div ng-message="required"><span>Zap</span></div>
-                                        </div>
-                                      </md-input-container>
-                                              
-                                      <md-input-container flex="100" flex-gt-xs="90">
-                                        <label>Ecole</label>
-                                        <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
-                                          <md-option  value="*">*</md-option>
-                                          <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
-                                          </md-option>
-                                        </md-select>
-                                        <div ng-messages="filtreform.ecole.$error" role="alert">
-                                          <div ng-message="required"><span>Ecole</span></div>
-                                        </div>
-                                      </md-input-container>
-                                      <md-input-container flex="100" flex-gt-xs="90">
-                                        <label>Convention</label>
-                                        <md-select ng-model="vm.filtre.id_convention_entete" name="convention" ng-disabled="!vm.filtre.id_ecole">
-                                          <md-option  value="*">*</md-option>
-                                          <md-option ng-repeat="eco in vm.convention_cisco_feffi_entetes" value="{{eco.id}}"> {{eco.ref_convention}}
-                                          </md-option>
-                                        </md-select>  
-                                        <div ng-messages="filtreform.convention_entete.$error" role="alert">
-                                          <div ng-message="required"><span>Convention</span></div>
-                                        </div>
-                                      </md-input-container>
-                                    </div>
-                                    </div>  
-                                    
-                                    <div class="footer-animate-show-hide" layout="row" layout-align="end end">
-                                        <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
-                                                                  Recherche
-                                        </md-button>
-                                        <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
-                                                              Réinitialise
-                                        </md-button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="racourcie_accueil">
-                          <md-fab-toolbar md-open="demo.isOpen" count="demo.count"
-                                          md-direction="{{demo.selectedDirection}}">
-                            <md-fab-trigger class="align-with-text">
-                              <md-button aria-label="menu" class="md-fab md-primary" ng-click="vm.click_menu()">
-                                <md-icon md-font-icon="icon-menu"></md-icon>
-                                  <md-tooltip><span>Racourcie</span></md-tooltip>
-                              </md-button>
-                            </md-fab-trigger>
-                            <md-toolbar class="md-theme-indigo" >
-                              <md-fab-actions class="md-toolbar-tools" >
-                                <md-button aria-label="comment" class=" md-primary" ui-sref="app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_convention_suivi_obcaf({rac: vm.selectedItemConvention_entete.id}) " ng-if="vm.showracourci_aac" style="font-size: 10px;">
-                                  <md-icon md-font-icon="icon-basecamp"></md-icon>
-                                 Insertion activitée technique
-                                </md-button>
-                                <md-button aria-label="validationtechnique" class=" md-primary"ui-sref="app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_convention_suivi_bcaf({rac: vm.selectedItemConvention_entete.id}) " ng-if="vm.showracourci_dpfi" style="font-size: 10px;">
-                                  <md-icon md-font-icon="icon-basket-fill"></md-icon>
-                                  Validation activitée technique
-                                </md-button> 
-                                <md-button aria-label="insertionfinanciere" class=" md-primary" ui-sref="app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_convention_suivi_fp_obcaf({rac: vm.selectedItemConvention_entete.id}) " ng-if="vm.showracourci_aac" style="font-size: 10px;">
-                                  <md-icon md-font-icon="icon-basket-unfill"></md-icon>
-                                  Insértion activitée financière
-                                </md-button>
-                                <md-button aria-label="validationfinanciere" class=" md-primary" ui-sref="app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_convention_suivi_fp_bcaf({rac: vm.selectedItemConvention_entete.id}) " ng-if="vm.showracourci_dpfi" style="font-size: 10px;">
-                                  <md-icon md-font-icon="icon-basket"></md-icon>
-                                  Validation activitée financière
-                                </md-button>                               
-                              </md-fab-actions>
-                            </md-toolbar>
-                          </md-fab-toolbar>
-                        </div>
-                        <div style="clear:both;"></div>            
-                          <div style="float: top !important">
-                            <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
-                            <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
-                                    Chargement,veuillez patienter s'il vous plait ...
-                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex="100" flex-gt-xs="90">
+                                          <label>Région</label>
+                                          <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)" required>
+                                            
+                                            <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
+                                          </md-select>
+                                          <div ng-messages="filtreform.region.$error" role="alert">
+                                            <div ng-message="required"><span>Région</span></div>
+                                          </div>
+                                        </md-input-container>
+                                                
+                                        <md-input-container flex="100" flex-gt-xs="90">
+                                          <label>Cisco</label>
+                                          <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco" required>
+                                            
+                                            <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.description}}</md-option>
+                                                                
+                                            </md-select>
+                                            <div ng-messages="filtreform.cisco.$error" role="alert">
+                                              <div ng-message="required"><span>Cisco</span></div>
+                                            </div>
+                                        </md-input-container>
+                                                
+                                        <md-input-container flex="100" flex-gt-xs="90">
+                                          <label>Commune</label>
+                                          <md-select ng-model="vm.filtre.id_commune" ng-disabled="!vm.filtre.id_cisco" name="commune" ng-change="vm.filtre_change_commune(vm.filtre)">
+                                            <md-option  value="*">*</md-option>
+                                            <md-option ng-repeat="eco in vm.communes" value="{{eco.id}}"> {{eco.nom}}</md-option>
+                                          </md-select>
+                                          <div ng-messages="filtreform.commune.$error" role="alert">
+                                            <div ng-message="required"><span>Commune</span></div>
+                                          </div>
+                                         </md-input-container>                                 
+        
+                                        <md-input-container flex="100" flex-gt-xs="90">
+                                          <label>Zap</label>
+                                          <md-select ng-model="vm.filtre.id_zap" name="zap" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_zap(vm.filtre)">
+                                            <md-option  value="*">*</md-option>
+                                            <md-option ng-repeat="zaps in vm.zaps" value="{{zaps.id}}"> {{zaps.nom}}
+                                            </md-option>
+                                          </md-select>  
+                                          <div ng-messages="filtreform.zap.$error" role="alert">
+                                            <div ng-message="required"><span>Zap</span></div>
+                                          </div>
+                                        </md-input-container>
+                                                
+                                        <md-input-container flex="100" flex-gt-xs="90">
+                                          <label>Ecole</label>
+                                          <md-select ng-model="vm.filtre.id_ecole" name="ecole" ng-disabled="!vm.filtre.id_commune" ng-change="vm.filtre_change_ecole(vm.filtre)">
+                                            <md-option  value="*">*</md-option>
+                                            <md-option ng-repeat="eco in vm.ecoles" value="{{eco.id}}"> {{eco.description}}
+                                            </md-option>
+                                          </md-select>
+                                          <div ng-messages="filtreform.ecole.$error" role="alert">
+                                            <div ng-message="required"><span>Ecole</span></div>
+                                          </div>
+                                        </md-input-container>
+                                        <md-input-container flex="100" flex-gt-xs="90">
+                                          <label>Convention</label>
+                                          <md-select ng-model="vm.filtre.id_convention_entete" name="convention" ng-disabled="!vm.filtre.id_ecole">
+                                            <md-option  value="*">*</md-option>
+                                            <md-option ng-repeat="eco in vm.convention_cisco_feffi_entetes" value="{{eco.id}}"> {{eco.ref_convention}}
+                                            </md-option>
+                                          </md-select>  
+                                          <div ng-messages="filtreform.convention_entete.$error" role="alert">
+                                            <div ng-message="required"><span>Convention</span></div>
+                                          </div>
+                                        </md-input-container>
+                                      </div>
+                                      </div>  
+                                      
+                                      <div class="footer-animate-show-hide" layout="row" layout-align="end end">
+                                          <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                                                    Recherche
+                                          </md-button>
+                                          <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                                                Réinitialise
+                                          </md-button>
+                                      </div>
+                                  </form>
+                              </div>
                           </div>
-                      <div>        
-                       <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                          <thead>
-                            <tr>
-                               <th class="secondary-text" ng-repeat="conv_ente in ::vm.convention_entete_column">
-                                 <div class="table-header">
-                                    <span class="column-title">{{conv_ente.titre}}</span>
-                                </div>
-                              </th>
-                             </tr>
-                          </thead>
-                                                     
-                           <tbody>
-                             <tr ng-repeat="convention_entete in vm.allconvention_entete"  ng-class="{selected: convention_entete.$selected}" ng-click="vm.selectionConvention_entete(convention_entete)">           
-                               <td>
-                                <span>{{convention_entete.cisco.description}}</span>
-                              </td>
-      
-                              <td>
-                                  <span>{{convention_entete.feffi.denomination}}</span>
-                              </td>
-      
-                              <td>
-                                <span>{{convention_entete.site.code_sous_projet}}</span>
-                              </td>
-      
-                              <td>
-                                <span>{{convention_entete.site.acces}}</span>
-                              </td>
-      
-                               <td>                         
-                                 <span>{{convention_entete.ref_convention}}</span>
-                               </td>
-      
-                               <td>                         
-                                 <span>{{convention_entete.objet}}</span>
-                               </td>
-      
-                               <td>                                    
-                                 <span>{{convention_entete.ref_financement}}</span>
-                              </td>
-                              <td>                          
-                                <span>{{vm.formatMillier(convention_entete.montant_total)}} Ar</span>
-                              </td>
-      
-                              <!--td>                          
-                                <span>{{convention_entete.avancement}}</span>
-                               </td-->
-      
-                               <td>                          
-                                <span>{{convention_entete.user.nom}}</span>
-                               </td>
-                             </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </md-tab-body>
-                  </md-tab>
-                </md-tabs>
+                          <br>
+                          <div class="racourcie_accueil">
+                            <md-fab-toolbar md-open="demo.isOpen" count="demo.count"
+                                            md-direction="{{demo.selectedDirection}}">
+                              <md-fab-trigger class="align-with-text">
+                                <md-button aria-label="menu" class="md-fab md-primary" ng-click="vm.click_menu()">
+                                  <md-icon md-font-icon="icon-menu"></md-icon>
+                                    <md-tooltip><span>Racourcie</span></md-tooltip>
+                                </md-button>
+                              </md-fab-trigger>
+                              <md-toolbar class="md-theme-indigo" >
+                                <md-fab-actions class="md-toolbar-tools">
+                                  <md-button aria-label="comment" class=" md-primary" ui-sref="app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_convention_suivi_obcaf({rac: vm.selectedItemConvention_entete.id}) " ng-if="vm.showracourci_aac" style="font-size: 10px;">
+                                    <md-icon md-font-icon="icon-basecamp"></md-icon>
+                                   Insertion activitée technique
+                                  </md-button>
+                                  <md-button aria-label="validationtechnique" class=" md-primary"ui-sref="app.paeb_gerer_subvention_operation_niveau_feffi_prestataire_convention_suivi_bcaf({rac: vm.selectedItemConvention_entete.id}) " ng-if="vm.showracourci_dpfi" style="font-size: 10px;">
+                                    <md-icon md-font-icon="icon-basket-fill"></md-icon>
+                                    Validation activitée technique
+                                  </md-button> 
+                                  <md-button aria-label="insertionfinanciere" class=" md-primary" ui-sref="app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_convention_suivi_fp_obcaf({rac: vm.selectedItemConvention_entete.id}) " ng-if="vm.showracourci_aac" style="font-size: 10px;">
+                                    <md-icon md-font-icon="icon-basket-unfill"></md-icon>
+                                    Insértion activitée financière
+                                  </md-button>
+                                  <md-button aria-label="validationfinanciere" class=" md-primary" ui-sref="app.paeb_gerer_subvention_financiere_niveau_feffi_prestataire_convention_suivi_fp_bcaf({rac: vm.selectedItemConvention_entete.id}) " ng-if="vm.showracourci_dpfi" style="font-size: 10px;">
+                                    <md-icon md-font-icon="icon-basket"></md-icon>
+                                    Validation activitée financière
+                                  </md-button>                                   
+                                  <md-button aria-label="insertiondemandefeffi" class=" md-primary" ui-sref="app.paeb_gerer_subvention_financiere_niveau_ufp_feffi_convention_suivi_f_obcaf_ufp({rac: vm.selectedItemConvention_entete.id}) " ng-if="vm.showracourci_aac" style="font-size: 10px;">
+                                    <md-icon md-font-icon="icon-basket-unfill"></md-icon>
+                                    Insértion demande deblocage FEFFI
+                                  </md-button>                              
+                                </md-fab-actions>
+                              </md-toolbar>
+                            </md-fab-toolbar>
+                          </div>
+                          <div style="clear:both;"></div>            
+                            <div style="float: top !important">
+                              <md-progress-circular ng-if="vm.affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                              <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                                      Chargement,veuillez patienter s'il vous plait ...
+                              </div>
+                            </div>
+                        <div>        
+                         <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
+                            <thead>
+                              <tr>
+                                 <th class="secondary-text" ng-repeat="conv_ente in ::vm.convention_entete_column">
+                                   <div class="table-header">
+                                      <span class="column-title">{{conv_ente.titre}}</span>
+                                  </div>
+                                </th>
+                               </tr>
+                            </thead>
+                                                       
+                             <tbody>
+                               <tr ng-repeat="convention_entete in vm.allconvention_entete"  ng-class="{selected: convention_entete.$selected}" ng-click="vm.selectionConvention_entete(convention_entete)">           
+                                 <td>
+                                  <span>{{convention_entete.cisco.description}}</span>
+                                </td>
+        
+                                <td>
+                                    <span>{{convention_entete.feffi.denomination}}</span>
+                                </td>
+        
+                                <td>
+                                  <span>{{convention_entete.site.code_sous_projet}}</span>
+                                </td>
+        
+                                <td>
+                                  <span>{{convention_entete.site.acces}}</span>
+                                </td>
+        
+                                 <td>                         
+                                   <span>{{convention_entete.ref_convention}}</span>
+                                 </td>
+        
+                                 <td>                         
+                                   <span>{{convention_entete.objet}}</span>
+                                 </td>
+        
+                                 <td>                                    
+                                   <span>{{convention_entete.ref_financement}}</span>
+                                </td>
+                                <td>                          
+                                  <span>{{vm.formatMillier(convention_entete.montant_total)}} Ar</span>
+                                </td>
+        
+                                <!--td>                          
+                                  <span>{{convention_entete.avancement}}</span>
+                                 </td-->
+        
+                                 <td>                          
+                                  <span>{{convention_entete.user.nom}}</span>
+                                 </td>
+                               </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </md-tab-body>
+                    </md-tab>
+                  </md-tabs>
+                </div>
+                
             </div>
             <!-- / BASIC FORM -->
 

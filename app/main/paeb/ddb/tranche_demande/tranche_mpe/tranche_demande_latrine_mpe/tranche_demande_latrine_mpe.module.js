@@ -11,7 +11,7 @@
     {
         // State
         $stateProvider.state('app.paeb_ddb_tranche_demande_tranche_mpe_tranche_demande_latrine_mpe', {
-            url      : '/donnees-de-base/tranche_demande_latrine_mpe',
+            url      : '/donnees-de-base/tranche_demande/tranche_demande_latrine_mpe',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/ddb/tranche_demande/tranche_mpe/tranche_demande_latrine_mpe/tranche_demande_latrine_mpe.html',

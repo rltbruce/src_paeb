@@ -165,12 +165,13 @@
         }
 
         vm.recherchefiltre = function(filtre)
-        {
+        {   vm.affiche_load = true;
             apiFactory.getAPIgeneraliserREST("ecole/index",'menus',
               'getecoleByfiltre','id_region',filtre.id_region,'id_cisco',
               filtre.id_cisco,'id_commune',filtre.id_commune,'id_zap',filtre.id_zap,'id_ecole',filtre.id_ecole).then(function(result)
               {
                   vm.allecole = result.data.response;
+                  vm.affiche_load = false;
               });
         }
 
@@ -281,7 +282,8 @@
         /**********************************debut compte****************************************/
         //col table
         vm.compte_feffi_column = [
-        {titre:"Nom banque"},
+        {titre:"Nom banque"},  
+        {titre:"Intitule"},
         {titre:"Adresse banque"},
         {titre:"RIB"},
         {titre:"Numero compte"}]; 

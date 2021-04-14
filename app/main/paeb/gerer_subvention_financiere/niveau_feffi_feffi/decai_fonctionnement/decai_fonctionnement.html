@@ -12,7 +12,7 @@
                 <span class="parent" href="javascript:;"> Niveau FEFFI</span>
                 
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
-                <span class="parent" href="javascript:;"> Insertion décaissement fonctionnement (O-BCAF)</span>
+                <span class="parent" href="javascript:;"> Insertion décaissement fonctionnement (AAC)</span>
             </div>
 
             <!--div class="title">Convention CISCO/FEFFI</div-->
@@ -78,7 +78,7 @@
                                 </div-->
                                 <div layout="column" layout-gt-xs="row">
 
-                                <md-input-container flex="100" flex-gt-xs="90">
+                                <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
                                   <label>Lot</label>
                                   <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                                     <md-option value="*">*</md-option>
@@ -434,9 +434,9 @@
                                 <span ng-if="!justificatif_decaiss_fonct_feffi.$edit">{{justificatif_decaiss_fonct_feffi.fichier}}</span>
                               </td>                       
                               <td>
-                                <a ng-if="!justificatif_decaiss_fonct_feffi.$edit && vm.validation_decais_fef==0" ng-click="vm.modifierJustificatif_decaiss_fonct_feffi(justificatif_decaiss_fonct_feffi)" title="Modifier">
+                                <!--a ng-if="!justificatif_decaiss_fonct_feffi.$edit && vm.validation_decais_fef==0" ng-click="vm.modifierJustificatif_decaiss_fonct_feffi(justificatif_decaiss_fonct_feffi)" title="Modifier">
                                   <span class="icon-table-edit"></span>
-                                </a>
+                                </a-->
                                           
                                 <a ng-if="!justificatif_decaiss_fonct_feffi.$edit && vm.validation_decais_fef==0" ng-click="vm.supprimerJustificatif_decaiss_fonct_feffi(justificatif_decaiss_fonct_feffi)" title="Supprimer">
                                   <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>

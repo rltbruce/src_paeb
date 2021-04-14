@@ -362,6 +362,7 @@
           vm.affiche_load =true;
           vm.steppiecefeffi=false;
           vm.showbuttonValidation = false;
+          vm.NouvelItemDemande_deblocage_daaf    = false;
           apiFactory.getAPIgeneraliserREST("demande_realimentation_feffi/index","menu","getdemandecreer2Byconvention",'id_convention_cife_entete',vm.selectedItemConvention_entete.id).then(function(result)
           {
               vm.alldemande_realimentation_invalide = result.data.response;
@@ -383,7 +384,7 @@
         {titre:"Nom banque"},
         {titre:"Numero compte"},
         {titre:"Date"},
-        {titre:"Situation"},
+        //{titre:"Situation"},
         {titre:"Action"}];  
 
          //fonction ajout dans bdd
@@ -474,8 +475,12 @@
                                               
                 vm.validation = item.validation;
                 vm.showbuttonValidation = true;
+                vm.steppiecefeffi=true;
             }
-            vm.steppiecefeffi=true;
+            else{
+              vm.steppiecefeffi=false;
+              vm.showbuttonValidation = false;
+            }
         };
         $scope.$watch('vm.selectedItemDemande_realimentation', function()
         {
@@ -593,7 +598,7 @@
                     anterieur: demande_realimentation.anterieur ,
                     reste: demande_realimentation.reste ,
                     date: convertionDate(demande_realimentation.date) ,
-                    validation: 0 ,
+                    validation: 5 ,
                     id_convention_cife_entete: vm.selectedItemConvention_entete.id              
                 });
                 //console.log(demande_realimentation.pays_id);
@@ -692,19 +697,25 @@
                   var avenant_convention = result.data.response;
                   var montant_avenant_tranche1 = 0;
                   var montant_avenant_tranche2 = 0;
-                  var montant_convention_tranche2 = 0;
+                  //var montant_convention_tranche2 = 0;
+                  var montant_avenant =0;
                   if (avenant_convention.length !=0)
-                  {
+                  { 
+                    montant_avenant = avenant_convention[0].montant;
                     var tranche_deblo_1 = vm.alltranche_deblocage_feffi.filter(function(obj)
                     {
-                        return obj.tranche == 'tranche 1';
+                        return obj.code == 'tranche 1';
                     });
+                    //console.log(tranche_deblo_1);
                     montant_avenant_tranche1 = (parseFloat(avenant_convention[0].montant) * tranche_deblo_1[0].pourcentage)/100;
                     montant_avenant_tranche2 = (parseFloat(avenant_convention[0].montant) * vm.allcurenttranche_deblocage_feffi[0].pourcentage)/100;
-                    montant_convention_tranche2 = ((parseFloat(vm.selectedItemConvention_entete.montant_divers) + parseFloat(vm.selectedItemConvention_entete.montant_trav_mob)) * parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;                    
+                                        
                   }
+                  var montant_convention_tranche2 = ((parseFloat(vm.selectedItemConvention_entete.montant_divers) + parseFloat(vm.selectedItemConvention_entete.montant_trav_mob)) * parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;
                   prevu = montant_avenant_tranche1 + montant_avenant_tranche2 + montant_convention_tranche2;
-                  
+                  console.log(montant_avenant_tranche1);
+                  console.log(montant_avenant_tranche2);
+                  console.log(montant_convention_tranche2);
                   cumul = prevu;
                   if (vm.alldemande_realimentation.length>0)
                   {                 
@@ -712,7 +723,7 @@
                       cumul = prevu + parseFloat(vm.dataLastedemande[0].cumul);
                   }
 
-                  reste=parseFloat( vm.selectedItemConvention_entete.montant_total) +parseFloat( avenant_convention[0].montant) -parseFloat( cumul);
+                  reste=parseFloat( vm.selectedItemConvention_entete.montant_total) +parseFloat( montant_avenant) -parseFloat( cumul);
 
                   item.periode = vm.allcurenttranche_deblocage_feffi[0].periode;
                   item.pourcentage = vm.allcurenttranche_deblocage_feffi[0].pourcentage;
@@ -729,14 +740,15 @@
               apiFactory.getAPIgeneraliserREST("avenant_convention/index","menu","getavenantByconvention",'id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
               {
                   var avenant_convention = result.data.response;
-                  console.log(avenant_convention);
+                  var montant_avenant =0;
                   var montant_avenant_tranche = 0;
-                  var montant_convention_tranche = 0;
+                 // var montant_convention_tranche = 0;
                   if (avenant_convention.length !=0)
                   {
-                    montant_avenant_tranche = (parseFloat(avenant_convention[0].montant) * vm.allcurenttranche_deblocage_feffi[0].pourcentage)/100;
-                    montant_convention_tranche = ((parseFloat(vm.selectedItemConvention_entete.montant_divers) + parseFloat(vm.selectedItemConvention_entete.montant_trav_mob)) * parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100;                    
+                    montant_avenant_tranche = (parseFloat(avenant_convention[0].montant) * vm.allcurenttranche_deblocage_feffi[0].pourcentage)/100;                   
+                    montant_avenant = avenant_convention[0].montant;
                   }
+                  var montant_convention_tranche = ((parseFloat(vm.selectedItemConvention_entete.montant_divers) + parseFloat(vm.selectedItemConvention_entete.montant_trav_mob)) * parseFloat(vm.allcurenttranche_deblocage_feffi[0].pourcentage))/100; 
                   prevu = montant_avenant_tranche + montant_convention_tranche;
                   
                   cumul = prevu;
@@ -746,7 +758,7 @@
                       cumul = prevu + parseFloat(vm.dataLastedemande[0].cumul);
                   }
 
-                  reste=parseFloat( vm.selectedItemConvention_entete.montant_total) +parseFloat( avenant_convention[0].montant) -parseFloat( cumul);
+                  reste=parseFloat( vm.selectedItemConvention_entete.montant_total) +parseFloat(montant_avenant) -parseFloat( cumul);
 
                   item.periode = vm.allcurenttranche_deblocage_feffi[0].periode;
                   item.pourcentage = vm.allcurenttranche_deblocage_feffi[0].pourcentage;
@@ -771,23 +783,34 @@
 
         vm.valider_demandecreer = function(validation)
         {
-            var count_justif_prevu = vm.alljustificatif_feffi.length;
-            var count_justif_current=0;
-             vm.alljustificatif_feffi.forEach(function(item)
-             {
-                if (item.id!=0 && item.id!=null && item.id!=undefined)
-                {
-                  count_justif_current = count_justif_current + 1;
+          apiFactory.getAPIgeneraliserREST("piece_justificatif_feffi/index",'id_demande_rea_feffi',vm.selectedItemDemande_realimentation.id,'id_tranche',vm.selectedItemDemande_realimentation.tranche.id).then(function(result_p)
+          {
+              var justificatif_feffi = result_p.data.response;
+              
+              var count_justif_prevu = justificatif_feffi.length;
+              var count_justif_current=0;
+              justificatif_feffi.forEach(function(item)
+              {
+                  if (item.id!=0 && item.id!=null && item.id!=undefined)
+                  {
+                    count_justif_current = count_justif_current + 1;
+                  }
+              });
+              if (parseInt(count_justif_prevu)==parseInt(count_justif_current))
+              {
+                  validation_in_baseDemande_realimentation(vm.selectedItemDemande_realimentation,0,validation);
                 }
-             });
-             if (parseInt(count_justif_prevu)==parseInt(count_justif_current))
-             {
-                validation_in_baseDemande_realimentation(vm.selectedItemDemande_realimentation,0,validation);
+              else
+              {
+                  vm.showAlert("Validation interrompue","Pièce justificative incomplète");
               }
-             else
-             {
-                vm.showAlert("cette action ne peut pas être réalisée","Pièce justificative incomplète");
-             }
+              console.log(count_justif_prevu);
+              console.log(count_justif_current);
+          });
+        }
+        vm.rejeter_demandecreer = function(validation)
+        {
+          validation_in_baseDemande_realimentation(vm.selectedItemDemande_realimentation,0,validation);
         }
 
         //insertion ou mise a jours ou suppression item dans bdd convention_cisco_feffi_entete
@@ -808,7 +831,7 @@
                     cumul: demande_realimentation.cumul ,
                     anterieur: demande_realimentation.anterieur ,
                     reste: demande_realimentation.reste ,
-                    date: convertionDate(new Date(demande_realimentation.date)) ,
+                    date: convertionDate(demande_realimentation.date) ,
                     validation: validation ,
                     id_convention_cife_entete: vm.selectedItemConvention_entete.id              
                 });
@@ -837,28 +860,34 @@
         
         vm.situationdemande = function(validation)
         {
-            switch (validation)
+          switch (validation)
             {
               case '1':
                       return 'Validée par DPFI';                  
                   break;
+              case '2':                  
+                    return 'Rejetée par DPFI'; 
+                    break;
 
-             case '2':
-                  
-                  return 'Rejetée par UFP'; 
-                  break;
               case '3':                  
                   return 'Validée par UFP'; 
                   break;
+              case '4':                  
+                  return 'Rejetée par UFP'; 
+                  break;
              
-             case '5':                  
+             case '6':                  
                   return 'Validée par DPFI'; 
                   break;
-             case '6':                  
-                  return 'Rejetée par DAAF'; 
+            case '7':                  
+                  return 'Rejetée par DPFI'; 
                   break;
-              case '7':                  
+
+             case '8':                  
                   return 'Validée par DAAF'; 
+                  break;
+              case '9':                  
+                  return 'Rejetée par DAAF'; 
                   break;
               
               default:
@@ -1193,7 +1222,18 @@
                                       justificatif_feffi.$selected = false;
                                       justificatif_feffi.$edit = false;
                                       vm.selectedItemJustificatif_feffi = {};
-                                      console.log('e');
+                                      var chemin= currentItemJustificatif_feffi.fichier;
+                                        var fd = new FormData();
+                                            fd.append('chemin',chemin);
+                                      
+                                        var uploadUrl  = apiUrl + "importer_fichier/remove_upload_file";
+
+                                        var upl= $http.post(uploadUrl,fd,{transformRequest: angular.identity,
+                                        headers: {'Content-Type': undefined}, chemin: chemin
+                                        }).success(function(data)
+                                        {console.log('suppressionmodifi');
+
+                                        });
                                   }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
                                 }
                             }).error(function()

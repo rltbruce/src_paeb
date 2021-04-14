@@ -77,7 +77,7 @@
                                 </div-->
                                 <div layout="column" layout-gt-xs="row">
 
-                                <md-input-container flex="100" flex-gt-xs="90">
+                                <md-input-container flex="100" flex-gt-xs="90" ng-show="false" ng-show="false">
                                   <label>Lot</label>
                                   <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                                     <md-option value="*">*</md-option>
@@ -276,7 +276,7 @@
                 <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menuformsobcafo_child1">
                 
                     <!-------------------convention cisco/feffi----------------->
-                    <md-tab>
+                    <md-tab ng-click="vm.menu_click_passation_pr()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
                             <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">DF</span>
@@ -401,7 +401,7 @@
                                   </a>
                                             
                                   <a ng-if="!passation_marches_pr.$edit && passation_marches_pr.validation ==0" ng-click="vm.supprimerPassation_marches_pr(passation_marches_pr)" title="Supprimer">
-                                    <span class="icon-delete"></span>
+                                    <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                   </a>
                                   <span ng-if="!passation_marches_pr.$edit && passation_marches_pr.validation ==1">Aucune action disponible</span>       
                                   <a ng-if="passation_marches_pr.$edit" ng-click="vm.annulerPassation_marches_pr(passation_marches_pr)" title="Annuler modification">
@@ -547,14 +547,14 @@
                                 </a>
                                           
                                 <a ng-if="!contrat_partenaire_relai.$edit && contrat_partenaire_relai.validation==0 && vm.session=='AAC'" ng-click="vm.supprimerContrat_partenaire_relai(contrat_partenaire_relai)" title="Supprimer">
-                                  <span class="icon-delete"></span>
+                                  <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                 </a>
                                 <a ng-if="!contrat_partenaire_relai.$edit && vm.session=='ADMIN'" ng-click="vm.modifierContrat_partenaire_relai(contrat_partenaire_relai)" title="Modifier">
                                   <span class="icon-table-edit"></span>
                                 </a>
                                           
                                 <a ng-if="!contrat_partenaire_relai.$edit && vm.session=='ADMIN'" ng-click="vm.supprimerContrat_partenaire_relai(contrat_partenaire_relai)" title="Supprimer">
-                                  <span class="icon-delete"></span>
+                                  <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                 </a>
                                <span ng-if="contrat_partenaire_relai.validation==1 && vm.session=='AAC'">Aucune action disponible</span>
                                 <a ng-if="contrat_partenaire_relai.$edit" ng-click="vm.annulerContrat_partenaire_relai(contrat_partenaire_relai)" title="Annuler modification">
@@ -2909,7 +2909,7 @@
                                 </td>
 
                                 <td>
-                                  <a ng-if="!document_pr_scan.$edit" ng-click="vm.modifierDocument_pr_scan(document_pr_scan)" title="Modifier">
+                                  <a ng-if="!document_pr_scan.$edit && document_pr_scan.id_document_pr_scan==null" ng-click="vm.modifierDocument_pr_scan(document_pr_scan)" title="Ajouter">
                                     <span class="icon-table-edit"></span>
                                   </a>
                                             
@@ -4573,14 +4573,14 @@
                                 </td>
 
                                 <td>
-                                  <a ng-if="!document_moe_scan.$edit && (document_moe_scan.validation==0 || document_moe_scan.validation==null) && vm.session=='AAC'" ng-click="vm.modifierDocument_moe_scan(document_moe_scan)" title="Modifier">
+                                  <a ng-if="!document_moe_scan.$edit && document_moe_scan.id_document_moe_scan==null && (document_moe_scan.validation==0 || document_moe_scan.validation==null) && vm.session=='AAC'" ng-click="vm.modifierDocument_moe_scan(document_moe_scan)" title="Ajouter">
                                     <span class="icon-table-edit"></span>
                                   </a>
-                                  <a ng-if="!document_moe_scan.$edit && vm.session=='ADMIN'" ng-click="vm.modifierDocument_moe_scan(document_moe_scan)" title="Modifier">
+                                  <a ng-if="!document_moe_scan.$edit && document_moe_scan.id_document_moe_scan==null && vm.session=='ADMIN'" ng-click="vm.modifierDocument_moe_scan(document_moe_scan)" title="Ajouter">
                                     <span class="icon-table-edit"></span>
                                   </a>
                                             
-                                  <a ng-if="!document_moe_scan.$edit && document_moe_scan.validation==0 && vm.session=='AAC'" ng-click="vm.supprimerDocument_moe_scan(document_moe_scan)" title="Supprimer">
+                                  <a ng-if="!document_moe_scan.$edit && document_moe_scan.existance && document_moe_scan.validation==0 && vm.session=='AAC'" ng-click="vm.supprimerDocument_moe_scan(document_moe_scan)" title="Supprimer">
                                     <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                   </a> 
                                         
@@ -6309,14 +6309,14 @@
                                 </td>
 
                                 <td>
-                                  <a ng-if="!document_prestataire_scan.$edit && (document_prestataire_scan.validation==0 || document_prestataire_scan.validation==null) && vm.session=='AAC'" ng-click="vm.modifierDocument_prestataire_scan(document_prestataire_scan)" title="Modifier">
+                                  <a ng-if="!document_prestataire_scan.$edit && document_prestataire_scan.id_document_prestataire_scan==null && (document_prestataire_scan.validation==0 || document_prestataire_scan.validation==null) && vm.session=='AAC'" ng-click="vm.modifierDocument_prestataire_scan(document_prestataire_scan)" title="Ajout">
                                     <span class="icon-table-edit"></span>
                                   </a>
-                                  <a ng-if="!document_prestataire_scan.$edit && vm.session=='ADMIN'" ng-click="vm.modifierDocument_prestataire_scan(document_prestataire_scan)" title="Modifier">
+                                  <a ng-if="!document_prestataire_scan.$edit && document_prestataire_scan.id_document_prestataire_scan==null && vm.session=='ADMIN'" ng-click="vm.modifierDocument_prestataire_scan(document_prestataire_scan)" title="Ajout">
                                     <span class="icon-table-edit"></span>
                                   </a>
                                             
-                                  <a ng-if="!document_prestataire_scan.$edit && document_prestataire_scan.validation==0 && vm.session=='AAC'" ng-click="vm.supprimerDocument_prestataire_scan(document_prestataire_scan)" title="Supprimer">
+                                  <a ng-if="!document_prestataire_scan.$edit && document_prestataire_scan.id_document_prestataire_scan!=null && document_prestataire_scan.validation==0 && vm.session=='AAC'" ng-click="vm.supprimerDocument_prestataire_scan(document_prestataire_scan)" title="Supprimer">
                                     <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                   </a>          
                                   <a ng-if="!document_prestataire_scan.$edit && document_prestataire_scan.existance && vm.session=='ADMIN'" ng-click="vm.supprimerDocument_prestataire_scan(document_prestataire_scan)" title="Supprimer">

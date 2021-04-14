@@ -2168,6 +2168,7 @@ vm.click_step_avenant_pr = function()
 vm.steppassation_marches = function()
 {
     vm.affiche_load = true;
+    vm.stepsoumissionnaire = false;
     apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu','getpassationByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
     {
         vm.allpassation_marches = result.data.response.filter(function(obj)

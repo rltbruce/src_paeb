@@ -232,9 +232,10 @@
             vm.filtre.id_zap = null;
             if (item.id_commune != '*')
             {
-                apiFactory.getAPIgeneraliserREST("zap_commune/index","getzap_communeBycommune","id_commune",item.id_commune).then(function(result)
+                apiFactory.getAPIgeneraliserREST("zap_commune/index","menu","getzap_communeBycommune","id_commune",item.id_commune).then(function(result)
               {
                 vm.zaps = result.data.response;
+                console.log(vm.zaps);
               });
             }
             else
@@ -296,6 +297,7 @@
         {   
             vm.stepTwo = false;
             vm.affiche_load = true;
+            NouvelItem=false;
             apiFactory.getAPIgeneraliserREST("feffi/index","id_ecole",vm.selectedItemecole.id).then(function(result)
             {
               vm.allfeffi = result.data.response;
@@ -553,6 +555,7 @@
 vm.step_menu_membre= function()
 {
   //recuperation donnée membre
+  NouvelItemMembre =false;
   apiFactory.getAPIgeneraliserREST("membre_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
   {
       vm.allmembre = result.data.response; 
@@ -844,6 +847,7 @@ apiFactory.getAll("organe_feffi/index").then(function success(response)
         { 
           vm.stepThree=false;
           vm.affiche_load = true;
+          NouvelItemCompte_feffi =false;
           //recuperation donnée compte
           apiFactory.getAPIgeneraliserREST("compte_feffi/index",'id_feffi',vm.selectedItem.id).then(function(result)
           {
@@ -855,6 +859,7 @@ apiFactory.getAll("organe_feffi/index").then(function success(response)
         //col table
         vm.compte_feffi_column = [
         {titre:"Nom banque"},
+        {titre:"Intitule"},
         {titre:"Adresse banque"},
         {titre:"RIB"},
         {titre:"Numero compte"},
@@ -870,7 +875,8 @@ apiFactory.getAll("organe_feffi/index").then(function success(response)
               $edit: true,
               $selected: true,
               id: '0',         
-              nom_banque: '',
+              nom_banque: '',        
+              intitule: 'PAEB construction FEFFI '+vm.selectedItemecole.description,
               adresse_banque: '',
               rib: '',
               numero_compte:'',
@@ -914,6 +920,7 @@ apiFactory.getAll("organe_feffi/index").then(function success(response)
             item.$edit = false;
             item.$selected = false;
             item.nom_banque      = currentItemCompte_feffi.nom_banque ;
+            item.intitule   = currentItemCompte_feffi.intitule ;
             item.adresse_banque   = currentItemCompte_feffi.adresse_banque ;
             item.rib      = currentItemCompte_feffi.rib;
             item.numero_compte      = currentItemCompte_feffi.numero_compte ;
@@ -967,6 +974,7 @@ apiFactory.getAll("organe_feffi/index").then(function success(response)
             item.$edit = true;
             item.$selected = true;            
             item.nom_banque      = vm.selectedItemCompte_feffi.nom_banque ;
+            item.intitule = vm.selectedItemCompte_feffi.intitule;
             item.adresse_banque = vm.selectedItemCompte_feffi.adresse_banque;
             item.rib  = parseInt(vm.selectedItemCompte_feffi.rib);
             item.numero_compte      =parseInt(vm.selectedItemCompte_feffi.numero_compte)  ;
@@ -1003,6 +1011,7 @@ apiFactory.getAll("organe_feffi/index").then(function success(response)
                 if(comp[0])
                 {
                    if((comp[0].nom_banque!=currentItemCompte_feffi.nom_banque) 
+                   || (comp[0].intitule!=currentItemCompte_feffi.intitule)
                     || (comp[0].adresse_banque!=currentItemCompte_feffi.adresse_banque)
                     || (comp[0].rib!=currentItemCompte_feffi.rib)
                     || (comp[0].numero_compte!=currentItemCompte_feffi.numero_compte))                    
@@ -1038,6 +1047,7 @@ apiFactory.getAll("organe_feffi/index").then(function success(response)
                     supprimer: suppression,
                     id:        getId,      
                     nom_banque:      compte_feffi.nom_banque,
+                    intitule: compte_feffi.intitule,
                     adresse_banque: compte_feffi.adresse_banque,
                     rib: compte_feffi.rib,
                     numero_compte: compte_feffi.numero_compte,
@@ -1125,7 +1135,8 @@ apiFactory.getAll("organe_feffi/index").then(function success(response)
         vm.step_menu_membre_titulaire= function()
         {  
           
-          vm.affiche_load = true;        
+          vm.affiche_load = true; 
+          NouvelItemMembre_titulaire =false;       
           apiFactory.getAPIgeneraliserREST("membre_titulaire/index",'id_compte',vm.selectedItemCompte_feffi.id).then(function(result)
           {
               vm.allmembre_titulaire = result.data.response; 

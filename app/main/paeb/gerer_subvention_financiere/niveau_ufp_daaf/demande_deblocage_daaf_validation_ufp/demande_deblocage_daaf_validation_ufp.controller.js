@@ -144,6 +144,7 @@
    vm.step_menu_demande_daaf = function()
   { 
     vm.affiche_load = true;
+    vm.showbuttonvalidation =false;
     apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemandedisponible","id_convention_ufp_daaf_entete",vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
     {
         vm.alldemande_deblocage_daaf_valide_daaf = result.data.response;

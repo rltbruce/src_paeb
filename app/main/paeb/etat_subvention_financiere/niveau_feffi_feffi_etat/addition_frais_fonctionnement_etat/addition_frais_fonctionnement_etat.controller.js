@@ -249,7 +249,8 @@
            // vm.allconvention= [] ;
             
             vm.showbuttonNouvContrat_prestataire=true;
-            vm.stepAddition=true;
+            vm.stepAddition=true;               
+            vm.steppieceaddition = false;
             vm.header_ref_convention = item.ref_convention;
               vm.header_cisco = item.cisco.description;
               vm.header_feffi = item.feffi.denomination; 

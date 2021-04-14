@@ -12,7 +12,7 @@
     {
         // State
         $stateProvider.state('app.paeb_gerer_subvention_financiere_niveau_ufp_feffi_convention_suivi_f_obcaf_ufp', {
-            url      : '/donnees-de-base/gerer_subvention_financiere/niveau_ufp_feffi/convention_suivi_f_obcaf_ufp',
+            url      : '/donnees-de-base/gerer_subvention_financiere/niveau_ufp_feffi/convention_suivi_f_obcaf_ufp:rac?',
             views    : {
                 'content@app': {
                     templateUrl: 'app/main/paeb/gerer_subvention_financiere/niveau_ufp_feffi/convention_suivi_f_obcaf_ufp/convention_suivi_f_obcaf_ufp.html',

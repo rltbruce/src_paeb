@@ -47,21 +47,30 @@
         vm.dtOptions = {
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
-          autoWidth: false          
+          autoWidth: false,
+          //searching: false,
+          //paging: false,
+         //destroy: true         
         };
 
         //style
         vm.dtOptionsperso = {
           dom: '<"top">rt<"bottom"<"left"<"length">><"right"<"info"><"pagination">>>',
           pagingType: 'simple',
-          autoWidth: false          
+          autoWidth: false,
+          searching: false,
+         paging: false,
+          retrieve: true           
         };
 
         //style
         vm.dtOptionsperso2 = {
           dom: '<"top"><"bottom"<"left"<"length">><"right"<"info"><"pagination">>>',
           pagingType: 'simple',
-          autoWidth: false          
+          autoWidth: false,
+          searching: false,
+          paging: false,
+          retrieve: true          
         };
 
          /*var id_user = $cookieStore.get('id');
@@ -94,6 +103,11 @@
         }
 /*****************Debut StepOne convention_ufp_daaf_entete****************/
 
+
+/*vm.click_menu_convention_daaf = function()
+{
+  NouvelItemConvention_ufp_daaf_entete = false;
+}*/
   //col table
         vm.convention_ufp_daaf_entete_column = [        
         {titre:"Numero vague"},        
@@ -522,20 +536,28 @@
   /*****************Fin StepOne convention_ufp_daaf_entete****************/
 
   /*****************Debut StepOne convention_ufp_daaf_detail****************/
+ /* $scope.dtInstancece = {};
+  $scope.dtInstance = function (instance) {
+    $scope.dtInstancece = instance;
+    console.log($scope.dtInstancece);
+}*/
 
   vm.click_step_detail = function()
   {  
       vm.affiche_load = true;
+      NouvelItemConvention_ufp_daaf_detail = false;
+
       apiFactory.getAPIgeneraliserREST("convention_ufp_daaf_detail/index",'id_convention_ufp_daaf_entete',vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
-      {
-           vm.allconvention_ufp_daaf_detail = result.data.response;
-          if (vm.allconvention_ufp_daaf_detail.length>0)
-          {
-            vm.showbuttonNouvDetail = false;
-          } 
-          vm.affiche_load = false;
-                  ////console.log(result.data.response);                 
-      });
+        {            
+            vm.allconvention_ufp_daaf_detail = result.data.response;
+            if (vm.allconvention_ufp_daaf_detail.length>0)
+            {
+              vm.showbuttonNouvDetail = false;
+            } 
+            vm.affiche_load = false;
+            ////console.log(result.data.response);                 
+        });
+      
   }
 
   //col table

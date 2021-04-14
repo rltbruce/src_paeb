@@ -69,7 +69,7 @@
                                 </div-->
                                 <div layout="column" layout-gt-xs="row">
 
-                                  <md-input-container flex="100" flex-gt-xs="90">
+                                  <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
                                   <label>Lot</label>
                                   <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                                     <md-option value="*">*</md-option>
@@ -261,11 +261,11 @@
                                      Mettre en-cours
                                     </md-button-->
 
-                                    <md-button type="submit" class="md-raised md-pink-900-bg" aria-label="Nouveau" ng-click="vm.valider_demande_final(7)" style="width:10%; color: white" ng-if="vm.showbuttonValidationdaaf && vm.validation==5">
+                                    <md-button type="submit" class="md-raised md-pink-900-bg" aria-label="Nouveau" ng-click="vm.valider_demande_final(8)" style="width:10%; color: white" ng-if="vm.showbuttonValidationdaaf && vm.validation==6">
                                      Valider
                                     </md-button>
 
-                                    <md-button type="submit" class="md-raised md-red-500-bg" aria-label="Nouveau" ng-click="vm.rejeter_demandedaaf(6)" style="width:10%; color: white" ng-if="vm.showbuttonValidationenrejedaaf && vm.validation==5">
+                                    <md-button type="submit" class="md-raised md-red-500-bg" aria-label="Nouveau" ng-click="vm.rejeter_demandedaaf(9)" style="width:10%; color: white" ng-if="vm.showbuttonValidationenrejedaaf && vm.validation==6">
                                      Rejeter
                                     </md-button>
                               </div> <br>
@@ -393,7 +393,7 @@
 
                    <!---------------------------------------DEBUT Transfert daaf----------------------------------------->
 
-                        <md-tab ng-disabled="vm.steptransdaaf==false || vm.validation!=7" ng-click="vm.step_transfert_daaf()">
+                        <md-tab ng-disabled="vm.steptransdaaf==false || vm.validation!=8" ng-click="vm.step_transfert_daaf()">
                           <md-tab-label>
                             <span class="ms-form-wizard-step-label">
                                 <!--span class="ms-form-wizard-step-number md-accent-bg">

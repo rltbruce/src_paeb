@@ -79,7 +79,7 @@
                                 </div-->
                                 <div layout="column" layout-gt-xs="row">
 
-                                  <md-input-container flex="100" flex-gt-xs="90">
+                                  <md-input-container flex="100" flex-gt-xs="90" ng-show="false">
                                   <label>Lot</label>
                                   <md-select ng-model="vm.filtre.lot" name="lot" style="overflow: hidden;text-overflow: ellipsis;">
                                     <md-option value="*">*</md-option>
@@ -276,116 +276,7 @@
                 <md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="acc_menuformsbcafo_child1"> 
                 <!--md-tabs md-dynamic-height md-selected="msWizard.selectedIndex" md-center-tabs="true" id="{{vm.styleTabfils}}"-->
 
-                    <!-------------------passation marchés partenaire relai----------------->
-                    <md-tab>
-                      <md-tab-label>
-                        <span class="ms-form-wizard-step-label">
-                            <!--span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==false">DF</span>
-                            <span class="ms-form-wizard-step-number md-accent-bg" ng-if="vm.stepOne==true">
-                              <i class="icon-check s16"></i>
-                            </span-->
-                            <span class="ms-form-wizard-step-text">Passation des marchés</span>
-                        </span>
-                       
-                      </md-tab-label>
-                      
-                      <md-tab-body>
-                          <div style="widht:100%;"> 
-                              <md-button type="submit" class="md-raised md-warn md-pink-900-bg" aria-label="Nouveau" ng-click="vm.validation_passation_marche_pr()" style="width:10%;" ng-show="vm.showbuttonValidationpassation_pr && vm.validation_passation_pr==0">
-                                    Valider
-                              </md-button>
-                          </div><br>
-                         <div>        
-                          <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                            <thead>
-                              <tr>
-                                <th class="secondary-text" ng-repeat="mem in ::vm.passation_marches_pr_column">
-                                  <div class="table-header">
-                                    <span class="column-title">{{mem.titre}}</span>
-                                  </div>
-                                </th>
-                              </tr>
-                            </thead>
-                                     
-                            <tbody>
-                              <tr ng-repeat="passation_marches_pr in vm.allpassation_marches_pr"  ng-class="{selected: passation_marches_pr.$selected}" ng-click="vm.selectionPassation_marches_pr(passation_marches_pr)">
-
-                                <td>
-                                  <span ng-if="passation_marches_pr.$edit">
-                                    <md-datepicker ng-model="passation_marches_pr.date_manifestation" md-placeholder="Date de signature" md-max-date="vm.datenow" required>                       
-                                    </md-datepicker>
-                                  </span>                          
-                                  <span ng-if="!passation_marches_pr.$edit">{{vm.formatDate(passation_marches_pr.date_manifestation)}}</span>
-                                </td>
-
-                                <td>
-                                  <span ng-if="passation_marches_pr.$edit">
-                                    <md-datepicker ng-model="passation_marches_pr.date_lancement_dp" md-placeholder="Date de signature" md-max-date="vm.datenow" required>                       
-                                    </md-datepicker>
-                                  </span>                          
-                                  <span ng-if="!passation_marches_pr.$edit">{{vm.formatDate(passation_marches_pr.date_lancement_dp)}}</span>
-                                </td>
-                                          
-                                <td>
-                                  <span ng-if="passation_marches_pr.$edit">
-                                    <md-datepicker ng-model="passation_marches_pr.date_remise" md-placeholder="Date de signature" md-min-date="passation_marches_pr.date_lancement_dp" md-max-date="vm.datenow" required>                       
-                                    </md-datepicker>   
-                                  </span>
-                                            
-                                  <span ng-if="!passation_marches_pr.$edit">{{vm.formatDate(passation_marches_pr.date_remise)}}</span>
-                                </td>
-                                          
-                                <td>
-                                  <span ng-if="passation_marches_pr.$edit">
-                                    <md-input-container style="width:100%;display: flex !important;">
-                                      <label>Nombre offre recu</label>
-                                      <input name="nbr_offre_recu" type="number" ng-model="passation_marches_pr.nbr_offre_recu" ng-min="1"/>
-                                    </md-input-container>   
-                                  </span>
-                                            
-                                  <span ng-if="!passation_marches_pr.$edit">{{passation_marches_pr.nbr_offre_recu}}</span>
-                                </td>                       
-
-                                <td>
-                                  <span ng-if="passation_marches_pr.$edit">
-                                    <md-datepicker ng-model="passation_marches_pr.date_signature_contrat" md-placeholder="Date de signature" md-min-date="passation_marches_pr.date_remise" md-max-date="vm.datenow" required>                       
-                                    </md-datepicker>
-                                  </span>                          
-                                  <span ng-if="!passation_marches_pr.$edit">{{vm.formatDate(passation_marches_pr.date_signature_contrat)}}</span>
-                                </td>                    
-
-                                <td>
-                                  <span ng-if="passation_marches_pr.$edit">
-                                    <md-datepicker ng-model="passation_marches_pr.date_os" md-placeholder="Date de signature" md-min-date="passation_marches_pr.date_signature_contrat" md-max-date="vm.datenow" required>                       
-                                    </md-datepicker>
-                                  </span>                          
-                                  <span ng-if="!passation_marches_pr.$edit">{{vm.formatDate(passation_marches_pr.date_os)}}</span>
-                                </td>
-                                                             
-                                <td>
-                                  <a ng-if="!passation_marches_pr.$edit && passation_marches_pr.validation ==0" ng-click="vm.modifierPassation_marches_pr(passation_marches_pr)" title="Modifier">
-                                    <span class="icon-table-edit"></span>
-                                  </a>
-                                            
-                                  <a ng-if="!passation_marches_pr.$edit && passation_marches_pr.validation ==0" ng-click="vm.supprimerPassation_marches_pr(passation_marches_pr)" title="Supprimer">
-                                    <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
-                                  </a>
-                                  <span ng-if="!passation_marches_pr.$edit && passation_marches_pr.validation ==1">Aucune action disponible</span>       
-                                  <a ng-if="passation_marches_pr.$edit" ng-click="vm.annulerPassation_marches_pr(passation_marches_pr)" title="Annuler modification">
-                                    <span class="icon-cancel"></span>
-                                  </a>
-                                            
-                                  <a ng-if="passation_marches_pr.$edit && passation_marches_pr.date_manifestation && passation_marches_pr.date_lancement_dp && passation_marches_pr.date_remise && passation_marches_pr.nbr_offre_recu && passation_marches_pr.date_os >''" ng-click="vm.ajoutPassation_marches_pr(passation_marches_pr,0)" title="Sauvegarder">
-                                    <span class="icon-content-save"></span>
-                                  </a>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-
-                      </md-tab-body>
-                    </md-tab>
+                    
                     <md-tab ng-disabled="!vm.stepcontrat_pr" ng-click="vm.step_click_contrat_pr()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
@@ -395,11 +286,11 @@
                       </md-tab-label>
                       
                       <md-tab-body>
-                        <div style="widht:100%;">                              
+                        <!--div style="widht:100%;">                              
                             <md-button type="submit" class="md-raised md-warn md-pink-900-bg" aria-label="Nouveau" ng-click="vm.valider_contrat()" style="width:10%;" ng-show="vm.showbuttonValidationcontrat_pr && vm.validation_contrat_pr==0">
                               Valider
                             </md-button><br>
-                        </div>
+                        </div--><br>
                        <div>        
                         <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
                           <thead>
@@ -498,100 +389,6 @@
 
                     </md-tab-body>
                     </md-tab>
-                    <!---------------------------------Avenant partenaire-----------------------------------------------> 
-                    <md-tab ng-disabled="!vm.stepavenant_pr || vm.validation_contrat_pr==0" ng-click="vm.click_step_avenant_pr()">                    
-                      <md-tab-label >
-                        <span class="ms-form-wizard-step-label">
-                            <span class="ms-form-wizard-step-text">Avenant</span>
-                        </span>
-                       
-                      </md-tab-label>
-
-                      <md-tab-body>
-                        <div style="widht:100%;">
-                                  <md-button type="submit" ng-show="vm.showbuttonValidation_avenant_partenaire &&  vm.validation_avenant_partenaire==0" class="md-raised md-warn  md-pink-900-bg" aria-label="Valider" ng-click="vm.validerAvenant_partenaire()" style="width:10%;">
-                                    Valider
-                                  </md-button><br>
-                                </div>
-                               <div>        
-                                <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" ms-responsive-table>
-                                  <thead>
-                                    <tr>
-                                      <th class="secondary-text" ng-repeat="mem in ::vm.avenant_partenaire_column">
-                                        <div class="table-header">
-                                          <span class="column-title">{{mem.titre}}</span>
-                                        </div>
-                                      </th>
-                                    </tr>
-                                  </thead>
-                                           
-                                  <tbody>
-                                    <tr ng-repeat="avenant_partenaire in vm.allavenant_partenaire"  ng-class="{selected: avenant_partenaire.$selected}" ng-click="vm.selectionAvenant_partenaire(avenant_partenaire)">
-                                                
-                                      <td>
-                                        <span ng-if="avenant_partenaire.$edit">
-                                          <md-input-container style="width:100%;display: flex !important;">
-                                            <label>Descriprtion</label>
-                                            <input name="description" type="text" ng-model="avenant_partenaire.description"/>
-                                          </md-input-container>   
-                                        </span>
-                                                  
-                                        <span ng-if="!avenant_partenaire.$edit">{{avenant_partenaire.description}}</span>
-                                      </td>
-
-                                      <td>
-                                        <span ng-if="avenant_partenaire.$edit">
-                                          <md-input-container style="width:100%;display: flex !important;">
-                                            <label>Référence avenant</label>
-                                            <input name="ref_avenant" type="text" ng-model="avenant_partenaire.ref_avenant"/>
-                                          </md-input-container>   
-                                        </span>
-                                                  
-                                        <span ng-if="!avenant_partenaire.$edit">{{avenant_partenaire.ref_avenant}}</span>
-                                      </td>
-                                                
-                                      <td>
-                                        <span ng-if="avenant_partenaire.$edit">
-                                          <md-input-container style="width:100%;display: flex !important;">
-                                            <label>Cout avenant</label>
-                                            <input name="montant" type="number" ng-model="avenant_partenaire.montant" ng-min="1"/>
-                                          </md-input-container>   
-                                        </span>
-                                                  
-                                        <span ng-if="!avenant_partenaire.$edit">{{vm.formatMillier(avenant_partenaire.montant)}} Ar</span>
-                                      </td>
-
-                                      <td>
-                                        <span ng-if="avenant_partenaire.$edit">
-                                          <md-datepicker ng-model="avenant_partenaire.date_signature" md-placeholder="Date de signature" md-max-date="vm.date_now" required>                       
-                                          </md-datepicker>
-                                        </span>                          
-                                        <span ng-if="!avenant_partenaire.$edit">{{vm.formatDate(avenant_partenaire.date_signature)}}</span>
-                                      </td>                      
-                                      <td>
-                                        <a ng-if="!avenant_partenaire.$edit && avenant_partenaire.validation==0" ng-click="vm.modifierAvenant_partenaire(avenant_partenaire)" title="Modifier">
-                                          <span class="icon-table-edit"></span>
-                                        </a>
-                                                  
-                                        <a ng-if="!avenant_partenaire.$edit && avenant_partenaire.validation==0" ng-click="vm.supprimerAvenant_partenaire(avenant_partenaire)" title="Supprimer">
-                                          <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
-                                        </a>
-                                        <span ng-if="!avenant_partenaire.$edit && avenant_partenaire.validation==1">Aucune action disponible</span>          
-                                        <a ng-if="avenant_partenaire.$edit" ng-click="vm.annulerAvenant_partenaire(avenant_partenaire)" title="Annuler modification">
-                                          <span class="icon-cancel"></span>
-                                        </a>
-                                                  
-                                        <a ng-if="avenant_partenaire.$edit && avenant_partenaire.description &&  avenant_partenaire.montant &&  avenant_partenaire.date_signature>''" ng-click="vm.ajoutAvenant_partenaire(avenant_partenaire,0)" title="Sauvegarder">
-                                          <span class="icon-content-save"></span>
-                                        </a>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                      </md-tab-body>
-                    </md-tab>
-                    <!---------------------------------Avenant partenaire----------------------------------------------->
                     <md-tab ng-disabled="!vm.stepprestaion_pr || vm.validation_contrat_pr==0" ng-click="vm.step_prestation_pr()">
                       <md-tab-label>
                         <span class="ms-form-wizard-step-label">
@@ -2354,7 +2151,7 @@
                                 </td>
 
                                 <td>
-                                  <a ng-if="!document_pr_scan.$edit && (document_pr_scan.validation==0 || document_pr_scan.validation==null)" ng-click="vm.modifierDocument_pr_scan(document_pr_scan)" title="Modifier">
+                                  <a ng-if="!document_pr_scan.$edit && document_pr_scan.id_document_pr_scan==null && (document_pr_scan.validation==0 || document_pr_scan.validation==null)" ng-click="vm.modifierDocument_pr_scan(document_pr_scan)" title="Ajouter">
                                     <span class="icon-table-edit"></span>
                                   </a>
                                             
@@ -3761,7 +3558,7 @@
                                 </td>
 
                                 <td>
-                                  <a ng-if="!document_moe_scan.$edit && (document_moe_scan.validation==0 || document_moe_scan.validation==null)" ng-click="vm.modifierDocument_moe_scan(document_moe_scan)" title="Modifier">
+                                  <a ng-if="!document_moe_scan.$edit && document_moe_scan.id_document_moe_scan==null && (document_moe_scan.validation==0 || document_moe_scan.validation==null)" ng-click="vm.modifierDocument_moe_scan(document_moe_scan)" title="Modifier">
                                     <span class="icon-table-edit"></span>
                                   </a>
                                             
@@ -5373,11 +5170,11 @@
                                 </td>
 
                                 <td>
-                                  <a ng-if="!document_prestataire_scan.$edit && (document_prestataire_scan.validation==0 || document_prestataire_scan.validation==null)" ng-click="vm.modifierDocument_prestataire_scan(document_prestataire_scan)" title="Modifier">
+                                  <a ng-if="!document_prestataire_scan.$edit && document_prestataire_scan.id_document_prestataire_scan==null && (document_prestataire_scan.validation==0 || document_prestataire_scan.validation==null)" ng-click="vm.modifierDocument_prestataire_scan(document_prestataire_scan)" title="Ajout">
                                     <span class="icon-table-edit"></span>
                                   </a>
                                             
-                                  <a ng-if="!document_prestataire_scan.$edit && document_prestataire_scan.validation==0" ng-click="vm.supprimerDocument_prestataire_scan(document_prestataire_scan)" title="Supprimer">
+                                  <a ng-if="!document_prestataire_scan.$edit && document_prestataire_scan.id_document_prestataire_scan!=null && document_prestataire_scan.validation==0" ng-click="vm.supprimerDocument_prestataire_scan(document_prestataire_scan)" title="Supprimer">
                                     <span class="icon-table-row-remove" style="color: rgb(211,47,47)"></span>
                                   </a>                        
                                             

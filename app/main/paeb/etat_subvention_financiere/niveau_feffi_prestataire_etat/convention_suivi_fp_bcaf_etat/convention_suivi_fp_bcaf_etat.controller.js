@@ -399,6 +399,7 @@
             vm.styleTabfils = "acc_sous_menu";
             vm.stepsuivi_paiement_moe = false;
             vm.affiche_load = true;
+            vm.stepsuivi_marche_moe = false;
             apiFactory.getAPIgeneraliserREST("contrat_be/index",'menus','getetatcontratByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
             {
                     vm.allcontrat_moe = result.data.response;

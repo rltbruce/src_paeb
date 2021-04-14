@@ -5,7 +5,8 @@
     angular
         .module('app.paeb.gerer_subvention_operation.niveau_feffi_prestataire', [
             'app.paeb.gerer_subvention_operation.niveau_feffi_prestataire.convention_suivi_obcaf',
-            'app.paeb.gerer_subvention_operation.niveau_feffi_prestataire.convention_suivi_bcaf'           
+            'app.paeb.gerer_subvention_operation.niveau_feffi_prestataire.convention_suivi_bcaf',
+            'app.paeb.gerer_subvention_operation.niveau_feffi_prestataire.convention_suivi_aac'           
             ])
         .run(testPermission)       
         .config(config);

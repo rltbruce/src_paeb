@@ -76,67 +76,83 @@
         }
 
         vm.filtre_change_region = function(item)
-        { 
-            vm.filtre.id_cisco = null;
-            if (item.id_region != '*')
-            {
-                apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
-                {
-                    vm.ciscos = result.data.response;
-                    console.log(vm.ciscos);
-                }, function error(result){ alert('something went wrong')});
-            }
-            else
-            {
-                vm.ciscos = [];
-            }
-          
-        }
-        vm.filtre_change_cisco = function(item)
-        { vm.filtre.id_commune = null;
-            if (item.id_cisco != '*')
-            {
-                apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",item.id_cisco).then(function(result)
+          { 
+              vm.filtre.id_cisco = null;
+              if (item.id_region != '*')
               {
-                vm.communes = result.data.response;
-                console.log(vm.communes);
-              }, function error(result){ alert('something went wrong')});
-            }
-            else
-            {
-                vm.communes = [];
-            }
-          
-        }
-        vm.filtre_change_commune = function(item)
-        { 
-            vm.filtre.id_ecole = null;
-            if (item.id_commune != '*')
-            {
-                apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleBycommune","id_commune",item.id_commune).then(function(result)
-              {
-                vm.ecoles = result.data.response;
-                console.log(vm.ecoles);
-              }, function error(result){ alert('something went wrong')});
-            }
-            else
-            {
-                vm.ecoles = [];
-            }
-          
-        }
-        vm.filtre_change_ecole = function(item)
-        { 
-            vm.filtre.id_convention_entete_entete = null;
-            if (item.id_ecole != '*')
-            {
-                  apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByecole","id_ecole",item.id_ecole).then(function(result)
+                  apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
                   {
-                    vm.convention_cisco_feffi_entetes = result.data.response;
-                    console.log(vm.convention_cisco_feffi_entetes );
+                      vm.ciscos = result.data.response;
+                      console.log(vm.ciscos);
                   }, function error(result){ alert('something went wrong')});
-            }
-        }
+              }
+              else
+              {
+                  vm.ciscos = [];
+              }
+            
+          }
+          vm.filtre_change_cisco = function(item)
+          { vm.filtre.id_commune = null;
+              if (item.id_cisco != '*')
+              {
+                  apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",item.id_cisco).then(function(result)
+                {
+                  vm.communes = result.data.response;
+                  console.log(vm.communes);
+                }, function error(result){ alert('something went wrong')});
+              }
+              else
+              {
+                  vm.communes = [];
+              }
+            
+          }
+          
+          vm.filtre_change_commune = function(item)
+          { 
+              vm.filtre.id_zap = null;
+              if (item.id_commune != '*')
+              {
+                  apiFactory.getAPIgeneraliserREST("zap_commune/index","menu","getzapBycommune","id_commune",item.id_commune).then(function(result)
+                {
+                  vm.zaps = result.data.response;
+                });
+              }
+              else
+              {
+                  vm.zaps = [];
+              }
+            
+          }
+          vm.filtre_change_zap = function(item)
+          { 
+              vm.filtre.id_ecole = null;
+              if (item.id_zap != '*')
+              {
+                  apiFactory.getAPIgeneraliserREST("ecole/index","menus","getecoleByzap","id_zap",item.id_zap).then(function(result)
+                {
+                  vm.ecoles = result.data.response;
+                });
+              }
+              else
+              {
+                  vm.ecoles = [];
+              }
+            
+          }
+          vm.filtre_change_ecole = function(item)
+          { 
+              vm.filtre.id_convention_entete = null;
+              if (item.id_ecole != '*')
+              {
+                    apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index","menu","getconventionByecole","id_ecole",item.id_ecole).then(function(result)
+                    {
+                      vm.convention_cisco_feffi_entetes = result.data.response;
+                      console.log(vm.convention_cisco_feffi_entetes );
+                    }, function error(result){ alert('something went wrong')});
+              }
+          }
 
 
     /*******************************Debut convention feffii******************************/

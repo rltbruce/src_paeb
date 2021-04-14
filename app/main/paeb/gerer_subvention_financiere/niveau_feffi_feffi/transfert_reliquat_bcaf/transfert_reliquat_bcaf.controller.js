@@ -341,6 +341,7 @@
         { 
           vm.stepjusti_trans_reliqua = false;  
           vm.showbuttonValidationtransfert_reliquat = false;
+          NouvelItemTransfert_reliquat = false;
           apiFactory.getAPIgeneraliserREST("transfert_reliquat/index",'menu','gettransfertByconvention','id_convention_entete',vm.selectedItemConvention_entete.id).then(function(result)
           {
               vm.alltransfert_reliquat = result.data.response.filter(function(obj)
@@ -436,15 +437,20 @@
             {
               currentItemTransfert_reliquat     = JSON.parse(JSON.stringify(vm.selectedItemTransfert_reliquat));
               vm.showbuttonValidationtransfert_reliquat = true;
+              vm.stepjusti_trans_reliqua = true;
+            }
+            else
+            {
+              vm.showbuttonValidationtransfert_reliquat = false;
+              vm.stepjusti_trans_reliqua = false;
             }
             
             //recuperation donnée convention
            if (vm.selectedItemTransfert_reliquat.id!=0)
             {   
                 vm.validation_transfert_reliquat = item.validation;;
-              //Fin Récupération cout divers par convention
-              
-                vm.stepjusti_trans_reliqua = true;
+              //Fin Récupération cout divers par convention              
+                
             };           
 
         };

@@ -136,6 +136,8 @@
   vm.step_menu_demande_daaf = function()
   { 
     vm.affiche_load = true;
+    vm.stepTwo = false;
+    vm.stepThree = false;
     //recuperation donnée demande
     apiFactory.getAPIgeneraliserREST("demande_deblocage_daaf/index","menu","getdemandedisponible","id_convention_ufp_daaf_entete",vm.selectedItemConvention_ufp_daaf_entete.id).then(function(result)
     {
@@ -210,7 +212,7 @@
   vm.step_menu_transfert_ufp = function()
   { 
       vm.affiche_load = true;
-      apiFactory.getAPIgeneraliserREST("transfert_ufp/index",'id_demande_deblocage_daaf',vm.selectedItemDemande_deblocage_daaf_validation_ufp.id).then(function(result)
+      apiFactory.getAPIgeneraliserREST("transfert_ufp/index",'menu','gettransfertvalidebyid_demande','id_demande_daaf',vm.selectedItemDemande_deblocage_daaf_validation_ufp.id).then(function(result)
       {
           vm.alltransfert_ufp = result.data.response.filter(function(obj)
           {

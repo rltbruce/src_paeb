@@ -378,7 +378,7 @@
                         <span class="icon-cancel"></span>
                       </a>
                                 
-                      <a ng-if="demande_deblocage_daaf.$edit && demande_deblocage_daaf.date && demande_deblocage_daaf.id_tranche_deblocage_daaf && demande_deblocage_daaf.id_convention_ufp_daaf_entete && demande_deblocage_daaf.ref_demande && demande_deblocage_daaf.objet && demande_deblocage_daaf.id_compte_daaf>''" ng-click="vm.ajoutDemande_deblocage_daaf(demande_deblocage_daaf,0)" title="Sauvegarder">
+                      <a ng-if="demande_deblocage_daaf.$edit && demande_deblocage_daaf.date && demande_deblocage_daaf.id_tranche_deblocage_daaf && demande_deblocage_daaf.ref_demande && demande_deblocage_daaf.objet && demande_deblocage_daaf.id_compte_daaf>''" ng-click="vm.ajoutDemande_deblocage_daaf(demande_deblocage_daaf,0)" title="Sauvegarder">
                         <span class="icon-content-save"></span>
                       </a>
                     </td>
@@ -443,7 +443,10 @@
                 </td>
                                              
                 <td>  
-                  <a ng-if="!justificatif_daaf.$edit && vm.validation_item==0" ng-click="vm.modifierJustificatif_daaf(justificatif_daaf)" title="Modifier">
+                  <a ng-if="!justificatif_daaf.$edit && vm.validation_item==0  && justificatif_daaf.id==0" ng-click="vm.modifierJustificatif_daaf(justificatif_daaf)" title="Ajout">
+                    <span class="icon-table-edit"></span>
+                  </a>
+                  <a ng-if="!justificatif_daaf.$edit && vm.validation_item==0  && justificatif_daaf.id==null" ng-click="vm.modifierJustificatif_daaf(justificatif_daaf)" title="Ajout">
                     <span class="icon-table-edit"></span>
                   </a>
                             

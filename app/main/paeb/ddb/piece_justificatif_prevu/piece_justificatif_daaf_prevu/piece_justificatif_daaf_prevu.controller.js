@@ -26,7 +26,8 @@
           dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
           pagingType: 'simple',
           autoWidth: false,
-          responsive: true          
+          responsive: true,
+          order:[]          
         };
 
         //col table
@@ -52,7 +53,8 @@
             //recuperation donnée piece_justificatif_daaf_prevu
             apiFactory.getAPIgeneraliserREST("piece_justificatif_daaf_prevu/index","menu","getpieceBytranche","id_tranche",item.id).then(function(result)
             {
-                vm.allpiece_justificatif_daaf_prevu = result.data.response; 
+                vm.allpiece_justificatif_daaf_prevu = result.data.response;
+                NouvelItem = false;
                 //console.log(vm.allpiece_justificatif_daaf_prevu);
             });
             vm.stepOne = true;
@@ -87,7 +89,7 @@
               code: '',
               intitule: ''
             };         
-            vm.allpiece_justificatif_daaf_prevu.push(items);
+            vm.allpiece_justificatif_daaf_prevu.unshift(items);
             vm.allpiece_justificatif_daaf_prevu.forEach(function(cis)
             {
               if(cis.$selected==true)
