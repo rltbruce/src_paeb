@@ -23,18 +23,58 @@
       <!-- ENTREPRISE -->
       <div class="form-wrapper md-whiteframe-1dp" >       
         <header layout="row" layout-align="space-between center" style="background: #F3F4F5; margin-bottom: 2px;" class="border-top border-bottom">
-          <div layout="row" layout-align="start">
+          <div layout="row" layout-align="start" style="min-height: 40px !important;">
               <div class="border-right" style="display: flex; justify-content: center; align-items: center; padding: 0px 10px 0px 10px; ">
                 <span style="line-height: normal;"> ENTREPRISE</span>
               </div>
               <div>
-                <md-button class="md-icon-button" aria-label="add prestataire" ng-click="vm.ajouter()">
+                <md-button class="md-icon-button" aria-label="add prestataire" ng-click="vm.ajouter()" ng-show="vm.filtre.id_cisco">
                   <md-icon md-font-icon="icon-plus"></md-icon>
                   <md-tooltip><span>Ajout entreprise</span></md-tooltip>
                 </md-button>
               </div>                      
           </div>
         </header>
+        <div class="md-whiteframe-3dp animate-show-hide">
+          <form name="filtreform" class="md-inline-form" novalidate >
+            <br>
+            <div style="margin: 0px 15px 10px 15px;">
+                <div layout="column" layout-gt-xs="row">
+                <md-input-container flex="100" flex-gt-xs="90">
+                  <label>Région</label>
+                  <md-select ng-model="vm.filtre.id_region" name="region" ng-change="vm.filtre_change_region(vm.filtre)" required>
+                    
+                    <md-option ng-repeat="region in vm.regions" value="{{region.id}}" > {{region.nom}}</md-option>
+                  </md-select>
+                  <div ng-messages="filtreform.region.$error" role="alert">
+                    <div ng-message="required"><span>Région</span></div>
+                  </div>
+                </md-input-container>
+                        
+                <md-input-container flex="100" flex-gt-xs="90">
+                  <label>Cisco</label>
+                  <md-select ng-model="vm.filtre.id_cisco" ng-disabled="!vm.filtre.id_region" ng-change="vm.filtre_change_cisco(vm.filtre)" name="cisco" required>
+                    
+                    <md-option ng-repeat="d in vm.ciscos" value="{{d.id}}"> {{d.description}}</md-option>
+                                        
+                    </md-select>
+                    <div ng-messages="filtreform.cisco.$error" role="alert">
+                    <div ng-message="required"><span>Cisco</span></div>
+                  </div>
+                </md-input-container>                        
+                
+                </div>
+              </div>  
+              <div class="footer-animate-show-hide" layout="row" layout-align="end end">
+                <md-button type="submit" class="md-raised md-accent" aria-label="Enregistrer" ng-disabled="filtreform.$invalid" ng-click="vm.recherchefiltre(vm.filtre)" style="float: right;">
+                                          Recherche
+                </md-button>
+                <md-button type="submit" class="md-raised md-primary" aria-label="Annuler" ng-click="vm.annulerfiltre()" style="float: right;">
+                                      Réinitialise
+                </md-button>
+            </div>
+          </form>
+      </div> <br>
          <div>        
           <table class="dataTable row-border hover"  datatable="ng" dt-options="vm.dtOptions" >
             <thead>

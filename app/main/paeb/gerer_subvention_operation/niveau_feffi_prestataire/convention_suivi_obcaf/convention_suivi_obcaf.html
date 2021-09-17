@@ -3259,7 +3259,7 @@
                                   <span ng-if="contrat_moe.$edit">
                                     <md-input-container style="width:100%;display: flex !important;">
                                       <label>moe</label>
-                                      <md-select ng-model="contrat_moe.id_moe"style="overflow: hidden;text-overflow: ellipsis;">
+                                      <md-select ng-model="contrat_moe.id_moe"style="overflow: hidden;text-overflow: ellipsis;" ng-click="vm.moeDialog(contrat_moe)" disabled>
                                         <md-option ng-repeat="moe in vm.allmoe" value="{{moe.id}}">
                                                                               {{moe.nom}}
                                         </md-option>
@@ -4899,7 +4899,7 @@
                                     <span ng-if="mpe_soumissionaire.$edit">
                                       <md-input-container style="width:100%;display: flex !important;">
                                         <label>Prestataire</label>
-                                        <md-select ng-model="mpe_soumissionaire.id_prestataire"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changePrestataire(mpe_soumissionaire)">
+                                        <md-select ng-model="mpe_soumissionaire.id_prestataire"style="overflow: hidden;text-overflow: ellipsis;" ng-change="vm.changePrestataire(mpe_soumissionaire)" ng-click="vm.entrepriseDialog(mpe_soumissionaire)" disabled>
                                           <md-option ng-repeat="prestataire in vm.allprestataire" value="{{prestataire.id}}">
                                                                                 {{prestataire.nom}}
                                           </md-option>
@@ -4912,7 +4912,7 @@
                                     <span ng-if="mpe_soumissionaire.$edit">
                                       <md-input-container style="width:100%;display: flex !important;">
                                         <label>Telephone</label>
-                                        <input name="telephone" type="text" ng-model="mpe_soumissionaire.telephone" disabled/>
+                                        <input name="telephone" type="text" ng-model="mpe_soumissionaire.telephone" readonly/>
                                       </md-input-container>   
                                     </span>
                                               
@@ -4923,7 +4923,7 @@
                                     <span ng-if="mpe_soumissionaire.$edit">
                                       <md-input-container style="width:100%;display: flex !important;">
                                         <label>Siège</label>
-                                        <input name="siege" type="text" ng-model="mpe_soumissionaire.siege" disabled/>
+                                        <input name="siege" type="text" ng-model="mpe_soumissionaire.siege" readonly/>
                                       </md-input-container>   
                                     </span>
                                               

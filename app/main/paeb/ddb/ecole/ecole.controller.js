@@ -170,6 +170,7 @@
               {
                   vm.allecole = result.data.response;
                   vm.affiche_load = false;
+                  console.log(vm.allecole);
               });
         }
 

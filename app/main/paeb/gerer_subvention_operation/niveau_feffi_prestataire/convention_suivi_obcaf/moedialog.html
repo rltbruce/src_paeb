@@ -1,0 +1,86 @@
+
+
+  <md-dialog ng-cloak aria-label="dialog_type_effort">
+      <md-subheader style="background-color: rgb(245,245,245)">
+          <h2 mat-dialog-title  style="margin:0px">Ajout Entreprise</h2>
+      </md-subheader>
+
+      <md-dialog-content layout="row" style="padding:0px">      
+          <div style=" margin:auto;">
+            <table class="dataTable row-border hover"  datatable="ng" dt-options="tOptions" ms-responsive-table>
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="conve in ::moedialog_column">
+                  <div class="table-header">
+                    <span class="column-title">{{conve.titre}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+
+              
+              <div style="float: top !important">
+                <md-progress-circular ng-if="affiche_load" class="md-accent" aria-label="Rating" md-mode="indeterminate" md-diameter="48"></md-progress-circular> 
+                <div ng-if="vm.affiche_load" style="position:relative;top: -30px;  left: 60px;color: #039be5">
+                      Récuperation,veuillez patienter s'il vous plait ...
+                </div>
+              </div>
+              <form name="formfiltre_nom" class="md-inline-form" novalidate ><br>
+                <div layout="column" layout-gt-xs="row" flex>                     
+                    <md-input-container flex="100" flex-gt-xs="75">
+                      <label>Nom MOE</label>
+                      <textarea type="text" name="nom" ng-model="filtre_nom.nom" required md-select-on-focus></textarea>
+                      <div ng-messages="filtre_nom.nom.$error"role="alert">
+                          <div ng-message="required">
+                              <span>Nom obligatoire.</span>
+                          </div>
+                      </div>
+                    </md-input-container>  
+                    <div flex="100" flex-gt-xs="25">
+                        <md-button type="submit" class="md-raised md-accent" aria-label="Recherche"
+                                ng-disabled="formfiltre_nom.$invalid " ng-click="recherche(filtre_nom,0)">
+                                Recherche
+                        </md-button>
+                    </div>
+                </div>
+                
+                  </form>       
+            <tbody>
+              <tr ng-repeat="moeDialog in allmoeDialog"  ng-class="{selected: moeDialog.$selected}" ng-click="selectionMoeDialog(moeDialog)">
+                        <td>
+                          <span>{{moeDialog.nom}}</span>
+                        </td>
+                        <td>
+                          <span>{{moeDialog.nif}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{moeDialog.stat}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{moeDialog.siege}}</span>
+                        </td>
+
+                        <td>
+                          <span>{{moeDialog.telephone}}</span>
+                        </td>
+              </tr>
+            </tbody>
+          </table>
+
+          </div>
+      </md-dialog-content>
+
+      <md-dialog-actions layout="row" style="background-color: rgb(245,245,245)">
+          <span>
+            <md-button type="submit" class="md-raised md-accent" ng-click="dialogajoutmoe()" ng-disabled="!selectedItemMoeDialog.id">Ajouter
+            </md-button>
+
+            <md-button type="submit" class="md-raised md-primary" ng-click="cancel()">Fermer</md-button>
+          </span>    
+      </md-dialog-actions>
+   
+  </md-dialog>
+
+

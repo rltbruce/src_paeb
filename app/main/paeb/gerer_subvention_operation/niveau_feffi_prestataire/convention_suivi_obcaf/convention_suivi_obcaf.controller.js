@@ -651,11 +651,11 @@
 
         vm.datenow = new Date();
 
-        apiFactory.getAll("bureau_etude/index").then(function(result)
+       /* apiFactory.getAll("bureau_etude/index").then(function(result)
         {
             vm.allmoe= result.data.response;
             console.log(vm.allmoe);
-        });
+        });*/
         apiFactory.getAll("situation_participant_sep/index").then(function(result)
         {
             vm.allsituation_participant_sep = result.data.response; 
@@ -686,10 +686,12 @@
         {
             vm.allpartenaire_relai= result.data.response;
         });
-        apiFactory.getAll("prestataire/index").then(function(result)
+        vm.allprestataire = [];
+        vm.allmoe= [];
+        /*apiFactory.getAll("prestataire/index").then(function(result)
         {
             vm.allprestataire= result.data.response;
-        });
+        });*/
        /* vm.allannee =[{annee:"2017"},{annee:"2018"},{annee:"2019"}];
         var last_date = Math.max.apply(Math, vm.allannee.map(function(o){return o.annee;}));
           if (parseInt(last_date)<parseInt(vm.datenow.getFullYear()))
@@ -7399,6 +7401,7 @@ vm.click_step_avenant_pr = function()
         //Masque de saisi ajout
         vm.ajouterContrat_moe = function ()
         { 
+          //vm.allmoe = [];
           if (NouvelItemContrat_moe == false)
           { 
             var items = {}; 
@@ -7524,7 +7527,7 @@ vm.click_step_avenant_pr = function()
 
           vm.selectedItemContrat_moe = {} ;
           NouvelItemContrat_moe      = false;
-          
+          vm.allmoe = [];
         };
 
         //fonction selection item contrat
@@ -7562,7 +7565,7 @@ vm.click_step_avenant_pr = function()
 
         //fonction masque de saisie modification item feffi
         vm.modifierContrat_moe = function(item)
-        {
+        {   
             NouvelItemContrat_moe = false ;
             vm.selectedItemContrat_moe = item;
             currentItemContrat_moe = angular.copy(vm.selectedItemContrat_moe);
@@ -7581,6 +7584,7 @@ vm.click_step_avenant_pr = function()
             //item.date_os = vm.injectDateinInput(vm.selectedItemContrat_moe.passation.date_os) ;           
             item.id_moe = vm.selectedItemContrat_moe.bureau_etude.id ;
             vm.showbuttonValidationcontrat_moe = false;
+            vm.allmoe.push(vm.selectedItemContrat_moe.bureau_etude);
         };
 
         //fonction bouton suppression item Contrat_moe
@@ -7699,11 +7703,46 @@ vm.click_step_avenant_pr = function()
               contrat_moe.$selected = false;
               contrat_moe.$edit = false;
               vm.selectedItemContrat_moe = {};
-
-                vm.stepcalendrier_paie_moe=false;
+              vm.stepcalendrier_paie_moe=false;
+              vm.allmoe = [];
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
+        }
+
+        vm.moeDialog = function (ev)
+        {
+          var moe_modif=null;
+          if (NouvelItemContrat_moe==false)
+          {
+            moe_modif = vm.selectedItemContrat_moe.bureau_etude;
+          }
+          console.log(moe_modif);
+          var confirm = $mdDialog.confirm({
+            controller: MoeDialogController,
+            templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_feffi_prestataire/convention_suivi_obcaf/moedialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev, 
+            locals:{moeToPass: moe_modif, nouvelItem: NouvelItemContrat_moe},
+            });
+            $mdDialog.show(confirm).then(function(data)
+            { 
+              //vm.affiche_load = true;
+              console.log(data);
+
+              var doublonn = vm.allmoe.filter(function(obj)
+              {
+                return obj.id == data.id;
+              });
+              console.log(doublonn);
+
+              if (doublonn.length == 0)
+              {                
+                vm.allmoe.push(data);
+              }
+              vm.selectedItemContrat_moe.id_moe =data.id;       
+            }, function(){//alert('rien');
+            });
         }
       /*****************************************fin contrat moe******************************************************/
 
@@ -10998,10 +11037,10 @@ vm.steppassation_marches = function()
         vm.stepmpe_soumissionaire = function()
         {            
           
-          apiFactory.getAll("prestataire/index").then(function(result)
+         /* apiFactory.getAll("prestataire/index").then(function(result)
           {
               vm.allprestataire= result.data.response;
-          });
+          });*/
           NouvelItemMpe_soumissionaire = false;         
             apiFactory.getAPIgeneraliserREST("mpe_soumissionaire/index",'id_passation_marches',vm.selectedItemPassation_marches.id).then(function(result)
             {
@@ -11044,6 +11083,7 @@ vm.steppassation_marches = function()
         //Masque de saisi ajout
         vm.ajouterMpe_soumissionaire = function ()
         { 
+          //vm.allprestataire=[];
           if (NouvelItemMpe_soumissionaire == false)
           {
             apiFactory.getAPIgeneraliserREST("passation_marches/index",'menu',"getpassationvalideById",'id_passation_mpe',vm.selectedItemPassation_marches.id).then(function(result)
@@ -11160,6 +11200,7 @@ vm.steppassation_marches = function()
 
           vm.selectedItemMpe_soumissionaire = {} ;
           NouvelItemMpe_soumissionaire      = false;
+          vm.allprestataire = [];
           
         };
 
@@ -11181,7 +11222,7 @@ vm.steppassation_marches = function()
 
         //fonction masque de saisie modification item feffi
         vm.modifierMpe_soumissionaire = function(item)
-        {
+        {   
             NouvelItemMpe_soumissionaire = false ;
             vm.selectedItemMpe_soumissionaire = item;
             currentItemMpe_soumissionaire = angular.copy(vm.selectedItemMpe_soumissionaire);
@@ -11194,6 +11235,7 @@ vm.steppassation_marches = function()
             item.id_prestataire   = vm.selectedItemMpe_soumissionaire.prestataire.id ;
             item.telephone   = vm.selectedItemMpe_soumissionaire.prestataire.telephone ;
             item.siege   = vm.selectedItemMpe_soumissionaire.prestataire.siege ;
+            vm.allprestataire.push(vm.selectedItemMpe_soumissionaire.prestataire);
         };
 
         //fonction bouton suppression item Mpe_soumissionaire
@@ -11304,6 +11346,7 @@ vm.steppassation_marches = function()
               mpe_soumissionaire.$selected = false;
               mpe_soumissionaire.$edit = false;
               vm.selectedItemMpe_soumissionaire = {};
+              vm.allprestataire = [];
             
           }).error(function (data){vm.showAlert('Error','Erreur lors de l\'insertion de donnée');});
 
@@ -11318,6 +11361,42 @@ vm.steppassation_marches = function()
          // console.log(pre[0]);
           item.telephone=pre[0].telephone;
           item.siege=pre[0].siege;
+        }
+        vm.entrepriseDialog = function (ev)
+        {
+          var entreprise_modif=null;
+          if (NouvelItemMpe_soumissionaire==false)
+          {
+            entreprise_modif = vm.selectedItemMpe_soumissionaire.prestataire;
+          }
+          console.log(entreprise_modif);
+          var confirm = $mdDialog.confirm({
+            controller: EntrepriseDialogController,
+            templateUrl: 'app/main/paeb/gerer_subvention_operation/niveau_feffi_prestataire/convention_suivi_obcaf/entreprisedialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev, 
+            locals:{entrepriseToPass: entreprise_modif, nouvelItem: NouvelItemMpe_soumissionaire},
+            });
+            $mdDialog.show(confirm).then(function(data)
+            { 
+              vm.affiche_load = true;
+              console.log(data);
+
+              var doublonn = vm.allprestataire.filter(function(obj)
+              {
+                return obj.id == data.id;
+              });
+              console.log(doublonn);
+
+              if (doublonn.length == 0)
+              {                
+                vm.allprestataire.push(data);
+              }
+              vm.selectedItemMpe_soumissionaire.id_prestataire =data.id;
+              vm.selectedItemMpe_soumissionaire.telephone =data.telephone; 
+              vm.selectedItemMpe_soumissionaire.siege =data.siege;       
+            }, function(){//alert('rien');
+            });
         }
 /**********************************fin sousmissionnaire****************************************/
 /*******************************************debut importer contrat moe*************************************************/
@@ -11735,6 +11814,7 @@ vm.steppassation_marches = function()
             item.montant_total_ttc = parseFloat(item.cout_batiment) + parseFloat(item.cout_latrine) + parseFloat(item.cout_mobilier);
             item.montant_total_ht = (parseFloat(item.cout_batiment) + parseFloat(item.cout_latrine) + parseFloat(item.cout_mobilier))/1;
         }
+        
         
 /**********************************fin contrat_prestataire****************************************/
 
@@ -14096,4 +14176,158 @@ vm.steppassation_marches = function()
       }
  
     }
+    /*****************Debut EntrepriseDialogue Controlleur  ****************/    
+    function EntrepriseDialogController($mdDialog, $scope, apiFactory, entrepriseToPass, nouvelItem)
+    { 
+        var dg=$scope;
+        dg.affiche_load = false;
+        dg.affichebuttonAjouter = false;
+        dg.selectedItemEntrepriseDialog = {};
+        dg.allentrepriseDialog = [];
+        var entreprise_a_anvoyer= [];
+
+        dg.entreprisedialog_column = [
+          {titre:"Nom"},
+          {titre:"Nif"},
+          {titre:"Stat"},
+          {titre:"Siege"},
+          {titre:"telephone"}];
+       
+
+        //style
+        dg.tOptions = {
+          dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
+          pagingType: 'simple',
+          autoWidth: false          
+        };
+        console.log(nouvelItem);
+        console.log(entrepriseToPass);
+        if (nouvelItem==false)
+        {
+          dg.allentrepriseDialog.push(entrepriseToPass);
+        }
+        dg.recherche = function(mpe)
+        {           
+          dg.affiche_load = true;
+          apiFactory.getAPIgeneraliserREST("prestataire/index",'menu','getprestatairebylike','mpe_like',mpe.nom).then(function(result)
+          {
+            dg.allentrepriseDialog = result.data.response;
+            dg.affiche_load = false;
+            console.log(dg.allentrepriseDialog);
+          });
+        }
+        
+
+        dg.cancel = function()
+        {
+          $mdDialog.cancel();
+          dg.affichebuttonAjouter = false;
+        };
+
+        dg.dialognouveauajout = function(conven)
+        {  
+            $mdDialog.hide(dg.selectedItemEntrepriseDialog);
+            dg.affichebuttonAjouter = false;
+            dg.allentrepriseDialog = [];
+        }
+
+        
+
+        //fonction selection item entreprise
+        dg.selectionEntrepriseDialog = function (item)
+        {
+            dg.selectedItemEntrepriseDialog  = item;
+            dg.affichebuttonAjouter = true;               
+        };
+        
+       $scope.$watch('selectedItemEntrepriseDialog', function()
+        {
+            if (!dg.allentrepriseDialog) return;
+              dg.allentrepriseDialog.forEach(function(iteme)
+              {
+                  iteme.$selected = false;
+              });
+            dg.selectedItemEntrepriseDialog.$selected = true;
+        });
+
+    }
+
+/*****************Fin EntrepriseDialogue Controlleur  ****************/ 
+    /*****************Debut moeDialogue Controlleur  ****************/    
+    function MoeDialogController($mdDialog, $scope, apiFactory, moeToPass, nouvelItem)
+    { 
+        var dg=$scope;
+        dg.affiche_load = false;
+        dg.affichebuttonAjouter = false;
+        dg.selectedItemMoeDialog = {};
+        dg.allmoeDialog = [];
+        var moe_a_anvoyer= [];
+
+        dg.moedialog_column = [
+          {titre:"Nom"},
+          {titre:"Nif"},
+          {titre:"Stat"},
+          {titre:"Siege"},
+          {titre:"telephone"}];
+       
+
+        //style
+        dg.tOptions = {
+          dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
+          pagingType: 'simple',
+          autoWidth: false          
+        };
+        console.log(nouvelItem);
+        console.log(moeToPass);
+        if (nouvelItem==false)
+        {
+          dg.allmoeDialog.push(moeToPass);
+        }
+        dg.recherche = function(moe)
+        {           
+          dg.affiche_load = true;
+          apiFactory.getAPIgeneraliserREST("bureau_etude/index",'menu','getbureau_etudebylike','moe_like',moe.nom).then(function(result)
+          {
+            dg.allmoeDialog = result.data.response;
+            dg.affiche_load = false;
+            console.log(dg.allmoeDialog);
+          });
+        }
+        
+
+        dg.cancel = function()
+        {
+          $mdDialog.cancel();
+          dg.affichebuttonAjouter = false;
+        };
+
+        dg.dialogajoutmoe = function(conven)
+        {  
+            $mdDialog.hide(dg.selectedItemMoeDialog);
+            dg.affichebuttonAjouter = false;
+            dg.allmoeDialog = [];
+        }
+
+        
+
+        //fonction selection item moe
+        dg.selectionMoeDialog = function (item)
+        {
+            dg.selectedItemMoeDialog  = item;
+            dg.affichebuttonAjouter = true;               
+        };
+        
+       $scope.$watch('selectedItemMoeDialog', function()
+        {
+            if (!dg.allmoeDialog) return;
+              dg.allmoeDialog.forEach(function(iteme)
+              {
+                  iteme.$selected = false;
+              });
+            dg.selectedItemMoeDialog.$selected = true;
+        });
+
+    }
+
+/*****************Fin MoeeDialogue Controlleur  ****************/ 
 })();

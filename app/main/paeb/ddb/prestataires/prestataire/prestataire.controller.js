@@ -23,10 +23,43 @@
           responsive: true,
           order:[]           
         };
-
+        apiFactory.getAll("region/index").then(function success(response)
+        {
+          vm.regions = response.data.response;
+        });
         //col table
         vm.prestataire_column = [{titre:"Nom"},{titre:"Nif"},{titre:"Stat"},{titre:"Siege"},{titre:"telephone"},{titre:"Action"}];
-        
+        vm.filtre_change_region = function(item)
+        { 
+            vm.filtre.id_cisco = null;
+            if (item.id_region != '*')
+            {
+                apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
+                {
+                    vm.ciscos = result.data.response;
+                }, function error(result){ alert('something went wrong')});
+            }
+            else
+            {
+                vm.ciscos = [];
+            }
+          
+        }
+        vm.annulerfiltre = function()
+        {
+            vm.filtre = {};
+        }
+
+        vm.recherchefiltre = function(filtre)
+        {
+           /* apiFactory.getAPIgeneraliserREST("convention_cisco_feffi_entete/index",'menu','getconventionvalidedaafBydate','lot',filtre.lot,'id_region',filtre.id_region
+                                ,'id_cisco',filtre.id_cisco,'id_commune',filtre.id_commune,'id_ecole',filtre.id_ecole,'id_convention_entete',filtre.id_convention_entete,'id_zap',filtre.id_zap).then(function(result)
+            {
+                vm.allconvention_cife_tete = result.data.response;
+                vm.affiche_load =false;
+            });*/
+            
+        }
         //recuperation donnée prestataire
         apiFactory.getAll("prestataire/index").then(function(result)
         {

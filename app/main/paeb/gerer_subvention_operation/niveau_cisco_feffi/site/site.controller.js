@@ -162,6 +162,9 @@
          vm.filtre_change_region = function(item)
         { 
             vm.filtre.id_cisco = null;
+            vm.filtre.id_ecole = null;
+            vm.filtre.id_commune = null;
+            vm.filtre.id_zap = null;
             if (item.id_region != '*')
             {
                 apiFactory.getAPIgeneraliserREST("cisco/index","id_region",item.id_region).then(function(result)
@@ -176,7 +179,10 @@
           
         }
         vm.filtre_change_cisco = function(item)
-        { vm.filtre.id_commune = null;
+        { 
+          vm.filtre.id_commune = null;
+          vm.filtre.id_ecole = null;
+          vm.filtre.id_zap = null;
             if (item.id_cisco != '*')
             {
                 apiFactory.getAPIgeneraliserREST("commune/index","id_cisco",item.id_cisco).then(function(result)
@@ -192,7 +198,8 @@
         }
         vm.filtre_change_commune = function(item)
         { 
-            vm.filtre.id_zap = null;
+          vm.filtre.id_ecole = null;
+          vm.filtre.id_zap = null;
             if (item.id_commune != '*')
             {
                 apiFactory.getAPIgeneraliserREST("zap_commune/index","menu","getzapBycommune","id_commune",item.id_commune).then(function(result)
